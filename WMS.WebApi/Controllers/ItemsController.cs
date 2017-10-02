@@ -22,7 +22,7 @@ namespace WMS.WebApi.Controllers
         }
 
         // GET: api/Items
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("")]
         public HttpResponseMessage GetItems()
