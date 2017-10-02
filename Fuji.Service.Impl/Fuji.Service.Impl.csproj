@@ -55,6 +55,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
       <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
       <Name>Fuji.Common.ValueObject</Name>
@@ -67,12 +71,8 @@
       <Project>{4fbc9a8b-22ee-474c-a07e-00d5e770f751}</Project>
       <Name>Fuji.Service</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
-      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
-      <Name>WIM.Core.Common.ValueObject</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
-      <Project>{7db9d256-b5fd-4884-aeb6-823e10639195}</Project>
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
@@ -83,10 +83,6 @@
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

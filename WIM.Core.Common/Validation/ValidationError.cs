@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using WIM.Core.Common.ValueObject;
 
 namespace WIM.Core.Common.Validation
 {

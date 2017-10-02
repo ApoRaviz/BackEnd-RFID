@@ -1,6 +1,6 @@
 using System;
 
-namespace Fuji.WebApi.Areas.HelpPage.ModelDescriptions
+namespace WIM.WebApi.Areas.HelpPage.ModelDescriptions
 {
     /// <summary>
     /// Describes a type model.

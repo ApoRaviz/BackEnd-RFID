@@ -14,8 +14,8 @@ using System.Data;
 using WIM.Core.Repository;
 using Fuji.Common.ValueObject;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Repository.Impl;
 using Fuji.Service.ItemImport;
+using WIM.Core.Repository.Impl;
 
 namespace Fuji.Service.Impl.ItemImport
 {
