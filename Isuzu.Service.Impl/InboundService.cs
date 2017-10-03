@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Validation;
-using WIM.Core.Common.ValueObject;
+//using WIM.Core.Common.ValueObject;
 using WIM.Core.Common.Helpers;
 using Isuzu.Service;
 using Isuzu.Repository;
@@ -19,12 +19,12 @@ namespace Isuzu.Service.Impl
 {
     public class InboundService : IInboundService
     {
-        private WIM_ISUZU_DEVntities Db = new WIM_ISUZU_DEVntities();
+        private IsuzuDataContext Db ;
 
         private string connectionString = ConfigurationManager.ConnectionStrings["WIM_ISUZU"].ConnectionString;
         public InboundService()
         {
-            Db = new WIM_ISUZU_DEVntities();
+            Db = new IsuzuDataContext();
         }
 
         #region =========================== HANDY ===========================
@@ -722,8 +722,17 @@ namespace Isuzu.Service.Impl
                     queryUpdate.PathDeleteReason = reason.Paths;
                     queryUpdate.UpdateAt = DateTime.Now;
                     queryUpdate.UpdateBy = reason.UserName;
+                    
+                }
+                try
+                {
                     Db.SaveChanges();
                 }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+
                 scope.Complete();
                 return true;
             }
@@ -739,7 +748,16 @@ namespace Isuzu.Service.Impl
                 if (queryUpdate != null)
                 {
                     queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count();
+                    
+                }
+
+                try
+                {
                     Db.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
                 }
                 scope.Complete();
                 return true;

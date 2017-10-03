@@ -375,7 +375,10 @@
     <Compile Include="Auth\RBACAttribute.cs" />
     <Compile Include="Auth\RBAC_IdentityExtendedMethods.cs" />
     <Compile Include="Auth\RolesFromClaims.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApiLogHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\HelpersController.cs" />
     <Compile Include="Controllers\InboundsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DataSet\GenerateHeaderDataSet.cs">
