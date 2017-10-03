@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace WIM.WebApi.Services
+namespace Fuji.WebApi.Services
 {
     public class EmailService : IIdentityMessageService
     {

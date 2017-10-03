@@ -104,7 +104,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>YUT_WMS_DEVDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\Projects\WIMService\WIM.WebApi\YUT_WMS_DEVDataSet.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\Projects\WIMService\Fuji.WebApi\YUT_WMS_DEVDataSet.xsd</rd:SchemaPath>
         <rd:TableName>Customer_MT</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Fuji.Common.ValueObject;
-using Fuji.Repository;
+using Fuji.Entity.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public static class AutoMapperConfig
     {

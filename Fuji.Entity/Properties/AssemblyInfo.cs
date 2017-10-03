@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WIM.Core.Repository.Context")]
+[assembly: AssemblyTitle("Fuji.Entity")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WIM.Core.Repository.Context")]
+[assembly: AssemblyProduct("Fuji.Entity")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("45200040-b506-4f55-bca9-09c77a473388")]
+[assembly: Guid("e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f")]
 
 // Version information for an assembly consists of the following four values:
 //

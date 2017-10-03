@@ -1,5 +1,5 @@
-﻿using Fuji.Repository;
-using Fuji.Common.ValueObject;
+﻿using Fuji.Common.ValueObject;
+using Fuji.Entity.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

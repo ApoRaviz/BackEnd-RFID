@@ -8,14 +8,14 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using WIM.WebApi.Providers;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Providers;
+using Fuji.WebApi.Auth;
 using System.Configuration;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security;
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public partial class Startup
     {

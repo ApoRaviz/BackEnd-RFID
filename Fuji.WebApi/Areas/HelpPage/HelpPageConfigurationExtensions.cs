@@ -11,10 +11,10 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using WIM.WebApi.Areas.HelpPage.ModelDescriptions;
-using WIM.WebApi.Areas.HelpPage.Models;
+using Fuji.WebApi.Areas.HelpPage.ModelDescriptions;
+using Fuji.WebApi.Areas.HelpPage.Models;
 
-namespace WIM.WebApi.Areas.HelpPage
+namespace Fuji.WebApi.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

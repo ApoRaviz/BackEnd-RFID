@@ -1,4 +1,4 @@
-namespace WIM.WebApi.Areas.HelpPage
+namespace Fuji.WebApi.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

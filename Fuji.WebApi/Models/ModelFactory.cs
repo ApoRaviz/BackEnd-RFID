@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http.Routing;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Auth;
 
-namespace WIM.WebApi.Models
+namespace Fuji.WebApi.Models
 {
     public class ModelFactory
     {

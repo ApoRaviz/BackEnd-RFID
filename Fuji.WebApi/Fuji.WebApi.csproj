@@ -588,6 +588,10 @@
       <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
       <Name>Fuji.Common.ValueObject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
+      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
+      <Name>Fuji.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
       <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
       <Name>Fuji.Repository</Name>
@@ -631,9 +635,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55645</IISUrl>
+          <IISUrl>http://localhost:9002/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:55645</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:9002/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

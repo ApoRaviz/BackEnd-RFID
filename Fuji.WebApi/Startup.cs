@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Owin;
 using Owin;
-using WIM.WebApi.Models;
+using Fuji.WebApi.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Auth;
 
-[assembly: OwinStartup(typeof(WIM.WebApi.Startup))]
+[assembly: OwinStartup(typeof(Fuji.WebApi.Startup))]
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public partial class Startup
     {

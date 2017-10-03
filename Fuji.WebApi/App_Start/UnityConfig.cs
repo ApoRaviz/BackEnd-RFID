@@ -10,10 +10,10 @@ using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
 
-using WIM.WebApi.Controllers;
+using Fuji.WebApi.Controllers;
 
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public static class UnityConfig
     {

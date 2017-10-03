@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Auth;
 
-namespace WIM.WebApi.Models
+namespace Fuji.WebApi.Models
 {
     [Table("Permissions")]
     public class Permission

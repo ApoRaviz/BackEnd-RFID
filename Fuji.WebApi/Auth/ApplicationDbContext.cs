@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
-using WIM.WebApi.Models;
+using Fuji.WebApi.Models;
 
-namespace WIM.WebApi.Auth
+namespace Fuji.WebApi.Auth
 {
     public class ApplicationUserLogin : IdentityUserLogin<string> { }
     public class ApplicationUserClaim : IdentityUserClaim<string> { }

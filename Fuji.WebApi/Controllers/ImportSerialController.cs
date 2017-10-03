@@ -21,8 +21,8 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data;
 using Fuji.Service.ItemImport;
-using Fuji.Repository;
 using Fuji.Common.ValueObject;
+using Fuji.Entity.ItemManagement;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -30,24 +30,24 @@ namespace Fuji.WebApi.Controllers
     public class ImportSerialController : ApiController
     {
 
-        private IItemImportService PrintLabelService;
-        public ImportSerialController(IItemImportService printLabelService)
+        private IItemImportService ItemImportService;
+        public ImportSerialController(IItemImportService itemImportService)
         {
-            this.PrintLabelService = printLabelService;
+            this.ItemImportService = itemImportService;
         }
 
         // GET: api/Items
-        [Authorize]
+        //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<ImportSerialHead>> response = new ResponseData<IEnumerable<ImportSerialHead>>();
+            ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>> response = new ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>>();
             try
             {
                 //string userName = User.Identity.GetUserName() ?? "SYSTEM";
-                IEnumerable<ImportSerialHead> items = PrintLabelService.GetItems();
+                IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> items = ItemImportService.GetItems();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
             }
@@ -70,7 +70,7 @@ namespace Fuji.WebApi.Controllers
             {
                 int totalRecord = 0;
                 //string userName = User.Identity.GetUserName() ?? "SYSTEM";
-                IEnumerable<ImportSerialHead> items = PrintLabelService.GetItems(pageIndex, pageSize, out totalRecord);
+                IEnumerable<ImportSerialHead> items = ItemImportService.GetItems(pageIndex, pageSize, out totalRecord);
                 if (totalRecord > 0)
                 {
                     DataImportSerailHead ret = new DataImportSerailHead(totalRecord, items);
@@ -97,7 +97,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 //string userName = User.Identity.GetUserName() ?? "SYSTEM";
-                IEnumerable<FujiPickingGroup> items = PrintLabelService.GetPickingGroup();
+                IEnumerable<FujiPickingGroup> items = ItemImportService.GetPickingGroup();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
             }
@@ -119,7 +119,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 //string userName = User.Identity.GetUserName() ?? "SYSTEM";
-                bool result = PrintLabelService.ClearPickingGroup(id);
+                bool result = ItemImportService.ClearPickingGroup(id);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(result);
             }
@@ -141,7 +141,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 //string userName = User.Identity.GetUserName() ?? "SYSTEM";
-                FujiPickingGroup result = PrintLabelService.GetPickingByOrderNo(id);
+                FujiPickingGroup result = ItemImportService.GetPickingByOrderNo(id);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(new List<FujiPickingGroup>() { result });
             }
@@ -161,7 +161,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
-            FujiPickingGroup pickingGroup = PrintLabelService.GetPickingByOrderNo(id, true);
+            FujiPickingGroup pickingGroup = ItemImportService.GetPickingByOrderNo(id, true);
             if (pickingGroup != null)
             {
                 string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
@@ -263,7 +263,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<ImportSerialHead> response = new ResponseData<ImportSerialHead>();
             try
             {
-                ImportSerialHead item = PrintLabelService.GetItemByDocID(id);
+                ImportSerialHead item = ItemImportService.GetItemByDocID(id);
                 response.SetData(item);
             }
             catch (ValidationException ex)
@@ -285,7 +285,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<ItemImportDto> response = new ResponseData<ItemImportDto>();
             try
             {
-                ItemImportDto item = PrintLabelService.GetItemByDocID_Handy(id);
+                ItemImportDto item = ItemImportService.GetItemByDocID_Handy(id);
                 response.SetData(item);
             }
             catch (ValidationException ex)
@@ -323,7 +323,7 @@ namespace Fuji.WebApi.Controllers
             List<DataBarcodeDetail> barcodeDetailList = new List<DataBarcodeDetail>();
             BarcodeLib.Barcode bc = new BarcodeLib.Barcode();
 
-            ImportSerialHead item = PrintLabelService.GetItemByDocID(id);
+            ImportSerialHead item = ItemImportService.GetItemByDocID(id);
             if (item != null)
             {
                 string barcodeInfo = item.HeadID;
@@ -395,7 +395,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
-            ImportSerialHead serialHead = PrintLabelService.GetItemByDocID(id);
+            ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id);
             if (serialHead != null)
             {
                 string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
@@ -455,7 +455,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
-            ImportSerialHead serialHead = PrintLabelService.GetItemByDocID(id);
+            ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id);
             if (serialHead != null)
             {
                 string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
@@ -515,7 +515,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
-            ImportSerialHead serialHead = PrintLabelService.GetItemByDocID(id);
+            ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id);
             if (serialHead != null)
             {
                 string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
@@ -813,7 +813,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 //item.UserUpdate = User.Identity.GetUserName();
-                ImportSerialHead newItem = PrintLabelService.CreateItem(item);
+                ImportSerialHead newItem = ItemImportService.CreateItem(item);
                 response.SetData(newItem);
             }
             catch (ValidationException ex)
@@ -835,7 +835,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 item.UserUpdate = "system";//User.Identity.GetUserName();
-                bool isUpated = PrintLabelService.UpdateItem(id, item);
+                bool isUpated = ItemImportService.UpdateItem(id, item);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -856,7 +856,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                PrintLabelService.DeleteItem(id);
+                ItemImportService.DeleteItem(id);
                 response.SetData(true);
             }
             catch (ValidationException ex)
@@ -878,7 +878,7 @@ namespace Fuji.WebApi.Controllers
             {
 
                 item.UserUpdate = "system";//User.Identity.GetUserName();
-                bool result = PrintLabelService.UpdateStausExport(item);
+                bool result = ItemImportService.UpdateStausExport(item);
                 if (result)
                     response.SetStatus(HttpStatusCode.OK);
                 else
@@ -911,7 +911,7 @@ namespace Fuji.WebApi.Controllers
 
             try
             {
-                string result = PrintLabelService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
+                string result = ItemImportService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
                 response.SetData(result);
             }
             catch (ValidationException ex)
@@ -938,7 +938,7 @@ namespace Fuji.WebApi.Controllers
 
             try
             {
-                IEnumerable<ImportSerialHead> result = PrintLabelService.GetDataByColumn(column, keyword);
+                IEnumerable<ImportSerialHead> result = ItemImportService.GetDataByColumn(column, keyword);
                 response.SetData(result);
             }
             catch (ValidationException ex)
@@ -1000,8 +1000,8 @@ namespace Fuji.WebApi.Controllers
                     docs.Close();
                     word.Quit();
                 }
-                //List<ImportSerialDetail> listDetail = PrintLabelService.UpdateStatus(pickingList, "13007");
-                List<ImportSerialDetail> listDetail = PrintLabelService.GetItemByDocID("IS17087AAE8A722").ImportSerialDetail.Take(20).ToList();
+                //List<ImportSerialDetail> listDetail = ItemImportService.UpdateStatus(pickingList, "13007");
+                List<ImportSerialDetail> listDetail = ItemImportService.GetItemByDocID("IS17087AAE8A722").ImportSerialDetail.Take(20).ToList();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(listDetail);
 
@@ -1046,8 +1046,8 @@ namespace Fuji.WebApi.Controllers
 
             try
             {
-                //List<ImportSerialDetail> listDetail = PrintLabelService.GetItemByDocID("IS17087AAE8A722").ImportSerialDetails.Take(20).ToList();
-                List<ImportSerialDetail> listDetail = PrintLabelService.UpdateStatus(receive, "13007");
+                //List<ImportSerialDetail> listDetail = ItemImportService.GetItemByDocID("IS17087AAE8A722").ImportSerialDetails.Take(20).ToList();
+                List<ImportSerialDetail> listDetail = ItemImportService.UpdateStatus(receive, "13007");
                 response.SetData(listDetail);
                 response.SetStatus(HttpStatusCode.OK);
 
@@ -1072,7 +1072,7 @@ namespace Fuji.WebApi.Controllers
             {
                 //receive.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
 
-                bool flag = PrintLabelService.SetScanned(receive);
+                bool flag = ItemImportService.SetScanned(receive);
                 response.SetData(flag ? 1 : 0);
             }
             catch (ValidationException ex)
@@ -1095,7 +1095,7 @@ namespace Fuji.WebApi.Controllers
                 var identity = User.Identity as ClaimsIdentity;
                 //receive.UserUpdate = identity.GetUserName();
 
-                bool flag = PrintLabelService.Receive(receive);
+                bool flag = ItemImportService.Receive(receive);
                 response.SetData(flag ? 1 : 0);
             }
             catch (ValidationException ex)
@@ -1115,7 +1115,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<List<string>> response = new ResponseData<List<string>>();
             try
             {
-                List<string> itemGroups = PrintLabelService.GetItemGroupByOrderNo_Handy(orderNo);
+                List<string> itemGroups = ItemImportService.GetItemGroupByOrderNo_Handy(orderNo);
                 response.SetData(itemGroups);
             }
             catch (ValidationException ex)
@@ -1136,7 +1136,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 string username = "SYSTEM";//User.Identity.GetUserName() ?? "SYSTEM";
-                bool flag = PrintLabelService.ConfirmPicking(confirmRequest, username);
+                bool flag = ItemImportService.ConfirmPicking(confirmRequest, username);
                 response.SetData(flag ? 1 : 0);
             }
             catch (ValidationException ex)
@@ -1157,7 +1157,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 string username = User.Identity.GetUserName() ?? "SYSTEM";
-                bool flag = PrintLabelService.ConfirmPicking(registerRequest, username);
+                bool flag = ItemImportService.ConfirmPicking(registerRequest, username);
                 response.SetData(flag ? 1 : 0);
             }
             catch (ValidationException ex)
@@ -1230,7 +1230,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 string username = "SYSTEM";//User.Identity.GetUserName() ?? "SYSTEM";
-                bool flag = PrintLabelService.RegisterRFID_HANDY(registerRequest, username);
+                bool flag = ItemImportService.RegisterRFID_HANDY(registerRequest, username);
                 response.SetData(flag ? 1 : 0);
             }
             catch (ValidationException ex)

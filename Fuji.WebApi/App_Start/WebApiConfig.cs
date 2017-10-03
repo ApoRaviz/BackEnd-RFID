@@ -9,10 +9,10 @@ using System.Web.Http.Cors;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using WIM.WebApi.Controllers;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Controllers;
+using Fuji.WebApi.Auth;
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public static class WebApiConfig
     {

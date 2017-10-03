@@ -7,12 +7,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Auth;
 using System.Net.Http;
 using System.Configuration;
 using System.Web.Http.Routing;
 
-namespace WIM.WebApi.Providers
+namespace Fuji.WebApi.Providers
 {
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {

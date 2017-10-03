@@ -10,7 +10,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Net.Http;
 
-namespace WIM.WebApi.Auth
+namespace Fuji.WebApi.Auth
 {
 
     public class ClaimsAuthorizationAttribute : AuthorizationFilterAttribute

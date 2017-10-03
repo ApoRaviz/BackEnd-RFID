@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Auth;
 
-namespace WIM.WebApi.Models
+namespace Fuji.WebApi.Models
 {
     // Models used as parameters to AccountController actions.
 

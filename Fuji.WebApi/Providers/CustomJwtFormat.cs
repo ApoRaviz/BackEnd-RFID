@@ -8,7 +8,7 @@ using System.Linq;
 using System.Web;
 using Thinktecture.IdentityModel.Tokens;
 
-namespace WIM.WebApi.Providers
+namespace Fuji.WebApi.Providers
 {
     public class CustomJwtFormat : ISecureDataFormat<AuthenticationTicket>
     {

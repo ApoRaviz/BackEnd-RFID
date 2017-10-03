@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WIM.WebApi.Models
+namespace Fuji.WebApi.Models
 {
     // Models returned by AccountController actions.
 
