@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using WIM.WebApi.Areas.HelpPage.ModelDescriptions;
-using WIM.WebApi.Areas.HelpPage.Models;
+using Fuji.WebApi.Areas.HelpPage.ModelDescriptions;
+using Fuji.WebApi.Areas.HelpPage.Models;
 
-namespace WIM.WebApi.Areas.HelpPage.Controllers
+namespace Fuji.WebApi.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

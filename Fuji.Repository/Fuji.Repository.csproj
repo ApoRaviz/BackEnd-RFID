@@ -47,63 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorLogs.cs">
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FujiDataModel.Context.cs" />
-    <Compile Include="FujiDataModel.cs" />
-    <Compile Include="FujiDatamodel.Designer.cs">
-      <DependentUpon>FujiDataModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FujiDataModel1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FujiDataModel1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FujiDataModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="ImportSerialDetail.cs">
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ImportSerialHead.cs">
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LabelRunning.cs">
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProcGetImportSerialHeadByHeadID_Result.cs">
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProcGetImportSerialHead_Result.cs">
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProgramVersionHistory.cs">
-      <DependentUpon>FujiDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FujiDataModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>FujiDataModel1.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="FujiDataModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>FujiDataModel1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <None Include="App.config" />
-    <None Include="FujiDataModel.edmx.diagram">
-      <DependentUpon>FujiDataModel.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
+      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
+      <Name>Fuji.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

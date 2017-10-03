@@ -7,12 +7,11 @@ using System.Security.Claims;
 using System.Web.Http;
 using WIM.Core.Common;
 using WIM.Core.Common.Extensions;
-using WIM.WebApi.Models;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 
-namespace WIM.WebApi.Controllers
+namespace Fuji.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/helpers")]

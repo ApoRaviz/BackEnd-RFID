@@ -8,14 +8,15 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using WIM.WebApi.Providers;
-using WIM.WebApi.Auth;
 using System.Configuration;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security;
+using WIM.Core.Security;
+using WIM.Core.Security.Context;
+using WIM.Core.Security.Providers;
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public partial class Startup
     {
@@ -27,7 +28,7 @@ namespace WIM.WebApi
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context and user manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(SecurityDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
 

@@ -5,10 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.WebApi.Auth;
-using WIM.WebApi.Models;
+using WIM.Core.Security;
 
-namespace WIM.WebApi.Controllers
+namespace Fuji.WebApi.Controllers
 {
     //[Authorize]
     public class BaseApiController : ApiController

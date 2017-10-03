@@ -10,10 +10,10 @@ using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
 
-using WIM.WebApi.Controllers;
+using Fuji.WebApi.Controllers;
 
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public static class UnityConfig
     {
@@ -30,7 +30,7 @@ namespace WIM.WebApi
 
             //Register OWin Authen
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
-            container.RegisterType<AccountController>(new InjectionConstructor());
+            //container.RegisterType<AccountController>(new InjectionConstructor());
 
             //Fuji
             container.RegisterType<IItemImportService, ItemImportService>();

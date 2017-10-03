@@ -17,7 +17,7 @@ namespace WIM.Core.Security
 
     public class ApplicationUserStore : UserStore<ApplicationUser, ApplicationRole, string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IUserStore<ApplicationUser, string>
     {
-        public ApplicationUserStore(ApplicationDbContext context)
+        public ApplicationUserStore(SecurityDbContext context)
             : base(context)
         {
         }
@@ -32,8 +32,8 @@ namespace WIM.Core.Security
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var appDbContext = context.Get<ApplicationDbContext>();
-            var appUserManager = new ApplicationUserManager(new ApplicationUserStore(context.Get<ApplicationDbContext>()));
+            var appDbContext = context.Get<SecurityDbContext>();
+            var appUserManager = new ApplicationUserManager(new ApplicationUserStore(context.Get<SecurityDbContext>()));
 
             // Configure validation logic for usernames
             appUserManager.UserValidator = new UserValidator<ApplicationUser>(appUserManager)
@@ -68,10 +68,10 @@ namespace WIM.Core.Security
 
         public static ApplicationUser GetUser(string _userId)
         {
-            return GetUser(new ApplicationDbContext(), _userId);
+            return GetUser(new SecurityDbContext(), _userId);
         }
 
-        public static ApplicationUser GetUser(ApplicationDbContext db, string _userId)
+        public static ApplicationUser GetUser(SecurityDbContext db, string _userId)
         {
             ApplicationUser _retVal = null;
             try
@@ -110,7 +110,7 @@ namespace WIM.Core.Security
 
         public static void PasswordHistoryOverYear(string _userId)
         {
-            using (ApplicationDbContext db = new ApplicationDbContext())
+            using (SecurityDbContext db = new SecurityDbContext())
             {
                 var phTop = db.PasswordHistory.Where(u => u.UserID == _userId).Take(1).FirstOrDefault();
                 if (phTop != null && (DateTime.Now - phTop.CreatedDate).TotalDays >= 365)
@@ -126,7 +126,7 @@ namespace WIM.Core.Security
 
         public static bool PasswordHistoryOver3Month(string _userId)
         {
-            using (ApplicationDbContext db = new ApplicationDbContext())
+            using (SecurityDbContext db = new SecurityDbContext())
             {
                 var phBottom = db.PasswordHistory.Where(u => u.UserID == _userId).OrderByDescending(o => o.ID).Take(1).FirstOrDefault();
                 if (phBottom != null && (phBottom.CreatedDate - DateTime.Now).TotalDays >= 90)
@@ -144,7 +144,7 @@ namespace WIM.Core.Security
             PasswordHasher ph = new PasswordHasher();
             try
             {
-                using (ApplicationDbContext db = new ApplicationDbContext())
+                using (SecurityDbContext db = new SecurityDbContext())
                 {
                     pass = (from p in db.PasswordHistory where p.UserID == _userId select p).ToList();
                 }
@@ -168,7 +168,7 @@ namespace WIM.Core.Security
         {
             try
             {
-                using (ApplicationDbContext db = new ApplicationDbContext())
+                using (SecurityDbContext db = new SecurityDbContext())
                 {
                     PasswordHistory passhis = new PasswordHistory();
                     PasswordHasher ph = new PasswordHasher();
@@ -193,7 +193,7 @@ namespace WIM.Core.Security
             {
                 /*_retVal = db.Users.Where(p => p.Id == _userId)
                     .Include(p => p.Roles).Include(x => x.Roles.Select(r => r.Role.Permissions)).FirstOrDefault();*/
-                using (ApplicationDbContext db = new ApplicationDbContext())
+                using (SecurityDbContext db = new SecurityDbContext())
                 {
                     pass = (from p in db.PasswordHistory select p).ToList();
                 }

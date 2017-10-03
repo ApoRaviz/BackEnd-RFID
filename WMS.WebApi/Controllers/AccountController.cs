@@ -22,6 +22,7 @@ using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 using WMS.WebApi.Providers;
 using WMS.WebApi.Results;
+using WIM.Core.Security.Providers;
 
 namespace WMS.WebApi.Controllers
 {

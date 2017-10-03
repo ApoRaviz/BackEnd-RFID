@@ -15,6 +15,7 @@ using Microsoft.Owin.Security;
 using WIM.Core.Security.Context;
 using WIM.Core.Security;
 using WMS.WebApi.Providers;
+using WIM.Core.Security.Providers;
 
 namespace WMS.WebApi
 {
@@ -28,7 +29,7 @@ namespace WMS.WebApi
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context and user manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(SecurityDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
 

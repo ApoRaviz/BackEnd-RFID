@@ -8,28 +8,30 @@ using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Repository;
 using WIM.Core.Common.Validation;
-using Fuji.Repository;
 using Fuji.Service.PrintLabel;
 using WIM.Core.Repository.Impl;
+using Fuji.Context;
+using Fuji.Entity.LabelManagement;
 
 namespace Fuji.Service.Impl.PrintLabel
 {
     public class PrintLabelService : IPrintLabelService
     {
-        private WIM_FUJI_DEVEntities db = new WIM_FUJI_DEVEntities();
+        private FujiDbContext Db { get; set; }
         
-        private IGenericRepository<LabelRunning> repo;
+        private IGenericRepository<LabelRunning> Repo;
 
         public PrintLabelService()
         {
-            repo = new GenericRepository<LabelRunning>(db);
+            Repo = new GenericRepository<LabelRunning>(Db);
+            Db = FujiDbContext.Create();
         }        
 
         public int GetRunningByType(string type, int running)
         {
             int baseRunning = 0;
             bool isNotUpdateDate;
-            LabelRunning label = (from l in db.LabelRunning
+            LabelRunning label = (from l in Db.LabelRunning
                          where l.Type.Equals(type)
                          select l
                          ).SingleOrDefault();
@@ -62,11 +64,11 @@ namespace Fuji.Service.Impl.PrintLabel
                     label.Running = running;
                 }                
 
-                repo.Update(label);
+                Repo.Update(label);
                 
                 try
                 {
-                    db.SaveChanges();
+                    Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
                 {

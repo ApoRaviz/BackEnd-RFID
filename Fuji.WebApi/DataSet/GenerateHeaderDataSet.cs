@@ -1,8 +1,8 @@
-﻿namespace WIM.WebApi.DataSet
+﻿namespace Fuji.WebApi.DataSet
 {
 }
 
-namespace WIM.WebApi.DataSet
+namespace Fuji.WebApi.DataSet
 {
 
 

@@ -1,4 +1,4 @@
-﻿using Fuji.Repository;
+﻿using Fuji.Entity.ProgramVersion;
 using Fuji.Service.ProgramVersion;
 using System;
 using System.Collections.Generic;

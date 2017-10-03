@@ -28,7 +28,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>IsuzuRfidDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\YamatoProject\Fuji\WimFUJI\WIM.WebApi\DataSet\IsuzuRfidDataSet.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\YamatoProject\Fuji\WimFUJI\Fuji.WebApi\DataSet\IsuzuRfidDataSet.xsd</rd:SchemaPath>
         <rd:TableName>IsuzuRfidTable</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

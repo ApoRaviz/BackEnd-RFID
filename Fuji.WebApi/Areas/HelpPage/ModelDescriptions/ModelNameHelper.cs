@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace WIM.WebApi.Areas.HelpPage.ModelDescriptions
+namespace Fuji.WebApi.Areas.HelpPage.ModelDescriptions
 {
     internal static class ModelNameHelper
     {

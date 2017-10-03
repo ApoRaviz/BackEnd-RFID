@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace WIM.WebApi.DataSet {
+namespace Fuji.WebApi.DataSet {
     
     
     /// <summary>
@@ -3027,7 +3027,7 @@ namespace WIM.WebApi.DataSet {
         }
     }
 }
-namespace WIM.WebApi.DataSet.MasterDataSetTableAdapters {
+namespace Fuji.WebApi.DataSet.MasterDataSetTableAdapters {
     
     
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace WIM.WebApi
+namespace Fuji.WebApi
 {
     public class BundleConfig
     {
