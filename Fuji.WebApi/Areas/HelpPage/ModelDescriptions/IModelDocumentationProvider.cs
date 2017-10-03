@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Fuji.WebApi.Areas.HelpPage.ModelDescriptions
+namespace WIM.WebApi.Areas.HelpPage.ModelDescriptions
 {
     public interface IModelDocumentationProvider
     {

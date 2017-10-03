@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace Fuji.WebApi.Areas.HelpPage.ModelDescriptions
+namespace WIM.WebApi.Areas.HelpPage.ModelDescriptions
 {
     public class ComplexTypeModelDescription : ModelDescription
     {

@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace Fuji.WebApi.Areas.HelpPage
+namespace WIM.WebApi.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {

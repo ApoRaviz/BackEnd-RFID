@@ -1,13 +1,14 @@
-﻿using System;
+﻿using WIM.Core.Common.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http;
-using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
+using System.Net.Http;
+using WIM.Core.Common.Helpers;
+using System.Data.Entity.Infrastructure;
 
 namespace WIM.Core.Common.Http
 {

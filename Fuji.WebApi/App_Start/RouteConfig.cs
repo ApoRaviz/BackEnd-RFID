@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Fuji.WebApi
+namespace WIM.WebApi
 {
     public class RouteConfig
     {
@@ -18,6 +18,8 @@ namespace Fuji.WebApi
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            
         }
     }
 }

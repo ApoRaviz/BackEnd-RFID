@@ -1,8 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dependencies;
+using System.Web.Http.ModelBinding;
+using System.Web.Http.Routing;
 using System.Net.Http;
 using WIM.Core.Common.Http;
 using System.Linq;

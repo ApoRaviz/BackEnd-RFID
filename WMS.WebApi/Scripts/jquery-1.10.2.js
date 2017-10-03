@@ -7289,7 +7289,7 @@ function css_defaultDisplay( nodeName ) {
 			// Use the already-created iframe if possible
 			iframe = ( iframe ||
 				jQuery("<iframe frameborder='0' width='0' height='0'/>")
-				.css( "cssText", "display:block !important" )
+				.css( "cssText", "display:block " )
 			).appendTo( doc.documentElement );
 
 			// Always write a new HTML skeleton so Webkit and Firefox don't choke on reuse
