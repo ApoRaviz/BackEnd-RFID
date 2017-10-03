@@ -14,13 +14,13 @@ namespace WMS.Master
         IEnumerable<MenuProjectMapping> GetMenuProjectMapping();
         IEnumerable<MenuProjectMappingDto> GetMenuProjectMappingDto(int id);
         IEnumerable<MenuProjectMappingDto> GetMenuProjectMappingByID(int id);
-        IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid);
+        IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid , IEnumerable<MenuProjectMappingDto> menu);
         IEnumerable<MenuProjectMappingDto> GetMenuPermission(string userid,int projectid);
         IEnumerable<MenuDto> GetMenuDtoDefault(int i);
         int CreateMenuProjectMapping(MenuDto MenuProjectMapping, int projectID,byte sort);
         int CreateMenuProjectMapping(MenuProjectMapping MenuProjectMapping);
         bool UpdateMenuProjectMapping(int id, MenuProjectMapping MenuProjectMapping);
-        bool UpdateMenuProjectMapping(MenuProjectMappingDto MenuProjectMapping,byte sort);
+        bool UpdateMenuProjectMapping(List<MenuProjectMappingDto> MenuProjectMapping);
         bool DeleteMenuProjectMapping(List<MenuProjectMappingDto> id);        
     }
 }

@@ -25,6 +25,19 @@ namespace WMS.Master.Customer
             Repo = new GenericRepository<Customer_MT>(db);
         }
 
+        public object GetCustomerAll()
+        {
+            var query = from ctm in db.Customer_MT
+                        where ctm.Active == 1
+                        select new
+                        {
+                            ctm.CusID,
+                            ctm.CusIDSys,
+                            ctm.CusName
+                        };
+
+            return query.ToList();
+        }
 
         //public ICollection<CustomerDto> GetCustomers(string userid)
         //{
@@ -61,24 +74,28 @@ namespace WMS.Master.Customer
 
         public object GetCustomers(string userid)
         {
-            var query = from ctm in db.Customer_MT
-                        join c in db.UserCustomerMappings on ctm.CusIDSys equals c.CusIDSys
-                        where c.UserID == userid
-                        select new
-                        {
-                            ctm.CusID,
-                            ctm.CusIDSys,
-                            ctm.CusName
-                        };
+            var query = (from ctm in db.Customer_MT
+                         join c in db.Project_MT on ctm.CusIDSys equals c.CusIDSys
+                         join d in db.Roles on c.ProjectIDSys equals d.ProjectIDSys
+                         join e in db.UserRoles on d.RoleID equals e.RoleID
+                         where e.UserID == userid
+                         select new
+                         {
+                             ctm.CusID,
+                             ctm.CusIDSys,
+                             ctm.CusName
+                         }).Distinct();
+
             return query.ToList();
         }
 
-        public object GetProjectByCustomer(string userid,int cusIDSys)
+        public object GetProjectByCustomer(string userid, int cusIDSys)
         {
             var query = from ctm in db.Customer_MT
                         join pm in db.Project_MT on ctm.CusIDSys equals pm.CusIDSys
-                        join upm in db.UserProjectMappings on pm.ProjectIDSys equals upm.ProjectIDSys
-                        where upm.UserID == userid && ctm.CusIDSys == cusIDSys
+                        join r in db.Roles on pm.ProjectIDSys equals r.ProjectIDSys
+                        join ru in db.UserRoles on r.RoleID equals ru.RoleID
+                        where ru.UserID == userid && pm.CusIDSys == cusIDSys
                         select new
                         {
                             pm.ProjectID,
@@ -95,7 +112,9 @@ namespace WMS.Master.Customer
 
         public CustomerDto GetCustomersInclude(int id, string[] tableNames)
         {
-            var customer = GetCustomerByCusIDSys(id);
+            var customer = from cus in db.Customer_MT
+                           where cus.CusIDSys == id && cus.Active == 1
+                           select cus;
             if (customer != null)
             {
                 var query = (from i in db.Customer_MT

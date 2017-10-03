@@ -168,8 +168,8 @@ namespace WMS.WebApi.Controllers
                 }
                 try
                 {
-                    bool isUpated = MenuService.UpdateMenu(mother.ParentMenu[j].MenuIDSys, mother.ParentMenu[j], forsort);
-
+                    mother.ParentMenu[j].MenuParentID = mother.ParentMenu[j].MenuIDSys;
+                    mother.ParentMenu[j].Sort = forsort;
                 }
                 catch (ValidationException)
                 {
@@ -214,17 +214,19 @@ namespace WMS.WebApi.Controllers
                 if (MenuList[i].ParentMenu != null)
                 {
                     setParent(MenuList[i]);
+                    MenuList[i].MenuParentID = MenuList[i].MenuIDSys;
+                    MenuList[i].Sort = forsort;
                 }
-                try
-                {
-                    bool isUpated = MenuService.UpdateMenu(MenuList[i].MenuIDSys, MenuList[i], forsort);
-                    response.SetData(isUpated);
-                }
-                catch (ValidationException ex)
-                {
-                    response.SetErrors(ex.Errors);
-                    response.SetStatus(HttpStatusCode.PreconditionFailed);
-                }
+            }
+            try
+            {
+                bool isUpated = MenuService.UpdateMenu(MenuList);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
         }

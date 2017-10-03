@@ -21,11 +21,13 @@ namespace WMS.WebApi.Controllers
     public class CustomersController : ApiController
     {
         private ICustomerService CustomerService;
+        private IProjectService ProjectService;
 
 
-        public CustomersController(ICustomerService customerService)
+        public CustomersController(ICustomerService customerService, IProjectService projectService)
         {
             this.CustomerService = customerService;
+            this.ProjectService = projectService;
         }
 
         //// GET: api/Customers
@@ -84,7 +86,16 @@ namespace WMS.WebApi.Controllers
             try
             {
                 string userid = User.Identity.GetUserId();
-                object customer = CustomerService.GetCustomers(userid);
+                object customer;
+                if (User.IsSysAdmin())
+                {
+
+                    customer = CustomerService.GetCustomerAll();
+                }
+                else
+                {
+                    customer = CustomerService.GetCustomers(userid);
+                }
 
                 response.SetData(customer);
             }
@@ -106,7 +117,17 @@ namespace WMS.WebApi.Controllers
             try
             {
                 string userid = User.Identity.GetUserId();
-                object customer = CustomerService.GetProjectByCustomer(userid, param.cusIDSys);
+                object customer;
+                if (User.IsSysAdmin())
+                {
+                    customer = ProjectService.ProjectCustomer(param.cusIDSys);
+                }
+                else
+                {
+                    customer = CustomerService.GetProjectByCustomer(userid, param.cusIDSys);
+                }
+
+
                 response.SetData(customer);
             }
             catch (ValidationException ex)
@@ -221,3 +242,4 @@ namespace WMS.WebApi.Controllers
         public int cusIDSys { get; set; }
     }
 }
+

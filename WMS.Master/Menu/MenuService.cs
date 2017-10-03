@@ -81,18 +81,19 @@ namespace WMS.Master
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return menu.MenuIDSys;
             }
         }
@@ -116,7 +117,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -127,17 +128,22 @@ namespace WMS.Master
             }
         }
 
-        public bool UpdateMenu(int id, MenuDto Menu,byte i)
+        public bool UpdateMenu(List<MenuDto> menu)
         {
             using (var scope = new TransactionScope())
             {
-                var existedMenu = repo.GetByID(id);
-                existedMenu.MenuParentID = Menu.MenuParentID;
-                existedMenu.MenuName = Menu.MenuName;
-                existedMenu.Sort = i;
+                Menu_MT existedMenu;
+                foreach (var c in menu)
+                {
+                    existedMenu = repo.GetByID(c.MenuIDSys);
+                    existedMenu.MenuParentID = c.MenuParentID;
+                    existedMenu.MenuName = c.MenuName;
+                    existedMenu.Sort = c.Sort;
+                }
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -149,7 +155,7 @@ namespace WMS.Master
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return true;
             }
         }

@@ -61,7 +61,7 @@ namespace WMS.Master
                     db.SaveChanges();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new ValidationException();
             }
@@ -122,7 +122,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4009));
@@ -164,6 +164,12 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
                 scope.Complete();
                 return true;
             }
@@ -178,8 +184,22 @@ namespace WMS.Master
                 existedUser.UpdateDate = DateTime.Now;
                 existedUser.UserUpdate = "1";
                 repo.Update(existedUser);
-                db.SaveChanges();
-                scope.Complete();
+                try
+                {
+                    db.SaveChanges();
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+
                 return true;
             }
         }
@@ -203,7 +223,7 @@ namespace WMS.Master
                     db.SaveChanges();
                     scope.Complete();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new ValidationException();
                 }
@@ -272,7 +292,7 @@ namespace WMS.Master
                     Person.UserUpdate = "1";
                     repoPerson.Insert(Person);
                     db.SaveChanges();
-                db.Users.Add(new User()
+                    db.Users.Add(new User()
                         {
                             UserID = Guid.NewGuid().ToString(),
                             UserName = User.UserName,
@@ -295,19 +315,20 @@ namespace WMS.Master
                             Active = 1
                         });
                    db.SaveChanges();
-                    }
+                   scope.Complete();
+                }
                     //repo.Insert(User);
                     catch (DbEntityValidationException e)
                     {
                         HandleValidationException(e);
                     }
-                    catch (DbUpdateException e)
+                    catch (DbUpdateException)
                     {
                         scope.Dispose();
                         ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4009));
                         throw ex;
                     }
-                    scope.Complete();
+                    
                     
                 }
                 

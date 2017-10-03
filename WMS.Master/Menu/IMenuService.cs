@@ -18,7 +18,7 @@ namespace WMS.Master
         int CreateMenu(MenuDto Menu, int projectID,byte sort);
         int CreateMenu(Menu_MT Menu);
         bool UpdateMenu(int id, Menu_MT Menu);
-        bool UpdateMenu(int id, MenuDto Menu,byte i);
+        bool UpdateMenu(List<MenuDto> menu);
         bool DeleteMenu(int id);        
     }
 }

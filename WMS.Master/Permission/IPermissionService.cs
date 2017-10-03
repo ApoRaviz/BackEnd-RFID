@@ -20,6 +20,7 @@ namespace WMS.Master
         bool DeletePermission(string id);
         bool DeleteAllInRole(string permissionID);
         string CreateRolePermission(string PermissionId, string RoleId);
+        string CreateRolePermission(string RoleID , List<PermissionTree> tree);
         bool DeleteRolePermission(string PermissionId, string RoleId);
         List<PermissionTree> GetPermissionTree(int projectid);
     }

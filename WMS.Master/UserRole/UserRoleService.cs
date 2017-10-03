@@ -44,23 +44,23 @@ namespace WMS.Master
         {
             using (var scope = new TransactionScope())
             {
-               
-                //repo.Insert(UserRole);
+
+                repo.Insert(UserRole);
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return UserRole.UserID;
             }
         }
@@ -70,23 +70,22 @@ namespace WMS.Master
             using (var scope = new TransactionScope())
             {
                 var existedUserRole = repo.GetByID(id);
-              
                 repo.Update(existedUserRole);
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -102,14 +101,12 @@ namespace WMS.Master
                 db.SaveChanges();
                 scope.Complete();
                 }
-                catch (DbUpdateConcurrencyException e)
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-
-
                 return true;
             }
         }
@@ -140,6 +137,7 @@ namespace WMS.Master
                                           }).ToList();
             return RoleUser;
         }
+
         public List<UserRoleDto> GetUserByRoleID(string roleid)
         {
             var RoleForPermissionQuery = from row in db.UserRoles
@@ -194,18 +192,18 @@ namespace WMS.Master
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return data.UserID;
             }
         }
@@ -221,18 +219,18 @@ namespace WMS.Master
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return data.UserID;
             }
         }

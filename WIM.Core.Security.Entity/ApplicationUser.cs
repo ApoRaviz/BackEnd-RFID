@@ -22,7 +22,7 @@ namespace WIM.Core.Security.Entity
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string UserUpdate { get; set; }
-
+        public bool IsSysAdmin { get; set; }
         //public int ProjectIDSys { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, string> manager, string authenticationType)
@@ -33,7 +33,7 @@ namespace WIM.Core.Security.Entity
             //userIdentity.AddClaim(new Claim("Permission", Permission.ToString()));
 
             //userIdentity.RemoveClaim(userIdentity.FindFirst("role"));
-            
+
 
             return userIdentity;
         }
@@ -58,25 +58,25 @@ namespace WIM.Core.Security.Entity
             return _retVal;
         }
 
-        public bool IsSysAdmin()
-        {
-            bool _retVal = false;
-            try
-            {
-                foreach (ApplicationUserRole _role in this.Roles)
-                {
-                    if (_role.IsSysAdmin)
-                    {
-                        _retVal = true;
-                        break;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-            return _retVal;
-        }
+        //public bool IsSysAdmin()
+        //{
+        //    bool _retVal = false;
+        //    try
+        //    {
+        //        foreach (ApplicationUserRole _role in this.Roles)
+        //        {
+        //            if (_role.IsSysAdmin)
+        //            {
+        //                _retVal = true;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
+        //    return _retVal;
+        //}
 
     }
 

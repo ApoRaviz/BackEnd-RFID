@@ -218,11 +218,9 @@ namespace WMS.WebApi.Controllers
         public HttpResponseMessage PostPermission(string RoleID,List<PermissionTree> Permission)
         {
             IResponseData<string> response = new ResponseData<string>();
-            for (int i = 0; i < Permission.Count; i++)
-            {
                 try
                 {
-                    string id = PermissionService.CreateRolePermission(Permission[i].PermissionID, RoleID);
+                    string id = PermissionService.CreateRolePermission(RoleID, Permission);
                     response.SetData(id);
                 }
                 catch (ValidationException ex)
@@ -230,7 +228,6 @@ namespace WMS.WebApi.Controllers
                     response.SetErrors(ex.Errors);
                     response.SetStatus(HttpStatusCode.PreconditionFailed);
                 }
-            }
             //Permission.UserUpdate = User.Identity.Name;
             return Request.ReturnHttpResponseMessage(response);
         }
