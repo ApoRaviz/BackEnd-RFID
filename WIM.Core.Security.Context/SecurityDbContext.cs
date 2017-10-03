@@ -6,18 +6,18 @@ using WIM.Core.Security.Entity;
 
 namespace WIM.Core.Security.Context
 {    
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
+    public class SecurityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
     {
-        public ApplicationDbContext()
+        public SecurityDbContext()
             : base("DefaultConnection")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
         }
 
-        public static ApplicationDbContext Create()
+        public static SecurityDbContext Create()
         {
-            return new ApplicationDbContext();
+            return new SecurityDbContext();
         }
 
         public DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
