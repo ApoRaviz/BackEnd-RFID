@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace WIM.WebApi.Models
+namespace Fuji.WebApi.Models
 {
     [Table("Menu_MT")]
     public class Menu

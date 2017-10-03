@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace WIM.WebApi.Models
+namespace Fuji.WebApi.Models
 {
     public class ClaimBindingModel
     {

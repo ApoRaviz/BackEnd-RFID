@@ -43,7 +43,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>GenerateHeaderDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\YamatoProject\WIMService\WIM.WebApi\DataSet\GenerateHeaderDataSet.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\YamatoProject\WIMService\Fuji.WebApi\DataSet\GenerateHeaderDataSet.xsd</rd:SchemaPath>
         <rd:TableName>GenerateHeaderDetailTable</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -95,7 +95,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>GenerateHeaderDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\YamatoProject\Fuji\WimFUJI\WIM.WebApi\DataSet\GenerateHeaderDataSet.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\YamatoProject\Fuji\WimFUJI\Fuji.WebApi\DataSet\GenerateHeaderDataSet.xsd</rd:SchemaPath>
         <rd:TableName>GenerateHeaderTable</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

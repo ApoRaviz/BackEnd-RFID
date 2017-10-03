@@ -9,10 +9,10 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using WIM.WebApi.Models;
-using WIM.WebApi.Auth;
+using Fuji.WebApi.Models;
+using Fuji.WebApi.Auth;
 
-namespace WIM.WebApi.Providers
+namespace Fuji.WebApi.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {

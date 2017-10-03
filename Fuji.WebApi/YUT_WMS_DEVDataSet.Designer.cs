@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace WIM.WebApi {
+namespace Fuji.WebApi {
     
     
     /// <summary>
@@ -1216,7 +1216,7 @@ namespace WIM.WebApi {
         }
     }
 }
-namespace WIM.WebApi.YUT_WMS_DEVDataSetTableAdapters {
+namespace Fuji.WebApi.YUT_WMS_DEVDataSetTableAdapters {
     
     
     /// <summary>

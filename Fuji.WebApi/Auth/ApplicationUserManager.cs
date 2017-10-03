@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace WIM.WebApi.Auth
+namespace Fuji.WebApi.Auth
 {
 
     public class ApplicationUserStore : UserStore<ApplicationUser, ApplicationRole, string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IUserStore<ApplicationUser, string>
@@ -48,7 +48,7 @@ namespace WIM.WebApi.Auth
                 RequireUppercase = true,
             };
             
-            appUserManager.EmailService = new WIM.WebApi.Services.EmailService();
+            appUserManager.EmailService = new Fuji.WebApi.Services.EmailService();
 
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)

@@ -10,7 +10,7 @@ namespace Fuji.Service.ItemImport
 {
     public interface IItemImportService
     {
-        IEnumerable<ImportSerialHead> GetItems();
+        IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> GetItems();
         IEnumerable<ImportSerialHead> GetItems(int pageIndex, int pageSize,out int totalRecord);
         List<FujiPickingGroup> GetPickingGroup(int max = 50);
         List<ImportSerialDetail> GetImportSerialDetailByHeadID(string headID);

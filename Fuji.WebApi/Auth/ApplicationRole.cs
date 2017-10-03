@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WIM.WebApi.Models;
+using Fuji.WebApi.Models;
 
-namespace WIM.WebApi.Auth
+namespace Fuji.WebApi.Auth
 {
     public class ApplicationRole : IdentityRole<string, ApplicationUserRole>
     {

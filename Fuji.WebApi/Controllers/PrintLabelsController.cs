@@ -15,7 +15,7 @@ using System.Xml.Linq;
 using System.Drawing.Printing;
 using Fuji.Service.PrintLabel;
 
-namespace WIM.WebApi.Controllers.ExternalInterface
+namespace Fuji.WebApi.Controllers.ExternalInterface
 {
     [RoutePrefix("api/v1/external/printLabel")]
     public class PrintLabelsController : ApiController

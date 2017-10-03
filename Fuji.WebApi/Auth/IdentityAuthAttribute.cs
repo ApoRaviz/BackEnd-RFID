@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using WIM.WebApi.Models;
+using Fuji.WebApi.Models;
 
-namespace WIM.WebApi.Auth
+namespace Fuji.WebApi.Auth
 {
     public class IdentityAuthAttribute : AuthorizationFilterAttribute
     {

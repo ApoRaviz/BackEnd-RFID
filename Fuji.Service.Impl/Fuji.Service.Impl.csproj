@@ -63,6 +63,14 @@
       <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
       <Name>Fuji.Common.ValueObject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Fuji.Context\Fuji.Context.csproj">
+      <Project>{9cc22b43-a4a9-44e9-8d84-b5bc04240248}</Project>
+      <Name>Fuji.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
+      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
+      <Name>Fuji.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
       <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
       <Name>Fuji.Repository</Name>

@@ -16,6 +16,7 @@ using Fuji.Common.ValueObject;
 using WIM.Core.Common.Helpers;
 using Fuji.Service.ItemImport;
 using WIM.Core.Repository.Impl;
+using Fuji.Context;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -27,20 +28,24 @@ namespace Fuji.Service.Impl.ItemImport
         #endregion
 
         private WIM_FUJI_DEVEntities Db = new WIM_FUJI_DEVEntities();
+        
+        private FujiDbContext FujiDb { get; set; }
 
         private IGenericRepository<ImportSerialHead> Repo;
 
         public ItemImportService()
         {
             Repo = new GenericRepository<ImportSerialHead>(Db);
+            FujiDb = FujiDbContext.Create();
         }
 
-        public IEnumerable<ImportSerialHead> GetItems()
+        public IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> GetItems()
         {
-            return (from h in Db.ImportSerialHead
+            return FujiDb.ImportSerialHead.Take(10).ToList();
+            /*return (from h in Db.ImportSerialHead
                     where !h.HeadID.Equals("0") && !h.Status.Equals(FujiStatus.DELETED.ToString())
                     orderby h.CreatedDate descending
-                    select h).Take(50);
+                    select h).Take(50);*/
         }
 
         public IEnumerable<ImportSerialHead> GetItems(int pageIndex, int pageSize,out int totalRecord)

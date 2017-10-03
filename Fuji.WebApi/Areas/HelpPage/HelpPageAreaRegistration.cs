@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace WIM.WebApi.Areas.HelpPage
+namespace Fuji.WebApi.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

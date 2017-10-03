@@ -6,8 +6,8 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
-using WIM.WebApi.Auth;
-using WIM.WebApi.Models;
+using Fuji.WebApi.Auth;
+using Fuji.WebApi.Models;
 
 public static class RBAC_ExtendedMethods_4_Principal
 {

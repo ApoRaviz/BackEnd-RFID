@@ -35,7 +35,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>PrintLabelDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\YamatoProject\WIMService\WIM.WebApi\DataSet\PrintLabelDataSet.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\YamatoProject\WIMService\Fuji.WebApi\DataSet\PrintLabelDataSet.xsd</rd:SchemaPath>
         <rd:TableName>PrintLabelTable</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

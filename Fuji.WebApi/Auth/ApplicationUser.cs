@@ -8,9 +8,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
-using WIM.WebApi.Models;
+using Fuji.WebApi.Models;
 
-namespace WIM.WebApi.Auth
+namespace Fuji.WebApi.Auth
 {    
     public class ApplicationUser : IdentityUser<string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
     {

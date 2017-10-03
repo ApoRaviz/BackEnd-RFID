@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 
-namespace WIM.WebApi.Auth
+namespace Fuji.WebApi.Auth
 {
     public class RolesFromClaims
     {

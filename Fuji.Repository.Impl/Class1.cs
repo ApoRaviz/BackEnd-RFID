@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIM.Core.Repository.Entity
+namespace Fuji.Repository.Impl
 {
     public class Class1
     {
