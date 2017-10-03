@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Web.Http;
 using WIM.Core.Common;
 using WIM.Core.Common.Extensions;
-using Fuji.WebApi.Models;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;

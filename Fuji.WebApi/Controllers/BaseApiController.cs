@@ -5,8 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Fuji.WebApi.Auth;
-using Fuji.WebApi.Models;
+using WIM.Core.Security;
 
 namespace Fuji.WebApi.Controllers
 {

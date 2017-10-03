@@ -3,8 +3,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Fuji.WebApi.Models;
-using Fuji.WebApi.Auth;
 
 namespace Fuji.WebApi
 {

@@ -7,10 +7,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
-using Fuji.WebApi.Auth;
 using System.Net.Http;
 using System.Configuration;
 using System.Web.Http.Routing;
+using WIM.Core.Security.Entity;
+using WIM.Core.Security;
 
 namespace Fuji.WebApi.Providers
 {

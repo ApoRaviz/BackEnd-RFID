@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
+using WIM.Core.Common.Helpers;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 using WMS.WebApi;

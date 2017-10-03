@@ -10,7 +10,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Fuji.WebApi.Controllers;
-using Fuji.WebApi.Auth;
 
 namespace Fuji.WebApi
 {

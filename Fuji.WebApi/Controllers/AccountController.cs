@@ -13,12 +13,12 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using Fuji.WebApi.Models;
 using Fuji.WebApi.Providers;
 using Fuji.WebApi.Results;
-using Fuji.WebApi.Auth;
 using System.Linq;
 using Microsoft.VisualBasic;
+using WIM.Core.Security;
+using WIM.Core.Security.Entity;
 
 namespace Fuji.WebApi.Controllers
 {

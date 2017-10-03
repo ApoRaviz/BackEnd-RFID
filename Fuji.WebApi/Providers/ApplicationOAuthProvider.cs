@@ -9,8 +9,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using Fuji.WebApi.Models;
-using Fuji.WebApi.Auth;
+using WIM.Core.Security.Entity;
+using WIM.Core.Security;
 
 namespace Fuji.WebApi.Providers
 {

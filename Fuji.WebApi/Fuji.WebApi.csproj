@@ -345,18 +345,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Auth\ApplicationDbContext.cs" />
-    <Compile Include="Auth\ApplicationRole.cs" />
-    <Compile Include="Auth\ApplicationRoleManager.cs" />
-    <Compile Include="Auth\ApplicationUser.cs" />
-    <Compile Include="Auth\ApplicationUserManager.cs" />
-    <Compile Include="Auth\ApplicationUserRole.cs" />
-    <Compile Include="Auth\ClaimsAuthorizationAttribute.cs" />
-    <Compile Include="Auth\ExtendedClaimsProvider.cs" />
-    <Compile Include="Auth\IdentityAuthAttribute.cs" />
-    <Compile Include="Auth\RBACAttribute.cs" />
-    <Compile Include="Auth\RBAC_IdentityExtendedMethods.cs" />
-    <Compile Include="Auth\RolesFromClaims.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiLogHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
@@ -391,16 +379,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ClaimBindingModel.cs" />
-    <Compile Include="Models\Menu.cs" />
-    <Compile Include="Models\MenuProjectMapping.cs" />
-    <Compile Include="Models\ModelFactory.cs" />
-    <Compile Include="Models\Permission.cs" />
-    <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\RoleBindingModels.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\CustomJwtFormat.cs" />
@@ -554,6 +532,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -615,6 +594,18 @@
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
+      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
+      <Name>WIM.Core.Security.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
+      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
+      <Name>WIM.Core.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
+      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
+      <Name>WIM.Core.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
