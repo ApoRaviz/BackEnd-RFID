@@ -15,6 +15,7 @@ using Microsoft.Owin.Security;
 using WIM.Core.Security.Context;
 using WIM.Core.Security;
 using WMS.WebApi.Providers;
+using WIM.Core.Security.Providers;
 
 namespace WMS.WebApi
 {

@@ -8,13 +8,13 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using Fuji.WebApi.Providers;
 using System.Configuration;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security;
 using WIM.Core.Security;
 using WIM.Core.Security.Context;
+using WIM.Core.Security.Providers;
 
 namespace Fuji.WebApi
 {
