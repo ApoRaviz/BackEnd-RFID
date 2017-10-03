@@ -21,8 +21,8 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data;
 using Fuji.Service.ItemImport;
-using Fuji.Repository;
 using Fuji.Common.ValueObject;
+using Fuji.Entity.ItemManagement;
 
 namespace Fuji.WebApi.Controllers
 {

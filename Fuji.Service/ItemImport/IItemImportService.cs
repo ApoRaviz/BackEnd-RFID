@@ -1,5 +1,5 @@
-﻿using Fuji.Repository;
-using Fuji.Common.ValueObject;
+﻿using Fuji.Common.ValueObject;
+using Fuji.Entity.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Fuji.Service.ItemImport
 {
     public interface IItemImportService
     {
-        IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> GetItems();
+        IEnumerable<ImportSerialHead> GetItems();
         IEnumerable<ImportSerialHead> GetItems(int pageIndex, int pageSize,out int totalRecord);
         List<FujiPickingGroup> GetPickingGroup(int max = 50);
         List<ImportSerialDetail> GetImportSerialDetailByHeadID(string headID);

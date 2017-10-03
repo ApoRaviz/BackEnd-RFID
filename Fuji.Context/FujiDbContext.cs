@@ -1,7 +1,10 @@
 ﻿using Fuji.Entity.ItemManagement;
+using Fuji.Entity.LabelManagement;
+using Fuji.Entity.ProgramVersion;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
@@ -13,9 +16,8 @@ namespace Fuji.Context
     {
         public DbSet<ImportSerialHead> ImportSerialHead { get; set; }
         public DbSet<ImportSerialDetail> ImportSerialDetail { get; set; }
-
-        /*public DbSet<LabelRunning> LabelRunning { get; set; }
-        public DbSet<ProgramVersionHistory> ProgramVersionHistory { get; set; }*/
+        public DbSet<LabelRunning> LabelRunning { get; set; }
+        public DbSet<ProgramVersionHistory> ProgramVersionHistory { get; set; }
 
         public FujiDbContext() : base("name=WIM_FUJI")
         {
@@ -37,6 +39,14 @@ namespace Fuji.Context
 
         }
 
-       
+        public ObjectResult<string> ProcGetNewID(string prefixes)
+        {
+            var prefixesParameter = prefixes != null ?
+                new ObjectParameter("Prefixes", prefixes) :
+                new ObjectParameter("Prefixes", typeof(string));
+
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcGetNewID", prefixesParameter);
+        }
+
     }
 }

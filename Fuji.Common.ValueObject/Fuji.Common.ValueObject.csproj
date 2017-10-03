@@ -50,9 +50,9 @@
     <Compile Include="SerialsRemainInStock.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
-      <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
-      <Name>Fuji.Repository</Name>
+    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
+      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
+      <Name>Fuji.Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Fuji.Common.ValueObject;
-using Fuji.Repository;
+using Fuji.Entity.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

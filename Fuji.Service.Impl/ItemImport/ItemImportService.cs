@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using Fuji.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -17,6 +16,7 @@ using WIM.Core.Common.Helpers;
 using Fuji.Service.ItemImport;
 using WIM.Core.Repository.Impl;
 using Fuji.Context;
+using Fuji.Entity.ItemManagement;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -26,26 +26,23 @@ namespace Fuji.Service.Impl.ItemImport
 
         private string connectionString = ConfigurationManager.ConnectionStrings["WIM_FUJI"].ConnectionString;
         #endregion
-
-        private WIM_FUJI_DEVEntities Db = new WIM_FUJI_DEVEntities();
         
-        private FujiDbContext FujiDb { get; set; }
+        private FujiDbContext Db { get; set; }
 
         private IGenericRepository<ImportSerialHead> Repo;
 
         public ItemImportService()
         {
             Repo = new GenericRepository<ImportSerialHead>(Db);
-            FujiDb = FujiDbContext.Create();
+            Db = FujiDbContext.Create();
         }
 
-        public IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> GetItems()
+        public IEnumerable<ImportSerialHead> GetItems()
         {
-            return FujiDb.ImportSerialHead.Take(10).ToList();
-            /*return (from h in Db.ImportSerialHead
+            return (from h in Db.ImportSerialHead
                     where !h.HeadID.Equals("0") && !h.Status.Equals(FujiStatus.DELETED.ToString())
                     orderby h.CreatedDate descending
-                    select h).Take(50);*/
+                    select h).Take(50);
         }
 
         public IEnumerable<ImportSerialHead> GetItems(int pageIndex, int pageSize,out int totalRecord)
@@ -99,7 +96,26 @@ namespace Fuji.Service.Impl.ItemImport
 
         public void DeleteItem(string id)
         {
-            Db.ProcDeleteImportSerial(id);
+            using (var scope = new TransactionScope())
+            {
+                //Db.ProcDeleteImportSerial(id);
+                ImportSerialHead importSerialHead = (
+                    from h in Db.ImportSerialHead
+                    where h.HeadID == id
+                    select h
+                ).SingleOrDefault();
+
+                importSerialHead.Status = "DELETED";
+
+                try
+                {
+                    Db.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+            }               
         }
 
         public ImportSerialHead GetItemByDocID(string id)
@@ -214,7 +230,15 @@ namespace Fuji.Service.Impl.ItemImport
                 if (item.ImportSerialDetail.Any())
                 {
                     IGenericRepository<ImportSerialDetail> detailRepo = new GenericRepository<ImportSerialDetail>(Db);
-                    Db.ProcDeleteImportSerialDetail(item.HeadID);
+                    //Db.ProcDeleteImportSerialDetail(item.HeadID);
+
+                    IEnumerable<ImportSerialDetail> _existDetails = (from d in Db.ImportSerialDetail
+                             where d.HeadID == item.HeadID
+                             select d
+                             ).ToList();
+
+                    Db.ImportSerialDetail.RemoveRange(_existDetails);
+
                     foreach (var detail in item.ImportSerialDetail)
                     {
                         detail.HeadID = item.HeadID;
@@ -223,7 +247,8 @@ namespace Fuji.Service.Impl.ItemImport
                         detail.CreatedDate = DateTime.Now;
                         detail.UpdateDate = DateTime.Now;
                         detail.UserUpdate = item.UserUpdate;
-                        detailRepo.Insert(detail);
+                        //detailRepo.Insert(detail);
+                        Db.ImportSerialDetail.Add(detail);
                     }
                 }
 

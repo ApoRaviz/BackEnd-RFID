@@ -43,7 +43,10 @@
   <ItemGroup>
     <Compile Include="ItemManagement\ImportSerialDetail.cs" />
     <Compile Include="ItemManagement\ImportSerialHead.cs" />
+    <Compile Include="LabelManagement\LabelRunning.cs" />
+    <Compile Include="ProgramVersion\ProgramVersionHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
