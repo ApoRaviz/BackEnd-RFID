@@ -8,7 +8,7 @@ namespace Isuzu.Repository
     public partial class IsuzuDataContext : DbContext
     {
         public IsuzuDataContext()
-            : base("name=IsuzuDataContext")
+            : base("name=WIM_ISUZU")
         {
         }
 
