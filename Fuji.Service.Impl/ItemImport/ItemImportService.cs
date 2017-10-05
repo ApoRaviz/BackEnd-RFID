@@ -291,7 +291,7 @@ namespace Fuji.Service.Impl.ItemImport
             }
         }
 
-        public List<ImportSerialDetail> UpdateStatus(List<PickingRequest> pickingList, string userUpdate)
+        public IEnumerable<ImportSerialDetail> UpdateStatus(List<PickingRequest> pickingList, string userUpdate)
         {
             List<string> itemCodes = pickingList.Select(x => x.ItemCode).ToList();
             List<string> serialNumbers = pickingList.Select(x => x.SerialNumber).ToList();
@@ -368,7 +368,7 @@ namespace Fuji.Service.Impl.ItemImport
 
 
 
-        public List<FujiPickingGroup> GetPickingGroup(int max = 50)
+        public IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 50)
         {
             List<FujiPickingGroup> items = new List<FujiPickingGroup>();
 
@@ -389,7 +389,7 @@ namespace Fuji.Service.Impl.ItemImport
             return items;
         }
 
-        public List<ImportSerialDetail> GetImportSerialDetailByHeadID(string headID)
+        public IEnumerable<ImportSerialDetail> GetImportSerialDetailByHeadID(string headID)
         {
             List<ImportSerialDetail> ret = new List<ImportSerialDetail>() { };
             string sql = "SELECT * FROM [dbo].[ImportSerialDetail] WHERE HeadID=@HeadID";
@@ -920,7 +920,7 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 var itemDetails = new List<ImportSerialDetail>() { };
                 if (isAddItem)
-                    itemDetails = GetImportSerialDetailByHeadID(data["HeadID"].ToString());
+                    itemDetails = GetImportSerialDetailByHeadID(data["HeadID"].ToString()).ToList();
 
                 newItem = new FujiPickingGroup(data["HeadID"].ToString()
                     , Convert.ToInt32(data["Qty"])

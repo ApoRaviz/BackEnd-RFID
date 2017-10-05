@@ -3,8 +3,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Isuzu.WebApi.Models;
-using Isuzu.WebApi.Auth;
 
 namespace Isuzu.WebApi
 {

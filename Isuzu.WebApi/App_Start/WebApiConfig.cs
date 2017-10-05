@@ -11,7 +11,6 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Isuzu.WebApi.Controllers;
 using WIM.Core.Common.Http;
-using Isuzu.WebApi.Auth;
 
 namespace Isuzu.WebApi
 {

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Owin;
 using Owin;
-using Isuzu.WebApi.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Isuzu.WebApi.Auth;
 
 [assembly: OwinStartup(typeof(Isuzu.WebApi.Startup))]
 
