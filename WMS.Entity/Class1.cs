@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIM.Core.Service
+namespace WMS.Entity
 {
     public class Class1
     {

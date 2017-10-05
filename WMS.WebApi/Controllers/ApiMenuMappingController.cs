@@ -85,12 +85,9 @@ namespace WMS.WebApi.Controllers
             IResponseData<string> response = new ResponseData<string>();
             try
             {
-                string id = "";
-                for (int i = 0; i < ApiMenuMapping.Count; i++) {
-                 id = ApiMenuMappingService.CreateApiMenuMapping(ApiMenuMapping[i]);
-                }
-                
-
+                string id = "Not have data";
+                if(ApiMenuMapping != null)
+                 id = ApiMenuMappingService.CreateApiMenuMapping(ApiMenuMapping);
                 response.SetData(id);
             }
             catch (ValidationException ex)

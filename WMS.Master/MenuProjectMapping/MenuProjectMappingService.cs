@@ -33,8 +33,6 @@ namespace WMS.Master
             return repo.GetAll();
         }
 
-
-
         public MenuProjectMapping GetMenuProjectMappingByMenuProjectMappingIDSys(int id)
         {
             MenuProjectMapping MenuProjectMapping = db.MenuProjectMappings.Find(id);
@@ -55,7 +53,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -66,7 +64,7 @@ namespace WMS.Master
             }
         }
 
-        public int CreateMenuProjectMapping(MenuDto MenuProjectMapping,int projectID,byte sort)
+        public int CreateMenuProjectMapping(MenuDto MenuProjectMapping, int projectID, byte sort)
         {
             using (var scope = new TransactionScope())
             {
@@ -85,10 +83,10 @@ namespace WMS.Master
                 }
                 catch (DbEntityValidationException e)
                 {
-                
+
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -116,7 +114,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     MenuProjectMapping.MenuIDSys = 0;
                     scope.Dispose();
@@ -128,35 +126,62 @@ namespace WMS.Master
             }
         }
 
-        public bool UpdateMenuProjectMapping( MenuProjectMappingDto menuProjectMapping , byte sort)
+        public bool UpdateMenuProjectMapping(List<MenuProjectMappingDto> menuProjectMapping)
         {
             using (var scope = new TransactionScope())
             {
-                MenuProjectMapping menu = new MenuProjectMapping();
-                menu.Sort = sort;
-                menu.MenuIDSysParent = menuProjectMapping.MenuIDSysParent;
-                menu.MenuName = menuProjectMapping.MenuName;
-                menu.MenuIDSys = menuProjectMapping.MenuIDSys;
-                menu.ProjectIDSys = menuProjectMapping.ProjectIDSys;
-                //existedMenuProjectMapping.Sort = MenuProjectMapping.Sort;
-                repo.Update(menu);
+                
+                
+                foreach(var c in menuProjectMapping)
+                {
+                    MenuProjectMapping menu = new MenuProjectMapping();
+                    menu.Sort = c.Sort;
+                    menu.MenuIDSysParent = c.MenuIDSysParent;
+                    menu.MenuName = c.MenuName;
+                    menu.MenuIDSys = c.MenuIDSys;
+                    menu.ProjectIDSys = c.ProjectIDSys;
+                    repo.Update(menu);
+                    if(c.ParentMenu != null)
+                    {
+                        setParent(c);
+                    }
+                }
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
 
-                scope.Complete();
+                
                 return true;
+            }
+        }
+
+        public void setParent(MenuProjectMappingDto mother)
+        {
+            foreach (var c in mother.ParentMenu)
+            {
+                MenuProjectMapping menu = new MenuProjectMapping();
+                menu.Sort = c.Sort;
+                menu.MenuIDSysParent = c.MenuIDSysParent;
+                menu.MenuName = c.MenuName;
+                menu.MenuIDSys = c.MenuIDSys;
+                menu.ProjectIDSys = c.ProjectIDSys;
+                repo.Update(menu);
+                if(c.ParentMenu != null)
+                {
+                    setParent(c);
+                }
             }
         }
 
@@ -165,10 +190,10 @@ namespace WMS.Master
         {
             using (var scope = new TransactionScope())
             {
-                
-                for (int i = 0; i< menu.Count; i++)
+
+                for (int i = 0; i < menu.Count; i++)
                 {
-                   
+
                     MenuProjectMapping x = new MenuProjectMapping();
                     x.MenuIDSys = menu[i].MenuIDSys;
                     x.ProjectIDSys = menu[i].ProjectIDSys;
@@ -181,13 +206,14 @@ namespace WMS.Master
                 try
                 {
                     db.SaveChanges();
-                }catch(DbUpdateConcurrencyException e)
+                }
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-                
+
                 scope.Complete();
                 return true;
             }
@@ -207,13 +233,13 @@ namespace WMS.Master
         public void HandleUpdateException(DbUpdateException ex)
         {
             throw new DbUpdateException(ex.Message);
-            
+
         }
 
 
         public void HandleUpdateException(ValidationException ex)
         {
-            throw  ex;
+            throw ex;
 
         }
 
@@ -230,7 +256,7 @@ namespace WMS.Master
                 Url = b.Menu_MT.Url,
                 Sort = b.Sort
             }
-                ).ToList();
+                );
 
             return MenuProjectMappingdto;
         }
@@ -257,27 +283,6 @@ namespace WMS.Master
         {
             var MenuProjectMappingQuery = from row in db.MenuProjectMappings
                                           where row.ProjectIDSys == id
-                                          orderby row.MenuIDSysParent , row.Sort
-                                          select row;
-            
-            var tbl_MenuProjectMapping = db.MenuProjectMappings;
-            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery.Select(b =>
-            new MenuProjectMappingDto()
-            {
-                MenuIDSys = b.MenuIDSys,
-                ProjectIDSys = b.ProjectIDSys,
-                MenuName = b.MenuName,
-                MenuIDSysParent = b.MenuIDSysParent,
-                Url = b.Menu_MT.Url
-            }
-                ).ToList();
-            return MenuProjectMappingdto;
-        }
-
-        public IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid)
-        {
-            var MenuProjectMappingQuery = from row in db.MenuProjectMappings
-                                          where row.ProjectIDSys == projectid
                                           orderby row.MenuIDSysParent, row.Sort
                                           select row;
 
@@ -289,15 +294,47 @@ namespace WMS.Master
                 ProjectIDSys = b.ProjectIDSys,
                 MenuName = b.MenuName,
                 MenuIDSysParent = b.MenuIDSysParent,
-                Url = "",
+                Url = b.Menu_MT.Url,
                 Sort = b.Sort
             }
-                ).ToList();
+                ).OrderBy(b => b.Sort).ToList();
+            return MenuProjectMappingdto;
+        }
+
+        public IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid, IEnumerable<MenuProjectMappingDto> menu)
+        {
+            var MenuProjectMappingQuery = (from row in db.MenuProjectMappings
+                                           join o in menu on row.MenuIDSys equals o.MenuIDSys into joined
+                                           from i in joined.DefaultIfEmpty()
+                                           where row.ProjectIDSys == projectid
+                                           orderby row.MenuIDSysParent, row.Sort
+                                           select new
+                                           {
+                                               MenuIDSys = row.MenuIDSys,
+                                               ProjectIDSys = row.ProjectIDSys,
+                                               MenuName = row.MenuName,
+                                               MenuIDSysParent = row.MenuIDSysParent,
+                                               Url = i.Url ?? String.Empty,
+                                               Sort = row.Sort
+                                           });
+
+            var tbl_MenuProjectMapping = db.MenuProjectMappings;
+            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery.Select(b =>
+            new MenuProjectMappingDto()
+            {
+                MenuIDSys = b.MenuIDSys,
+                ProjectIDSys = b.ProjectIDSys,
+                MenuName = b.MenuName,
+                MenuIDSysParent = b.MenuIDSysParent,
+                Url = b.Url,
+                Sort = b.Sort
+            }
+                );
             return MenuProjectMappingdto;
 
         }
 
-        public IEnumerable<MenuProjectMappingDto> GetMenuPermission(string userid,int projectid)
+        public IEnumerable<MenuProjectMappingDto> GetMenuPermission(string userid, int projectid)
         {
             var menu = from ur in db.UserRoles
                        join rp in db.RolePermission on ur.RoleID equals rp.RoleID
@@ -318,7 +355,7 @@ namespace WMS.Master
                 Url = b.Menu_MT.Url,
                 Sort = b.Sort
             }
-                ).ToList();
+                );
             return MenuProjectMappingdto;
 
         }

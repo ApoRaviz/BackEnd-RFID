@@ -337,21 +337,20 @@ namespace WMS.WebApi.Controllers
                 forsort = Convert.ToByte(i);
                 MenuProjectMappingList[i].Sort = forsort;
                 MenuProjectMappingList[i].MenuIDSysParent = 0;
-
-                try
-                {
-                    bool isUpated = MenuProjectMappingService.UpdateMenuProjectMapping(MenuProjectMappingList[i], forsort);
-                    response.SetData(true);
-                }
-                catch (ValidationException ex)
-                {
-                    response.SetErrors(ex.Errors);
-                    response.SetStatus(HttpStatusCode.PreconditionFailed);
-                }
                 if (MenuProjectMappingList[i].ParentMenu != null)
                 {
                     setParent(MenuProjectMappingList[i]);
                 }
+            }
+            try
+            {
+                bool isUpated = MenuProjectMappingService.UpdateMenuProjectMapping(MenuProjectMappingList);
+                response.SetData(true);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
         }
@@ -361,9 +360,14 @@ namespace WMS.WebApi.Controllers
         {
             Menu = new List<MenuProjectMappingDto>();
             int ProID = User.Identity.GetProjectIDSys();
-            IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID);
-            MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserId(), ProID);
-            List<MenuProjectMappingDto> res = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
+            if (User.IsSysAdmin())
+            { MenuPermis = MenuProjectMappingService.GetMenuProjectMappingByID(ProID);
+            }
+            else
+            { MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserId(), ProID);
+            }
+            IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID,MenuPermis);
+            List<MenuProjectMappingDto> res = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
             foreach (MenuProjectMappingDto resX in res)
             {
                 FindParentMenu(MenuAll.ToList(), resX, resX.MenuIDSysParent);
@@ -374,7 +378,7 @@ namespace WMS.WebApi.Controllers
                 }
 
             }
-            List<MenuProjectMappingDto> resByZero = res.Where(x => x.MenuIDSysParent == 0).ToList();
+            List<MenuProjectMappingDto> resByZero = res.Where(x => x.MenuIDSysParent == 0 && x.Url != null).ToList();
             if(resByZero != null)
             {
                 foreach(var resp in resByZero)
@@ -423,7 +427,7 @@ namespace WMS.WebApi.Controllers
 
                 }
             }
-            catch (Exception e)
+            catch (Exception )
             {
             }
             return false;
@@ -460,19 +464,11 @@ namespace WMS.WebApi.Controllers
             for (int j = 0; j < mother.ParentMenu.Count; j++)
             {
                 mother.ParentMenu[j].MenuIDSysParent = mother.MenuIDSys;
-                mother.Sort = Convert.ToByte(j);
+                mother.ParentMenu[j].Sort = Convert.ToByte(j);
                 forsort = Convert.ToByte(j);
                 if (mother.ParentMenu[j].ParentMenu != null)
                 {
                     setParent(mother.ParentMenu[j]);
-                }
-                try
-                {
-                    bool isUpated = MenuProjectMappingService.UpdateMenuProjectMapping(mother.ParentMenu[j], forsort);
-
-                }
-                catch (ValidationException)
-                {
                 }
             }
         }

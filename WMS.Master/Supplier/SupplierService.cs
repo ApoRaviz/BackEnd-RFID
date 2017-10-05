@@ -51,23 +51,22 @@ namespace WMS.Master {
                 Supplier.CreatedDate = DateTime.Now;
                 Supplier.UpdateDate = DateTime.Now;
                 Supplier.UserUpdate = "1";
-                
                 repo.Insert(Supplier);
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return Supplier.SupIDSys;
             }
         }
@@ -96,18 +95,18 @@ namespace WMS.Master {
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -126,7 +125,7 @@ namespace WMS.Master {
                 db.SaveChanges();
                 scope.Complete();
                 }
-                catch (DbUpdateConcurrencyException e)
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));

@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
+using System.Text;
 using System.Web;
 using Thinktecture.IdentityModel.Tokens;
 
-namespace WMS.WebApi.Providers
+namespace WIM.Core.Security.Providers
 {
     public class CustomJwtFormat : ISecureDataFormat<AuthenticationTicket>
     {
-
+    
         private readonly string _issuer = string.Empty;
 
         public CustomJwtFormat(string issuer)
@@ -34,6 +35,11 @@ namespace WMS.WebApi.Providers
             var keyByteArray = TextEncodings.Base64Url.Decode(symmetricKeyAsBase64);
 
             var signingKey = new HmacSigningCredentials(keyByteArray);
+
+            /*var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.Default.GetBytes(symmetricKeyAsBase64));
+            var signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(
+                securityKey,
+                SecurityAlgorithms.HmacSha256Signature);*/
 
             var issued = data.Properties.IssuedUtc;
 

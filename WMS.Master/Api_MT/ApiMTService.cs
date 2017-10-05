@@ -50,17 +50,17 @@ namespace WMS.Master
             {
                 const string pool = "abcdefghijklmnopqrstuvwxyz0123456789";
                 Random rnd = new Random();
-                try
-                {
-               for(int i = 0;i < ApiMT.Count; i++)
+                for (int i = 0; i < ApiMT.Count; i++)
                 {
                     var chars = Enumerable.Range(0, 4)
                     .Select(x => pool[rnd.Next(0, pool.Length)]);
                     ApiMT[i].ApiIDSys = new string(chars.ToArray());
                     repo.Insert(ApiMT[i]);
                 }
-               
+                try
+                {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -76,7 +76,6 @@ namespace WMS.Master
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return "Success";
             }
         }

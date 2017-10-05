@@ -10,6 +10,7 @@ namespace WMS.Master.Customer
     {
         object GetCustomers(string userid);
         object GetProjectByCustomer(string userid,int cusIDSys);
+        object GetCustomerAll();
         CustomerDto GetCustomersInclude(int id, string[] tableNames);
         ProcGetCustomerByCusIDSys_Result GetCustomerByCusIDSys(int id);
         CustomerDto GetCustomerByCusIDSysIncludeProjects(int id);

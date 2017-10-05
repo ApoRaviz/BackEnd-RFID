@@ -63,29 +63,29 @@ namespace WMS.WebApi.Controllers
 
 
 
-        // POST: api/ItemSets
-        [HttpPost]
-        [Route("")]
-        public HttpResponseMessage Post([FromBody]ItemSetDto ItemSet)
-        {
-            IResponseData<int> response = new ResponseData<int>();
-            try
-            {
-                int id = ItemSetService.CreateItemSet(ItemSet);
-                response.SetData(id);
-                int idSet = 0;
-                for(int i = 0; i< ItemSet.ItemSetDetail.Count; i++)
-                {
-                    idSet = ItemSetService.CreateItemsetDetail(id, ItemSet.ItemSetDetail[i]);
-                }
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
+        //// POST: api/ItemSets
+        //[HttpPost]
+        //[Route("")]
+        //public HttpResponseMessage Post([FromBody]ItemSetDto ItemSet)
+        //{
+        //    IResponseData<int> response = new ResponseData<int>();
+        //    try
+        //    {
+        //        int id = ItemSetService.CreateItemSet(ItemSet);
+        //        response.SetData(id);
+        //        int idSet = 0;
+        //        for(int i = 0; i< ItemSet.ItemSetDetail.Count; i++)
+        //        {
+        //            idSet = ItemSetService.CreateItemsetDetail(id, ItemSet.ItemSetDetail[i]);
+        //        }
+        //    }
+        //    catch (ValidationException ex)
+        //    {
+        //        response.SetErrors(ex.Errors);
+        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //    }
+        //    return Request.ReturnHttpResponseMessage(response);
+        //}
 
         [HttpPost]
         [Route("{ItemSetIDSys}")]
@@ -95,10 +95,7 @@ namespace WMS.WebApi.Controllers
             try
             {
                 int idSet = 0;
-                for (int i = 0; i < ItemSet.Count; i++)
-                {
-                    idSet = ItemSetService.CreateItemsetDetail(ItemSetIDSys, ItemSet[i]);
-                }
+                    idSet = ItemSetService.CreateItemsetDetail(ItemSetIDSys, ItemSet);
                 response.SetData(idSet);
             }
             catch (ValidationException ex)

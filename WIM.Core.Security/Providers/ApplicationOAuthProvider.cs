@@ -12,7 +12,7 @@ using Microsoft.Owin.Security.OAuth;
 using WIM.Core.Security.Entity;
 using WIM.Core.Security;
 
-namespace WMS.WebApi.Providers
+namespace WIM.Core.Security.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Owin;
 using Owin;
-using Fuji.WebApi.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Fuji.WebApi.Auth;
 
 [assembly: OwinStartup(typeof(Fuji.WebApi.Startup))]
 

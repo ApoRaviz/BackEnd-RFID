@@ -13,7 +13,7 @@ using System.Web.Http.Routing;
 using WIM.Core.Security.Entity;
 using WIM.Core.Security;
 
-namespace Fuji.WebApi.Providers
+namespace WIM.Core.Security.Providers
 {
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {

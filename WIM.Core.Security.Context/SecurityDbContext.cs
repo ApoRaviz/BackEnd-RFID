@@ -23,6 +23,8 @@ namespace WIM.Core.Security.Context
         public DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
         public DbSet<Menu> Menu { get; set; }
         public DbSet<PasswordHistory> PasswordHistory { get; set; }
+        public DbSet<Api_MT> Api_MT { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

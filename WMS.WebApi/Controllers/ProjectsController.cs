@@ -101,12 +101,12 @@ namespace WMS.WebApi.Controllers
 
         [HttpGet]
         [Route("user/{CusIDSys}/{UserID}")]
-        public HttpResponseMessage GetUserProject(int CusIDSys,string UserID)
+        public HttpResponseMessage GetUserProject(int CusIDSys, string UserID)
         {
             ResponseData<List<UserProjectMapping>> response = new ResponseData<List<UserProjectMapping>>();
             try
             {
-                List<UserProjectMapping> Projects = ProjectService.GetUserProject(CusIDSys,UserID);
+                List<UserProjectMapping> Projects = ProjectService.GetUserProject(CusIDSys, UserID);
                 response.SetData(Projects);
             }
             catch (ValidationException ex)
@@ -140,7 +140,7 @@ namespace WMS.WebApi.Controllers
             }
             else
             {
-               IResponseData<ProcGetProjectByProjectIDSys_Result> response = new ResponseData<ProcGetProjectByProjectIDSys_Result>();             
+                IResponseData<ProcGetProjectByProjectIDSys_Result> response = new ResponseData<ProcGetProjectByProjectIDSys_Result>();
                 try
                 {
                     ProcGetProjectByProjectIDSys_Result Project = ProjectService.GetProjectByProjectIDSys(projectIDSys);
@@ -153,7 +153,7 @@ namespace WMS.WebApi.Controllers
                 }
                 return Request.ReturnHttpResponseMessage(response);
             }
-        }      
+        }
 
         // POST: api/Projects
         [HttpPost]
@@ -174,28 +174,28 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [HttpPost]
-        [Route("user/{UserID}")]
-        public HttpResponseMessage PostUserProject(string UserID, [FromBody]List<Project_MT> project)
-        {
-            IResponseData<bool> response = new ResponseData<bool>();
-            try
-            {
-                bool newProject = false;
-                for (int i =0; i< project.Count; i++)
-                {
-                    newProject = ProjectService.CreateUserProject(UserID,project[i].ProjectIDSys);
-                }
-                
-                response.SetData(newProject);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
+        //[HttpPost]
+        //[Route("user/{UserID}")]
+        //public HttpResponseMessage PostUserProject(string UserID, [FromBody]List<Project_MT> project)
+        //{
+        //    IResponseData<bool> response = new ResponseData<bool>();
+        //    try
+        //    {
+        //        bool newProject = false;
+        //        for (int i = 0; i < project.Count; i++)
+        //        {
+        //            newProject = ProjectService.CreateUserProject(UserID, project[i].ProjectIDSys);
+        //        }
+
+        //        response.SetData(newProject);
+        //    }
+        //    catch (ValidationException ex)
+        //    {
+        //        response.SetErrors(ex.Errors);
+        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //    }
+        //    return Request.ReturnHttpResponseMessage(response);
+        //}
         // PUT: api/Projects/5
         [HttpPut]
         [Route("{projectIDSys}")]
@@ -242,7 +242,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ProjectService.DeleteUserProject(projectIDSys,User.Identity.GetUserId());
+                bool isUpated = ProjectService.DeleteUserProject(projectIDSys, User.Identity.GetUserId());
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

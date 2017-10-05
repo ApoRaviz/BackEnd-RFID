@@ -90,7 +90,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -143,7 +143,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -168,7 +168,7 @@ namespace WMS.Master
                 db.SaveChanges();
                 scope.Complete();
                 }
-                catch (DbUpdateConcurrencyException e)
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
