@@ -10,7 +10,7 @@ namespace WMS.Master
     {
         IEnumerable<ItemSetDto> GetItemSets();
         ItemSetDto GetItemSet(int id);      
-        int CreateItemsetDetail(int id, ItemSetDetailDto temp);
+        int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp);
         int CreateItemSet(ItemSet_MT ItemSet);
         int CreateItemSet(ItemSetDto ItemSet);
         bool UpdateItemSet(int id, ItemSet_MT ItemSet);

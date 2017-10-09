@@ -6,8 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Http;
-using Isuzu.WebApi.Auth;
-using Isuzu.WebApi.Models;
+using WIM.Core.Security;
 
 namespace Isuzu.WebApi.Controllers
 {

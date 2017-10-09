@@ -104,16 +104,17 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/account/users/mobile/otp",
                     "POST/api/v1/account/users/mobile/otp",
                     "POST/api/v1/account/renewtoken",
-                    "GET/api/v1/MenuProjectMappings/menu/1",
                     "GET/api/v1/MenuProjectMappings/parent/1",
                     "GET/api/v1/Users/customers",
                     "GET/api/v1/customers/projects",
                     "GET/api/v1/Persons"
                 };
+            string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
+
             string[] urlIgnoreChkOTP = {
                     "POST/api/v1/account/assignProject"
                 };
-            if (urlIgnore.Contains(reqUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrl)))
+            if (urlIgnore.Contains(reqUrl) || reqUrl.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrl)))
             {
                 return true;
             }
@@ -246,7 +247,8 @@ public static class RBAC_ExtendedMethods_4_Principal
                 if (!string.IsNullOrEmpty(_userId))
                 {
                     ApplicationUser _authenticatedUser = ApplicationUserManager.GetUser(_userId);
-                    _retVal = _authenticatedUser.IsSysAdmin();
+                    //_retVal = _authenticatedUser.IsSysAdmin();
+                    _retVal = _authenticatedUser.IsSysAdmin;
                 }
             }
         }

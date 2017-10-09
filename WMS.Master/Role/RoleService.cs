@@ -61,31 +61,26 @@ namespace WMS.Master
         {
             using (var scope = new TransactionScope())
             {
-                //Role.Id = db.ProcGetNewID("RL").FirstOrDefault().Substring(0, 13);
                 role.RoleID = Guid.NewGuid().ToString();
-                try
-                {
-                    repo.Insert(role);
-                }
-                catch(DbUnexpectedValidationException e)
-                {
-                    Console.Write(e);
-                }
+                repo.Insert(role);
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
+                }catch(DbUnexpectedValidationException e)
+                {
+                    Console.Write(e);
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return role.RoleID;
             }
         }
@@ -98,27 +93,27 @@ namespace WMS.Master
                 existedRole.Name = role.Name;
                 existedRole.Description = role.Description;
                 existedRole.IsSysAdmin = role.IsSysAdmin;
-
                 repo.Update(existedRole);
                 try
                 {
                     db.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return true;
             }
         }
-//=======================================
+//==========================================================================
         public bool DeleteRole(string id)
         {
             List<UserRoleDto> users = new List<UserRoleDto>();
@@ -148,28 +143,26 @@ namespace WMS.Master
             
             using (var scope = new TransactionScope())
             {
-                try
-                {
                     for (int i = 0; i < users.Count; i++)
                     {
                         data.UserID = users[i].UserID;
                         data.RoleID = users[i].Name;
                         repoUser.Delete(data);
-                        db.SaveChanges();
                     }
                     for (int i = 0; i < permissions.Count; i++)
                     {
                         permission.PermissionID = permissions[i].Name;
                         permission.RoleID = permissions[i].RoleID;
                         repoRolePermission.Delete(permission);
-                        db.SaveChanges();
                     }
-                    var existedRole = repo.GetByID(id);
-                    repo.Delete(existedRole);
+                var existedRole = repo.GetByID(id);
+                repo.Delete(existedRole);
+                try
+                {
                     db.SaveChanges();
                     scope.Complete();
                 }
-                catch (DbUpdateConcurrencyException e)
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
@@ -179,7 +172,7 @@ namespace WMS.Master
                 return true;
             }
         }
-//=======================================
+//=========================================================================================
         public void HandleValidationException(DbEntityValidationException ex)
         {
             foreach (var eve in ex.EntityValidationErrors)

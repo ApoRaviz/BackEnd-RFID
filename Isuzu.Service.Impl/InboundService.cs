@@ -302,7 +302,7 @@ namespace Isuzu.Service.Impl
                         select i
                     ).SingleOrDefault();
         }
-        public List<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord)
+        public IEnumerable<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord)
         {
             List<InboundItems> items = new List<InboundItems>();
             totalRecord = 0;
@@ -340,7 +340,7 @@ namespace Isuzu.Service.Impl
             }
 
         }
-        public List<InboundItems> GetInboundItemByQty(int qty, bool isShipped = false)
+        public IEnumerable<InboundItems> GetInboundItemByQty(int qty, bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
             using (var scope = new TransactionScope())
@@ -376,7 +376,7 @@ namespace Isuzu.Service.Impl
             }
             //return (from i in Db.InboundItems select i).Take(Qty).ToList();
         }
-        public List<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false)
+        public IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
             using (var scope = new TransactionScope())
@@ -415,7 +415,7 @@ namespace Isuzu.Service.Impl
 
             //return (from i in Db.InboundItems where i.InvNo.Equals(invNo) select i).ToList();
         }
-        public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList,string userName)
+        public IEnumerable<InboundItems> ImportInboundItemList(List<InboundItems> itemList,string userName)
         {
             List<InboundItems> duplicateList = new List<InboundItems>();
             List<string> isuzuOrders = itemList.Select(x => x.ISZJOrder).ToList();
@@ -454,7 +454,7 @@ namespace Isuzu.Service.Impl
                         });
                         var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
                             if (item != null)
-                                item.Qty = item.InboundItems.Count();
+                                item.Qty = item.InboundItems.Count;
                     }
                     else
                     { 
@@ -475,7 +475,7 @@ namespace Isuzu.Service.Impl
                         item.UpdateBy = userName;
                         item.UpdateAt = DateTime.Now;
                         item.Status = IsuzuStatus.NEW.ToString();
-                        item.Qty = i.GroupList.Count();
+                        item.Qty = i.GroupList.Count;
                         Db.InboundItemsHead.Add(item);
                         }
                     });
@@ -553,7 +553,7 @@ namespace Isuzu.Service.Impl
             }
 
         }
-        public List<InboundItemsHead> GetInboundGroup(int max = 50)
+        public IEnumerable<InboundItemsHead> GetInboundGroup(int max = 50)
         {
             List<InboundItemsHead> items = new List<InboundItemsHead>();
 
@@ -600,7 +600,7 @@ namespace Isuzu.Service.Impl
 
             return items;
         }
-        public List<InboundItemsHead> GetInboundGroupPaging(int pageIndex,int pageSize,out int totalRecord)
+        public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex,int pageSize,out int totalRecord)
         {
             DataSet dset = new DataSet();
             List<InboundItemsHead> items = new List<InboundItemsHead>() { };
@@ -747,7 +747,7 @@ namespace Isuzu.Service.Impl
                                             select p).FirstOrDefault();
                 if (queryUpdate != null)
                 {
-                    queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count();
+                    queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
                     
                 }
 

@@ -42,7 +42,7 @@ namespace WMS.WebApi.Auth
                 return Task.FromResult<object>(null);
             }
 
-            if (!principal.HasPermission(actionContext.Request))
+            if (!principal.HasPermission(actionContext.Request) && !principal.IsSysAdmin())
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
                 ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E403));

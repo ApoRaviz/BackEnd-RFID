@@ -54,7 +54,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -81,7 +81,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -103,13 +103,13 @@ namespace WMS.Master
                 db.SaveChanges();
                 scope.Complete();
                 }
-                catch (DbUpdateConcurrencyException e)
+                catch (DbUpdateConcurrencyException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
@@ -149,13 +149,45 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
                 scope.Complete();
+                return RoleId;
+            }
+        }
+
+        public string CreateRolePermission(string RoleId, List<PermissionTree> tree)
+        {
+            using (var scope = new TransactionScope())
+            {
+                //Permission.Id = db.ProcGetNewID("RL").FirstOrDefault().Substring(0, 13);
+                foreach (var c in tree)
+                {
+                    RolePermission data = new RolePermission();
+                    data.PermissionID = c.PermissionID;
+                    data.RoleID = RoleId;
+                    repoRolePermission.Insert(data);
+                }
+                try
+                {
+                    db.SaveChanges();
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                
                 return RoleId;
             }
         }
@@ -168,11 +200,6 @@ namespace WMS.Master
             if(RoleForPermissionQuery != null) { 
             using (var scope = new TransactionScope())
             {
-                    /*RolePermission temp = RoleForPermissionQuery.Select(b => new RolePermission()
-                    {
-                        RoleID = b.RoleID,
-                        PermissionID = b.PermissionID
-                    }).SingleOrDefault();*/
                     RolePermission temp = new RolePermission();
                     temp = RoleForPermissionQuery.SingleOrDefault();
                     if (temp != null)
@@ -183,7 +210,7 @@ namespace WMS.Master
                         db.SaveChanges();
                         scope.Complete();
                         }
-                        catch (DbUpdateConcurrencyException e)
+                        catch (DbUpdateConcurrencyException)
                         {
                             scope.Dispose();
                             ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
@@ -296,46 +323,37 @@ namespace WMS.Master
                 }).ToList();
             }
             RolePermission x = new RolePermission();
-                try
+                
+                using (var scope = new TransactionScope())
                 {
-                for (int i = 0; i < temp.Count; i++)
+                    for (int i = 0; i < temp.Count; i++)
                 {
-                    using (var scope = new TransactionScope())
-                    {
+                    
                         x.RoleID = temp[i].RoleID;
                         x.PermissionID = temp[i].Name;
-                        repoRolePermission.Delete(x);
-                        db.SaveChanges();
-                        scope.Complete();
-                    }
+                        repoRolePermission.Delete(x); 
+                }
+                try
+                {
+                    db.SaveChanges();
+                scope.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    throw ex;
+                }
+                catch (DbUpdateException )
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    throw ex;
                 }
             }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
-                }
-                catch (DbUpdateException e)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
-                }
-                
-            
             return true;
         }
 
         public List<Permission> GetPermissionByProjectID(int ProjectID,string UserID)
         {
-
-            //var temp = from row in db.Permissions
-            //           where row.ProjectIDSys == ProjectID && (
-            //           from o in db.RolePermission
-            //           where (from i in db.UserRoles
-            //                  where i.UserID == UserID
-            //                  select i.RoleID).Contains(o.RoleID)
-            //           select o.PermissionID).Contains(row.PermissionID)
-            //           select row;
 
             var temp = from ur in db.UserRoles
                        join r in db.Roles on ur.RoleID equals r.RoleID
@@ -343,7 +361,6 @@ namespace WMS.Master
                        join ps in db.Permissions on rp.PermissionID equals ps.PermissionID
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectID
                        select ps;
-
             List<Permission> permission = temp.ToList();
             return permission;
         }

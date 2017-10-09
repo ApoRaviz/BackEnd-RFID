@@ -78,7 +78,44 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                scope.Complete();
+                return api.ApiIDSys;
+            }
+        }
+
+        public string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping)
+        {
+            using (var scope = new TransactionScope())
+            {
+                ApiMenuMapping api = new ApiMenuMapping();
+                
+                    foreach (var c in ApiMenuMapping)
+                    {
+                        api.ApiIDSys = c.ApiIDSys;
+                        api.MenuIDSys = c.MenuIDSys;
+                        api.GET = c.GET;
+                        api.POST = c.POST;
+                        api.PUT = c.PUT;
+                        api.DEL = c.DEL;
+                        api.Type = c.Type;
+                        repo.Insert(api);
+                    }
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -102,7 +139,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));

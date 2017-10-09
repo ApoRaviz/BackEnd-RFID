@@ -17,7 +17,6 @@ namespace WMS.WebApi.Controllers
     {
         private ILocationService LocationService;
 
-
         public LocationsController(ILocationService LocationService)
         {
             this.LocationService = LocationService;

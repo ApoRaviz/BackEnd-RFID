@@ -12,6 +12,7 @@ namespace WMS.Master
         ApiMenuMappingDto GetApiMenuMapping(string id);
         List<ApiMenuMapping> GetListApiMenuMapping(int id);
         string CreateApiMenuMapping(ApiMenuMappingDto ApiMenuMapping);
+        string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping);
         bool UpdateApiMenuMapping(string id, ApiMenuMapping ApiMenuMapping);
         bool DeleteApiMenuMapping(string id);        
     }

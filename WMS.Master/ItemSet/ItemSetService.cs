@@ -84,7 +84,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -113,7 +113,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -161,7 +161,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException )
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -172,15 +172,18 @@ namespace WMS.Master
             }
         }
 
-        public int CreateItemsetDetail(int id, ItemSetDetailDto temp)
+        public int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp)
         {
             using (var scope = new TransactionScope())
             {
                 ItemSetDetail item = new ItemSetDetail();
-                item.Qty = temp.Qty;
-                item.ItemIDSys = temp.ItemIDSys;
-                item.ItemSetIDSys = id;
-                repo2.Insert(item);
+                foreach(var c in temp)
+                {
+                    item.Qty = c.Qty;
+                    item.ItemIDSys = c.ItemIDSys;
+                    item.ItemSetIDSys = id;
+                    repo2.Insert(item);
+                }
                 try
                 {
                     db.SaveChanges();
@@ -189,7 +192,7 @@ namespace WMS.Master
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -255,7 +258,7 @@ namespace WMS.Master
             {
                 HandleValidationException(e);
             }
-            catch (DbUpdateConcurrencyException e)
+            catch (DbUpdateConcurrencyException)
             {
                 ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                 throw ex;

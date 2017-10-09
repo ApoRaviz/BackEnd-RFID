@@ -9,6 +9,7 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WMS.Master;
+using WMS.Master.Customer;
 using WMS.Master.Users;
 
 
@@ -19,11 +20,13 @@ namespace WMS.WebApi.Controllers
     public class UsersController : ApiController
     {
         private IUserService UserService;
+        private ICustomerService CustomerService;
 
 
-        public UsersController(IUserService UserService)
+        public UsersController(IUserService UserService, ICustomerService customerService)
         {
             this.UserService = UserService;
+            this.CustomerService = customerService;
         }
 
         //get api/Users
@@ -54,7 +57,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<User> response = new ResponseData<User>();
             try
             {
-                
+
                 User User = UserService.GetUserByUserID(UserID);
                 response.SetData(User);
             }
@@ -74,7 +77,15 @@ namespace WMS.WebApi.Controllers
             try
             {
                 string userid = User.Identity.GetUserId();
-                object customer = this.UserService.GetCustonersByUserID(userid);
+                object customer;
+                if (User.IsSysAdmin())
+                {
+                    customer = CustomerService.GetCustomerAll();
+                }
+                else
+                {
+                    customer = this.UserService.GetCustonersByUserID(userid);
+                }
 
                 response.SetData(customer);
             }
@@ -95,9 +106,9 @@ namespace WMS.WebApi.Controllers
             try
             {
                 string id = "";
-                PasswordHasher ph = new PasswordHasher(); 
-                    User.PasswordHash = ph.HashPassword(User.PasswordHash);
-                    id = UserService.CreateUser(User);
+                PasswordHasher ph = new PasswordHasher();
+                User.PasswordHash = ph.HashPassword(User.PasswordHash);
+                id = UserService.CreateUser(User);
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -119,7 +130,7 @@ namespace WMS.WebApi.Controllers
             {
                 string userid = User.Identity.GetUserId();
                 Random rnd = new Random();
-                String str = "", sreRs = "", key="";
+                String str = "", sreRs = "", key = "";
                 for (int i = 0; i < 3; i++)
                 {
                     key = rnd.Next(1000, 9999).ToString();
@@ -128,7 +139,7 @@ namespace WMS.WebApi.Controllers
                     if (i < 2)
                         sreRs += " - ";
                 }
-            
+
                 UserService.GetKeyRegisterMobile(userid, key);
                 response.SetData(sreRs);
             }
@@ -144,7 +155,7 @@ namespace WMS.WebApi.Controllers
         [Route("mobile/keyaccess")]
         public HttpResponseMessage PostRegisterFirebaseTokenMobile([FromBody]KeyAccessModel param)
         {
-            IResponseData <Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
+            IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
             try
             {
                 string userid = User.Identity.GetUserId();

@@ -961,58 +961,34 @@ namespace Fuji.WebApi.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            string root = HttpContext.Current.Server.MapPath("~/Handy/Upload");
-            var provider = new MultipartFormDataStreamProvider(root);
-            ResponseData<List<ImportSerialDetail>> response = new ResponseData<List<ImportSerialDetail>>();
-            //try
-            //{
-            // Read the form data.
-            await Request.Content.ReadAsMultipartAsync(provider);
-
-            // This illustrates how to get the file names.
-            foreach (MultipartFileData file in provider.FileData)
+            //string root = HttpContext.Current.Server.MapPath("~/Handy/Upload");
+            DateTime d = DateTime.Now;
+            string root = @"D:\Uploads\Fuji\" + d.Year.ToString() + "\\" + d.Month.ToString("00");//HttpContext.Current.Server.MapPath("~/Handy/Upload");
+            if (!Directory.Exists(root))
             {
-                System.IO.File.Move(file.LocalFileName, file.LocalFileName + ".pdf");
-                List<PickingRequest> pickingList = new List<PickingRequest>();
-                
-                using (var word = new NetOffice.WordApi.Application())
-                {
-                    object miss = System.Reflection.Missing.Value;
-                    object path = file.LocalFileName + ".pdf";
-                    object readOnly = true;
-                    var docs = word.Documents.Open(path, miss, readOnly, miss, miss, miss, miss, miss, miss, miss, miss, miss, miss, miss, miss, miss);
-
-                    var pickingListTable = docs.Tables[4];
-
-
-
-                    //for (int i = 2; i < pickingListTable.Rows.Count; i++)
-                    //{
-                    //    PickingRequest picking = new PickingRequest();
-
-                    //    picking.ItemCode = Regex.Replace(pickingListTable.Cell(i, 1).Range.Text, @"[^0-9a-zA-Z]+", "");
-                    //    picking.SerialNumber = Regex.Replace(pickingListTable.Cell(i, 4).Range.Text, @"[^0-9a-zA-Z]+", "");
-                    //    picking.OrderNumber = Regex.Replace(pickingListTable.Cell(i, 8).Range.Text, @"[^0-9a-zA-Z]+", "");
-                    //    if(!string.IsNullOrEmpty(picking.SerialNumber))
-                    //        pickingList.Add(picking);
-                    //}
-
-                    docs.Close();
-                    word.Quit();
-                }
-                //List<ImportSerialDetail> listDetail = ItemImportService.UpdateStatus(pickingList, "13007");
-                List<ImportSerialDetail> listDetail = ItemImportService.GetItemByDocID("IS17087AAE8A722").ImportSerialDetail.Take(20).ToList();
-                response.SetStatus(HttpStatusCode.OK);
-                response.SetData(listDetail);
-
+                Directory.CreateDirectory(root);
             }
 
-            //}
-            //catch (ValidationException e)
-            //{
-            //    response.SetErrors(e.Errors);
-            //    response.SetStatus(HttpStatusCode.PreconditionFailed);
-            //}
+            var provider = new MultipartFormDataStreamProvider(root);
+            ResponseData<List<ImportSerialDetail>> response = new ResponseData<List<ImportSerialDetail>>();
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                foreach (MultipartFileData file in provider.FileData)
+                {
+                    var fileName = Request.Headers.GetValues("fileName").FirstOrDefault().Replace("\"", string.Empty);
+                    string filePath = System.IO.Path.GetDirectoryName(file.LocalFileName) + "\\" + fileName;
+                    System.IO.File.Copy(file.LocalFileName, filePath);
+                    System.IO.File.Delete(file.LocalFileName);
+                }
+
+            }
+            catch (ValidationException e)
+            {
+                response.SetErrors(e.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
 
             return Request.ReturnHttpResponseMessage(response);
         }
@@ -1040,14 +1016,13 @@ namespace Fuji.WebApi.Controllers
 
         [HttpPost]
         [Route("ImportPickingWin")]
-        public HttpResponseMessage PostFormWin([FromBody]List<PickingRequest> receive)
+        public HttpResponseMessage PostFormWin([FromBody]PickingFromWinRequest receive)
         {
-            IResponseData<List<ImportSerialDetail>> response = new ResponseData<List<ImportSerialDetail>>();
+            IResponseData<IEnumerable<ImportSerialDetail>> response = new ResponseData<IEnumerable<ImportSerialDetail>>();
 
             try
             {
-                //List<ImportSerialDetail> listDetail = ItemImportService.GetItemByDocID("IS17087AAE8A722").ImportSerialDetails.Take(20).ToList();
-                List<ImportSerialDetail> listDetail = ItemImportService.UpdateStatus(receive, "13007");
+                IEnumerable<ImportSerialDetail> listDetail = ItemImportService.UpdateStatus(receive.ListPicking, receive.UserID);
                 response.SetData(listDetail);
                 response.SetStatus(HttpStatusCode.OK);
 
@@ -1218,6 +1193,11 @@ namespace Fuji.WebApi.Controllers
             }
             public int TotalRecord { get; set; }
             public IEnumerable<ImportSerialHead> Items { get; set; }
+        }
+        public class PickingFromWinRequest
+        {
+            public string UserID { get; set; }
+            public List<PickingRequest> ListPicking { get; set; }
         }
 
         [Authorize]

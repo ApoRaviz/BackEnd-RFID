@@ -26,14 +26,14 @@ namespace Isuzu.Service
 
         //Default
         InboundItems GetInboundItemByISZJOrder(string iszjOrder);
-        List<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord);
-        List<InboundItems> ImportInboundItemList(List<InboundItems> itemList,string userName);
-        List<InboundItems> GetInboundItemByQty(int Qty, bool isShipped = false);
-        List<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false);
+        IEnumerable<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord);
+        IEnumerable<InboundItems> ImportInboundItemList(List<InboundItems> itemList,string userName);
+        IEnumerable<InboundItems> GetInboundItemByQty(int Qty, bool isShipped = false);
+        IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false);
         IEnumerable<InboundItems> GetDataByColumn(ParameterSearch parameterSearch);
         IEnumerable<InboundItemsHead> GetDataGroupByColumn(string column, string keyword);
-        List<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord);
-        List<InboundItemsHead> GetInboundGroup(int max = 20);
+        IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord);
+        IEnumerable<InboundItemsHead> GetInboundGroup(int max = 20);
         InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo);
         bool UpdateStausExport(InboundItemsHead item);
         bool UpdateDeleteReason(IsuzuDeleteReason reason);

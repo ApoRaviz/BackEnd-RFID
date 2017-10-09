@@ -261,10 +261,10 @@ namespace Isuzu.Service.Impl
         [Route("items")]
         public HttpResponseMessage Get()
         {
-            ResponseData<List<InboundItemsHead>> respones = new ResponseData<List<InboundItemsHead>>();
+            IResponseData<IEnumerable<InboundItemsHead>> respones = new ResponseData<IEnumerable<InboundItemsHead>>();
             try
             {
-                List<InboundItemsHead> items = InboundService.GetInboundGroup();
+                IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroup();
                 respones.SetData(items);
                 respones.SetStatus(HttpStatusCode.OK);
             }
@@ -281,12 +281,12 @@ namespace Isuzu.Service.Impl
         [Route("items/{pageIndex}/{pageSize}")]
         public HttpResponseMessage GetByPaging(int pageIndex,int pageSize)
         {
-            ResponseData<DataInboundGroupItems> respones = new ResponseData<DataInboundGroupItems>();
+            IResponseData<DataInboundGroupItems> respones = new ResponseData<DataInboundGroupItems>();
             try
             {
                  
                 int totalRecord = 0;
-                List<InboundItemsHead> items = InboundService.GetInboundGroupPaging(pageIndex,pageSize,out totalRecord);
+                IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroupPaging(pageIndex,pageSize,out totalRecord);
                 if(items != null && totalRecord > 0)
                 {
                     DataInboundGroupItems dataItem = new DataInboundGroupItems(totalRecord,items);
@@ -308,7 +308,7 @@ namespace Isuzu.Service.Impl
         [Route("itemsInvNo/{invNo}")]
         public HttpResponseMessage GetByInvNo(string invNo)
         {
-            ResponseData<InboundItemsHead> respones = new ResponseData<InboundItemsHead>();
+            IResponseData<InboundItemsHead> respones = new ResponseData<InboundItemsHead>();
             try
             {
                 InboundItemsHead item = InboundService.GetInboundGroupByInvoiceNumber(invNo);
@@ -332,7 +332,7 @@ namespace Isuzu.Service.Impl
         [Route("items/{iszjOrder}")]
         public HttpResponseMessage GetInboundItemByISZJOrder([FromUri]string iszjOrder)
         {
-            ResponseData<InboundItemHandyDto> responseHandy = new ResponseData<InboundItemHandyDto>();
+            IResponseData<InboundItemHandyDto> responseHandy = new ResponseData<InboundItemHandyDto>();
             try
             {
                 InboundItemHandyDto item = InboundService.GetInboundItemByISZJOrder_HANDY(iszjOrder);
@@ -353,7 +353,7 @@ namespace Isuzu.Service.Impl
         public HttpResponseMessage GetDataByColumn(string column, string keyword)
         {
 
-            ResponseData<IEnumerable<InboundItemsHead>> response = new ResponseData<IEnumerable<InboundItemsHead>>();
+            IResponseData<IEnumerable<InboundItemsHead>> response = new ResponseData<IEnumerable<InboundItemsHead>>();
             if (string.IsNullOrEmpty(keyword))
             {
                 response.SetData(null);
@@ -380,11 +380,11 @@ namespace Isuzu.Service.Impl
         [Route("itemImport/{pageIndex}/{pageSize}")]
         public HttpResponseMessage GetItemByPaging(int pageIndex, int pageSize)
         {
-            ResponseData<DataInboundItems> respones = new ResponseData<DataInboundItems>();
+            IResponseData<DataInboundItems> respones = new ResponseData<DataInboundItems>();
             try
             {
                 int totalRecord = 0;
-                List<InboundItems> items = InboundService.GetInboundItemPaging(pageIndex, pageSize, out totalRecord);
+                IEnumerable<InboundItems> items = InboundService.GetInboundItemPaging(pageIndex, pageSize, out totalRecord);
                 if (totalRecord > 0)
                 {
                     DataInboundItems ret = new DataInboundItems(totalRecord, items);
@@ -405,7 +405,7 @@ namespace Isuzu.Service.Impl
         [Route("itemImport/bycolumns")]
         public HttpResponseMessage SearchItemByColumn([FromBody]ParameterSearch parameterSearch)
         {
-            ResponseData<IEnumerable<InboundItems>> respones = new ResponseData<IEnumerable<InboundItems>>();
+            IResponseData<IEnumerable<InboundItems>> respones = new ResponseData<IEnumerable<InboundItems>>();
             try
             {
                 IEnumerable<InboundItems> items = InboundService.GetDataByColumn(parameterSearch);
@@ -470,7 +470,7 @@ namespace Isuzu.Service.Impl
 
             var provider = new MultipartFormDataStreamProvider(root);
             var userID = "SYSTEM";
-            ResponseData<List<InboundItems>> response = new ResponseData<List<InboundItems>>();
+            IResponseData<IEnumerable<InboundItems>> response = new ResponseData<IEnumerable<InboundItems>>();
             List<InboundItems> inboundList = new List<InboundItems>();
             try
             {
@@ -542,8 +542,8 @@ namespace Isuzu.Service.Impl
                     {
                         //response.SetData(InboundService.GetInboundItemByInvoiceNumber("V170646"));
                         //response.SetStatus(HttpStatusCode.OK);
-                        List<InboundItems> listDuplicateInbound = InboundService.ImportInboundItemList(inboundList, userID);
-                        if (listDuplicateInbound.Count > 0)
+                        IEnumerable<InboundItems> listDuplicateInbound = InboundService.ImportInboundItemList(inboundList, userID);
+                        if (listDuplicateInbound.Count() > 0)
                         {
                             response.SetData(listDuplicateInbound);
                             response.SetStatus(HttpStatusCode.Conflict);
@@ -610,7 +610,7 @@ namespace Isuzu.Service.Impl
             IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
-            List<InboundItems> inboundItems = InboundService.GetInboundItemByInvoiceNumber(id,true);
+            IEnumerable<InboundItems> inboundItems = InboundService.GetInboundItemByInvoiceNumber(id,true);
             if (inboundItems != null)
             {
                 string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
@@ -618,7 +618,7 @@ namespace Isuzu.Service.Impl
                 string fileName = "{0}_{1}.{2}";
                 fileName = String.Format(fileName, "Export_Isuzu_", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 Encoding encoding = Encoding.Default;
-                DataTable dt = getExportInboundDataTable(inboundItems);
+                DataTable dt = getExportInboundDataTable(inboundItems.ToList());
                 MemoryStream ms = new MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
                 {
@@ -730,7 +730,7 @@ namespace Isuzu.Service.Impl
         public HttpResponseMessage UpdateInboundGroup([FromBody]InboundItemsHead item)
         {
 
-            ResponseData<bool> response = new ResponseData<bool>();
+            IResponseData<bool> response = new ResponseData<bool>();
 
             try
             {
@@ -772,9 +772,8 @@ namespace Isuzu.Service.Impl
             }
 
             var provider = new MultipartFormDataStreamProvider(root);
-            ResponseData<List<string>> response = new ResponseData<List<string>>();
+            IResponseData<IEnumerable<string>> response = new ResponseData<IEnumerable<string>>();
             List<string> AllPath = new List<string>() { };
-            List<InboundItems> inboundList = new List<InboundItems>();
             try
             {
                 // Read the form data.
@@ -814,7 +813,7 @@ namespace Isuzu.Service.Impl
         public HttpResponseMessage DeleteReason([FromBody]IsuzuDeleteReason item)
         {
 
-            ResponseData<bool> response = new ResponseData<bool>();
+            IResponseData<bool> response = new ResponseData<bool>();
 
             try
             {
