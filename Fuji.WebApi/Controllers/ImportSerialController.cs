@@ -23,6 +23,7 @@ using System.Data;
 using Fuji.Service.ItemImport;
 using Fuji.Common.ValueObject;
 using Fuji.Entity.ItemManagement;
+using Microsoft.AspNet.Identity;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -37,8 +38,8 @@ namespace Fuji.WebApi.Controllers
         }
 
         // GET: api/Items
-        //[Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial")]
         public HttpResponseMessage Get()
@@ -46,7 +47,7 @@ namespace Fuji.WebApi.Controllers
             ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>> response = new ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>>();
             try
             {
-                //string userName = User.Identity.GetUserName() ?? "SYSTEM";
+                string userName = User.Identity.GetUserName() ?? "SYSTEM";
                 IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> items = ItemImportService.GetItems();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
@@ -60,7 +61,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/paging/{pageIndex}/{pageSize}")]
         public HttpResponseMessage GetPaging(int pageIndex, int pageSize)
@@ -69,7 +70,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 int totalRecord = 0;
-                //string userName = User.Identity.GetUserName() ?? "SYSTEM";
+                string userName = User.Identity.GetUserName() ?? "SYSTEM";
                 IEnumerable<ImportSerialHead> items = ItemImportService.GetItems(pageIndex, pageSize, out totalRecord);
                 if (totalRecord > 0)
                 {
@@ -88,7 +89,7 @@ namespace Fuji.WebApi.Controllers
 
         #region Picking
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/pickingGroup")]
         public HttpResponseMessage GetPickingGroups()
@@ -96,7 +97,7 @@ namespace Fuji.WebApi.Controllers
             ResponseData<IEnumerable<FujiPickingGroup>> response = new ResponseData<IEnumerable<FujiPickingGroup>>();
             try
             {
-                //string userName = User.Identity.GetUserName() ?? "SYSTEM";
+                string userName = User.Identity.GetUserName() ?? "SYSTEM";
                 IEnumerable<FujiPickingGroup> items = ItemImportService.GetPickingGroup();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
@@ -110,7 +111,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/clearPicking/{id}")]
         public HttpResponseMessage ClearPickingGroups(string id)
@@ -118,7 +119,7 @@ namespace Fuji.WebApi.Controllers
             ResponseData<Boolean> response = new ResponseData<Boolean>();
             try
             {
-                //string userName = User.Identity.GetUserName() ?? "SYSTEM";
+                string userName = User.Identity.GetUserName() ?? "SYSTEM";
                 bool result = ItemImportService.ClearPickingGroup(id);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(result);
@@ -132,7 +133,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/pickingGroup/{id}")]
         public HttpResponseMessage GetPickingByOrderNo(string id)
@@ -140,7 +141,7 @@ namespace Fuji.WebApi.Controllers
             ResponseData<List<FujiPickingGroup>> response = new ResponseData<List<FujiPickingGroup>>();
             try
             {
-                //string userName = User.Identity.GetUserName() ?? "SYSTEM";
+                string userName = User.Identity.GetUserName() ?? "SYSTEM";
                 FujiPickingGroup result = ItemImportService.GetPickingByOrderNo(id);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(new List<FujiPickingGroup>() { result });
@@ -254,7 +255,7 @@ namespace Fuji.WebApi.Controllers
 
         #endregion
 
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Authorize]
         [HttpGet]
         [Route("importSerial/{id}")]
@@ -277,7 +278,7 @@ namespace Fuji.WebApi.Controllers
         // GET: api/ImportSerial/5
         // GET: api/Items/1
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/handy/{id}")]
         public HttpResponseMessage GetHandy(string id)
@@ -296,8 +297,8 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        //[Authorize]
-        ////[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/header/{id}")]
         public HttpResponseMessage GetHeaderPDF(string id)
@@ -385,8 +386,8 @@ namespace Fuji.WebApi.Controllers
             return result;
         }
 
-        //[Authorize]
-        ////[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/export/{id}")]
         public HttpResponseMessage ExportToExcel(string id)
@@ -803,8 +804,8 @@ namespace Fuji.WebApi.Controllers
 
 
         // POST: api/ImportSerial
-        //[Authorize]
-        ////[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("importSerial")]
         public HttpResponseMessage Post([FromBody]ImportSerialHead item)
@@ -812,7 +813,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<ImportSerialHead> response = new ResponseData<ImportSerialHead>();
             try
             {
-                //item.UserUpdate = User.Identity.GetUserName();
+                item.UserUpdate = User.Identity.GetUserName();
                 ImportSerialHead newItem = ItemImportService.CreateItem(item);
                 response.SetData(newItem);
             }
@@ -826,7 +827,7 @@ namespace Fuji.WebApi.Controllers
 
         // PUT: api/Items/5
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPut]
         [Route("importSerial/{id}")]
         public HttpResponseMessage Put(string id, [FromBody]ImportSerialHead item)
@@ -834,7 +835,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                item.UserUpdate = "system";//User.Identity.GetUserName();
+                item.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
                 bool isUpated = ItemImportService.UpdateItem(id, item);
                 response.SetData(isUpated);
             }
@@ -848,7 +849,7 @@ namespace Fuji.WebApi.Controllers
 
         // DELETE: api/Items/5
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpDelete]
         [Route("importSerial/{id}")]
         public HttpResponseMessage Delete(string id)
@@ -868,7 +869,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("importSerial/statusexport")]
         public HttpResponseMessage PostUpdateStatusExport([FromBody]ImportSerialHead item)
@@ -876,8 +877,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<Boolean> response = new ResponseData<Boolean>();
             try
             {
-
-                item.UserUpdate = "system";//User.Identity.GetUserName();
+                item.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
                 bool result = ItemImportService.UpdateStausExport(item);
                 if (result)
                     response.SetStatus(HttpStatusCode.OK);
@@ -897,7 +897,7 @@ namespace Fuji.WebApi.Controllers
 
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/autocomplete")]
         public HttpResponseMessage GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)
@@ -923,7 +923,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/bycolumn/{column}/{keyword}")]
         public HttpResponseMessage GetDataByColumn(string column, string keyword)
@@ -949,8 +949,8 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        //[Authorize]
-        ////[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("ImportPickingListTest")]
         public async Task<HttpResponseMessage> PostFormData()
@@ -1037,7 +1037,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("importSerial/handy/setscanned")]
         public HttpResponseMessage SetScanned([FromBody]SetScannedRequest receive)
@@ -1045,7 +1045,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                //receive.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
+                receive.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
 
                 bool flag = ItemImportService.SetScanned(receive);
                 response.SetData(flag ? 1 : 0);
@@ -1059,7 +1059,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("importSerial/handy/receive")]
         public HttpResponseMessage Receive([FromBody]ReceiveRequest receive)
@@ -1067,8 +1067,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                var identity = User.Identity as ClaimsIdentity;
-                //receive.UserUpdate = identity.GetUserName();
+                receive.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
 
                 bool flag = ItemImportService.Receive(receive);
                 response.SetData(flag ? 1 : 0);
@@ -1081,8 +1080,8 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        //[Authorize]
-        ////[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/handy/itemGroups/{orderNo}")]
         public HttpResponseMessage GetByOrder(string orderNo)
@@ -1102,7 +1101,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("importSerial/handy/ConfirmPickingList")]
         public HttpResponseMessage ConfirmPickingList([FromBody]ConfirmPickingRequest confirmRequest)
@@ -1110,7 +1109,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                string username = "SYSTEM";//User.Identity.GetUserName() ?? "SYSTEM";
+                string username = User.Identity.GetUserName() ?? "SYSTEM";
                 bool flag = ItemImportService.ConfirmPicking(confirmRequest, username);
                 response.SetData(flag ? 1 : 0);
             }
@@ -1123,7 +1122,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         /*[Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("importSerial/handy/registerRFID")]
         public HttpResponseMessage RegisterRFID([FromBody]RegisterRFIDRequest registerRequest)
@@ -1201,7 +1200,7 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("importSerial/handy/registerRFID")]
         public HttpResponseMessage RegisterRFID_HANDY([FromBody]RegisterRFIDRequest registerRequest)
@@ -1209,7 +1208,7 @@ namespace Fuji.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                string username = "SYSTEM";//User.Identity.GetUserName() ?? "SYSTEM";
+                string username = User.Identity.GetUserName() ?? "SYSTEM";
                 bool flag = ItemImportService.RegisterRFID_HANDY(registerRequest, username);
                 response.SetData(flag ? 1 : 0);
             }
@@ -1219,6 +1218,29 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("importSerial/byCriteria")]
+        public HttpResponseMessage FindImportSerialDetailByCriteria([FromBody]ParameterSearch parameterSearch)
+        {
+            ResponseData<IEnumerable<ImportSerialDetail>> respones = new ResponseData<IEnumerable<ImportSerialDetail>>();
+            try
+            {
+                IEnumerable<ImportSerialDetail> items = ItemImportService.FindImportSerialDetailByCriteria(parameterSearch);
+                if (items != null)
+                {
+                    respones.SetStatus(HttpStatusCode.OK);
+                    respones.SetData(items);
+                }
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
         }
 
     }
