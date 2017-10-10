@@ -15,6 +15,7 @@ using System.Diagnostics;
 using WMS.Master.Menu;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
+using System.Data.SqlClient;
 
 namespace WMS.Master
 {
@@ -317,7 +318,6 @@ namespace WMS.Master
                                                Url = i.Url ?? String.Empty,
                                                Sort = row.Sort
                                            });
-
             var tbl_MenuProjectMapping = db.MenuProjectMappings;
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery.Select(b =>
             new MenuProjectMappingDto()
@@ -344,7 +344,18 @@ namespace WMS.Master
                        where r.ProjectIDSys == projectid && ur.UserID == userid && mp.ProjectIDSys == projectid
                        select mp;
 
-            var tbl_MenuProjectMapping = db.MenuProjectMappings;
+
+
+            //var menu = db.MenuProjectMappings.SqlQuery(
+            //    "SELECT e.MenuIDSys,e.ProjectIDSys,e.MenuIDSysParent,e.Sort,e.MenuName,e.MenuPic FROM UserRoles a " +
+            //    " INNER JOIN RolePermission b ON a.RoleID = b.RoleID" +
+            //    " INNER JOIN Roles d ON a.RoleID = d.RoleID" +
+            //    " INNER JOIN Permissions c ON b.PermissionID = c.PermissionID" +
+            //    " INNER JOIN MenuProjectMapping e ON c.MenuIDSys = e.MenuIDSys" +
+            //    " INNER JOIN Menu_MT f ON e.MenuIDSys = f.MenuIDSys" +
+            //    " WHERE d.ProjectIDSys = {0} AND a.UserID = {1} AND e.ProjectIDSys = {0}"
+            //    , projectid, userid).ToList();
+
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = menu.Select(b =>
             new MenuProjectMappingDto()
             {

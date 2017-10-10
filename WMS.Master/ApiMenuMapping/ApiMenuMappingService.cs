@@ -93,10 +93,10 @@ namespace WMS.Master
         {
             using (var scope = new TransactionScope())
             {
-                ApiMenuMapping api = new ApiMenuMapping();
+                
                 
                     foreach (var c in ApiMenuMapping)
-                    {
+                    {   ApiMenuMapping api = new ApiMenuMapping();
                         api.ApiIDSys = c.ApiIDSys;
                         api.MenuIDSys = c.MenuIDSys;
                         api.GET = c.GET;
@@ -122,7 +122,7 @@ namespace WMS.Master
                     throw ex;
                 }
                 scope.Complete();
-                return api.ApiIDSys;
+                return "Success";
             }
         }
 

@@ -175,6 +175,7 @@
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
+    <Compile Include="MenuProjectMapping\MenuMappingPermission.cs" />
     <Compile Include="MenuProjectMapping\MenuProjectMappingDto.cs" />
     <Compile Include="MenuProjectMapping\MenuProjectMappingService.cs" />
     <Compile Include="Menu\IMenuService.cs" />
