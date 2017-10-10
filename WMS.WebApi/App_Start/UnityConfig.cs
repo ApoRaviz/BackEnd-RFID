@@ -4,17 +4,14 @@ using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
 using WIM.Core.Common;
-using WMS.Master.Customer;
 using WMS.WebApi.Controllers;
-using WMS.Master.Unit;
 using WMS.Master.Label;
 using WMS.Master.Report;
 using WMS.Master.Inspect;
 using WMS.Master.Import;
-using WMS.Master.Dimension;
 using WMS.Master.Zone;
 using WMS.Master;
-
+using WMS.Service;
 namespace WMS.WebApi
 {
     public static class UnityConfig
