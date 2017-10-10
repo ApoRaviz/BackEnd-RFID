@@ -537,6 +537,10 @@
       <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
       <Name>WMS.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.ValueObject\WMS.ValueObject.csproj">
+      <Project>{24995cd6-a57e-4be2-9d13-77e5a81e9cee}</Project>
+      <Name>WMS.ValueObject</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

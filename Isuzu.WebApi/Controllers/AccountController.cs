@@ -13,12 +13,12 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using Isuzu.WebApi.Models;
-using Isuzu.WebApi.Providers;
 using Isuzu.WebApi.Results;
-using Isuzu.WebApi.Auth;
 using System.Linq;
 using Microsoft.VisualBasic;
+using WIM.Core.Security;
+using WIM.Core.Security.Entity;
+using WIM.Core.Security.Providers;
 
 namespace Isuzu.WebApi.Controllers
 {

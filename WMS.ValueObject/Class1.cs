@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Isuzu.Service
+namespace WMS.ValueObject
 {
     public class Class1
     {

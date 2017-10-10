@@ -300,6 +300,15 @@
     <Reference Include="WIM.Core.Common.ValueObject">
       <HintPath>..\WIM.Core.Common.ValueObject\bin\Debug\WIM.Core.Common.ValueObject.dll</HintPath>
     </Reference>
+    <Reference Include="WIM.Core.Security">
+      <HintPath>..\WIM.Core.Security\bin\Debug\WIM.Core.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="WIM.Core.Security.Context">
+      <HintPath>..\WIM.Core.Security.Context\bin\Debug\WIM.Core.Security.Context.dll</HintPath>
+    </Reference>
+    <Reference Include="WIM.Core.Security.Entity">
+      <HintPath>..\WIM.Core.Security.Entity\bin\Debug\WIM.Core.Security.Entity.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WordApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=dd9255e6bcd130c8, processorArchitecture=MSIL">
       <HintPath>..\packages\NetOffice.Word.1.7.3.0\lib\net45\WordApi.dll</HintPath>
@@ -363,18 +372,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Auth\ApplicationDbContext.cs" />
-    <Compile Include="Auth\ApplicationRole.cs" />
-    <Compile Include="Auth\ApplicationRoleManager.cs" />
-    <Compile Include="Auth\ApplicationUser.cs" />
-    <Compile Include="Auth\ApplicationUserManager.cs" />
-    <Compile Include="Auth\ApplicationUserRole.cs" />
-    <Compile Include="Auth\ClaimsAuthorizationAttribute.cs" />
-    <Compile Include="Auth\ExtendedClaimsProvider.cs" />
-    <Compile Include="Auth\IdentityAuthAttribute.cs" />
-    <Compile Include="Auth\RBACAttribute.cs" />
-    <Compile Include="Auth\RBAC_IdentityExtendedMethods.cs" />
-    <Compile Include="Auth\RolesFromClaims.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiLogHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
@@ -407,20 +404,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ClaimBindingModel.cs" />
-    <Compile Include="Models\Menu.cs" />
-    <Compile Include="Models\MenuProjectMapping.cs" />
-    <Compile Include="Models\ModelFactory.cs" />
-    <Compile Include="Models\Permission.cs" />
-    <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\RoleBindingModels.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Providers\CustomJwtFormat.cs" />
-    <Compile Include="Providers\CustomOAuthProvider.cs" />
     <Compile Include="Report\ReportUtils.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Services\EmailService.cs" />
@@ -555,6 +539,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+    <Folder Include="Providers\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
@@ -603,9 +589,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:5556</IISUrl>
+          <IISUrl>http://localhost:9003</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:5556</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:9003</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
