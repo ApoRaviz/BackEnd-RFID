@@ -17,13 +17,14 @@ namespace WIM.Core.Common.Helpers
             db = new SecurityDbContext();
             apiTable = new Hashtable();
 
-            var api = from row in db.Api_MT
+            //#JobComment
+            /*var api = from row in db.Api_MT
                       select row;
 
             foreach(var a in api)
             {
                 apiTable.Add(a.ApiIDSys, a.Api);
-            }
+            }*/
         }
     }
 }

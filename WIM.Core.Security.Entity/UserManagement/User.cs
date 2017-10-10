@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
+using WIM.Core.Security.Entity.RoleAndPermission;
 
-namespace WIM.Core.Security.Entity
+namespace WIM.Core.Security.Entity.UserManagement
 {
     [Table("Users")]
     public class User
@@ -21,5 +23,5 @@ namespace WIM.Core.Security.Entity
         public string Name { get; set; }
 
         public ICollection<Role> Roles { get; set; }
-    }    
+    }
 }

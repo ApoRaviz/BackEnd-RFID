@@ -42,9 +42,6 @@
     <Reference Include="Isuzu.Repository">
       <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
     </Reference>
-    <Reference Include="Isuzu.Service">
-      <HintPath>..\Isuzu.Service\bin\Debug\Isuzu.Service.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -71,6 +68,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Isuzu.Service\Isuzu.Service.csproj">
+      <Project>{1add2f62-608b-446d-ae85-2468953751d1}</Project>
+      <Name>Isuzu.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

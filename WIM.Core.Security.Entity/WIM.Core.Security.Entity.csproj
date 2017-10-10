@@ -65,23 +65,28 @@
   <ItemGroup>
     <Compile Include="AccountBindingModels.cs" />
     <Compile Include="AccountViewModels.cs" />
-    <Compile Include="ApiMenuMapping.cs" />
-    <Compile Include="Api_MT.cs" />
     <Compile Include="ApplicationRole.cs" />
     <Compile Include="ApplicationUser.cs" />
     <Compile Include="ApplicationUserRole.cs" />
     <Compile Include="ClaimBindingModel.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="MenuProjectMapping.cs" />
-    <Compile Include="Permission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Role.cs" />
+    <Compile Include="RoleAndPermission\Permission.cs" />
+    <Compile Include="RoleAndPermission\Role.cs" />
+    <Compile Include="RoleAndPermission\RolePermission.cs" />
     <Compile Include="RoleBindingModels.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="UserManagement\User.cs" />
+    <Compile Include="UserManagement\UserProjectMapping.cs" />
+    <Compile Include="UserManagement\UserRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

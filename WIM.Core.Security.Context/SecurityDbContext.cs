@@ -20,10 +20,10 @@ namespace WIM.Core.Security.Context
             return new SecurityDbContext();
         }
 
-        public DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
-        public DbSet<Menu> Menu { get; set; }
+        //public DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
+        //public DbSet<Menu> Menu { get; set; }
         public DbSet<PasswordHistory> PasswordHistory { get; set; }
-        public DbSet<Api_MT> Api_MT { get; set; }
+        //public DbSet<Api_MT> Api_MT { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -45,10 +45,10 @@ namespace WIM.Core.Security.Context
             modelBuilder.Entity<ApplicationUserClaim>().ToTable("UserClaims");
             modelBuilder.Entity<ApplicationUserLogin>().ToTable("UserLogins");
 
-            modelBuilder.Entity<Menu>().ToTable("Menu_MT");
-            modelBuilder.Entity<Api_MT>().ToTable("Api_MT");
-            modelBuilder.Entity<MenuProjectMapping>().ToTable("MenuProjectMapping").HasKey(c => new { c.MenuIDSys, c.ProjectIDSys });
-            modelBuilder.Entity<ApiMenuMapping>().ToTable("ApiMenuMapping").HasKey(c => new { c.ApiIDSys, c.MenuIDSys });
+            //modelBuilder.Entity<Menu>().ToTable("Menu_MT");
+            //modelBuilder.Entity<Api_MT>().ToTable("Api_MT");
+            //modelBuilder.Entity<MenuProjectMapping>().ToTable("MenuProjectMapping").HasKey(c => new { c.MenuIDSys, c.ProjectIDSys });
+            //modelBuilder.Entity<ApiMenuMapping>().ToTable("ApiMenuMapping").HasKey(c => new { c.ApiIDSys, c.MenuIDSys });
             modelBuilder.Entity<PasswordHistory>().ToTable("PasswordHistory");
         }
     }

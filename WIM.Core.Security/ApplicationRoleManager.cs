@@ -29,13 +29,14 @@ namespace WIM.Core.Security
         public static ApplicationRole GetRole(string roleID)
         {
             ApplicationRole role = null;
-            using (RoleStore<ApplicationRole, string, ApplicationUserRole> db = new RoleStore<ApplicationRole, string, ApplicationUserRole>(new SecurityDbContext()))
+            //#Jobcomment
+            /*using (RoleStore<ApplicationRole, string, ApplicationUserRole> db = new RoleStore<ApplicationRole, string, ApplicationUserRole>(new SecurityDbContext()))
             {
                 role = db.Roles.Where(r => r.Id == roleID)
                     .Include(p => p.Permissions.Select(mp => mp.MenuProjectMapping.Menu)
                     ).FirstOrDefault();
 
-            }
+            }*/
             return role;
         }
 

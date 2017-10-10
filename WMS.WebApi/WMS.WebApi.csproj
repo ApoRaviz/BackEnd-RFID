@@ -517,6 +517,10 @@
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
       <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
       <Name>WIM.Core.Security.Context</Name>
@@ -536,10 +540,6 @@
     <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
       <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
       <Name>WMS.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.ValueObject\WMS.ValueObject.csproj">
-      <Project>{24995cd6-a57e-4be2-9d13-77e5a81e9cee}</Project>
-      <Name>WMS.ValueObject</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
