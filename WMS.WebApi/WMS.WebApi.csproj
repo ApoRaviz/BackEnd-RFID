@@ -356,6 +356,7 @@
     <Compile Include="Controllers\UploadFileApiController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
+    <Compile Include="Controllers\WarehouseController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="DataSet\MasterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -536,10 +537,6 @@
     <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
       <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
       <Name>WMS.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.ValueObject\WMS.ValueObject.csproj">
-      <Project>{24995cd6-a57e-4be2-9d13-77e5a81e9cee}</Project>
-      <Name>WMS.ValueObject</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

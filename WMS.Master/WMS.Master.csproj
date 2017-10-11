@@ -305,6 +305,8 @@
     <Compile Include="User\UserReq.cs" />
     <Compile Include="User\UserService.cs" />
     <Compile Include="User\UserDto.cs" />
+    <Compile Include="Warehouses\IWarehouseService.cs" />
+    <Compile Include="Warehouses\WarehouseService.cs" />
     <Compile Include="Warehouse_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -359,5 +361,6 @@
       <Name>WMS.Repository</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
