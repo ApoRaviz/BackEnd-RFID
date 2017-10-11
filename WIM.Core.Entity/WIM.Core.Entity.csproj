@@ -41,16 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Currency\CurrencyUnit.cs" />
     <Compile Include="CustomerManagement\Customer_MT.cs" />
+    <Compile Include="Dimension\DimensionLayout_MT.cs" />
+    <Compile Include="Employee\Employee_MT.cs" />
     <Compile Include="MenuManagement\ApiMenuMapping.cs" />
     <Compile Include="MenuManagement\Api_MT.cs" />
     <Compile Include="MenuManagement\MenuProjectMapping.cs" />
     <Compile Include="MenuManagement\Menu_MT.cs" />
+    <Compile Include="Person\Person_MT.cs" />
     <Compile Include="ProjectManagement\Project_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierManagement\Supplier_MT.cs" />
     <Compile Include="WarehouseManagement\Location_MT.cs" />
+    <Compile Include="WarehouseManagement\RackLayout.cs" />
+    <Compile Include="WarehouseManagement\RackLayout_MT.cs" />
     <Compile Include="WarehouseManagement\Warehouse_MT.cs" />
+    <Compile Include="WarehouseManagement\ZoneLayoutDetail_MT.cs" />
+    <Compile Include="WarehouseManagement\ZoneLayoutHeader_MT.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

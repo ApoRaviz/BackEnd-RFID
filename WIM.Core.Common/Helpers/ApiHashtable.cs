@@ -17,7 +17,7 @@ namespace WIM.Core.Common.Helpers
             db = new SecurityDbContext();
             apiTable = new Hashtable();
 
-            //#JobComment
+            // #JobComment
             /*var api = from row in db.Api_MT
                       select row;
 

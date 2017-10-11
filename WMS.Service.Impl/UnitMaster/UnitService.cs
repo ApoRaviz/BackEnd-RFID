@@ -12,13 +12,14 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WMS.Context;
+using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {
     public class UnitService : IUnitService
     {
-        private MasterContext Db = MasterContext.Create();
+        private WMSDbContext Db = WMSDbContext.Create();
         private GenericRepository<Unit_MT> Repo;
 
         public UnitService()
@@ -26,14 +27,14 @@ namespace WMS.Service
             Repo = new GenericRepository<Unit_MT>(Db);
         }        
 
-        public IEnumerable<ProcGetUnits_Result> GetUnits()
+        public IEnumerable<Unit_MT> GetUnits()
         {
-            return Db.ProcGetUnits().ToList();
+            return Db.Unit_MT.ToList();
         }
 
-        public ProcGetUnitByUnitIDSys_Result GetUnitByUnitIDSys(int id)
+        public Unit_MT GetUnitByUnitIDSys(int id)
         {
-            return Db.ProcGetUnitByUnitIDSys(id).FirstOrDefault();
+            return Db.Unit_MT.SingleOrDefault(u => u.UnitIDSys == id);
         }
 
         public Unit_MT GetUnitByCusIDSysIncludeProjects(int id)

@@ -7,19 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Master;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Context;
 
 namespace WMS.Service
 {
     public class ApiMTService : IApiMTService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext db = CoreDbContext.Create();
         private GenericRepository<Api_MT> repo;
 
         public ApiMTService()

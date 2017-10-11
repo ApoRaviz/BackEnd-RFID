@@ -25,6 +25,7 @@ using WMS.WebApi.Results;
 using WIM.Core.Security.Providers;
 using WMS.Common;
 using WMS.Service;
+using WIM.Core.Security.Entity.UserManagement;
 
 namespace WMS.WebApi.Controllers
 {
@@ -179,7 +180,7 @@ namespace WMS.WebApi.Controllers
                 }
 
                 Dictionary<string, string> Json = new Dictionary<string, string>();
-                WMS.Master.User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
+                User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
           
                 if (OTPClaimBinding.OTP.Equals(users.KeyOTP) &&  DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
                 {

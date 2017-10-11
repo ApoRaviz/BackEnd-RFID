@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,8 +9,10 @@ using WMS.Entity.InspectionManagement;
 
 namespace WMS.Entity.ItemManagement
 {
+    [Table("ItemInspectMapping")]
     public class ItemInspectMapping
     {
+        [Key]
         public int ItemInspectIDSys { get; set; }
         public int ItemIDSys { get; set; }
         public int InspectIDSys { get; set; }

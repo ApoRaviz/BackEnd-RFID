@@ -15,6 +15,7 @@ namespace WIM.Core.Entity.CustomerManagement
         public Customer_MT()
         {
             this.Project_MT = new HashSet<Project_MT>();
+            // #JobComment
             //this.UserCustomerMappings = new HashSet<UserCustomerMapping>();
         }
 

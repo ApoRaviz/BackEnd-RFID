@@ -16,13 +16,17 @@ using System.Data.SqlTypes;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Security.Context;
+using WIM.Core.Entity.Person;
+using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Context;
 
 namespace WMS.Service
 {
     public class UserService : IUserService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext CoreDb;
+        private SecurityDbContext SecuDb;
         private GenericRepository<User> repo;
         private GenericRepository<Person_MT> repoPerson;
         private GenericRepository<UserRole> repoUserRole;
@@ -30,9 +34,11 @@ namespace WMS.Service
 
         public UserService()
         {
-            repoPerson = new GenericRepository<Person_MT>(db);
-            repo = new GenericRepository<User>(db);
-            repoUserRole = new GenericRepository<UserRole>(db);
+            CoreDb = new CoreDbContext();
+            SecuDb = new SecurityDbContext();
+            repoPerson = new GenericRepository<Person_MT>(CoreDb);
+            repo = new GenericRepository<User>(SecuDb);
+            repoUserRole = new GenericRepository<UserRole>(SecuDb);
         }
 
         public IEnumerable<User> GetUsers()
@@ -42,24 +48,22 @@ namespace WMS.Service
 
         public User GetUserByUserID(string id)
         {
-            User User = db.Users.Find(id);
+            User User = SecuDb.User.Find(id);
             return User;
-        }
-        
+        }        
 
         public string GetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
         {
             User u;
             try
             {
-                 u = (from user in db.Users
+                 u = (from user in SecuDb.User
                           where user.UserID == userid
                           select user).FirstOrDefault();
                 if (keyOtp > 99999)
                 {
                     u.KeyOTP = keyOtp;
                     u.KeyOTPDate = DateTime.Now;
-                    db.SaveChanges();
                 }
             }
             catch (Exception)
@@ -71,8 +75,8 @@ namespace WMS.Service
 
         public object GetCustonersByUserID(string userid)
         {
-            var query = from ctm in db.Customer_MT
-                        join c in db.UserCustomerMappings on ctm.CusIDSys equals c.CusIDSys
+            var query = from ctm in CoreDb.Customer_MT
+                        join c in SecuDb.UserCustomerMapping on ctm.CusIDSys equals c.CusIDSys
                         where c.UserID == userid
                         select new
                         {
@@ -117,7 +121,7 @@ namespace WMS.Service
                 }
                 try
                 {
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -159,7 +163,7 @@ namespace WMS.Service
                 
                 try
                 {
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -187,7 +191,7 @@ namespace WMS.Service
                 repo.Update(existedUser);
                 try
                 {
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -214,14 +218,14 @@ namespace WMS.Service
             
             using (var scope = new TransactionScope())
             {
-                User u = (from user in db.Users
+                User u = (from user in SecuDb.User
                           where user.UserID == userid
                           select user).FirstOrDefault();
                 u.KeyAccess = key;
                 u.KeyAccessDate = DateTime.Now;
                 try
                 {
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                     scope.Complete();
                 }
                 catch (Exception)
@@ -239,7 +243,7 @@ namespace WMS.Service
                 try
                 {
                     DateTime datew = DateTime.Now.AddMinutes(-2);
-                    User u = (from user in db.Users
+                    User u = (from user in SecuDb.User
                               where user.KeyAccess == param.Key
                               && user.KeyAccessDate > datew && user.KeyAccess != null
                               select user).FirstOrDefault();
@@ -250,7 +254,7 @@ namespace WMS.Service
                     u.TokenMobile = param.Token;
                     u.KeyAccess = null;
                     u.KeyAccessDate = null;
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -274,8 +278,8 @@ namespace WMS.Service
 
         public List<User> getUserNotHave(string RoleID)
         {
-            var user = (from row in db.Users
-                        where !(from o in db.UserRoles
+            var user = (from row in SecuDb.User
+                        where !(from o in SecuDb.UserRole
                                 where o.RoleID == RoleID
                                 select o.UserID).Contains(row.UserID)
                         select row).ToList();
@@ -292,8 +296,8 @@ namespace WMS.Service
                     Person.UpdateDate = DateTime.Now;
                     Person.UserUpdate = "1";
                     repoPerson.Insert(Person);
-                    db.SaveChanges();
-                    db.Users.Add(new User()
+
+                    SecuDb.User.Add(new User()
                         {
                             UserID = Guid.NewGuid().ToString(),
                             UserName = User.UserName,
@@ -315,7 +319,7 @@ namespace WMS.Service
                             UserUpdate = "1",
                             Active = 1
                         });
-                   db.SaveChanges();
+                   SecuDb.SaveChanges();
                    scope.Complete();
                 }
                     //repo.Insert(User);
@@ -338,7 +342,7 @@ namespace WMS.Service
 
         public User GetUserByPersonIDSys(int personIDSys)
         {
-            var user = from i in db.Users
+            var user = from i in SecuDb.User
                        where i.PersonIDSys == personIDSys
                        select i;
             return user.SingleOrDefault();
@@ -350,7 +354,7 @@ namespace WMS.Service
             {
                 try
                 {
-                    User u = (from user in db.Users
+                    User u = (from user in SecuDb.User
                               where user.TokenMobile == param.Token
                               && user.KeyAccessDate == null && user.KeyAccess == null
                               select user).FirstOrDefault();
@@ -359,7 +363,7 @@ namespace WMS.Service
                         return false;
                     }
                     u.TokenMobile = param.NewToken;
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)

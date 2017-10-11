@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Validation;
-using WMS.Master;
+using WIM.Core.Context;
+using WIM.Core.Entity.Dimension;
 
 namespace WMS.Service
 {
     public class DimensionService : IDimensionService
     {
-        private MasterContext Db = MasterContext.Create();
+        private CoreDbContext Db = CoreDbContext.Create();
 
         public DimensionService()
         {

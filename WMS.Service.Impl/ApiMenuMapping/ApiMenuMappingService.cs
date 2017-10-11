@@ -7,20 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Master;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-
+using WIM.Core.Context;
+using WIM.Core.Entity.MenuManagement;
 
 namespace WMS.Service
 {
     public class ApiMenuMappingService : IApiMenuMappingService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext db = CoreDbContext.Create();
         private GenericRepository<ApiMenuMapping> repo;
 
         public ApiMenuMappingService()
@@ -30,7 +30,7 @@ namespace WMS.Service
 
         public IEnumerable<ApiMenuMappingDto> GetCategories()
         {
-            IEnumerable<ApiMenuMapping> ApiMenuMappings = (from i in db.ApiMenuMappings
+            IEnumerable<ApiMenuMapping> ApiMenuMappings = (from i in db.ApiMenuMapping
                                           select i).ToList();
 
             IEnumerable<ApiMenuMappingDto> ApiMenuMappingDtos = Mapper.Map<IEnumerable<ApiMenuMapping>, IEnumerable<ApiMenuMappingDto>>(ApiMenuMappings);
@@ -39,7 +39,7 @@ namespace WMS.Service
 
         public ApiMenuMappingDto GetApiMenuMapping(string id)
         {
-            ApiMenuMapping ApiMenuMapping = (from i in db.ApiMenuMappings
+            ApiMenuMapping ApiMenuMapping = (from i in db.ApiMenuMapping
                             where i.ApiIDSys == id 
                             select i).SingleOrDefault();
 
@@ -50,7 +50,7 @@ namespace WMS.Service
 
         public List<ApiMenuMapping> GetListApiMenuMapping(int id)
         {
-            var ApiMenuMapping = (from i in db.ApiMenuMappings
+            var ApiMenuMapping = (from i in db.ApiMenuMapping
                                              where i.MenuIDSys == id
                                              select i).ToList();
             return ApiMenuMapping;

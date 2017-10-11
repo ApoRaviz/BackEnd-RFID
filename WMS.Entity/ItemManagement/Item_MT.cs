@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +10,7 @@ using WIM.Core.Entity.SupplierManagement;
 
 namespace WMS.Entity.ItemManagement
 {
+    [Table("Item_MT")]
     public class Item_MT
     {
         public Item_MT()
@@ -17,6 +20,7 @@ namespace WMS.Entity.ItemManagement
             this.ItemSetDetails = new HashSet<ItemSetDetail>();
         }
 
+        [Key]
         public int ItemIDSys { get; set; }
         public int ProjectIDSys { get; set; }
         public string ItemCode { get; set; }

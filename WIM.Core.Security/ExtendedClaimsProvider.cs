@@ -35,7 +35,7 @@ namespace WIM.Core.Security
                             continue;
                         }
                         //string url = perm.Method + perm.MenuProjectMapping.Menu.Url;
-                          string url = perm.Method +"/"+perm.Api.Api.ApiIDSys;
+                          string url = perm.Method +"/"+perm.Api.Api_MT.ApiIDSys;
            
                     if (claims.Any(x => x.Type == "UrlPermission" && x.Value == url))
                         {

@@ -5,9 +5,10 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Security.Entity.UserManagement;
 using WMS.Common;
 using WMS.Service;
 
@@ -28,10 +29,10 @@ namespace WMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<ProcGetProjects_Result>> response = new ResponseData<IEnumerable<ProcGetProjects_Result>>();
+            ResponseData<IEnumerable<Project_MT>> response = new ResponseData<IEnumerable<Project_MT>>();
             try
             {
-                IEnumerable<ProcGetProjects_Result> Projects = ProjectService.GetProjects();
+                IEnumerable<Project_MT> Projects = ProjectService.GetProjects();
                 response.SetData(Projects);
             }
             catch (ValidationException ex)
@@ -127,10 +128,10 @@ namespace WMS.WebApi.Controllers
         {
             if (include.Any(x => x.Equals("customer_mt", StringComparison.CurrentCultureIgnoreCase)))
             {
-                IResponseData<ProjectDto> response = new ResponseData<ProjectDto>();
+                IResponseData<Project_MT> response = new ResponseData<Project_MT>();
                 try
                 {
-                    ProjectDto Project = ProjectService.GetProjectByProjectIDSysIncludeCustomer(projectIDSys);
+                    Project_MT Project = ProjectService.GetProjectByProjectIDSysIncludeCustomer(projectIDSys);
                     response.SetData(Project);
                 }
                 catch (ValidationException ex)
@@ -142,10 +143,10 @@ namespace WMS.WebApi.Controllers
             }
             else
             {
-                IResponseData<ProcGetProjectByProjectIDSys_Result> response = new ResponseData<ProcGetProjectByProjectIDSys_Result>();
+                IResponseData<Project_MT> response = new ResponseData<Project_MT>();
                 try
                 {
-                    ProcGetProjectByProjectIDSys_Result Project = ProjectService.GetProjectByProjectIDSys(projectIDSys);
+                    Project_MT Project = ProjectService.GetProjectByProjectIDSys(projectIDSys);
                     response.SetData(Project);
                 }
                 catch (ValidationException ex)

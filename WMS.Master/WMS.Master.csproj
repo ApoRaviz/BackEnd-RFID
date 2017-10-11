@@ -81,15 +81,9 @@
     <Compile Include="ImportDefinitionHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Import\IImportServicecs.cs" />
-    <Compile Include="Import\ImportDefinitionHeader_MT_Partial.cs" />
-    <Compile Include="Import\ImportService.cs" />
     <Compile Include="InspectType.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Inspect\IInspectService.cs" />
-    <Compile Include="Inspect\InspectDto.cs" />
-    <Compile Include="Inspect\InspectService.cs" />
     <Compile Include="Inspect_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -115,9 +109,6 @@
     <Compile Include="LabelLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Label\ILabelService.cs" />
-    <Compile Include="Label\LabelLayoutHeader_MT_Partial.cs" />
-    <Compile Include="Label\LabelService.cs" />
     <Compile Include="Label_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -214,9 +205,6 @@
     <Compile Include="ReportLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Report\IReportService.cs" />
-    <Compile Include="Report\ReportLayoutHeader_MT.cs" />
-    <Compile Include="Report\ReportService.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -250,9 +238,6 @@
     <Compile Include="ZoneLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Zone\IZoneService.cs" />
-    <Compile Include="Zone\ZoneLayoutHeader_MT_Partial.cs" />
-    <Compile Include="Zone\ZoneService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

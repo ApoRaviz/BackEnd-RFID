@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,13 +10,16 @@ using WIM.Core.Entity.ProjectManagement;
 
 namespace WMS.Entity.ItemManagement
 {
+    [Table("Category_MT")]
     public class Category_MT
     {        
         public Category_MT()
         {
+            // # JobComment
             //this.Location_MT = new HashSet<Location_MT>();
         }
 
+        [Key]
         public int CateIDSys { get; set; }
         public int ProjectIDSys { get; set; }
         public string CateID { get; set; }

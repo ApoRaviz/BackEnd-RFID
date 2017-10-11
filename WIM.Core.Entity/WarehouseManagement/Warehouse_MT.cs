@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.WarehouseManagement
 {
+    [Table("Warehouse_MT")]
     public class Warehouse_MT
     {
+        [Key]
         public int WHIDSys { get; set; }
         public string WHID { get; set; }
         public string WHName { get; set; }

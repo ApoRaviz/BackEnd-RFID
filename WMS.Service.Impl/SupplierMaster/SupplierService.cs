@@ -13,13 +13,14 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Context;
+using WIM.Core.Entity.SupplierManagement;
 
 namespace WMS.Service
 { 
     public class SupplierService : ISupplierService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext db = CoreDbContext.Create();
         private GenericRepository<Supplier_MT> repo;
 
         public SupplierService()

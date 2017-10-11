@@ -33,10 +33,6 @@ namespace Fuji.Context
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            //modelBuilder.Entity<ImportSerialHead>().ToTable("ImportSerialHead");
-            //modelBuilder.Entity<ImportSerialDetail>().ToTable("ImportSerialDetail");
-
         }
 
         public ObjectResult<string> ProcGetNewID(string prefixes)

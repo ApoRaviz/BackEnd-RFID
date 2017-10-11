@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Security.Entity.UserManagement;
 using WMS.Common;
-using WMS.Master;
+
 namespace WMS.Service
 {
     public interface IUserRoleService

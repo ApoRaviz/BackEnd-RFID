@@ -10,6 +10,7 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WMS.Common;
 using WMS.Service;
+using WIM.Core.Entity.MenuManagement;
 
 namespace WMS.WebApi.Controllers
 {

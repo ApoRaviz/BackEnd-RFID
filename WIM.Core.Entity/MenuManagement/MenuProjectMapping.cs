@@ -11,11 +11,11 @@ using WIM.Core.Entity.ProjectManagement;
 namespace WIM.Core.Entity.MenuManagement
 {
     [Table("MenuProjectMapping")]
-    public partial class MenuProjectMapping
+    public class MenuProjectMapping
     {        
         public MenuProjectMapping()
         {
-            //#JobComment
+            // #JobComment
             //this.Permissions = new HashSet<Permission>();
         }
 

@@ -13,13 +13,14 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Context;
+using WIM.Core.Entity.WarehouseManagement;
 
 namespace WMS.Service
 {
     public class LocationService : ILocationService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext db = CoreDbContext.Create();
         private GenericRepository<Location_MT> repo;
 
         public LocationService()
@@ -77,7 +78,6 @@ namespace WMS.Service
                 existedLocation.QualityType = Location.QualityType;
                 existedLocation.RackType = Location.RackType;
                 existedLocation.Tempature = Location.Tempature;
-                existedLocation.CateIDSys = Location.CateIDSys;
                 existedLocation.Weight = Location.Weight;
                 existedLocation.Width = Location.Width;
                 existedLocation.Length = Location.Length;

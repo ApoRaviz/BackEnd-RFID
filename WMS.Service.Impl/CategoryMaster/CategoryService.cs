@@ -7,19 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Master;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
+using WMS.Context;
+using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {
     public class CategoryService : ICategoryService
     {
-        private MasterContext db = MasterContext.Create();
+        private WMSDbContext db = WMSDbContext.Create();
         private GenericRepository<Category_MT> repo;
 
         public CategoryService()

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WMS.Master;
+using WIM.Core.Entity.Currency;
+using WMS.Context;
 using WMS.Repository;
 
 
@@ -11,7 +12,7 @@ namespace WMS.Service
 {
     class CurrencyService : ICurrencyService
     {
-        private MasterContext Db = MasterContext.Create();
+        private WMSDbContext Db = WMSDbContext.Create();
         private GenericRepository<CurrencyUnit> Repo;
         public CurrencyService()
         {

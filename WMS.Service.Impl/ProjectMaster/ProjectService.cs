@@ -11,25 +11,27 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Context;
+using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Security.Context;
+using WIM.Core.Security.Entity.UserManagement;
 
 namespace WMS.Service
 {
         public class ProjectService : IProjectService
         {
-            private MasterContext Db = MasterContext.Create();
-            private GenericRepository<Project_MT> Repo;
-            private GenericRepository<UserProjectMapping> Repo2;
+            private CoreDbContext CoreDb;
+            private SecurityDbContext SecuDb;
 
-            public ProjectService()
+        public ProjectService()
             {
-                Repo = new GenericRepository<Project_MT>(Db);
-                Repo2 = new GenericRepository<UserProjectMapping>(Db);
+                CoreDb = new CoreDbContext();
+                SecuDb = new SecurityDbContext();
             }
 
-            public IEnumerable<ProcGetProjects_Result> GetProjects()
+            public IEnumerable<Project_MT> GetProjects()
             {
-                return Db.ProcGetProjects().ToList();
+                return CoreDb.Project_MT.ToList();
             }
 
             public object GetProjectsByCusID(int CusIDSys)
@@ -38,23 +40,26 @@ namespace WMS.Service
             }
 
 
-            public ProcGetProjectByProjectIDSys_Result GetProjectByProjectIDSys(int id)
+            public Project_MT GetProjectByProjectIDSys(int id)
             {
-                return Db.ProcGetProjectByProjectIDSys(id).FirstOrDefault();
+                return CoreDb.Project_MT.SingleOrDefault(p => p.ProjectIDSys == id);
             }
 
-            public ProjectDto GetProjectByProjectIDSysIncludeCustomer(int id)
+            public Project_MT GetProjectByProjectIDSysIncludeCustomer(int id)
             {
                 var project = GetProjectByProjectIDSys(id);
                 if (project != null)
                 {
-                    Mapper.Initialize(cfg => cfg.CreateMap<ProcGetProjectByProjectIDSys_Result, ProjectDto>());
-                    ProjectDto projectDto = Mapper.Map<ProcGetProjectByProjectIDSys_Result, ProjectDto>(project);
 
-                    var customer = Db.ProcGetCustomerByCusIDSys(projectDto.CusIDSys).FirstOrDefault();
-                    Mapper.Initialize(cfg => cfg.CreateMap<ProcGetCustomerByCusIDSys_Result, CustomerDto>());
-                    projectDto.Customer_MT = Mapper.Map<ProcGetCustomerByCusIDSys_Result, CustomerDto>(customer);
-                    return projectDto;
+                // #JobComment
+                /*Mapper.Initialize(cfg => cfg.CreateMap<ProcGetProjectByProjectIDSys_Result, ProjectDto>());
+                ProjectDto projectDto = Mapper.Map<ProcGetProjectByProjectIDSys_Result, ProjectDto>(project);
+
+                var customer = Db.ProcGetCustomerByCusIDSys(projectDto.CusIDSys).FirstOrDefault();
+                Mapper.Initialize(cfg => cfg.CreateMap<ProcGetCustomerByCusIDSys_Result, CustomerDto>());
+                projectDto.Customer_MT = Mapper.Map<ProcGetCustomerByCusIDSys_Result, CustomerDto>(customer);
+                return projectDto;*/
+                return project;
                 }
                 return null;
             }
@@ -66,16 +71,16 @@ namespace WMS.Service
             {
                 using (var scope = new TransactionScope())
                 {
-                    project.ProjectID = Db.ProcGetNewID("PJ").FirstOrDefault();
+                    project.ProjectID = CoreDb.ProcGetNewID("PJ").FirstOrDefault();
                     project.ProjectStatus = "Active";
                     project.CreatedDate = DateTime.Now;
                     project.UpdateDate = DateTime.Now;
                     project.UserUpdate = "1";
 
-                    Repo.Insert(project);
+                 CoreDb.Project_MT.Add(project);
                     try
                     {
-                        Db.SaveChanges();
+                    CoreDb.SaveChanges();
                     scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -96,14 +101,14 @@ namespace WMS.Service
             {
                 using (var scope = new TransactionScope())
                 {
-                    var existedProject = Repo.GetByID(id);
+                    var existedProject = CoreDb.Project_MT.SingleOrDefault(p => p.ProjectIDSys == id);
                     existedProject.ProjectName = project.ProjectName;
                     existedProject.UpdateDate = DateTime.Now;
                     existedProject.UserUpdate = "1";
-                    Repo.Update(existedProject);
+                
                     try
                     {
-                        Db.SaveChanges();
+                    CoreDb.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -125,14 +130,14 @@ namespace WMS.Service
             {
                 using (var scope = new TransactionScope())
                 {
-                    var existedProject = Repo.GetByID(id);
-                    existedProject.ProjectStatus = "Inactive";
+                    var existedProject = CoreDb.Project_MT.SingleOrDefault(p => p.ProjectIDSys == id);
+                existedProject.ProjectStatus = "Inactive";
                     existedProject.UpdateDate = DateTime.Now;
                     existedProject.UserUpdate = "1";
-                    Repo.Update(existedProject);
+                    
                     try
                     {
-                        Db.SaveChanges();
+                    CoreDb.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbUpdateConcurrencyException)
@@ -160,8 +165,8 @@ namespace WMS.Service
 
             public List<Project_MT> ProjectHaveMenu(int CusID)
             {
-                var project = from row in Db.Project_MT
-                              where (from o in Db.MenuProjectMappings
+                var project = from row in CoreDb.Project_MT
+                              where (from o in CoreDb.MenuProjectMapping
                                      select o.ProjectIDSys).Contains(row.ProjectIDSys)
                                      && row.CusIDSys == CusID
                               select row;
@@ -170,7 +175,7 @@ namespace WMS.Service
 
             public List<Project_MT> ProjectCustomer(int CusID)
             {
-                var project = from row in Db.Project_MT
+                var project = from row in CoreDb.Project_MT
                               where row.CusIDSys == CusID
                               select row;
                 return project.ToList();
@@ -183,10 +188,11 @@ namespace WMS.Service
                     UserProjectMapping project = new UserProjectMapping();
                     project.UserID = UserID;
                     project.ProjectIDSys = ProjectIDSys;
-                    Repo2.Insert(project);
+
+                SecuDb.UserProjectMapping.Add(project);
                     try
                     {
-                        Db.SaveChanges();
+                    SecuDb.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -208,8 +214,8 @@ namespace WMS.Service
             public List<UserProjectMapping> GetUserProject(int CusIDSys, string UserID)
             {
 
-                var userproject = (from row in Db.UserProjectMappings
-                                   where row.UserID == UserID && (from o in Db.Project_MT
+                var userproject = (from row in SecuDb.UserProjectMapping
+                                   where row.UserID == UserID && (from o in CoreDb.Project_MT
                                                                   where o.CusIDSys == CusIDSys
                                                                   select o.ProjectIDSys).Contains(row.ProjectIDSys)
                                    select row).ToList();
@@ -223,8 +229,9 @@ namespace WMS.Service
                     UserProjectMapping project = new UserProjectMapping();
                     project.ProjectIDSys = projectID;
                     project.UserID = UserID;
-                    Repo2.Delete(project);
-                    Db.SaveChanges();
+                    // #JobComment
+                    //Repo2.Delete(project);
+                    CoreDb.SaveChanges();
                     scope.Complete();
                     return true;
                 }

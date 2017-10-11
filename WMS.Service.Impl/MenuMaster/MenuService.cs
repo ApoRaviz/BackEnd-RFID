@@ -14,13 +14,14 @@ using System.Diagnostics;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Context;
+using WIM.Core.Entity.MenuManagement;
 
 namespace WMS.Service
 {
     public class MenuService : IMenuService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext db = CoreDbContext.Create();
         private GenericRepository<Menu_MT> repo;
 
         public MenuService()
@@ -32,8 +33,6 @@ namespace WMS.Service
         {
             return repo.GetAll();
         }
-
-
 
         public Menu_MT GetMenuByMenuIDSys(int id)
         {
@@ -259,7 +258,7 @@ namespace WMS.Service
         public IEnumerable<MenuDto> GetMenuDtoNotHave(int projectIDSys)
         {
             var menuQuery = from row in db.Menu_MT
-                            where !(from o in db.MenuProjectMappings
+                            where !(from o in db.MenuProjectMapping
                                     where o.ProjectIDSys == projectIDSys
                                     select o.MenuIDSys)
                                     .Contains(row.MenuIDSys)

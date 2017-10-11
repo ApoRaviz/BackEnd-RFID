@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportManagement\ImportDefinitionDetail_MT.cs" />
+    <Compile Include="ImportManagement\ImportDefinitionHeader_MT.cs" />
     <Compile Include="InspectionManagement\InspectType.cs" />
     <Compile Include="InspectionManagement\Inspect_MT.cs" />
     <Compile Include="ItemManagement\Category_MT.cs" />
@@ -56,7 +58,11 @@
     <Compile Include="ItemManagement\ItemUnitMapping.cs" />
     <Compile Include="ItemManagement\Item_MT.cs" />
     <Compile Include="ItemManagement\Unit_MT.cs" />
+    <Compile Include="LayoutManagement\LabelLayoutDetail_MT.cs" />
+    <Compile Include="LayoutManagement\LabelLayoutHeader_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\ReportLayoutDetail_MT.cs" />
+    <Compile Include="Report\ReportLayoutHeader_MT.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -13,13 +13,14 @@ using System.Data.Entity;
 //using System.Web.Mvc;
 //using Newtonsoft.Json;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Entity.CustomerManagement;
+using WIM.Core.Context;
 
 namespace WMS.Service
 {
     public class CustomerService : ICustomerService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext db = CoreDbContext.Create();
         private GenericRepository<Customer_MT> Repo;
 
         public CustomerService()
@@ -58,7 +59,7 @@ namespace WMS.Service
 
         public CustomerDto GetCustomerByCusIDSysIncludeProjects(int id)
         {
-            var customer = GetCustomerByCusIDSys(id);
+            /*var customer = GetCustomerByCusIDSys(id);
             if (customer != null)
             {
                 Mapper.Initialize(cfg => cfg.CreateMap<ProcGetCustomerByCusIDSys_Result, CustomerDto>());
@@ -70,13 +71,14 @@ namespace WMS.Service
                 customerDto.Project_MT = projectsDto;
 
                 return customerDto;
-            }
+            }*/
             return null;
         }
 
         public object GetCustomers(string userid)
         {
-            var query = (from ctm in db.Customer_MT
+            // #JobComment
+            /*var query = (from ctm in db.Customer_MT
                          join c in db.Project_MT on ctm.CusIDSys equals c.CusIDSys
                          join d in db.Roles on c.ProjectIDSys equals d.ProjectIDSys
                          join e in db.UserRoles on d.RoleID equals e.RoleID
@@ -88,12 +90,14 @@ namespace WMS.Service
                              ctm.CusName
                          }).Distinct();
 
-            return query.ToList();
+            return query.ToList();*/
+            return null;
+
         }
 
         public object GetProjectByCustomer(string userid, int cusIDSys)
         {
-            var query = from ctm in db.Customer_MT
+            /*var query = from ctm in db.Customer_MT
                         join pm in db.Project_MT on ctm.CusIDSys equals pm.CusIDSys
                         join r in db.Roles on pm.ProjectIDSys equals r.ProjectIDSys
                         join ru in db.UserRoles on r.RoleID equals ru.RoleID
@@ -104,12 +108,13 @@ namespace WMS.Service
                             pm.ProjectIDSys,
                             pm.ProjectName,
                         };
-            return query.ToList();
+            return query.ToList();*/
+            return null;
         }
 
-        public ProcGetCustomerByCusIDSys_Result GetCustomerByCusIDSys(int id)
+        public Customer_MT GetCustomerByCusIDSys(int id)
         {
-            return db.ProcGetCustomerByCusIDSys(id).FirstOrDefault();
+            return db.Customer_MT.SingleOrDefault(c => c.CusIDSys == id);
         }
 
         public CustomerDto GetCustomersInclude(int id, string[] tableNames)

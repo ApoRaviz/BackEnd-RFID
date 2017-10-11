@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WMS.Entity.ItemManagement
 {
+    [Table("ItemSet_MT")]
     public class ItemSet_MT
     {
         public ItemSet_MT()
@@ -13,6 +16,7 @@ namespace WMS.Entity.ItemManagement
             this.ItemSetDetails = new HashSet<ItemSetDetail>();
         }
 
+        [Key]
         public int ItemSetIDSys { get; set; }
         public int ProjectIDSys { get; set; }
         public string LineID { get; set; }

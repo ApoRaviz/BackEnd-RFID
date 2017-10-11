@@ -38,8 +38,8 @@ namespace Fuji.WebApi.Controllers
         }
 
         // GET: api/Items
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        //[Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial")]
         public HttpResponseMessage Get()

@@ -54,5 +54,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
+      <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
+      <Name>WMS.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

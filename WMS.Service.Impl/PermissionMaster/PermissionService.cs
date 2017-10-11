@@ -14,20 +14,25 @@ using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Security.Context;
+using WIM.Core.Security.Entity.RoleAndPermission;
+using WIM.Core.Context;
 
 namespace WMS.Service
 {
     public class PermissionService : IPermissionService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext CoreDb;
+        private SecurityDbContext SecuDb;
         private GenericRepository<Permission> repo;
         private GenericRepository<RolePermission> repoRolePermission;
 
         public PermissionService()
         {
-            repo = new GenericRepository<Permission>(db);
-            repoRolePermission = new GenericRepository<RolePermission>(db);
+            CoreDb = new CoreDbContext();
+            SecuDb = new SecurityDbContext();
+            //repo = new GenericRepository<Permission>(db);
+            //repoRolePermission = new GenericRepository<RolePermission>(db);
         }
 
         public IEnumerable<Permission> GetPermissions()
@@ -37,7 +42,7 @@ namespace WMS.Service
 
         public Permission GetPermissionByLocIDSys(string id)
         {
-            Permission Permission = db.Permissions.Find(id);
+            Permission Permission = SecuDb.Permission.Find(id);
             return Permission;
         }
 
@@ -50,7 +55,7 @@ namespace WMS.Service
                 repo.Insert(Permission);
                 try
                 {
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -71,13 +76,12 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedPermission = repo.GetByID(id);
+                Permission existedPermission = SecuDb.Permission.SingleOrDefault(p => p.PermissionID == id);
                 existedPermission.PermissionName = Permission.PermissionName;
-
-                repo.Update(existedPermission);
+               
                 try
                 {
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -98,12 +102,13 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedPermission = repo.GetByID(id);
-                repo.Delete(existedPermission);
+                Permission existedPermission = SecuDb.Permission.SingleOrDefault(p => p.PermissionID == id);
+                SecuDb.Permission.Remove(existedPermission);
+
                 try
                 {
-                db.SaveChanges();
-                scope.Complete();
+                    SecuDb.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException )
                 {
@@ -142,10 +147,13 @@ namespace WMS.Service
                 RolePermission data = new RolePermission();
                 data.PermissionID = PermissionId;
                 data.RoleID = RoleId;
-                repoRolePermission.Insert(data);
+
+                SecuDb.RolePermission.Add(data);
+
                 try
                 {
-                     db.SaveChanges();
+                    SecuDb.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -157,7 +165,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return RoleId;
             }
         }
@@ -172,11 +180,13 @@ namespace WMS.Service
                     RolePermission data = new RolePermission();
                     data.PermissionID = c.PermissionID;
                     data.RoleID = RoleId;
-                    repoRolePermission.Insert(data);
+
+                    SecuDb.RolePermission.Add(data);
+
                 }
                 try
                 {
-                    db.SaveChanges();
+                    SecuDb.SaveChanges();
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -196,7 +206,7 @@ namespace WMS.Service
 
         public bool DeleteRolePermission(string PermissionId, string RoleId)
         {   
-            var RoleForPermissionQuery = from row in db.RolePermission
+            var RoleForPermissionQuery = from row in SecuDb.RolePermission
                                          where row.PermissionID == PermissionId && row.RoleID == RoleId
                                          select row;
             if(RoleForPermissionQuery != null) { 
@@ -206,11 +216,11 @@ namespace WMS.Service
                     temp = RoleForPermissionQuery.SingleOrDefault();
                     if (temp != null)
                     {
-                        repoRolePermission.Delete(temp);
+                        SecuDb.RolePermission.Remove(temp);
                         try
                         {
-                        db.SaveChanges();
-                        scope.Complete();
+                            SecuDb.SaveChanges();
+                            scope.Complete();
                         }
                         catch (DbUpdateConcurrencyException)
                         {
@@ -226,14 +236,14 @@ namespace WMS.Service
 
         public List<PermissionTree> GetPermissionTree(int projectid)
         {
-            var menu = from row in db.Permissions
+            var menu = from row in SecuDb.Permission
                        where row.ProjectIDSys == projectid
-                             && !(from o in db.ApiMenuMappings
+                             && !(from o in CoreDb.ApiMenuMapping
                                   where o.Type == "A"
                                   select o.ApiIDSys+o.MenuIDSys).Contains(row.ApiIDSys+row.MenuIDSys)
                        select row;
-            var menutemp = from row in db.Menu_MT
-                           where (from o in db.Permissions
+            var menutemp = from row in CoreDb.Menu_MT
+                           where (from o in SecuDb.Permission
                                   where o.ProjectIDSys == projectid
                                   select o.MenuIDSys).Contains(row.MenuIDSys)
                            select row;
@@ -268,7 +278,7 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionByProjectID(int ProjectID)
         {
-            var temp = from row in db.Permissions
+            var temp = from row in SecuDb.Permission
                        where row.ProjectIDSys == ProjectID
                        select row;
             List<Permission> permission = temp.ToList();
@@ -277,9 +287,9 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionByMenuID(int MenuIDSys ,int ProjectIDSys)
         {
-            var temp = from row in db.Permissions
+            var temp = from row in SecuDb.Permission
                        where row.MenuIDSys == MenuIDSys && row.ProjectIDSys == ProjectIDSys &&
-                               !(from i in db.ApiMenuMappings
+                               !(from i in CoreDb.ApiMenuMapping
                                  where i.MenuIDSys == MenuIDSys && i.Type == "A"
                                  select i.ApiIDSys).Contains(row.ApiIDSys)
                        select row;
@@ -289,9 +299,9 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionAuto(int MenuIDSys, int ProjectIDSys)
         {
-            var temp = from row in db.Permissions
+            var temp = from row in SecuDb.Permission
                        where row.MenuIDSys == MenuIDSys && row.ProjectIDSys == ProjectIDSys &&
-                               (from i in db.ApiMenuMappings
+                               (from i in CoreDb.ApiMenuMapping
                                  where i.MenuIDSys == MenuIDSys && i.Type == "A"
                                  select i.ApiIDSys).Contains(row.ApiIDSys)
                        select row;
@@ -301,8 +311,8 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionByRoleID(string RoleID, int ProjectIDSys)
         {
-            var temp = from row in db.Permissions
-                       where row.ProjectIDSys == ProjectIDSys && (from o in db.RolePermission
+            var temp = from row in SecuDb.Permission
+                       where row.ProjectIDSys == ProjectIDSys && (from o in SecuDb.RolePermission
                                where o.RoleID == RoleID
                                select o.PermissionID).Contains(row.PermissionID)
                        select row;
@@ -315,7 +325,7 @@ namespace WMS.Service
             List<RolePermissionDto> temp = new List<RolePermissionDto>();
             if (permissionID != null)
             {
-                var temp1 = (from row in db.RolePermission
+                var temp1 = (from row in SecuDb.RolePermission
                                              where row.PermissionID == permissionID
                                              select row);
                 var y = temp1.ToList();
@@ -333,12 +343,12 @@ namespace WMS.Service
                     
                         x.RoleID = temp[i].RoleID;
                         x.PermissionID = temp[i].Name;
-                        repoRolePermission.Delete(x); 
+                        SecuDb.RolePermission.Remove(x);
                 }
                 try
                 {
-                    db.SaveChanges();
-                scope.Complete();
+                    SecuDb.SaveChanges();
+                    scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -357,10 +367,10 @@ namespace WMS.Service
         public List<Permission> GetPermissionByProjectID(int ProjectID,string UserID)
         {
 
-            var temp = from ur in db.UserRoles
-                       join r in db.Roles on ur.RoleID equals r.RoleID
-                       join rp in db.RolePermission on r.RoleID equals rp.RoleID
-                       join ps in db.Permissions on rp.PermissionID equals ps.PermissionID
+            var temp = from ur in SecuDb.UserRole
+                       join r in SecuDb.Role on ur.RoleID equals r.RoleID
+                       join rp in SecuDb.RolePermission on r.RoleID equals rp.RoleID
+                       join ps in SecuDb.Permission on rp.PermissionID equals ps.PermissionID
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectID
                        select ps;
             List<Permission> permission = temp.ToList();

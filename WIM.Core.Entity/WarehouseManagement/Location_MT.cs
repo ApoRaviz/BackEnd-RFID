@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.WarehouseManagement
 {
+
+    [Table("Location_MT")]
     public class Location_MT
     {
+        [Key]
         public int LocIDSys { get; set; }
         public string LineID { get; set; }
         public string WHID { get; set; }
@@ -23,6 +28,8 @@ namespace WIM.Core.Entity.WarehouseManagement
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string UserUpdate { get; set; }
+
+        // #JobComment
         //public int CateIDSys { get; set; }
 
         //public virtual Category_MT Category_MT { get; set; }

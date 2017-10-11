@@ -8,7 +8,8 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Master;
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Security.Entity.RoleAndPermission;
 using WMS.Common;
 using WMS.Service;
 namespace WMS.WebApi.Controllers

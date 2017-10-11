@@ -10,22 +10,26 @@ using System.Transactions;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
-using WMS.Master;
 using System.Diagnostics;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using System.Data.SqlClient;
 using WMS.Common;
+using WIM.Core.Context;
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Security.Context;
 
 namespace WMS.Service
 {
     public class MenuProjectMappingService : IMenuProjectMappingService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext db = CoreDbContext.Create();
+        private SecurityDbContext SecuDb;
         private GenericRepository<MenuProjectMapping> repo;
 
         public MenuProjectMappingService()
         {
+            SecuDb = new SecurityDbContext();
             repo = new GenericRepository<MenuProjectMapping>(db);
         }
 
@@ -36,7 +40,7 @@ namespace WMS.Service
 
         public MenuProjectMapping GetMenuProjectMappingByMenuProjectMappingIDSys(int id)
         {
-            MenuProjectMapping MenuProjectMapping = db.MenuProjectMappings.Find(id);
+            MenuProjectMapping MenuProjectMapping = db.MenuProjectMapping.Find(id);
             return MenuProjectMapping;
         }
 
@@ -246,7 +250,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetMenuProjectMappingByID(int id)
         {
-            var tbl_MenuProjectMapping = db.MenuProjectMappings;
+            var tbl_MenuProjectMapping = db.MenuProjectMapping;
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = tbl_MenuProjectMapping.Where(t => t.ProjectIDSys == id).Select(b =>
             new MenuProjectMappingDto()
             {
@@ -264,7 +268,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuDto> GetMenuDtoByProjectID(int id)
         {
-            var tbl_MenuProjectMapping = db.MenuProjectMappings;
+            var tbl_MenuProjectMapping = db.MenuProjectMapping;
             IEnumerable<MenuDto> MenuProjectMappingdto = tbl_MenuProjectMapping.Where(t => t.ProjectIDSys == id).Select(b =>
             new MenuDto()
             {
@@ -282,12 +286,12 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetMenuProjectMappingDto(int id)
         {
-            var MenuProjectMappingQuery = from row in db.MenuProjectMappings
+            var MenuProjectMappingQuery = from row in db.MenuProjectMapping
                                           where row.ProjectIDSys == id
                                           orderby row.MenuIDSysParent, row.Sort
                                           select row;
 
-            var tbl_MenuProjectMapping = db.MenuProjectMappings;
+            var tbl_MenuProjectMapping = db.MenuProjectMapping;
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery.Select(b =>
             new MenuProjectMappingDto()
             {
@@ -304,7 +308,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid, IEnumerable<MenuProjectMappingDto> menu)
         {
-            var MenuProjectMappingQuery = (from row in db.MenuProjectMappings
+            var MenuProjectMappingQuery = (from row in db.MenuProjectMapping
                                            join o in menu on row.MenuIDSys equals o.MenuIDSys into joined
                                            from i in joined.DefaultIfEmpty()
                                            where row.ProjectIDSys == projectid
@@ -318,7 +322,7 @@ namespace WMS.Service
                                                Url = i.Url ?? String.Empty,
                                                Sort = row.Sort
                                            });
-            var tbl_MenuProjectMapping = db.MenuProjectMappings;
+            var tbl_MenuProjectMapping = db.MenuProjectMapping;
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery.Select(b =>
             new MenuProjectMappingDto()
             {
@@ -336,11 +340,11 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetMenuPermission(string userid, int projectid)
         {
-            var menu = from ur in db.UserRoles
-                       join rp in db.RolePermission on ur.RoleID equals rp.RoleID
-                       join ps in db.Permissions on rp.PermissionID equals ps.PermissionID
-                       join r in db.Roles on ur.RoleID equals r.RoleID
-                       join mp in db.MenuProjectMappings on ps.MenuIDSys equals mp.MenuIDSys
+            var menu = from ur in SecuDb.UserRole
+                       join rp in SecuDb.RolePermission on ur.RoleID equals rp.RoleID
+                       join ps in SecuDb.Permission on rp.PermissionID equals ps.PermissionID
+                       join r in SecuDb.Role on ur.RoleID equals r.RoleID
+                       join mp in db.MenuProjectMapping on ps.MenuIDSys equals mp.MenuIDSys
                        where r.ProjectIDSys == projectid && ur.UserID == userid && mp.ProjectIDSys == projectid
                        select mp;
 

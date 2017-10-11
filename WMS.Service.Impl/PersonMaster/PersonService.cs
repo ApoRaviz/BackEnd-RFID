@@ -13,18 +13,23 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Context;
+using WIM.Core.Entity.Person;
+using WIM.Core.Security.Context;
 
 namespace WMS.Service
 { 
     public class PersonService : IPersonService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext CoreDb;
+        private SecurityDbContext SecuDb;
         private GenericRepository<Person_MT> repo;
 
         public PersonService()
         {
-            repo = new GenericRepository<Person_MT>(db);
+            CoreDb = new CoreDbContext();
+            SecuDb = new SecurityDbContext();
+            repo = new GenericRepository<Person_MT>(CoreDb);
         }        
 
         public IEnumerable<Person_MT> GetPersons()
@@ -34,8 +39,8 @@ namespace WMS.Service
 
         public Person_MT GetPersonByPersonIDSys(string id)
         {
-            Person_MT Person = (from i in db.Person_MT
-                                where (from o in db.Users
+            Person_MT Person = (from i in CoreDb.Person_MT
+                                where (from o in SecuDb.User
                                        where o.UserID == id
                                        select o.PersonIDSys)
                                      .Contains(i.PersonIDSys)
@@ -45,7 +50,7 @@ namespace WMS.Service
 
         public PersonDto GetPersonByPersonID(int id)
         {
-            var Person = (from i in db.Person_MT
+            var Person = (from i in CoreDb.Person_MT
                                 where i.PersonIDSys == id
                                 select i).Select(b => new PersonDto(){
                                 Name = b.Name,
@@ -60,16 +65,15 @@ namespace WMS.Service
         public int CreatePerson(Person_MT Person)
         {
             using (var scope = new TransactionScope())
-            {
-                
+            {                
                 Person.CreateDate = DateTime.Now;
                 Person.UpdateDate = DateTime.Now;
                 Person.UserUpdate = "1";
                 
-                repo.Insert(Person);
+                CoreDb.Person_MT.Add(Person);
                 try
                 {
-                    db.SaveChanges();
+                    CoreDb.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -90,8 +94,8 @@ namespace WMS.Service
         {           
             using (var scope = new TransactionScope())
             {
-                var existedPerson = (from i in db.Person_MT
-                                     where (from o in db.Users
+                var existedPerson = (from i in CoreDb.Person_MT
+                                     where (from o in SecuDb.User
                                             where o.UserID == id
                                             select o.PersonIDSys)
                                           .Contains(i.PersonIDSys)
@@ -108,10 +112,10 @@ namespace WMS.Service
                 existedPerson.Mobile = Person.Mobile;
                 existedPerson.UpdateDate = DateTime.Now;
                 existedPerson.UserUpdate = "1";
-                repo.Update(existedPerson);
+
                 try
                 {
-                    db.SaveChanges();
+                    CoreDb.SaveChanges();
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -132,7 +136,7 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedPerson = (from i in db.Person_MT
+                var existedPerson = (from i in CoreDb.Person_MT
                                      where i.PersonIDSys == Person.PersonIDSys
                                      select i).SingleOrDefault();
                 existedPerson.PersonIDSys = Person.PersonIDSys;
@@ -147,10 +151,10 @@ namespace WMS.Service
                 existedPerson.Mobile = Person.Mobile;
                 existedPerson.UpdateDate = DateTime.Now;
                 existedPerson.UserUpdate = "1";
-                repo.Update(existedPerson);
+
                 try
                 {
-                    db.SaveChanges();
+                    CoreDb.SaveChanges();
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -172,13 +176,12 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedPerson = repo.GetByID(id);
+                var existedPerson = CoreDb.Person_MT.SingleOrDefault(p => p.PersonIDSys == id);
                 existedPerson.UpdateDate = DateTime.Now;
-                existedPerson.UserUpdate = "1";
-                repo.Update(existedPerson);
+                existedPerson.UserUpdate = "1";                
                 try
                 {
-                db.SaveChanges();
+                    CoreDb.SaveChanges();
                 scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)

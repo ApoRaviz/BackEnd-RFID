@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using WIM.Core.Entity.ProjectManagement;
 
 namespace WMS.Entity.ItemManagement
 {
+    [Table("Unit_MT")]
     public class Unit_MT
     {
         public Unit_MT()
@@ -14,6 +17,7 @@ namespace WMS.Entity.ItemManagement
             this.ItemUnitMapping = new HashSet<ItemUnitMapping>();
         }
 
+        [Key]
         public int UnitIDSys { get; set; }
         public int ProjectIDSys { get; set; }
         public string UnitID { get; set; }

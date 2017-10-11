@@ -14,18 +14,25 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WMS.Master;
+using WIM.Core.Security.Context;
+using WIM.Core.Security.Entity.RoleAndPermission;
+using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Context;
 
 namespace WMS.Service
 {
     public class RoleService : IRoleService
     {
-        private MasterContext db = MasterContext.Create();
+        private CoreDbContext CoreDb;
+        private SecurityDbContext db;        
         private GenericRepository<Role> repo;
         private GenericRepository<UserRole> repoUser;
         private GenericRepository<RolePermission> repoRolePermission;
 
         public RoleService()
         {
+            CoreDb = new CoreDbContext();
+            db = new SecurityDbContext();
             repo = new GenericRepository<Role>(db);
             repoUser = new GenericRepository<UserRole>(db);
             repoRolePermission = new GenericRepository<RolePermission>(db);
@@ -38,7 +45,7 @@ namespace WMS.Service
 
         public IEnumerable<Role> GetRoles(int projectIDSys)
         {
-            var roles = from row in db.Roles
+            var roles = from row in db.Role
                         where row.ProjectIDSys == projectIDSys
                         select row;
             return roles;
@@ -46,14 +53,14 @@ namespace WMS.Service
 
         public Role GetRoleByLocIDSys(string id)
         {           
-            Role Role = db.Roles.Find(id);                                  
+            Role Role = db.Role.Find(id);                                  
             return Role;            
         }
 
         public string GetRoleByUserAndProject(string UserID, int ProjectIDSys)
         {
-            var res = (from ur in db.UserRoles
-                       join r in db.Roles on ur.RoleID equals r.RoleID
+            var res = (from ur in db.UserRole
+                       join r in db.Role on ur.RoleID equals r.RoleID
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectIDSys
                        select new { r.RoleID }).SingleOrDefault();
             return res.RoleID;
@@ -121,7 +128,7 @@ namespace WMS.Service
             List<UserRoleDto> users = new List<UserRoleDto>();
             List<RolePermissionDto> permissions = new List<RolePermissionDto>();
             if(id != "") { 
-            var user = from row in db.UserRoles
+            var user = from row in db.UserRole
                        where row.RoleID == id
                        select row;
             users = user.Select(b => new UserRoleDto()
@@ -202,7 +209,7 @@ namespace WMS.Service
 
         public List<RolePermissionDto> GetRoleNotPermissionID(string id)
         {
-            var RoleForPermissionQuery = from row in db.Roles
+            var RoleForPermissionQuery = from row in db.Role
                                          where !(from o in db.RolePermission
                                                  where o.PermissionID == id
                                                  select o.RoleID).Contains(row.RoleID)
@@ -220,7 +227,7 @@ namespace WMS.Service
 
         public Role GetRoleByName(string name)
         {
-            var role = from row in db.Roles
+            var role = from row in db.Role
                        where row.Name == name
                        select row;
             Role get = role.SingleOrDefault();
@@ -229,13 +236,13 @@ namespace WMS.Service
 
         public List<Role> GetRoleByProjectUser(int id)
         {
-            var customer = (from row in db.Project_MT
+            var customer = (from row in CoreDb.Project_MT
                            where row.ProjectIDSys == id
                            select row.CusIDSys).SingleOrDefault();
-            var role = (from row in db.Roles
+            var role = (from row in db.Role
                         join row2 in db.RolePermission on row.RoleID equals row2.RoleID
-                        join row3 in db.Permissions on row2.PermissionID equals row3.PermissionID
-                        join row4 in db.Project_MT on row3.ProjectIDSys equals row4.ProjectIDSys
+                        join row3 in db.Permission on row2.PermissionID equals row3.PermissionID
+                        join row4 in CoreDb.Project_MT on row3.ProjectIDSys equals row4.ProjectIDSys
                         where row4.CusIDSys == customer
                        select row).Include("Project_MT").Distinct().ToList();
             

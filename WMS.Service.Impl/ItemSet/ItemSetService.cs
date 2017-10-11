@@ -7,19 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Master;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
+using WMS.Context;
+using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {
     public class ItemSetService : IItemSetService
     {
-        private MasterContext db = MasterContext.Create();
+        private WMSDbContext db = WMSDbContext.Create();
         private GenericRepository<ItemSet_MT> repo;
         private GenericRepository<ItemSetDetail> repo2;
 
@@ -229,7 +230,7 @@ namespace WMS.Service
                 ProjectIDSys = b.ProjectIDSys
             }).SingleOrDefault();
 
-            var query2 = (from row in db.ItemSetDetails
+            var query2 = (from row in db.ItemSetDetail
                          where row.ItemSetIDSys == id
                          select row);
             List<ItemSetDetailDto> items = query2.Include(a => a.Item_MT).Select(b => new ItemSetDetailDto()
@@ -246,10 +247,10 @@ namespace WMS.Service
 
         public bool DeleteItemSetDto(int id)
         {
-            var query2 = from row in db.ItemSetDetails
+            var query2 = from row in db.ItemSetDetail
                          where row.ItemSetIDSys == id
                          select row;
-            db.ItemSetDetails.RemoveRange(query2);
+            db.ItemSetDetail.RemoveRange(query2);
             try
             {
                 db.SaveChanges();

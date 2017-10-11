@@ -1,11 +1,11 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WMS.Master.Label;
-using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
@@ -20,6 +20,10 @@ using System.Threading.Tasks;
 using System.IO;
 using WMS.Common;
 using WMS.Service;
+using WMS.Service.Label;
+using WMS.Entity.LayoutManagement;
+using WMS.Entity.ItemManagement;
+using WIM.Core.Entity.SupplierManagement;
 
 namespace WMS.WebApi.Controllers
 {
@@ -114,7 +118,7 @@ namespace WMS.WebApi.Controllers
 
         [HttpGet]
         [Route("GetItemLabel/{LabelIDSys}")]
-        public HttpResponseMessage GetItemLabel(int LabelIDSys, [FromBody]WMS.Master.Item_MT item)
+        public HttpResponseMessage GetItemLabel(int LabelIDSys, [FromBody]Item_MT item)
         {
             LabelLayoutHeader_MT label = LabelService.GetLabelLayoutByReportIDSys(LabelIDSys, "LabelLayoutDetail_MT");
             label.detail = label.LabelLayoutDetail_MT.ToList();
@@ -197,7 +201,7 @@ namespace WMS.WebApi.Controllers
 
         [HttpGet]
         [Route("GetSupplierLabel/{LabelIDSys}")]
-        public HttpResponseMessage GetSupplierLabel(int LabelIDSys, [FromBody]WMS.Master.Supplier_MT supplier)
+        public HttpResponseMessage GetSupplierLabel(int LabelIDSys, [FromBody]Supplier_MT supplier)
         {
             LabelLayoutHeader_MT label = LabelService.GetLabelLayoutByReportIDSys(LabelIDSys, "LabelLayoutDetail_MT");
             label.detail = label.LabelLayoutDetail_MT.ToList();
