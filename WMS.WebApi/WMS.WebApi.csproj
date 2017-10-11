@@ -533,6 +533,10 @@
       <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
       <Name>WIM.Core.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
+      <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
+      <Name>WMS.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMS.Master\WMS.Master.csproj">
       <Project>{4b54c7a7-0b9d-40a2-95d3-2c96d052ae0b}</Project>
       <Name>WMS.Master</Name>
@@ -540,6 +544,14 @@
     <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
       <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
       <Name>WMS.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Service.Impl\WMS.Service.Impl.csproj">
+      <Project>{dc9513cf-fdab-4170-8131-4a1fd5d048be}</Project>
+      <Name>WMS.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Service\WMS.Service\WMS.Service.csproj">
+      <Project>{7ebe4831-beee-4f55-a5ca-71efa10522a7}</Project>
+      <Name>WMS.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,8 @@ using WMS.Master;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
+using WMS.Common;
+using WMS.Service;
 
 namespace WMS.WebApi.Controllers
 {
