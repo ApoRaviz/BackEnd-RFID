@@ -30,5 +30,6 @@ namespace Fuji.Service.ItemImport
         bool ClearPickingGroup(string orderID);
         FujiPickingGroup GetPickingByOrderNo(string orderNo, bool isAddItem = false);
         bool RegisterRFID_HANDY(RegisterRFIDRequest registerRequest, string username);
+        IEnumerable<ImportSerialDetail> FindImportSerialDetailByCriteria(ParameterSearch parameterSearch);
     }
 }

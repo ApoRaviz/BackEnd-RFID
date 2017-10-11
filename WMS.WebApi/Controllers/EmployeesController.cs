@@ -11,6 +11,8 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
 using WMS.WebApi.Report;
+using WMS.Common;
+using WMS.Service;
 
 namespace WMS.WebApi.Controllers
 {

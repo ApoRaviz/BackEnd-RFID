@@ -18,6 +18,8 @@ using OnBarcode.Barcode.ASPNET;
 using BarcodeLib;
 using System.Threading.Tasks;
 using System.IO;
+using WMS.Common;
+using WMS.Service;
 
 namespace WMS.WebApi.Controllers
 {
