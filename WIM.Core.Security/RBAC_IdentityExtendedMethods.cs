@@ -36,6 +36,28 @@ public static class RBAC_ExtendedMethods_4_Principal
         return _retVal;
     }
 
+    public static string GetUserName(this IIdentity _identity)
+    {
+        string _retVal = "";
+        try
+        {
+            if (_identity != null && _identity.IsAuthenticated)
+            {
+                var ci = _identity as ClaimsIdentity;
+
+                if (!string.IsNullOrEmpty(ci.Name))
+                {
+                    _retVal = ci.Name;
+                }
+            }
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        return _retVal;
+    }
+
     public static int GetProjectIDSys(this IIdentity _identity)
     {
         try

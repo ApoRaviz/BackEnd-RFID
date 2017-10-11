@@ -68,11 +68,16 @@ namespace WMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Post([FromBody]Unit_MT unit)
         {
-            IResponseData<int> response = new ResponseData<int>();
+            IResponseData<Unit_MT> response = new ResponseData<Unit_MT>();
             try
             {
+                unit.UnitID = "1";
+                unit.Active = 1;
+                unit.ProjectIDSys = User.Identity.GetProjectIDSys();
+                unit.UserUpdate = User.Identity.Name;
                 int id = UnitService.CreateUnit(unit);
-                response.SetData(id);
+                unit.UnitIDSys = id;
+                response.SetData(unit);
             }
             catch (ValidationException ex)
             {
@@ -119,5 +124,12 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+    }
+
+    class UnitsModel
+    {
+        public int UnitIDSys { get; set; }
+        public string UnitName { get; set; }
+         
     }
 }

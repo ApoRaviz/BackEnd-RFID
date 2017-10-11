@@ -82,7 +82,6 @@ namespace WMS.Master.Unit
             {
                 var existedUnit = Repo.GetByID(id);
                 existedUnit.UnitName = unit.UnitName;
-                existedUnit.ProjectIDSys = unit.ProjectIDSys;
                 existedUnit.UpdateDate = DateTime.Now;
                 existedUnit.UserUpdate = "1";
                 Repo.Update(existedUnit);
