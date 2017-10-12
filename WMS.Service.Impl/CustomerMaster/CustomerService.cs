@@ -107,7 +107,6 @@ namespace WMS.Service
                             pm.ProjectName,
                         };
             return query.ToList();
-            return null;
         }
 
         public Customer_MT GetCustomerByCusIDSys(int id)
