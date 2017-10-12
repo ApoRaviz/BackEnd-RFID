@@ -91,15 +91,13 @@ namespace WMS.Service
                          }).Distinct();
 
             return query.ToList();
-            return null;
-
         }
 
         public object GetProjectByCustomer(string userid, int cusIDSys)
         {
-            /*var query = from ctm in db.Customer_MT
+            var query = from ctm in db.Customer_MT
                         join pm in db.Project_MT on ctm.CusIDSys equals pm.CusIDSys
-                        join r in db.Roles on pm.ProjectIDSys equals r.ProjectIDSys
+                        join r in db.Role on pm.ProjectIDSys equals r.ProjectIDSys
                         join ru in db.UserRoles on r.RoleID equals ru.RoleID
                         where ru.UserID == userid && pm.CusIDSys == cusIDSys
                         select new
@@ -108,7 +106,7 @@ namespace WMS.Service
                             pm.ProjectIDSys,
                             pm.ProjectName,
                         };
-            return query.ToList();*/
+            return query.ToList();
             return null;
         }
 
