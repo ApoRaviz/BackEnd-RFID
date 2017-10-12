@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using WIM.Core.Security.Entity;
-using WIM.Core.Security.Entity.RoleAndPermission;
-using WIM.Core.Security.Entity.UserManagement;
 
 namespace WIM.Core.Security.Context
 {    
@@ -21,24 +19,24 @@ namespace WIM.Core.Security.Context
         {
             return new SecurityDbContext();
         }
-        
-        public DbSet<User> User { get; set; }
-        public DbSet<RolePermission> RolePermission { get; set; }
-        public DbSet<Role> Role { get; set; }
-        public DbSet<UserRole> UserRole { get; set; }
-        public DbSet<Permission> Permission { get; set; }        
+
+        //public DbSet<User> User { get; set; }
+        //public DbSet<RolePermission> RolePermission { get; set; }
+        //public DbSet<Role> Role { get; set; }
+        //public DbSet<UserRole> UserRole { get; set; }
+        //public DbSet<Permission> Permission { get; set; }        
         public DbSet<PasswordHistory> PasswordHistory { get; set; }
-        public DbSet<UserProjectMapping> UserProjectMapping { get; set; }
-        public DbSet<UserCustomerMapping> UserCustomerMapping { get; set; }
-        
+        //public DbSet<UserProjectMapping> UserProjectMapping { get; set; }
+        //public DbSet<UserCustomerMapping> UserCustomerMapping { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.Entity<ApplicationUser>().ToTable("Users").Property(p => p.Id).HasColumnName("UserID");
             modelBuilder.Entity<ApplicationRole>().ToTable("Roles").Property(p => p.Id).HasColumnName("RoleID");
-            modelBuilder.Entity<ApplicationUserRole>().ToTable("UserRoles");          
+            modelBuilder.Entity<ApplicationUserRole>().ToTable("UserRoles");
 
             modelBuilder.Entity<ApplicationRole>().
             HasMany(c => c.Permissions).

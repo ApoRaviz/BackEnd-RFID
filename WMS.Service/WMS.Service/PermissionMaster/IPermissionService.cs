@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Security.Entity.RoleAndPermission;
+using WIM.Core.Entity.RoleAndPermission;
 using WMS.Common;
 
 namespace WMS.Service

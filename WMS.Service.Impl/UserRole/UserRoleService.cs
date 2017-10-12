@@ -16,35 +16,35 @@ using System.Data.SqlTypes;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WIM.Core.Security.Context;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.UserManagement;
+using WIM.Core.Context;
 
 namespace WMS.Service
 {
     public class UserRoleService : IUserRoleService
     {
-        private SecurityDbContext db;
-        private GenericRepository<UserRole> repo;
+        private CoreDbContext db;
+        private GenericRepository<UserRoles> repo;
         
 
         public UserRoleService()
         {
-            db = new SecurityDbContext();
-            repo = new GenericRepository<UserRole>(db);
+            db = new CoreDbContext();
+            repo = new GenericRepository<UserRoles>(db);
         }        
 
-        public IEnumerable<UserRole> GetUserRoles()
+        public IEnumerable<UserRoles> GetUserRoles()
         {           
             return repo.GetAll();
         }
 
-        public UserRole GetUserRoleByLocIDSys(int id)
+        public UserRoles GetUserRoleByLocIDSys(int id)
         {           
-            UserRole UserRole = db.UserRole.Find(id);                                  
+            UserRoles UserRole = db.UserRoles.Find(id);                                  
             return UserRole;            
         }                      
 
-        public string CreateUserRole(UserRole UserRole)
+        public string CreateUserRole(UserRoles UserRole)
         {
             using (var scope = new TransactionScope())
             {
@@ -69,7 +69,7 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateUserRole(int id, UserRole UserRole)
+        public bool UpdateUserRole(int id, UserRoles UserRole)
         {           
             using (var scope = new TransactionScope())
             {
@@ -130,7 +130,7 @@ namespace WMS.Service
         {
             // #JobComment
             List<RoleUserDto> RoleUser = (from o in db.Role
-                                          join i in db.UserRole on o.RoleID equals i.RoleID
+                                          join i in db.UserRoles on o.RoleID equals i.RoleID
                                           where i.UserID == userid
                                           select o).Include("Project_MT").Select(b => new RoleUserDto()
                                           {
@@ -145,7 +145,7 @@ namespace WMS.Service
 
         public List<UserRoleDto> GetUserByRoleID(string roleid)
         {
-            var RoleForPermissionQuery = from row in db.UserRole
+            var RoleForPermissionQuery = from row in db.UserRoles
                                          where row.RoleID == roleid
                                          select row;
             List<UserRoleDto> userlist = RoleForPermissionQuery.Include(a => a.User).Select(b => new UserRoleDto()
@@ -153,7 +153,7 @@ namespace WMS.Service
                 UserID = b.UserID,
                 Name = b.User.Name,
                 Email = b.User.Email,
-                PhoneNumber = b.User.PhoneNumber,
+                //PhoneNumber = b.User.PhoneNumber.ToString(),
                 PasswordHash = b.User.PasswordHash,
                 Surname = b.User.Surname,
 
@@ -168,7 +168,7 @@ namespace WMS.Service
                 UserID = b.UserID,
                 Name = b.Name,
                 Email = b.Email,
-                PhoneNumber = b.PhoneNumber,
+                //PhoneNumber = b.PhoneNumber.ToString(),
                 PasswordHash = b.PasswordHash,
                 Surname = b.Surname
             }).SingleOrDefault();
@@ -176,7 +176,7 @@ namespace WMS.Service
         }
         public RoleUserDto GetRoleUserByRoleID(string id)
         {
-            RoleUserDto RoleUser = db.UserRole.Include(a => a.Role).Select(b => new RoleUserDto()
+            RoleUserDto RoleUser = db.UserRoles.Include(a => a.Role).Select(b => new RoleUserDto()
             {
                 RoleID = b.RoleID,
                 Name = b.Role.Name,
@@ -190,7 +190,7 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                UserRole data = new UserRole();
+                UserRoles data = new UserRoles();
                 data.RoleID = roleid;
                 data.UserID = userid;
                 repo.Insert(data);
@@ -217,7 +217,7 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                UserRole data = new UserRole();
+                UserRoles data = new UserRoles();
                 data.RoleID = roleid;
                 data.UserID = userid;
                 repo.Insert(data);
@@ -242,7 +242,7 @@ namespace WMS.Service
 
         public bool DeleteRolePermission(string UserId, string RoleId)
         {
-            var RoleForPermissionQuery = from row in db.UserRole
+            var RoleForPermissionQuery = from row in db.UserRoles
                                          where row.UserID == UserId && row.RoleID == RoleId
                                          select row;
             if (RoleForPermissionQuery != null)
@@ -254,7 +254,7 @@ namespace WMS.Service
                         RoleID = b.RoleID,
                         PermissionID = b.PermissionID
                     }).SingleOrDefault();*/
-                    UserRole temp = new UserRole();
+                    UserRoles temp = new UserRoles();
                     temp = RoleForPermissionQuery.SingleOrDefault();
                     if (temp != null)
                     {

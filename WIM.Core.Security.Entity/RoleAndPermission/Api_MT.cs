@@ -5,16 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Entity.RoleAndPermission;
 
-namespace WIM.Core.Entity.MenuManagement
+namespace WIM.Core.Security.Entity.RoleAndPermission
 {
     [Table("Api_MT")]
     public class Api_MT
     {
         public Api_MT()
         {
-            this.ApiMenuMappings = new HashSet<ApiMenuMapping>();
+            //this.ApiMenuMappings = new HashSet<ApiMenuMapping>();
             // #JobComment
             this.Permissions = new HashSet<Permission>();
         }
@@ -25,7 +24,7 @@ namespace WIM.Core.Entity.MenuManagement
         public string Method { get; set; }
         public string Controller { get; set; }
 
-        public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
+        //public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
     }
 }

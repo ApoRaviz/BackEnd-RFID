@@ -4,12 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Entity.ProjectManagement;
-using WIM.Core.Entity.RoleAndPermission;
-//using WIM.Core.Security.Entity.RoleAndPermission;
 
-namespace WIM.Core.Entity.MenuManagement
+namespace WIM.Core.Security.Entity.RoleAndPermission
 {
     [Table("MenuProjectMapping")]
     public class MenuProjectMapping
@@ -32,8 +28,8 @@ namespace WIM.Core.Entity.MenuManagement
         public int MenuIDSysParent { get; set; }
 
         public virtual Menu_MT Menu_MT { get; set; }
-        public virtual Project_MT Project_MT { get; set; }
-        
+        //public virtual Project_MT Project_MT { get; set; }
+
         public virtual ICollection<Permission> Permissions { get; set; }
     }
 }

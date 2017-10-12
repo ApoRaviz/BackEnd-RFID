@@ -34,15 +34,15 @@ namespace WIM.Core.Security
                         {
                             continue;
                         }
-                        //string url = perm.Method + perm.MenuProjectMapping.Menu.Url;
-                          string url = perm.Method +"/"+perm.Api.Api_MT.ApiIDSys;
-           
-                    if (claims.Any(x => x.Type == "UrlPermission" && x.Value == url))
-                        {
-                            continue;
-                        }
-                        claims.Add(CreateClaim("UrlPermission", url));
-                    }
+                //string url = perm.Method + perm.MenuProjectMapping.Menu_MT.Url;
+                string url = perm.Method + "/" + perm.Api_MT.ApiIDSys;
+
+                if (claims.Any(x => x.Type == "UrlPermission" && x.Value == url))
+                {
+                    continue;
+                }
+                claims.Add(CreateClaim("UrlPermission", url));
+            }
                 //}
                                 
             return claims;

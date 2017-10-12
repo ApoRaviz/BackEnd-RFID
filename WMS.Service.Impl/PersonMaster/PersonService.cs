@@ -40,7 +40,7 @@ namespace WMS.Service
         public Person_MT GetPersonByPersonIDSys(string id)
         {
             Person_MT Person = (from i in CoreDb.Person_MT
-                                where (from o in SecuDb.User
+                                where (from o in CoreDb.User
                                        where o.UserID == id
                                        select o.PersonIDSys)
                                      .Contains(i.PersonIDSys)
@@ -95,7 +95,7 @@ namespace WMS.Service
             using (var scope = new TransactionScope())
             {
                 var existedPerson = (from i in CoreDb.Person_MT
-                                     where (from o in SecuDb.User
+                                     where (from o in CoreDb.User
                                             where o.UserID == id
                                             select o.PersonIDSys)
                                           .Contains(i.PersonIDSys)

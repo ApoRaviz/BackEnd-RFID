@@ -15,7 +15,7 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WIM.Core.Security.Context;
-using WIM.Core.Security.Entity.RoleAndPermission;
+using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Context;
 
 namespace WMS.Service
@@ -42,7 +42,7 @@ namespace WMS.Service
 
         public Permission GetPermissionByLocIDSys(string id)
         {
-            Permission Permission = SecuDb.Permission.Find(id);
+            Permission Permission = CoreDb.Permission.Find(id);
             return Permission;
         }
 
@@ -76,7 +76,7 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Permission existedPermission = SecuDb.Permission.SingleOrDefault(p => p.PermissionID == id);
+                Permission existedPermission = CoreDb.Permission.SingleOrDefault(p => p.PermissionID == id);
                 existedPermission.PermissionName = Permission.PermissionName;
                
                 try
@@ -102,8 +102,8 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Permission existedPermission = SecuDb.Permission.SingleOrDefault(p => p.PermissionID == id);
-                SecuDb.Permission.Remove(existedPermission);
+                Permission existedPermission = CoreDb.Permission.SingleOrDefault(p => p.PermissionID == id);
+                CoreDb.Permission.Remove(existedPermission);
 
                 try
                 {
@@ -148,7 +148,7 @@ namespace WMS.Service
                 data.PermissionID = PermissionId;
                 data.RoleID = RoleId;
 
-                SecuDb.RolePermission.Add(data);
+                CoreDb.RolePermission.Add(data);
 
                 try
                 {
@@ -181,7 +181,7 @@ namespace WMS.Service
                     data.PermissionID = c.PermissionID;
                     data.RoleID = RoleId;
 
-                    SecuDb.RolePermission.Add(data);
+                    CoreDb.RolePermission.Add(data);
 
                 }
                 try
@@ -206,7 +206,7 @@ namespace WMS.Service
 
         public bool DeleteRolePermission(string PermissionId, string RoleId)
         {   
-            var RoleForPermissionQuery = from row in SecuDb.RolePermission
+            var RoleForPermissionQuery = from row in CoreDb.RolePermission
                                          where row.PermissionID == PermissionId && row.RoleID == RoleId
                                          select row;
             if(RoleForPermissionQuery != null) { 
@@ -216,7 +216,7 @@ namespace WMS.Service
                     temp = RoleForPermissionQuery.SingleOrDefault();
                     if (temp != null)
                     {
-                        SecuDb.RolePermission.Remove(temp);
+                        CoreDb.RolePermission.Remove(temp);
                         try
                         {
                             SecuDb.SaveChanges();
@@ -236,14 +236,14 @@ namespace WMS.Service
 
         public List<PermissionTree> GetPermissionTree(int projectid)
         {
-            var menu = from row in SecuDb.Permission
+            var menu = from row in CoreDb.Permission
                        where row.ProjectIDSys == projectid
                              && !(from o in CoreDb.ApiMenuMapping
                                   where o.Type == "A"
                                   select o.ApiIDSys+o.MenuIDSys).Contains(row.ApiIDSys+row.MenuIDSys)
                        select row;
             var menutemp = from row in CoreDb.Menu_MT
-                           where (from o in SecuDb.Permission
+                           where (from o in CoreDb.Permission
                                   where o.ProjectIDSys == projectid
                                   select o.MenuIDSys).Contains(row.MenuIDSys)
                            select row;
@@ -278,7 +278,7 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionByProjectID(int ProjectID)
         {
-            var temp = from row in SecuDb.Permission
+            var temp = from row in CoreDb.Permission
                        where row.ProjectIDSys == ProjectID
                        select row;
             List<Permission> permission = temp.ToList();
@@ -287,7 +287,7 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionByMenuID(int MenuIDSys ,int ProjectIDSys)
         {
-            var temp = from row in SecuDb.Permission
+            var temp = from row in CoreDb.Permission
                        where row.MenuIDSys == MenuIDSys && row.ProjectIDSys == ProjectIDSys &&
                                !(from i in CoreDb.ApiMenuMapping
                                  where i.MenuIDSys == MenuIDSys && i.Type == "A"
@@ -299,7 +299,7 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionAuto(int MenuIDSys, int ProjectIDSys)
         {
-            var temp = from row in SecuDb.Permission
+            var temp = from row in CoreDb.Permission
                        where row.MenuIDSys == MenuIDSys && row.ProjectIDSys == ProjectIDSys &&
                                (from i in CoreDb.ApiMenuMapping
                                  where i.MenuIDSys == MenuIDSys && i.Type == "A"
@@ -311,8 +311,8 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionByRoleID(string RoleID, int ProjectIDSys)
         {
-            var temp = from row in SecuDb.Permission
-                       where row.ProjectIDSys == ProjectIDSys && (from o in SecuDb.RolePermission
+            var temp = from row in CoreDb.Permission
+                       where row.ProjectIDSys == ProjectIDSys && (from o in CoreDb.RolePermission
                                where o.RoleID == RoleID
                                select o.PermissionID).Contains(row.PermissionID)
                        select row;
@@ -325,7 +325,7 @@ namespace WMS.Service
             List<RolePermissionDto> temp = new List<RolePermissionDto>();
             if (permissionID != null)
             {
-                var temp1 = (from row in SecuDb.RolePermission
+                var temp1 = (from row in CoreDb.RolePermission
                                              where row.PermissionID == permissionID
                                              select row);
                 var y = temp1.ToList();
@@ -343,7 +343,7 @@ namespace WMS.Service
                     
                         x.RoleID = temp[i].RoleID;
                         x.PermissionID = temp[i].Name;
-                        SecuDb.RolePermission.Remove(x);
+                    CoreDb.RolePermission.Remove(x);
                 }
                 try
                 {
@@ -367,10 +367,10 @@ namespace WMS.Service
         public List<Permission> GetPermissionByProjectID(int ProjectID,string UserID)
         {
 
-            var temp = from ur in SecuDb.UserRole
-                       join r in SecuDb.Role on ur.RoleID equals r.RoleID
-                       join rp in SecuDb.RolePermission on r.RoleID equals rp.RoleID
-                       join ps in SecuDb.Permission on rp.PermissionID equals ps.PermissionID
+            var temp = from ur in CoreDb.UserRoles
+                       join r in CoreDb.Role on ur.RoleID equals r.RoleID
+                       join rp in CoreDb.RolePermission on r.RoleID equals rp.RoleID
+                       join ps in CoreDb.Permission on rp.PermissionID equals ps.PermissionID
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectID
                        select ps;
             List<Permission> permission = temp.ToList();

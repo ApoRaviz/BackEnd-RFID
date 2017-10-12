@@ -15,8 +15,8 @@ using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WMS.Master;
 using WIM.Core.Security.Context;
-using WIM.Core.Security.Entity.RoleAndPermission;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.RoleAndPermission;
+using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
 
 namespace WMS.Service
@@ -26,7 +26,7 @@ namespace WMS.Service
         private CoreDbContext CoreDb;
         private SecurityDbContext db;        
         private GenericRepository<Role> repo;
-        private GenericRepository<UserRole> repoUser;
+        private GenericRepository<UserRoles> repoUser;
         private GenericRepository<RolePermission> repoRolePermission;
 
         public RoleService()
@@ -34,7 +34,7 @@ namespace WMS.Service
             CoreDb = new CoreDbContext();
             db = new SecurityDbContext();
             repo = new GenericRepository<Role>(db);
-            repoUser = new GenericRepository<UserRole>(db);
+            repoUser = new GenericRepository<UserRoles>(db);
             repoRolePermission = new GenericRepository<RolePermission>(db);
         }        
 
@@ -45,7 +45,7 @@ namespace WMS.Service
 
         public IEnumerable<Role> GetRoles(int projectIDSys)
         {
-            var roles = from row in db.Role
+            var roles = from row in CoreDb.Role
                         where row.ProjectIDSys == projectIDSys
                         select row;
             return roles;
@@ -53,14 +53,14 @@ namespace WMS.Service
 
         public Role GetRoleByLocIDSys(string id)
         {           
-            Role Role = db.Role.Find(id);                                  
+            Role Role = CoreDb.Role.Find(id);                                  
             return Role;            
         }
 
         public string GetRoleByUserAndProject(string UserID, int ProjectIDSys)
         {
-            var res = (from ur in db.UserRole
-                       join r in db.Role on ur.RoleID equals r.RoleID
+            var res = (from ur in CoreDb.UserRoles
+                       join r in CoreDb.Role on ur.RoleID equals r.RoleID
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectIDSys
                        select new { r.RoleID }).SingleOrDefault();
             return res.RoleID;
@@ -128,7 +128,7 @@ namespace WMS.Service
             List<UserRoleDto> users = new List<UserRoleDto>();
             List<RolePermissionDto> permissions = new List<RolePermissionDto>();
             if(id != "") { 
-            var user = from row in db.UserRole
+            var user = from row in CoreDb.UserRoles
                        where row.RoleID == id
                        select row;
             users = user.Select(b => new UserRoleDto()
@@ -137,7 +137,7 @@ namespace WMS.Service
                 Name = b.RoleID
             }).ToList();
             
-            var rolepermission = from row in db.RolePermission
+            var rolepermission = from row in CoreDb.RolePermission
                                  where row.RoleID == id
                                  select row;
             permissions = rolepermission.Select(b => new RolePermissionDto()
@@ -147,7 +147,7 @@ namespace WMS.Service
             }).ToList();
             }
 
-            UserRole data = new UserRole();
+            UserRoles data = new UserRoles();
             RolePermission permission = new RolePermission();
             
             using (var scope = new TransactionScope())
@@ -195,10 +195,10 @@ namespace WMS.Service
 
         public List<RolePermissionDto> GetRoleByPermissionID(string id)
         {
-            var RoleForPermissionQuery = from row in db.RolePermission
+            var RoleForPermissionQuery = from row in CoreDb.RolePermission
                                          where row.PermissionID == id
                                           select row;
-            List<RolePermissionDto> rolelist = db.RolePermission.Where(t => t.PermissionID == id)
+            List<RolePermissionDto> rolelist = CoreDb.RolePermission.Where(t => t.PermissionID == id)
                 .Select(b => new RolePermissionDto()
             {
                 RoleID = b.RoleID                
@@ -209,8 +209,8 @@ namespace WMS.Service
 
         public List<RolePermissionDto> GetRoleNotPermissionID(string id)
         {
-            var RoleForPermissionQuery = from row in db.Role
-                                         where !(from o in db.RolePermission
+            var RoleForPermissionQuery = from row in CoreDb.Role
+                                         where !(from o in CoreDb.RolePermission
                                                  where o.PermissionID == id
                                                  select o.RoleID).Contains(row.RoleID)
                                          select row;
@@ -227,7 +227,7 @@ namespace WMS.Service
 
         public Role GetRoleByName(string name)
         {
-            var role = from row in db.Role
+            var role = from row in CoreDb.Role
                        where row.Name == name
                        select row;
             Role get = role.SingleOrDefault();
@@ -239,9 +239,9 @@ namespace WMS.Service
             var customer = (from row in CoreDb.Project_MT
                            where row.ProjectIDSys == id
                            select row.CusIDSys).SingleOrDefault();
-            var role = (from row in db.Role
-                        join row2 in db.RolePermission on row.RoleID equals row2.RoleID
-                        join row3 in db.Permission on row2.PermissionID equals row3.PermissionID
+            var role = (from row in CoreDb.Role
+                        join row2 in CoreDb.RolePermission on row.RoleID equals row2.RoleID
+                        join row3 in CoreDb.Permission on row2.PermissionID equals row3.PermissionID
                         join row4 in CoreDb.Project_MT on row3.ProjectIDSys equals row4.ProjectIDSys
                         where row4.CusIDSys == customer
                        select row).Include("Project_MT").Distinct().ToList();

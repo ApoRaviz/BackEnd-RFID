@@ -8,7 +8,7 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Entity.ProjectManagement;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.UserManagement;
 using WMS.Common;
 using WMS.Service;
 
@@ -102,23 +102,23 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [HttpGet]
-        [Route("user/{CusIDSys}/{UserID}")]
-        public HttpResponseMessage GetUserProject(int CusIDSys, string UserID)
-        {
-            ResponseData<List<UserProjectMapping>> response = new ResponseData<List<UserProjectMapping>>();
-            try
-            {
-                List<UserProjectMapping> Projects = ProjectService.GetUserProject(CusIDSys, UserID);
-                response.SetData(Projects);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
+        //[HttpGet]
+        //[Route("user/{CusIDSys}/{UserID}")]
+        //public HttpResponseMessage GetUserProject(int CusIDSys, string UserID)
+        //{
+        //    ResponseData<List<UserProjectMapping>> response = new ResponseData<List<UserProjectMapping>>();
+        //    try
+        //    {
+        //        List<UserProjectMapping> Projects = ProjectService.GetUserProject(CusIDSys, UserID);
+        //        response.SetData(Projects);
+        //    }
+        //    catch (ValidationException ex)
+        //    {
+        //        response.SetErrors(ex.Errors);
+        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //    }
+        //    return Request.ReturnHttpResponseMessage(response);
+        //}
 
 
         // GET: api/Projects/5
@@ -238,27 +238,28 @@ namespace WMS.WebApi.Controllers
         }
 
         // DELETE: api/Projects/5
-        [HttpDelete]
-        [Route("user/{projectIDSys}")]
-        public HttpResponseMessage DeleteUserProject(int projectIDSys)
-        {
-            IResponseData<bool> response = new ResponseData<bool>();
-            try
-            {
-                bool isUpated = ProjectService.DeleteUserProject(projectIDSys, User.Identity.GetUserId());
-                response.SetData(isUpated);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-    }
+        //    [HttpDelete]
+        //    [Route("user/{projectIDSys}")]
+        //    public HttpResponseMessage DeleteUserProject(int projectIDSys)
+        //    {
+        //        IResponseData<bool> response = new ResponseData<bool>();
+        //        try
+        //        {
+        //            bool isUpated = ProjectService.DeleteUserProject(projectIDSys, User.Identity.GetUserId());
+        //            response.SetData(isUpated);
+        //        }
+        //        catch (ValidationException ex)
+        //        {
+        //            response.SetErrors(ex.Errors);
+        //            response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //        }
+        //        return Request.ReturnHttpResponseMessage(response);
+        //    }
+        //}
 
-    public class HttpRequestParameter
-    {
-        public List<string> Includes { get; set; }
+        public class HttpRequestParameter
+        {
+            public List<string> Includes { get; set; }
+        }
     }
 }

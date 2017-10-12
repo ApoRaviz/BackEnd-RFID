@@ -5,7 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.SupplierManagement;
 //using WIM.Core.Security.Entity.RoleAndPermission;
 
@@ -22,7 +24,7 @@ namespace WIM.Core.Entity.ProjectManagement
 
             // #JobComment
             //this.UserProjectMappings = new HashSet<UserProjectMapping>();
-            //this.Roles = new HashSet<Role>();
+            this.Roles = new HashSet<Role>();
         }
 
         [Key]
@@ -43,8 +45,8 @@ namespace WIM.Core.Entity.ProjectManagement
 
         //public virtual ICollection<UserProjectMapping> UserProjectMappings { get; set; }
 
-        //public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
 
-        //public virtual Customer_MT Customer_MT { get; set; }
+        public virtual Customer_MT Customer_MT { get; set; }
     }
 }

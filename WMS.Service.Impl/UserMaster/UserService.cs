@@ -18,7 +18,7 @@ using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WIM.Core.Security.Context;
 using WIM.Core.Entity.Person;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
 
 namespace WMS.Service
@@ -29,7 +29,7 @@ namespace WMS.Service
         private SecurityDbContext SecuDb;
         private GenericRepository<User> repo;
         private GenericRepository<Person_MT> repoPerson;
-        private GenericRepository<UserRole> repoUserRole;
+        private GenericRepository<UserRoles> repoUserRole;
         private object param = new { };
 
         public UserService()
@@ -37,8 +37,8 @@ namespace WMS.Service
             CoreDb = new CoreDbContext();
             SecuDb = new SecurityDbContext();
             repoPerson = new GenericRepository<Person_MT>(CoreDb);
-            repo = new GenericRepository<User>(SecuDb);
-            repoUserRole = new GenericRepository<UserRole>(SecuDb);
+            repo = new GenericRepository<User>(CoreDb);
+            repoUserRole = new GenericRepository<UserRoles>(SecuDb);
         }
 
         public IEnumerable<User> GetUsers()
@@ -48,7 +48,7 @@ namespace WMS.Service
 
         public User GetUserByUserID(string id)
         {
-            User User = SecuDb.User.Find(id);
+            User User = CoreDb.User.Find(id);
             return User;
         }        
 
@@ -57,16 +57,20 @@ namespace WMS.Service
             User u;
             try
             {
-                 u = (from user in SecuDb.User
-                          where user.UserID == userid
-                          select user).FirstOrDefault();
+                u = (from i in CoreDb.User
+                    where i.UserID == userid
+                    select i).SingleOrDefault();
                 if (keyOtp > 99999)
                 {
                     u.KeyOTP = keyOtp;
                     u.KeyOTPDate = DateTime.Now;
                 }
+                CoreDb.SaveChanges();
+            }catch(ValidationException e)
+            {
+                throw e;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw new ValidationException();
             }
@@ -75,15 +79,17 @@ namespace WMS.Service
 
         public object GetCustonersByUserID(string userid)
         {
-            var query = from ctm in CoreDb.Customer_MT
-                        join c in SecuDb.UserCustomerMapping on ctm.CusIDSys equals c.CusIDSys
-                        where c.UserID == userid
-                        select new
-                        {
-                            ctm.CusID,
-                            ctm.CusIDSys,
-                            ctm.CusName
-                        };
+            var query = (from ctm in CoreDb.Customer_MT
+                         join c in CoreDb.Project_MT on ctm.CusIDSys equals c.CusIDSys
+                         join d in CoreDb.Role on c.ProjectIDSys equals d.ProjectIDSys
+                         join e in CoreDb.UserRoles on d.RoleID equals e.RoleID
+                         where e.UserID == userid
+                         select new
+                         {
+                             ctm.CusID,
+                             ctm.CusIDSys,
+                             ctm.CusName
+                         }).Distinct();
             return query.ToList();
         }
 
@@ -96,7 +102,7 @@ namespace WMS.Service
                     User.Email = User.Email;
                     User.Name = User.Name;
                     User.Surname = User.Surname;
-                    User.PhoneNumber = User.PhoneNumber;
+                    //User.PhoneNumber = User.PhoneNumber;
                     User.PasswordHash = User.PasswordHash;
                     User.EmailConfirmed = false;
                     User.PhoneNumberConfirmed = false;
@@ -156,7 +162,7 @@ namespace WMS.Service
                 User.PasswordHash = User.PasswordHash;
                 User.Name = User.Name;
                 User.Surname = User.Surname;
-                User.PhoneNumber = User.PhoneNumber;
+                //User.PhoneNumber = User.PhoneNumber;
                 User.UpdateDate = DateTime.Now;
                 User.UserUpdate = "1";
                 repo.Update(User);
@@ -218,7 +224,7 @@ namespace WMS.Service
             
             using (var scope = new TransactionScope())
             {
-                User u = (from user in SecuDb.User
+                User u = (from user in CoreDb.User
                           where user.UserID == userid
                           select user).FirstOrDefault();
                 u.KeyAccess = key;
@@ -243,7 +249,7 @@ namespace WMS.Service
                 try
                 {
                     DateTime datew = DateTime.Now.AddMinutes(-2);
-                    User u = (from user in SecuDb.User
+                    User u = (from user in CoreDb.User
                               where user.KeyAccess == param.Key
                               && user.KeyAccessDate > datew && user.KeyAccess != null
                               select user).FirstOrDefault();
@@ -278,8 +284,8 @@ namespace WMS.Service
 
         public List<User> getUserNotHave(string RoleID)
         {
-            var user = (from row in SecuDb.User
-                        where !(from o in SecuDb.UserRole
+            var user = (from row in CoreDb.User
+                        where !(from o in CoreDb.UserRoles
                                 where o.RoleID == RoleID
                                 select o.UserID).Contains(row.UserID)
                         select row).ToList();
@@ -297,14 +303,14 @@ namespace WMS.Service
                     Person.UserUpdate = "1";
                     repoPerson.Insert(Person);
 
-                    SecuDb.User.Add(new User()
+                    CoreDb.User.Add(new User()
                         {
                             UserID = Guid.NewGuid().ToString(),
                             UserName = User.UserName,
                             Email = User.Email,
                             Name = User.Name,
                             Surname = User.Surname,
-                            PhoneNumber = User.PhoneNumber,
+                            //PhoneNumber = User.PhoneNumber,
                             PasswordHash = User.PasswordHash,
                             EmailConfirmed = false,
                             PhoneNumberConfirmed = false,
@@ -342,7 +348,7 @@ namespace WMS.Service
 
         public User GetUserByPersonIDSys(int personIDSys)
         {
-            var user = from i in SecuDb.User
+            var user = from i in CoreDb.User
                        where i.PersonIDSys == personIDSys
                        select i;
             return user.SingleOrDefault();
@@ -354,7 +360,7 @@ namespace WMS.Service
             {
                 try
                 {
-                    User u = (from user in SecuDb.User
+                    User u = (from user in CoreDb.User
                               where user.TokenMobile == param.Token
                               && user.KeyAccessDate == null && user.KeyAccess == null
                               select user).FirstOrDefault();

@@ -5,32 +5,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Security.Entity.RoleAndPermission;
+using WIM.Core.Entity.Person;
 
-namespace WIM.Core.Security.Entity.UserManagement
+namespace WIM.Core.Entity.UserManagement
 {
-    /*[Table("Users")]
-    public class User : Person_MT
-    {
-        public User()
-        {
-            this.Roles = new HashSet<Role>();
-        }
-
-        [Key]
-        public string UserID { get; set; }
-
-        public string Name { get; set; }
-
-        public ICollection<Role> Roles { get; set; }
-    }*/
-
-    //[Table("Users")]
+//: Person_MT
+    [Table("Users")]
     public class User
     {
         public User()
         {
-            this.UserRoles = new HashSet<UserRole>();
+            this.UserRoles = new HashSet<UserRoles>();
         }
         [Key]
         public string UserID { get; set; }
@@ -39,7 +24,6 @@ namespace WIM.Core.Security.Entity.UserManagement
         public string PasswordHash { get; set; }
         public System.DateTime LastLogin { get; set; }
         public string SecurityStamp { get; set; }
-        public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public Nullable<System.DateTime> LockoutEndDateUtc { get; set; }
@@ -50,14 +34,19 @@ namespace WIM.Core.Security.Entity.UserManagement
         public string KeyAccess { get; set; }
         public Nullable<System.DateTime> KeyAccessDate { get; set; }
         public string TokenMobile { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public string Surname { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public int PersonIDSys { get; set; }
+        public string UserUpdate { get; set; }
+
 
         public Nullable<int> KeyOTP { get; set; }
         public Nullable<System.DateTime> KeyOTPDate { get; set; }
 
-        public virtual ICollection<UserRole> UserRoles { get; set; }
-
-        public virtual ICollection<UserProjectMapping> UserProjectMappings { get; set; }
-
+        public virtual ICollection<UserRoles> UserRoles { get; set; }
         //public virtual Person_MT Person_MT { get; set; }
     }
 }

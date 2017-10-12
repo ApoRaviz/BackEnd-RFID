@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.UserManagement;
 using WMS.Common;
 
 namespace WMS.Service
 {
     public interface IUserRoleService
     {
-        IEnumerable<UserRole> GetUserRoles();
-        UserRole GetUserRoleByLocIDSys(int id);
-        string CreateUserRole(UserRole UserRole);
-        bool UpdateUserRole(int id, UserRole UserRole);
+        IEnumerable<UserRoles> GetUserRoles();
+        UserRoles GetUserRoleByLocIDSys(int id);
+        string CreateUserRole(UserRoles UserRole);
+        bool UpdateUserRole(int id, UserRoles UserRole);
         bool DeleteUserRole(int id);
         List<RoleUserDto> GetRoleByUserID(string userid);
         List<UserRoleDto> GetUserByRoleID(string roleid);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.Person
 {
-    [Table("Menu_MT")]
+    [Table("Person_MT")]
     public class Person_MT
     {      
         [Key]

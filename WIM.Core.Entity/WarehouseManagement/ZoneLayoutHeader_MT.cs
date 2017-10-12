@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.WarehouseManagement
 {
-    [Table("ZoneLayoutDetail_MT")]
+    [Table("ZoneLayoutHeader_MT")]
     public class ZoneLayoutHeader_MT
     {
         public ZoneLayoutHeader_MT()

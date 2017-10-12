@@ -5,16 +5,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Entity.UserManagement;
 
-namespace WIM.Core.Security.Entity.RoleAndPermission
+namespace WIM.Core.Entity.RoleAndPermission
 {
-    //[Table("Roles")]
+    [Table("Roles")]
     public class Role
     {        
         public Role()
         {
-            this.UserRoles = new HashSet<UserRole>();
+            this.UserRoles = new HashSet<UserRoles>();
             this.RolePermissions = new HashSet<RolePermission>();
         }
 
@@ -25,9 +26,9 @@ namespace WIM.Core.Security.Entity.RoleAndPermission
         public bool IsSysAdmin { get; set; }
         public int ProjectIDSys { get; set; }
 
-        //public virtual Project_MT Project_MT { get; set; }
+        public virtual Project_MT Project_MT { get; set; }
         
-        public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<UserRoles> UserRoles { get; set; }
         
         public virtual ICollection<RolePermission> RolePermissions { get; set; }
     }
