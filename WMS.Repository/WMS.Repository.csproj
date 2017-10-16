@@ -44,6 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
+      <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
+      <Name>WMS.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
       <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
       <Name>WMS.Entity</Name>
