@@ -15,6 +15,8 @@ using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
+using WMS.Repository.ItemManagement;
+using WMS.Repository.Impl.ItemManagement;
 
 namespace WMS.Service
 {
@@ -22,20 +24,23 @@ namespace WMS.Service
     {
         private WMSDbContext db = WMSDbContext.Create();
         private GenericRepository<Item_MT> repo;
+        private IItemRepository ItemRepo { get; set; }
 
         public ItemService()
         {
             repo = new GenericRepository<Item_MT>(db);
+            ItemRepo = new ItemRepository();
         }
+
+        public void CalulateVat()
+        {
+            
+        }
+
 
         public IEnumerable<ItemDto> GetItems()
         {
-            IEnumerable<Item_MT> items = (from i in db.Item_MT
-                                          where i.Active == 1
-                                          select i).ToList();
-
-            IEnumerable<ItemDto> itemDtos = Mapper.Map<IEnumerable<Item_MT>, IEnumerable<ItemDto>>(items);
-            return itemDtos;
+            return ItemRepo.GetItems();
         }
 
         public ItemDto GetItem(int id, string[] tableNames)
