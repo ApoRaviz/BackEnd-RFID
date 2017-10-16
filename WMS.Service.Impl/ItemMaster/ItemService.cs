@@ -30,13 +30,7 @@ namespace WMS.Service
         {
             repo = new GenericRepository<Item_MT>(db);
             ItemRepo = new ItemRepository();
-        }
-
-        public void CalulateVat()
-        {
-            
-        }
-
+        }        
 
         public IEnumerable<ItemDto> GetItems()
         {
