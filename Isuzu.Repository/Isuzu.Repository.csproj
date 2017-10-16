@@ -49,10 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InboundItems.cs" />
-    <Compile Include="InboundItemsHead.cs" />
-    <Compile Include="IsuzuDataContext.cs" />
-    <Compile Include="LabelRunning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

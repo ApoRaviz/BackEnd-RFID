@@ -10,6 +10,7 @@ using WIM.Core.Common.Validation;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using WIM.Core.Repository;
 using Fuji.Common.ValueObject;
 using WIM.Core.Common.Helpers;
@@ -17,6 +18,12 @@ using Fuji.Service.ItemImport;
 using WIM.Core.Repository.Impl;
 using Fuji.Context;
 using Fuji.Entity.ItemManagement;
+using System.Net.Http;
+using System.Drawing;
+using BarcodeLib;
+using Microsoft.Reporting.WebForms;
+using System.IO;
+
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -54,42 +61,27 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
+                    var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
+                    output.Direction = ParameterDirection.Output;
 
-                        using (SqlCommand cmd = new SqlCommand("ProcPagingImportSerialHead", con))
-                        {
-                            cmd.Parameters.Add("@page", SqlDbType.Int).Value = pageIndex;
-                            cmd.Parameters.Add("@size", SqlDbType.Int).Value = pageSize;
-                            cmd.Parameters.Add("@sort", SqlDbType.VarChar).Value = "CreatedDate";
-                            cmd.Parameters.Add("@sortdecending", SqlDbType.VarChar).Value = "DESC";
-                            cmd.Parameters.Add("@totalrow", SqlDbType.Int, 30);
-                            cmd.Parameters["@totalrow"].Direction = ParameterDirection.Output;
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            dset = new DataSet();
+                    items =  Db.Database.SqlQuery<ImportSerialHead>("ProcPagingImportSerialHead @page,@size,@sort,@sortdecending,@totalrow out"
+                        , new SqlParameter("@page",pageIndex)
+                        , new SqlParameter("@size",pageSize)
+                        , new SqlParameter("@sort", "CreatedDate")
+                        , new SqlParameter("@sortdecending", "DESC")
+                        , output).ToList();
 
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                items = translateImportSerialHeadList(reader);
-                            }
-                                //using (SqlDataAdapter objDataAdapter = new SqlDataAdapter())
-                                //{
-                                //    objDataAdapter.SelectCommand = cmd;
-                                //    objDataAdapter.Fill(dset, "DataSet1");
-                                //}
-                            totalRecord = Convert.ToInt32(cmd.Parameters["@totalrow"].Value);
-                    }
-                    }
+                    totalRecord = Convert.ToInt32(output.Value);
+
+
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     return new List<ImportSerialHead>() { };
                 }
 
                 scope.Complete();
                 return items;
-                //return translateImportSerialHeadList(dset);
             }
         }
       
@@ -118,16 +110,22 @@ namespace Fuji.Service.Impl.ItemImport
             }               
         }
 
-        public ImportSerialHead GetItemByDocID(string id)
+        public ImportSerialHead GetItemByDocID(string id,bool isIncludeChild = false)
         {
             /*var item = Repo.GetByID(id);
             return item;*/
             //return Db.ProcGetImportSerialHeadByHeadID(docId).FirstOrDefault();
 
-            return (from h in Db.ImportSerialHead
-                     where h.HeadID == id
-                     select h
-                     ).FirstOrDefault();
+            var headItem = (from h in Db.ImportSerialHead
+             where h.HeadID == id
+             select h).FirstOrDefault();
+
+            if (isIncludeChild)
+            {
+               Db.Entry(headItem).Collection(c => c.ImportSerialDetail).Load();
+            }
+
+            return headItem;
         }
 
         public ItemImportDto GetItemByDocID_Handy(string id)
@@ -139,9 +137,7 @@ namespace Fuji.Service.Impl.ItemImport
                         HeadID = h.HeadID,
                         ItemCode = h.ItemCode,
                         Qty = h.Qty
-                    }
-
-                    ).SingleOrDefault();
+                    }).SingleOrDefault();
 
             if (itemHead == null)
             {
@@ -153,6 +149,7 @@ namespace Fuji.Service.Impl.ItemImport
 
         public ImportSerialHead CreateItem(ImportSerialHead item)
         {
+
             using (var scope = new TransactionScope())
             {
                 item.HeadID = Db.ProcGetNewID("IS").FirstOrDefault();
@@ -162,19 +159,23 @@ namespace Fuji.Service.Impl.ItemImport
                 item.CreatedDate = DateTime.Now;
                 item.UpdateDate = DateTime.Now;
                 Repo.Insert(item);
+
+                Db.Entry(item).Collection(c => c.ImportSerialDetail).Load();
+
                 if (item.ImportSerialDetail.Any())
-                {
-                    foreach (var detail in item.ImportSerialDetail)
                     {
-                        IGenericRepository<ImportSerialDetail> detailRepo = new GenericRepository<ImportSerialDetail>(Db);
-                        detail.HeadID = item.HeadID;
-                        detail.DetailID = Guid.NewGuid().ToString();
-                        detail.CreatedDate = DateTime.Now;
-                        detail.UpdateDate = DateTime.Now;
-                        detail.UserUpdate = item.UserUpdate;
-                        detailRepo.Insert(detail);
+
+                        foreach (var detail in item.ImportSerialDetail)
+                            {
+                                IGenericRepository<ImportSerialDetail> detailRepo = new GenericRepository<ImportSerialDetail>(Db);
+                                detail.HeadID = item.HeadID;
+                                detail.DetailID = Guid.NewGuid().ToString();
+                                detail.CreatedDate = DateTime.Now;
+                                detail.UpdateDate = DateTime.Now;
+                                detail.UserUpdate = item.UserUpdate;
+                                detailRepo.Insert(detail);
+                            }
                     }
-                }
                 try
                 {
                     Db.SaveChanges();
@@ -226,6 +227,8 @@ namespace Fuji.Service.Impl.ItemImport
                     existedItem.Spare10 = item.Spare10;
                     //Repo.Update(existedItem);
                 }
+
+                Db.Entry(item).Collection(c => c.ImportSerialDetail).Load();
 
                 if (item.ImportSerialDetail.Any())
                 {
@@ -397,20 +400,7 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-
-                        using (SqlCommand cmd = new SqlCommand(sql, con))
-                        {
-                            cmd.Parameters.Add("@HeadID", SqlDbType.VarChar).Value = headID;
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                ret = translateImportSerialDetailList(reader);
-                            }
-
-                        }
-                    }
+                    Db.Database.SqlQuery<ImportSerialDetail>(sql,new SqlParameter("@HeadID",headID));
                 }
                 catch (Exception)
                 {
@@ -509,34 +499,21 @@ namespace Fuji.Service.Impl.ItemImport
                     break;
             }
 
+           
+
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-
-                        using (SqlCommand cmd = new SqlCommand(sql, con))
-                        {
-                            cmd.Parameters.Add("@keyword", SqlDbType.VarChar).Value = keyword;
-                            dset = new DataSet();
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                items = translateImportSerialHeadList(reader);
-                            }
-                          
-                        }
-                    }
+                    items = Db.Database.SqlQuery<ImportSerialHead>(sql, new SqlParameter("@keyword", keyword)).ToList();
                 }
                 catch (Exception)
                 {
                     return new List<ImportSerialHead>() { };
                 }
-
                 scope.Complete();
                 return items;
-               // return translateImportSerialHeadList(dset);
+
             }
 
         }
@@ -801,6 +778,68 @@ namespace Fuji.Service.Impl.ItemImport
             }
         }
 
+        public StreamContent GetReportStream(ImportSerialHead item)
+        {
+            byte[] bytes;
+            string[] streamids;
+            Warning[] warnings;
+            string mimeType, encoding, extension;
+            List<FujiDataBarcode> barcodeList = new List<FujiDataBarcode>();
+            List<FujiDataBarcodeDetail> barcodeDetailList = new List<FujiDataBarcodeDetail>();
+            Barcode bc = new Barcode();
+
+            string barcodeInfo = item.HeadID;
+            byte[] barcodeImage = bc.EncodeToByte(TYPE.CODE128A, barcodeInfo, Color.Black, Color.White, 400, 200);
+            FujiDataBarcode barcode = new FujiDataBarcode(
+                barcodeImage,
+                barcodeInfo,
+                item.WHID,
+                item.ItemCode,
+                item.InvoiceNumber,
+                item.LotNumber,
+                item.ReceivingDate.ToString("yyyy/MM/dd", new System.Globalization.CultureInfo("en-US")),
+                item.Qty.ToString(),
+                item.Location);
+            barcodeList.Add(barcode);
+
+            foreach (var itemDetail in item.ImportSerialDetail)
+            {
+                FujiDataBarcodeDetail detail = new FujiDataBarcodeDetail(itemDetail.ItemCode,
+                    itemDetail.SerialNumber,
+                    itemDetail.BoxNumber,
+                    itemDetail.ItemGroup);
+                barcodeDetailList.Add(detail);
+            }
+
+
+            using (var reportViewer = new ReportViewer())
+            {
+                reportViewer.ProcessingMode = ProcessingMode.Local;
+                reportViewer.LocalReport.ReportPath = "Report/GenerateHeaderReport.rdlc";
+
+                reportViewer.LocalReport.Refresh();
+                reportViewer.LocalReport.EnableExternalImages = true;
+
+                ReportDataSource rds1 = new ReportDataSource();
+                rds1.Name = "DataSet1";
+                rds1.Value = barcodeList;
+
+                ReportDataSource rds2 = new ReportDataSource();
+                rds2.Name = "DataSet2";
+                rds2.Value = barcodeDetailList;
+
+
+                reportViewer.LocalReport.DataSources.Add(rds1);
+                reportViewer.LocalReport.DataSources.Add(rds2);
+                bytes = reportViewer.LocalReport.Render("Pdf", null, out mimeType, out encoding, out extension, out streamids, out warnings);
+
+            }
+
+            Stream stream = new MemoryStream(bytes);
+            return new StreamContent(stream);
+
+        }
+
         #region TranslateDataSet
         private ImportSerialHead translateImportSerialHead(DataRow data)
         {
@@ -1017,27 +1056,68 @@ namespace Fuji.Service.Impl.ItemImport
             }
         }
 
-        public IEnumerable<ImportSerialDetail> FindImportSerialDetailByCriteria(ParameterSearch parameterSearch)
+        public IEnumerable<ImportSerialDetail> FindImportSerialDetailByCriteria(ParameterSearch parameterSearch, out int totalRecord)
         {
+            totalRecord = 0;
             string sql = "SELECT * FROM [dbo].[ImportSerialDetail]";
+
+            IEnumerable<ImportSerialDetail> items = new List<ImportSerialDetail>();
 
             int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
 
             if (cnt > 0)
             {
-                sql += " WHERE ";
-                for (int i = 0; i < cnt; i++)
+                if (parameterSearch.Columns.Any(a => a.Contains("InvoiceNumber")))
                 {
-                    sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
-                }
-                sql = sql.Substring(0, sql.Length - 4);
-                sql += " AND [Status] <> 'DELETED'";
-            }
+                    sql = "SELECT B.* FROM [WIM_FUJI_DEV].[dbo].[ImportSerialHead] AS A INNER JOIN [WIM_FUJI_DEV].[dbo].[ImportSerialDetail] AS B ON A.HeadID = B.HeadID WHERE ";
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        if (parameterSearch.Columns[i] == "InvoiceNumber")
+                            sql += string.Format(" A.{0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                        else if (parameterSearch.Columns[i] == "CreatedDate")
+                            sql += string.Format(" {0} LIKE '%{1}%' AND ", "CONVERT(DATE,B." + parameterSearch.Columns[i] + ")", parameterSearch.Keywords[i]);
+                        else
+                            sql += string.Format(" B.{0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                    }
+                    sql = sql.Substring(0, sql.Length - 4);
+                    sql += " AND B.[Status] <> 'DELETED'";
 
-            IEnumerable<ImportSerialDetail> items = Db.Database.SqlQuery<ImportSerialDetail>(sql).ToList();
+                }
+                else
+                {
+                    sql += " WHERE ";
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        if (parameterSearch.Columns[i] == "CreatedDate")
+                            sql += string.Format(" {0} LIKE '%{1}%' AND ", "CONVERT(DATE," + parameterSearch.Columns[i] + ")", parameterSearch.Keywords[i]);
+                        else
+                            sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                    }
+                    sql = sql.Substring(0, sql.Length - 4);
+                    sql += " AND [Status] <> 'DELETED'";
+
+
+
+                }
+                items = Db.Database.SqlQuery<ImportSerialDetail>(sql).ToList();
+                totalRecord = items.Count();
+            }
+            else
+            {
+                var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
+                output.Direction = ParameterDirection.Output;
+
+                items = Db.Database.SqlQuery<ImportSerialDetail>("ProcPagingImportSerialDetail @page,@size,@totalrow out"
+                    , new SqlParameter("@page", parameterSearch.PageIndex)
+                    , new SqlParameter("@size", parameterSearch.PageSize)
+                    , output).ToList();
+                totalRecord = Convert.ToInt32(output.Value);
+            }
 
             return items;
         }
+
+
         #endregion =============== // FUJI phase 3 Register RFID ================
     }
 }

@@ -36,8 +36,17 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\Fuji.WebApi\DLL\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Isuzu.Common.ValueObject">
       <HintPath>..\Isuzu.Common.ValueObject\bin\Debug\Isuzu.Common.ValueObject.dll</HintPath>
+    </Reference>
+    <Reference Include="Isuzu.Context">
+      <HintPath>..\Isuzu.Context\bin\Debug\Isuzu.Context.dll</HintPath>
+    </Reference>
+    <Reference Include="Isuzu.Entity">
+      <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
     </Reference>
     <Reference Include="Isuzu.Repository">
       <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
@@ -65,7 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InboundService.cs" />
+    <Compile Include="Inbound\InboundService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

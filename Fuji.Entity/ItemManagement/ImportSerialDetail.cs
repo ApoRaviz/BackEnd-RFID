@@ -25,6 +25,7 @@ namespace Fuji.Entity.ItemManagement
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string UserUpdate { get; set; }
 
+       
         public virtual ImportSerialHead ImportSerialHead { get; set; }
     }
 }
