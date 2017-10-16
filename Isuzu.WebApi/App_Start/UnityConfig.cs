@@ -4,20 +4,10 @@ using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
 using WIM.Core.Common;
-//using WIM.Master.Customer;
 using Isuzu.WebApi.Controllers;
 using Isuzu.Service;
 using Isuzu.Service.Impl;
-//using WIM.Master.Unit;
-//using WIM.Master.Label;
-//using WIM.Master.Report;
-//using WIM.ExternallInterface;
-//using WIM.Master.Supplier;
-//using WIM.Master.Inspect;
-//using WIM.Master.Import;
-//using WIM.Master.Dimension;
-//using WIM.Master;
-//using WIM.ExternallInterface.Isuzu.Services.InboundService;
+
 
 namespace Isuzu.WebApi
 {
