@@ -7,8 +7,8 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WIM.Core.Entity.RoleAndPermission;
-using WIM.Core.Entity.UserManagement;
+using WIM.Core.Security.Entity.RoleAndPermission;
+using WIM.Core.Security.Entity.UserManagement;
 using WMS.Common;
 using WMS.Service;
 
@@ -34,10 +34,10 @@ namespace WMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<UserRoles>> response = new ResponseData<IEnumerable<UserRoles>>();
+            ResponseData<IEnumerable<UserRole>> response = new ResponseData<IEnumerable<UserRole>>();
             try
             {
-                IEnumerable<UserRoles> UserRole = UserRoleService.GetUserRoles();
+                IEnumerable<UserRole> UserRole = UserRoleService.GetUserRoles();
                 response.SetData(UserRole);
             }
             catch (ValidationException ex)
@@ -155,7 +155,7 @@ namespace WMS.WebApi.Controllers
 
         [HttpPut]
         [Route("{RoleIDSys}")]
-        public HttpResponseMessage Put(int RoleIDSys, [FromBody]UserRoles UserRole)
+        public HttpResponseMessage Put(int RoleIDSys, [FromBody]UserRole UserRole)
         {
 
             IResponseData<bool> response = new ResponseData<bool>();
