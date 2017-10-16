@@ -12,8 +12,10 @@ namespace WIM.Core.Entity.MenuManagement
     public class ApiMenuMapping
     {
         [Key]
+        [Column(Order = 1)]
         public string ApiIDSys { get; set; }
         [Key]
+        [Column(Order = 2)]
         public int MenuIDSys { get; set; }
         public byte GET { get; set; }
         public byte POST { get; set; }

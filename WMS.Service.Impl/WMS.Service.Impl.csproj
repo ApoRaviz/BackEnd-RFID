@@ -125,10 +125,6 @@
       <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
       <Name>WMS.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
-      <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
-      <Name>WMS.Repository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WMS.Service\WMS.Service\WMS.Service.csproj">
       <Project>{7ebe4831-beee-4f55-a5ca-71efa10522a7}</Project>
       <Name>WMS.Service</Name>

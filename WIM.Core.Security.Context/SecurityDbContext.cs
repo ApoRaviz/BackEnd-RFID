@@ -36,9 +36,9 @@ namespace WIM.Core.Security.Context
         {
             base.OnModelCreating(modelBuilder);
             
-            modelBuilder.Entity<ApplicationUser>().ToTable("Users").Property(p => p.Id).HasColumnName("UserID");
-            modelBuilder.Entity<ApplicationRole>().ToTable("Roles").Property(p => p.Id).HasColumnName("RoleID");
-            modelBuilder.Entity<ApplicationUserRole>().ToTable("UserRoles");          
+            modelBuilder.Entity<ApplicationUser>().ToTable("Users");
+            modelBuilder.Entity<ApplicationRole>().ToTable("Roles");
+            modelBuilder.Entity<ApplicationUserRole>().ToTable("UserRoles");
 
             modelBuilder.Entity<ApplicationRole>().
             HasMany(c => c.Permissions).

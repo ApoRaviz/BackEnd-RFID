@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WMS.Repository
+namespace WMS.Repository.ItemManagement
 {
-    public interface IEntityDto
+    public interface IItemRepository
     {
-        
-    }
 
-  
+    }
 }
