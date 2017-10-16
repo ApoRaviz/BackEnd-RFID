@@ -5,9 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WMS.Common;
+using WMS.Entity.ItemManagement;
+using WMS.Service;
 
 namespace WMS.WebApi.Controllers
 {

@@ -29,10 +29,11 @@ namespace WIM.Core.Security
         public static ApplicationRole GetRole(string roleID)
         {
             ApplicationRole role = null;
+            // #JobComment
             using (RoleStore<ApplicationRole, string, ApplicationUserRole> db = new RoleStore<ApplicationRole, string, ApplicationUserRole>(new SecurityDbContext()))
             {
                 role = db.Roles.Where(r => r.Id == roleID)
-                    .Include(p => p.Permissions.Select(mp => mp.MenuProjectMapping.Menu)
+                    .Include(p => p.Permissions.Select(mp => mp.MenuProjectMapping.Menu_MT)
                     ).FirstOrDefault();
 
             }
@@ -46,10 +47,10 @@ namespace WIM.Core.Security
             ApplicationRole role = null;
             using (RoleStore<ApplicationRole, string, ApplicationUserRole> db = new RoleStore<ApplicationRole, string, ApplicationUserRole>(new SecurityDbContext()))
             {
-                role = db.Roles.Where(r => r.Id == roleID)
-                    //.Include(p => p.Permissions.Select(mp => mp.MenuProjectMapping.Menu)
-                    .Include(p => p.Permissions.Select(mp => mp.Api.Api)
-                    ).FirstOrDefault();
+                role = (db.Roles.Where(r => r.Id == roleID)
+                    .Include(p => p.Permissions.Select(mp => mp.MenuProjectMapping.Menu_MT)
+                    ).Include(p => p.Permissions.Select(mp => mp.Api_MT)
+                    )).FirstOrDefault();
                 Console.Write(role);
             }
             return role;

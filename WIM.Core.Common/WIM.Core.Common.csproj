@@ -71,21 +71,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountDataModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AccountDataModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AccountDataModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AccountDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AccountDataModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AccountDataModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="CommonContext.cs" />
     <Compile Include="CommonDataModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -125,20 +110,8 @@
       <DependentUpon>CommonDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Role.cs">
-      <DependentUpon>AccountDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs">
-      <DependentUpon>AccountDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserClaim.cs">
-      <DependentUpon>AccountDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="UserLog.cs">
       <DependentUpon>CommonDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserLogin.cs">
-      <DependentUpon>AccountDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Validation\ElementNotFound.cs" />
     <Compile Include="Validation\IValidationException.cs" />
@@ -152,13 +125,6 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="AccountDataModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AccountDataModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="AccountDataModel.edmx.diagram">
-      <DependentUpon>AccountDataModel.edmx</DependentUpon>
-    </None>
     <None Include="App.Config" />
     <None Include="CommonDataModel.edmx.diagram">
       <DependentUpon>CommonDataModel.edmx</DependentUpon>
@@ -166,16 +132,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AccountDataModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AccountDataModel.edmx</DependentUpon>
-      <LastGenOutput>AccountDataModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="AccountDataModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AccountDataModel.edmx</DependentUpon>
-      <LastGenOutput>AccountDataModel.cs</LastGenOutput>
-    </Content>
     <Content Include="CommonDataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CommonDataModel.Context.cs</LastGenOutput>
@@ -191,6 +147,14 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Name>WIM.Core.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
       <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
       <Name>WIM.Core.Repository.Impl</Name>

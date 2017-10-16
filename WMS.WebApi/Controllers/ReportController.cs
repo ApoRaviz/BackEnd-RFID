@@ -6,9 +6,6 @@ using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Helpers;
 using WMS.WebApi.Report;
-using WMS.Master;
-using WMS.Master.Label;
-using WMS.Master.Report;
 using System.IO;
 using System.Data;
 using WIM.Core.Common.Http;
@@ -16,6 +13,10 @@ using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
 using System.Web.Http.Cors;
 using System.Threading.Tasks;
+using WMS.Common;
+using WMS.Service;
+using WMS.Entity.Report;
+using WMS.Service.Report;
 
 namespace WMS.WebApi.Controllers
 {

@@ -6,12 +6,13 @@ using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
-using WMS.Master.Inspect;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
-using WMS.WebApi.Report;
+using WMS.Common;
+using WMS.Service;
+using WMS.Service.Inspect;
+using WMS.Entity.InspectionManagement;
 
 namespace WMS.WebApi.Controllers
 {

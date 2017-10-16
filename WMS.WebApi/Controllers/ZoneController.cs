@@ -7,8 +7,11 @@ using System.Web.Http;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
-using WMS.Master.Zone;
 using WMS.Master;
+using WMS.Common;
+using WMS.Service;
+using WIM.Core.Service.WarehouseService;
+using WIM.Core.Entity.WarehouseManagement;
 
 namespace WMS.WebApi.Controllers
 {

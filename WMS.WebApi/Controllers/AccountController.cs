@@ -23,6 +23,9 @@ using WIM.Core.Security.Entity;
 using WMS.WebApi.Providers;
 using WMS.WebApi.Results;
 using WIM.Core.Security.Providers;
+using WMS.Common;
+using WMS.Service;
+using WIM.Core.Entity.UserManagement;
 
 namespace WMS.WebApi.Controllers
 {
@@ -145,7 +148,7 @@ namespace WMS.WebApi.Controllers
                 Firebase fireb = new Firebase();
                 FirebaseModelSand fireBaseParam = new FirebaseModelSand();
                 string token;
-                WMS.Master.UserService users = new WMS.Master.UserService();
+                UserService users = new UserService();
                 Random rnd = new Random();
                 int key;
                 key = rnd.Next(100000, 999999);
@@ -177,7 +180,7 @@ namespace WMS.WebApi.Controllers
                 }
 
                 Dictionary<string, string> Json = new Dictionary<string, string>();
-                WMS.Master.User users = new WMS.Master.UserService().GetUserByUserID(User.Identity.GetUserId());
+                User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
           
                 if (OTPClaimBinding.OTP.Equals(users.KeyOTP) &&  DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
                 {
@@ -234,7 +237,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
             try
             {
-                string roleID = new WMS.Master.RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), User.Identity.GetProjectIDSys());
+                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), User.Identity.GetProjectIDSys());
                 if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
                 {
                     return null;
@@ -296,7 +299,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
             try
             {
-                string roleID = new WMS.Master.RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
+                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
                 if (!ModelState.IsValid && string.IsNullOrEmpty(roleID) ) 
                 {
                     return null;

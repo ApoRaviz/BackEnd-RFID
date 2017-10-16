@@ -5,10 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
-using WMS.Master.Unit;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WMS.Common;
+using WMS.Entity.ItemManagement;
+using WMS.Service;
 
 namespace WMS.WebApi.Controllers
 {
@@ -28,10 +29,10 @@ namespace WMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<ProcGetUnits_Result>> response = new ResponseData<IEnumerable<ProcGetUnits_Result>>();
+            ResponseData<IEnumerable<Unit_MT>> response = new ResponseData<IEnumerable<Unit_MT>>();
             try
             {
-                IEnumerable<ProcGetUnits_Result> units = UnitService.GetUnits();
+                IEnumerable<Unit_MT> units = UnitService.GetUnits();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(units);
             }
@@ -48,10 +49,10 @@ namespace WMS.WebApi.Controllers
         [Route("{unitIDSys}")]
         public HttpResponseMessage Get(int unitIDSys)
         {
-            IResponseData<ProcGetUnitByUnitIDSys_Result> response = new ResponseData<ProcGetUnitByUnitIDSys_Result>();
+            IResponseData<Unit_MT> response = new ResponseData<Unit_MT>();
             try
             {
-                ProcGetUnitByUnitIDSys_Result unit = UnitService.GetUnitByUnitIDSys(unitIDSys);
+                Unit_MT unit = UnitService.GetUnitByUnitIDSys(unitIDSys);
                 response.SetData(unit);
             }
             catch (ValidationException ex)

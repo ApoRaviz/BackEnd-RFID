@@ -8,9 +8,10 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Master;
-using WMS.Master.Menu;
-
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Entity.RoleAndPermission;
+using WMS.Common;
+using WMS.Service;
 namespace WMS.WebApi.Controllers
 {
     //[Authorize]
@@ -360,14 +361,18 @@ namespace WMS.WebApi.Controllers
         {
             Menu = new List<MenuProjectMappingDto>();
             int ProID = User.Identity.GetProjectIDSys();
+            List<MenuProjectMappingDto> res = new List<MenuProjectMappingDto>();
             if (User.IsSysAdmin())
             { MenuPermis = MenuProjectMappingService.GetMenuProjectMappingByID(ProID);
+                res = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
             }
             else
             { MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserId(), ProID);
+                res = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
             }
             IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID,MenuPermis);
-            List<MenuProjectMappingDto> res = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
+             
+
             foreach (MenuProjectMappingDto resX in res)
             {
                 FindParentMenu(MenuAll.ToList(), resX, resX.MenuIDSysParent);

@@ -47,9 +47,10 @@ namespace Fuji.Service.Impl.ItemImport
         public IEnumerable<ImportSerialHead> GetItems()
         {
             return (from h in Db.ImportSerialHead
-                    where !h.HeadID.Equals("0") && !h.Status.Equals(FujiStatus.DELETED.ToString())
-                    orderby h.CreatedDate descending
-                    select h).Take(50);
+                                where !h.HeadID.Equals("0") && !h.Status.Equals(FujiStatus.DELETED.ToString())
+                                orderby h.CreatedDate descending
+                                select h).Take(50);
+
         }
 
         public IEnumerable<ImportSerialHead> GetItems(int pageIndex, int pageSize,out int totalRecord)
@@ -577,6 +578,11 @@ namespace Fuji.Service.Impl.ItemImport
                              select d
                          );
 
+                var resultGroup = (from p in query
+                                   group p by p.ItemGroup into g
+                                   select new { ItemGroup = g.Key, Items = g.ToList() }).ToList();
+
+
                 ImportSerialHead importHead = (from h in Db.ImportSerialHead
                                                where h.HeadID == receive.HeadID
                                                select h
@@ -587,7 +593,7 @@ namespace Fuji.Service.Impl.ItemImport
                     throw new ValidationException(new ValidationError(((int)ErrorCode.DataNotFound).ToString(), ErrorCode.DataNotFound.GetDescription()));
                 }
 
-                if (query.Count() != importHead.Qty)
+                if (resultGroup.Count() != importHead.Qty)
                 {
                     throw new ValidationException(new ValidationError("48888", "Head ไม่เท่ากับที่ Scan รับ"));
                 }

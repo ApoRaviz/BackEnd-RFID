@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DC9513CF-FDAB-4170-8131-4A1FD5D048BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WMS.Service.Impl</RootNamespace>
+    <AssemblyName>WMS.Service.Impl</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.0\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApiMaster\ApiMTService.cs" />
+    <Compile Include="ApiMenuMapping\ApiMenuMappingService.cs" />
+    <Compile Include="CategoryMaster\CategoryService.cs" />
+    <Compile Include="Currency\CurrencyService.cs" />
+    <Compile Include="CustomerMaster\CustomerService.cs" />
+    <Compile Include="Dimension\DimensionService.cs" />
+    <Compile Include="EmployeeMaster\EmployeeService.cs" />
+    <Compile Include="Import\ImportService.cs" />
+    <Compile Include="Inspect\InspectService.cs" />
+    <Compile Include="ItemMaster\ItemService.cs" />
+    <Compile Include="ItemSet\ItemSetService.cs" />
+    <Compile Include="Label\LabelService.cs" />
+    <Compile Include="LocationMaster\LocationService.cs" />
+    <Compile Include="MenuMaster\MenuService.cs" />
+    <Compile Include="MenuProjectMapping\MenuProjectMappingService.cs" />
+    <Compile Include="PermissionMaster\PermissionService.cs" />
+    <Compile Include="PersonMaster\PersonService.cs" />
+    <Compile Include="ProjectMaster\ProjectService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\ReportService.cs" />
+    <Compile Include="RoleMaster\RoleService.cs" />
+    <Compile Include="SupplierMaster\SupplierService.cs" />
+    <Compile Include="UnitMaster\UnitService.cs" />
+    <Compile Include="UserMaster\UserService.cs" />
+    <Compile Include="UserRole\UserRoleService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Name>WIM.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
+      <Name>WIM.Core.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
+      <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
+      <Name>WIM.Core.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
+      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
+      <Name>WIM.Core.Security.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
+      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
+      <Name>WIM.Core.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
+      <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
+      <Name>WMS.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
+      <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
+      <Name>WMS.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
+      <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
+      <Name>WMS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Service\WMS.Service\WMS.Service.csproj">
+      <Project>{7ebe4831-beee-4f55-a5ca-71efa10522a7}</Project>
+      <Name>WMS.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

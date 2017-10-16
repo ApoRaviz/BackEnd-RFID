@@ -57,41 +57,21 @@
     <Compile Include="ApiMenuMapping.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ApiMenuMapping\ApiMenuMappingDto.cs" />
-    <Compile Include="ApiMenuMapping\ApiMenuMappingService.cs" />
-    <Compile Include="ApiMenuMapping\IApiMenuMappingService.cs" />
     <Compile Include="Api_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Api_MT\ApiMTDto.cs" />
-    <Compile Include="Api_MT\ApiMTService.cs" />
-    <Compile Include="Api_MT\IApiMTService.cs" />
-    <Compile Include="Category\CategoryDto.cs" />
-    <Compile Include="Category\CategoryService.cs" />
-    <Compile Include="Category\ICategoryService.cs" />
     <Compile Include="Category_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CurrencyUnit.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Currency\CurrencyService.cs" />
-    <Compile Include="Currency\ICurrencyService.cs" />
-    <Compile Include="Customer\CustomerAutoCompleteDto.cs" />
-    <Compile Include="Customer\CustomerDto.cs" />
-    <Compile Include="Customer\CustomerService.cs" />
-    <Compile Include="Customer\ICustomerService.cs" />
     <Compile Include="Customer_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DimensionLayout_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Dimension\DimensionService.cs" />
-    <Compile Include="Dimension\IDimensionService.cs" />
-    <Compile Include="Employee\IEmployeeService.cs" />
-    <Compile Include="Employee\EmployeeDto.cs" />
-    <Compile Include="Employee\EmployeeService.cs" />
     <Compile Include="Employee_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -101,15 +81,9 @@
     <Compile Include="ImportDefinitionHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Import\IImportServicecs.cs" />
-    <Compile Include="Import\ImportDefinitionHeader_MT_Partial.cs" />
-    <Compile Include="Import\ImportService.cs" />
     <Compile Include="InspectType.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Inspect\IInspectService.cs" />
-    <Compile Include="Inspect\InspectDto.cs" />
-    <Compile Include="Inspect\InspectService.cs" />
     <Compile Include="Inspect_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -120,20 +94,12 @@
     <Compile Include="ItemSetDetail.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ItemSet\IItemSetService.cs" />
-    <Compile Include="ItemSet\ItemSetDetailDto.cs" />
-    <Compile Include="ItemSet\ItemSetDto.cs" />
-    <Compile Include="ItemSet\ItemSetService.cs" />
     <Compile Include="ItemSet_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemUnitMapping.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ItemUnit\ItemUnitDto.cs" />
-    <Compile Include="Item\ItemDto.cs" />
-    <Compile Include="Item\ItemService.cs" />
-    <Compile Include="Item\IItemService.cs" />
     <Compile Include="Item_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -143,15 +109,9 @@
     <Compile Include="LabelLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Label\ILabelService.cs" />
-    <Compile Include="Label\LabelLayoutHeader_MT_Partial.cs" />
-    <Compile Include="Label\LabelService.cs" />
     <Compile Include="Label_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Location\ILocationService.cs" />
-    <Compile Include="Location\LocationDto.cs" />
-    <Compile Include="Location\LocationService.cs" />
     <Compile Include="Location_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -174,25 +134,12 @@
     <Compile Include="MenuProjectMapping.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
-    <Compile Include="MenuProjectMapping\MenuProjectMappingDto.cs" />
-    <Compile Include="MenuProjectMapping\MenuProjectMappingService.cs" />
-    <Compile Include="Menu\IMenuService.cs" />
-    <Compile Include="Menu\MenuService.cs" />
-    <Compile Include="Menu\MenuDto.cs" />
     <Compile Include="Menu_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Permission.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Permission\IPermissionService.cs" />
-    <Compile Include="Permission\PermissionRoleDto.cs" />
-    <Compile Include="Permission\PermissionService.cs" />
-    <Compile Include="Permission\PermissionTree.cs" />
-    <Compile Include="Person\IPersonService.cs" />
-    <Compile Include="Person\PersonDto.cs" />
-    <Compile Include="Person\PersonService.cs" />
     <Compile Include="Person_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -242,9 +189,6 @@
     <Compile Include="ProcGetUnits_Result.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Project\IProjectService.cs" />
-    <Compile Include="Project\ProjectDto.cs" />
-    <Compile Include="Project\ProjectService.cs" />
     <Compile Include="Project_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -261,27 +205,15 @@
     <Compile Include="ReportLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Report\IReportService.cs" />
-    <Compile Include="Report\ReportLayoutHeader_MT.cs" />
-    <Compile Include="Report\ReportService.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RolePermission.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Role\IRoleService.cs" />
-    <Compile Include="Role\RolePermissionDto.cs" />
-    <Compile Include="Role\RoleService.cs" />
-    <Compile Include="Supplier\ISupplierService.cs" />
-    <Compile Include="Supplier\SupplierService.cs" />
-    <Compile Include="Supplier\SupplierDto.cs" />
     <Compile Include="Supplier_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Unit\IUnitService.cs" />
-    <Compile Include="Unit\UnitDto.cs" />
-    <Compile Include="Unit\UnitService.cs" />
     <Compile Include="Unit_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -297,14 +229,6 @@
     <Compile Include="UserRole.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserRole\IUserRoleService.cs" />
-    <Compile Include="UserRole\RoleUserDto.cs" />
-    <Compile Include="UserRole\UserRoleDto.cs" />
-    <Compile Include="UserRole\UserRoleService.cs" />
-    <Compile Include="User\IUserService.cs" />
-    <Compile Include="User\UserReq.cs" />
-    <Compile Include="User\UserService.cs" />
-    <Compile Include="User\UserDto.cs" />
     <Compile Include="Warehouse_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -314,9 +238,6 @@
     <Compile Include="ZoneLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Zone\IZoneService.cs" />
-    <Compile Include="Zone\ZoneLayoutHeader_MT_Partial.cs" />
-    <Compile Include="Zone\ZoneService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
@@ -330,6 +251,16 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Name>WIM.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
+      <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
+      <Name>WMS.Repository</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="MasterDataModel.edmx">
@@ -348,16 +279,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MasterDataModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
-      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
-      <Name>WIM.Core.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
-      <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
-      <Name>WMS.Repository</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

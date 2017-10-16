@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7EBE4831-BEEE-4F55-A5CA-71EFA10522A7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WMS.Service</RootNamespace>
+    <AssemblyName>WMS.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApiMaster\IApiMTService.cs" />
+    <Compile Include="ApiMenuMapping\IApiMenuMappingService.cs" />
+    <Compile Include="CategoryMaster\ICategoryService.cs" />
+    <Compile Include="Currency\ICurrencyService.cs" />
+    <Compile Include="CustomerMaster\ICustomerService.cs" />
+    <Compile Include="Dimension\IDimensionService.cs" />
+    <Compile Include="EmployeeMaster\IEmployeeService.cs" />
+    <Compile Include="Import\IImportService.cs" />
+    <Compile Include="Inspect\IInspectService.cs" />
+    <Compile Include="ItemMaster\IItemService.cs" />
+    <Compile Include="ItemSet\IItemSetService.cs" />
+    <Compile Include="Label\ILabelService.cs" />
+    <Compile Include="LocationMaster\ILocationService.cs" />
+    <Compile Include="MenuMaster\IMenuService.cs" />
+    <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
+    <Compile Include="PermissionMaster\IPermissionService.cs" />
+    <Compile Include="PersonMaster\IPersonService.cs" />
+    <Compile Include="ProjectMaster\IProjectService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\IReportService.cs" />
+    <Compile Include="RoleMaster\IRoleService.cs" />
+    <Compile Include="SupplierMaster\ISupplierService.cs" />
+    <Compile Include="UnitMaster\IUnitService.cs" />
+    <Compile Include="UserMaster\IUserService.cs" />
+    <Compile Include="UserRole\IUserRoleService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
+      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
+      <Name>WIM.Core.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
+      <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
+      <Name>WMS.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WMS.Entity\WMS.Entity.csproj">
+      <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
+      <Name>WMS.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
