@@ -12,8 +12,11 @@ using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.Person;
 using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.SupplierManagement;
+using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.WarehouseManagement;
+
 
 namespace WIM.Core.Context
 {
@@ -32,9 +35,12 @@ namespace WIM.Core.Context
         public DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
         public DbSet<Person_MT> Person_MT { get; set; }
         public DbSet<Project_MT> Project_MT { get; set; }
-        public DbSet<Supplier_MT> Supplier_MT { get; set; }        
-
-
+        public DbSet<Supplier_MT> Supplier_MT { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<Permission> Permission { get; set; }
+        public DbSet<RolePermission> RolePermission { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<UserRoles> UserRoles { get; set; }
         public CoreDbContext() : base("name=DefaultConnection")
         {
             Configuration.ProxyCreationEnabled = false;

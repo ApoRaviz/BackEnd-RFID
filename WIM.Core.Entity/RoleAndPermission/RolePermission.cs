@@ -5,21 +5,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Security.Entity.RoleAndPermission;
 
-namespace WIM.Core.Security.Entity.UserManagement
+namespace WIM.Core.Entity.RoleAndPermission
 {
-    //[Table("UserRole")]
-    public class UserRole
+    [Table("RolePermission")]
+    public class RolePermission
     {
         [Key]
         [Column(Order = 1)]
-        public string UserID { get; set; }
+        public string RoleID { get; set; }
         [Key]
         [Column(Order = 2)]
-        public string RoleID { get; set; }
+        public string PermissionID { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual Permission Permission { get; set; }
         public virtual Role Role { get; set; }
     }
 }

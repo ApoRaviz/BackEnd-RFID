@@ -340,10 +340,10 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetMenuPermission(string userid, int projectid)
         {
-            var menu = from ur in SecuDb.UserRole
-                       join rp in SecuDb.RolePermission on ur.RoleID equals rp.RoleID
-                       join ps in SecuDb.Permission on rp.PermissionID equals ps.PermissionID
-                       join r in SecuDb.Role on ur.RoleID equals r.RoleID
+            var menu = from ur in db.UserRoles
+                       join rp in db.RolePermission on ur.RoleID equals rp.RoleID
+                       join ps in db.Permission on rp.PermissionID equals ps.PermissionID
+                       join r in db.Role on ur.RoleID equals r.RoleID
                        join mp in db.MenuProjectMapping on ps.MenuIDSys equals mp.MenuIDSys
                        where r.ProjectIDSys == projectid && ur.UserID == userid && mp.ProjectIDSys == projectid
                        select mp;

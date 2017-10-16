@@ -5,21 +5,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Entity.RoleAndPermission;
 
-namespace WIM.Core.Security.Entity.UserManagement
+namespace WIM.Core.Entity.UserManagement
 {
-    //[Table("UserProjectMapping")]
-    public class UserProjectMapping
+    [Table("UserRoles")]
+    public class UserRoles
     {
         [Key]
         [Column(Order = 1)]
         public string UserID { get; set; }
         [Key]
         [Column(Order = 2)]
-        public int ProjectIDSys { get; set; }
+        public string RoleID { get; set; }
 
-        //public virtual Project_MT Project_MT { get; set; }
         public virtual User User { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

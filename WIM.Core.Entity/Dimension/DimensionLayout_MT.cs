@@ -23,6 +23,6 @@ namespace WIM.Core.Entity.Dimension
         public string Color { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }
+        public string UserUpdate { get; set; }//1232312312312
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.ProjectManagement;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.UserManagement;
 using WMS.Common;
 
 namespace WMS.Service
@@ -15,12 +15,12 @@ namespace WMS.Service
         Project_MT GetProjectByProjectIDSys(int id);
         List<Project_MT> ProjectHaveMenu(int CusID);
         List<Project_MT> ProjectCustomer(int CusID);
-        bool CreateUserProject(string UserID, int ProjectIDSys);
+        //bool CreateUserProject(string UserID, int ProjectIDSys);
         Project_MT GetProjectByProjectIDSysIncludeCustomer(int id);
         Project_MT CreateProject(Project_MT project);
         bool UpdateProject(int id, Project_MT project);
         bool DeleteProject(int id);
-        List<UserProjectMapping> GetUserProject(int CusIDSys, string UserID);
-        bool DeleteUserProject(int projectID, string UserID);
+        //List<UserProjectMapping> GetUserProject(int CusIDSys, string UserID);
+        //bool DeleteUserProject(int projectID, string UserID);
     }
 }
