@@ -59,19 +59,19 @@ namespace WMS.Service
 
         public CustomerDto GetCustomerByCusIDSysIncludeProjects(int id)
         {
-            /*var customer = GetCustomerByCusIDSys(id);
-            if (customer != null)
-            {
-                Mapper.Initialize(cfg => cfg.CreateMap<ProcGetCustomerByCusIDSys_Result, CustomerDto>());
-                CustomerDto customerDto = Mapper.Map<ProcGetCustomerByCusIDSys_Result, CustomerDto>(customer);
+            //var customer = GetCustomerByCusIDSys(id);
+            //if (customer != null)
+            //{
+            //    Mapper.Initialize(cfg => cfg.CreateMap<ProcGetCustomerByCusIDSys_Result, CustomerDto>());
+            //    CustomerDto customerDto = Mapper.Map<ProcGetCustomerByCusIDSys_Result, CustomerDto>(customer);
 
-                var projects = db.ProcGetProjectsByCusIDSys(customerDto.CusIDSys).ToList();
-                Mapper.Initialize(cfg => cfg.CreateMap<ProcGetProjectsByCusIDSys_Result, ProjectDto>());
-                ICollection<ProjectDto> projectsDto = Mapper.Map<ICollection<ProcGetProjectsByCusIDSys_Result>, ICollection<ProjectDto>>(projects);
-                customerDto.Project_MT = projectsDto;
+            //    var projects = db.ProcGetProjectsByCusIDSys(customerDto.CusIDSys).ToList();
+            //    Mapper.Initialize(cfg => cfg.CreateMap<ProcGetProjectsByCusIDSys_Result, ProjectDto>());
+            //    ICollection<ProjectDto> projectsDto = Mapper.Map<ICollection<ProcGetProjectsByCusIDSys_Result>, ICollection<ProjectDto>>(projects);
+            //    customerDto.Project_MT = projectsDto;
 
-                return customerDto;
-            }*/
+            //    return customerDto;
+            //}
             return null;
         }
 

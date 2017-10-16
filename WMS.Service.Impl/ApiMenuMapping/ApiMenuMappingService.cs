@@ -52,7 +52,7 @@ namespace WMS.Service
         {
             var ApiMenuMapping = (from i in db.ApiMenuMapping
                                              where i.MenuIDSys == id
-                                             select i).ToList();
+                                             select i).Include(b => b.Api_MT).ToList();
             return ApiMenuMapping;
         }
 

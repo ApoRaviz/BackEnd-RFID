@@ -17,10 +17,10 @@ namespace WIM.Core.Entity.MenuManagement
         [Key]
         [Column(Order = 2)]
         public int MenuIDSys { get; set; }
-        public byte GET { get; set; }
-        public byte POST { get; set; }
-        public byte PUT { get; set; }
-        public byte DEL { get; set; }
+        public bool GET { get; set; }
+        public bool POST { get; set; }
+        public bool PUT { get; set; }
+        public bool DEL { get; set; }
         public string Type { get; set; }
 
         public virtual Menu_MT Menu_MT { get; set; }
