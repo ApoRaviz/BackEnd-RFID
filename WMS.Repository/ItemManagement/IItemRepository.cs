@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WMS.Common;
 
-namespace WMS.Repository
+namespace WMS.Repository.ItemManagement
 {
-    public interface IEntityDto
+    public interface IItemRepository
     {
-        
+        IEnumerable<ItemDto> GetItems();
     }
-
-  
 }

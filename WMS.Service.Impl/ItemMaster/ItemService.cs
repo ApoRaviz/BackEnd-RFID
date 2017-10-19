@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -15,6 +14,7 @@ using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
+using WIM.Core.Repository.Impl;
 
 namespace WMS.Service
 {

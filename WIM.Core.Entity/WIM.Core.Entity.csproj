@@ -65,6 +65,8 @@
     <Compile Include="WarehouseManagement\ZoneLayoutDetail_MT.cs" />
     <Compile Include="WarehouseManagement\ZoneLayoutHeader_MT.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Security\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
