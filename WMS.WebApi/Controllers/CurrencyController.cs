@@ -12,6 +12,7 @@ using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
 using WMS.Common;
 using WMS.Service;
+using WIM.Core.Entity.Currency;
 
 namespace WMS.WebApi.Controllers
 {
@@ -20,32 +21,117 @@ namespace WMS.WebApi.Controllers
     public class CurrencyController : ApiController
     {
 
-        private ICustomerService CustomerService;
+        private ICurrencyService CurrencyService;
 
-        public CurrencyController(ICustomerService customerService)
+        public CurrencyController(ICurrencyService CurrencyService)
         {
-            this.CustomerService = customerService;
+            this.CurrencyService = CurrencyService;
         }
 
-        //// GET: api/Customers
-        //[HttpGet]
-        //[Route("")]
-        //public HttpResponseMessage Get()
-        //{
-        //    ResponseData<IEnumerable<ProcGetCustomers_Result>> response = new ResponseData<IEnumerable<ProcGetCustomers_Result>>();
-        //    try
-        //    {
-        //        IEnumerable<ProcGetCustomers_Result> customers = CustomerService.GetCustomers();
-        //        response.SetData(customers);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
+        //get api/Currencys
+        [HttpGet]
+        [Route("")]
+        public HttpResponseMessage Get()
+        {
+            ResponseData<IEnumerable<CurrencyUnit>> response = new ResponseData<IEnumerable<CurrencyUnit>>();
+            try
+            {
+                IEnumerable<CurrencyUnit> Currency = CurrencyService.GetCurrency();
+                response.SetData(Currency);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
 
+        // get api/Currencys/id
+
+        [HttpGet]
+        [Route("{CurrencyIDSys}")]
+        public HttpResponseMessage Get(int CurrencyIDSys)
+        {
+            IResponseData<CurrencyUnit> response = new ResponseData<CurrencyUnit>();
+            try
+            {
+                CurrencyUnit Currency = CurrencyService.GetCurrencyByCurrIDSys(CurrencyIDSys);
+                response.SetData(Currency);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        // POST: api/Suppliers
+        [HttpPost]
+        [Route("")]
+        public HttpResponseMessage Post([FromBody]CurrencyUnit Currency)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+                Currency.UserUpdate = User.Identity.Name;
+                int id = CurrencyService.CreateCurrency(Currency);
+                response.SetData(id);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        // PUT: api/Suppliers/5
+
+        [HttpPut]
+        [Route("{CurrencyIDSys}")]
+        public HttpResponseMessage Put(int CurrencyIDSys, [FromBody]CurrencyUnit Currency)
+        {
+
+            IResponseData<bool> response = new ResponseData<bool>();
+
+            try
+            {
+                bool isUpated = CurrencyService.UpdateCurrency(CurrencyIDSys, Currency);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpDelete]
+        [Route("{CurrencyIDSys}")]
+        public HttpResponseMessage Delete(int CurrencyIDSys)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpdated = CurrencyService.DeleteCurrency(CurrencyIDSys);
+                response.SetData(isUpdated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        private ICurrencyService GetCurrencyService()
+        {
+            return CurrencyService;
+        }
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -8,7 +9,7 @@ using WIM.Core.Context;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Repository;
 
-namespace WMS.Repository.Impl.Currency
+namespace WMS.Repository.Impl
 {
     public class CurrencyRepository : IGenericRepository<CurrencyUnit>
     {
@@ -21,7 +22,11 @@ namespace WMS.Repository.Impl.Currency
 
         public void Delete(object id)
         {
-            throw new NotImplementedException();
+            var existedCurrency = GetByID(id);
+            existedCurrency.Active = 0;
+            existedCurrency.UpdateDate = DateTime.Now;
+            existedCurrency.UserUpdate = "1";
+            Db.SaveChanges();
         }
 
         public void Delete(CurrencyUnit entityToDelete)
@@ -41,7 +46,9 @@ namespace WMS.Repository.Impl.Currency
 
         public IEnumerable<CurrencyUnit> Get()
         {
-            throw new NotImplementedException();
+            var currency = (from i in Db.CurrencyUnit
+                            select i).Include(b => b.Country_MT).ToList();
+            return currency;
         }
 
         public CurrencyUnit Get(Func<CurrencyUnit, bool> where)
@@ -56,7 +63,8 @@ namespace WMS.Repository.Impl.Currency
 
         public CurrencyUnit GetByID(object id)
         {
-            throw new NotImplementedException();
+            CurrencyUnit Currency = Db.CurrencyUnit.Find(id);
+            return Currency;
         }
 
         public CurrencyUnit GetFirst(Func<CurrencyUnit, bool> predicate)
@@ -86,12 +94,20 @@ namespace WMS.Repository.Impl.Currency
 
         public void Insert(CurrencyUnit entity)
         {
-            throw new NotImplementedException();
+            Db.CurrencyUnit.Add(entity);
+            Db.SaveChanges();
         }
 
-        public void Update(CurrencyUnit entityToUpdate)
+        public void Update(CurrencyUnit Currency)
         {
-            throw new NotImplementedException();
+            var existedCurrency = GetByID(Currency.CurrencyIDSys);
+            existedCurrency.CurrencyID = Currency.CurrencyID;
+            existedCurrency.CurrencyName = Currency.CurrencyName;
+            existedCurrency.Active = Currency.Active;
+            existedCurrency.UpdateDate = DateTime.Now;
+            existedCurrency.UserUpdate = "1";
+            existedCurrency.CountryIDSys = Currency.CountryIDSys;
+            Db.SaveChanges();
         }
     }
 }

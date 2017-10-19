@@ -7,15 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using WMS.Master;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
+using WMS.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
@@ -38,7 +39,7 @@ namespace WMS.Service
             return ItemSetDtos;
         }
 
-        
+
 
         /*public ItemSetDto GetItemSet(int id, string[] tableNames)
         {
@@ -79,13 +80,13 @@ namespace WMS.Service
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException )
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                
+
                 return ItemSet.ItemSetIDSys;
             }
         }
@@ -99,7 +100,7 @@ namespace WMS.Service
                 existedItemSet.ItemSetCode = ItemSet.ItemSetCode;
                 existedItemSet.UpdateDate = DateTime.Now;
                 existedItemSet.UserUpdate = "1";
-                
+
                 try
                 {
                     repo.Update(existedItemSet);
@@ -109,7 +110,7 @@ namespace WMS.Service
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException )
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -146,7 +147,7 @@ namespace WMS.Service
                 item.UpdateDate = DateTime.Now;
                 item.UserUpdate = "1";
 
-                
+
                 try
                 {
                     repo.Insert(item);
@@ -156,7 +157,7 @@ namespace WMS.Service
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException )
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -174,12 +175,12 @@ namespace WMS.Service
                 try
                 {
                     foreach (var c in temp)
-                {
-                    item.Qty = c.Qty;
-                    item.ItemIDSys = c.ItemIDSys;
-                    item.ItemSetIDSys = id;
-                    repo.Insert(item);
-                }
+                    {
+                        item.Qty = c.Qty;
+                        item.ItemIDSys = c.ItemIDSys;
+                        item.ItemSetIDSys = id;
+                        repo.Insert(item);
+                    }
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -196,7 +197,7 @@ namespace WMS.Service
             }
         }
 
-            public void HandleValidationException(DbEntityValidationException ex)
+        public void HandleValidationException(DbEntityValidationException ex)
         {
             foreach (var eve in ex.EntityValidationErrors)
             {
@@ -212,7 +213,7 @@ namespace WMS.Service
             var item = repo.GetItemSetDto(id);
             var items = repo.GetItemSetDetailDto(id);
             item.ItemSetDetail = items;
-            return item; 
+            return item;
         }
 
         public bool DeleteItemSetDto(int id)

@@ -63,6 +63,9 @@
     <Compile Include="Category_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Country_MT.cs">
+      <DependentUpon>MasterDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CurrencyUnit.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -229,6 +232,8 @@
     <Compile Include="UserRole.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Warehouse\IWarehouseService.cs" />
+    <Compile Include="Warehouse\WarehouseService.cs" />
     <Compile Include="Warehouse_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>

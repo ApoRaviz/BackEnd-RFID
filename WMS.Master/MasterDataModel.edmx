@@ -21,10 +21,10 @@
           </Key>
           <Property Name="ApiIDSys" Type="nvarchar" MaxLength="4" Nullable="false" />
           <Property Name="MenuIDSys" Type="int" Nullable="false" />
-          <Property Name="GET" Type="tinyint" Nullable="false" />
-          <Property Name="POST" Type="tinyint" Nullable="false" />
-          <Property Name="PUT" Type="tinyint" Nullable="false" />
-          <Property Name="DEL" Type="tinyint" Nullable="false" />
+          <Property Name="GET" Type="bit" Nullable="false" />
+          <Property Name="POST" Type="bit" Nullable="false" />
+          <Property Name="PUT" Type="bit" Nullable="false" />
+          <Property Name="DEL" Type="bit" Nullable="false" />
           <Property Name="Type" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
         <EntityType Name="Category_MT">
@@ -40,6 +40,15 @@
           <Property Name="UpdateDate" Type="smalldatetime" Nullable="false" />
           <Property Name="UserUpdate" Type="nvarchar" MaxLength="25" Nullable="false" />
         </EntityType>
+        <EntityType Name="Country_MT">
+          <Key>
+            <PropertyRef Name="CountryIDSys" />
+          </Key>
+          <Property Name="CountryIDSys" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="2" />
+          <Property Name="PhoneCode" Type="nvarchar" MaxLength="5" />
+        </EntityType>
         <EntityType Name="CurrencyUnit">
           <Key>
             <PropertyRef Name="CurrencyIDSys" />
@@ -47,11 +56,11 @@
           <Property Name="CurrencyIDSys" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CurrencyID" Type="nvarchar" MaxLength="6" Nullable="false" />
           <Property Name="CurrencyName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Country" Type="nvarchar" MaxLength="25" Nullable="false" />
           <Property Name="Active" Type="tinyint" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime" Nullable="false" />
           <Property Name="UserUpdate" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="CountryIDSys" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Customer_MT">
           <Key>
@@ -111,6 +120,8 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime" Nullable="false" />
           <Property Name="UserUpdate" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="HiredDate" Type="datetime" />
+          <Property Name="PositionIDSys" Type="int" />
         </EntityType>
         <EntityType Name="ImportDefinitionDetail_MT">
           <Key>
@@ -783,6 +794,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CurrencyUnit_Country_MT">
+          <End Role="Country_MT" Type="Self.Country_MT" Multiplicity="1" />
+          <End Role="CurrencyUnit" Type="Self.CurrencyUnit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country_MT">
+              <PropertyRef Name="CountryIDSys" />
+            </Principal>
+            <Dependent Role="CurrencyUnit">
+              <PropertyRef Name="CountryIDSys" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Employee_MT_Employee_MT">
           <End Role="Person_MT" Type="Self.Person_MT" Multiplicity="1" />
           <End Role="Employee_MT" Type="Self.Employee_MT" Multiplicity="*" />
@@ -1222,6 +1245,7 @@
           <EntitySet Name="Api_MT" EntityType="Self.Api_MT" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApiMenuMapping" EntityType="Self.ApiMenuMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category_MT" EntityType="Self.Category_MT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Country_MT" EntityType="Self.Country_MT" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CurrencyUnit" EntityType="Self.CurrencyUnit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer_MT" EntityType="Self.Customer_MT" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DimensionLayout_MT" EntityType="Self.DimensionLayout_MT" Schema="dbo" store:Type="Tables" />
@@ -1317,6 +1341,10 @@
           <AssociationSet Name="FK_ApiMenuMapping_Menu_MT" Association="Self.FK_ApiMenuMapping_Menu_MT">
             <End Role="Menu_MT" EntitySet="Menu_MT" />
             <End Role="ApiMenuMapping" EntitySet="ApiMenuMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CurrencyUnit_Country_MT" Association="Self.FK_CurrencyUnit_Country_MT">
+            <End Role="Country_MT" EntitySet="Country_MT" />
+            <End Role="CurrencyUnit" EntitySet="CurrencyUnit" />
           </AssociationSet>
           <AssociationSet Name="FK_Employee_MT_Employee_MT" Association="Self.FK_Employee_MT_Employee_MT">
             <End Role="Person_MT" EntitySet="Person_MT" />
@@ -1458,7 +1486,6 @@
             <End Role="Project_MT" EntitySet="Project_MT" />
             <End Role="Category_MT" EntitySet="Category_MT" />
           </AssociationSet>
-          <EntitySet Name="CurrencyUnits" EntityType="MasterModel.CurrencyUnit" />
           <EntitySet Name="Location_MT" EntityType="MasterModel.Location_MT" />
           <EntitySet Name="Warehouse_MT" EntityType="MasterModel.Warehouse_MT" />
           <AssociationSet Name="FK_Location_MT_Category_MT" Association="MasterModel.FK_Location_MT_Category_MT">
@@ -1728,13 +1755,8 @@
           <FunctionImport Name="ProcGetRackLayoutByZoneIDSys" ReturnType="Collection(MasterModel.RackLayout)">
           <Parameter Name="ZoneIDSys" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="ApiMenuMappings" EntityType="MasterModel.ApiMenuMapping" />
           <EntitySet Name="ItemSet_MT" EntityType="MasterModel.ItemSet_MT" />
           <EntitySet Name="ItemSetDetails" EntityType="MasterModel.ItemSetDetail" />
-          <AssociationSet Name="FK_ApiMenuMapping_Menu_MT" Association="MasterModel.FK_ApiMenuMapping_Menu_MT">
-            <End Role="Menu_MT" EntitySet="Menu_MT" />
-            <End Role="ApiMenuMapping" EntitySet="ApiMenuMappings" />
-          </AssociationSet>
           <AssociationSet Name="FK_ItemSetDetail_Item_MT" Association="MasterModel.FK_ItemSetDetail_Item_MT">
             <End Role="Item_MT" EntitySet="Item_MT" />
             <End Role="ItemSetDetail" EntitySet="ItemSetDetails" />
@@ -1763,10 +1785,6 @@
           </AssociationSet>
           <EntitySet Name="Label_MT" EntityType="MasterModel.Label_MT" />
           <EntitySet Name="Api_MT" EntityType="MasterModel.Api_MT" />
-          <AssociationSet Name="FK_ApiMenuMapping_Api_MT" Association="MasterModel.FK_ApiMenuMapping_Api_MT">
-            <End Role="Api_MT" EntitySet="Api_MT" />
-            <End Role="ApiMenuMapping" EntitySet="ApiMenuMappings" />
-          </AssociationSet>
           <AssociationSet Name="FK_Permissions_Api_MT" Association="MasterModel.FK_Permissions_Api_MT">
             <End Role="Api_MT" EntitySet="Api_MT" />
             <End Role="Permission" EntitySet="Permissions" />
@@ -1780,6 +1798,21 @@
           <AssociationSet Name="FK_Employee_MT_Employee_MT" Association="MasterModel.FK_Employee_MT_Employee_MT">
             <End Role="Person_MT" EntitySet="Person_MT" />
             <End Role="Employee_MT" EntitySet="Employee_MT" />
+          </AssociationSet>
+          <EntitySet Name="ApiMenuMappings" EntityType="MasterModel.ApiMenuMapping" />
+          <AssociationSet Name="FK_ApiMenuMapping_Api_MT" Association="MasterModel.FK_ApiMenuMapping_Api_MT">
+            <End Role="Api_MT" EntitySet="Api_MT" />
+            <End Role="ApiMenuMapping" EntitySet="ApiMenuMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApiMenuMapping_Menu_MT" Association="MasterModel.FK_ApiMenuMapping_Menu_MT">
+            <End Role="Menu_MT" EntitySet="Menu_MT" />
+            <End Role="ApiMenuMapping" EntitySet="ApiMenuMappings" />
+          </AssociationSet>
+          <EntitySet Name="CurrencyUnits" EntityType="MasterModel.CurrencyUnit" />
+          <EntitySet Name="Country_MT" EntityType="MasterModel.Country_MT" />
+          <AssociationSet Name="FK_CurrencyUnit_Country_MT" Association="MasterModel.FK_CurrencyUnit_Country_MT">
+            <End Role="Country_MT" EntitySet="Country_MT" />
+            <End Role="CurrencyUnit" EntitySet="CurrencyUnits" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="ProcGetCustomers_Result">
@@ -2135,19 +2168,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="CurrencyUnit">
-          <Key>
-            <PropertyRef Name="CurrencyIDSys" />
-          </Key>
-          <Property Name="CurrencyIDSys" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CurrencyID" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
-          <Property Name="CurrencyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="Active" Type="Byte" Nullable="false" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UserUpdate" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Location_MT">
           <Key>
             <PropertyRef Name="LocIDSys" />
@@ -2876,21 +2896,6 @@
           <Property Type="DateTime" Name="UpdatedDate" Nullable="true" Precision="23" />
           <Property Type="String" Name="UserUpdate" Nullable="true" MaxLength="25" />
         </ComplexType>
-        <EntityType Name="ApiMenuMapping">
-          <Key>
-            <PropertyRef Name="ApiIDSys" />
-            <PropertyRef Name="MenuIDSys" />
-          </Key>
-          <Property Name="ApiIDSys" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="MenuIDSys" Type="Int32" Nullable="false" />
-          <Property Name="GET" Type="Byte" Nullable="false" />
-          <Property Name="POST" Type="Byte" Nullable="false" />
-          <Property Name="PUT" Type="Byte" Nullable="false" />
-          <Property Name="DEL" Type="Byte" Nullable="false" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="Menu_MT" Relationship="MasterModel.FK_ApiMenuMapping_Menu_MT" FromRole="ApiMenuMapping" ToRole="Menu_MT" />
-          <NavigationProperty Name="Api_MT" Relationship="MasterModel.FK_ApiMenuMapping_Api_MT" FromRole="ApiMenuMapping" ToRole="Api_MT" />
-        </EntityType>
         <EntityType Name="ItemSet_MT">
           <Key>
             <PropertyRef Name="ItemSetIDSys" />
@@ -2918,18 +2923,6 @@
           <NavigationProperty Name="Item_MT" Relationship="MasterModel.FK_ItemSetDetail_Item_MT" FromRole="ItemSetDetail" ToRole="Item_MT" />
           <NavigationProperty Name="ItemSet_MT" Relationship="MasterModel.FK_ItemSetDetail_ItemSet_MT" FromRole="ItemSetDetail" ToRole="ItemSet_MT" />
         </EntityType>
-        <Association Name="FK_ApiMenuMapping_Menu_MT">
-          <End Type="MasterModel.Menu_MT" Role="Menu_MT" Multiplicity="1" />
-          <End Type="MasterModel.ApiMenuMapping" Role="ApiMenuMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Menu_MT">
-              <PropertyRef Name="MenuIDSys" />
-            </Principal>
-            <Dependent Role="ApiMenuMapping">
-              <PropertyRef Name="MenuIDSys" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ItemSetDetail_Item_MT">
           <End Type="MasterModel.Item_MT" Role="Item_MT" Multiplicity="1" />
           <End Type="MasterModel.ItemSetDetail" Role="ItemSetDetail" Multiplicity="*" />
@@ -3057,21 +3050,9 @@
           <Property Name="Api" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Method" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="Controller" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ApiMenuMappings" Relationship="MasterModel.FK_ApiMenuMapping_Api_MT" FromRole="Api_MT" ToRole="ApiMenuMapping" />
           <NavigationProperty Name="Permissions" Relationship="MasterModel.FK_Permissions_Api_MT" FromRole="Api_MT" ToRole="Permission" />
+          <NavigationProperty Name="ApiMenuMappings" Relationship="MasterModel.FK_ApiMenuMapping_Api_MT" FromRole="Api_MT" ToRole="ApiMenuMapping" />
         </EntityType>
-        <Association Name="FK_ApiMenuMapping_Api_MT">
-          <End Type="MasterModel.Api_MT" Role="Api_MT" Multiplicity="1" />
-          <End Type="MasterModel.ApiMenuMapping" Role="ApiMenuMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Api_MT">
-              <PropertyRef Name="ApiIDSys" />
-            </Principal>
-            <Dependent Role="ApiMenuMapping">
-              <PropertyRef Name="ApiIDSys" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Permissions_Api_MT">
           <End Type="MasterModel.Api_MT" Role="Api_MT" Multiplicity="0..1" />
           <End Type="MasterModel.Permission" Role="Permission" Multiplicity="*" />
@@ -3133,6 +3114,8 @@
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UserUpdate" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Person_MT" Relationship="MasterModel.FK_Employee_MT_Employee_MT" FromRole="Employee_MT" ToRole="Person_MT" />
+          <Property Name="HiredDate" Type="DateTime" Precision="3" />
+          <Property Name="PositionIDSys" Type="Int32" />
         </EntityType>
         <Association Name="FK_Employee_MT_Employee_MT">
           <End Type="MasterModel.Person_MT" Role="Person_MT" Multiplicity="1" />
@@ -3143,6 +3126,81 @@
             </Principal>
             <Dependent Role="Employee_MT">
               <PropertyRef Name="PersonIDSys" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ApiMenuMapping">
+          <Key>
+            <PropertyRef Name="ApiIDSys" />
+            <PropertyRef Name="MenuIDSys" />
+          </Key>
+          <Property Name="ApiIDSys" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="MenuIDSys" Type="Int32" Nullable="false" />
+          <Property Name="GET" Type="Boolean" Nullable="false" />
+          <Property Name="POST" Type="Boolean" Nullable="false" />
+          <Property Name="PUT" Type="Boolean" Nullable="false" />
+          <Property Name="DEL" Type="Boolean" Nullable="false" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Api_MT" Relationship="MasterModel.FK_ApiMenuMapping_Api_MT" FromRole="ApiMenuMapping" ToRole="Api_MT" />
+          <NavigationProperty Name="Menu_MT" Relationship="MasterModel.FK_ApiMenuMapping_Menu_MT" FromRole="ApiMenuMapping" ToRole="Menu_MT" />
+        </EntityType>
+        <Association Name="FK_ApiMenuMapping_Api_MT">
+          <End Type="MasterModel.Api_MT" Role="Api_MT" Multiplicity="1" />
+          <End Type="MasterModel.ApiMenuMapping" Role="ApiMenuMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Api_MT">
+              <PropertyRef Name="ApiIDSys" />
+            </Principal>
+            <Dependent Role="ApiMenuMapping">
+              <PropertyRef Name="ApiIDSys" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApiMenuMapping_Menu_MT">
+          <End Type="MasterModel.Menu_MT" Role="Menu_MT" Multiplicity="1" />
+          <End Type="MasterModel.ApiMenuMapping" Role="ApiMenuMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu_MT">
+              <PropertyRef Name="MenuIDSys" />
+            </Principal>
+            <Dependent Role="ApiMenuMapping">
+              <PropertyRef Name="MenuIDSys" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CurrencyUnit">
+          <Key>
+            <PropertyRef Name="CurrencyIDSys" />
+          </Key>
+          <Property Name="CurrencyIDSys" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CurrencyID" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="CurrencyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Byte" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserUpdate" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CountryIDSys" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Country_MT" Relationship="MasterModel.FK_CurrencyUnit_Country_MT" FromRole="CurrencyUnit" ToRole="Country_MT" />
+        </EntityType>
+        <EntityType Name="Country_MT">
+          <Key>
+            <PropertyRef Name="CountryIDSys" />
+          </Key>
+          <Property Name="CountryIDSys" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CurrencyUnits" Relationship="MasterModel.FK_CurrencyUnit_Country_MT" FromRole="Country_MT" ToRole="CurrencyUnit" />
+        </EntityType>
+        <Association Name="FK_CurrencyUnit_Country_MT">
+          <End Type="MasterModel.Country_MT" Role="Country_MT" Multiplicity="1" />
+          <End Type="MasterModel.CurrencyUnit" Role="CurrencyUnit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country_MT">
+              <PropertyRef Name="CountryIDSys" />
+            </Principal>
+            <Dependent Role="CurrencyUnit">
+              <PropertyRef Name="CountryIDSys" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3483,20 +3541,6 @@
                 <ScalarProperty Name="CateID" ColumnName="CateID" />
                 <ScalarProperty Name="ProjectIDSys" ColumnName="ProjectIDSys" />
                 <ScalarProperty Name="CateIDSys" ColumnName="CateIDSys" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CurrencyUnits">
-            <EntityTypeMapping TypeName="MasterModel.CurrencyUnit">
-              <MappingFragment StoreEntitySet="CurrencyUnit">
-                <ScalarProperty Name="UserUpdate" ColumnName="UserUpdate" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
-                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-                <ScalarProperty Name="CurrencyIDSys" ColumnName="CurrencyIDSys" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3956,19 +4000,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="ApiMenuMappings">
-            <EntityTypeMapping TypeName="MasterModel.ApiMenuMapping">
-              <MappingFragment StoreEntitySet="ApiMenuMapping">
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="DEL" ColumnName="DEL" />
-                <ScalarProperty Name="PUT" ColumnName="PUT" />
-                <ScalarProperty Name="POST" ColumnName="POST" />
-                <ScalarProperty Name="GET" ColumnName="GET" />
-                <ScalarProperty Name="MenuIDSys" ColumnName="MenuIDSys" />
-                <ScalarProperty Name="ApiIDSys" ColumnName="ApiIDSys" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ItemSet_MT">
             <EntityTypeMapping TypeName="MasterModel.ItemSet_MT">
               <MappingFragment StoreEntitySet="ItemSet_MT">
@@ -4073,6 +4104,8 @@
           <EntitySetMapping Name="Employee_MT">
             <EntityTypeMapping TypeName="MasterModel.Employee_MT">
               <MappingFragment StoreEntitySet="Employee_MT">
+                <ScalarProperty Name="PositionIDSys" ColumnName="PositionIDSys" />
+                <ScalarProperty Name="HiredDate" ColumnName="HiredDate" />
                 <ScalarProperty Name="UserUpdate" ColumnName="UserUpdate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -4084,6 +4117,43 @@
                 <ScalarProperty Name="Area" ColumnName="Area" />
                 <ScalarProperty Name="PersonIDSys" ColumnName="PersonIDSys" />
                 <ScalarProperty Name="EmID" ColumnName="EmID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApiMenuMappings">
+            <EntityTypeMapping TypeName="MasterModel.ApiMenuMapping">
+              <MappingFragment StoreEntitySet="ApiMenuMapping">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="PUT" ColumnName="PUT" />
+                <ScalarProperty Name="POST" ColumnName="POST" />
+                <ScalarProperty Name="GET" ColumnName="GET" />
+                <ScalarProperty Name="MenuIDSys" ColumnName="MenuIDSys" />
+                <ScalarProperty Name="ApiIDSys" ColumnName="ApiIDSys" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrencyUnits">
+            <EntityTypeMapping TypeName="MasterModel.CurrencyUnit">
+              <MappingFragment StoreEntitySet="CurrencyUnit">
+                <ScalarProperty Name="CountryIDSys" ColumnName="CountryIDSys" />
+                <ScalarProperty Name="UserUpdate" ColumnName="UserUpdate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="CurrencyIDSys" ColumnName="CurrencyIDSys" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Country_MT">
+            <EntityTypeMapping TypeName="MasterModel.Country_MT">
+              <MappingFragment StoreEntitySet="Country_MT">
+                <ScalarProperty Name="PhoneCode" ColumnName="PhoneCode" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryIDSys" ColumnName="CountryIDSys" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -10,6 +10,7 @@ using WMS.Service.Inspect;
 using WMS.Service.Impl.Inspect;
 using WIM.Core.Service.WarehouseService;
 using WIM.Core.Service.Impl.WarehouseService;
+using WMS.Master;
 
 namespace WMS.WebApi
 {
@@ -56,8 +57,10 @@ namespace WMS.WebApi
             container.RegisterType<IPersonService, PersonService>();
             //container.RegisterType<IImportService, ImportService>();
             container.RegisterType<IDimensionService, DimensionService>();
-            container.RegisterType<IZoneService, ZoneService>();           
-
+            container.RegisterType<IWarehouseService, WarehouseService>();
+            container.RegisterType<IZoneService, ZoneService>();
+            container.RegisterType<ICurrencyService, CurrencyService>();
+            container.RegisterType<ICountryService, CountryService>();
         }
     }
 }
