@@ -33,7 +33,7 @@ namespace WMS.Repository.Impl.CustomerAndProject
         public Project_MT GetByID(object id)
         {
             var project = (from c in Db.Project_MT
-                           where c.ProjectIDSys.Equals(id)
+                           where c.ProjectIDSys== (int)id
                            select c).SingleOrDefault();
             return project;
         }
@@ -77,7 +77,7 @@ namespace WMS.Repository.Impl.CustomerAndProject
 
         public void Delete(object id)
         {
-            var existedProject = Db.Project_MT.SingleOrDefault(p => p.ProjectIDSys.Equals(id));
+            var existedProject = Db.Project_MT.SingleOrDefault(p => p.ProjectIDSys== (int)id);
             existedProject.ProjectStatus = "Inactive";
             existedProject.UpdateDate = DateTime.Now;
             existedProject.UserUpdate = "1";

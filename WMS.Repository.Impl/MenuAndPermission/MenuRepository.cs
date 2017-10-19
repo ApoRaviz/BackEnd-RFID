@@ -33,7 +33,7 @@ namespace WMS.Repository.Impl
         public Menu_MT GetByID(object id)
         {
             Menu_MT Menu = (from c in Db.Menu_MT
-                            where c.MenuIDSys.Equals(id)
+                            where c.MenuIDSys== (int)id
                             orderby c.MenuName
                             select c).SingleOrDefault();
             return Menu;

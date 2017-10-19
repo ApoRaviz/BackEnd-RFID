@@ -35,7 +35,7 @@ namespace WMS.Repository.Impl
         public Item_MT GetByID(object id)
         {
             var query = (from i in Db.Item_MT
-                         where i.ItemIDSys.Equals(id) && i.Active == 1
+                         where i.ItemIDSys== (int)id && i.Active == 1
                          select i).Include(b => b.ItemUnitMapping).SingleOrDefault();
             return query;
         }
@@ -54,7 +54,7 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var existedItem = (from i in Db.Item_MT
-                               where i.ItemIDSys.Equals(id)
+                               where i.ItemIDSys== (int)id
                                select i).SingleOrDefault();
             existedItem.UpdateDate = DateTime.Now;
             existedItem.UserUpdate = "1";

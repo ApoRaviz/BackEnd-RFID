@@ -32,7 +32,7 @@ namespace WMS.Repository.Impl
         public Supplier_MT GetByID(object id)
         {
             var Supplier = (from i in Db.Supplier_MT
-                            where i.SupIDSys.Equals(id)
+                            where i.SupIDSys== (int)id
                             select i);
             return Supplier.SingleOrDefault();
         }

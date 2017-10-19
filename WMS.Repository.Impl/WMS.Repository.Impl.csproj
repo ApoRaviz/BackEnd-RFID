@@ -54,6 +54,7 @@
     <Compile Include="CustomerAndProject\CustomerRepository.cs" />
     <Compile Include="CustomerAndProject\ProjectRepository.cs" />
     <Compile Include="Dimension\DimensionRepository.cs" />
+    <Compile Include="Inspect\InspectRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />
     <Compile Include="ItemManagement\ItemSetRepository.cs" />
     <Compile Include="Location\LocationRepository.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="RoleAndUser\UserRepository.cs" />
     <Compile Include="RoleAndUser\UserRoleRepository.cs" />
     <Compile Include="Supplier\SupplierRepository.cs" />
+    <Compile Include="UnitMaster\UnitRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">

@@ -9,33 +9,34 @@ using WIM.Core.Common.Validation;
 using WIM.Core.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.InspectionManagement;
+using WMS.Repository.Impl;
 using WMS.Service.Inspect;
 
 namespace WMS.Service.Impl.Inspect
 {
     public class InspectService : IInspectService
     {
-        private WMSDbContext db = WMSDbContext.Create();
-        private GenericRepository<Inspect_MT> repo;
+
+        private InspectRepository repo;
 
         public InspectService()
         {
-            repo = new GenericRepository<Inspect_MT>(db);
+            repo = new InspectRepository ();
         }
 
         public IEnumerable<InspectType> GetInspectTypes()
         {
-            return db.InspectType;
-        }
+            return repo.GetType();
+        } 
 
         public IEnumerable<Inspect_MT> GetInspects()
         {
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public Inspect_MT GetInspectBySupIDSys(int id)
         {
-            Inspect_MT Inspect = db.Inspect_MT.Find(id);
+            Inspect_MT Inspect = repo.GetByID(id);
             return Inspect;
         }
 
@@ -46,11 +47,9 @@ namespace WMS.Service.Impl.Inspect
                 Inspect.CreatedDate = DateTime.Now;
                 Inspect.UpdateDate = DateTime.Now;
                 Inspect.UserUpdate = "1";
-
-                repo.Insert(Inspect);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(Inspect);
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -65,14 +64,10 @@ namespace WMS.Service.Impl.Inspect
         {
             using (var scope = new TransactionScope())
             {
-                var existedInspect = repo.GetByID(id);
-                existedInspect.InspectName = inspect.InspectName;
-                existedInspect.UpdateDate = DateTime.Now;
-                existedInspect.UserUpdate = "1";
-                repo.Update(existedInspect);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(inspect);
+
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -87,15 +82,8 @@ namespace WMS.Service.Impl.Inspect
         {
             using (var scope = new TransactionScope())
             {
-                var existedInspect = repo.GetByID(id);
-                existedInspect.Active = 0;
-                existedInspect.UpdateDate = DateTime.Now;
-                existedInspect.UserUpdate = "1";
-                repo.Update(existedInspect);
-                db.SaveChanges();
+                repo.Delete(id);
                 scope.Complete();
-
-
                 return true;
             }
         }

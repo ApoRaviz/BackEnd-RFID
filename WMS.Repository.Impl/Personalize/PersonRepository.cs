@@ -27,7 +27,7 @@ namespace WMS.Repository.Impl
         public Person_MT GetByID(object id)
         {
             var person = (from i in Db.Person_MT
-                          where i.PersonIDSys.Equals(id)
+                          where i.PersonIDSys== (int)id
                           select i).SingleOrDefault();
             return person;
         }

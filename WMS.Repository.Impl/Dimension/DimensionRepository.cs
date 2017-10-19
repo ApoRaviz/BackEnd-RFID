@@ -7,10 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity.Dimension;
-using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Repository;
 using WMS.Common;
-using WMS.Context;
+
 
 namespace WMS.Repository.Impl
 {
@@ -33,7 +32,7 @@ namespace WMS.Repository.Impl
         public DimensionLayout_MT GetByID(object id)
         {
             var Dimension = from c in Db.DimensionLayout_MT
-                            where c.DimensionIDSys.Equals(id)
+                            where c.DimensionIDSys== (int)id
                             select c;
             return Dimension.SingleOrDefault();
         }

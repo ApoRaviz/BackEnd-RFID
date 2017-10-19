@@ -44,7 +44,7 @@ namespace WMS.Repository.Impl
         public Category_MT GetByID(object id)
         {
             var categories = (from i in Db.Category_MT
-                              where i.CateIDSys.Equals(id) && i.Active == 1
+                              where i.CateIDSys== (int)id && i.Active == 1
                               select i).SingleOrDefault();
             return categories;
         }
@@ -63,7 +63,7 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             Category_MT existedCategory = (from i in Db.Category_MT
-                                           where i.CateIDSys.Equals(id)
+                                           where i.CateIDSys== (int)id
                                            select i).SingleOrDefault();
             existedCategory.Active = 0;
             Db.SaveChanges();
