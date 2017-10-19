@@ -30,8 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BarcodeLib">
+      <HintPath>..\Fuji.WebApi\DLL\BarcodeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\Fuji.WebApi\DLL\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,7 +48,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfirmPickingRequest.cs" />
+    <Compile Include="FujiDataImportSerialDetail.cs" />
+    <Compile Include="FujiDataLabelBarcode.cs" />
+    <Compile Include="FujiDataBarcode.cs" />
+    <Compile Include="FujiDataBarcodeDetail.cs" />
+    <Compile Include="FujiDataImportSerialHead.cs" />
+    <Compile Include="FujiPickingFromWinRequest.cs" />
     <Compile Include="FujiPickingGroup.cs" />
+    <Compile Include="FujiReportHelper.cs" />
     <Compile Include="FujiStatus.cs" />
     <Compile Include="ItemImportDto.cs" />
     <Compile Include="ParameterSearch.cs" />

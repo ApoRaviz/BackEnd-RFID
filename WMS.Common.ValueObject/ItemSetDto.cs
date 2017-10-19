@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WMS.Master;
-using WMS.Repository;
+
 
 namespace WMS.Common
 {
-    public class ItemSetDto : BaseEntityDto
+    public class ItemSetDto 
     {
         public int ItemSetIDSys { get; set; }
         public int ProjectIDSys { get; set; }

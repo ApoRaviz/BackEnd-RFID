@@ -3,6 +3,7 @@ using Fuji.Entity.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Fuji.Service.ItemImport
         IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 50);
         IEnumerable<ImportSerialDetail> GetImportSerialDetailByHeadID(string headID);
         IEnumerable<ImportSerialHead> GetDataByColumn(string column, string keyword);
-        ImportSerialHead GetItemByDocID(string id);
+        ImportSerialHead GetItemByDocID(string id, bool isIncludeChild = false);
         ItemImportDto GetItemByDocID_Handy(string id);
         string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);
         ImportSerialHead CreateItem(ImportSerialHead Item);
@@ -30,6 +31,7 @@ namespace Fuji.Service.ItemImport
         bool ClearPickingGroup(string orderID);
         FujiPickingGroup GetPickingByOrderNo(string orderNo, bool isAddItem = false);
         bool RegisterRFID_HANDY(RegisterRFIDRequest registerRequest, string username);
-        IEnumerable<ImportSerialDetail> FindImportSerialDetailByCriteria(ParameterSearch parameterSearch);
+        IEnumerable<ImportSerialDetail> FindImportSerialDetailByCriteria(ParameterSearch parameterSearch, out int totalRecord);
+        StreamContent GetReportStream(ImportSerialHead item);
     }
 }

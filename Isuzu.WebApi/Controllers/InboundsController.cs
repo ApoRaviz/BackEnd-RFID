@@ -16,9 +16,8 @@ using WIM.Core.Common.Validation;
 using System.Text;
 using System.Security.Claims;
 using Isuzu.Service.Impl;
-using Isuzu.Repository;
 using Isuzu.Common.ValueObject;
-
+using Isuzu.Entity;
 
 namespace Isuzu.Service.Impl
 {
@@ -281,7 +280,7 @@ namespace Isuzu.Service.Impl
         [Route("items/{pageIndex}/{pageSize}")]
         public HttpResponseMessage GetByPaging(int pageIndex,int pageSize)
         {
-            IResponseData<DataInboundGroupItems> respones = new ResponseData<DataInboundGroupItems>();
+            IResponseData<IsuzuDataInboundGroupItems> respones = new ResponseData<IsuzuDataInboundGroupItems>();
             try
             {
                  
@@ -289,7 +288,7 @@ namespace Isuzu.Service.Impl
                 IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroupPaging(pageIndex,pageSize,out totalRecord);
                 if(items != null && totalRecord > 0)
                 {
-                    DataInboundGroupItems dataItem = new DataInboundGroupItems(totalRecord,items);
+                    IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord,items);
                     respones.SetData(dataItem);
                     respones.SetStatus(HttpStatusCode.OK);
                 }
@@ -311,7 +310,7 @@ namespace Isuzu.Service.Impl
             IResponseData<InboundItemsHead> respones = new ResponseData<InboundItemsHead>();
             try
             {
-                InboundItemsHead item = InboundService.GetInboundGroupByInvoiceNumber(invNo);
+                InboundItemsHead item = InboundService.GetInboundGroupByInvoiceNumber(invNo,true);
                 if (item != null)
                 {
                     respones.SetData(item);
@@ -380,14 +379,14 @@ namespace Isuzu.Service.Impl
         [Route("itemImport/{pageIndex}/{pageSize}")]
         public HttpResponseMessage GetItemByPaging(int pageIndex, int pageSize)
         {
-            IResponseData<DataInboundItems> respones = new ResponseData<DataInboundItems>();
+            IResponseData<IsuzuDataInboundItems> respones = new ResponseData<IsuzuDataInboundItems>();
             try
             {
                 int totalRecord = 0;
                 IEnumerable<InboundItems> items = InboundService.GetInboundItemPaging(pageIndex, pageSize, out totalRecord);
                 if (totalRecord > 0)
                 {
-                    DataInboundItems ret = new DataInboundItems(totalRecord, items);
+                    IsuzuDataInboundItems ret = new IsuzuDataInboundItems(totalRecord, items);
                     respones.SetStatus(HttpStatusCode.OK);
                     respones.SetData(ret);
                 }
@@ -469,9 +468,9 @@ namespace Isuzu.Service.Impl
             }
 
             var provider = new MultipartFormDataStreamProvider(root);
-            var userID = "SYSTEM";
-            IResponseData<IEnumerable<InboundItems>> response = new ResponseData<IEnumerable<InboundItems>>();
+            ResponseData<List<InboundItems>> response = new ResponseData<List<InboundItems>>();
             List<InboundItems> inboundList = new List<InboundItems>();
+            bool isDubplicat = false;
             try
             {
                 // Read the form data.
@@ -481,80 +480,29 @@ namespace Isuzu.Service.Impl
                 // This illustrates how to get the file names.
                 foreach (MultipartFileData file in provider.FileData)
                 {
-                    int num = new Random().Next(100);
-                    string dir = System.IO.Path.GetDirectoryName(file.LocalFileName);
-                    string newFileName = dir + "\\" + "IMPORT_" + num + "_" + DateTime.Now.ToString("ddMMyyyyHHmmss");
-                    System.IO.File.Copy(file.LocalFileName, newFileName + ".xlsx");
-                    System.IO.File.Delete(file.LocalFileName);
-
-                    string path = newFileName + ".xlsx";
-
-                    #region ExcelPackage
-                    using (var pck = new ExcelPackage())
+                    IsuzuDataImport returnImported = InboundService.OpenReadExcel(file.LocalFileName);
+                    if (returnImported != null)
                     {
-                        using (var stream = File.OpenRead(path))
+                        if (returnImported.isDuplicated)
                         {
-                            pck.Load(stream);
-                        }
-
-                        var ws = pck.Workbook.Worksheets.First();
-                        if (ws != null)
-                        {
-
-                            for (int i = 2; i <= ws.Dimension.End.Row; i++)
-                            {
-                                if (!string.IsNullOrEmpty(ws.Cells[i, 1].Text))
-                                {
-                                    InboundItems inbound = new InboundItems();
-                                    inbound.InvNo = GetAutoGen(ws.Cells[i, 1].Text);
-                                    inbound.SeqNo = Convert.ToInt32(ws.Cells[i, 2].Text);
-                                    inbound.ITAOrder = ws.Cells[i, 3].Text;
-                                    inbound.ISZJOrder = ws.Cells[i, 4].Text;
-                                    inbound.PartNo = ws.Cells[i, 5].Text;
-                                    inbound.ParrtName = ws.Cells[i, 6].Text;
-                                    inbound.Qty = Convert.ToInt32(ws.Cells[i, 7].Text);
-                                    inbound.Vendor = ws.Cells[i, 8].Text;
-                                    inbound.Shelf = ws.Cells[i, 9].Text;
-                                    inbound.Destination = ws.Cells[i, 10].Text;
-                                    if (!string.IsNullOrEmpty(inbound.ISZJOrder))
-                                        inboundList.Add(inbound);
-                                }
-                            }
-                        }
-                    }
-                    #endregion
-
-                  
-
-                    var duplicateKeys = inboundList.GroupBy(gb => gb.ISZJOrder)
-                         .Where(w => w.Count() > 1)
-                         .Select(s => s.FirstOrDefault());
-
-
-                    
-                    if (duplicateKeys.Count() > 0)
-                    {
-                        inboundList = duplicateKeys.ToList();
-                        response.SetData(inboundList);
-                        response.SetStatus(HttpStatusCode.Conflict);
-                    }
-                    else
-                    {
-                        //response.SetData(InboundService.GetInboundItemByInvoiceNumber("V170646"));
-                        //response.SetStatus(HttpStatusCode.OK);
-                        IEnumerable<InboundItems> listDuplicateInbound = InboundService.ImportInboundItemList(inboundList, userID);
-                        if (listDuplicateInbound.Count() > 0)
-                        {
-                            response.SetData(listDuplicateInbound);
-                            response.SetStatus(HttpStatusCode.Conflict);
+                            isDubplicat = true;
+                            inboundList = returnImported.listItem;
+                            break;
                         }
                         else
-                        {
-                            response.SetData(inboundList);
-                            response.SetStatus(HttpStatusCode.OK);
-                        }
+                            inboundList.AddRange(returnImported.listItem);
                     }
+                }
 
+                if (isDubplicat)
+                {
+                    response.SetData(inboundList);
+                    response.SetStatus(HttpStatusCode.Conflict);
+                }
+                else
+                {
+                    response.SetData(inboundList);
+                    response.SetStatus(HttpStatusCode.OK);
                 }
 
             }
@@ -565,22 +513,6 @@ namespace Isuzu.Service.Impl
             }
 
             return Request.ReturnHttpResponseMessage(response);
-        }
-        private string GetAutoGen(string input)
-        {
-            //if (input.Length == 1)
-            //{
-            //    switch (input.Trim().ToUpper())
-            //    {
-            //        case "C":
-            //            input = input + DateTime.Now.ToString("yyMMdd");
-            //            break;
-            //        case "R":
-            //            input = input + DateTime.Now.ToString("yyMMdd");
-            //            break;
-            //    }
-            //}
-            return input;
         }
 
         [HttpGet]
@@ -617,109 +549,12 @@ namespace Isuzu.Service.Impl
 
                 string fileName = "{0}_{1}.{2}";
                 fileName = String.Format(fileName, "Export_Isuzu_", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
-                Encoding encoding = Encoding.Default;
-                DataTable dt = getExportInboundDataTable(inboundItems.ToList());
-                MemoryStream ms = new MemoryStream();
-                using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
-                {
-                    ExcelWorksheet sheet = package.Workbook.Worksheets.Add("report");
-
-                    int idxRow = 1;
-                    int idxCol = 1;
-                    for (int col = 0; col < dt.Columns.Count; col++)
-                    {
-                        var cell = sheet.Cells[idxRow, idxCol + col];
-                        var border = cell.Style.Border;
-                        cell.Value = dt.Columns[col].ColumnName;
-                    }
-
-                    idxRow = idxRow + 1;
-                    for (int row = 0; row < dt.Rows.Count; row++)
-                    {
-                        for (int col = 0; col < dt.Columns.Count; col++)
-                        {
-                            var cell = sheet.Cells[idxRow + row, idxCol + col];
-                            if (dt.Rows[row][col] is DateTime)
-                            {
-                                DateTime ddt = (DateTime)dt.Rows[row][col];
-                                cell.Value = ddt.ToString("yyyy/MM/dd", new System.Globalization.CultureInfo("en-US"));
-                            }
-                            else
-                                cell.Value = dt.Rows[row][col].ToString();
-
-                        }
-                    }
-
-                    sheet.Cells.AutoFitColumns();
-
-                    package.SaveAs(ms);
-
-                }
-
-                DownloadFile(ms, fileName);
+                DataTable dt = IsuzuReportHelper.getExportInboundDataTable(inboundItems.ToList());
+                IsuzuReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
 
             }
             result = new HttpResponseMessage(HttpStatusCode.OK);
             return result;
-        }
-
-        private DataTable getExportInboundDataTable(List<InboundItems> items)
-        {
-            DataTable dataTable = new DataTable();
-            //custom fields
-            if (items != null)
-            {
-                dataTable.Columns.Add(new DataColumn("No."));
-                dataTable.Columns.Add(new DataColumn("ITA Order"));
-                dataTable.Columns.Add(new DataColumn("ISZJ Order"));
-                dataTable.Columns.Add(new DataColumn("Part No."));
-                dataTable.Columns.Add(new DataColumn("Part Name"));
-                dataTable.Columns.Add(new DataColumn("Q'ty"));
-                dataTable.Columns.Add(new DataColumn("Vendor"));
-                dataTable.Columns.Add(new DataColumn("Shelf"));
-                dataTable.Columns.Add(new DataColumn("Destination"));
-                dataTable.Columns.Add(new DataColumn("Carton No."));
-                dataTable.Columns.Add(new DataColumn("Case No."));
-                
-                for (int i = 0; i < items.Count();i++) 
-                {
-                    //if(items[i].Status == IsuzuStatus.SHIPPED.ToString())
-                    //{ 
-                        object[] obj = new object[11];
-                        obj[0] = items[i].SeqNo;
-                        obj[1] = items[i].ITAOrder;
-                        obj[2] = items[i].ISZJOrder;
-                        obj[3] = items[i].PartNo;
-                        obj[4] = items[i].ParrtName;
-                        obj[5] = items[i].Qty.ToString();
-                        obj[6] = items[i].Vendor;
-                        obj[7] = items[i].Shelf;
-                        obj[8] = items[i].Destination;
-                        obj[9] = items[i].CartonNo;
-                        obj[10] = items[i].CaseNo;
-                        dataTable.Rows.Add(obj);
-                    //}
-                }
-            }
-
-            return dataTable;
-        }
-        private static bool DownloadFile(MemoryStream ms, string fileName)
-        {
-            //if (!File.Exists(path))
-            //    return false;
-
-            System.Web.HttpResponse respone = System.Web.HttpContext.Current.Response;
-            respone.ClearContent();
-            respone.Clear();
-            respone.AppendHeader("content-disposition", "attachment; filename=" + fileName);
-            respone.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            ms.WriteTo(respone.OutputStream);
-            //respone.WriteFile(path);
-            respone.Flush();
-            respone.Close();
-
-            return true;
         }
 
 
@@ -838,37 +673,5 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(response);
         }
 
-    }
-
-    public class DataBarcode
-    {
-
-        public byte[] Barcode { get; private set; }
-        public string BarcodeInfo { get; private set; }
-        public DataBarcode(byte[] barcode, string barcodeInfo)
-        {
-            this.Barcode = barcode;
-            this.BarcodeInfo = barcodeInfo;
-        }
-    }
-    public class DataInboundItems
-    {
-        public DataInboundItems(int totalRecord, IEnumerable<InboundItems> items)
-        {
-            this.TotalRecord = totalRecord;
-            this.Items = items;
-        }
-        public int TotalRecord { get; set; }
-        public IEnumerable<InboundItems> Items { get; set; }
-    }
-    public class DataInboundGroupItems
-    {
-        public DataInboundGroupItems(int totalRecord, IEnumerable<InboundItemsHead> items)
-        {
-            this.TotalRecord = totalRecord;
-            this.Items = items;
-        }
-        public int TotalRecord { get; set; }
-        public IEnumerable<InboundItemsHead> Items { get; set; }
     }
 }

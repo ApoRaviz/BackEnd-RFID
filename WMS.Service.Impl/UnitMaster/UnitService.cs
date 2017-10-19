@@ -12,33 +12,34 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WMS.Context;
+using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {
     public class UnitService : IUnitService
     {
-        private MasterContext Db = MasterContext.Create();
-        private GenericRepository<Unit_MT> Repo;
+        private WMSDbContext Db = WMSDbContext.Create();
+
 
         public UnitService()
         {
-            Repo = new GenericRepository<Unit_MT>(Db);
+            
         }        
 
-        public IEnumerable<ProcGetUnits_Result> GetUnits()
+        public IEnumerable<Unit_MT> GetUnits()
         {
-            return Db.ProcGetUnits().ToList();
+            return Db.Unit_MT.ToList();
         }
 
-        public ProcGetUnitByUnitIDSys_Result GetUnitByUnitIDSys(int id)
+        public Unit_MT GetUnitByUnitIDSys(int id)
         {
-            return Db.ProcGetUnitByUnitIDSys(id).FirstOrDefault();
+            return Db.Unit_MT.SingleOrDefault(u => u.UnitIDSys == id);
         }
 
         public Unit_MT GetUnitByCusIDSysIncludeProjects(int id)
         {
-            var unit = Repo.GetByID(id);
+            var unit = GetUnitByUnitIDSys(id);
             if (unit != null)
             {
                 //return unit;
@@ -58,7 +59,7 @@ namespace WMS.Service
                 unit.UpdateDate = DateTime.Now;
                 unit.UserUpdate = "1";
 
-                Repo.Insert(unit);
+                Db.Unit_MT.Add(unit);
                 try
                 {
                     Db.SaveChanges();
@@ -82,12 +83,11 @@ namespace WMS.Service
         {           
             using (var scope = new TransactionScope())
             {
-                var existedUnit = Repo.GetByID(id);
+                var existedUnit = GetUnitByUnitIDSys(id);
                 existedUnit.UnitName = unit.UnitName;
                 existedUnit.ProjectIDSys = unit.ProjectIDSys;
                 existedUnit.UpdateDate = DateTime.Now;
                 existedUnit.UserUpdate = "1";
-                Repo.Update(existedUnit);
                 try
                 {
                     Db.SaveChanges();
@@ -111,11 +111,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedUnit = Repo.GetByID(id);
+                var existedUnit = GetUnitByUnitIDSys(id);
                 existedUnit.Active = 0;
                 existedUnit.UpdateDate = DateTime.Now;
                 existedUnit.UserUpdate = "1";
-                Repo.Update(existedUnit);
                 Db.SaveChanges();
                 scope.Complete();
                 return true;

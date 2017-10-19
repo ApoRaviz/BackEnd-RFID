@@ -519,6 +519,14 @@
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
+      <Name>WIM.Core.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
       <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
       <Name>WIM.Core.Security.Context</Name>
@@ -531,17 +539,21 @@
       <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
       <Name>WIM.Core.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
+      <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
+      <Name>WIM.Core.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
+      <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
+      <Name>WIM.Core.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
       <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
       <Name>WMS.Common.ValueObject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Master\WMS.Master.csproj">
-      <Project>{4b54c7a7-0b9d-40a2-95d3-2c96d052ae0b}</Project>
-      <Name>WMS.Master</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
-      <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
-      <Name>WMS.Repository</Name>
+    <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
+      <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
+      <Name>WMS.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Service.Impl\WMS.Service.Impl.csproj">
       <Project>{dc9513cf-fdab-4170-8131-4a1fd5d048be}</Project>

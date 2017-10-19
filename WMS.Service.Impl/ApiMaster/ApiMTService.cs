@@ -7,40 +7,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Master;
-using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Context;
+using WIM.Core.Repository.Impl;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class ApiMTService : IApiMTService
     {
-        private MasterContext db = MasterContext.Create();
-        private GenericRepository<Api_MT> repo;
+
+        ApiMTRepository repo;
 
         public ApiMTService()
         {
-            repo = new GenericRepository<Api_MT>(db);
+            repo = new ApiMTRepository();
         }
 
         public IEnumerable<Api_MT> GetAPIs()
         {
-            
-            return repo.GetAll(); ;
+            return repo.Get(); ;
         }
 
         public ApiMTDto GetApiMT(string id)
         {
-            Api_MT ApiMT = (from i in db.Api_MT
-                            where i.ApiIDSys == id 
-                            select i).SingleOrDefault();
-
+            Api_MT ApiMT = repo.GetByID(id);
             ApiMTDto ApiMTDto = Mapper.Map<Api_MT, ApiMTDto>(ApiMT); 
-
             return ApiMTDto;
         }        
 
@@ -50,28 +47,25 @@ namespace WMS.Service
             {
                 const string pool = "abcdefghijklmnopqrstuvwxyz0123456789";
                 Random rnd = new Random();
-                for (int i = 0; i < ApiMT.Count; i++)
+                try
+                {
+                    for (int i = 0; i < ApiMT.Count; i++)
                 {
                     var chars = Enumerable.Range(0, 4)
                     .Select(x => pool[rnd.Next(0, pool.Length)]);
                     ApiMT[i].ApiIDSys = new string(chars.ToArray());
                     repo.Insert(ApiMT[i]);
                 }
-                try
-                {
-                    db.SaveChanges();
                     scope.Complete();
                 }
                 catch (DbEntityValidationException)
                 {
-                    db.Dispose();
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4011));
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    db.Dispose();
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
@@ -83,13 +77,12 @@ namespace WMS.Service
         public bool UpdateApiMT(string id, Api_MT ApiMT)
         {
             using (var scope = new TransactionScope())
-            {
-                var existedApiMT = repo.GetByID(id);
-                existedApiMT.ApiMenuMappings = ApiMT.ApiMenuMappings;
-                repo.Update(existedApiMT);
-                try
+            {   try
                 {
-                    db.SaveChanges();
+                    var existedApiMT = repo.GetByID(id);
+                    existedApiMT.ApiMenuMappings = ApiMT.ApiMenuMappings;
+                    repo.Update(existedApiMT);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException)
                 {
@@ -103,7 +96,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -112,13 +104,11 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedApiMT = repo.GetByID(id);
-                repo.Delete(existedApiMT);
-
                 try
                 {
-                    db.SaveChanges();
-                    scope.Complete();
+                     var existedApiMT = repo.GetByID(id);
+                     repo.Delete(existedApiMT);
+                     scope.Complete();
                 }catch (DbUpdateConcurrencyException)
             {
                 scope.Dispose();
@@ -127,7 +117,6 @@ namespace WMS.Service
             }
                 return true;
             }
-
         }
 
         public void HandleValidationException(DbEntityValidationException ex)

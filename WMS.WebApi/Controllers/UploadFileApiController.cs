@@ -11,13 +11,13 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
 using WMS.WebApi.Report;
-using WMS.Master.Import;
 using System.IO;
-using WMS.Master;
 using System.Globalization;
 using Microsoft.AspNet.Identity;
 using WMS.Common;
 using WMS.Service;
+using WMS.Entity.ImportManagement;
+using WMS.Service.Import;
 
 namespace WMS.WebApi.Controllers
 {

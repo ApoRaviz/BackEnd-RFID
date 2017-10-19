@@ -12,8 +12,7 @@ namespace Fuji.Entity.ItemManagement
     public class ImportSerialDetail
     {
         [Key]
-        public string DetailID { get; set; }
-        public string HeadID { get; set; }
+        public string DetailID { get; set; }        
         public string ItemCode { get; set; }
         public string SerialNumber { get; set; }
         public string BoxNumber { get; set; }
@@ -25,6 +24,7 @@ namespace Fuji.Entity.ItemManagement
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string UserUpdate { get; set; }
 
+        public string HeadID { get; set; }
         public virtual ImportSerialHead ImportSerialHead { get; set; }
     }
 }

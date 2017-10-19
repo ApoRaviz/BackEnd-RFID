@@ -11,5 +11,8 @@ namespace Fuji.Common.ValueObject
         public List<string> Columns { get; set; }
         public List<string> Keywords { get; set; }
         public string SpeacialQuery { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
+        public int TotalRecord { get; set; }
     }
 }

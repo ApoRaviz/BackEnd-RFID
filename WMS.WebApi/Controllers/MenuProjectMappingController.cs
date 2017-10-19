@@ -8,7 +8,8 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Master;
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Entity.RoleAndPermission;
 using WMS.Common;
 using WMS.Service;
 namespace WMS.WebApi.Controllers
@@ -369,12 +370,12 @@ namespace WMS.WebApi.Controllers
             { MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserId(), ProID);
                 res = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
             }
-            IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID,MenuPermis);
+            IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID,MenuPermis).ToList();
              
 
             foreach (MenuProjectMappingDto resX in res)
             {
-                FindParentMenu(MenuAll.ToList(), resX, resX.MenuIDSysParent);
+                FindParentMenu(MenuAll, resX, resX.MenuIDSysParent);
                 if (MenuParent != null)
                 {
                     Menu.Add(MenuParent);
@@ -437,7 +438,7 @@ namespace WMS.WebApi.Controllers
             return false;
         }
 
-        private void FindParentMenu(List<MenuProjectMappingDto> data, MenuProjectMappingDto menuCur, int id)
+        private void FindParentMenu(IEnumerable<MenuProjectMappingDto> data, MenuProjectMappingDto menuCur, int id)
         {
             if (!FindChildenMenu(Menu, menuCur, id))
             {

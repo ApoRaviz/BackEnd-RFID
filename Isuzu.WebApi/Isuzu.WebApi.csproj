@@ -65,14 +65,14 @@
     <Reference Include="Isuzu.Common.ValueObject">
       <HintPath>..\Isuzu.Common.ValueObject\bin\Debug\Isuzu.Common.ValueObject.dll</HintPath>
     </Reference>
+    <Reference Include="Isuzu.Entity">
+      <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
+    </Reference>
     <Reference Include="Isuzu.Repository">
       <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
     </Reference>
     <Reference Include="Isuzu.Service">
       <HintPath>..\Isuzu.Service\bin\Debug\Isuzu.Service.dll</HintPath>
-    </Reference>
-    <Reference Include="Isuzu.Service.Impl">
-      <HintPath>..\Isuzu.Service.Impl\bin\Debug\Isuzu.Service.Impl.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
@@ -299,9 +299,6 @@
     </Reference>
     <Reference Include="WIM.Core.Common.ValueObject">
       <HintPath>..\WIM.Core.Common.ValueObject\bin\Debug\WIM.Core.Common.ValueObject.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Security">
-      <HintPath>..\WIM.Core.Security\bin\Debug\WIM.Core.Security.dll</HintPath>
     </Reference>
     <Reference Include="WIM.Core.Security.Context">
       <HintPath>..\WIM.Core.Security.Context\bin\Debug\WIM.Core.Security.Context.dll</HintPath>
@@ -570,6 +567,16 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Report\GenerateHeaderReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Isuzu.Service.Impl\Isuzu.Service.Impl.csproj">
+      <Project>{e8f620e3-cfe2-401c-a9ec-9de16eda37bb}</Project>
+      <Name>Isuzu.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
+      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
+      <Name>WIM.Core.Security</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

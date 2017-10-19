@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Security.Entity
 {

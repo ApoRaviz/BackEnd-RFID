@@ -7,31 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Master;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
+using WMS.Context;
+using WMS.Entity.ItemManagement;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class CategoryService : ICategoryService
     {
-        private MasterContext db = MasterContext.Create();
-        private GenericRepository<Category_MT> repo;
-
+        private CategoryRepository repo;
+        private WMSDbContext proc;
         public CategoryService()
         {
-            repo = new GenericRepository<Category_MT>(db);
+            proc = new WMSDbContext();
+            repo = new CategoryRepository();
         }
 
         public IEnumerable<CategoryDto> GetCategories()
         {
-            IEnumerable<Category_MT> categorys = (from i in db.Category_MT
-                                          where i.Active == 1
-                                          select i).ToList();
+            IEnumerable<Category_MT> categorys = repo.Get();
 
             IEnumerable<CategoryDto> categoryDtos = categorys.Select(b => new CategoryDto()
             {
@@ -46,10 +46,7 @@ namespace WMS.Service
 
         public IEnumerable<CategoryDto> GetCategoriesByProjectID(int projectIDSys)
         {
-            IEnumerable<Category_MT> categorys = (from i in db.Category_MT
-                                                  where i.Active == 1 && i.ProjectIDSys == projectIDSys
-                                                  select i).ToList();
-
+            IEnumerable<Category_MT> categorys = repo.GetByProjectID(projectIDSys);
             IEnumerable<CategoryDto> categoryDtos = categorys.Select(b => new CategoryDto()
             {
                 CateIDSys = b.CateIDSys,
@@ -63,10 +60,7 @@ namespace WMS.Service
 
         public CategoryDto GetCategory(int id)
         {
-            Category_MT category = (from i in db.Category_MT
-                            where i.CateIDSys == id && i.Active == 1
-                            select i).SingleOrDefault();
-
+            Category_MT category = repo.GetByID(id);
             CategoryDto categoryDto = new CategoryDto();
             categoryDto.CateIDSys = category.CateIDSys;
             categoryDto.CateID = category.CateID;
@@ -80,16 +74,15 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                category.CateID = db.ProcGetNewID("CT").FirstOrDefault();
+                category.CateID = proc.ProcGetNewID("CT").FirstOrDefault();
                 category.Active = 1;
                 category.CreatedDate = DateTime.Now;
                 category.UpdateDate = DateTime.Now;
                 category.UserUpdate = "1";
-
-                repo.Insert(category);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(category);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -101,7 +94,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return category.CateIDSys;
             }
         }
@@ -114,10 +106,10 @@ namespace WMS.Service
                 existedCategory.CateName = category.CateName;
                 existedCategory.UpdateDate = DateTime.Now;
                 existedCategory.UserUpdate = "1";
-                repo.Update(existedCategory);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(existedCategory);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -129,7 +121,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return true;
             }
         }
@@ -142,11 +134,10 @@ namespace WMS.Service
                 existedCategory.Active = 0;
                 existedCategory.UpdateDate = DateTime.Now;
                 existedCategory.UserUpdate = "1";
-                repo.Update(existedCategory);
                 try
                 {
-                db.SaveChanges();
-                scope.Complete();
+                    repo.Update(existedCategory);
+                    scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {

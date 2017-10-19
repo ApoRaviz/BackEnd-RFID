@@ -8,11 +8,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+using WIM.Core.Security.Entity.UserManagement;
+
 namespace WIM.Core.Security.Entity
 {
     public class ApplicationUserLogin : IdentityUserLogin<string> { }
     public class ApplicationUserClaim : IdentityUserClaim<string> { }
 
+  
     public class ApplicationUser : IdentityUser<string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
     {
         public string Name { get; set; }
@@ -24,6 +27,7 @@ namespace WIM.Core.Security.Entity
         public string UserUpdate { get; set; }
         public bool IsSysAdmin { get; set; }
         //public int ProjectIDSys { get; set; }
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, string> manager, string authenticationType)
         {
