@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.UserManagement;
-using WMS.Repository;
 
 namespace WMS.Common
 {
-    public class PersonDto : BaseEntityDto
+    public class PersonDto 
     {
         public int PersonIDSys { get; set; }
         public string PersonID { get; set; }

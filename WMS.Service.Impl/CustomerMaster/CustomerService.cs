@@ -15,30 +15,22 @@ using System.Data.Entity;
 using WMS.Common;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class CustomerService : ICustomerService
     {
-        private CoreDbContext db = CoreDbContext.Create();
-        private GenericRepository<Customer_MT> Repo;
+        private CustomerRepository Repo;
 
         public CustomerService()
         {
-            Repo = new GenericRepository<Customer_MT>(db);
+            Repo = new CustomerRepository();
         }
 
         public object GetCustomerAll()
         {
-            var query = from ctm in db.Customer_MT
-                        where ctm.Active == 1
-                        select new
-                        {
-                            ctm.CusID,
-                            ctm.CusIDSys,
-                            ctm.CusName
-                        };
-
+            var query = Repo.Get();
             return query.ToList();
         }
 
@@ -59,71 +51,39 @@ namespace WMS.Service
 
         public CustomerDto GetCustomerByCusIDSysIncludeProjects(int id)
         {
-            //var customer = GetCustomerByCusIDSys(id);
-            //if (customer != null)
-            //{
-            //    Mapper.Initialize(cfg => cfg.CreateMap<ProcGetCustomerByCusIDSys_Result, CustomerDto>());
-            //    CustomerDto customerDto = Mapper.Map<ProcGetCustomerByCusIDSys_Result, CustomerDto>(customer);
+            var customer = Repo.GetByID(id);
+            if (customer != null)
+            {
+                CustomerDto customerDto = Mapper.Map<Customer_MT, CustomerDto>(customer);
 
-            //    var projects = db.ProcGetProjectsByCusIDSys(customerDto.CusIDSys).ToList();
-            //    Mapper.Initialize(cfg => cfg.CreateMap<ProcGetProjectsByCusIDSys_Result, ProjectDto>());
-            //    ICollection<ProjectDto> projectsDto = Mapper.Map<ICollection<ProcGetProjectsByCusIDSys_Result>, ICollection<ProjectDto>>(projects);
-            //    customerDto.Project_MT = projectsDto;
-
-            //    return customerDto;
-            //}
+                return customerDto;
+            }
             return null;
         }
 
         public object GetCustomers(string userid)
         {
-            // #JobComment
-            var query = (from ctm in db.Customer_MT
-                         join c in db.Project_MT on ctm.CusIDSys equals c.CusIDSys
-                         join d in db.Role on c.ProjectIDSys equals d.ProjectIDSys
-                         join e in db.UserRoles on d.RoleID equals e.RoleID
-                         where e.UserID == userid
-                         select new
-                         {
-                             ctm.CusID,
-                             ctm.CusIDSys,
-                             ctm.CusName
-                         }).Distinct();
-
-            return query.ToList();
+            var query = Repo.GetByUserID(userid);
+            return query;
         }
 
         public object GetProjectByCustomer(string userid, int cusIDSys)
         {
-            var query = from ctm in db.Customer_MT
-                        join pm in db.Project_MT on ctm.CusIDSys equals pm.CusIDSys
-                        join r in db.Role on pm.ProjectIDSys equals r.ProjectIDSys
-                        join ru in db.UserRoles on r.RoleID equals ru.RoleID
-                        where ru.UserID == userid && pm.CusIDSys == cusIDSys
-                        select new
-                        {
-                            pm.ProjectID,
-                            pm.ProjectIDSys,
-                            pm.ProjectName,
-                        };
-            return query.ToList();
+            var query = Repo.GetProjectByUserIDCusID(userid, cusIDSys);
+            return query;
         }
 
         public Customer_MT GetCustomerByCusIDSys(int id)
         {
-            return db.Customer_MT.SingleOrDefault(c => c.CusIDSys == id);
+            return Repo.GetByID(id);
         }
 
         public CustomerDto GetCustomersInclude(int id, string[] tableNames)
         {
-            var customer = from cus in db.Customer_MT
-                           where cus.CusIDSys == id && cus.Active == 1
-                           select cus;
+            var customer = Repo.GetByID(id);
             if (customer != null)
             {
-                var query = (from i in db.Customer_MT
-                             where i.CusIDSys == id && i.Active == 1
-                             select i);
+                var query = Repo.GetByID(id);
                 if (tableNames != null)
                 {
                     foreach (string tableName in tableNames)
@@ -131,15 +91,13 @@ namespace WMS.Service
                         switch (tableName)
                         {
                             case "ProjectMT":
-                                query = query.Include(pj => pj.Project_MT);
                                 break;
                             default:
-                                query = query.Include(tableName);
                                 break;
                         }
                     }
                 }
-                CustomerDto customerDto = Mapper.Map<Customer_MT, CustomerDto>(query.SingleOrDefault());
+                CustomerDto customerDto = Mapper.Map<Customer_MT, CustomerDto>(query);
                 return customerDto;
             }
             return null;
@@ -173,17 +131,16 @@ namespace WMS.Service
                 customer.CreatedDate = DateTime.Now;
                 customer.UpdateDate = DateTime.Now;
                 customer.UserUpdate = "1";
-
-                Repo.Insert(customer);
                 try
                 {
-                    db.SaveChanges();
+                    Repo.Insert(customer);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                scope.Complete();
+
                 return customer.CusIDSys;
             }
         }
@@ -210,16 +167,16 @@ namespace WMS.Service
                 existedCustomer.Mobile3 = customer.Mobile3;
                 existedCustomer.UpdateDate = DateTime.Now;
                 existedCustomer.UserUpdate = "1";
-                Repo.Update(existedCustomer);
+                
                 try
                 {
-                    db.SaveChanges();
+                    Repo.Update(existedCustomer);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -233,7 +190,6 @@ namespace WMS.Service
                 existedCustomer.UpdateDate = DateTime.Now;
                 existedCustomer.UserUpdate = "1";
                 Repo.Update(existedCustomer);
-                db.SaveChanges();
                 scope.Complete();
                 return true;
             }

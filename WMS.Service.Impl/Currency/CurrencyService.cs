@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 using WIM.Core.Entity.Currency;
 using WMS.Context;
 using WMS.Repository;
-
+using WMS.Repository.Impl.Currency;
 
 namespace WMS.Service
 {
     class CurrencyService : ICurrencyService
     {
-        private WMSDbContext Db = WMSDbContext.Create();
-        private GenericRepository<CurrencyUnit> Repo;
+        private CurrencyRepository Repo;
         public CurrencyService()
         {
-            Repo = new GenericRepository<CurrencyUnit>(Db);
+            Repo = new CurrencyRepository();
         }
         public CurrencyUnit GetCurrency()
         {

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.Person;
-using WMS.Repository;
 
 namespace WMS.Common
 {
-    public class EmployeeDto : BaseEntityDto
+    public class EmployeeDto
     {
         public string EmID { get; set; }
         public int PersonIDSys { get; set; }

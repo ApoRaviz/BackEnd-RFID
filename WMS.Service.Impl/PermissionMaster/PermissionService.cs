@@ -17,32 +17,28 @@ using WMS.Common;
 using WIM.Core.Security.Context;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class PermissionService : IPermissionService
     {
-        private CoreDbContext CoreDb;
-        private SecurityDbContext SecuDb;
-        private GenericRepository<Permission> repo;
-        private GenericRepository<RolePermission> repoRolePermission;
+        private PermissionRepository repo;
 
         public PermissionService()
         {
-            CoreDb = new CoreDbContext();
-            SecuDb = new SecurityDbContext();
-            //repo = new GenericRepository<Permission>(db);
+            repo = new PermissionRepository();
             //repoRolePermission = new GenericRepository<RolePermission>(db);
         }
 
         public IEnumerable<Permission> GetPermissions()
         {
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public Permission GetPermissionByLocIDSys(string id)
         {
-            Permission Permission = CoreDb.Permission.Find(id);
+            Permission Permission = repo.GetByID(id);
             return Permission;
         }
 
@@ -50,12 +46,12 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                //Permission.Id = db.ProcGetNewID("RL").FirstOrDefault().Substring(0, 13);
                 Permission.PermissionID = Guid.NewGuid().ToString();
-                repo.Insert(Permission);
+
                 try
                 {
-                    SecuDb.SaveChanges();
+                    repo.Insert(Permission);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -67,7 +63,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return Permission.PermissionID;
             }
         }
@@ -76,12 +71,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Permission existedPermission = CoreDb.Permission.SingleOrDefault(p => p.PermissionID == id);
-                existedPermission.PermissionName = Permission.PermissionName;
-               
                 try
                 {
-                    SecuDb.SaveChanges();
+                    repo.Update(Permission);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -93,7 +86,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -102,28 +94,23 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Permission existedPermission = CoreDb.Permission.SingleOrDefault(p => p.PermissionID == id);
-                CoreDb.Permission.Remove(existedPermission);
-
                 try
                 {
-                    SecuDb.SaveChanges();
+                    repo.Delete(id);
                     scope.Complete();
                 }
-                catch (DbUpdateConcurrencyException )
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-                catch (DbUpdateException )
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-
-
                 return true;
             }
         }
@@ -147,12 +134,9 @@ namespace WMS.Service
                 RolePermission data = new RolePermission();
                 data.PermissionID = PermissionId;
                 data.RoleID = RoleId;
-
-                CoreDb.RolePermission.Add(data);
-
                 try
                 {
-                    SecuDb.SaveChanges();
+                    repo.InsertRolePermission(data);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -165,7 +149,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                
+
                 return RoleId;
             }
         }
@@ -174,19 +158,17 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                //Permission.Id = db.ProcGetNewID("RL").FirstOrDefault().Substring(0, 13);
-                foreach (var c in tree)
-                {
-                    RolePermission data = new RolePermission();
-                    data.PermissionID = c.PermissionID;
-                    data.RoleID = RoleId;
-
-                    CoreDb.RolePermission.Add(data);
-
-                }
                 try
                 {
-                    SecuDb.SaveChanges();
+                    //Permission.Id = db.ProcGetNewID("RL").FirstOrDefault().Substring(0, 13);
+                    foreach (var c in tree)
+                    {
+                        RolePermission data = new RolePermission();
+                        data.PermissionID = c.PermissionID;
+                        data.RoleID = RoleId;
+                        repo.InsertRolePermission(data);
+                    }
+
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -199,27 +181,25 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                
+
                 return RoleId;
             }
         }
 
         public bool DeleteRolePermission(string PermissionId, string RoleId)
-        {   
-            var RoleForPermissionQuery = from row in CoreDb.RolePermission
-                                         where row.PermissionID == PermissionId && row.RoleID == RoleId
-                                         select row;
-            if(RoleForPermissionQuery != null) { 
-            using (var scope = new TransactionScope())
+        {
+            var RoleForPermissionQuery = repo.GetRolePermissionQuery(PermissionId, RoleId);
+            if (RoleForPermissionQuery != null)
             {
+                using (var scope = new TransactionScope())
+                {
                     RolePermission temp = new RolePermission();
                     temp = RoleForPermissionQuery.SingleOrDefault();
                     if (temp != null)
                     {
-                        CoreDb.RolePermission.Remove(temp);
                         try
                         {
-                            SecuDb.SaveChanges();
+                            repo.DeleteRolePermission(temp);
                             scope.Complete();
                         }
                         catch (DbUpdateConcurrencyException)
@@ -230,24 +210,16 @@ namespace WMS.Service
                         }
                         return true;
                     }
+                }
             }
-            }return true;
+            return true;
         }
 
         public List<PermissionTree> GetPermissionTree(int projectid)
         {
-            var menu = from row in CoreDb.Permission
-                       where row.ProjectIDSys == projectid
-                             && !(from o in CoreDb.ApiMenuMapping
-                                  where o.Type == "A"
-                                  select o.ApiIDSys+o.MenuIDSys).Contains(row.ApiIDSys+row.MenuIDSys)
-                       select row;
-            var menutemp = from row in CoreDb.Menu_MT
-                           where (from o in CoreDb.Permission
-                                  where o.ProjectIDSys == projectid
-                                  select o.MenuIDSys).Contains(row.MenuIDSys)
-                           select row;
-            List<PermissionTree> menutree = menutemp.Select(b => new PermissionTree()
+            var menu = repo.GetRolePermissionNotApiQuery(projectid);
+            var menutemp = repo.GetMenuByPermissionsinProject(projectid);
+            List <PermissionTree> menutree = menutemp.Select(b => new PermissionTree()
             {
                 PermissionName = b.MenuName,
                 PermissionID = b.MenuIDSys.ToString()
@@ -264,7 +236,7 @@ namespace WMS.Service
             Console.Write("abc");
             for (int i = 0; i < menutree.Count; i++)
             {
-                for(int j = 0; j < listpermission.Count; j++)
+                for (int j = 0; j < listpermission.Count; j++)
                 {
                     temp = listpermission[j];
                     if (menutree[i].PermissionID == temp[0].MenuIDSys.ToString())
@@ -278,44 +250,28 @@ namespace WMS.Service
 
         public List<Permission> GetPermissionByProjectID(int ProjectID)
         {
-            var temp = from row in CoreDb.Permission
-                       where row.ProjectIDSys == ProjectID
-                       select row;
+            var temp = repo.GetPermissionByProjID(ProjectID);
             List<Permission> permission = temp.ToList();
             return permission;
         }
 
-        public List<Permission> GetPermissionByMenuID(int MenuIDSys ,int ProjectIDSys)
+        public List<Permission> GetPermissionByMenuID(int MenuIDSys, int ProjectIDSys)
         {
-            var temp = from row in CoreDb.Permission
-                       where row.MenuIDSys == MenuIDSys && row.ProjectIDSys == ProjectIDSys &&
-                               !(from i in CoreDb.ApiMenuMapping
-                                 where i.MenuIDSys == MenuIDSys && i.Type == "A"
-                                 select i.ApiIDSys).Contains(row.ApiIDSys)
-                       select row;
+            var temp = repo.GetPermissionByMenuID(MenuIDSys, ProjectIDSys);
             List<Permission> permission = temp.ToList();
             return permission;
         }
 
         public List<Permission> GetPermissionAuto(int MenuIDSys, int ProjectIDSys)
         {
-            var temp = from row in CoreDb.Permission
-                       where row.MenuIDSys == MenuIDSys && row.ProjectIDSys == ProjectIDSys &&
-                               (from i in CoreDb.ApiMenuMapping
-                                 where i.MenuIDSys == MenuIDSys && i.Type == "A"
-                                 select i.ApiIDSys).Contains(row.ApiIDSys)
-                       select row;
+            var temp = repo.GetPermissionAuto(MenuIDSys, ProjectIDSys);
             List<Permission> permission = temp.ToList();
             return permission;
         }
 
         public List<Permission> GetPermissionByRoleID(string RoleID, int ProjectIDSys)
         {
-            var temp = from row in CoreDb.Permission
-                       where row.ProjectIDSys == ProjectIDSys && (from o in CoreDb.RolePermission
-                               where o.RoleID == RoleID
-                               select o.PermissionID).Contains(row.PermissionID)
-                       select row;
+            var temp = repo.GetPermissionByRoleID(RoleID, ProjectIDSys);
             List<Permission> permission = temp.ToList();
             return permission;
         }
@@ -325,29 +281,28 @@ namespace WMS.Service
             List<RolePermissionDto> temp = new List<RolePermissionDto>();
             if (permissionID != null)
             {
-                var temp1 = (from row in CoreDb.RolePermission
-                                             where row.PermissionID == permissionID
-                                             select row);
+                var temp1 = repo.GetRolePermissionByPerID(permissionID);
                 var y = temp1.ToList();
-                temp = temp1.Select(b => new RolePermissionDto() {
+                temp = temp1.Select(b => new RolePermissionDto()
+                {
                     RoleID = b.RoleID,
                     Name = b.PermissionID
                 }).ToList();
             }
             RolePermission x = new RolePermission();
-                
-                using (var scope = new TransactionScope())
+
+            using (var scope = new TransactionScope())
+            {
+                try
                 {
                     for (int i = 0; i < temp.Count; i++)
                 {
-                    
-                        x.RoleID = temp[i].RoleID;
-                        x.PermissionID = temp[i].Name;
-                    CoreDb.RolePermission.Remove(x);
+
+                    x.RoleID = temp[i].RoleID;
+                    x.PermissionID = temp[i].Name;
+                    repo.Delete(x);
                 }
-                try
-                {
-                    SecuDb.SaveChanges();
+                
                     scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -355,7 +310,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-                catch (DbUpdateException )
+                catch (DbUpdateException)
                 {
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
@@ -364,16 +319,11 @@ namespace WMS.Service
             return true;
         }
 
-        public List<Permission> GetPermissionByProjectID(int ProjectID,string UserID)
+        public List<Permission> GetPermissionByProjectID(int ProjectID, string UserID)
         {
 
-            var temp = from ur in CoreDb.UserRoles
-                       join r in CoreDb.Role on ur.RoleID equals r.RoleID
-                       join rp in CoreDb.RolePermission on r.RoleID equals rp.RoleID
-                       join ps in CoreDb.Permission on rp.PermissionID equals ps.PermissionID
-                       where ur.UserID == UserID && r.ProjectIDSys == ProjectID
-                       select ps;
-            List<Permission> permission = temp.ToList();
+            var temp = repo.GetPermissionByUserProject(ProjectID, UserID);
+            List <Permission> permission = temp.ToList();
             return permission;
         }
 

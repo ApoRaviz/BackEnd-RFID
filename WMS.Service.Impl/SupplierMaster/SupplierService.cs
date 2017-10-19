@@ -15,35 +15,36 @@ using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WIM.Core.Context;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Repository.Impl;
+using WMS.Context;
 
 namespace WMS.Service
 { 
     public class SupplierService : ISupplierService
     {
-        private CoreDbContext db = CoreDbContext.Create();
-        private GenericRepository<Supplier_MT> repo;
+        private SupplierRepository repo;
+        private WMSDbContext proc;
 
         public SupplierService()
         {
-            repo = new GenericRepository<Supplier_MT>(db);
+            repo = new SupplierRepository();
+            proc = new WMSDbContext();
         }        
 
         public IEnumerable<Supplier_MT> GetSuppliers()
         {           
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public IEnumerable<Supplier_MT> GetSuppliersByProjectID(int projectID)
         {
-            var supplier = from row in db.Supplier_MT
-                           where row.ProjectIDSys == projectID
-                           select row;
+            var supplier = repo.GetByProjectID(projectID);
             return supplier;
         }
 
         public Supplier_MT GetSupplierBySupIDSys(int id)
         {           
-            Supplier_MT Supplier = db.Supplier_MT.Find(id);                                  
+            Supplier_MT Supplier = repo.GetByID(id);                                  
             return Supplier;            
         }                      
 
@@ -51,14 +52,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Supplier.SupID = db.ProcGetNewID("SL").FirstOrDefault().Substring(0, 13);
-                Supplier.CreatedDate = DateTime.Now;
-                Supplier.UpdateDate = DateTime.Now;
-                Supplier.UserUpdate = "1";
-                repo.Insert(Supplier);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(Supplier);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -79,26 +75,10 @@ namespace WMS.Service
         {           
             using (var scope = new TransactionScope())
             {
-                var existedSupplier = repo.GetByID(id);
-                existedSupplier.ProjectIDSys = supplier.ProjectIDSys;
-                existedSupplier.CompName = supplier.CompName;
-                existedSupplier.Address = supplier.Address;
-                existedSupplier.SubCity = supplier.SubCity;
-                existedSupplier.City = supplier.City;
-                existedSupplier.Province = supplier.Province;
-                existedSupplier.Zipcode = supplier.Zipcode;
-                existedSupplier.CountryCode = supplier.CountryCode;
-                existedSupplier.ContName = supplier.ContName;
-                existedSupplier.Email = supplier.Email;
-                existedSupplier.TelOffice = supplier.TelOffice;
-                existedSupplier.TelExt = supplier.TelExt;
-                existedSupplier.Mobile = supplier.Mobile;
-                existedSupplier.UpdateDate = DateTime.Now;
-                existedSupplier.UserUpdate = "1";
-                repo.Update(existedSupplier);
+          
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(supplier);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -119,15 +99,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedSupplier = repo.GetByID(id);
-                existedSupplier.Active = 0;
-                existedSupplier.UpdateDate = DateTime.Now;
-                existedSupplier.UserUpdate = "1";
-                repo.Update(existedSupplier);
                 try
                 {
-                db.SaveChanges();
-                scope.Complete();
+                    repo.Delete(id);
+                    scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {

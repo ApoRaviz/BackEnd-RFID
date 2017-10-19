@@ -47,10 +47,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiMaster\ApiMenuMappingRepository.cs" />
+    <Compile Include="ApiMaster\ApiMTRepository.cs" />
+    <Compile Include="CategoryMaster\CategoryRepository.cs" />
+    <Compile Include="Currency\CurrencyRepository.cs" />
+    <Compile Include="CustomerAndProject\CustomerRepository.cs" />
+    <Compile Include="CustomerAndProject\ProjectRepository.cs" />
+    <Compile Include="Dimension\DimensionRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />
+    <Compile Include="ItemManagement\ItemSetRepository.cs" />
+    <Compile Include="Location\LocationRepository.cs" />
+    <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
+    <Compile Include="MenuAndPermission\MenuRepository.cs" />
+    <Compile Include="MenuAndPermission\PermissionRepository.cs" />
+    <Compile Include="Personalize\EmployeeRepository.cs" />
+    <Compile Include="Personalize\PersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleAndUser\RoleRepository.cs" />
+    <Compile Include="RoleAndUser\UserRepository.cs" />
+    <Compile Include="RoleAndUser\UserRoleRepository.cs" />
+    <Compile Include="Supplier\SupplierRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Name>WIM.Core.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
       <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
       <Name>WIM.Core.Repository.Impl</Name>
@@ -80,5 +106,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

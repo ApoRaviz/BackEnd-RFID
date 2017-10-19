@@ -7,10 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.MenuManagement
-{    
+{
     [Table("ApiMenuMapping")]
-    public class ApiMenuMapping
+    public class ApiMenuMapping : BaseEntity
     {
+        public ApiMenuMapping()
+        {
+            CreateAt = DateTime.Now;
+        }
+
         [Key]
         [Column(Order = 1)]
         public string ApiIDSys { get; set; }
@@ -25,5 +30,12 @@ namespace WIM.Core.Entity.MenuManagement
 
         public virtual Menu_MT Menu_MT { get; set; }
         public virtual Api_MT Api_MT { get; set; }
+    }
+
+    public  class BaseEntity
+    {
+        public string CreateBy { get; set; }
+        public DateTime CreateAt { get; set; }
+
     }
 }

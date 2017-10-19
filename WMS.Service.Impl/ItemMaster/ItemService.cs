@@ -15,24 +15,23 @@ using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class ItemService : IItemService
     {
-        private WMSDbContext db = WMSDbContext.Create();
-        private GenericRepository<Item_MT> repo;
+        //private WMSDbContext db = WMSDbContext.Create();
+        private ItemRepository repo;
 
         public ItemService()
         {
-            repo = new GenericRepository<Item_MT>(db);
+            repo = new ItemRepository();
         }
 
         public IEnumerable<ItemDto> GetItems()
         {
-            IEnumerable<Item_MT> items = (from i in db.Item_MT
-                                          where i.Active == 1
-                                          select i).ToList();
+            IEnumerable<Item_MT> items = repo.Get();
 
             IEnumerable<ItemDto> itemDtos = Mapper.Map<IEnumerable<Item_MT>, IEnumerable<ItemDto>>(items);
             return itemDtos;
@@ -49,9 +48,7 @@ namespace WMS.Service
                             .SingleOrDefault();*/
 
             //return Mapper.Map<Item_MT, ItemDto>(item);
-            var query = (from i in db.Item_MT
-                          where i.ItemIDSys == id && i.Active == 1
-                          select i);
+            var query = repo.GetByID(id);
 
             if (tableNames != null)
             {
@@ -60,32 +57,26 @@ namespace WMS.Service
                     switch (tableName)
                     {
                         case "ItemUnitMapping":
-                            query = query.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT));
+                            //query = query.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT));
                             break;
                         default:
-                            query = query.Include(tableName);
+                            //query = query.Include(tableName);
                             break;
                     }
                 }
             }
 
-            return Mapper.Map<Item_MT, ItemDto>(query.SingleOrDefault());
+            return Mapper.Map<Item_MT, ItemDto>(query);
         }        
 
         public int CreateItem(Item_MT item)
         {
             using (var scope = new TransactionScope())
-            {
-                item.CreatedDate = DateTime.Now;
-                item.UpdateDate = DateTime.Now;
-                item.ActiveDateFrom = DateTime.Now;
-                item.ActiveDateTo = DateTime.Now;
-                item.UserUpdate = "1";
-
-                repo.Insert(item);
+            {       
                 try
                 {
-                    db.SaveChanges();
+                 repo.Insert(item);
+                 scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -97,7 +88,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return item.ItemIDSys;
             }
         }
@@ -106,39 +96,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedItem = repo.GetByID(id);
-                existedItem.ProjectIDSys = item.ProjectIDSys;
-                existedItem.ItemCode = item.ItemCode;
-                existedItem.JAN = item.JAN;
-                existedItem.ScanCode = item.ScanCode;
-                existedItem.ItemName = item.ItemName;
-                existedItem.ItemColor = item.ItemColor;
-                existedItem.Description = item.Description;
-                existedItem.ExpireControl = item.ExpireControl;
-                existedItem.SerialControl = item.SerialControl;
-                existedItem.SerialFormat = item.SerialFormat;
-                existedItem.Spare1 = item.Spare1;
-                existedItem.Spare2 = item.Spare2;
-                existedItem.Spare3 = item.Spare3;
-                existedItem.Spare4 = item.Spare4;
-                existedItem.Spare5 = item.Spare5;
-                existedItem.InspectControl = item.InspectControl;
-                existedItem.ExpireControl = item.ExpireControl;
-                existedItem.DimensionControl = item.DimensionControl;
-                existedItem.BoxControl = item.BoxControl;
-                existedItem.LotControl = item.LotControl;
-                existedItem.PalletControl = item.PalletControl;
-                existedItem.ItemSetControl = item.ItemSetControl;
-                existedItem.MiniAlert = item.MiniAlert;
-                existedItem.AlertExp = item.AlertExp;
-                existedItem.TaxCond = item.TaxCond;
-                existedItem.TaxPerc = item.TaxPerc;
-                existedItem.UpdateDate = DateTime.Now;
-                existedItem.UserUpdate = "1";
-                repo.Update(existedItem);
                 try
-                {
-                    db.SaveChanges();
+                { 
+                    repo.Update(item);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -150,7 +111,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -159,15 +119,11 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedItem = repo.GetByID(id);
-                existedItem.Active = 0;
-                existedItem.UpdateDate = DateTime.Now;
-                existedItem.UserUpdate = "1";
-                repo.Update(existedItem);
+                
                 try
                 {
-                db.SaveChanges();
-                scope.Complete();
+                    repo.Delete(id);
+                    scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -31,7 +31,7 @@ namespace WMS.WebApi.Controllers
             ResponseData<IEnumerable<ApiMenuMappingDto>> response = new ResponseData<IEnumerable<ApiMenuMappingDto>>();
             try
             {
-                IEnumerable<ApiMenuMappingDto> categories = ApiMenuMappingService.GetCategories();
+                IEnumerable<ApiMenuMappingDto> categories = ApiMenuMappingService.GetApiMenuMapping();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(categories);
             }
@@ -66,10 +66,10 @@ namespace WMS.WebApi.Controllers
         [Route("menu/{MenuIDSys}")]
         public HttpResponseMessage GetListApiMenuMapping(int MenuIDSys)
         {
-            IResponseData<List<ApiMenuMapping>> response = new ResponseData<List<ApiMenuMapping>>();
+            IResponseData<IEnumerable<ApiMenuMapping>> response = new ResponseData<IEnumerable<ApiMenuMapping>>();
             try
             {
-                List<ApiMenuMapping> ApiMT = ApiMenuMappingService.GetListApiMenuMapping(MenuIDSys);
+                IEnumerable<ApiMenuMapping> ApiMT = ApiMenuMappingService.GetListApiMenuMapping(MenuIDSys);
                 response.SetData(ApiMT);
             }
             catch (ValidationException ex)

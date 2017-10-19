@@ -20,11 +20,11 @@ namespace WMS.Service
     public class UnitService : IUnitService
     {
         private WMSDbContext Db = WMSDbContext.Create();
-        private GenericRepository<Unit_MT> Repo;
+
 
         public UnitService()
         {
-            Repo = new GenericRepository<Unit_MT>(Db);
+            
         }        
 
         public IEnumerable<Unit_MT> GetUnits()
@@ -39,7 +39,7 @@ namespace WMS.Service
 
         public Unit_MT GetUnitByCusIDSysIncludeProjects(int id)
         {
-            var unit = Repo.GetByID(id);
+            var unit = GetUnitByUnitIDSys(id);
             if (unit != null)
             {
                 //return unit;
@@ -59,7 +59,7 @@ namespace WMS.Service
                 unit.UpdateDate = DateTime.Now;
                 unit.UserUpdate = "1";
 
-                Repo.Insert(unit);
+                Db.Unit_MT.Add(unit);
                 try
                 {
                     Db.SaveChanges();
@@ -83,12 +83,11 @@ namespace WMS.Service
         {           
             using (var scope = new TransactionScope())
             {
-                var existedUnit = Repo.GetByID(id);
+                var existedUnit = GetUnitByUnitIDSys(id);
                 existedUnit.UnitName = unit.UnitName;
                 existedUnit.ProjectIDSys = unit.ProjectIDSys;
                 existedUnit.UpdateDate = DateTime.Now;
                 existedUnit.UserUpdate = "1";
-                Repo.Update(existedUnit);
                 try
                 {
                     Db.SaveChanges();
@@ -112,11 +111,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedUnit = Repo.GetByID(id);
+                var existedUnit = GetUnitByUnitIDSys(id);
                 existedUnit.Active = 0;
                 existedUnit.UpdateDate = DateTime.Now;
                 existedUnit.UserUpdate = "1";
-                Repo.Update(existedUnit);
                 Db.SaveChanges();
                 scope.Complete();
                 return true;

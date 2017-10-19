@@ -14,23 +14,25 @@ using WMS.Common;
 using WIM.Core.Context;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Security.Context;
+using WMS.Repository.Impl.CustomerAndProject;
+using WMS.Context;
 
 namespace WMS.Service
 {
         public class ProjectService : IProjectService
         {
-            private CoreDbContext CoreDb;
-            private SecurityDbContext SecuDb;
+            private ProjectRepository repo;
+            private WMSDbContext proc;
 
         public ProjectService()
             {
-                CoreDb = new CoreDbContext();
-                SecuDb = new SecurityDbContext();
+                repo = new ProjectRepository();
+                proc = new WMSDbContext();
             }
 
             public IEnumerable<Project_MT> GetProjects()
             {
-                return CoreDb.Project_MT.ToList();
+                return repo.Get();
             }
 
             public object GetProjectsByCusID(int CusIDSys)
@@ -41,23 +43,14 @@ namespace WMS.Service
 
             public Project_MT GetProjectByProjectIDSys(int id)
             {
-                return CoreDb.Project_MT.SingleOrDefault(p => p.ProjectIDSys == id);
+            return repo.GetByID(id);
             }
 
             public Project_MT GetProjectByProjectIDSysIncludeCustomer(int id)
             {
-                var project = GetProjectByProjectIDSys(id);
+                var project = repo.GetProjectByProjIDincluCus(id);
                 if (project != null)
                 {
-
-                // #JobComment
-                /*Mapper.Initialize(cfg => cfg.CreateMap<ProcGetProjectByProjectIDSys_Result, ProjectDto>());
-                ProjectDto projectDto = Mapper.Map<ProcGetProjectByProjectIDSys_Result, ProjectDto>(project);
-
-                var customer = Db.ProcGetCustomerByCusIDSys(projectDto.CusIDSys).FirstOrDefault();
-                Mapper.Initialize(cfg => cfg.CreateMap<ProcGetCustomerByCusIDSys_Result, CustomerDto>());
-                projectDto.Customer_MT = Mapper.Map<ProcGetCustomerByCusIDSys_Result, CustomerDto>(customer);
-                return projectDto;*/
                 return project;
                 }
                 return null;
@@ -70,16 +63,9 @@ namespace WMS.Service
             {
                 using (var scope = new TransactionScope())
                 {
-                    project.ProjectID = CoreDb.ProcGetNewID("PJ").FirstOrDefault();
-                    project.ProjectStatus = "Active";
-                    project.CreatedDate = DateTime.Now;
-                    project.UpdateDate = DateTime.Now;
-                    project.UserUpdate = "1";
-
-                 CoreDb.Project_MT.Add(project);
                     try
                     {
-                    CoreDb.SaveChanges();
+                    repo.Insert(project);
                     scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -100,14 +86,9 @@ namespace WMS.Service
             {
                 using (var scope = new TransactionScope())
                 {
-                    var existedProject = CoreDb.Project_MT.SingleOrDefault(p => p.ProjectIDSys == id);
-                    existedProject.ProjectName = project.ProjectName;
-                    existedProject.UpdateDate = DateTime.Now;
-                    existedProject.UserUpdate = "1";
-                
                     try
                     {
-                    CoreDb.SaveChanges();
+                        repo.Update(project);
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -120,7 +101,6 @@ namespace WMS.Service
                         ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                         throw ex;
                     }
-                    
                     return true;
                 }
             }
@@ -128,15 +108,10 @@ namespace WMS.Service
             public bool DeleteProject(int id)
             {
                 using (var scope = new TransactionScope())
-                {
-                    var existedProject = CoreDb.Project_MT.SingleOrDefault(p => p.ProjectIDSys == id);
-                existedProject.ProjectStatus = "Inactive";
-                    existedProject.UpdateDate = DateTime.Now;
-                    existedProject.UserUpdate = "1";
-                    
+                { 
                     try
                     {
-                    CoreDb.SaveChanges();
+                        repo.Delete(id);
                         scope.Complete();
                     }
                     catch (DbUpdateConcurrencyException)
@@ -164,19 +139,13 @@ namespace WMS.Service
 
             public List<Project_MT> ProjectHaveMenu(int CusID)
             {
-                var project = from row in CoreDb.Project_MT
-                              where (from o in CoreDb.MenuProjectMapping
-                                     select o.ProjectIDSys).Contains(row.ProjectIDSys)
-                                     && row.CusIDSys == CusID
-                              select row;
+            var project = repo.GetProjectHaveMenu(CusID);
                 return project.ToList();
             }
 
             public List<Project_MT> ProjectCustomer(int CusID)
             {
-                var project = from row in CoreDb.Project_MT
-                              where row.CusIDSys == CusID
-                              select row;
+            var project = repo.GetProjectCustomer(CusID);
                 return project.ToList();
             }
 

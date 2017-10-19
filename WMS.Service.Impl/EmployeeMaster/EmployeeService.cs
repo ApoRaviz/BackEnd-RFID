@@ -15,38 +15,34 @@ using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WIM.Core.Context;
 using WIM.Core.Entity.Employee;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
-{ 
+{
 
     public class EmployeeService : IEmployeeService
     {
-        private CoreDbContext db = CoreDbContext.Create();
-        private GenericRepository<Employee_MT> repo;
+        private EmployeeRepository repo;
 
         public EmployeeService()
         {
-            repo = new GenericRepository<Employee_MT>(db);
-        }        
+            repo = new EmployeeRepository();
+        }
 
         public IEnumerable<Employee_MT> GetEmployees()
-        {           
-            return repo.GetAll();
+        {
+            return repo.Get();
         }
 
         public Employee_MT GetEmployeeByEmployeeIDSys(string id)
         {
-            Employee_MT Employee = (from i in db.Employee_MT
-                                where i.EmID == id
-                                select i).Include("Person_MT").SingleOrDefault();
-            return Employee;            
+            Employee_MT Employee = repo.GetByID(id);
+            return Employee;
         }
 
         public Employee_MT GetEmployeeByPerson(int id)
         {
-            Employee_MT Employee = (from i in db.Employee_MT
-                                    where i.PersonIDSys == id
-                                    select i).Include("Person_MT").SingleOrDefault();
+            Employee_MT Employee = repo.GetByPersonID(id);
             return Employee;
         }
 
@@ -58,46 +54,10 @@ namespace WMS.Service
                 Employee.CreatedDate = DateTime.Now;
                 Employee.UpdateDate = DateTime.Now;
                 Employee.UserUpdate = "1";
-                
-                repo.Insert(Employee);
                 try
                 {
-                    db.SaveChanges();
-                }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException )
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                scope.Complete();
-                return Employee.EmID;
-            }
-        }
-
-        public bool UpdateEmployee(string id, Employee_MT Employee)
-        {           
-            using (var scope = new TransactionScope())
-            {
-                var existedEmployee = (from i in db.Employee_MT
-                                     where i.EmID == id
-                                     select i).SingleOrDefault();
-                existedEmployee.EmID = Employee.EmID;
-                existedEmployee.Area = Employee.Area;
-                existedEmployee.Position = Employee.Position;
-                existedEmployee.Dept = Employee.Dept;
-                existedEmployee.TelOffice = Employee.TelOffice;
-                existedEmployee.TelEx = Employee.TelEx;
-                existedEmployee.UpdateDate = DateTime.Now;
-                existedEmployee.UserUpdate = "1";
-                repo.Update(existedEmployee);
-                try
-                {
-                    db.SaveChanges();
+                    repo.Insert(Employee);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -109,7 +69,29 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                return Employee.EmID;
+            }
+        }
+
+        public bool UpdateEmployee(string id, Employee_MT Employee)
+        {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    repo.Update(Employee);
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
                 return true;
             }
         }
@@ -118,21 +100,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedEmployee = (from i in db.Employee_MT
-                                     where i.EmID == Employee.EmID
-                                     select i).SingleOrDefault();
-                existedEmployee.EmID = Employee.EmID;
-                existedEmployee.Area = Employee.Area;
-                existedEmployee.Position = Employee.Position;
-                existedEmployee.Dept = Employee.Dept;
-                existedEmployee.TelOffice = Employee.TelOffice;
-                existedEmployee.TelEx = Employee.TelEx;
-                existedEmployee.UpdateDate = DateTime.Now;
-                existedEmployee.UserUpdate = "1";
-                repo.Update(existedEmployee);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(Employee);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -144,7 +115,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -157,11 +127,11 @@ namespace WMS.Service
                 existedEmployee.Active = 0;
                 existedEmployee.UpdateDate = DateTime.Now;
                 existedEmployee.UserUpdate = "1";
-                repo.Update(existedEmployee);
+
                 try
                 {
-                db.SaveChanges();
-                scope.Complete();
+                    repo.Update(existedEmployee);
+                    scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {

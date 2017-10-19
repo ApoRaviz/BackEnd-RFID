@@ -18,29 +18,27 @@ using WMS.Common;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Security.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class MenuProjectMappingService : IMenuProjectMappingService
     {
-        private CoreDbContext db = CoreDbContext.Create();
-        private SecurityDbContext SecuDb;
-        private GenericRepository<MenuProjectMapping> repo;
+        private MenuProjectMappingRepository repo;
 
         public MenuProjectMappingService()
         {
-            SecuDb = new SecurityDbContext();
-            repo = new GenericRepository<MenuProjectMapping>(db);
+            repo = new MenuProjectMappingRepository();
         }
 
         public IEnumerable<MenuProjectMapping> GetMenuProjectMapping()
         {
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public MenuProjectMapping GetMenuProjectMappingByMenuProjectMappingIDSys(int id)
         {
-            MenuProjectMapping MenuProjectMapping = db.MenuProjectMapping.Find(id);
+            MenuProjectMapping MenuProjectMapping = new MenuProjectMapping();
             return MenuProjectMapping;
         }
 
@@ -48,11 +46,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-
-                repo.Insert(MenuProjectMapping);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(MenuProjectMapping);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -64,7 +61,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+
                 return MenuProjectMapping.MenuIDSys;
             }
         }
@@ -78,17 +75,14 @@ namespace WMS.Service
                 menuProjectMapping.ProjectIDSys = projectID;
                 menuProjectMapping.MenuName = MenuProjectMapping.MenuName;
                 menuProjectMapping.MenuIDSysParent = MenuProjectMapping.MenuParentID;
-
                 menuProjectMapping.Sort = sort;
-                repo.Insert(menuProjectMapping);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(menuProjectMapping);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
-
                     HandleValidationException(e);
                 }
                 catch (DbUpdateException)
@@ -97,7 +91,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-
                 return MenuProjectMapping.MenuIDSys;
             }
         }
@@ -106,14 +99,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedMenuProjectMapping = repo.GetByID(id);
-                existedMenuProjectMapping.Sort = MenuProjectMapping.Sort;
-                existedMenuProjectMapping.MenuIDSysParent = MenuProjectMapping.MenuIDSysParent;
-                existedMenuProjectMapping.MenuName = MenuProjectMapping.MenuName;
-                //existedMenuProjectMapping.Sort = MenuProjectMapping.Sort;
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(MenuProjectMapping);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -126,7 +115,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+
                 return true;
             }
         }
@@ -135,25 +124,23 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                
-                
-                foreach(var c in menuProjectMapping)
-                {
-                    MenuProjectMapping menu = new MenuProjectMapping();
-                    menu.Sort = c.Sort;
-                    menu.MenuIDSysParent = c.MenuIDSysParent;
-                    menu.MenuName = c.MenuName;
-                    menu.MenuIDSys = c.MenuIDSys;
-                    menu.ProjectIDSys = c.ProjectIDSys;
-                    repo.Update(menu);
-                    if(c.ParentMenu != null)
-                    {
-                        setParent(c);
-                    }
-                }
+
                 try
                 {
-                    db.SaveChanges();
+                    foreach (var c in menuProjectMapping)
+                    {
+                        MenuProjectMapping menu = new MenuProjectMapping();
+                        menu.Sort = c.Sort;
+                        menu.MenuIDSysParent = c.MenuIDSysParent;
+                        menu.MenuName = c.MenuName;
+                        menu.MenuIDSys = c.MenuIDSys;
+                        menu.ProjectIDSys = c.ProjectIDSys;
+                        repo.Update(menu);
+                        if (c.ParentMenu != null)
+                        {
+                            setParent(c);
+                        }
+                    }
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -166,8 +153,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-
-                
                 return true;
             }
         }
@@ -183,7 +168,7 @@ namespace WMS.Service
                 menu.MenuIDSys = c.MenuIDSys;
                 menu.ProjectIDSys = c.ProjectIDSys;
                 repo.Update(menu);
-                if(c.ParentMenu != null)
+                if (c.ParentMenu != null)
                 {
                     setParent(c);
                 }
@@ -195,22 +180,21 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-
-                for (int i = 0; i < menu.Count; i++)
-                {
-
-                    MenuProjectMapping x = new MenuProjectMapping();
-                    x.MenuIDSys = menu[i].MenuIDSys;
-                    x.ProjectIDSys = menu[i].ProjectIDSys;
-                    repo.Delete(x);
-                    if (menu[i].ParentMenu != null)
-                    {
-                        DeleteMenuProjectMapping(menu[i].ParentMenu);
-                    }
-                }
                 try
                 {
-                    db.SaveChanges();
+                    for (int i = 0; i < menu.Count; i++)
+                    {
+
+                        MenuProjectMapping x = new MenuProjectMapping();
+                        x.MenuIDSys = menu[i].MenuIDSys;
+                        x.ProjectIDSys = menu[i].ProjectIDSys;
+                        repo.Delete(x);
+                        if (menu[i].ParentMenu != null)
+                        {
+                            DeleteMenuProjectMapping(menu[i].ParentMenu);
+                        }
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -250,8 +234,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetMenuProjectMappingByID(int id)
         {
-            var tbl_MenuProjectMapping = db.MenuProjectMapping;
-            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = tbl_MenuProjectMapping.Where(t => t.ProjectIDSys == id).Select(b =>
+            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = repo.GetByProjectID(id).Select(b =>
             new MenuProjectMappingDto()
             {
                 MenuIDSys = b.MenuIDSys,
@@ -268,8 +251,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuDto> GetMenuDtoByProjectID(int id)
         {
-            var tbl_MenuProjectMapping = db.MenuProjectMapping;
-            IEnumerable<MenuDto> MenuProjectMappingdto = tbl_MenuProjectMapping.Where(t => t.ProjectIDSys == id).Select(b =>
+            IEnumerable<MenuDto> MenuProjectMappingdto = repo.GetByProjectID(id).Select(b =>
             new MenuDto()
             {
                 MenuIDSys = b.MenuIDSys,
@@ -286,12 +268,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetMenuProjectMappingDto(int id)
         {
-            var MenuProjectMappingQuery = from row in db.MenuProjectMapping
-                                          where row.ProjectIDSys == id
-                                          orderby row.MenuIDSysParent, row.Sort
-                                          select row;
-
-            var tbl_MenuProjectMapping = db.MenuProjectMapping;
+            var MenuProjectMappingQuery = repo.GetByProjectID(id);
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery.Select(b =>
             new MenuProjectMappingDto()
             {
@@ -308,47 +285,15 @@ namespace WMS.Service
 
         public IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid, IEnumerable<MenuProjectMappingDto> menu)
         {
-            var MenuProjectMappingQuery = (from row in db.MenuProjectMapping
-                                           join o in menu on row.MenuIDSys equals o.MenuIDSys into joined
-                                           from i in joined.DefaultIfEmpty()
-                                           where row.ProjectIDSys == projectid
-                                           orderby row.MenuIDSysParent, row.Sort
-                                           select new
-                                           {
-                                               MenuIDSys = row.MenuIDSys,
-                                               ProjectIDSys = row.ProjectIDSys,
-                                               MenuName = row.MenuName,
-                                               MenuIDSysParent = row.MenuIDSysParent,
-                                               Url = i.Url ?? String.Empty,
-                                               Sort = row.Sort
-                                           });
-            var tbl_MenuProjectMapping = db.MenuProjectMapping;
-            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery.Select(b =>
-            new MenuProjectMappingDto()
-            {
-                MenuIDSys = b.MenuIDSys,
-                ProjectIDSys = b.ProjectIDSys,
-                MenuName = b.MenuName,
-                MenuIDSysParent = b.MenuIDSysParent,
-                Url = b.Url,
-                Sort = b.Sort
-            }
-                );
+            var MenuProjectMappingQuery = repo.GetAllMenu(projectid, menu);
+            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto = MenuProjectMappingQuery;
             return MenuProjectMappingdto;
 
         }
 
         public IEnumerable<MenuProjectMappingDto> GetMenuPermission(string userid, int projectid)
         {
-            var menu = from ur in db.UserRoles
-                       join rp in db.RolePermission on ur.RoleID equals rp.RoleID
-                       join ps in db.Permission on rp.PermissionID equals ps.PermissionID
-                       join r in db.Role on ur.RoleID equals r.RoleID
-                       join mp in db.MenuProjectMapping on ps.MenuIDSys equals mp.MenuIDSys
-                       where r.ProjectIDSys == projectid && ur.UserID == userid && mp.ProjectIDSys == projectid
-                       select mp;
-
-
+            var menu = repo.GetMenuPermission(userid, projectid);
 
             //var menu = db.MenuProjectMappings.SqlQuery(
             //    "SELECT e.MenuIDSys,e.ProjectIDSys,e.MenuIDSysParent,e.Sort,e.MenuName,e.MenuPic FROM UserRoles a " +
@@ -377,8 +322,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuDto> GetMenuDtoDefault(int i)
         {
-            var tbl_MenuProjectMapping = db.Menu_MT;
-            IEnumerable<MenuDto> MenuProjectMappingdto = tbl_MenuProjectMapping.Where(t => t.IsDefault == i).Select(b =>
+            IEnumerable<MenuDto> MenuProjectMappingdto = repo.GetMenuDtoDefault(i).Select(b =>
             new MenuDto()
             {
                 MenuIDSys = b.MenuIDSys,

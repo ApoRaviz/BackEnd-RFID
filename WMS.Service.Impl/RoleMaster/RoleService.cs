@@ -18,52 +18,42 @@ using WIM.Core.Security.Context;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class RoleService : IRoleService
     {
-        private CoreDbContext CoreDb;
-        private SecurityDbContext db;        
-        private GenericRepository<Role> repo;
-        private GenericRepository<UserRoles> repoUser;
-        private GenericRepository<RolePermission> repoRolePermission;
+        private RoleRepository repo;
+        private UserRoleRepository repouser;
 
         public RoleService()
         {
-            CoreDb = new CoreDbContext();
-            db = new SecurityDbContext();
-            repo = new GenericRepository<Role>(db);
-            repoUser = new GenericRepository<UserRoles>(db);
-            repoRolePermission = new GenericRepository<RolePermission>(db);
+            repo = new RoleRepository();
+            repouser = new UserRoleRepository();
         }        
 
         public IEnumerable<Role> GetRoles()
         {           
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public IEnumerable<Role> GetRoles(int projectIDSys)
         {
-            var roles = from row in CoreDb.Role
-                        where row.ProjectIDSys == projectIDSys
-                        select row;
+            var roles = repo.Get(projectIDSys);
             return roles;
         }
 
         public Role GetRoleByLocIDSys(string id)
         {           
-            Role Role = CoreDb.Role.Find(id);                                  
+            Role Role = repo.GetByID(id);                                  
             return Role;            
         }
 
         public string GetRoleByUserAndProject(string UserID, int ProjectIDSys)
         {
-            var res = (from ur in CoreDb.UserRoles
-                       join r in CoreDb.Role on ur.RoleID equals r.RoleID
-                       where ur.UserID == UserID && r.ProjectIDSys == ProjectIDSys
-                       select new { r.RoleID }).SingleOrDefault();
-            return res.RoleID;
+            var res = repo.GetByUserAndProject(UserID,ProjectIDSys);
+            return res;
         }
 
         public string CreateRole(Role role)
@@ -71,10 +61,9 @@ namespace WMS.Service
             using (var scope = new TransactionScope())
             {
                 role.RoleID = Guid.NewGuid().ToString();
-                repo.Insert(role);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(role);
                     scope.Complete();
                 }catch(DbUnexpectedValidationException e)
                 {
@@ -97,15 +86,10 @@ namespace WMS.Service
         public bool UpdateRole(string id, Role role)
         {           
             using (var scope = new TransactionScope())
-            {
-                var existedRole = repo.GetByID(id);
-                existedRole.Name = role.Name;
-                existedRole.Description = role.Description;
-                existedRole.IsSysAdmin = role.IsSysAdmin;
-                repo.Update(existedRole);
+            {     
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(role);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -125,26 +109,14 @@ namespace WMS.Service
 //==========================================================================
         public bool DeleteRole(string id)
         {
+            //#Oil Comment
+            //Wait for reperformance code
             List<UserRoleDto> users = new List<UserRoleDto>();
             List<RolePermissionDto> permissions = new List<RolePermissionDto>();
-            if(id != "") { 
-            var user = from row in CoreDb.UserRoles
-                       where row.RoleID == id
-                       select row;
-            users = user.Select(b => new UserRoleDto()
+            if (id != "")
             {
-                UserID = b.UserID,
-                Name = b.RoleID
-            }).ToList();
-            
-            var rolepermission = from row in CoreDb.RolePermission
-                                 where row.RoleID == id
-                                 select row;
-            permissions = rolepermission.Select(b => new RolePermissionDto()
-            {
-                RoleID = b.RoleID,
-                Name = b.PermissionID
-            }).ToList();
+                var user = repouser.GetUserByRoleID(id);
+                permissions = repo.GetByRoleIDForDel(id).ToList();
             }
 
             UserRoles data = new UserRoles();
@@ -152,24 +124,24 @@ namespace WMS.Service
             
             using (var scope = new TransactionScope())
             {
+                try
+                {
                     for (int i = 0; i < users.Count; i++)
                     {
                         data.UserID = users[i].UserID;
                         data.RoleID = users[i].Name;
-                        repoUser.Delete(data);
+                        repouser.Delete(data);
                     }
                     for (int i = 0; i < permissions.Count; i++)
                     {
                         permission.PermissionID = permissions[i].Name;
                         permission.RoleID = permissions[i].RoleID;
-                        repoRolePermission.Delete(permission);
+                        repo.Delete(permission);
                     }
                 var existedRole = repo.GetByID(id);
                 repo.Delete(existedRole);
-                try
-                {
-                    db.SaveChanges();
-                    scope.Complete();
+                
+                scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -195,10 +167,7 @@ namespace WMS.Service
 
         public List<RolePermissionDto> GetRoleByPermissionID(string id)
         {
-            var RoleForPermissionQuery = from row in CoreDb.RolePermission
-                                         where row.PermissionID == id
-                                          select row;
-            List<RolePermissionDto> rolelist = CoreDb.RolePermission.Where(t => t.PermissionID == id)
+            List<RolePermissionDto> rolelist = repo.GetRoleByPermissionID(id)
                 .Select(b => new RolePermissionDto()
             {
                 RoleID = b.RoleID                
@@ -209,11 +178,7 @@ namespace WMS.Service
 
         public List<RolePermissionDto> GetRoleNotPermissionID(string id)
         {
-            var RoleForPermissionQuery = from row in CoreDb.Role
-                                         where !(from o in CoreDb.RolePermission
-                                                 where o.PermissionID == id
-                                                 select o.RoleID).Contains(row.RoleID)
-                                         select row;
+            var RoleForPermissionQuery = repo.GetNotPermissionID(id);
             List<RolePermissionDto> rolelist = RoleForPermissionQuery.Select(b => new RolePermissionDto()
                 {
                     RoleID = b.RoleID,
@@ -227,25 +192,12 @@ namespace WMS.Service
 
         public Role GetRoleByName(string name)
         {
-            var role = from row in CoreDb.Role
-                       where row.Name == name
-                       select row;
-            Role get = role.SingleOrDefault();
-            return get;
+            return null;
         }
 
         public List<Role> GetRoleByProjectUser(int id)
         {
-            var customer = (from row in CoreDb.Project_MT
-                           where row.ProjectIDSys == id
-                           select row.CusIDSys).SingleOrDefault();
-            var role = (from row in CoreDb.Role
-                        join row2 in CoreDb.RolePermission on row.RoleID equals row2.RoleID
-                        join row3 in CoreDb.Permission on row2.PermissionID equals row3.PermissionID
-                        join row4 in CoreDb.Project_MT on row3.ProjectIDSys equals row4.ProjectIDSys
-                        where row4.CusIDSys == customer
-                       select row).Include("Project_MT").Distinct().ToList();
-            
+            var role = repo.GetByProjectUser(id);
             return role;
         }
 

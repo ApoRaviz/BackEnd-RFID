@@ -20,35 +20,30 @@ using WIM.Core.Security.Context;
 using WIM.Core.Entity.Person;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class UserService : IUserService
     {
-        private CoreDbContext CoreDb;
-        private SecurityDbContext SecuDb;
-        private GenericRepository<User> repo;
-        private GenericRepository<Person_MT> repoPerson;
-        private GenericRepository<UserRoles> repoUserRole;
+        private UserRepository repo;
+        private UserRoleRepository repoRole;
         private object param = new { };
 
         public UserService()
         {
-            CoreDb = new CoreDbContext();
-            SecuDb = new SecurityDbContext();
-            repoPerson = new GenericRepository<Person_MT>(CoreDb);
-            repo = new GenericRepository<User>(CoreDb);
-            repoUserRole = new GenericRepository<UserRoles>(SecuDb);
+            repo = new UserRepository();
+            repoRole = new UserRoleRepository();
         }
 
         public IEnumerable<User> GetUsers()
         {
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public User GetUserByUserID(string id)
         {
-            User User = CoreDb.User.Find(id);
+            User User = repo.GetByID(id);
             return User;
         }        
 
@@ -57,15 +52,14 @@ namespace WMS.Service
             User u;
             try
             {
-                u = (from i in CoreDb.User
-                    where i.UserID == userid
-                    select i).SingleOrDefault();
+                u = repo.GetByID(userid);
                 if (keyOtp > 99999)
                 {
                     u.KeyOTP = keyOtp;
                     u.KeyOTPDate = DateTime.Now;
+                    repo.Update(u);
                 }
-                CoreDb.SaveChanges();
+                
             }catch(ValidationException e)
             {
                 throw e;
@@ -79,31 +73,17 @@ namespace WMS.Service
 
         public object GetCustonersByUserID(string userid)
         {
-            var query = (from ctm in CoreDb.Customer_MT
-                         join c in CoreDb.Project_MT on ctm.CusIDSys equals c.CusIDSys
-                         join d in CoreDb.Role on c.ProjectIDSys equals d.ProjectIDSys
-                         join e in CoreDb.UserRoles on d.RoleID equals e.RoleID
-                         where e.UserID == userid
-                         select new
-                         {
-                             ctm.CusID,
-                             ctm.CusIDSys,
-                             ctm.CusName
-                         }).Distinct();
-            return query.ToList();
+            var query = repo.GetCustomerByUser(userid);
+            return query;
         }
 
         public string CreateUser(User User)
         {
             using (var scope = new TransactionScope())
             {
+                try
+                {
                     User.UserID = Guid.NewGuid().ToString();
-                    User.UserName = User.UserName;
-                    User.Email = User.Email;
-                    User.Name = User.Name;
-                    User.Surname = User.Surname;
-                    //User.PhoneNumber = User.PhoneNumber;
-                    User.PasswordHash = User.PasswordHash;
                     User.EmailConfirmed = false;
                     User.PhoneNumberConfirmed = false;
                     User.TwoFactorEnabled = false;
@@ -112,7 +92,6 @@ namespace WMS.Service
                     User.AccessFailedCount = 0;
                     User.LockoutEnabled = true;
                     User.LastLogin = DateTime.Now.Date;
-                    User.PersonIDSys = User.PersonIDSys;
                     User.LockoutEndDateUtc = DateTime.Now.Date;
                     User.UserUpdate = "1";
                     User.Active = 1;
@@ -122,12 +101,11 @@ namespace WMS.Service
                     foreach(var c in User.UserRoles)
                     {
                         c.UserID = User.UserID;
-                        repoUserRole.Insert(c);
+                        repoRole.Insert(c);
                     }
                 }
-                try
-                {
-                    SecuDb.SaveChanges();
+                
+                   
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -148,12 +126,14 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                if (User.UserRoles != null)
+                try
+                {
+                    if (User.UserRoles != null)
                 {
                     foreach (var c in User.UserRoles)
                     {
                         c.UserID = User.UserID;
-                        repoUserRole.Insert(c);
+                        repoRole.Insert(c);
                     }
                     User.UserRoles = null;
                 }
@@ -166,10 +146,6 @@ namespace WMS.Service
                 User.UpdateDate = DateTime.Now;
                 User.UserUpdate = "1";
                 repo.Update(User);
-                
-                try
-                {
-                    SecuDb.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -190,14 +166,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedUser = repo.GetByID(id);
-                existedUser.Active = 0;
-                existedUser.UpdateDate = DateTime.Now;
-                existedUser.UserUpdate = "1";
-                repo.Update(existedUser);
                 try
                 {
-                    SecuDb.SaveChanges();
+                    repo.Delete(id);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -224,14 +195,12 @@ namespace WMS.Service
             
             using (var scope = new TransactionScope())
             {
-                User u = (from user in CoreDb.User
-                          where user.UserID == userid
-                          select user).FirstOrDefault();
+                User u = repo.GetByID(userid);
                 u.KeyAccess = key;
                 u.KeyAccessDate = DateTime.Now;
                 try
                 {
-                    SecuDb.SaveChanges();
+                    repo.Update(u);
                     scope.Complete();
                 }
                 catch (Exception)
@@ -249,10 +218,7 @@ namespace WMS.Service
                 try
                 {
                     DateTime datew = DateTime.Now.AddMinutes(-2);
-                    User u = (from user in CoreDb.User
-                              where user.KeyAccess == param.Key
-                              && user.KeyAccessDate > datew && user.KeyAccess != null
-                              select user).FirstOrDefault();
+                    User u = repo.GetUserTokenRegis(param, datew);
                     if (u is null)
                     {
                         return false;
@@ -260,7 +226,7 @@ namespace WMS.Service
                     u.TokenMobile = param.Token;
                     u.KeyAccess = null;
                     u.KeyAccessDate = null;
-                    SecuDb.SaveChanges();
+                    repo.Update(u);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -284,74 +250,68 @@ namespace WMS.Service
 
         public List<User> getUserNotHave(string RoleID)
         {
-            var user = (from row in CoreDb.User
-                        where !(from o in CoreDb.UserRoles
-                                where o.RoleID == RoleID
-                                select o.UserID).Contains(row.UserID)
-                        select row).ToList();
-            return user;
+            var user = repo.GetUserNotHave(RoleID);
+            return user.ToList();
         }
 
-        public string CreateUserAndPerson(User User,Person_MT Person)
-        {
-            using (var scope = new TransactionScope())
-            {
-                try
-                {
-                    Person.CreateDate = DateTime.Now;
-                    Person.UpdateDate = DateTime.Now;
-                    Person.UserUpdate = "1";
-                    repoPerson.Insert(Person);
+        //public string CreateUserAndPerson(User User, Person_MT Person)
+        //{
+        //    using (var scope = new TransactionScope())
+        //    {
+        //        try
+        //        {
+        //            Person.CreateDate = DateTime.Now;
+        //            Person.UpdateDate = DateTime.Now;
+        //            Person.UserUpdate = "1";
+        //            repoPerson.Insert(Person);
 
-                    CoreDb.User.Add(new User()
-                        {
-                            UserID = Guid.NewGuid().ToString(),
-                            UserName = User.UserName,
-                            Email = User.Email,
-                            Name = User.Name,
-                            Surname = User.Surname,
-                            //PhoneNumber = User.PhoneNumber,
-                            PasswordHash = User.PasswordHash,
-                            EmailConfirmed = false,
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            CreateDate = DateTime.Now,
-                            UpdateDate = DateTime.Now,
-                            AccessFailedCount = 0,
-                            LockoutEnabled = true,
-                            LastLogin = DateTime.Now.Date,
-                            PersonIDSys = Person.PersonIDSys,
-                            LockoutEndDateUtc = DateTime.Now.Date,
-                            UserUpdate = "1",
-                            Active = 1
-                        });
-                   SecuDb.SaveChanges();
-                   scope.Complete();
-                }
-                    //repo.Insert(User);
-                    catch (DbEntityValidationException e)
-                    {
-                        HandleValidationException(e);
-                    }
-                    catch (DbUpdateException)
-                    {
-                        scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4009));
-                        throw ex;
-                    }
-                    
-                    
-                }
-                
-                return User.UserID;
-        }
+        //            CoreDb.User.Add(new User()
+        //                {
+        //                    UserID = Guid.NewGuid().ToString(),
+        //                    UserName = User.UserName,
+        //                    Email = User.Email,
+        //                    Name = User.Name,
+        //                    Surname = User.Surname,
+        //                    //PhoneNumber = User.PhoneNumber,
+        //                    PasswordHash = User.PasswordHash,
+        //                    EmailConfirmed = false,
+        //                    PhoneNumberConfirmed = false,
+        //                    TwoFactorEnabled = false,
+        //                    CreateDate = DateTime.Now,
+        //                    UpdateDate = DateTime.Now,
+        //                    AccessFailedCount = 0,
+        //                    LockoutEnabled = true,
+        //                    LastLogin = DateTime.Now.Date,
+        //                    PersonIDSys = Person.PersonIDSys,
+        //                    LockoutEndDateUtc = DateTime.Now.Date,
+        //                    UserUpdate = "1",
+        //                    Active = 1
+        //                });
+        //           SecuDb.SaveChanges();
+        //           scope.Complete();
+        //        }
+        //            //repo.Insert(User);
+        //            catch (DbEntityValidationException e)
+        //            {
+        //                HandleValidationException(e);
+        //            }
+        //            catch (DbUpdateException)
+        //            {
+        //                scope.Dispose();
+        //                ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4009));
+        //                throw ex;
+        //            }
+
+
+        //        }
+
+        //        return User.UserID;
+        //}
 
         public User GetUserByPersonIDSys(int personIDSys)
         {
-            var user = from i in CoreDb.User
-                       where i.PersonIDSys == personIDSys
-                       select i;
-            return user.SingleOrDefault();
+            var user = repo.GetByPersonIDSys(personIDSys);
+            return user;
         }
 
         public bool UodateTokenMobile(FirebaseTokenModel param)
@@ -360,16 +320,13 @@ namespace WMS.Service
             {
                 try
                 {
-                    User u = (from user in CoreDb.User
-                              where user.TokenMobile == param.Token
-                              && user.KeyAccessDate == null && user.KeyAccess == null
-                              select user).FirstOrDefault();
+                    User u = repo.GetUserTokenRegis(param);
                     if (u is null)
                     {
                         return false;
                     }
                     u.TokenMobile = param.NewToken;
-                    SecuDb.SaveChanges();
+                    repo.Update(u);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)

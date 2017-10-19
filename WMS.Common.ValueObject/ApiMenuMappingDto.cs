@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WMS.Repository;
 
 namespace WMS.Common
 {
-    public class ApiMenuMappingDto: BaseEntityDto
+    public class ApiMenuMappingDto
     {
         public string ApiIDSys { get; set; }
         public int MenuIDSys { get; set; }
