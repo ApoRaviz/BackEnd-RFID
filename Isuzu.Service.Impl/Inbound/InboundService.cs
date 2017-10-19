@@ -9,17 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Validation;
-//using WIM.Core.Common.ValueObject;
 using WIM.Core.Common.Helpers;
 using Isuzu.Service;
-using Isuzu.Repository;
 using Isuzu.Common.ValueObject;
+using System.IO;
+using OfficeOpenXml;
+using Isuzu.Context;
+using Isuzu.Entity;
 
 namespace Isuzu.Service.Impl
 {
     public class InboundService : IInboundService
     {
-        private IsuzuDataContext Db ;
+        private IsuzuDataContext Db;
 
         private string connectionString = ConfigurationManager.ConnectionStrings["WIM_ISUZU"].ConnectionString;
         public InboundService()
@@ -70,9 +72,9 @@ namespace Isuzu.Service.Impl
 
                     if (itemRFIDIsDuplicatedAnother != null)
                     {
-                         ValidationException ve = new ValidationException();
-                         ve.Add(new ValidationError(((int)ErrorCode.RFIDIsDuplicatedAnother).ToString(), string.Format("RFID {0} ถูก Register โดย Order {1} ไปแล้ว ", inboundItem.RFIDTag, itemRFIDIsDuplicatedAnother.ISZJOrder)));
-                         throw ve;
+                        ValidationException ve = new ValidationException();
+                        ve.Add(new ValidationError(((int)ErrorCode.RFIDIsDuplicatedAnother).ToString(), string.Format("RFID {0} ถูก Register โดย Order {1} ไปแล้ว ", inboundItem.RFIDTag, itemRFIDIsDuplicatedAnother.ISZJOrder)));
+                        throw ve;
                     }
 
                     var inboundItemExist = (
@@ -288,7 +290,7 @@ namespace Isuzu.Service.Impl
             return (
                     from i in Db.InboundItems
                     where rfids.RFIDTags.Contains(i.RFIDTag)
-                    select  i
+                    select i
                 ).ToList();
         }
         #endregion
@@ -310,25 +312,16 @@ namespace Isuzu.Service.Impl
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-                        using (SqlCommand cmd = new SqlCommand("ProcPagingInboundItems", con))
-                        {
-                            cmd.Parameters.Add("@page", SqlDbType.Int).Value = pageIndex;
-                            cmd.Parameters.Add("@size", SqlDbType.Int).Value = pageSize;
-                            cmd.Parameters.Add("@totalRecord", SqlDbType.Int, 30);
-                            cmd.Parameters["@totalRecord"].Direction = ParameterDirection.Output;
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            //dset = new DataSet();
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                if(reader.HasRows)
-                                 items = translateIsuzuInboundItemsList(reader);
-                            }
-                            totalRecord = Convert.ToInt32(cmd.Parameters["@totalRecord"].Value);
-                        }
-                    }
+
+                    var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
+                    output.Direction = ParameterDirection.Output;
+
+                    items = Db.Database.SqlQuery<InboundItems>("ProcPagingInboundItems @page,@size,@totalRecord out"
+                        , new SqlParameter("@page", pageIndex)
+                        , new SqlParameter("@size", pageSize)
+                        , output).ToList();
+
+                    totalRecord = Convert.ToInt32(output.Value);
                 }
                 catch (Exception)
                 {
@@ -343,28 +336,19 @@ namespace Isuzu.Service.Impl
         public IEnumerable<InboundItems> GetInboundItemByQty(int qty, bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
+            string sql = "SELECT * FROM [dbo].[InboundItems] WHERE Qty=@Qty ORDER BY SeqNo";
+            if (isShipped)
+                sql = "SELECT * FROM [dbo].[InboundItems] WHERE Qty=@Qty AND Status=@Status ORDER BY SeqNo";
+
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-                        string sql = "SELECT * FROM [dbo].[InboundItems] WHERE Qty=@Qty ORDER BY SeqNo";
-                        if (isShipped)
-                            sql = "SELECT * FROM [dbo].[InboundItems] WHERE Qty=@Qty AND Status=@Status ORDER BY SeqNo";
-                        using (SqlCommand cmd = new SqlCommand(sql, con))
-                        {
-                            cmd.Parameters.Add("@Qty", SqlDbType.Int).Value = qty;
-                            if(isShipped)
-                                cmd.Parameters.Add("@Status", SqlDbType.VarChar).Value = IsuzuStatus.SHIPPED.ToString();
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                items = translateIsuzuInboundItemsList(reader);
-                            }
-
-                        }
-                    }
+                    items = (isShipped) ? Db.Database.SqlQuery<InboundItems>(sql
+                        , new SqlParameter("@Qty", qty)
+                        , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
+                        : Db.Database.SqlQuery<InboundItems>(sql
+                        , new SqlParameter("@Qty",qty)).ToList();
                 }
                 catch (Exception)
                 {
@@ -374,35 +358,24 @@ namespace Isuzu.Service.Impl
                 scope.Complete();
                 return items;
             }
-            //return (from i in Db.InboundItems select i).Take(Qty).ToList();
+
         }
-        public IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false)
+        public IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo, bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
+            string sql = "SELECT * FROM [dbo].[InboundItems] WHERE InvNo=@InvNo ORDER BY SeqNo";
+            if (isShipped)
+                sql = "SELECT * FROM [dbo].[InboundItems] WHERE InvNo=@InvNo AND Status=@Status ORDER BY SeqNo";
+
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-                        string sql = "SELECT * FROM [dbo].[InboundItems] WHERE InvNo=@InvNo ORDER BY SeqNo";
-                        if (isShipped)
-                            sql = "SELECT * FROM [dbo].[InboundItems] WHERE InvNo=@InvNo AND Status=@Status ORDER BY SeqNo";
-
-                        using (SqlCommand cmd = new SqlCommand(sql, con))
-                        {
-                            cmd.Parameters.Add("@InvNo", SqlDbType.VarChar).Value = invNo;
-                            if(isShipped)
-                                cmd.Parameters.Add("@Status", SqlDbType.VarChar).Value = IsuzuStatus.SHIPPED.ToString();
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                items = translateIsuzuInboundItemsList(reader);
-                            }
-                            
-                        }
-                    }
+                    items = (isShipped) ? Db.Database.SqlQuery<InboundItems>(sql
+                       , new SqlParameter("@InvNo", invNo)
+                       , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
+                       : Db.Database.SqlQuery<InboundItems>(sql
+                       , new SqlParameter("@Qty", invNo)).ToList();
                 }
                 catch (Exception)
                 {
@@ -413,25 +386,24 @@ namespace Isuzu.Service.Impl
                 return items;
             }
 
-            //return (from i in Db.InboundItems where i.InvNo.Equals(invNo) select i).ToList();
         }
-        public IEnumerable<InboundItems> ImportInboundItemList(List<InboundItems> itemList,string userName)
+        public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList, string userName)
         {
             List<InboundItems> duplicateList = new List<InboundItems>();
             List<string> isuzuOrders = itemList.Select(x => x.ISZJOrder).ToList();
 
             duplicateList = (from p in Db.InboundItems
-                     where isuzuOrders.Contains(p.ISZJOrder)
-                     select p).ToList();
+                             where isuzuOrders.Contains(p.ISZJOrder)
+                             select p).ToList();
             if (duplicateList.Count > 0)
                 return duplicateList;
 
             var itemGroups = (from p in itemList
                               group p
                               by p.InvNo into g
-                              select new { InvNo = g.Key, GroupList = g.ToList()}).ToList();
+                              select new { InvNo = g.Key, GroupList = g.ToList() }).ToList();
 
-           
+
 
             using (var scope = new TransactionScope())
             {
@@ -440,47 +412,47 @@ namespace Isuzu.Service.Impl
                 {
                     itemGroups.ForEach(i =>
                     {
-                    if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
-                    {
-                        i.GroupList.ForEach(x =>
+                        if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
                         {
-                            x.ID = Guid.NewGuid().ToString();
-                            x.CreateBy = userName;
-                            x.CreateAt = DateTime.Now;
-                            x.UpdateBy = userName;
-                            x.UpdateAt = DateTime.Now;
-                            x.Status = IsuzuStatus.NEW.ToString();
-                            Db.InboundItems.Add(x);
-                        });
-                        var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
+                            i.GroupList.ForEach(x =>
+                            {
+                                x.ID = Guid.NewGuid().ToString();
+                                x.CreateBy = userName;
+                                x.CreateAt = DateTime.Now;
+                                x.UpdateBy = userName;
+                                x.UpdateAt = DateTime.Now;
+                                x.Status = IsuzuStatus.NEW.ToString();
+                                Db.InboundItems.Add(x);
+                            });
+                            var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
                             if (item != null)
                                 item.Qty = item.InboundItems.Count;
-                    }
-                    else
-                    { 
-                        InboundItemsHead item = new InboundItemsHead();
-                        item.InvNo = i.InvNo;
-                        i.GroupList.ForEach(x =>
+                        }
+                        else
                         {
-                            x.ID = Guid.NewGuid().ToString();
-                            x.CreateBy = userName;
-                            x.CreateAt = DateTime.Now;
-                            x.UpdateBy = userName;
-                            x.UpdateAt = DateTime.Now;
-                            x.Status = IsuzuStatus.NEW.ToString();
-                            item.InboundItems.Add(x);
-                        });
-                        item.CreateBy = userName;
-                        item.CreateAt = DateTime.Now;
-                        item.UpdateBy = userName;
-                        item.UpdateAt = DateTime.Now;
-                        item.Status = IsuzuStatus.NEW.ToString();
-                        item.Qty = i.GroupList.Count;
-                        Db.InboundItemsHead.Add(item);
+                            InboundItemsHead item = new InboundItemsHead();
+                            item.InvNo = i.InvNo;
+                            i.GroupList.ForEach(x =>
+                            {
+                                x.ID = Guid.NewGuid().ToString();
+                                x.CreateBy = userName;
+                                x.CreateAt = DateTime.Now;
+                                x.UpdateBy = userName;
+                                x.UpdateAt = DateTime.Now;
+                                x.Status = IsuzuStatus.NEW.ToString();
+                                item.InboundItems.Add(x);
+                            });
+                            item.CreateBy = userName;
+                            item.CreateAt = DateTime.Now;
+                            item.UpdateBy = userName;
+                            item.UpdateAt = DateTime.Now;
+                            item.Status = IsuzuStatus.NEW.ToString();
+                            item.Qty = i.GroupList.Count;
+                            Db.InboundItemsHead.Add(item);
                         }
                     });
 
-                Db.SaveChanges();
+                    Db.SaveChanges();
 
                 }
                 catch (DbEntityValidationException e)
@@ -494,6 +466,7 @@ namespace Isuzu.Service.Impl
         }
         public IEnumerable<InboundItems> GetDataByColumn(ParameterSearch parameterSearch)
         {
+            List<InboundItems> items = new List<InboundItems>() { };
             string sql = "SELECT * FROM [dbo].[InboundItems]";
 
             int cnt = parameterSearch.Columns.Any() ? parameterSearch.Columns.Count : 0;
@@ -508,40 +481,13 @@ namespace Isuzu.Service.Impl
                 sql = sql.Substring(0, sql.Length - 4);
                 sql += " AND [Status] <> 'DELETED'";
             }
-                       
-            /*switch (column.Trim().ToUpper())
-            {
-                default:
-                case "INVNO":
-                    sql += "SELECT * FROM [dbo].[InboundItems] WHERE [InvNo] LIKE '%' + @keyword + '%' ";
-                    break;
-                case "ISZJORDER":
-                    sql += "SELECT * FROM [dbo].[InboundItems] WHERE [ISZJOrder] LIKE '%' + @keyword + '%' ";
-                    break;
-                
-            }*/
 
-            DataSet dset = new DataSet();
-            List<InboundItems> items = new List<InboundItems>() { };
+          
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-
-                        using (SqlCommand cmd = new SqlCommand(sql, con))
-                        {
-                            //cmd.Parameters.Add("@keyword", SqlDbType.VarChar).Value = keyword;
-                            dset = new DataSet();
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                items = translateIsuzuInboundItemsList(reader);
-                            }
-
-                        }
-                    }
+                    items = Db.Database.SqlQuery<InboundItems>(sql).ToList();
                 }
                 catch (Exception)
                 {
@@ -565,20 +511,25 @@ namespace Isuzu.Service.Impl
             //                by p into g
             //                select new { GroupID = g.Key.InvNo, GroupList = g.ToList() ,IsExport = g.Key.IsExport}).Take(max).ToList();
 
-                 //itemGroups.ForEach(f => {
-                 //    IsuzuInboundGroup item = new IsuzuInboundGroup(f.GroupID, f.GroupList.Count(),f.IsExport);
-                 //    items.Add(item);
-                 //});
+            //itemGroups.ForEach(f => {
+            //    IsuzuInboundGroup item = new IsuzuInboundGroup(f.GroupID, f.GroupList.Count(),f.IsExport);
+            //    items.Add(item);
+            //});
 
             return items;
         }
-        public InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo)
+        public InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo, bool isAddItems = false)
         {
-            InboundItemsHead items = (from p in Db.InboundItemsHead where p.InvNo.Equals(invNo)
-                     select  p).FirstOrDefault();
-            if (items != null)
+            InboundItemsHead item = (from p in Db.InboundItemsHead
+                                      where p.InvNo.Equals(invNo)
+                                      select p).FirstOrDefault();
+            if (item != null)
             {
-                items.InboundItems = (from p in items.InboundItems where p.Status != IsuzuStatus.DELETED.ToString() select p).ToList();
+                if(isAddItems)
+                {
+                    Db.Entry(item).Collection(c => c.InboundItems).Load();
+                    item.InboundItems = (from p in item.InboundItems where p.Status != IsuzuStatus.DELETED.ToString() select p).ToList();
+                }
             }
             //items = items.ForEach(f => {
             //    if(f.InboundItems.FirstOrDefault().Status == IsuzuStatus.DELETED.ToString())
@@ -598,9 +549,9 @@ namespace Isuzu.Service.Impl
             //});
 
 
-            return items;
+            return item;
         }
-        public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex,int pageSize,out int totalRecord)
+        public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord)
         {
             DataSet dset = new DataSet();
             List<InboundItemsHead> items = new List<InboundItemsHead>() { };
@@ -609,24 +560,15 @@ namespace Isuzu.Service.Impl
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-                        using (SqlCommand cmd = new SqlCommand("ProcPagingInboundItemHead", con))
-                        {
-                            cmd.Parameters.Add("@page", SqlDbType.Int).Value = pageIndex;
-                            cmd.Parameters.Add("@size", SqlDbType.Int).Value = pageSize;
-                            cmd.Parameters.Add("@totalRecord", SqlDbType.Int, 30);
-                            cmd.Parameters["@totalRecord"].Direction = ParameterDirection.Output;
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            dset = new DataSet();
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                items = translateIsuzuInboundHeadList(reader);
-                            }
-                            totalRecord = Convert.ToInt32(cmd.Parameters["@totalRecord"].Value);
-                        }
-                    }
+                    var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
+                    output.Direction = ParameterDirection.Output;
+
+                    items = Db.Database.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHead @page,@size,@totalRecord out"
+                        , new SqlParameter("@page", pageIndex)
+                        , new SqlParameter("@size", pageSize)
+                        , output).ToList();
+
+                    totalRecord = Convert.ToInt32(output.Value);
                 }
                 catch (Exception)
                 {
@@ -636,7 +578,7 @@ namespace Isuzu.Service.Impl
                 scope.Complete();
                 return items;
             }
-            
+
         }
         public IEnumerable<InboundItemsHead> GetDataGroupByColumn(string column, string keyword)
         {
@@ -648,28 +590,12 @@ namespace Isuzu.Service.Impl
                     sql += "SELECT * FROM InboundItemsHead WHERE [InvNo] LIKE '%' + @keyword + '%' ";
                     break;
             }
-
-            DataSet dset = new DataSet();
             List<InboundItemsHead> items = new List<InboundItemsHead>() { };
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    using (var con = new SqlConnection(this.connectionString))
-                    {
-                        con.Open();
-
-                        using (SqlCommand cmd = new SqlCommand(sql, con))
-                        {
-                            cmd.Parameters.Add("@keyword", SqlDbType.VarChar).Value = keyword;
-                            dset = new DataSet();
-                            using (SqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                items = translateIsuzuInboundHeadList(reader);
-                            }
-                            
-                        }
-                    }
+                    items = Db.Database.SqlQuery<InboundItemsHead>(sql,new SqlParameter("@keyword", keyword)).ToList();
                 }
                 catch (Exception)
                 {
@@ -686,16 +612,16 @@ namespace Isuzu.Service.Impl
             using (var scope = new TransactionScope())
             {
                 InboundItemsHead queryUpdateHead = (from p in Db.InboundItemsHead
-                                                     where p.InvNo.Equals(item.InvNo)
-                                                     && p.Status == IsuzuStatus.SHIPPED.ToString()
-                                                     select p).FirstOrDefault();
-                if(queryUpdateHead != null)
+                                                    where p.InvNo.Equals(item.InvNo)
+                                                    && p.Status == IsuzuStatus.SHIPPED.ToString()
+                                                    select p).FirstOrDefault();
+                if (queryUpdateHead != null)
                 {
                     queryUpdateHead.IsExport = true;
                     queryUpdateHead.UpdateBy = item.UpdateBy;
                     queryUpdateHead.UpdateAt = DateTime.Now;
                 }
-                   
+
                 try
                 {
                     Db.SaveChanges();
@@ -713,8 +639,8 @@ namespace Isuzu.Service.Impl
             using (var scope = new TransactionScope())
             {
                 InboundItems queryUpdate = (from p in Db.InboundItems
-                                                    where p.ISZJOrder.Equals(reason.ISZJOrder)
-                                                    select p).FirstOrDefault();
+                                            where p.ISZJOrder.Equals(reason.ISZJOrder)
+                                            select p).FirstOrDefault();
                 if (queryUpdate != null)
                 {
                     queryUpdate.Status = IsuzuStatus.DELETED.ToString();
@@ -722,7 +648,7 @@ namespace Isuzu.Service.Impl
                     queryUpdate.PathDeleteReason = reason.Paths;
                     queryUpdate.UpdateAt = DateTime.Now;
                     queryUpdate.UpdateBy = reason.UserName;
-                    
+
                 }
                 try
                 {
@@ -743,12 +669,13 @@ namespace Isuzu.Service.Impl
             using (var scope = new TransactionScope())
             {
                 InboundItemsHead queryUpdate = (from p in Db.InboundItemsHead
-                                            where p.InvNo.Equals(invNo)
-                                            select p).FirstOrDefault();
+                                                where p.InvNo.Equals(invNo)
+                                                select p).FirstOrDefault();
                 if (queryUpdate != null)
                 {
+                    Db.Entry(queryUpdate).Collection(c => c.InboundItems);
                     queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
-                    
+
                 }
 
                 try
@@ -763,7 +690,89 @@ namespace Isuzu.Service.Impl
                 return true;
             }
         }
+        public IsuzuDataImport OpenReadExcel(string localFileName)
+        {
+            List<InboundItems> listDuplicateInbound = new List<InboundItems>();
+            List<InboundItems> inboundList = new List<InboundItems>();
+            IsuzuDataImport ret = new IsuzuDataImport();
 
+            int num = new Random().Next(100);
+            string dir = System.IO.Path.GetDirectoryName(localFileName);
+            string newFileName = dir + "\\" + "IMPORT_" + num + "_" + DateTime.Now.ToString("ddMMyyyyHHmmss");
+            System.IO.File.Copy(localFileName, newFileName + ".xlsx");
+            System.IO.File.Delete(localFileName);
+
+            string path = newFileName + ".xlsx";
+
+            #region ExcelPackage
+            using (var pck = new ExcelPackage())
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    pck.Load(stream);
+                }
+
+                var ws = pck.Workbook.Worksheets.First();
+                if (ws != null)
+                {
+
+                    for (int i = 2; i <= ws.Dimension.End.Row; i++)
+                    {
+                        if (!string.IsNullOrEmpty(ws.Cells[i, 1].Text))
+                        {
+                            InboundItems inbound = new InboundItems()
+                            {
+                                InvNo = IsuzuReportHelper.GetIsuzuAutoGenHeader(ws.Cells[i, 1].Text),
+                                SeqNo = Convert.ToInt32(ws.Cells[i, 2].Text),
+                                ITAOrder = ws.Cells[i, 3].Text,
+                                ISZJOrder = ws.Cells[i, 4].Text,
+                                PartNo = ws.Cells[i, 5].Text,
+                                ParrtName = ws.Cells[i, 6].Text,
+                                Qty = Convert.ToInt32(ws.Cells[i, 7].Text),
+                                Vendor = ws.Cells[i, 8].Text,
+                                Shelf = ws.Cells[i, 9].Text,
+                                Destination = ws.Cells[i, 10].Text
+                            };
+                            if (!string.IsNullOrEmpty(inbound.ISZJOrder))
+                                inboundList.Add(inbound);
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            var duplicateKeys = inboundList.GroupBy(gb => gb.ISZJOrder)
+                 .Where(w => w.Count() > 1)
+                 .Select(s => s.FirstOrDefault());
+
+
+            if (duplicateKeys.Count() > 0)
+            {
+
+                listDuplicateInbound = duplicateKeys.ToList();
+                ret.isDuplicated = true;
+                ret.listItem = listDuplicateInbound;
+            }
+            else
+            {
+                listDuplicateInbound = ImportInboundItemList(inboundList, "SYSTEM");
+                if (listDuplicateInbound.Count > 0)
+                {
+                    ret.isDuplicated = true;
+                    ret.listItem = listDuplicateInbound;
+
+                }
+                else
+                {
+                    ret.isDuplicated = false;
+                    ret.listItem = inboundList;
+                }
+            }
+
+
+
+            return ret;
+        }
         #endregion
 
         public void HandleValidationException(DbEntityValidationException ex)
@@ -780,7 +789,7 @@ namespace Isuzu.Service.Impl
         #region TranslateDataSet
         private IsuzuInboundGroup translateIsuzuInboundGroup(DataRow data)
         {
-            IsuzuInboundGroup newItem = new IsuzuInboundGroup(null,0,false);
+            IsuzuInboundGroup newItem = new IsuzuInboundGroup(null, 0, false);
             if (data != null)
             {
                 newItem.InvNo = data["InvNo"].ToString();
@@ -813,7 +822,7 @@ namespace Isuzu.Service.Impl
 
         private IsuzuInboundGroup translateIsuzuInboundGroup(SqlDataReader reader)
         {
-            IsuzuInboundGroup newItem = new IsuzuInboundGroup(null, 0,false);
+            IsuzuInboundGroup newItem = new IsuzuInboundGroup(null, 0, false);
             if (reader != null)
             {
                 newItem.InvNo = reader["InvNo"].ToString();

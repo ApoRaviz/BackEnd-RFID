@@ -48,67 +48,16 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
 
-            byte[] bytes;
-            Warning[] warnings;
-            string[] streamids;
-            string mimeType, encoding, extension;
-            List<DataBarcode> barcodeList = new List<DataBarcode>();
-            Barcode bc = new Barcode();
-            type = "BXFJ";
-
-            for (int i = 0; i < running; i++)
-            {
-                string barcodeInfoImage = type
-                    + DateTime.Now.ToString("yyMMdd", new System.Globalization.CultureInfo("en-US"))
-                    + (baseRunning + i).ToString("0000");
-                string barcodeInfo = type
-                    + "\n"
-                    + DateTime.Now.ToString("yyMMdd", new System.Globalization.CultureInfo("en-US"))
-                    + (baseRunning + i).ToString("0000");
-
-                byte[] barcodeImage = bc.EncodeToByte(TYPE.CODE128, barcodeInfoImage, Color.Black, Color.White, 287, 96);
-
-                DataBarcode barcode = new DataBarcode(barcodeImage, barcodeInfo);
-                barcodeList.Add(barcode);
-            }
-
-            using (var reportViewer = new ReportViewer())
-            {
-                //reportViewer.Width = 384;
-                //reportViewer.Height = 384;
-                reportViewer.ProcessingMode = ProcessingMode.Local;
-                reportViewer.LocalReport.ReportPath = "Report/BoxLabelReport.rdlc";
-                reportViewer.LocalReport.Refresh();
-                reportViewer.LocalReport.EnableExternalImages = true;
-
-                ReportDataSource rds1 = new ReportDataSource();
-                rds1.Name = "DataSet1";
-                rds1.Value = barcodeList;
-                reportViewer.LocalReport.DataSources.Add(rds1);
-                bytes = reportViewer.LocalReport.Render("Pdf", null, out mimeType, out encoding, out extension, out streamids, out warnings);
-
-            }
-            result.StatusCode = HttpStatusCode.OK;
-            Stream stream = new MemoryStream(bytes);
-            result.Content = new StreamContent(stream);
+           
+            result.StatusCode = HttpStatusCode.OK; 
+            result.Content = PrintLabelService.GetReportStream(running,baseRunning);
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             return result;
             //return Request.ReturnHttpResponseMessage(response);
 
 
         }
-
-        public class DataBarcode
-        {
-
-            public byte[] Barcode { get; private set; }
-            public string BarcodeInfo { get; private set; }
-            public DataBarcode(byte[] barcode, string barcodeInfo)
-            {
-                this.Barcode = barcode;
-                this.BarcodeInfo = barcodeInfo;
-            }
-        }
+ 
 
     }
 }

@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Isuzu.Common.ValueObject">
-      <HintPath>..\Isuzu.Common.ValueObject\bin\Debug\Isuzu.Common.ValueObject.dll</HintPath>
+    <Reference Include="Isuzu.Entity">
+      <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
     </Reference>
     <Reference Include="Isuzu.Repository">
       <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
@@ -46,8 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IInboundService.cs" />
+    <Compile Include="Inbound\IInboundService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Isuzu.Common.ValueObject\Isuzu.Common.ValueObject.csproj">
+      <Project>{bae81779-979d-4544-9184-4614986f3362}</Project>
+      <Name>Isuzu.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Isuzu.Context\Isuzu.Context.csproj">
+      <Project>{82d2b22a-90bc-440a-ba19-83914d0018ac}</Project>
+      <Name>Isuzu.Context</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

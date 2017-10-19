@@ -30,8 +30,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BarcodeLib">
+      <HintPath>..\Isuzu.WebApi\DLL\BarcodeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\Isuzu.WebApi\DLL\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Isuzu.Context">
+      <HintPath>..\Isuzu.Context\bin\Debug\Isuzu.Context.dll</HintPath>
+    </Reference>
+    <Reference Include="Isuzu.Entity">
+      <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="Isuzu.Repository">
+      <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
+    </Reference>
+    <Reference Include="Isuzu.Repository.Impl">
+      <HintPath>..\Isuzu.Repository.Impl\bin\Debug\Isuzu.Repository.Impl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,8 +61,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InboundItemHandyDto.cs" />
+    <Compile Include="IsuzuDataBarcode.cs" />
+    <Compile Include="IsuzuDataImport.cs" />
+    <Compile Include="IsuzuDataInboundGroupItems.cs" />
+    <Compile Include="IsuzuDataInboundItems.cs" />
     <Compile Include="IsuzuDeleteReason.cs" />
     <Compile Include="IsuzuInboundGroup.cs" />
+    <Compile Include="IsuzuReportHelper.cs" />
     <Compile Include="IsuzuStatus.cs" />
     <Compile Include="ParameterSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -65,6 +65,9 @@
     <Reference Include="Isuzu.Common.ValueObject">
       <HintPath>..\Isuzu.Common.ValueObject\bin\Debug\Isuzu.Common.ValueObject.dll</HintPath>
     </Reference>
+    <Reference Include="Isuzu.Entity">
+      <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
+    </Reference>
     <Reference Include="Isuzu.Repository">
       <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
     </Reference>
