@@ -84,7 +84,7 @@ namespace WMS.Repository.Impl
         public MenuProjectMapping GetByID(object id)
         {
             var menu = from c in Db.MenuProjectMapping
-                       where c.MenuIDSys.Equals(id)
+                       where c.MenuIDSys== (int)id
                        orderby c.MenuIDSysParent, c.Sort
                        select c;
             return menu.SingleOrDefault();
@@ -93,7 +93,7 @@ namespace WMS.Repository.Impl
         public IEnumerable<MenuProjectMapping> GetByProjectID(int id)
         {
             var menu = from c in Db.MenuProjectMapping
-                       where c.ProjectIDSys.Equals(id)
+                       where c.ProjectIDSys== (int)id
                        orderby c.MenuIDSysParent, c.Sort
                        select c;
             return menu.ToList();

@@ -31,7 +31,7 @@ namespace WMS.Repository.Impl
         public Location_MT GetByID(object id)
         {
             var location = from c in Db.Location_MT
-                           where c.LocIDSys.Equals(id)
+                           where c.LocIDSys== (int)id
                            select c;
             return location.SingleOrDefault();
         }
@@ -49,7 +49,7 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var existedLocation = (from c in Db.Location_MT
-                                   where c.LocIDSys.Equals(id)
+                                   where c.LocIDSys== (int)id
                                    select c).SingleOrDefault();
             existedLocation.Active = 0;
             existedLocation.UpdateDate = DateTime.Now;

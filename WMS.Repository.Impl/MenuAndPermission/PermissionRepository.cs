@@ -137,7 +137,7 @@ namespace WMS.Repository.Impl
         public Permission GetByID(object id)
         {
             var permission = from c in Db.Permission
-                             where c.PermissionID.Equals(id)
+                             where c.PermissionID == id
                              select c;
             return permission.SingleOrDefault();
         }
@@ -151,7 +151,7 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var permission = (from c in Db.Permission
-                              where c.PermissionID.Equals(id)
+                              where c.PermissionID == id
                               select c).SingleOrDefault();
 
             Db.Permission.Remove(permission);

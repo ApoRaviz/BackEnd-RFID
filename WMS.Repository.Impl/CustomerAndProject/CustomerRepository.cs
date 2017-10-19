@@ -34,7 +34,7 @@ namespace WMS.Repository.Impl
         public Customer_MT GetByID(object id)
         {
             var customer = (from c in Db.Customer_MT
-                            where c.Active == 1 && c.CusIDSys.Equals(id)
+                            where c.Active == 1 && c.CusIDSys == (int)id
                             select c).Include(b => b.Project_MT).SingleOrDefault();
             return customer;
         }
@@ -83,7 +83,7 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var existedCustomer = (from c in Db.Customer_MT
-                                   where c.CusIDSys.Equals(id)
+                                   where c.CusIDSys== (int)id
                                    select c).SingleOrDefault();
             existedCustomer.Active = 0;
             Db.SaveChanges();

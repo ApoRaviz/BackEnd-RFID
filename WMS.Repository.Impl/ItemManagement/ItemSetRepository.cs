@@ -33,7 +33,7 @@ namespace WMS.Repository.Impl
         public ItemSet_MT GetByID(object id)
         {
             var query = (from i in Db.ItemSet_MT
-                         where i.ItemSetIDSys.Equals(id)
+                         where i.ItemSetIDSys== (int)id
                          select i).SingleOrDefault();
             return query;
         }
@@ -93,7 +93,7 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var query2 = from row in Db.ItemSetDetail
-                         where row.ItemSetIDSys.Equals(id)
+                         where row.ItemSetIDSys== (int)id
                          select row;
             Db.ItemSetDetail.RemoveRange(query2);
             Db.SaveChanges();
