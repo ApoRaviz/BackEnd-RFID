@@ -12,6 +12,7 @@ using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
 using WMS.Common;
 using WMS.Service;
+using WIM.Core.Entity.Currency;
 
 namespace WMS.WebApi.Controllers
 {

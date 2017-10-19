@@ -7,6 +7,7 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WIM.Core.Entity.WarehouseManagement;
 using WMS.Master;
 
 namespace WMS.WebApi.Controllers

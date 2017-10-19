@@ -10,6 +10,7 @@ using WMS.Service.Inspect;
 using WMS.Service.Impl.Inspect;
 using WIM.Core.Service.WarehouseService;
 using WIM.Core.Service.Impl.WarehouseService;
+using WMS.Master;
 
 namespace WMS.WebApi
 {

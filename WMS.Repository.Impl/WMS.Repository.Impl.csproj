@@ -50,6 +50,7 @@
     <Compile Include="ApiMaster\ApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\ApiMTRepository.cs" />
     <Compile Include="CategoryMaster\CategoryRepository.cs" />
+    <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Currency\CurrencyRepository.cs" />
     <Compile Include="CustomerAndProject\CustomerRepository.cs" />
     <Compile Include="CustomerAndProject\ProjectRepository.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="RoleAndUser\UserRepository.cs" />
     <Compile Include="RoleAndUser\UserRoleRepository.cs" />
     <Compile Include="Supplier\SupplierRepository.cs" />
+    <Compile Include="Warehouse\WarehouseRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">

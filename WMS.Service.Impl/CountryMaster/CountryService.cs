@@ -14,27 +14,29 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WMS.Master;
+using WMS.Repository.Impl;
+using WIM.Core.Entity.Country;
 
 namespace WMS.Service
 {
     public class CountryService : ICountryService
     {
-        private MasterContext db = MasterContext.Create();
-        private GenericRepository<Country_MT> repo;
+        private CountryRepository repo;
 
         public CountryService()
         {
-            repo = new GenericRepository<Country_MT>(db);
+            repo = new CountryRepository();
         }
 
         public IEnumerable<Country_MT> GetCountry()
         {
-            return repo.GetAll();
+            var CountryName = repo.Get();
+            return CountryName;
         }
 
         public Country_MT GetCountryByCountryIDSys(int id)
         {
-            Country_MT Country = db.Country_MT.Find(id);
+            Country_MT Country = repo.GetByID(id);
             return Country;
         }
 
@@ -42,11 +44,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-
-                repo.Insert(Country);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(Country);
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -67,16 +67,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedCountry = repo.GetByID(id);
-                existedCountry.CountryCode = Country.CountryCode;
-                existedCountry.CountryName = Country.CountryName;
-                existedCountry.PhoneCode = Country.PhoneCode;
-
-
-                repo.Update(existedCountry);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(Country);
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -97,12 +90,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedCountry = repo.GetByID(id);
 
-                repo.Update(existedCountry);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Delete(id);
                     scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)

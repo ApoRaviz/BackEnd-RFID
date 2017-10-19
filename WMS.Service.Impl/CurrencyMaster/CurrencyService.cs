@@ -14,30 +14,30 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WMS.Master;
-
+using WIM.Core.Entity.Currency;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class CurrencyService : ICurrencyService
     {
-        private MasterContext db = MasterContext.Create();
-        private GenericRepository<CurrencyUnit> repo;
+
+        private CurrencyRepository repo;
 
         public CurrencyService()
         {
-            repo = new GenericRepository<CurrencyUnit>(db);
+            repo = new CurrencyRepository();
         }
 
         public IEnumerable<CurrencyUnit> GetCurrency()
         {
-            var CountryName = (from i in db.CurrencyUnits
-                                    select i).Include(b => b.Country_MT).ToList();
-            return CountryName;
+            var CurrencyName = repo.Get();
+            return CurrencyName;
         }
 
         public CurrencyUnit GetCurrencyByCurrIDSys(int id)
         {
-            CurrencyUnit Currency = db.CurrencyUnits.Find(id);
+            CurrencyUnit Currency = repo.GetByID(id);
             return Currency;
         }
 
@@ -49,10 +49,9 @@ namespace WMS.Service
                 Currency.UpdateDate = DateTime.Now;
                 Currency.UserUpdate = "1";
 
-                repo.Insert(Currency);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(Currency);
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -73,19 +72,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedCurrency = repo.GetByID(id);
-                existedCurrency.CurrencyID = Currency.CurrencyID;
-                existedCurrency.CurrencyName = Currency.CurrencyName;
-                existedCurrency.Active = Currency.Active;
-                existedCurrency.UpdateDate = DateTime.Now;
-                existedCurrency.UserUpdate = "1";
-                existedCurrency.CountryIDSys = Currency.CountryIDSys;
-
-
-                repo.Update(existedCurrency);
                 try
                 {
-                    db.SaveChanges();
+                 repo.Update(Currency);
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -106,14 +95,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedCurrency = repo.GetByID(id);
-                existedCurrency.Active = 0;
-                existedCurrency.UpdateDate = DateTime.Now;
-                existedCurrency.UserUpdate = "1";
-                repo.Update(existedCurrency);
+                
                 try
                 {
-                    db.SaveChanges();
+                    repo.Delete(id);
                     scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
