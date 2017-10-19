@@ -25,7 +25,7 @@ using WMS.WebApi.Results;
 using WIM.Core.Security.Providers;
 using WMS.Common;
 using WMS.Service;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.UserManagement;
 
 namespace WMS.WebApi.Controllers
 {
