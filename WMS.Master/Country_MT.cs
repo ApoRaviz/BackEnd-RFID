@@ -12,23 +12,20 @@ namespace WMS.Master
     using System;
     using System.Collections.Generic;
     
-    public partial class Api_MT
+    public partial class Country_MT
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Api_MT()
+        public Country_MT()
         {
-            this.Permissions = new HashSet<Permission>();
-            this.ApiMenuMappings = new HashSet<ApiMenuMapping>();
+            this.CurrencyUnits = new HashSet<CurrencyUnit>();
         }
     
-        public string ApiIDSys { get; set; }
-        public string Api { get; set; }
-        public string Method { get; set; }
-        public string Controller { get; set; }
+        public int CountryIDSys { get; set; }
+        public string CountryName { get; set; }
+        public string CountryCode { get; set; }
+        public string PhoneCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Permission> Permissions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
+        public virtual ICollection<CurrencyUnit> CurrencyUnits { get; set; }
     }
 }

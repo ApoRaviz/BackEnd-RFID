@@ -17,27 +17,27 @@ using WMS.Service;
 namespace WMS.WebApi.Controllers
 {
     //[Authorize]
-    [RoutePrefix("api/v1/currency")]
-    public class CurrencyController : ApiController
+    [RoutePrefix("api/v1/country")]
+    public class CountryController : ApiController
     {
 
-        private ICurrencyService CurrencyService;
+        private ICountryService CountryService;
 
-        public CurrencyController(ICurrencyService CurrencyService)
+        public CountryController(ICountryService CountryService)
         {
-            this.CurrencyService = CurrencyService;
+            this.CountryService = CountryService;
         }
 
-        //get api/Currencys
+        //get api/Countrys
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<CurrencyUnit>> response = new ResponseData<IEnumerable<CurrencyUnit>>();
+            ResponseData<IEnumerable<Country_MT>> response = new ResponseData<IEnumerable<Country_MT>>();
             try
             {
-                IEnumerable<CurrencyUnit> Currency = CurrencyService.GetCurrency();
-                response.SetData(Currency);
+                IEnumerable<Country_MT> Country = CountryService.GetCountry();
+                response.SetData(Country);
             }
             catch (ValidationException ex)
             {
@@ -47,17 +47,17 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // get api/Currencys/id
+        // get api/Countrys/id
 
         [HttpGet]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Get(int CurrencyIDSys)
+        [Route("{CountryIDSys}")]
+        public HttpResponseMessage Get(int CountryIDSys)
         {
-            IResponseData<CurrencyUnit> response = new ResponseData<CurrencyUnit>();
+            IResponseData<Country_MT> response = new ResponseData<Country_MT>();
             try
             {
-                CurrencyUnit Currency = CurrencyService.GetCurrencyByCurrIDSys(CurrencyIDSys);
-                response.SetData(Currency);
+                Country_MT Country = CountryService.GetCountryByCountryIDSys(CountryIDSys);
+                response.SetData(Country);
             }
             catch (ValidationException ex)
             {
@@ -67,16 +67,14 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // POST: api/Suppliers
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]CurrencyUnit Currency)
+        public HttpResponseMessage Post([FromBody]Country_MT Country)
         {
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Currency.UserUpdate = User.Identity.Name;
-                int id = CurrencyService.CreateCurrency(Currency);
+                int id = CountryService.CreateCountry(Country);
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -90,15 +88,15 @@ namespace WMS.WebApi.Controllers
         // PUT: api/Suppliers/5
 
         [HttpPut]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Put(int CurrencyIDSys, [FromBody]CurrencyUnit Currency)
+        [Route("{CountryIDSys}")]
+        public HttpResponseMessage Put(int CountryIDSys, [FromBody]Country_MT Country)
         {
 
             IResponseData<bool> response = new ResponseData<bool>();
 
             try
             {
-                bool isUpated = CurrencyService.UpdateCurrency(CurrencyIDSys, Currency);
+                bool isUpated = CountryService.UpdateCountry(CountryIDSys, Country);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -111,13 +109,13 @@ namespace WMS.WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Delete(int CurrencyIDSys)
+        [Route("{CountryIDSys}")]
+        public HttpResponseMessage Delete(int CountryIDSys)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpdated = CurrencyService.DeleteCurrency(CurrencyIDSys);
+                bool isUpdated = CountryService.DeleteCountry(CountryIDSys);
                 response.SetData(isUpdated);
             }
             catch (ValidationException ex)
@@ -128,9 +126,11 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        private ICurrencyService GetCurrencyService()
+
+
+        private ICountryService GetCountryService()
         {
-            return CurrencyService;
+            return CountryService;
         }
 
     }

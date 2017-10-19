@@ -16,7 +16,6 @@
         <AssociationConnector Association="MasterModel.FK_Project_MT_Supplier_MT_ProjectIDSys" />
         <EntityTypeShape EntityType="MasterModel.Category_MT" Width="1.5" PointX="16.5" PointY="5.25" IsExpanded="true" />
         <AssociationConnector Association="MasterModel.FK_Project_MT_Category_MT_ProjectIDSys" />
-        <EntityTypeShape EntityType="MasterModel.CurrencyUnit" Width="1.5" PointX="3.25" PointY="0.875" />
         <EntityTypeShape EntityType="MasterModel.Location_MT" PointX="18.75" PointY="4.5" Width="1.5" />
         <EntityTypeShape EntityType="MasterModel.Warehouse_MT" Width="1.5" PointX="6.375" PointY="6.75" />
         <AssociationConnector Association="MasterModel.FK_Location_MT_Category_MT" />
@@ -57,10 +56,8 @@
         <EntityTypeShape EntityType="MasterModel.ZoneLayoutDetail_MT" Width="1.5" PointX="20.625" PointY="10.125" />
         <AssociationConnector Association="MasterModel.FK__ZoneLayou__ZoneI__13A7DD28" />
         <EntityTypeShape EntityType="MasterModel.RackLayout_MT" Width="1.5" PointX="5.375" PointY="0.75" />
-        <EntityTypeShape EntityType="MasterModel.ApiMenuMapping" Width="1.5" PointX="4.125" PointY="6.875" />
         <EntityTypeShape EntityType="MasterModel.ItemSet_MT" Width="1.5" PointX="11.25" PointY="19.125" />
         <EntityTypeShape EntityType="MasterModel.ItemSetDetail" Width="1.5" PointX="21.25" PointY="14.75" />
-        <AssociationConnector Association="MasterModel.FK_ApiMenuMapping_Menu_MT" />
         <AssociationConnector Association="MasterModel.FK_ItemSetDetail_Item_MT" />
         <AssociationConnector Association="MasterModel.FK_ItemSet_MT_Project_MT" />
         <AssociationConnector Association="MasterModel.FK_ItemSetDetail_ItemSet_MT" />
@@ -71,12 +68,17 @@
         <AssociationConnector Association="MasterModel.FK__UserCustoMap_User" />
         <EntityTypeShape EntityType="MasterModel.Label_MT" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="MasterModel.Api_MT" Width="1.5" PointX="15.375" PointY="0.875" />
-        <AssociationConnector Association="MasterModel.FK_ApiMenuMapping_Api_MT" />
         <AssociationConnector Association="MasterModel.FK_Permissions_Api_MT" />
         <EntityTypeShape EntityType="MasterModel.Person_MT" Width="1.5" PointX="0.75" PointY="11.625" />
         <AssociationConnector Association="MasterModel.FK_Users_Person_MT" />
         <EntityTypeShape EntityType="MasterModel.Employee_MT" Width="1.5" PointX="6.25" PointY="22.625" />
         <AssociationConnector Association="MasterModel.FK_Employee_MT_Employee_MT" />
+        <EntityTypeShape EntityType="MasterModel.ApiMenuMapping" Width="1.5" PointX="19.625" PointY="1" />
+        <AssociationConnector Association="MasterModel.FK_ApiMenuMapping_Api_MT" />
+        <AssociationConnector Association="MasterModel.FK_ApiMenuMapping_Menu_MT" />
+        <EntityTypeShape EntityType="MasterModel.CurrencyUnit" Width="1.5" PointX="19.625" PointY="18.25" />
+        <EntityTypeShape EntityType="MasterModel.Country_MT" Width="1.5" PointX="17.375" PointY="21.625" />
+        <AssociationConnector Association="MasterModel.FK_CurrencyUnit_Country_MT" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

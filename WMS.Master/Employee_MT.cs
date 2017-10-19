@@ -25,6 +25,8 @@ namespace WMS.Master
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string UserUpdate { get; set; }
+        public Nullable<System.DateTime> HiredDate { get; set; }
+        public Nullable<int> PositionIDSys { get; set; }
     
         public virtual Person_MT Person_MT { get; set; }
     }

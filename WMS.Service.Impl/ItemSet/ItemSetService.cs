@@ -31,11 +31,29 @@ namespace WMS.Service
 
         public IEnumerable<ItemSetDto> GetItemSets()
         {
-            IEnumerable<ItemSet_MT> ItemSets = (from i in db.ItemSet_MT
+            IEnumerable<ItemSetDto> ItemSetDtos = (from i in db.ItemSet_MT
                                           where i.Active == 1
-                                          select i).ToList();
+                                          select new ItemSetDto
+                                          {
+                                              Active = i.Active,
+                                              ItemSetCode = i.ItemSetCode,
+                                              ItemSetDetail = (from isd in db.ItemSetDetails
+                                                               join itm in db.Item_MT on isd.ItemIDSys equals itm.ItemIDSys
+                                                               where isd.ItemSetIDSys == i.ItemSetIDSys
+                                                               select new ItemSetDetailDto {
+                                                                   IDSys = isd.IDSys,
+                                                                   ItemName = itm.ItemName,
+                                                                   ItemIDSys = isd.ItemIDSys,
+                                                                   ItemCode = itm.ItemCode,
+                                                                   ItemSetIDSys = isd.ItemSetIDSys,
+                                                               }).ToList(),
+                                              ItemSetIDSys = i.ItemSetIDSys,
+                                              ItemSetName = i.ItemSetName,
+                                              LineID = i.LineID,
+                                              ProjectIDSys = i.ProjectIDSys,
 
-            IEnumerable<ItemSetDto> ItemSetDtos = Mapper.Map<IEnumerable<ItemSet_MT>, IEnumerable<ItemSetDto>>(ItemSets);
+                                          }
+                                          ).ToList();
             return ItemSetDtos;
         }
 

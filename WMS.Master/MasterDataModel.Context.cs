@@ -34,7 +34,6 @@ namespace WMS.Master
         public virtual DbSet<InspectType> InspectTypes { get; set; }
         public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
         public virtual DbSet<Category_MT> Category_MT { get; set; }
-        public virtual DbSet<CurrencyUnit> CurrencyUnits { get; set; }
         public virtual DbSet<Location_MT> Location_MT { get; set; }
         public virtual DbSet<Warehouse_MT> Warehouse_MT { get; set; }
         public virtual DbSet<Item_MT> Item_MT { get; set; }
@@ -57,7 +56,6 @@ namespace WMS.Master
         public virtual DbSet<ZoneLayoutHeader_MT> ZoneLayoutHeader_MT { get; set; }
         public virtual DbSet<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public virtual DbSet<RackLayout_MT> RackLayout_MT { get; set; }
-        public virtual DbSet<ApiMenuMapping> ApiMenuMappings { get; set; }
         public virtual DbSet<ItemSet_MT> ItemSet_MT { get; set; }
         public virtual DbSet<ItemSetDetail> ItemSetDetails { get; set; }
         public virtual DbSet<UserCustomerMapping> UserCustomerMappings { get; set; }
@@ -66,6 +64,9 @@ namespace WMS.Master
         public virtual DbSet<Api_MT> Api_MT { get; set; }
         public virtual DbSet<Person_MT> Person_MT { get; set; }
         public virtual DbSet<Employee_MT> Employee_MT { get; set; }
+        public virtual DbSet<ApiMenuMapping> ApiMenuMappings { get; set; }
+        public virtual DbSet<CurrencyUnit> CurrencyUnits { get; set; }
+        public virtual DbSet<Country_MT> Country_MT { get; set; }
     
         public virtual ObjectResult<ProcGetCustomers_Result> ProcGetCustomers()
         {

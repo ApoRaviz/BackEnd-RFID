@@ -57,8 +57,9 @@ namespace WMS.WebApi
             container.RegisterType<IImportService, ImportService>();
             container.RegisterType<IDimensionService, DimensionService>();
             container.RegisterType<IWarehouseService, WarehouseService>();
-            container.RegisterType<IZoneService, ZoneService>();           
-
+            container.RegisterType<IZoneService, ZoneService>();
+            container.RegisterType<ICurrencyService, CurrencyService>();
+            container.RegisterType<ICountryService, CountryService>();
         }
     }
 }

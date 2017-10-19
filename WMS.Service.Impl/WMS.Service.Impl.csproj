@@ -55,7 +55,8 @@
     <Compile Include="ApiMaster\ApiMTService.cs" />
     <Compile Include="ApiMenuMapping\ApiMenuMappingService.cs" />
     <Compile Include="CategoryMaster\CategoryService.cs" />
-    <Compile Include="Currency\CurrencyService.cs" />
+    <Compile Include="CountryMaster\CountryService.cs" />
+    <Compile Include="CurrencyMaster\CurrencyService.cs" />
     <Compile Include="CustomerMaster\CustomerService.cs" />
     <Compile Include="Dimension\DimensionService.cs" />
     <Compile Include="EmployeeMaster\EmployeeService.cs" />
