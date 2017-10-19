@@ -16,6 +16,8 @@ using System.IO;
 using WMS.Master;
 using System.Globalization;
 using Microsoft.AspNet.Identity;
+using WMS.Common;
+using WMS.Service;
 
 namespace WMS.WebApi.Controllers
 {
