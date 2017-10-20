@@ -15,6 +15,7 @@ using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.Person;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.RoleAndPermission;
+using WIM.Core.Entity.Status;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.WarehouseManagement;
@@ -46,6 +47,8 @@ namespace WIM.Core.Context
         public DbSet<CurrencyUnit> CurrencyUnit { get; set; }
         public DbSet<Country_MT> Country_MT { get; set; }
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
+
+        public DbSet<Status_MT> Status_MT { get; set; }
 
         public CoreDbContext() : base("name=DefaultConnection")
         {

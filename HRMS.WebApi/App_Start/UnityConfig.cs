@@ -11,7 +11,8 @@ using System.Web.Http;
 using Unity.WebApi;
 
 using Fuji.WebApi.Controllers;
-
+using HRMS.Service;
+using HRMS.Service.Impl;
 
 namespace Fuji.WebApi
 {
@@ -32,10 +33,8 @@ namespace Fuji.WebApi
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
 
-            //Fuji
-            container.RegisterType<IItemImportService, ItemImportService>();
-            container.RegisterType<IProgramVersionService, ProgramVersionService>();
-            container.RegisterType<IPrintLabelService, PrintLabelService>();
+            container.RegisterType<IDemoService, DemoService>();
+
 
         }
     }

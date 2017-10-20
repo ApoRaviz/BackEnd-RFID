@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Constants\Constant.cs" />
     <Compile Include="Data\AutoCompleteDto.cs" />
+    <Compile Include="Data\BaseEntity.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="CommonService.cs" />
     <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />

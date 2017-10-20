@@ -53,15 +53,7 @@
     <Reference Include="AutoMapper, Version=6.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.1.0\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="BarcodeLib, Version=1.0.0.22, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLL\BarcodeLib.dll</HintPath>
-    </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLL\EPPlus.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
     </Reference>
@@ -184,16 +176,8 @@
       <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net45\OfficeApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="OnBarcode.Barcode.ASPNET, Version=6.0.0.41022, Culture=neutral, PublicKeyToken=a775cebcbc8b82dd, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLL\OnBarcode.Barcode.ASPNET.dll</HintPath>
-    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="QRCoder, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLL\QRCoder.dll</HintPath>
     </Reference>
     <Reference Include="SendGrid, Version=9.4.1.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
       <HintPath>..\packages\Sendgrid.9.5.0\lib\net452\SendGrid.dll</HintPath>
@@ -348,47 +332,16 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiLogHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\ImportSerialController.cs" />
-    <Compile Include="Controllers\PrintLabelsController.cs" />
-    <Compile Include="Controllers\ProgramVersionController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Controllers\HelpersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="DataSet\GenerateHeaderDataSet.cs">
-      <DependentUpon>GenerateHeaderDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="DataSet\GenerateHeaderDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GenerateHeaderDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="DataSet\IsuzuRfidDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IsuzuRfidDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="DataSet\MasterDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MasterDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="DataSet\PrintLabelDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PrintLabelDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Services\EmailService.cs" />
-    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="YUT_WMS_DEVDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>YUT_WMS_DEVDataSet.xsd</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -396,10 +349,6 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="DLL\BarcodeLib.dll" />
-    <Content Include="DLL\EPPlus.dll" />
-    <Content Include="DLL\OnBarcode.Barcode.ASPNET.dll" />
-    <Content Include="DLL\QRCoder.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -432,51 +381,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="DataSet\MasterDataSet.xsc">
-      <DependentUpon>MasterDataSet.xsd</DependentUpon>
-    </Content>
-    <Content Include="DataSet\GenerateHeaderDataSet.xsc">
-      <DependentUpon>GenerateHeaderDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="DataSet\GenerateHeaderDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>GenerateHeaderDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="DataSet\GenerateHeaderDataSet.xss">
-      <DependentUpon>GenerateHeaderDataSet.xsd</DependentUpon>
-    </Content>
-    <Content Include="DataSet\IsuzuRfidDataSet.xsc">
-      <DependentUpon>IsuzuRfidDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="DataSet\IsuzuRfidDataSet.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>IsuzuRfidDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <Content Include="DataSet\IsuzuRfidDataSet.xss">
-      <DependentUpon>IsuzuRfidDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="DataSet\MasterDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>MasterDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <Content Include="DataSet\MasterDataSet.xss">
-      <DependentUpon>MasterDataSet.xsd</DependentUpon>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="DataSet\PrintLabelDataSet.xsc">
-      <DependentUpon>PrintLabelDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="DataSet\PrintLabelDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>PrintLabelDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="DataSet\PrintLabelDataSet.xss">
-      <DependentUpon>PrintLabelDataSet.xsd</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
@@ -509,23 +415,11 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\Site.css" />
-    <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="YUT_WMS_DEVDataSet.xsc">
-      <DependentUpon>YUT_WMS_DEVDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="YUT_WMS_DEVDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>YUT_WMS_DEVDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="YUT_WMS_DEVDataSet.xss">
-      <DependentUpon>YUT_WMS_DEVDataSet.xsd</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -561,6 +455,10 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\HRMS.Repository.Entity.csproj">
+      <Project>{2d18ff9d-6137-464e-861b-417ffa24fdf1}</Project>
+      <Name>HRMS.Repository.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
       <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
       <Name>Fuji.Common.ValueObject</Name>
@@ -581,9 +479,29 @@
       <Project>{4fbc9a8b-22ee-474c-a07e-00d5e770f751}</Project>
       <Name>Fuji.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HRMS.Repository.Context\HRMS.Repository.Context.csproj">
+      <Project>{69a3a794-8780-43df-8b2c-055fbdc64d2d}</Project>
+      <Name>HRMS.Repository.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
+      <Project>{b7ea8787-86ea-48fc-945f-6cae2b397da4}</Project>
+      <Name>HRMS.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
+      <Project>{93a81e85-aca4-4809-88dc-c3d67548ef83}</Project>
+      <Name>HRMS.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
+      <Name>WIM.Core.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
       <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
@@ -624,9 +542,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:9002/</IISUrl>
+          <IISUrl>http://localhost:9005/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:9002/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:9005/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
