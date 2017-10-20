@@ -41,7 +41,7 @@ namespace WMS.Service
         public IEnumerable<Role> GetRoles(int projectIDSys)
         {
             var roles = repo.Get(projectIDSys);
-            return roles;
+            return roles.ToList();
         }
 
         public Role GetRoleByLocIDSys(string id)

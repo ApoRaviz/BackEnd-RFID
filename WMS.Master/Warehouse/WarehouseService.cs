@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Repository;
+//using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -18,16 +18,17 @@ namespace WMS.Master
     public class WarehouseService : IWarehouseService
     {
         private MasterContext db = MasterContext.Create();
-        private GenericRepository<Warehouse_MT> repo;
+        //private GenericRepository<Warehouse_MT> repo;
 
         public WarehouseService()
         {
-            repo = new GenericRepository<Warehouse_MT>(db);
+            //repo = new GenericRepository<Warehouse_MT>(db);
         }        
 
         public IEnumerable<Warehouse_MT> GetWarehouses()
-        {           
-            return repo.GetAll();
+        {
+            //return repo.GetAll();
+            throw new NotImplementedException();
         }
 
         public Warehouse_MT GetWarehouseByLocIDSys(int id)
@@ -45,7 +46,7 @@ namespace WMS.Master
                 Warehouse.UpdateDate = DateTime.Now;
                 Warehouse.UserUpdate = "1";
                 
-                repo.Insert(Warehouse);
+                //repo.Insert(Warehouse);
                 try
                 {
                     db.SaveChanges();
@@ -69,19 +70,19 @@ namespace WMS.Master
         {           
             using (var scope = new TransactionScope())
             {
-                var existedWarehouse = repo.GetByID(id);
-                existedWarehouse.WHID = Warehouse.WHID;
-                existedWarehouse.WHName = Warehouse.WHName;
-                existedWarehouse.Size = Warehouse.Size;
-                existedWarehouse.Address = Warehouse.Address;
-                existedWarehouse.SubCity = Warehouse.SubCity;
-                existedWarehouse.City = Warehouse.City;
-                existedWarehouse.Province = Warehouse.Province;
-                existedWarehouse.Zipcode = Warehouse.Zipcode;
-                existedWarehouse.CountryCode = Warehouse.CountryCode;
-                existedWarehouse.UpdateDate = DateTime.Now;
-                existedWarehouse.UserUpdate = "1";
-                repo.Update(existedWarehouse);
+                //var existedWarehouse = repo.GetByID(id);
+                //existedWarehouse.WHID = Warehouse.WHID;
+                //existedWarehouse.WHName = Warehouse.WHName;
+                //existedWarehouse.Size = Warehouse.Size;
+                //existedWarehouse.Address = Warehouse.Address;
+                //existedWarehouse.SubCity = Warehouse.SubCity;
+                //existedWarehouse.City = Warehouse.City;
+                //existedWarehouse.Province = Warehouse.Province;
+                //existedWarehouse.Zipcode = Warehouse.Zipcode;
+                //existedWarehouse.CountryCode = Warehouse.CountryCode;
+                //existedWarehouse.UpdateDate = DateTime.Now;
+                //existedWarehouse.UserUpdate = "1";
+                //repo.Update(existedWarehouse);
                 try
                 {
                     db.SaveChanges();
@@ -105,11 +106,11 @@ namespace WMS.Master
         {
             using (var scope = new TransactionScope())
             {
-                var existedWarehouse = repo.GetByID(id);
-                existedWarehouse.Active = 0;
-                existedWarehouse.UpdateDate = DateTime.Now;
-                existedWarehouse.UserUpdate = "1";
-                repo.Update(existedWarehouse);
+                //var existedWarehouse = repo.GetByID(id);
+                //existedWarehouse.Active = 0;
+                //existedWarehouse.UpdateDate = DateTime.Now;
+                //existedWarehouse.UserUpdate = "1";
+                //repo.Update(existedWarehouse);
                 try
                 {
                 db.SaveChanges();
