@@ -42,7 +42,25 @@ namespace WMS.Service
 
         public PersonDto GetPersonByPersonID(int id)
         {
-            var Person = Mapper.Map<Person_MT,PersonDto >(repo.GetByID(id));
+            var data = repo.GetByID(id);
+            PersonDto Person = new PersonDto()
+            {
+                PersonIDSys = data.PersonIDSys,
+                PersonID = data.PersonID,
+                Age = data.Age,
+                BirthDate = data.BirthDate,
+                CreateDate = data.CreateDate,
+                Email = data.Email,
+                Name = data.Name,
+                Surname = data.Surname,
+                Religion = data.Religion,
+                Nationality = data.Nationality,
+                Gender = data.Gender,
+                UpdateDate = data.UpdateDate,
+                UserUpdate = data.UserUpdate,
+                Mobile = data.Mobile
+                
+            };
             return Person;
         }
 

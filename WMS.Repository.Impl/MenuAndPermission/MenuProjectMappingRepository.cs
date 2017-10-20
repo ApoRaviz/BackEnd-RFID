@@ -92,10 +92,10 @@ namespace WMS.Repository.Impl
 
         public IEnumerable<MenuProjectMapping> GetByProjectID(int id)
         {
-            var menu = from c in Db.MenuProjectMapping
+            var menu = (from c in Db.MenuProjectMapping
                        where c.ProjectIDSys== (int)id
                        orderby c.MenuIDSysParent, c.Sort
-                       select c;
+                       select c).Include(b => b.Menu_MT);
             return menu.ToList();
         }
 

@@ -91,7 +91,7 @@ namespace WMS.Repository.Impl.CustomerAndProject
 
         public void Update(Project_MT entityToUpdate)
         {
-            var existedProject = Db.Project_MT.SingleOrDefault(p => p.ProjectIDSys == entityToUpdate.ProjectIDSys);
+            var existedProject = GetByID(entityToUpdate.ProjectIDSys);
             existedProject.ProjectName = entityToUpdate.ProjectName;
             existedProject.UpdateDate = DateTime.Now;
             existedProject.UserUpdate = "1";

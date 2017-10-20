@@ -104,8 +104,8 @@ namespace WMS.Service
                         repoRole.Insert(c);
                     }
                 }
-                
-                   
+
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -117,7 +117,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4009));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return User.UserID;
             }
         }

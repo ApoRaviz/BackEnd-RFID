@@ -65,7 +65,6 @@ namespace WMS.Service
                     api.PUT = ApiMenuMapping.PUT;
                     api.DEL = ApiMenuMapping.DEL;
                     api.Type = ApiMenuMapping.Type;
-                    api.CreateAt = DateTime.Now;
                     repo.Insert(api);
                     scope.Complete();
                 }

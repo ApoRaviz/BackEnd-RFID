@@ -152,9 +152,21 @@ namespace WMS.Repository.Impl
         {
             var permission = (from c in Db.Permission
                               where c.PermissionID == id
+
                               select c).SingleOrDefault();
 
             Db.Permission.Remove(permission);
+            Db.SaveChanges();
+        }
+
+        public void Delete(RolePermission id)
+        {
+            var permission = (from c in Db.RolePermission
+                              where c.PermissionID == id.PermissionID
+                              && c.RoleID == id.RoleID
+                              select c).SingleOrDefault();
+
+            Db.RolePermission.Remove(permission);
             Db.SaveChanges();
         }
 

@@ -90,6 +90,7 @@ namespace WMS.Repository.Impl
 
         public void Insert(User entity)
         {
+            entity.Active = 1;
             Db.User.Add(entity);
             Db.SaveChanges();
         }

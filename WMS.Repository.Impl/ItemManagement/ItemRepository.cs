@@ -46,6 +46,7 @@ namespace WMS.Repository.Impl
             entity.ActiveDateFrom = DateTime.Now;
             entity.ActiveDateTo = DateTime.Now;
             entity.UserUpdate = "1";
+            entity.Active = 1;
             Db.Item_MT.Add(entity);
             Db.SaveChanges();
         }
