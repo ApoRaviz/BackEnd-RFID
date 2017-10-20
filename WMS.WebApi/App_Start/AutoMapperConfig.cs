@@ -16,7 +16,8 @@ namespace WMS.WebApi
                 cfg.CreateMap<Customer_MT, CustomerDto>();
                 cfg.CreateMap<Project_MT, ProjectDto>();
                 cfg.CreateMap<Category_MT, CategoryDto>();
-                cfg.CreateMap<Item_MT, ItemDto>();                
+                cfg.CreateMap<Item_MT, ItemDto>();
+                cfg.CreateMap<ItemSet_MT, ItemSetDto>();
                 cfg.CreateMap<ItemUnitMapping, ItemUnitDto>()
                     .ForMember(d => d.ItemIDSys, opt => opt.MapFrom(s => s.ItemIDSys))
                     .ForMember(d => d.UnitIDSys, opt => opt.MapFrom(s => s.UnitIDSys))

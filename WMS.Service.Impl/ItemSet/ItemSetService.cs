@@ -31,11 +31,16 @@ namespace WMS.Service
 
         public IEnumerable<ItemSetDto> GetItemSets()
         {
+            IEnumerable<ItemSetDto> ttemSetDto;
+
             IEnumerable<ItemSet_MT> ItemSets = (from i in db.ItemSet_MT
                                           where i.Active == 1
-                                          select i).ToList();
+                                          select i
+                                          //new ItemSetDto {
 
-            IEnumerable<ItemSetDto> ItemSetDtos = Mapper.Map<IEnumerable<ItemSet_MT>, IEnumerable<ItemSetDto>>(ItemSets);
+                                          //}
+                                          ).ToList() ;
+            IEnumerable<ItemSetDto> ItemSetDtos =  Mapper.Map<IEnumerable<ItemSet_MT>, IEnumerable<ItemSetDto>>(ItemSets);
             return ItemSetDtos;
         }
 
