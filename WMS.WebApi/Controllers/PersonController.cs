@@ -14,7 +14,7 @@ using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.Person;
 using WIM.Core.Entity.Employee;
-using WIM.Core.Security.Entity.UserManagement;
+using WIM.Core.Entity.UserManagement;
 
 namespace WMS.WebApi.Controllers
 {

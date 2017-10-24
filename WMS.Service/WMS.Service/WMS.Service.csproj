@@ -44,7 +44,8 @@
     <Compile Include="ApiMaster\IApiMTService.cs" />
     <Compile Include="ApiMenuMapping\IApiMenuMappingService.cs" />
     <Compile Include="CategoryMaster\ICategoryService.cs" />
-    <Compile Include="Currency\ICurrencyService.cs" />
+    <Compile Include="CountryMaster\ICountryService.cs" />
+    <Compile Include="CurrencyMaster\ICurrencyService.cs" />
     <Compile Include="CustomerMaster\ICustomerService.cs" />
     <Compile Include="Dimension\IDimensionService.cs" />
     <Compile Include="EmployeeMaster\IEmployeeService.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="UnitMaster\IUnitService.cs" />
     <Compile Include="UserMaster\IUserService.cs" />
     <Compile Include="UserRole\IUserRoleService.cs" />
+    <Compile Include="WarehouseMaster\IWarehouseService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\WIM.Core.Entity\WIM.Core.Entity.csproj">

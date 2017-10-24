@@ -12,13 +12,7 @@ namespace WIM.Core.Entity.RoleAndPermission
 {
     [Table("Roles")]
     public class Role
-    {        
-        public Role()
-        {
-            this.UserRoles = new HashSet<UserRoles>();
-            this.RolePermissions = new HashSet<RolePermission>();
-        }
-
+    {
         [Key]
         public string RoleID { get; set; }
         public string Name { get; set; }
@@ -27,9 +21,6 @@ namespace WIM.Core.Entity.RoleAndPermission
         public int ProjectIDSys { get; set; }
 
         public virtual Project_MT Project_MT { get; set; }
-        
         public virtual ICollection<UserRoles> UserRoles { get; set; }
-        
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
     }
 }

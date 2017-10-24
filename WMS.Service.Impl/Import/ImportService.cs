@@ -78,7 +78,7 @@ namespace WMS.Service.Impl.Import
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     // #JobComment
@@ -112,7 +112,7 @@ namespace WMS.Service.Impl.Import
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -149,7 +149,7 @@ namespace WMS.Service.Impl.Import
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -173,7 +173,7 @@ namespace WMS.Service.Impl.Import
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
@@ -196,7 +196,7 @@ namespace WMS.Service.Impl.Import
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateConcurrencyException e)
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));

@@ -6,6 +6,8 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.Country;
+using WIM.Core.Entity.Currency;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.Employee;
@@ -13,6 +15,7 @@ using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.Person;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.RoleAndPermission;
+using WIM.Core.Entity.Status;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.WarehouseManagement;
@@ -41,6 +44,12 @@ namespace WIM.Core.Context
         public DbSet<RolePermission> RolePermission { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<CurrencyUnit> CurrencyUnit { get; set; }
+        public DbSet<Country_MT> Country_MT { get; set; }
+        public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
+
+        public DbSet<Status_MT> Status_MT { get; set; }
+
         public CoreDbContext() : base("name=DefaultConnection")
         {
             Configuration.ProxyCreationEnabled = false;

@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.UserManagement;
-using WMS.Repository;
 
 namespace WMS.Common
 {
-    public class PersonDto : BaseEntityDto
+    public class PersonDto  
     {
         public int PersonIDSys { get; set; }
         public string PersonID { get; set; }
@@ -17,7 +16,7 @@ namespace WMS.Common
         public string Surname { get; set; }
         public int Age { get; set; }
         public string Gender { get; set; }
-        public System.DateTime? BirthDate { get; set; }
+        public Nullable<System.DateTime> BirthDate { get; set; }
         public string Religion { get; set; }
         public string Nationality { get; set; }
         public string Mobile { get; set; }

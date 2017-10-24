@@ -5,13 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.Employee;
+using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Entity.Person
 {
     [Table("Person_MT")]
     public class Person_MT
     {      
-        [Key]
+        [Key] 
         public int PersonIDSys { get; set; }
         public string PersonID { get; set; }
         public string Name { get; set; }
@@ -26,7 +28,7 @@ namespace WIM.Core.Entity.Person
         public System.DateTime UpdateDate { get; set; }
         public System.DateTime CreateDate { get; set; }
         public string UserUpdate { get; set; }
-        
+
     }
    
 }

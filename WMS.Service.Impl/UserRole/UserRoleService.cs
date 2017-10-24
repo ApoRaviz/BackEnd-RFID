@@ -18,29 +18,27 @@ using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class UserRoleService : IUserRoleService
     {
-        private CoreDbContext db;
-        private GenericRepository<UserRoles> repo;
-        
+        private UserRoleRepository repo;
 
         public UserRoleService()
         {
-            db = new CoreDbContext();
-            repo = new GenericRepository<UserRoles>(db);
+            repo = new UserRoleRepository();
         }        
 
         public IEnumerable<UserRoles> GetUserRoles()
         {           
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public UserRoles GetUserRoleByLocIDSys(int id)
         {           
-            UserRoles UserRole = db.UserRoles.Find(id);                                  
+            UserRoles UserRole = repo.GetByID(id);                                  
             return UserRole;            
         }                      
 
@@ -48,11 +46,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-
-                repo.Insert(UserRole);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(UserRole);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -73,11 +69,9 @@ namespace WMS.Service
         {           
             using (var scope = new TransactionScope())
             {
-                var existedUserRole = repo.GetByID(id);
-                repo.Update(existedUserRole);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(UserRole);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -98,12 +92,11 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedUserRole = repo.GetByID(id);
-                repo.Update(existedUserRole);
                 try
                 {
-                db.SaveChanges();
-                scope.Complete();
+                    var existedUserRole = repo.GetByID(id);
+                    repo.Delete(id);
+                    scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,60 +122,24 @@ namespace WMS.Service
         public List<RoleUserDto> GetRoleByUserID(string userid)
         {
             // #JobComment
-            List<RoleUserDto> RoleUser = (from o in db.Role
-                                          join i in db.UserRoles on o.RoleID equals i.RoleID
-                                          where i.UserID == userid
-                                          select o).Include("Project_MT").Select(b => new RoleUserDto()
-                                          {
-                                              RoleID = b.RoleID,
-                                              Name = b.Name,
-                                              Description = b.Description,
-                                              IsSysAdmin = b.IsSysAdmin,
-                                              Project_MT = null//b.Project_MT
-                                          }).ToList();
+            List<RoleUserDto> RoleUser = repo.GetRoleByUserID(userid).ToList();
             return RoleUser;
         }
 
         public List<UserRoleDto> GetUserByRoleID(string roleid)
         {
-            var RoleForPermissionQuery = from row in db.UserRoles
-                                         where row.RoleID == roleid
-                                         select row;
-            List<UserRoleDto> userlist = RoleForPermissionQuery.Include(a => a.User).Select(b => new UserRoleDto()
-            {
-                UserID = b.UserID,
-                Name = b.User.Name,
-                Email = b.User.Email,
-                //PhoneNumber = b.User.PhoneNumber.ToString(),
-                PasswordHash = b.User.PasswordHash,
-                Surname = b.User.Surname,
-
-            }).ToList();
-            return userlist;
+            var RoleForPermissionQuery = repo.GetUserByRoleID(roleid);
+            return RoleForPermissionQuery.ToList();
         }
 
         public UserRoleDto GetUserRoleByUserID(string id)
         {
-            UserRoleDto UserRole = db.User.Where(a => a.UserID == id).Select(b => new UserRoleDto()
-            {
-                UserID = b.UserID,
-                Name = b.Name,
-                Email = b.Email,
-                //PhoneNumber = b.PhoneNumber.ToString(),
-                PasswordHash = b.PasswordHash,
-                Surname = b.Surname
-            }).SingleOrDefault();
+            UserRoleDto UserRole = repo.GetUserRoleByUserID(id);
             return UserRole;
         }
         public RoleUserDto GetRoleUserByRoleID(string id)
         {
-            RoleUserDto RoleUser = db.UserRoles.Include(a => a.Role).Select(b => new RoleUserDto()
-            {
-                RoleID = b.RoleID,
-                Name = b.Role.Name,
-                Description = b.Role.Description,
-                IsSysAdmin = b.Role.IsSysAdmin
-            }).SingleOrDefault();
+            RoleUserDto RoleUser = repo.GetRoleUserByRoleID(id);
             return RoleUser;
         }
 
@@ -193,10 +150,9 @@ namespace WMS.Service
                 UserRoles data = new UserRoles();
                 data.RoleID = roleid;
                 data.UserID = userid;
-                repo.Insert(data);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(data);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -220,10 +176,9 @@ namespace WMS.Service
                 UserRoles data = new UserRoles();
                 data.RoleID = roleid;
                 data.UserID = userid;
-                repo.Insert(data);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(data);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -242,9 +197,7 @@ namespace WMS.Service
 
         public bool DeleteRolePermission(string UserId, string RoleId)
         {
-            var RoleForPermissionQuery = from row in db.UserRoles
-                                         where row.UserID == UserId && row.RoleID == RoleId
-                                         select row;
+            var RoleForPermissionQuery = repo.GetUserRole(UserId, RoleId);
             if (RoleForPermissionQuery != null)
             {
                 using (var scope = new TransactionScope())
@@ -255,11 +208,10 @@ namespace WMS.Service
                         PermissionID = b.PermissionID
                     }).SingleOrDefault();*/
                     UserRoles temp = new UserRoles();
-                    temp = RoleForPermissionQuery.SingleOrDefault();
+                    temp = RoleForPermissionQuery;
                     if (temp != null)
                     {
                         repo.Delete(temp);
-                        db.SaveChanges();
                         scope.Complete();
                         return true;
                     }

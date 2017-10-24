@@ -10,9 +10,9 @@ namespace WMS.Service
 {
     public interface IApiMenuMappingService
     {
-        IEnumerable<ApiMenuMappingDto> GetCategories();
+        IEnumerable<ApiMenuMappingDto> GetApiMenuMapping();
         ApiMenuMappingDto GetApiMenuMapping(string id);
-        List<ApiMenuMapping> GetListApiMenuMapping(int id);
+        IEnumerable<ApiMenuMapping> GetListApiMenuMapping(int id);
         string CreateApiMenuMapping(ApiMenuMappingDto ApiMenuMapping);
         string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping);
         bool UpdateApiMenuMapping(string id, ApiMenuMapping ApiMenuMapping);

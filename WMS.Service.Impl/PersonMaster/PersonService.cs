@@ -16,64 +16,62 @@ using WMS.Common;
 using WIM.Core.Context;
 using WIM.Core.Entity.Person;
 using WIM.Core.Security.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 { 
     public class PersonService : IPersonService
     {
-        private CoreDbContext CoreDb;
-        private SecurityDbContext SecuDb;
-        private GenericRepository<Person_MT> repo;
+        private PersonRepository repo;
 
         public PersonService()
         {
-            CoreDb = new CoreDbContext();
-            SecuDb = new SecurityDbContext();
-            repo = new GenericRepository<Person_MT>(CoreDb);
+            repo = new PersonRepository();
         }        
 
         public IEnumerable<Person_MT> GetPersons()
         {           
-            return repo.GetAll();
+            return repo.Get();
         }
 
         public Person_MT GetPersonByPersonIDSys(string id)
         {
-            Person_MT Person = (from i in CoreDb.Person_MT
-                                where (from o in CoreDb.User
-                                       where o.UserID == id
-                                       select o.PersonIDSys)
-                                     .Contains(i.PersonIDSys)
-                                select i).SingleOrDefault();
+            Person_MT Person = repo.GetByUserID(id);
             return Person;            
         }
 
         public PersonDto GetPersonByPersonID(int id)
         {
-            var Person = (from i in CoreDb.Person_MT
-                                where i.PersonIDSys == id
-                                select i).Select(b => new PersonDto(){
-                                Name = b.Name,
-                                PersonIDSys = b.PersonIDSys,
-                                Surname = b.Surname,Religion = b.Religion,
-                                Age = b.Age,BirthDate = b.BirthDate,Gender = b.Gender,
-                                Email = b.Email,CreateDate = b.CreateDate,Mobile = b.Mobile,Nationality = b.Nationality
-                                }).SingleOrDefault();
+            var data = repo.GetByID(id);
+            PersonDto Person = new PersonDto()
+            {
+                PersonIDSys = data.PersonIDSys,
+                PersonID = data.PersonID,
+                Age = data.Age,
+                BirthDate = data.BirthDate,
+                CreateDate = data.CreateDate,
+                Email = data.Email,
+                Name = data.Name,
+                Surname = data.Surname,
+                Religion = data.Religion,
+                Nationality = data.Nationality,
+                Gender = data.Gender,
+                UpdateDate = data.UpdateDate,
+                UserUpdate = data.UserUpdate,
+                Mobile = data.Mobile
+                
+            };
             return Person;
         }
 
         public int CreatePerson(Person_MT Person)
         {
             using (var scope = new TransactionScope())
-            {                
-                Person.CreateDate = DateTime.Now;
-                Person.UpdateDate = DateTime.Now;
-                Person.UserUpdate = "1";
-                
-                CoreDb.Person_MT.Add(Person);
+            {      
                 try
                 {
-                    CoreDb.SaveChanges();
+                    repo.Insert(Person);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -85,7 +83,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return Person.PersonIDSys;
             }
         }
@@ -94,28 +91,9 @@ namespace WMS.Service
         {           
             using (var scope = new TransactionScope())
             {
-                var existedPerson = (from i in CoreDb.Person_MT
-                                     where (from o in CoreDb.User
-                                            where o.UserID == id
-                                            select o.PersonIDSys)
-                                          .Contains(i.PersonIDSys)
-                                     select i).SingleOrDefault();
-                existedPerson.PersonIDSys = Person.PersonIDSys;
-                existedPerson.Name = Person.Name;
-                existedPerson.Gender = Person.Gender;
-                existedPerson.Age = Person.Age;
-                existedPerson.BirthDate = Person.BirthDate;
-                existedPerson.Religion = Person.Religion;
-                existedPerson.Nationality = Person.Nationality;
-                existedPerson.Surname = Person.Surname;
-                existedPerson.Email = Person.Email;
-                existedPerson.Mobile = Person.Mobile;
-                existedPerson.UpdateDate = DateTime.Now;
-                existedPerson.UserUpdate = "1";
-
                 try
                 {
-                    CoreDb.SaveChanges();
+                    repo.Update(id, Person);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -136,25 +114,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedPerson = (from i in CoreDb.Person_MT
-                                     where i.PersonIDSys == Person.PersonIDSys
-                                     select i).SingleOrDefault();
-                existedPerson.PersonIDSys = Person.PersonIDSys;
-                existedPerson.Name = Person.Name;
-                existedPerson.Gender = Person.Gender;
-                existedPerson.Age = Person.Age;
-                existedPerson.BirthDate = Person.BirthDate;
-                existedPerson.Religion = Person.Religion;
-                existedPerson.Nationality = Person.Nationality;
-                existedPerson.Surname = Person.Surname;
-                existedPerson.Email = Person.Email;
-                existedPerson.Mobile = Person.Mobile;
-                existedPerson.UpdateDate = DateTime.Now;
-                existedPerson.UserUpdate = "1";
-
                 try
                 {
-                    CoreDb.SaveChanges();
+                    repo.Update(Person);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -176,12 +138,11 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedPerson = CoreDb.Person_MT.SingleOrDefault(p => p.PersonIDSys == id);
-                existedPerson.UpdateDate = DateTime.Now;
-                existedPerson.UserUpdate = "1";                
+                              
                 try
                 {
-                    CoreDb.SaveChanges();
+                //#Oil Comment
+                //Wait for Command Delete
                 scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)

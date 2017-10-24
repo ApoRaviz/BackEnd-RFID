@@ -15,23 +15,22 @@ using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class ApiMenuMappingService : IApiMenuMappingService
     {
-        private CoreDbContext db = CoreDbContext.Create();
-        private GenericRepository<ApiMenuMapping> repo;
+        private ApiMenuMappingRepository repo;
 
         public ApiMenuMappingService()
         {
-            repo = new GenericRepository<ApiMenuMapping>(db);
+            repo = new ApiMenuMappingRepository();
         }
 
-        public IEnumerable<ApiMenuMappingDto> GetCategories()
+        public IEnumerable<ApiMenuMappingDto> GetApiMenuMapping()
         {
-            IEnumerable<ApiMenuMapping> ApiMenuMappings = (from i in db.ApiMenuMapping
-                                          select i).ToList();
+            IEnumerable<ApiMenuMapping> ApiMenuMappings = repo.Get();
 
             IEnumerable<ApiMenuMappingDto> ApiMenuMappingDtos = Mapper.Map<IEnumerable<ApiMenuMapping>, IEnumerable<ApiMenuMappingDto>>(ApiMenuMappings);
             return ApiMenuMappingDtos;
@@ -39,20 +38,16 @@ namespace WMS.Service
 
         public ApiMenuMappingDto GetApiMenuMapping(string id)
         {
-            ApiMenuMapping ApiMenuMapping = (from i in db.ApiMenuMapping
-                            where i.ApiIDSys == id 
-                            select i).SingleOrDefault();
+            ApiMenuMapping ApiMenuMapping = repo.GetByID(id);
 
             ApiMenuMappingDto ApiMenuMappingDto = Mapper.Map<ApiMenuMapping, ApiMenuMappingDto>(ApiMenuMapping); 
 
             return ApiMenuMappingDto;
         }
 
-        public List<ApiMenuMapping> GetListApiMenuMapping(int id)
+        public IEnumerable<ApiMenuMapping> GetListApiMenuMapping(int id)
         {
-            var ApiMenuMapping = (from i in db.ApiMenuMapping
-                                             where i.MenuIDSys == id
-                                             select i).ToList();
+            var ApiMenuMapping = repo.Get(id);
             return ApiMenuMapping;
         }
 
@@ -63,7 +58,6 @@ namespace WMS.Service
                 ApiMenuMapping api = new ApiMenuMapping();
                 try
                 {
-                
                     api.ApiIDSys = ApiMenuMapping.ApiIDSys;
                     api.MenuIDSys = ApiMenuMapping.MenuIDSys;
                     api.GET = ApiMenuMapping.GET;
@@ -72,8 +66,7 @@ namespace WMS.Service
                     api.DEL = ApiMenuMapping.DEL;
                     api.Type = ApiMenuMapping.Type;
                     repo.Insert(api);
-                    db.SaveChanges();
-             
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -85,7 +78,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return api.ApiIDSys;
             }
         }
@@ -94,8 +86,9 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                
-                
+
+                try
+                {
                     foreach (var c in ApiMenuMapping)
                     {   ApiMenuMapping api = new ApiMenuMapping();
                         api.ApiIDSys = c.ApiIDSys;
@@ -108,9 +101,8 @@ namespace WMS.Service
                         repo.Insert(api);
                     }
 
-                try
-                {
-                    db.SaveChanges();
+                
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -122,7 +114,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return "Success";
             }
         }
@@ -131,10 +122,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                repo.Update(ApiMenuMapping);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(ApiMenuMapping);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -146,7 +137,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -155,11 +145,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedApiMenuMapping = repo.GetByID(id);
-                repo.Delete(existedApiMenuMapping);
                 try
                 {
-                db.SaveChanges();
+                var existedApiMenuMapping = repo.GetByID(id);
+                repo.Delete(existedApiMenuMapping);
                 scope.Complete();
                 }catch (DbUpdateConcurrencyException)
             {

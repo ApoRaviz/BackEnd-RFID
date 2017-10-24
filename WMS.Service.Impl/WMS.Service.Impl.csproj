@@ -61,7 +61,8 @@
     <Compile Include="ApiMaster\ApiMTService.cs" />
     <Compile Include="ApiMenuMapping\ApiMenuMappingService.cs" />
     <Compile Include="CategoryMaster\CategoryService.cs" />
-    <Compile Include="Currency\CurrencyService.cs" />
+    <Compile Include="CountryMaster\CountryService.cs" />
+    <Compile Include="CurrencyMaster\CurrencyService.cs" />
     <Compile Include="CustomerMaster\CustomerService.cs" />
     <Compile Include="Dimension\DimensionService.cs" />
     <Compile Include="EmployeeMaster\EmployeeService.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="UnitMaster\UnitService.cs" />
     <Compile Include="UserMaster\UserService.cs" />
     <Compile Include="UserRole\UserRoleService.cs" />
+    <Compile Include="WarehouseMaster\WarehouseService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
@@ -128,10 +130,6 @@
     <ProjectReference Include="..\WMS.Repository.Impl\WMS.Repository.Impl.csproj">
       <Project>{4a90ad09-d706-4985-a8cd-73b2ba35403d}</Project>
       <Name>WMS.Repository.Impl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
-      <Project>{665b8178-ec1a-49f7-aa86-775cee3a51e4}</Project>
-      <Name>WMS.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Service\WMS.Service\WMS.Service.csproj">
       <Project>{7ebe4831-beee-4f55-a5ca-71efa10522a7}</Project>

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Country\Country_MT.cs" />
     <Compile Include="Currency\CurrencyUnit.cs" />
     <Compile Include="CustomerManagement\Customer_MT.cs" />
     <Compile Include="Dimension\DimensionLayout_MT.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="RoleAndPermission\Permission.cs" />
     <Compile Include="RoleAndPermission\Role.cs" />
     <Compile Include="RoleAndPermission\RolePermission.cs" />
+    <Compile Include="Status\Status_MT.cs" />
     <Compile Include="SupplierManagement\Supplier_MT.cs" />
     <Compile Include="UserManagement\User.cs" />
     <Compile Include="UserManagement\UserRole.cs" />
