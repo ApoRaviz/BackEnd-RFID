@@ -25,4 +25,17 @@ namespace WIM.Core.Repository
         TEntity GetSingle(Func<TEntity, bool> predicate);
         TEntity GetFirst(Func<TEntity, bool> predicate);
     }
+
+    public abstract class AGenericRepository<TEntity> where TEntity : class
+    {
+        public abstract IEnumerable<TEntity> Get();
+        
+        public abstract TEntity GetByID(object id);
+
+
+        public TEntity GetCustomByID(object id)
+        {
+            return null;
+        }
+    }
 }

@@ -6,19 +6,33 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
-using WIM.Core.Entity.WarehouseManagement;
 using WIM.Core.Repository;
 using WMS.Common;
+using WMS.Context;
+using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Repository.Impl
 {
+    public class Test1 : AGenericRepository<Location_MT>
+    {
+        public override IEnumerable<Location_MT> Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Location_MT GetByID(object id)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class LocationRepository : IGenericRepository<Location_MT>
     {
-        private CoreDbContext Db { get; set; }
+        private WMSDbContext Db { get; set; }
 
         public LocationRepository()
         {
-            Db = new CoreDbContext();
+            Db = new WMSDbContext();
         }
 
         public IEnumerable<Location_MT> Get()
@@ -99,7 +113,7 @@ namespace WMS.Repository.Impl
 
         public Location_MT Get(Func<Location_MT, bool> where)
         {
-            throw new NotImplementedException();
+            return Get().Where(where).First();
         }
 
         public void Delete(Func<Location_MT, bool> where)
@@ -129,7 +143,8 @@ namespace WMS.Repository.Impl
 
         public Location_MT GetFirst(Func<Location_MT, bool> predicate)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();            
         }
+      
     }
 }

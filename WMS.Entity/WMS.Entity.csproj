@@ -63,6 +63,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\ReportLayoutDetail_MT.cs" />
     <Compile Include="Report\ReportLayoutHeader_MT.cs" />
+    <Compile Include="WarehouseManagement\Location_MT.cs" />
+    <Compile Include="WarehouseManagement\RackLayout.cs" />
+    <Compile Include="WarehouseManagement\RackLayout_MT.cs" />
+    <Compile Include="WarehouseManagement\Warehouse_MT.cs" />
+    <Compile Include="WarehouseManagement\ZoneLayoutDetail_MT.cs" />
+    <Compile Include="WarehouseManagement\ZoneLayoutHeader_MT.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

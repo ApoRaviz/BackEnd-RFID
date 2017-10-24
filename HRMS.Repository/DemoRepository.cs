@@ -19,11 +19,7 @@ namespace HRMS.Repository.Impl
 
         public IEnumerable<Leave> GetList()
         {
-            IEnumerable<Leave> leaves = (
-                                            from l in HRMSDb.Leave
-                                            select l
-                                         ).ToList();
-            return leaves;
+            return null;
         }
 
     }

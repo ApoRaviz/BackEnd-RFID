@@ -85,6 +85,7 @@
     <Compile Include="UserMaster\UserService.cs" />
     <Compile Include="UserRole\UserRoleService.cs" />
     <Compile Include="WarehouseMaster\WarehouseService.cs" />
+    <Compile Include="WarehouseMaster\ZoneService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
