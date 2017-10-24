@@ -45,6 +45,9 @@
     <Reference Include="Isuzu.Repository">
       <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
     </Reference>
+    <Reference Include="Isuzu.Repository.Impl">
+      <HintPath>..\Isuzu.Repository.Impl\bin\Debug\Isuzu.Repository.Impl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />

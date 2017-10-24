@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ItemManagement\IGenericRepository.cs" />
+    <Compile Include="ItemManagement\ISerialHeadRepository.cs" />
+    <Compile Include="ItemManagement\ISerialRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

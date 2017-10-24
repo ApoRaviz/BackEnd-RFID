@@ -1,11 +1,11 @@
-namespace Isuzu.Repository
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Isuzu.Entity
+{
+    [Table("InboundItems")]
     public partial class InboundItems
     {
         public string ID { get; set; }
