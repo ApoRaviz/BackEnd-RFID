@@ -612,27 +612,26 @@ namespace Fuji.Service.Impl.ItemImport
 
             using (var scope = new TransactionScope())
             {
-                //var query = (from d in Db.ImportSerialDetail
-                //             where receive.ItemGroups.Contains(d.ItemGroup)
-                //                && d.HeadID == "0"
-                //                && d.Status == FujiStatus.NEW.ToString()
-                //             select d
-                //         );
-
-                var query = SerialDetailRepo.GetItemsBy(d => receive.ItemGroups.Contains(d.ItemGroup)
+                var query = (from d in Db.ImportSerialDetail
+                             where receive.ItemGroups.Contains(d.ItemGroup)
                                 && d.HeadID == "0"
-                                && d.Status == FujiStatus.NEW.ToString());
+                                //&& d.Status == FujiStatus.NEW.ToString()
+                                && new List<string> {
+                                    FujiStatus.NEW.ToString(),
+                                    FujiStatus.SCANNED.ToString()
+                                }.Contains(d.Status)
+                             select d
+                         );
 
                 var resultGroup = (from p in query
                                    group p by p.ItemGroup into g
                                    select new { ItemGroup = g.Key, Items = g.ToList() }).ToList();
 
 
-                //ImportSerialHead importHead = (from h in Db.ImportSerialHead
-                //                               where h.HeadID == receive.HeadID
-                //                               select h
-                //     ).SingleOrDefault();
-                ImportSerialHead importHead = SerialHeadRepo.GetItemSingleBy(h => h.HeadID == receive.HeadID);
+                ImportSerialHead importHead = (from h in Db.ImportSerialHead
+                                               where h.HeadID == receive.HeadID
+                                               select h
+                       ).SingleOrDefault();
 
                 if (importHead == null)
                 {
@@ -644,24 +643,22 @@ namespace Fuji.Service.Impl.ItemImport
                     throw new ValidationException(new ValidationError("48888", "Head ไม่เท่ากับที่ Scan รับ"));
                 }
 
+                importHead.Status = FujiStatus.SCANNED.ToString();
+                importHead.UpdateDate = DateTime.Now;
+                importHead.UserUpdate = receive.UserUpdate;
+
+                foreach (ImportSerialDetail detail in query)
+                {
+                    detail.HeadID = receive.HeadID;
+                    detail.ItemCode = receive.ItemCode;
+                    detail.Status = FujiStatus.SCANNED.ToString();
+                    detail.UpdateDate = DateTime.Now;
+                    detail.UserUpdate = receive.UserUpdate;
+                }
+
                 try
                 {
-                    importHead.Status = FujiStatus.SCANNED.ToString();
-                    importHead.UpdateDate = DateTime.Now;
-                    importHead.UserUpdate = receive.UserUpdate;
-                    SerialHeadRepo.Update(importHead);
-
-                    foreach (ImportSerialDetail detail in query)
-                    {
-                        detail.HeadID = receive.HeadID;
-                        detail.ItemCode = receive.ItemCode;
-                        detail.Status = FujiStatus.SCANNED.ToString();
-                        detail.UpdateDate = DateTime.Now;
-                        detail.UserUpdate = receive.UserUpdate;
-                        SerialDetailRepo.Update(detail);
-                    }
-
-                    //Db.SaveChanges();
+                    Db.SaveChanges();
                     scope.Complete();
                     return true;
                 }
