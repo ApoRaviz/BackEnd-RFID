@@ -6,18 +6,19 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
-using WIM.Core.Entity.WarehouseManagement;
 using WIM.Core.Repository;
+using WMS.Context;
+using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Repository.Impl
 {
     public class WarehouseRepository : IGenericRepository<Warehouse_MT>
     {
-        private CoreDbContext Db;
+        private WMSDbContext Db;
 
         public WarehouseRepository()
         {
-            Db = new CoreDbContext();
+            Db = new WMSDbContext();
         }
 
         public void Delete(object id)

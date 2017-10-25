@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
-using Fuji.WebApi.Areas.HelpPage.ModelDescriptions;
+using HRMS.WebApi.Areas.HelpPage.ModelDescriptions;
 
-namespace Fuji.WebApi.Areas.HelpPage.Models
+namespace HRMS.WebApi.Areas.HelpPage.Models
 {
     /// <summary>
     /// The model that represents an API displayed on the help page.

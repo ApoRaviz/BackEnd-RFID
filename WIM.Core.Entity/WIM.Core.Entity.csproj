@@ -56,18 +56,11 @@
     <Compile Include="RoleAndPermission\Permission.cs" />
     <Compile Include="RoleAndPermission\Role.cs" />
     <Compile Include="RoleAndPermission\RolePermission.cs" />
+    <Compile Include="Status\Status_MT.cs" />
     <Compile Include="SupplierManagement\Supplier_MT.cs" />
     <Compile Include="UserManagement\User.cs" />
     <Compile Include="UserManagement\UserRole.cs" />
-    <Compile Include="WarehouseManagement\Location_MT.cs" />
-    <Compile Include="WarehouseManagement\RackLayout.cs" />
-    <Compile Include="WarehouseManagement\RackLayout_MT.cs" />
-    <Compile Include="WarehouseManagement\Warehouse_MT.cs" />
-    <Compile Include="WarehouseManagement\ZoneLayoutDetail_MT.cs" />
-    <Compile Include="WarehouseManagement\ZoneLayoutHeader_MT.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Security\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

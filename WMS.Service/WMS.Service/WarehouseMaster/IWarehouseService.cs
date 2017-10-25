@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Entity.WarehouseManagement;
+using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Master
 {
