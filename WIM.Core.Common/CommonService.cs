@@ -24,7 +24,9 @@ namespace WIM.Core.Common
 
         public bool WriteUserLog(UserLog log)
         {
-            var logRepo = new GenericRepository<UserLog>(db);
+            return false;
+
+            /*var logRepo = new GenericRepository<UserLog>(db);
 
             using (var scope = new TransactionScope())
             {
@@ -39,13 +41,14 @@ namespace WIM.Core.Common
                 }
                 scope.Complete();
                 return true;
-            }
+            }*/
         }
 
         public IList<UserLog> UserLogData()
         {
-            var logRepo = new GenericRepository<UserLog>(db);
-            return logRepo.GetAll().ToList();
+            return null;
+            /*var logRepo = new GenericRepository<UserLog>(db);
+            return logRepo.GetAll().ToList();*/
         }
 
         public IList<ProcGetUserLog_Result> GetUserLogData(int? logId, DateTime? RequestDateFrom, DateTime? RequestDateTo)

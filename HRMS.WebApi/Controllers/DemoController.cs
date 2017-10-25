@@ -13,9 +13,12 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Status;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
 namespace HRMS.WebApi.Controllers
 {
+
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
@@ -33,24 +36,17 @@ namespace HRMS.WebApi.Controllers
             ResponseData<int> response = new ResponseData<int>();
             try
             {
-                List<string> l = new List<string>();
-                
-                IList<string> l1 = new List<string>();
+                using (HRMSDbContext db = new HRMSDbContext())
+                {
+                    ILeaveRepository repo = new LeaveRepository(db);
+                    repo.Update(leave, "13007");
 
+                    //ILeaveDetailRepository repoDetail = new LeaveDetailRepository(db);
+                    //repoDetail.Update(new LeaveDetail(), "13007");
 
-                ILeaveRepository repo = new LeaveRepository();
+                    db.SaveChanges();
+                }                            
 
-             
-
-
-                HRMSDbContext hrmsDb = new HRMSDbContext();
-
-
-                hrmsDb.Entry(leave).State = EntityState.Modified;
-
-
-
-                hrmsDb.SaveChanges();
                 response.SetData(1);
             }
             catch (ValidationException ex)
@@ -62,94 +58,16 @@ namespace HRMS.WebApi.Controllers
         }
     }
 
-    public class BaseEntity
-    {
-        public string CreateBy { get; set; }
-        public DateTime CreateAt { get; set; }
-        public string UpdateBy { get; set; }
-        public DateTime UpdateAt { get; set; }
-    }
 
-    public interface IGenericRepository<TEntity> where TEntity : class
-    {
-        IEnumerable<TEntity> Get();
-        TEntity GetByID(object id);
-        void Insert(TEntity entity);
-        void Delete(object id);
-        void Delete(TEntity entityToDelete);
-        void Update(TEntity entityToUpdate);
-
-    }
-
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
-    {
-        protected DbContext Context;
-
-        public GenericRepository()
-        {
-
-        }
-
-            public GenericRepository(DbContext context)
-        {
-            Context = context;
-        }
-
-
-
-        public void Delete(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(TEntity entityToDelete)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TEntity> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity GetByID(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TEntity entityToUpdate)
-        {        
-          
-            Context.SaveChanges();
-            throw new NotImplementedException();
-        }
-    }
-
-    public interface ITest
-    {
-
-    }
-
-    public interface ILeaveRepository : IGenericRepository<Leave>
-    {
+    public interface ILeaveRepository : IRepository<Leave>
+    {        
         IEnumerable<Leave> GetTopSellingCourses(int count);
         IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize);
 
-    }
+    }   
 
-    public class LeaveRepository : GenericRepository<Leave>,  ILeaveRepository
+    public class LeaveRepository : Repository<Leave>,  ILeaveRepository
     {
-
-        public LeaveRepository()
-        {
-            this.Context = new HRMSDbContext();
-        }
-
         public LeaveRepository(DbContext context)  : base(context)
         {
 
@@ -157,11 +75,8 @@ namespace HRMS.WebApi.Controllers
 
         public IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize)
         {
-            ///
             throw new NotImplementedException();
-        }
-         
-      
+        }              
 
         public IEnumerable<Leave> GetTopSellingCourses(int count)
         {
@@ -169,10 +84,19 @@ namespace HRMS.WebApi.Controllers
         }
     }
 
-
-    public class LeaveDetailRepository
+    public interface ILeaveDetailRepository : IRepository<LeaveDetail>
     {
-     
+
+
+    }
+
+
+    public class LeaveDetailRepository : Repository<LeaveDetail>, ILeaveDetailRepository
+    {
+        public LeaveDetailRepository(DbContext context) : base(context)
+        {
+
+        }
     }
 
 }

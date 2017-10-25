@@ -5,25 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
+using WIM.Core.Entity;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity 
     {
         protected DbContext Context;
         internal DbSet<TEntity> DbSet;
-
-        public Repository()
-        {
-            Context = new CoreDbContext();
-            this.DbSet = Context.Set<TEntity>();
-        }
-
-        public Repository(string nameOrConnectionString)
-        {
-            Context = new DbContext(nameOrConnectionString);
-            this.DbSet = Context.Set<TEntity>();
-        }
 
         public Repository(DbContext context)
         {
@@ -31,7 +20,7 @@ namespace WIM.Core.Repository.Impl
             this.DbSet = Context.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> Get()
+        public IEnumerable<TEntity> Get()
         {
             IQueryable<TEntity> query = DbSet;
             return query.ToList();
@@ -42,50 +31,47 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Where(where).FirstOrDefault<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
             return DbSet.ToList();
         }
 
-        private TEntity GetByID(object id)
+        public TEntity GetByID(object id)
         {
             return DbSet.Find(id);
-        }
+        }       
 
-        public TEntity GetByID(int id)
-        {
-            return DbSet.Find(id);
-        }
-
-        public TEntity GetByID(string id)
-        {
-            return DbSet.Find(id);
-        }
-
-
-        public bool Exists(object primaryKey)
+            public bool Exists(object primaryKey)
         {
             return DbSet.Find(primaryKey) != null;
         }
 
-        public virtual void Insert(TEntity entity)
-        {
+        public void Insert(TEntity entity, string username)
+        {            
+            entity.CreateBy = username;
+            entity.CreateAt = DateTime.Now;
+            entity.UpdateBy = username;
+            entity.UpdateAt = DateTime.Now;
+
             DbSet.Add(entity);
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public void Update(TEntity entityToUpdate, string username)
         {
+            entityToUpdate.UpdateBy = username;
+            entityToUpdate.UpdateAt = DateTime.Now;
+            
             DbSet.Attach(entityToUpdate);
             Context.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
-        public virtual void Delete(object id)
+        public void Delete(object id)
         {
             TEntity entityToDelete = DbSet.Find(id);
             Delete(entityToDelete);
         }
 
-        public virtual void Delete(TEntity entityToDelete)
+        public void Delete(TEntity entityToDelete)
         {
             if (Context.Entry(entityToDelete).State == EntityState.Detached)
             {
@@ -96,12 +82,12 @@ namespace WIM.Core.Repository.Impl
 
        
         // Other
-        public virtual IEnumerable<TEntity> GetMany(Func<TEntity, bool> where)
+        public IEnumerable<TEntity> GetMany(Func<TEntity, bool> where)
         {
             return DbSet.Where(where).ToList();
         }
 
-        public virtual IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where)
+        public IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where)
         {
             return DbSet.Where(where).AsQueryable();
         }

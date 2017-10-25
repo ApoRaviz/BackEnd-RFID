@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Data;
+using WIM.Core.Entity;
 
 namespace HRMS.Repository.Entity.LeaveRequest
 {

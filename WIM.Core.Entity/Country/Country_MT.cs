@@ -10,7 +10,7 @@ using WIM.Core.Entity.Currency;
 namespace WIM.Core.Entity.Country
 {
     [Table("Country_MT")]
-    public class Country_MT
+    public class Country_MT : BaseEntity
     {
 
         public Country_MT()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIM.Core.Common.Data
+namespace WIM.Core.Entity
 {
     public class BaseEntity
     {
