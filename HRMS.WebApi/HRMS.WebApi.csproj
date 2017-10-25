@@ -459,26 +459,6 @@
       <Project>{2d18ff9d-6137-464e-861b-417ffa24fdf1}</Project>
       <Name>HRMS.Repository.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
-      <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
-      <Name>Fuji.Common.ValueObject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
-      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
-      <Name>Fuji.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
-      <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
-      <Name>Fuji.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Service.Impl\Fuji.Service.Impl.csproj">
-      <Project>{e22348a1-e953-478b-9b69-cb3fcb3a45ce}</Project>
-      <Name>Fuji.Service.Impl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Service\Fuji.Service.csproj">
-      <Project>{4fbc9a8b-22ee-474c-a07e-00d5e770f751}</Project>
-      <Name>Fuji.Service</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HRMS.Repository.Context\HRMS.Repository.Context.csproj">
       <Project>{69a3a794-8780-43df-8b2c-055fbdc64d2d}</Project>
       <Name>HRMS.Repository.Context</Name>

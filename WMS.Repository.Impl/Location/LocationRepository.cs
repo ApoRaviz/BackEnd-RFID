@@ -13,18 +13,6 @@ using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Repository.Impl
 {
-    public class Test1 : AGenericRepository<Location_MT>
-    {
-        public override IEnumerable<Location_MT> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Location_MT GetByID(object id)
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     public class LocationRepository : IGenericRepository<Location_MT>
     {

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using Fuji.Common.ValueObject;
+using WIM.Core.Repository;
 
 namespace Fuji.Repository.Impl.ItemManagement
 {

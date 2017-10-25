@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Fuji.WebApi.WebApiApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="HRMS.WebApi.WebApiApplication" Language="C#" %>

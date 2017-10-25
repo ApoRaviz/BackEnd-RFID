@@ -67,5 +67,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{EA0CB63C-87C2-470E-9651-3CCD1D8C8BE4}</Project>
+      <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

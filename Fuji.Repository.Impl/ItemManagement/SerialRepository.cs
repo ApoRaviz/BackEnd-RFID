@@ -1,12 +1,12 @@
 ﻿using Fuji.Context;
 using Fuji.Entity.ItemManagement;
-using Fuji.Repository.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Repository;
 
 namespace Fuji.Repository.Impl.ItemManagement
 {
