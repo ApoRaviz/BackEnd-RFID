@@ -47,10 +47,21 @@ namespace WIM.Core.Repository.Impl
             return DbSet.ToList();
         }
 
-        public virtual TEntity GetByID(object id)
+        private TEntity GetByID(object id)
         {
             return DbSet.Find(id);
         }
+
+        public TEntity GetByID(int id)
+        {
+            return DbSet.Find(id);
+        }
+
+        public TEntity GetByID(string id)
+        {
+            return DbSet.Find(id);
+        }
+
 
         public bool Exists(object primaryKey)
         {

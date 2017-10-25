@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{075C6141-16E3-402D-8389-3B87CADA20B0}"
 EndProject
@@ -130,6 +130,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isuzu.Service", "Isuzu.Service\Isuzu.Service.csproj", "{1ADD2F62-608B-446D-AE85-2468953751D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isuzu.Service.Impl", "Isuzu.Service.Impl\Isuzu.Service.Impl.csproj", "{E8F620E3-CFE2-401C-A9EC-9DE16EDA37BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.Repository", "WMS.Repository\WMS.Repository.csproj", "{C9851706-907C-4291-8086-B1DF3B41674D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -301,6 +303,10 @@ Global
 		{E8F620E3-CFE2-401C-A9EC-9DE16EDA37BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8F620E3-CFE2-401C-A9EC-9DE16EDA37BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8F620E3-CFE2-401C-A9EC-9DE16EDA37BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9851706-907C-4291-8086-B1DF3B41674D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9851706-907C-4291-8086-B1DF3B41674D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9851706-907C-4291-8086-B1DF3B41674D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9851706-907C-4291-8086-B1DF3B41674D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -368,6 +374,7 @@ Global
 		{6EFDBE1E-E1B8-46BD-835A-867B6AC88125} = {0A63804F-42AB-4447-8521-AEA7D97A3B73}
 		{1ADD2F62-608B-446D-AE85-2468953751D1} = {3E1DC9AF-2FB8-4307-A30E-93A5236B09DC}
 		{E8F620E3-CFE2-401C-A9EC-9DE16EDA37BB} = {3E1DC9AF-2FB8-4307-A30E-93A5236B09DC}
+		{C9851706-907C-4291-8086-B1DF3B41674D} = {287F7803-8C67-4E68-9DD9-22F0C9C24D1C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A988AAD2-BAE7-4EE3-9908-4E6C802AFADF}

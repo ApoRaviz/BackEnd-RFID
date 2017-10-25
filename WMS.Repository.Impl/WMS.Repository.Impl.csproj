@@ -102,6 +102,10 @@
       <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
       <Name>WMS.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
+      <Project>{c9851706-907c-4291-8086-b1df3b41674d}</Project>
+      <Name>WMS.Repository</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

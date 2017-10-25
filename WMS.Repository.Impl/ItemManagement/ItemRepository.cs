@@ -10,10 +10,11 @@ using WIM.Core.Repository.Impl;
 using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
+using WMS.Repository.ItemManagement;
 
 namespace WMS.Repository.Impl
 {
-    public class ItemRepository : IGenericRepository<Item_MT>
+    public class ItemRepository : Repository<ItemSet_MT>,IItemSetRepository
     {
         private WMSDbContext Db { get; set; }
 
@@ -110,49 +111,7 @@ namespace WMS.Repository.Impl
             Db.SaveChanges();
         }
 
-        public IEnumerable<Item_MT> GetMany(Func<Item_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IQueryable<Item_MT> GetManyQueryable(Func<Item_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Item_MT Get(Func<Item_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Func<Item_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Item_MT> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Item_MT> GetWithInclude(Expression<Func<Item_MT, bool>> predicate, params string[] include)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Exists(object primaryKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Item_MT GetSingle(Func<Item_MT, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Item_MT GetFirst(Func<Item_MT, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
+ 
     }
 }

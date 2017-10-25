@@ -10,10 +10,12 @@ using WIM.Core.Repository;
 using WMS.Common;
 using WMS.Entity.ItemManagement;
 using System.Transactions;
+using WIM.Core.Repository.Impl;
+using WMS.Repository.ItemManagement;
 
 namespace WMS.Repository.Impl
 {
-    public class ItemSetRepository : IGenericRepository<ItemSet_MT>
+    public class ItemSetRepository : Repository<ItemSet_MT>, IItemSetRepository
     {
         //private WMSDbContext proc;
         //private ItemSetRepository repo;
@@ -25,7 +27,7 @@ namespace WMS.Repository.Impl
             Db = new WMSDbContext();
         }
 
-    
+
 
 
 
@@ -37,7 +39,6 @@ namespace WMS.Repository.Impl
                                    {
                                        Active = itsm.Active,
                                        ItemSetCode = itsm.ItemSetCode,
-                                       ItemSetDetail = GetItemSetDetail(itsm.ItemSetIDSys).ToList(),
                                        ItemSetIDSys = itsm.ItemSetIDSys,
                                        ItemSetName = itsm.ItemSetName,
                                        LineID = itsm.LineID,
@@ -47,11 +48,21 @@ namespace WMS.Repository.Impl
             return ItemSets;
         }
 
-        public ItemSet_MT GetByIDMT(int id)
+        public ItemSetDto GetItemSetAndDetail(int id)
         {
-            ItemSet_MT ItemSets = (from itsm in Db.ItemSet_MT
+            ItemSetDto ItemSets = (from itsm in Db.ItemSet_MT
                                    where itsm.ItemSetIDSys == id
-                                   select itsm).FirstOrDefault();
+                                   select new ItemSetDto
+                                   {
+                                       Active = itsm.Active,
+                                       ItemSetCode = itsm.ItemSetCode,
+                                       ItemSetDetail = GetItemSetDetail(id).ToList(),
+                                       ItemSetIDSys = itsm.ItemSetIDSys,
+                                       ItemSetName = itsm.ItemSetName,
+                                       LineID = itsm.LineID,
+                                       ProjectIDSys = itsm.ProjectIDSys,
+                                       UserUpdate = itsm.UserUpdate
+                                   }).FirstOrDefault();
             return ItemSets;
         }
 
@@ -101,7 +112,8 @@ namespace WMS.Repository.Impl
         {
             using (var scope = new TransactionScope())
             {
-                var existedItemSet = this.GetByIDMT(id);
+
+                ItemSet_MT existedItemSet = this.Get(id);
                 existedItemSet.ItemSetCode = ItemSet.ItemSetCode;
                 existedItemSet.ItemSetDetails = ItemSet.ItemSetDetails;
                 existedItemSet.UpdateDate = DateTime.Now;
@@ -217,7 +229,7 @@ namespace WMS.Repository.Impl
             throw new NotImplementedException();
         }
 
-     
+
 
 
 
