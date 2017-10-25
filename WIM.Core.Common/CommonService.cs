@@ -28,7 +28,7 @@ namespace WIM.Core.Common
 
             using (var scope = new TransactionScope())
             {
-                logRepo.Insert(log);
+                //logRepo.Insert(log);
                 try
                 {
                     db.SaveChanges();
@@ -45,7 +45,8 @@ namespace WIM.Core.Common
         public IList<UserLog> UserLogData()
         {
             var logRepo = new GenericRepository<UserLog>(db);
-            return logRepo.GetAll().ToList();
+            //return logRepo.GetAll().ToList();
+            return null;
         }
 
         public IList<ProcGetUserLog_Result> GetUserLogData(int? logId, DateTime? RequestDateFrom, DateTime? RequestDateTo)

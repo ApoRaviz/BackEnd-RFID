@@ -68,9 +68,11 @@ namespace WMS.Repository.Impl.CustomerAndProject
         {
             entity.ProjectID = Db.ProcGetNewID("PJ");
             entity.ProjectStatus = "Active";
+            entity.CusIDSys = entity.Customer_MT.CusIDSys;
             entity.CreatedDate = DateTime.Now;
             entity.UpdateDate = DateTime.Now;
             entity.UserUpdate = "1";
+            entity.Customer_MT = null;
             Db.Project_MT.Add(entity);
             Db.SaveChanges();
         }

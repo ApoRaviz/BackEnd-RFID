@@ -42,6 +42,7 @@ namespace WIM.Core.Context
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<CurrencyUnit> CurrencyUnit { get; set; }
         public DbSet<Country_MT> Country_MT { get; set; }
+        public DbSet<Status_MT> Status_MT { get; set; }
 
         public CoreDbContext() : base("name=DefaultConnection")
         {
