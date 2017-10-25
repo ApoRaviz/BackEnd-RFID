@@ -9,7 +9,7 @@ using WIM.Core.Entity;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity 
     {
         protected DbContext Context;
         internal DbSet<TEntity> DbSet;
