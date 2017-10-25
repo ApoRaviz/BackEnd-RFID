@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WIM.Core.Repository
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
         IEnumerable<TEntity> Get();
         TEntity Get(Func<TEntity, Boolean> where);
         IEnumerable<TEntity> GetAll();
         TEntity GetByID(object id);
         bool Exists(object primaryKey);
-        void Insert(TEntity entity);
-        void Update(TEntity entityToUpdate);
+        void Insert(TEntity entity, string username);
+        void Update(TEntity entityToUpdate, string username);
         void Delete(object id);
         void Delete(TEntity entityToDelete);
         
