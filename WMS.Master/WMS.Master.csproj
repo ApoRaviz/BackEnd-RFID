@@ -63,6 +63,9 @@
     <Compile Include="Category_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Country_MT.cs">
+      <DependentUpon>MasterDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CurrencyUnit.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -81,15 +84,9 @@
     <Compile Include="ImportDefinitionHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Import\IImportServicecs.cs" />
-    <Compile Include="Import\ImportDefinitionHeader_MT_Partial.cs" />
-    <Compile Include="Import\ImportService.cs" />
     <Compile Include="InspectType.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Inspect\IInspectService.cs" />
-    <Compile Include="Inspect\InspectDto.cs" />
-    <Compile Include="Inspect\InspectService.cs" />
     <Compile Include="Inspect_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -115,9 +112,6 @@
     <Compile Include="LabelLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Label\ILabelService.cs" />
-    <Compile Include="Label\LabelLayoutHeader_MT_Partial.cs" />
-    <Compile Include="Label\LabelService.cs" />
     <Compile Include="Label_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -214,9 +208,6 @@
     <Compile Include="ReportLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Report\IReportService.cs" />
-    <Compile Include="Report\ReportLayoutHeader_MT.cs" />
-    <Compile Include="Report\ReportService.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -241,6 +232,8 @@
     <Compile Include="UserRole.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Warehouse\IWarehouseService.cs" />
+    <Compile Include="Warehouse\WarehouseService.cs" />
     <Compile Include="Warehouse_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
@@ -250,9 +243,6 @@
     <Compile Include="ZoneLayoutHeader_MT.cs">
       <DependentUpon>MasterDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Zone\IZoneService.cs" />
-    <Compile Include="Zone\ZoneLayoutHeader_MT_Partial.cs" />
-    <Compile Include="Zone\ZoneService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
@@ -266,6 +256,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Name>WIM.Core.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="MasterDataModel.edmx">
@@ -284,16 +280,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MasterDataModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
-      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
-      <Name>WIM.Core.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
-      <Project>{404dc46f-7784-48e3-a506-5a5a69bd7eef}</Project>
-      <Name>WMS.Repository</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

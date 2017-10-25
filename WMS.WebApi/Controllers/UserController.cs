@@ -8,7 +8,7 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Master;
+using WIM.Core.Entity.UserManagement;
 using WMS.Common;
 using WMS.Service;
 
@@ -106,7 +106,7 @@ namespace WMS.WebApi.Controllers
             {
                 string id = "";
                 PasswordHasher ph = new PasswordHasher();
-                User.PasswordHash = ph.HashPassword(User.PasswordHash);
+                User.PasswordHash = ph.HashPassword("1234!");
                 id = UserService.CreateUser(User);
                 response.SetData(id);
             }

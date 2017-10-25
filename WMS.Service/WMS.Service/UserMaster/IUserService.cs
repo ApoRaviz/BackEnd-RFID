@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.Person;
+using WIM.Core.Entity.UserManagement;
 using WMS.Common;
-using WMS.Master;
 
 namespace WMS.Service
 {
@@ -13,7 +14,7 @@ namespace WMS.Service
         IEnumerable<User> GetUsers();
         User GetUserByUserID(string id);
         string CreateUser(User User);
-        string CreateUserAndPerson(User User,Person_MT Person);
+        //string CreateUserAndPerson(User User,Person_MT Person);
         bool GetKeyRegisterMobile(string userid,string key);
         string GetFirebaseTokenMobileByUserID(string userid, int keyOtp);
         bool RegisterTokenMobile(KeyAccessModel param);

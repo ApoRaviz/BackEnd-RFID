@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WMS.Master;
+using WIM.Core.Entity.CustomerManagement;
+using WIM.Core.Entity.ProjectManagement;
 using WMS.Common;
+using WMS.Entity.ItemManagement;
+
 namespace WMS.WebApi
 {
     public static class AutoMapperConfig

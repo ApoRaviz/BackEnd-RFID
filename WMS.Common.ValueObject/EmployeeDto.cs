@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WMS.Master;
-using WMS.Repository;
+using WIM.Core.Entity.Person;
 
 namespace WMS.Common
 {
-    public class EmployeeDto : BaseEntityDto
+    public class EmployeeDto
     {
         public string EmID { get; set; }
         public int PersonIDSys { get; set; }

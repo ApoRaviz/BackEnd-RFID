@@ -5,11 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WMS.Common;
 using WMS.Service;
+using WIM.Core.Entity.MenuManagement;
 
 namespace WMS.WebApi.Controllers
 {
@@ -31,7 +31,7 @@ namespace WMS.WebApi.Controllers
             ResponseData<IEnumerable<ApiMenuMappingDto>> response = new ResponseData<IEnumerable<ApiMenuMappingDto>>();
             try
             {
-                IEnumerable<ApiMenuMappingDto> categories = ApiMenuMappingService.GetCategories();
+                IEnumerable<ApiMenuMappingDto> categories = ApiMenuMappingService.GetApiMenuMapping();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(categories);
             }
@@ -66,10 +66,10 @@ namespace WMS.WebApi.Controllers
         [Route("menu/{MenuIDSys}")]
         public HttpResponseMessage GetListApiMenuMapping(int MenuIDSys)
         {
-            IResponseData<List<ApiMenuMapping>> response = new ResponseData<List<ApiMenuMapping>>();
+            IResponseData<IEnumerable<ApiMenuMapping>> response = new ResponseData<IEnumerable<ApiMenuMapping>>();
             try
             {
-                List<ApiMenuMapping> ApiMT = ApiMenuMappingService.GetListApiMenuMapping(MenuIDSys);
+                IEnumerable<ApiMenuMapping> ApiMT = ApiMenuMappingService.GetListApiMenuMapping(MenuIDSys);
                 response.SetData(ApiMT);
             }
             catch (ValidationException ex)

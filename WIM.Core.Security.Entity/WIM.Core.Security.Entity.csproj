@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -65,19 +65,22 @@
   <ItemGroup>
     <Compile Include="AccountBindingModels.cs" />
     <Compile Include="AccountViewModels.cs" />
-    <Compile Include="ApiMenuMapping.cs" />
-    <Compile Include="Api_MT.cs" />
     <Compile Include="ApplicationRole.cs" />
     <Compile Include="ApplicationUser.cs" />
     <Compile Include="ApplicationUserRole.cs" />
     <Compile Include="ClaimBindingModel.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="MenuProjectMapping.cs" />
-    <Compile Include="Permission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Role.cs" />
+    <Compile Include="RoleAndPermission\Api_MT.cs" />
+    <Compile Include="RoleAndPermission\MenuProjectMapping.cs" />
+    <Compile Include="RoleAndPermission\Menu_MT.cs" />
+    <Compile Include="RoleAndPermission\Permission.cs" />
+    <Compile Include="RoleAndPermission\Role.cs" />
+    <Compile Include="RoleAndPermission\RolePermission.cs" />
     <Compile Include="RoleBindingModels.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="UserManagement\User.cs" />
+    <Compile Include="UserManagement\UserCustomerMapping.cs" />
+    <Compile Include="UserManagement\UserProjectMapping.cs" />
+    <Compile Include="UserManagement\UserRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

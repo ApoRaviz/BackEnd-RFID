@@ -10,9 +10,11 @@ using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
-using WMS.WebApi.Report;
 using WMS.Common;
 using WMS.Service;
+using WIM.Core.Entity.Person;
+using WIM.Core.Entity.Employee;
+using WIM.Core.Entity.UserManagement;
 
 namespace WMS.WebApi.Controllers
 {
@@ -77,9 +79,9 @@ namespace WMS.WebApi.Controllers
             try
             {
                 PersonDto Person = PersonService.GetPersonByPersonID(PersonIDSys);
-                WMS.Master.User User = UserService.GetUserByPersonIDSys(PersonIDSys);
+                User user = UserService.GetUserByPersonIDSys(PersonIDSys);
                 Employee_MT Employee = EmployeeService.GetEmployeeByPerson(PersonIDSys);
-                Person.User = User;
+                Person.User = user;
                 Person.Employee = Employee;
                 response.SetData(Person);
             }

@@ -12,33 +12,33 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WMS.Context;
+using WMS.Entity.ItemManagement;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class UnitService : IUnitService
     {
-        private MasterContext Db = MasterContext.Create();
-        private GenericRepository<Unit_MT> Repo;
+        private UnitRepository repo;
 
         public UnitService()
         {
-            Repo = new GenericRepository<Unit_MT>(Db);
+            repo = new UnitRepository();
         }        
-
-        public IEnumerable<ProcGetUnits_Result> GetUnits()
+        public IEnumerable<Unit_MT> GetUnits()
         {
-            return Db.ProcGetUnits().ToList();
+            return repo.Get();
         }
 
-        public ProcGetUnitByUnitIDSys_Result GetUnitByUnitIDSys(int id)
+        public Unit_MT GetUnitByUnitIDSys(int id)
         {
-            return Db.ProcGetUnitByUnitIDSys(id).FirstOrDefault();
+            return repo.GetByID(id);
         }
 
         public Unit_MT GetUnitByCusIDSysIncludeProjects(int id)
         {
-            var unit = Repo.GetByID(id);
+            var unit = GetUnitByUnitIDSys(id);
             if (unit != null)
             {
                 //return unit;
@@ -53,15 +53,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-
-                unit.CreatedDate = DateTime.Now;
-                unit.UpdateDate = DateTime.Now;
-                unit.UserUpdate = "1";
-
-                Repo.Insert(unit);
                 try
                 {
-                    Db.SaveChanges();
+                    repo.Insert(unit);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -73,7 +68,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return unit.UnitIDSys;
             }
         }
@@ -82,14 +76,9 @@ namespace WMS.Service
         {           
             using (var scope = new TransactionScope())
             {
-                var existedUnit = Repo.GetByID(id);
-                existedUnit.UnitName = unit.UnitName;
-                existedUnit.UpdateDate = DateTime.Now;
-                existedUnit.UserUpdate = "1";
-                Repo.Update(existedUnit);
                 try
                 {
-                    Db.SaveChanges();
+                    repo.Update(unit);
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -110,12 +99,7 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedUnit = Repo.GetByID(id);
-                existedUnit.Active = 0;
-                existedUnit.UpdateDate = DateTime.Now;
-                existedUnit.UserUpdate = "1";
-                Repo.Update(existedUnit);
-                Db.SaveChanges();
+                repo.Delete(id);
                 scope.Complete();
                 return true;
             }

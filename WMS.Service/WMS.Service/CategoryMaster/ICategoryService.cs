@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WMS.Common;
-using WMS.Master;
+using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {

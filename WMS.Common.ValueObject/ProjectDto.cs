@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using WMS.Repository;
+
 
 namespace WMS.Common
 {
-    public class ProjectDto : BaseEntityDto
+    public class ProjectDto 
     {
         public int ProjectIDSys { get; set; }
         public string ProjectID { get; set; }

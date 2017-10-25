@@ -14,30 +14,29 @@ using System.Diagnostics;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
-using WMS.Master;
+using WIM.Core.Context;
+using WIM.Core.Entity.MenuManagement;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class MenuService : IMenuService
     {
-        private MasterContext db = MasterContext.Create();
-        private GenericRepository<Menu_MT> repo;
+        private MenuRepository repo;
 
         public MenuService()
         {
-            repo = new GenericRepository<Menu_MT>(db);
+            repo = new MenuRepository();
         }
 
         public IEnumerable<Menu_MT> GetMenu()
         {
-            return repo.GetAll();
+            return repo.Get();
         }
-
-
 
         public Menu_MT GetMenuByMenuIDSys(int id)
         {
-            Menu_MT Menu = db.Menu_MT.Find(id);
+            Menu_MT Menu = repo.GetByID(id);
             return Menu;
         }
 
@@ -45,11 +44,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-
-                repo.Insert(Menu);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(Menu);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -61,7 +59,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return Menu.MenuIDSys;
             }
         }
@@ -78,10 +75,9 @@ namespace WMS.Service
                 menu.Sort = sort;
                 menu.ProjectIDSys = projectID;
                 menu.MenuPic = Menu.Icon;
-                repo.Insert(menu);
                 try
                 {
-                    db.SaveChanges();
+                    repo.Insert(menu);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -104,15 +100,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedMenu = repo.GetByID(id);
-                existedMenu.MenuParentID = Menu.MenuParentID;
-                existedMenu.MenuName = Menu.MenuName;
-                existedMenu.Url = Menu.Url;
-                existedMenu.Api = Menu.Api;
-                existedMenu.Sort = Menu.Sort;
                 try
                 {
-                    db.SaveChanges();
+                    repo.Update(Menu);
+                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -124,7 +115,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
                 return true;
             }
         }
@@ -133,17 +123,18 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Menu_MT existedMenu;
-                foreach (var c in menu)
+                try
                 {
+                    
+                foreach (var c in menu)
+                {   Menu_MT existedMenu;
                     existedMenu = repo.GetByID(c.MenuIDSys);
                     existedMenu.MenuParentID = c.MenuParentID;
                     existedMenu.MenuName = c.MenuName;
                     existedMenu.Sort = c.Sort;
+                    repo.Update(existedMenu);
                 }
-                try
-                {
-                    db.SaveChanges();
+                
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)
@@ -169,7 +160,6 @@ namespace WMS.Service
                 repo.Update(existedMenu);
                 try
                 {
-                db.SaveChanges();
                 scope.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -197,8 +187,7 @@ namespace WMS.Service
 
         public IEnumerable<MenuDto> GetMenuByMenuParentID(int id)
         {
-            var tbl_menu = db.Menu_MT;
-            IEnumerable<MenuDto> menudto = tbl_menu.Where(t => t.MenuParentID == id).Select(b =>
+            IEnumerable<MenuDto> menudto = repo.GetByMenuParentID(id).Select(b =>
             new MenuDto()
             {
                 MenuIDSys = b.MenuIDSys,
@@ -216,11 +205,8 @@ namespace WMS.Service
 
         public IEnumerable<MenuDto> GetMenuDto()
         {
-            var menuQuery = from row in db.Menu_MT
-                                 orderby row.MenuParentID , row.Sort
-                                 select row;
+            var menuQuery = repo.Get();
             Console.Write(menuQuery);
-            var tbl_menu = db.Menu_MT;
             IEnumerable<MenuDto> menudto = menuQuery.Select(b =>
             new MenuDto()
             {
@@ -237,11 +223,8 @@ namespace WMS.Service
         }
         public IEnumerable<MenuDto> GetMenuDto(int projectIDSys)
         {
-            var menuQuery = from row in db.Menu_MT
-                            orderby row.MenuParentID, row.Sort
-                            select row;
+            var menuQuery = repo.Get();
             Console.Write(menuQuery);
-            var tbl_menu = db.Menu_MT;
             IEnumerable<MenuDto> menudto = menuQuery.Select(b =>
             new MenuDto()
             {
@@ -258,15 +241,8 @@ namespace WMS.Service
         }
         public IEnumerable<MenuDto> GetMenuDtoNotHave(int projectIDSys)
         {
-            var menuQuery = from row in db.Menu_MT
-                            where !(from o in db.MenuProjectMappings
-                                    where o.ProjectIDSys == projectIDSys
-                                    select o.MenuIDSys)
-                                    .Contains(row.MenuIDSys)
-                            orderby row.MenuParentID, row.Sort
-                            select row;
+            var menuQuery = repo.GetNotHave(projectIDSys);
             Console.Write(menuQuery);
-            var tbl_menu = db.Menu_MT;
             IEnumerable<MenuDto> menudto = menuQuery.Select(b =>
             new MenuDto()
             {

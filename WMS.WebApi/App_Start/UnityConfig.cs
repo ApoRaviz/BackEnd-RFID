@@ -5,13 +5,13 @@ using System.Web.Http;
 using Unity.WebApi;
 using WIM.Core.Common;
 using WMS.WebApi.Controllers;
-using WMS.Master.Label;
-using WMS.Master.Report;
-using WMS.Master.Inspect;
-using WMS.Master.Import;
-using WMS.Master.Zone;
-using WMS.Master;
 using WMS.Service;
+using WMS.Service.Inspect;
+using WMS.Service.Impl.Inspect;
+using WIM.Core.Service.WarehouseService;
+using WIM.Core.Service.Impl.WarehouseService;
+using WMS.Master;
+
 namespace WMS.WebApi
 {
     public static class UnityConfig
@@ -39,13 +39,14 @@ namespace WMS.WebApi
             container.RegisterType<IItemService, ItemService>();
             container.RegisterType<IItemSetService, ItemSetService>();
             container.RegisterType<IUnitService, UnitService>();
-            container.RegisterType<ILabelService, LabelService>();
+            // #JobComment
+            //container.RegisterType<ILabelService, LabelService>();
             container.RegisterType<ISupplierService, SupplierService>(); 
             container.RegisterType<IInspectService, InspectService>();
             container.RegisterType<ILocationService, LocationService>();
             container.RegisterType<IMenuService, MenuService>();
             container.RegisterType<IMenuProjectMappingService, MenuProjectMappingService>();
-            container.RegisterType<IReportService, ReportService>();
+            //container.RegisterType<IReportService, ReportService>();
             container.RegisterType<IRoleService, RoleService>();
             container.RegisterType<IPermissionService, PermissionService>();
             container.RegisterType<IUserService, UserService>();
@@ -54,10 +55,12 @@ namespace WMS.WebApi
             container.RegisterType<IUserRoleService, UserRoleService>();
             container.RegisterType<IEmployeeService, EmployeeService>();
             container.RegisterType<IPersonService, PersonService>();
-            container.RegisterType<IImportService, ImportService>();
+            //container.RegisterType<IImportService, ImportService>();
             container.RegisterType<IDimensionService, DimensionService>();
-            container.RegisterType<IZoneService, ZoneService>();           
-
+            container.RegisterType<IWarehouseService, WarehouseService>();
+            container.RegisterType<IZoneService, ZoneService>();
+            container.RegisterType<ICurrencyService, CurrencyService>();
+            container.RegisterType<ICountryService, CountryService>();
         }
     }
 }

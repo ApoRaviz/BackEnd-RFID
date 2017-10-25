@@ -17,8 +17,8 @@ namespace WMS.Master
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Api_MT()
         {
-            this.ApiMenuMappings = new HashSet<ApiMenuMapping>();
             this.Permissions = new HashSet<Permission>();
+            this.ApiMenuMappings = new HashSet<ApiMenuMapping>();
         }
     
         public string ApiIDSys { get; set; }
@@ -27,8 +27,8 @@ namespace WMS.Master
         public string Controller { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Permission> Permissions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
     }
 }
