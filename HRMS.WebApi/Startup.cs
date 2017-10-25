@@ -6,9 +6,9 @@ using Owin;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-[assembly: OwinStartup(typeof(Fuji.WebApi.Startup))]
+[assembly: OwinStartup(typeof(HRMS.WebApi.Startup))]
 
-namespace Fuji.WebApi
+namespace HRMS.WebApi
 {
     public partial class Startup
     {

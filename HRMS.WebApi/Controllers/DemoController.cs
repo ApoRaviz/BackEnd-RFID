@@ -26,29 +26,32 @@ namespace HRMS.WebApi.Controllers
             DemoService = demoService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("")]
-        public HttpResponseMessage Get()
+        public HttpResponseMessage Demo([FromBody]Leave leave)
         {
-            ResponseData<IEnumerable<LeaveDto>> response = new ResponseData<IEnumerable<LeaveDto>>();
+            ResponseData<int> response = new ResponseData<int>();
             try
             {
-                HRMSDbContext hrmsDb = new HRMSDbContext();           
+                List<string> l = new List<string>();
+                
+                IList<string> l1 = new List<string>();
 
-                IEnumerable<LeaveDto> leaves = new List<LeaveDto>();
 
-                leaves = (
-                    from l in hrmsDb.Leaves
-                    join s in hrmsDb.Status_MT
-                    on l.StatusIDSys equals s.StatusIDSys
-                    select new LeaveDto
-                    {
-                        Comment = l.Comment,
-                        StatusTitle = s.Title
-                    }
-                );
+                ILeaveRepository repo = new LeaveRepository();
 
-                response.SetData(leaves);
+             
+
+
+                HRMSDbContext hrmsDb = new HRMSDbContext();
+
+
+                hrmsDb.Entry(leave).State = EntityState.Modified;
+
+
+
+                hrmsDb.SaveChanges();
+                response.SetData(1);
             }
             catch (ValidationException ex)
             {
@@ -58,4 +61,118 @@ namespace HRMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
     }
+
+    public class BaseEntity
+    {
+        public string CreateBy { get; set; }
+        public DateTime CreateAt { get; set; }
+        public string UpdateBy { get; set; }
+        public DateTime UpdateAt { get; set; }
+    }
+
+    public interface IGenericRepository<TEntity> where TEntity : class
+    {
+        IEnumerable<TEntity> Get();
+        TEntity GetByID(object id);
+        void Insert(TEntity entity);
+        void Delete(object id);
+        void Delete(TEntity entityToDelete);
+        void Update(TEntity entityToUpdate);
+
+    }
+
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    {
+        protected DbContext Context;
+
+        public GenericRepository()
+        {
+
+        }
+
+            public GenericRepository(DbContext context)
+        {
+            Context = context;
+        }
+
+
+
+        public void Delete(object id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(TEntity entityToDelete)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TEntity> Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TEntity GetByID(object id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(TEntity entityToUpdate)
+        {        
+          
+            Context.SaveChanges();
+            throw new NotImplementedException();
+        }
+    }
+
+    public interface ITest
+    {
+
+    }
+
+    public interface ILeaveRepository : IGenericRepository<Leave>
+    {
+        IEnumerable<Leave> GetTopSellingCourses(int count);
+        IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize);
+
+    }
+
+    public class LeaveRepository : GenericRepository<Leave>,  ILeaveRepository
+    {
+
+        public LeaveRepository()
+        {
+            this.Context = new HRMSDbContext();
+        }
+
+        public LeaveRepository(DbContext context)  : base(context)
+        {
+
+        }
+
+        public IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize)
+        {
+            ///
+            throw new NotImplementedException();
+        }
+         
+      
+
+        public IEnumerable<Leave> GetTopSellingCourses(int count)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class LeaveDetailRepository
+    {
+     
+    }
+
 }

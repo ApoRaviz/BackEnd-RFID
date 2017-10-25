@@ -7,8 +7,8 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WIM.Core.Entity.WarehouseManagement;
 using WMS.Common;
+using WMS.Entity.WarehouseManagement;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers
@@ -89,7 +89,6 @@ namespace WMS.WebApi.Controllers
         [Route("{LocIDSys}")]
         public HttpResponseMessage Put(int LocIDSys, [FromBody]Location_MT Location)
         {
-
             IResponseData<bool> response = new ResponseData<bool>();
 
             try

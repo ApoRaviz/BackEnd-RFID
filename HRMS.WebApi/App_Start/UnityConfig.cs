@@ -1,20 +1,13 @@
-using Fuji.Service.Impl.ItemImport;
-using Fuji.Service.Impl.PrintLabel;
-using Fuji.Service.Impl.ProgramVersion;
-using Fuji.Service.ItemImport;
-using Fuji.Service.PrintLabel;
-using Fuji.Service.ProgramVersion;
 using Microsoft.Owin.Security;
 using Microsoft.Practices.Unity;
 using System.Web;
 using System.Web.Http;
+using HRMS.WebApi.Controllers;
 using Unity.WebApi;
-
-using Fuji.WebApi.Controllers;
 using HRMS.Service;
 using HRMS.Service.Impl;
 
-namespace Fuji.WebApi
+namespace HRMS.WebApi
 {
     public static class UnityConfig
     {

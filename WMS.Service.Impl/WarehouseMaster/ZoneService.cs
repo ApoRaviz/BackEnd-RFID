@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Validation;
-using WIM.Core.Context;
-using WIM.Core.Entity.WarehouseManagement;
-using WIM.Core.Service.WarehouseService;
+using WMS.Context;
+using WMS.Entity.WarehouseManagement;
+using WMS.Service.WarehouseMaster;
 
-namespace WIM.Core.Service.Impl.WarehouseService
+namespace WMS.Service.Impl.WarehouseMaster
 {
     public class ZoneService : IZoneService
     {
@@ -20,7 +20,7 @@ namespace WIM.Core.Service.Impl.WarehouseService
         string pXmlRack = "<row><ZoneIDSys>{0}</ZoneIDSys><ZoneID>{1}</ZoneID><RackID>{2}</RackID><BlockID>{3}</BlockID>" +
                             "<Floor>{4}</Floor><Left>{5}</Left><Top>{6}</Top></row>";
 
-        private CoreDbContext Db = CoreDbContext.Create();
+        private WMSDbContext Db = WMSDbContext.Create();
 
         public ZoneService()
         {

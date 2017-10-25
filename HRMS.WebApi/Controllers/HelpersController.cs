@@ -11,7 +11,7 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 
-namespace Fuji.WebApi.Controllers
+namespace HRMS.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/helpers")]

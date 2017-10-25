@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Entity.WarehouseManagement;
+using WMS.Entity.WarehouseManagement;
 
-namespace WIM.Core.Service.WarehouseService
+namespace WMS.Service.WarehouseMaster
 {
     public interface IZoneService
     {

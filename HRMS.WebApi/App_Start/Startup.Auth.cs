@@ -16,7 +16,7 @@ using WIM.Core.Security;
 using WIM.Core.Security.Context;
 using WIM.Core.Security.Providers;
 
-namespace Fuji.WebApi
+namespace HRMS.WebApi
 {
     public partial class Startup
     {

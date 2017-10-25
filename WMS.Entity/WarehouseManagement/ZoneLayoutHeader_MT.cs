@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIM.Core.Entity.WarehouseManagement
+namespace WMS.Entity.WarehouseManagement
 {
     [Table("ZoneLayoutHeader_MT")]
     public class ZoneLayoutHeader_MT

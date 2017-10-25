@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WarehouseService\IZoneService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
