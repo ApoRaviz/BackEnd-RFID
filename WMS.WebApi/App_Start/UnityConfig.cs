@@ -8,9 +8,9 @@ using WMS.WebApi.Controllers;
 using WMS.Service;
 using WMS.Service.Inspect;
 using WMS.Service.Impl.Inspect;
-using WIM.Core.Service.WarehouseService;
-using WIM.Core.Service.Impl.WarehouseService;
 using WMS.Master;
+using WMS.Service.WarehouseMaster;
+using WMS.Service.Impl.WarehouseMaster;
 
 namespace WMS.WebApi
 {

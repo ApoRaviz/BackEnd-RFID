@@ -10,7 +10,6 @@ using WIM.Core.Repository.Impl;
 using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.ItemManagement;
 
 namespace WMS.Repository.Impl
 {

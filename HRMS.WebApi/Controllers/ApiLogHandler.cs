@@ -10,7 +10,7 @@ using System.Web;
 using System.Web.Http.Routing;
 using WIM.Core.Common;
 
-namespace Fuji.WebApi.Controllers
+namespace HRMS.WebApi.Controllers
 {
     public class ApiLogHandler : DelegatingHandler
     {

@@ -13,14 +13,14 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using Fuji.WebApi.Results;
+using HRMS.WebApi.Results;
 using System.Linq;
 using Microsoft.VisualBasic;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 using WIM.Core.Security.Providers;
 
-namespace Fuji.WebApi.Controllers
+namespace HRMS.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/v1/account")]

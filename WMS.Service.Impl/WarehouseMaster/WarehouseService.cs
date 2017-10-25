@@ -13,7 +13,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Repository.Impl;
-using WIM.Core.Entity.WarehouseManagement;
+using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Master
 {

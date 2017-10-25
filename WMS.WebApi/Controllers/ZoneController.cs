@@ -10,8 +10,8 @@ using WIM.Core.Common.Extensions;
 using WMS.Master;
 using WMS.Common;
 using WMS.Service;
-using WIM.Core.Service.WarehouseService;
-using WIM.Core.Entity.WarehouseManagement;
+using WMS.Entity.WarehouseManagement;
+using WMS.Service.WarehouseMaster;
 
 namespace WMS.WebApi.Controllers
 {

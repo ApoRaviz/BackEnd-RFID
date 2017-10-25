@@ -14,9 +14,9 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Common;
 using WIM.Core.Context;
-using WIM.Core.Entity.WarehouseManagement;
 using WMS.Repository.Impl;
 using WMS.Context;
+using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Service
 {
