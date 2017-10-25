@@ -68,6 +68,14 @@ namespace WMS.Repository.Impl
             return userrole.SingleOrDefault();
         }
 
+        public IQueryable<UserRoles> GetByID(string id)
+        {
+            var userrole = from c in Db.UserRoles
+                           where c.UserID == id
+                           select c;
+            return userrole;
+        }
+
         public IEnumerable<RoleUserDto> GetRoleByUserID(string userid)
         {
             var RoleUser = (from o in Db.Role
@@ -79,7 +87,7 @@ namespace WMS.Repository.Impl
                                               Name = b.Name,
                                               Description = b.Description,
                                               IsSysAdmin = b.IsSysAdmin,
-                                              Project_MT = null//b.Project_MT
+                                              Project_MT = b.Project_MT
                                           });
             return RoleUser;
         }

@@ -19,6 +19,7 @@ namespace WMS.Service
         bool UpdateRole(string id, Role Role);
         bool DeleteRole(string id);
         List<RolePermissionDto> GetRoleByPermissionID(string id);
-        List<Role> GetRoleByProjectUser(int id);
+        List<Role> GetRoleByProjectUser(int id ,string userid);
+        List<Role> GetRoleByUserID(string userid );
     }
 }

@@ -47,7 +47,7 @@ namespace WMS.Repository.Impl
 
         public void Insert(Supplier_MT entity)
         {
-            entity.SupID = Db.ProcGetNewID("SL").FirstOrDefault().Substring(0, 13);
+            entity.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
             entity.CreatedDate = DateTime.Now;
             entity.UpdateDate = DateTime.Now;
             entity.UserUpdate = "1";

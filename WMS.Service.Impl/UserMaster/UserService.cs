@@ -83,6 +83,8 @@ namespace WMS.Service
             {
                 try
                 {
+                    var userole = User.UserRoles;
+                    User.UserRoles = null;
                     User.UserID = Guid.NewGuid().ToString();
                     User.EmailConfirmed = false;
                     User.PhoneNumberConfirmed = false;
@@ -96,9 +98,9 @@ namespace WMS.Service
                     User.UserUpdate = "1";
                     User.Active = 1;
                 repo.Insert(User);
-                if(User.UserRoles != null)
+                if(userole != null)
                 {
-                    foreach(var c in User.UserRoles)
+                    foreach(var c in userole)
                     {
                         c.UserID = User.UserID;
                         repoRole.Insert(c);

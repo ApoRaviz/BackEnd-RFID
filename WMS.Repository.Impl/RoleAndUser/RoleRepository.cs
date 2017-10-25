@@ -99,6 +99,15 @@ namespace WMS.Repository.Impl
             return role;
         }
 
+        public List<Role> GetByUser(string UserID)
+        {
+            var res = (from ur in Db.UserRoles
+                       join r in Db.Role on ur.RoleID equals r.RoleID
+                       where ur.UserID == UserID 
+                       select r).Include(b => b.Project_MT).ToList();
+            return res;
+        }
+
         public void Insert(Role entity)
         {
             entity.RoleID = Guid.NewGuid().ToString();
@@ -130,7 +139,7 @@ namespace WMS.Repository.Impl
 
         public IEnumerable<Role> GetMany(Func<Role, bool> where)
         {
-            throw new NotImplementedException();
+            return Db.Role.Where(where);
         }
 
         public IQueryable<Role> GetManyQueryable(Func<Role, bool> where)
@@ -155,7 +164,13 @@ namespace WMS.Repository.Impl
 
         public IQueryable<Role> GetWithInclude(Expression<Func<Role, bool>> predicate, params string[] include)
         {
-            throw new NotImplementedException();
+            return Db.Role.Where(predicate).Include(include[0]);
+        }
+
+        public IEnumerable<Role> GetWithIncludes(Func<Role, bool> where, params string[] include)
+        {
+           
+            return  Db.Role.Include(include[0]).Where(where);
         }
 
         public bool Exists(object primaryKey)

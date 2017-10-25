@@ -28,9 +28,7 @@ namespace WIM.Core.Entity.WarehouseManagement
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string UserUpdate { get; set; }
-
-        // #JobComment
-        //public int CateIDSys { get; set; }
+        public int CateIDSys { get; set; }
 
         //public virtual Category_MT Category_MT { get; set; }
     }

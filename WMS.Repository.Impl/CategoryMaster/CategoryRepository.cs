@@ -51,7 +51,7 @@ namespace WMS.Repository.Impl
 
         public void Insert(Category_MT entity)
         {
-            entity.CateID = Db.ProcGetNewID("CT").FirstOrDefault();
+            entity.CateID = Db.ProcGetNewID("CT");
             entity.Active = 1;
             entity.CreatedDate = DateTime.Now;
             entity.UpdateDate = DateTime.Now;

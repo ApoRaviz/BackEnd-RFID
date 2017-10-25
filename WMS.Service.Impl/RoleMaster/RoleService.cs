@@ -195,11 +195,18 @@ namespace WMS.Service
             return null;
         }
 
-        public List<Role> GetRoleByProjectUser(int id)
+        public List<Role> GetRoleByProjectUser(int id , string userid)
         {
-            var role = repo.GetByProjectUser(id);
-            return role;
+            string[] include = { "Project_MT" };
+            var role = repo.GetWithIncludes((x => x.ProjectIDSys == id && 
+            !(repouser.GetByID(userid).Include(p => p.Role).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))) , include).ToList();
+            return role.ToList();
         }
 
+        public List<Role> GetRoleByUserID(string id)
+        {
+            var role = repo.GetByUser(id);
+            return role;
+        }
     }
 }

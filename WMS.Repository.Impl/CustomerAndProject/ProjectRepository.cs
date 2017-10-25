@@ -66,7 +66,7 @@ namespace WMS.Repository.Impl.CustomerAndProject
 
         public void Insert(Project_MT entity)
         {
-            entity.ProjectID = Db.ProcGetNewID("PJ").FirstOrDefault();
+            entity.ProjectID = Db.ProcGetNewID("PJ");
             entity.ProjectStatus = "Active";
             entity.CreatedDate = DateTime.Now;
             entity.UpdateDate = DateTime.Now;

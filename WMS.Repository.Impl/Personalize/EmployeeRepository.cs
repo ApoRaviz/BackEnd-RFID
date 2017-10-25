@@ -49,6 +49,7 @@ namespace WMS.Repository.Impl
             entity.UpdateDate = DateTime.Now;
             entity.UserUpdate = "1";
             Db.Employee_MT.Add(entity);
+            Db.SaveChanges();
         }
 
         public void Delete(object id)

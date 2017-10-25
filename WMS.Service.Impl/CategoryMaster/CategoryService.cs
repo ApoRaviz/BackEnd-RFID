@@ -16,6 +16,7 @@ using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Repository.Impl;
+using WIM.Core.Context;
 
 namespace WMS.Service
 {
@@ -74,7 +75,7 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                category.CateID = proc.ProcGetNewID("CT").FirstOrDefault();
+                category.CateID = proc.ProcGetNewID("CT");
                 category.Active = 1;
                 category.CreatedDate = DateTime.Now;
                 category.UpdateDate = DateTime.Now;

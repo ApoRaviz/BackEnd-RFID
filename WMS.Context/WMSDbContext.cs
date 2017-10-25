@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,13 +49,15 @@ namespace WMS.Context
 
         }
 
-        public ObjectResult<string> ProcGetNewID(string prefixes)
+        public string ProcGetNewID(string prefixes)
         {
-            var prefixesParameter = prefixes != null ?
-                new ObjectParameter("Prefixes", prefixes) :
-                new ObjectParameter("Prefixes", typeof(string));
+            var prefixesParameter = new SqlParameter
+            {
+                ParameterName = "Prefixes",
+                Value = prefixes
+            };
 
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcGetNewID", prefixesParameter);
+            return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
 
         public ObjectResult<Nullable<int>> ProcCreateLabelLayout(string forTable, string formatName, Nullable<decimal> width, string widthUnit, Nullable<decimal> height, string heightUnit, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
