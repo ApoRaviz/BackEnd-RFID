@@ -23,7 +23,7 @@ namespace WIM.Core.Entity.Country
         public string CountryName { get; set; }
         public string CountryCode { get; set; }
         public string PhoneCode { get; set; }
-
+        
         public virtual ICollection<CurrencyUnit> CurrencyUnits { get; set; }
     }
 }

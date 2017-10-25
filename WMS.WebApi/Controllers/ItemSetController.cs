@@ -91,13 +91,14 @@ namespace WMS.WebApi.Controllers
 
         [HttpPost]
         [Route("{ItemSetIDSys}")]
-        public HttpResponseMessage Post2(int ItemSetIDSys,[FromBody]List<ItemSetDetailDto> ItemSet)
+        public HttpResponseMessage UpdateItemSet(int ItemSetIDSys,[FromBody]ItemSetDto ItemSet)
         {
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                int idSet = 0;
-                    idSet = ItemSetService.CreateItemsetDetail(ItemSetIDSys, ItemSet);
+                
+                ItemSet.UserUpdate = User.Identity.name
+                int idSet = ItemSetService.UpdateItemSet(ItemSetIDSys, ItemSet);
                 response.SetData(idSet);
             }
             catch (ValidationException ex)
