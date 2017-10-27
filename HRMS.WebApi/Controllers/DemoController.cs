@@ -36,7 +36,7 @@ namespace HRMS.WebApi.Controllers
             ResponseData<int> response = new ResponseData<int>();
             try
             {
-                using (HRMSDbContext db =new HRMSDbContext())
+                using (HRMSDbContext db = new HRMSDbContext())
                 {
                     ILeaveRepository repo = new LeaveRepository(db);
                     repo.Update(leave, "13007");
@@ -45,11 +45,7 @@ namespace HRMS.WebApi.Controllers
                     //repoDetail.Update(new LeaveDetail(), "13007");
 
                     db.SaveChanges();
-                }
-                             
-                //HRMSDbContext hrmsDb = new HRMSDbContext();
-                //hrmsDb.Entry(leave).State = EntityState.Modified;
-                //hrmsDb.SaveChanges();
+                }                            
 
                 response.SetData(1);
             }
