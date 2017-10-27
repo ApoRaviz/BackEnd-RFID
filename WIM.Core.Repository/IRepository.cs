@@ -14,8 +14,8 @@ namespace WIM.Core.Repository
         IEnumerable<TEntity> GetAll();
         TEntity GetByID(object id);
         bool Exists(object primaryKey);
-        void Insert(TEntity entity, string username);
-        void Update(TEntity entityToUpdate, string username);
+        TEntity Insert(TEntity entity, string username);
+        TEntity Update(object entityToUpdate, string username);
         void Delete(object id);
         void Delete(TEntity entityToDelete);
         

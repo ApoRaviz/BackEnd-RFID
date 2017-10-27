@@ -17,7 +17,7 @@ namespace HRMS.Repository.Entity.LeaveRequest
         {
             LeaveDetails = new HashSet<LeaveDetail>();
         }
-
+        
         [Key]
         public int LeaveIDSys { get; set; }
         public int StatusIDSys { get; set; }

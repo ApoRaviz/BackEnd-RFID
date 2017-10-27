@@ -12,7 +12,8 @@ namespace HRMS.WebApi
         {
             Mapper.Initialize(cfg =>
             {
-                //cfg.CreateMap<ImportSerialHead, ItemImportDto>();
+                cfg.CreateMap<Controllers.LeaveDto, Repository.Entity.LeaveRequest.Leave>();
+                cfg.CreateMap<Repository.Entity.LeaveRequest.Leave, Controllers.LeaveDto>();
 
             });
         }
