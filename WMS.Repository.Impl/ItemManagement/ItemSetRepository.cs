@@ -17,15 +17,15 @@ namespace WMS.Repository.Impl
 {
     public class ItemSetRepository : Repository<ItemSet_MT>, IItemSetRepository
     {
-        //private WMSDbContext proc;
+        private WMSDbContext Db;
         //private ItemSetRepository repo;
 
-        private WMSDbContext Db { get; set; }
 
-        public ItemSetRepository()
+        public ItemSetRepository(WMSDbContext Context) : base(Context)
         {
-            Db = new WMSDbContext();
+            Db = Context;
         }
+
 
 
 
@@ -108,12 +108,33 @@ namespace WMS.Repository.Impl
         //    }
         //}
 
+        public IEnumerable<ItemSetDto> GetDto()
+        {
+            return GetDto(50);
+        }
+
+        public IEnumerable<ItemSetDto> GetDto(int limit)
+        {
+            IEnumerable<ItemSetDto> ItemSets = (from itsm in Db.ItemSet_MT
+                                                select new ItemSetDto
+                                                {
+                                                    Active = itsm.Active,
+                                                    ItemSetCode = itsm.ItemSetCode,
+                                                    //ItemSetDetail = GetItemSetDetail(itsm.ItemSetIDSys).ToList(),
+                                                    ItemSetIDSys = itsm.ItemSetIDSys,
+                                                    ItemSetName = itsm.ItemSetName,
+                                                    LineID = itsm.LineID,
+                                                    ProjectIDSys = itsm.ProjectIDSys,
+                                                    UserUpdate = itsm.UserUpdate
+                                                }).ToList();
+            return ItemSets;
+        }
+
         public void UpdateItemSet(int id, ItemSet_MT ItemSet)
         {
             using (var scope = new TransactionScope())
             {
-
-                ItemSet_MT existedItemSet = this.Get(id);
+                ItemSet_MT existedItemSet = base.GetByID(id);
                 existedItemSet.ItemSetCode = ItemSet.ItemSetCode;
                 existedItemSet.ItemSetDetails = ItemSet.ItemSetDetails;
                 existedItemSet.UpdateDate = DateTime.Now;
@@ -124,132 +145,12 @@ namespace WMS.Repository.Impl
 
         public void DeleteItemSet(int id, ItemSetDto ItemSet)
         {
-            using (var scope = new TransactionScope())
-            {
-                var existedItemSet = this.GetByIDMT(id);
-                existedItemSet.Active = 0;
-                existedItemSet.UpdateDate = DateTime.Now;
-                existedItemSet.UserUpdate = ItemSet.UserUpdate;
-                Db.SaveChanges();
-            }
+            var existedItemSet = base.GetByID(id);
+            existedItemSet.Active = 0;
+            existedItemSet.UpdateDate = DateTime.Now;
+            existedItemSet.UserUpdate = ItemSet.UserUpdate;
+            Db.SaveChanges();
         }
-
-        public IEnumerable<ItemSetDto> Get()
-        {
-            return Get(50);
-        }
-
-        public IEnumerable<ItemSetDto> Get(int limit)
-        {
-            IEnumerable<ItemSetDto> ItemSets = (from itsm in Db.ItemSet_MT
-                                                select new ItemSetDto
-                                                {
-                                                    Active = itsm.Active,
-                                                    ItemSetCode = itsm.ItemSetCode,
-                                                    ItemSetDetail = GetItemSetDetail(itsm.ItemSetIDSys).ToList(),
-                                                    ItemSetIDSys = itsm.ItemSetIDSys,
-                                                    ItemSetName = itsm.ItemSetName,
-                                                    LineID = itsm.LineID,
-                                                    ProjectIDSys = itsm.ProjectIDSys,
-                                                    UserUpdate = itsm.UserUpdate
-                                                }).ToList();
-            return ItemSets;
-        }
-
-
-
-
-        public ItemSet_MT GetByID(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(ItemSet_MT entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(ItemSet_MT entityToDelete)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(ItemSet_MT entityToUpdate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ItemSet_MT> GetMany(Func<ItemSet_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<ItemSet_MT> GetManyQueryable(Func<ItemSet_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ItemSet_MT Get(Func<ItemSet_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Func<ItemSet_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ItemSet_MT> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<ItemSet_MT> GetWithInclude(Expression<Func<ItemSet_MT, bool>> predicate, params string[] include)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Exists(object primaryKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ItemSet_MT GetSingle(Func<ItemSet_MT, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ItemSet_MT GetFirst(Func<ItemSet_MT, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
