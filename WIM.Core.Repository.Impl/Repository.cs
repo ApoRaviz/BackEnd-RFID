@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
@@ -9,7 +11,7 @@ using WIM.Core.Entity;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity 
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         protected DbContext Context;
         internal DbSet<TEntity> DbSet;
@@ -22,8 +24,7 @@ namespace WIM.Core.Repository.Impl
 
         public IEnumerable<TEntity> Get()
         {
-            IQueryable<TEntity> query = DbSet;
-            return query.ToList();
+            return DbSet.Take(2000).ToList();
         }
 
         public TEntity Get(Func<TEntity, Boolean> where)
@@ -46,7 +47,7 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Find(primaryKey) != null;
         }
 
-        public void Insert(TEntity entity, string username)
+        public TEntity Insert(TEntity entity, string username)
         {            
             entity.CreateBy = username;
             entity.CreateAt = DateTime.Now;
@@ -54,15 +55,41 @@ namespace WIM.Core.Repository.Impl
             entity.UpdateAt = DateTime.Now;
 
             DbSet.Add(entity);
+            return entity;
         }
 
-        public void Update(TEntity entityToUpdate, string username)
+        private string GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
         {
-            entityToUpdate.UpdateBy = username;
-            entityToUpdate.UpdateAt = DateTime.Now;
-            
-            DbSet.Attach(entityToUpdate);
-            Context.Entry(entityToUpdate).State = EntityState.Modified;
+            foreach (PropertyInfo prop in properties)
+            {
+                KeyAttribute attr = prop.GetCustomAttribute<KeyAttribute>();
+                if (attr != null)
+                {
+                    return prop.Name;
+                }
+            }
+            throw new Exception("The Object Found KeyAttribute.");
+        }
+
+        public TEntity Update(object entityToUpdate, string username)
+        {
+            Type typeEntityToUpdate = entityToUpdate.GetType(); 
+            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
+            string namePropKey = GetPropertyNameOfKeyAttribute(properties);         
+            var id = typeEntityToUpdate.GetProperty(namePropKey).GetValue(entityToUpdate, null);
+            TEntity entityForUpdated= GetByID(id);
+            Type typeEntityForUpdate = entityForUpdated.GetType();
+            foreach (PropertyInfo prop in properties)
+            {                
+                var value = prop.GetValue(entityToUpdate);                
+                if (typeEntityForUpdate.GetProperty(prop.Name) != null)
+                {
+                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdated, value, null);
+                }
+            }
+            entityForUpdated.UpdateBy = username;
+            entityForUpdated.UpdateAt = DateTime.Now;
+            return entityForUpdated;
         }
 
         public void Delete(object id)

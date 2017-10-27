@@ -1,23 +1,39 @@
-﻿using HRMS.Repository.Context;
+﻿using AutoMapper;
+using HRMS.Repository.Context;
 using HRMS.Repository.Entity.LeaveRequest;
 using HRMS.Service;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using Validation = WIM.Core.Common.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Status;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 
 namespace HRMS.WebApi.Controllers
-{
+{   
+
+    public class LeaveDto
+    {
+        [Key]
+        public int LeaveIDSys { get; set; }
+        public int StatusIDSys { get; set; }
+        public string StatusTitle { get; set; }
+        public Decimal Duration { get; set; }
+        public string Comment { get; set; }
+        public int LeaveTypeIDSys { get; set; }
+        public string EmID { get; set; }
+    }
+
 
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
@@ -31,57 +47,63 @@ namespace HRMS.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Demo([FromBody]Leave leave)
+        public HttpResponseMessage Demo([FromBody]LeaveDto leaveRequest)
         {
-            ResponseData<int> response = new ResponseData<int>();
+            ResponseData<LeaveDto> response = new ResponseData<LeaveDto>();
             try
             {
+                Leave leaveUpdated;
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
                     ILeaveRepository repo = new LeaveRepository(db);
-                    repo.Update(leave, "13007");
-
-                    //ILeaveDetailRepository repoDetail = new LeaveDetailRepository(db);
-                    //repoDetail.Update(new LeaveDetail(), "13007");
-
+                    leaveUpdated = repo.Update(leaveRequest, "13007");                                      
                     db.SaveChanges();
-                }                            
-
-                response.SetData(1);
+                }
+                LeaveDto leaveReturn = Mapper.Map<Leave, LeaveDto>(leaveUpdated);
+                response.SetData(leaveReturn);
             }
-            catch (ValidationException ex)
+            catch (Validation.ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
-        }
+        }        
     }
 
-
     public interface ILeaveRepository : IRepository<Leave>
-    {        
+    {
         IEnumerable<Leave> GetTopSellingCourses(int count);
         IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize);
 
-    }   
+    }
 
-    public class LeaveRepository : Repository<Leave>,  ILeaveRepository
+    public class LeaveRepository : Repository<Leave>, ILeaveRepository
     {
-        public LeaveRepository(DbContext context)  : base(context)
+        private HRMSDbContext Db;
+
+        public LeaveRepository(HRMSDbContext context) : base(context)
         {
-
+            Db = context;
         }
-
+       
         public IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize)
         {
+
             throw new NotImplementedException();
-        }              
+        }
+
+        public IEnumerable<LeaveDto> GetDto(int limit)
+        {
+            throw new NotImplementedException();
+        }
 
         public IEnumerable<Leave> GetTopSellingCourses(int count)
         {
             throw new NotImplementedException();
         }
+
+
     }
 
     public interface ILeaveDetailRepository : IRepository<LeaveDetail>
