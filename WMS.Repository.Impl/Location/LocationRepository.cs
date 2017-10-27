@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Repository;
-using WMS.Common;
+
 using WMS.Context;
 using WMS.Entity.WarehouseManagement;
 

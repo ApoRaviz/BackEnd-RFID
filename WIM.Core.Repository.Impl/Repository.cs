@@ -133,7 +133,14 @@ namespace WIM.Core.Repository.Impl
             return query.Where(predicate);
         }
 
-        
+        public IQueryable<TEntity> GetWithInclude(Func<TEntity, bool> where, params string[] include)
+        {
+            IQueryable<TEntity> query = this.DbSet;
+            query = include.Aggregate(query, (current, inc) => current.Include(inc));
+            return query.Where(where).AsQueryable();
+        }
+
+
 
         public TEntity GetSingle(Func<TEntity, bool> predicate)
         {

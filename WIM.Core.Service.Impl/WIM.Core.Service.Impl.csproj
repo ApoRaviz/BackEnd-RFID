@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -48,9 +51,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiMaster\ApiMTService.cs" />
+    <Compile Include="ApiMenuMapping\ApiMenuMappingService.cs" />
+    <Compile Include="CountryMaster\CountryService.cs" />
+    <Compile Include="CurrencyMaster\CurrencyService.cs" />
+    <Compile Include="CustomerMaster\CustomerService.cs" />
+    <Compile Include="EmployeeMaster\EmployeeService.cs" />
+    <Compile Include="MenuMaster\MenuService.cs" />
+    <Compile Include="MenuProjectMapping\MenuProjectMappingService.cs" />
+    <Compile Include="PermissionMaster\PermissionService.cs" />
+    <Compile Include="PersonMaster\PersonService.cs" />
+    <Compile Include="ProjectMaster\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleMaster\RoleService.cs" />
+    <Compile Include="UserMaster\UserService.cs" />
+    <Compile Include="UserRole\UserRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
@@ -62,6 +83,14 @@
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
+      <Project>{E365F321-091B-4D42-8934-6E919C7FF6B1}</Project>
+      <Name>WIM.Core.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{EA0CB63C-87C2-470E-9651-3CCD1D8C8BE4}</Project>
+      <Name>WIM.Core.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
       <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>

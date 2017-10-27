@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.Person;
 
-namespace WIM.Core.Entity.Employee : BaseEntity
+namespace WIM.Core.Entity
 {
     [Table("Employee_MT")]
-    public class Employee_MT 
+    public class Employee_MT : BaseEntity
     {
         [Key]
         public string EmID { get; set; }

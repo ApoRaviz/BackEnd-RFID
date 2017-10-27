@@ -37,7 +37,7 @@ namespace WIM.Core.Entity.CustomerManagement
         public string Mobile1 { get; set; }
         public string Mobile2 { get; set; }
         public string Mobile3 { get; set; }
-        //public byte Active { get; set; }
+        public bool IsActive { get; set; }
         //public System.DateTime CreatedDate { get; set; }
         //public System.DateTime UpdateDate { get; set; }
         //public string UserUpdate { get; set; }
