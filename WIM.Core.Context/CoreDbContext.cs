@@ -44,7 +44,7 @@ namespace WIM.Core.Context
         public DbSet<Country_MT> Country_MT { get; set; }
         public DbSet<Status_MT> Status_MT { get; set; }
 
-        public CoreDbContext() : base("name=DefaultConnection")
+        public CoreDbContext() : base("name=CORE")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

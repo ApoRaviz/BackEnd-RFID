@@ -21,7 +21,7 @@ namespace WMS.Service
 {
     public class ApiMenuMappingService : IApiMenuMappingService
     {
-        private ApiMenuMappingRepository repo;
+        private IApiMenuMappingRepository repo;
 
         public ApiMenuMappingService()
         {

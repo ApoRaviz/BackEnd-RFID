@@ -10,7 +10,7 @@ using WIM.Core.Entity.ProjectManagement;
 namespace WIM.Core.Entity.SupplierManagement
 {
     [Table("Supplier_MT")]
-    public class Supplier_MT
+    public class Supplier_MT : BaseEntity
     {
         public Supplier_MT()
         {
@@ -33,10 +33,10 @@ namespace WIM.Core.Entity.SupplierManagement
         public string TelOffice { get; set; }
         public string TelExt { get; set; }
         public string Mobile { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+        //public byte Active { get; set; }
+        //public System.DateTime CreatedDate { get; set; }
+        //public System.DateTime UpdateDate { get; set; }
+        //public string UserUpdate { get; set; }
 
         public virtual Project_MT Project_MT { get; set; }
 

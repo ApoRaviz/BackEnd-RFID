@@ -10,7 +10,7 @@ using WIM.Core.Entity.RoleAndPermission;
 namespace WIM.Core.Entity.UserManagement
 {
     [Table("UserRoles")]
-    public class UserRoles
+    public class UserRoles : BaseEntity
     {
         [Key]
         [Column(Order = 1)]
