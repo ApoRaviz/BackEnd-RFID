@@ -57,7 +57,7 @@ namespace HRMS.WebApi.Controllers
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
                     ILeaveRepository repo = new LeaveRepository(db);
-
+                    User.Identity.GetP
                     leaveUpdated = repo.GetWithInclude(x => x.LeaveIDSys == 2, "LeaveDetails").First();
 
                     //leaveUpdated = repo.Update(leaveRequest, "13007");                                      
@@ -79,7 +79,6 @@ namespace HRMS.WebApi.Controllers
     {
         IEnumerable<Leave> GetTopSellingCourses(int count);
         IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize);
-
     }
 
     public class LeaveRepository : Repository<Leave>, ILeaveRepository

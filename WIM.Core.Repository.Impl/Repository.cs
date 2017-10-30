@@ -4,10 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity;
+using WIM.Core.Security;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -47,11 +50,11 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Find(primaryKey) != null;
         }
 
-        public TEntity Insert(TEntity entity, string username)
+        public TEntity Insert(TEntity entity, IIdentity identity)
         {            
-            entity.CreateBy = username;
+            entity.CreateBy = identity.Name;
             entity.CreateAt = DateTime.Now;
-            entity.UpdateBy = username;
+            entity.UpdateBy = identity.Name;
             entity.UpdateAt = DateTime.Now;
 
             DbSet.Add(entity);
@@ -71,7 +74,7 @@ namespace WIM.Core.Repository.Impl
             throw new Exception("The Object Found KeyAttribute.");
         }
 
-        public TEntity Update(object entityToUpdate, string username)
+        public TEntity Update(object entityToUpdate, IIdentity identity)
         {
             Type typeEntityToUpdate = entityToUpdate.GetType(); 
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
@@ -87,7 +90,7 @@ namespace WIM.Core.Repository.Impl
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdated, value, null);
                 }
             }
-            entityForUpdated.UpdateBy = username;
+            entityForUpdated.UpdateBy = identity.Name;
             entityForUpdated.UpdateAt = DateTime.Now;
             return entityForUpdated;
         }
@@ -143,7 +146,7 @@ namespace WIM.Core.Repository.Impl
         public TEntity GetFirst(Func<TEntity, bool> predicate)
         {
             return DbSet.First<TEntity>(predicate);
-        }
+        }       
 
     }
 }
