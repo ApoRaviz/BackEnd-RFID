@@ -77,7 +77,7 @@ namespace WIM.Core.Repository.Impl
             return entityForInsert;
         }        
 
-        public TEntity Update(object entityToUpdate, IIdentity identity)
+        public TEntity Update(TEntity entityToUpdate, IIdentity identity)
         {
             Type typeEntityToUpdate = entityToUpdate.GetType(); 
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
