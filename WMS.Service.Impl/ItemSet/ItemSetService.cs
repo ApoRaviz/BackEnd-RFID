@@ -14,43 +14,38 @@ using WMS.Common;
 using WMS.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository;
 using WIM.Core.Repository;
+using WMS.Repository.ItemManagement;
 
 namespace WMS.Service
 {
     public class ItemSetService : IItemSetService
     {
-        private WMSDbContext proc;
-       // private Repository.ItemSetRepository repo;
-        private IGenericRepository<ItemSet_MT> repo = new Repository.ItemSetRepository();
-        private Repository.ItemSetRepository repo1;
-        private WMSDbContext Db;
+        private WMSDbContext proc = WMSDbContext.Create();
+        // private Repository.ItemSetRepository repo;
+        private IItemSetRepository repo ;
 
         public ItemSetService()
         {
-            repo.Get();
-               
-            proc = new WMSDbContext();
-            repo = new ItemSetRepository();
-            Db = WMSDbContext.Create();
+            repo = new ItemSetRepository(new WMSDbContext());
         }
 
         public IEnumerable<ItemSetDto> GetItemSets()
         {
-            IEnumerable<ItemSet_MT> ItemSets = ;
+            //IEnumerable<ItemSet_MT> ItemSets = ;
 
             IEnumerable<ItemSetDto> ItemSetDtos = Mapper.Map<IEnumerable<ItemSet_MT>, IEnumerable<ItemSetDto>>(ItemSets);
             return ItemSetDtos;
         }
 
-        public int CreateItemSet(ItemSet_MT ItemSet)
+        public int CreateItemSet(ItemSet_MT ItemSet,)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Insert(ItemSet);
+                    ItemSet.UserUpdate ;
+                    repo.Insert(ItemSet,);
                     scope.Complete();
                 }
                 catch (DbEntityValidationException e)

@@ -14,13 +14,13 @@ using WMS.Repository.ItemManagement;
 
 namespace WMS.Repository.Impl
 {
-    public class ItemRepository : Repository<ItemSet_MT>,IItemSetRepository
+    public class ItemRepository : Repository<ItemSet_MT>, IItemSetRepository
     {
-        private WMSDbContext Db { get; set; }
+        private WMSDbContext Db;
 
-        public ItemRepository()
+        public ItemRepository(WMSDbContext context) : base(context)
         {
-            Db = new WMSDbContext();
+            this.Db = context;
         }
 
 
@@ -35,7 +35,7 @@ namespace WMS.Repository.Impl
         public Item_MT GetByID(object id)
         {
             var query = (from i in Db.Item_MT
-                         where i.ItemIDSys== (int)id && i.Active == 1
+                         where i.ItemIDSys == (int)id && i.Active == 1
                          select i).Include(b => b.ItemUnitMapping).SingleOrDefault();
             return query;
         }
@@ -55,7 +55,7 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var existedItem = (from i in Db.Item_MT
-                               where i.ItemIDSys== (int)id
+                               where i.ItemIDSys == (int)id
                                select i).SingleOrDefault();
             existedItem.UpdateDate = DateTime.Now;
             existedItem.UserUpdate = "1";
@@ -112,6 +112,6 @@ namespace WMS.Repository.Impl
         }
 
 
- 
+
     }
 }

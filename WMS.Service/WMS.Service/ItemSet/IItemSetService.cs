@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WMS.Common;
@@ -10,13 +11,10 @@ namespace WMS.Service
 {
     public interface IItemSetService
     {
-        IEnumerable<ItemSetDto> GetItemSets();
-        ItemSetDto GetItemSet(int id);      
-        int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp);
-        int CreateItemSet(ItemSet_MT ItemSet);
-        int CreateItemSet(ItemSetDto ItemSet);
-        bool UpdateItemSet(int id, ItemSetDto ItemSet);
-        bool DeleteItemSet(int id);
-        bool DeleteItemSetDto(int id);
+        IEnumerable<ItemSetDto> GetDto();
+        ItemSetDto GetDtoByID(int id,IIdentity UserIden);
+        ItemSetDto CreateItemSet(ItemSet_MT ItemSet, IIdentity UserIden);
+        bool UpdateItemSet(ItemSetDto ItemSet, IIdentity UserIden);
+        bool DeleteItemSet(int id,IIdentity UserIden);
     }
 }
