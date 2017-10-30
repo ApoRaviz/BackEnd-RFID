@@ -14,13 +14,14 @@ namespace HRMS.Repository.Entity.LeaveRequest
     public class LeaveDetail : BaseEntity
     {
         [Key]
-        public int LeaveDetailIDSys { get; set; }        
+        public int LeaveDetailIDSys { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        [IsHead]
         public int LeaveIDSys { get; set; }
 
         public virtual Leave Leave { get; set; }
 
-}
+    }
 }

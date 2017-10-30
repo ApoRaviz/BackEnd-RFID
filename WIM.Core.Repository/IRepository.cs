@@ -14,12 +14,11 @@ namespace WIM.Core.Repository
         TEntity Get(Func<TEntity, Boolean> where);
         IEnumerable<TEntity> GetAll();
         TEntity GetByID(object id);
-        bool Exists(object primaryKey);
+        bool Exists(object id);        
         TEntity Insert(TEntity entity, IIdentity identity);
         TEntity Update(object entityToUpdate, IIdentity identity);
         void Delete(object id);
         void Delete(TEntity entityToDelete);
-        
 
         // Other
         IEnumerable<TEntity> GetMany(Func<TEntity, bool> where);
