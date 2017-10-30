@@ -18,6 +18,7 @@ using WIM.Core.Context;
 using WIM.Core.Entity.Status;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using System.Linq.Expressions;
 
 namespace HRMS.WebApi.Controllers
 {   
@@ -49,18 +50,21 @@ namespace HRMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Demo([FromBody]LeaveDto leaveRequest)
         {
-            ResponseData<LeaveDto> response = new ResponseData<LeaveDto>();
+            ResponseData<Leave> response = new ResponseData<Leave>();
             try
             {
                 Leave leaveUpdated;
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
                     ILeaveRepository repo = new LeaveRepository(db);
-                    leaveUpdated = repo.Update(leaveRequest, "13007");                                      
-                    db.SaveChanges();
+                    User.Identity.GetP
+                    leaveUpdated = repo.GetWithInclude(x => x.LeaveIDSys == 2, "LeaveDetails").First();
+
+                    //leaveUpdated = repo.Update(leaveRequest, "13007");                                      
+                    //db.SaveChanges();
                 }
                 LeaveDto leaveReturn = Mapper.Map<Leave, LeaveDto>(leaveUpdated);
-                response.SetData(leaveReturn);
+                response.SetData(leaveUpdated);
             }
             catch (Validation.ValidationException ex)
             {
@@ -75,7 +79,6 @@ namespace HRMS.WebApi.Controllers
     {
         IEnumerable<Leave> GetTopSellingCourses(int count);
         IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize);
-
     }
 
     public class LeaveRepository : Repository<Leave>, ILeaveRepository
