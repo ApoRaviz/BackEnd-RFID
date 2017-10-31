@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRMS.Repository
+namespace HRMS.Service.LeaveManagement
 {
-    public class Class1
+    public interface ILeaveService
     {
+
     }
 }

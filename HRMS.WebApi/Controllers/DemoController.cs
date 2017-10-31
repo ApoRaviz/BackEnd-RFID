@@ -19,17 +19,20 @@ using WIM.Core.Entity.Status;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Linq.Expressions;
+using HRMS.Entity.LeaveManagement;
+using HRMS.Context;
+using HRMS.Repository.Impl.LeaveManagement;
+using HRMS.Repository.LeaveManagement;
 
 namespace HRMS.WebApi.Controllers
 {    
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
-        private IDemoService DemoService;
-
-        public DemoController(IDemoService demoService)
+       
+        public DemoController()
         {
-            DemoService = demoService;
+            
         }
 
         [HttpPost]
@@ -104,13 +107,13 @@ namespace HRMS.WebApi.Controllers
         
     }
 
-    public interface ILeaveRepository : IRepository<Leave>
+    /*public interface ILeaveRepository : IRepository<Leave>
     {
         IEnumerable<Leave> GetTopSellingCourses(int count);
         IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize);
-    }
+    }*/
 
-    public class LeaveRepository : Repository<Leave>, ILeaveRepository
+    /*public class LeaveRepository : Repository<Leave>, ILeaveRepository
     {
         private HRMSDbContext Db;
 
@@ -136,9 +139,9 @@ namespace HRMS.WebApi.Controllers
         }
 
 
-    }
+    }*/
 
-    public interface ILeaveDetailRepository : IRepository<LeaveDetail>
+    /*public interface ILeaveDetailRepository : IRepository<LeaveDetail>
     {
 
 
@@ -151,6 +154,6 @@ namespace HRMS.WebApi.Controllers
         {
 
         }
-    }
+    }*/
 
 }
