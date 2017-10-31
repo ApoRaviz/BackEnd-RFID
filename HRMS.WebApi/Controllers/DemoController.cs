@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using HRMS.Repository.Context;
-using HRMS.Repository.Entity.LeaveRequest;
 using HRMS.Service;
 using System;
 using System.Collections.Generic;
@@ -23,16 +21,20 @@ using HRMS.Entity.LeaveManagement;
 using HRMS.Context;
 using HRMS.Repository.Impl.LeaveManagement;
 using HRMS.Repository.LeaveManagement;
+using HRMS.Service.LeaveManagement;
+using HRMS.Service.Impl.LeaveManagement;
 
 namespace HRMS.WebApi.Controllers
 {    
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
-       
-        public DemoController()
+
+        private ILeaveService LeaveService;
+        public DemoController(ILeaveService leaveService)
         {
-            
+            //LeaveService = leaveService;
+            LeaveService = new LeaveService(User.Identity);
         }
 
         [HttpPost]
@@ -45,15 +47,15 @@ namespace HRMS.WebApi.Controllers
 
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
-                    ILeaveRepository headRepo = new LeaveRepository(db);
+                    ILeaveRepository headRepo = new LeaveRepository(db, User.Identity);
                     ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
-                    Leave x = headRepo.Insert(leaveRequest, User.Identity);
+                    Leave x = headRepo.Insert(leaveRequest);
 
                     foreach (var entity in leaveRequest.LeaveDetails)
                     {
                         entity.LeaveIDSys = x.LeaveIDSys;
-                        dRepo.Insert(entity, User.Identity);
+                        dRepo.Insert(entity);
                     }
 
                     db.SaveChanges();

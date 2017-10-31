@@ -474,6 +474,14 @@
       <Project>{2d0b2680-d488-4b8a-bab8-cf286cd071e0}</Project>
       <Name>HRMS.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
+      <Project>{b7ea8787-86ea-48fc-945f-6cae2b397da4}</Project>
+      <Name>HRMS.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
+      <Project>{93a81e85-aca4-4809-88dc-c3d67548ef83}</Project>
+      <Name>HRMS.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>

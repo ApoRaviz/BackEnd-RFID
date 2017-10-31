@@ -44,9 +44,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\HRMS.Repository.Entity.csproj">
-      <Project>{2d18ff9d-6137-464e-861b-417ffa24fdf1}</Project>
-      <Name>HRMS.Repository.Entity</Name>
+    <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">
+      <Project>{a3ea41df-d932-48b0-8100-a76e5df04b8e}</Project>
+      <Name>HRMS.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Entity\HRMS.Entity.csproj">
+      <Project>{1646E0FC-8F7B-436F-983A-7C9873CA49CB}</Project>
+      <Name>HRMS.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
       <Project>{93a81e85-aca4-4809-88dc-c3d67548ef83}</Project>
