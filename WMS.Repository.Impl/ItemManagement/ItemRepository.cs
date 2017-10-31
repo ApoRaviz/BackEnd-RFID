@@ -121,5 +121,30 @@ namespace WMS.Repository.Impl
         {
             throw new NotImplementedException();
         }
+
+        public ItemSetDto GetDtoByID(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ItemSetDto GetItemSetAndDetail(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ItemSetDetailDto> GetDtoItemSetDetail(int itemSetIDSys)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ItemSetDto> GetDto()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ItemSetDto> GetDto(int limit)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

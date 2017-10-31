@@ -11,10 +11,10 @@ namespace WMS.Service
 {
     public interface IItemSetService
     {
-        IEnumerable<ItemSetDto> GetDto();
-        ItemSetDto GetDtoByID(int id,IIdentity UserIden);
-        ItemSetDto CreateItemSet(ItemSet_MT ItemSet, IIdentity identity);
-        ItemSetDto UpdateItemSet(ItemSetDto ItemSet, IIdentity identity);
-        bool DeleteItemSet(int id,IIdentity UserIden);
+        IEnumerable<ItemSetDto> GetDto(int limit);
+        ItemSetDto GetDtoByID(int id);
+        ItemSetDto CreateItemSet(ItemSet_MT ItemSet);
+        bool UpdateItemSet(ItemSetDto ItemSet);
+        bool DeleteItemSet(int id);
     }
 }

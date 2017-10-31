@@ -17,7 +17,8 @@ namespace WMS.WebApi.Controllers
     [RoutePrefix("api/v1/ItemSets")]
     public class ItemSetsController : ApiController
     {
-        private IItemSetService ItemSetService;
+        private IItemSetService ItemSetService { get; set; }
+
         public ItemSetsController(IItemSetService ItemSetService)
         {
             this.ItemSetService = ItemSetService;
@@ -32,7 +33,7 @@ namespace WMS.WebApi.Controllers
             ResponseData<IEnumerable<ItemSetDto>> response = new ResponseData<IEnumerable<ItemSetDto>>();
             try
             {
-                IEnumerable<ItemSetDto> ItemSets = ItemSetService.GetItemSets();
+                IEnumerable<ItemSetDto> ItemSets = ItemSetService.GetDto();
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(ItemSets);
             }
@@ -52,7 +53,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<ItemSetDto> response = new ResponseData<ItemSetDto>();
             try
             {
-                ItemSetDto ItemSet = ItemSetService.GetItemSet(id);
+                ItemSetDto ItemSet = ItemSetService.GetDtoByID(id,User.Identity);
                 response.SetData(ItemSet);
             }
             catch (ValidationException ex)
@@ -106,12 +107,12 @@ namespace WMS.WebApi.Controllers
         // PUT: api/ItemSets/5
         [HttpPut]
         [Route("{id}")]
-        public HttpResponseMessage Put(int id, [FromBody]ItemSet_MT ItemSet)
+        public HttpResponseMessage Put(int id, [FromBody]ItemSetDto ItemSet)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ItemSetService.UpdateItemSet(id, ItemSet);
+                bool isUpated = ItemSetService.UpdateItemSet(ItemSet,User.Identity);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

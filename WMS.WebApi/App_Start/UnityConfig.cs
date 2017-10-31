@@ -11,6 +11,7 @@ using WMS.Service.Impl.Inspect;
 using WMS.Master;
 using WMS.Service.WarehouseMaster;
 using WMS.Service.Impl.WarehouseMaster;
+using System.Security.Principal;
 
 namespace WMS.WebApi
 {
@@ -31,6 +32,7 @@ namespace WMS.WebApi
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
 
+            container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
             //Register Service
             container.RegisterType<ICommonService, CommonService>();
             container.RegisterType<ICustomerService, CustomerService>();
@@ -38,6 +40,8 @@ namespace WMS.WebApi
             container.RegisterType<ICategoryService, CategoryService>();
             container.RegisterType<IItemService, ItemService>();
             container.RegisterType<IItemSetService, ItemSetService>();
+            container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
+
             container.RegisterType<IUnitService, UnitService>();
             // #JobComment
             //container.RegisterType<ILabelService, LabelService>();

@@ -14,9 +14,9 @@ namespace WMS.Repository.Impl
     {
         private WMSDbContext Db;
         //private ItemSetRepository repo;
+        private IIdentity Identity;
 
-
-        public ItemSetRepository(WMSDbContext Context) : base(Context)
+        public ItemSetRepository(WMSDbContext Context,IIdentity identity) : base(Context, identity)
         {
             Db = Context;
         }
