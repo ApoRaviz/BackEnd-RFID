@@ -21,21 +21,7 @@ using WIM.Core.Repository.Impl;
 using System.Linq.Expressions;
 
 namespace HRMS.WebApi.Controllers
-{   
-
-    public class LeaveDto
-    {
-        [Key]
-        public int LeaveIDSys { get; set; }
-        public int StatusIDSys { get; set; }
-        public string StatusTitle { get; set; }
-        public Decimal Duration { get; set; }
-        public string Comment { get; set; }
-        public int LeaveTypeIDSys { get; set; }
-        public string EmID { get; set; }
-    }
-
-
+{    
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
@@ -47,8 +33,42 @@ namespace HRMS.WebApi.Controllers
         }
 
         [HttpPost]
+        [Route("new")]
+        public HttpResponseMessage DemoAdd([FromBody]Leave leaveRequest)
+        {
+            ResponseData<Leave> response = new ResponseData<Leave>();
+            try
+            {
+
+                using (HRMSDbContext db = new HRMSDbContext())
+                {
+                    ILeaveRepository headRepo = new LeaveRepository(db);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
+
+                    Leave x = headRepo.Insert(leaveRequest, User.Identity);
+
+                    foreach (var entity in leaveRequest.LeaveDetails)
+                    {
+                        entity.LeaveIDSys = x.LeaveIDSys;
+                        dRepo.Insert(entity, User.Identity);
+                    }
+
+                    db.SaveChanges();
+                }
+                
+                response.SetData(leaveRequest);
+            }
+            catch (Validation.ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
         [Route("")]
-        public HttpResponseMessage Demo([FromBody]LeaveDto leaveRequest)
+        public HttpResponseMessage DemoUpdate([FromBody]LeaveDto leaveRequest)
         {
             ResponseData<Leave> response = new ResponseData<Leave>();
             try
@@ -57,13 +77,21 @@ namespace HRMS.WebApi.Controllers
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
                     ILeaveRepository repo = new LeaveRepository(db);
-                    User.Identity.GetP
-                    leaveUpdated = repo.GetWithInclude(x => x.LeaveIDSys == 2, "LeaveDetails").First();
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
-                    //leaveUpdated = repo.Update(leaveRequest, "13007");                                      
-                    //db.SaveChanges();
+                    leaveUpdated = repo.Update(leaveRequest, User.Identity);
+                 
+                    dRepo.Delete(x => x.LeaveIDSys == leaveUpdated.LeaveIDSys);
+          
+                    foreach (var entity in leaveRequest.LeaveDetails)
+                    {
+                        var leaveForInsert = Mapper.Map<LeaveDetailDto, LeaveDetail> (entity);
+                        dRepo.Insert(leaveForInsert, User.Identity);
+                    }
+
+                    db.SaveChanges();
                 }
-                LeaveDto leaveReturn = Mapper.Map<Leave, LeaveDto>(leaveUpdated);
+
                 response.SetData(leaveUpdated);
             }
             catch (Validation.ValidationException ex)
@@ -72,7 +100,8 @@ namespace HRMS.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
-        }        
+        } 
+        
     }
 
     public interface ILeaveRepository : IRepository<Leave>

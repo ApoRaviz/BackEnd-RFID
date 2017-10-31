@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using HRMS.Repository.Entity.LeaveRequest;
 
 namespace HRMS.WebApi
 {
@@ -12,8 +13,12 @@ namespace HRMS.WebApi
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<Controllers.LeaveDto, Repository.Entity.LeaveRequest.Leave>();
-                cfg.CreateMap<Repository.Entity.LeaveRequest.Leave, Controllers.LeaveDto>();
+                cfg.CreateMap<LeaveDto, Leave>();
+                cfg.CreateMap<Leave, LeaveDto>();
+
+                cfg.CreateMap<LeaveDetail, LeaveDetailDto>();
+                cfg.CreateMap<LeaveDetailDto, LeaveDetail>();
+
 
             });
         }

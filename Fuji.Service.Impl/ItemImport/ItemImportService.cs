@@ -34,14 +34,14 @@ namespace Fuji.Service.Impl.ItemImport
         private string connectionString = ConfigurationManager.ConnectionStrings["WIM_FUJI"].ConnectionString;
         #endregion
         
-        //private FujiDbContext Db { get; set; }
+        private FujiDbContext Db { get; set; }
         //private IGenericRepository<ImportSerialHead> Repo;
 
         private SerialRepository SerialDetailRepo;
         private SerialHeadRepository SerialHeadRepo;
         public ItemImportService()
         {
-            //Db = FujiDbContext.Create();
+            Db = FujiDbContext.Create();
             //Repo = new GenericRepository<ImportSerialHead>(Db);
             SerialDetailRepo = new SerialRepository();
             SerialHeadRepo = new SerialHeadRepository();

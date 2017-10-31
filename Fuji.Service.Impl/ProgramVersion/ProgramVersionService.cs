@@ -23,7 +23,7 @@ namespace Fuji.Service.Impl.ProgramVersion
 
         public ProgramVersionService()
         {
-            Repo = new GenericRepository<ProgramVersionHistory>(Db);
+            //Repo = new GenericRepository<ProgramVersionHistory>(Db);
             Db = FujiDbContext.Create();
         }        
 
