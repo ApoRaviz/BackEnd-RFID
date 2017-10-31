@@ -74,7 +74,7 @@ namespace WMS.Service
             {
                 try
                 {
-                 repo.Update(Currency);
+                repo.Update(Currency);
                 }
                 catch (DbEntityValidationException e)
                 {

@@ -2,13 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Repository;
-using System.Transactions;
-using WIM.Core.Common.Validation;
-using System.Data.Entity.Validation;
-using WIM.Core.Repository.Impl;
 
 namespace WIM.Core.Common
 {

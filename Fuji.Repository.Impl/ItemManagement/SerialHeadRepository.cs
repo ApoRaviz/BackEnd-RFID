@@ -1,6 +1,5 @@
 ﻿using Fuji.Context;
 using Fuji.Entity.ItemManagement;
-using Fuji.Repository.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

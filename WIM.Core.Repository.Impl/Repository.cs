@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity;
+using WIM.Core.Security;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -13,17 +18,18 @@ namespace WIM.Core.Repository.Impl
     {
         protected DbContext Context;
         internal DbSet<TEntity> DbSet;
+        internal IIdentity Identity;
 
-        public Repository(DbContext context)
+        public Repository(DbContext context, IIdentity identity)
         {
             Context = context;
             this.DbSet = Context.Set<TEntity>();
+            Identity = identity;
         }
 
         public IEnumerable<TEntity> Get()
         {
-            IQueryable<TEntity> query = DbSet;
-            return query.ToList();
+            return DbSet.Take(2000).ToList();
         }
 
         public TEntity Get(Func<TEntity, Boolean> where)
@@ -41,28 +47,74 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Find(id);
         }       
 
-            public bool Exists(object primaryKey)
+            public bool Exists(object id)
         {
-            return DbSet.Find(primaryKey) != null;
-        }
+            return DbSet.Find(id) != null;
+        }       
 
-        public void Insert(TEntity entity, string username)
-        {            
-            entity.CreateBy = username;
-            entity.CreateAt = DateTime.Now;
-            entity.UpdateBy = username;
-            entity.UpdateAt = DateTime.Now;
-
-            DbSet.Add(entity);
-        }
-
-        public void Update(TEntity entityToUpdate, string username)
+        public TEntity Insert(TEntity entityToInsert)
         {
-            entityToUpdate.UpdateBy = username;
-            entityToUpdate.UpdateAt = DateTime.Now;
+            Type typeEntityToInsert = entityToInsert.GetType(); 
+            PropertyInfo[] properties = typeEntityToInsert.GetProperties();
+
+            TEntity entityForInsert = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { });
+
+            Type typeEntityForUpdate = entityForInsert.GetType();
+            foreach (PropertyInfo prop in properties)
+            {                
+                var value = prop.GetValue(entityToInsert, null);                
+                if (!prop.PropertyType.IsGenericType)
+                {
+                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                }
+            }
             
-            DbSet.Attach(entityToUpdate);
-            Context.Entry(entityToUpdate).State = EntityState.Modified;
+            entityForInsert.CreateBy = Identity.Name;
+            entityForInsert.CreateAt = DateTime.Now;
+            entityForInsert.UpdateBy = Identity.Name;
+            entityForInsert.UpdateAt = DateTime.Now;
+            entityForInsert.IsActive = true;
+
+            DbSet.Add(entityForInsert);
+            return entityForInsert;
+        }                
+
+        public TEntity Update(object entityToUpdate)
+        {
+            Type typeEntityToUpdate = entityToUpdate.GetType();
+            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
+            string namePropKey = GetPropertyNameOfKeyAttribute(properties);
+            var id = typeEntityToUpdate.GetProperty(namePropKey).GetValue(entityToUpdate, null);
+            TEntity entityForUpdate = GetByID(id);
+            if (entityForUpdate == null)
+            {
+                throw new Exception("Data Not Found.");
+            }
+            Type typeEntityForUpdate = entityForUpdate.GetType();
+            foreach (PropertyInfo prop in properties)
+            {
+                var value = prop.GetValue(entityToUpdate);
+                if (typeEntityForUpdate.GetProperty(prop.Name) != null && !prop.PropertyType.IsGenericType)
+                {
+                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
+                }
+            }
+            entityForUpdate.UpdateBy = Identity.Name;
+            entityForUpdate.UpdateAt = DateTime.Now;
+            return entityForUpdate;
+        }
+
+        private string GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
+        {
+            foreach (PropertyInfo prop in properties)
+            {
+                KeyAttribute attr = prop.GetCustomAttribute<KeyAttribute>();
+                if (attr != null)
+                {
+                    return prop.Name;
+                }
+            }
+            throw new Exception("The Object Found KeyAttribute.");
         }
 
         public void Delete(object id)
@@ -116,7 +168,7 @@ namespace WIM.Core.Repository.Impl
         public TEntity GetFirst(Func<TEntity, bool> predicate)
         {
             return DbSet.First<TEntity>(predicate);
-        }
+        }       
 
     }
 }

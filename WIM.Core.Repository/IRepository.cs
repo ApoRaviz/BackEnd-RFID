@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
@@ -13,12 +14,11 @@ namespace WIM.Core.Repository
         TEntity Get(Func<TEntity, Boolean> where);
         IEnumerable<TEntity> GetAll();
         TEntity GetByID(object id);
-        bool Exists(object primaryKey);
-        void Insert(TEntity entity, string username);
-        void Update(TEntity entityToUpdate, string username);
+        bool Exists(object id);        
+        TEntity Insert(TEntity entity);
+        TEntity Update(object entityToUpdate);
         void Delete(object id);
         void Delete(TEntity entityToDelete);
-        
 
         // Other
         IEnumerable<TEntity> GetMany(Func<TEntity, bool> where);

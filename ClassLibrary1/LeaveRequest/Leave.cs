@@ -15,9 +15,9 @@ namespace HRMS.Repository.Entity.LeaveRequest
     {
         public Leave()
         {
-            //LeaveDetails = new HashSet<LeaveDetail>();
+            LeaveDetails = new HashSet<LeaveDetail>();
         }
-
+        
         [Key]
         public int LeaveIDSys { get; set; }
         public int StatusIDSys { get; set; }
@@ -26,17 +26,38 @@ namespace HRMS.Repository.Entity.LeaveRequest
         public Decimal Duration { get; set; }
         public string Comment { get; set; }
         public int LeaveTypeIDSys { get; set; }
-        public string EmID { get; set; }
+        public string RequesterID { get; set; }
+        public string ApproverID { get; set; }
 
-        //public virtual ICollection<LeaveDetail> LeaveDetails { get; set; }
+        public virtual ICollection<LeaveDetail> LeaveDetails { get; set; }
 
     }
 
     public class LeaveDto
     {
-        public string Comment { get; set; }
+        [Key]        
+        public int LeaveIDSys { get; set; }
+        public int StatusIDSys { get; set; }
         public string StatusTitle { get; set; }
+        public Decimal Duration { get; set; }
+        public string Comment { get; set; }
+        public int LeaveTypeIDSys { get; set; }
+        public string RequesterID { get; set; }
+        public string ApproverID { get; set; }
 
-        public virtual ICollection<LeaveDetail> LeaveDetails { get; set; }
+        public virtual ICollection<LeaveDetailDto> LeaveDetails { get; set; }
+    }
+
+    public class LeaveDetailDto
+    {
+        [Key]
+        public int LeaveDetailIDSys { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+
+        public int LeaveIDSys { get; set; }
+
+        public virtual Leave Leave { get; set; }
+
     }
 }

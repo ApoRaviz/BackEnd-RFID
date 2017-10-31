@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenericRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
   </ItemGroup>
@@ -63,6 +62,10 @@
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
+      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
+      <Name>WIM.Core.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
