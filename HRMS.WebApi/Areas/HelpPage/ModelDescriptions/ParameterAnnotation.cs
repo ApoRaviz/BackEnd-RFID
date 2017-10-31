@@ -1,6 +1,6 @@
 using System;
 
-namespace Fuji.WebApi.Areas.HelpPage.ModelDescriptions
+namespace HRMS.WebApi.Areas.HelpPage.ModelDescriptions
 {
     public class ParameterAnnotation
     {

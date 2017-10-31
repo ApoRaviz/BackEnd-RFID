@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using Fuji.WebApi.Areas.HelpPage.ModelDescriptions;
-using Fuji.WebApi.Areas.HelpPage.Models;
+using HRMS.WebApi.Areas.HelpPage.ModelDescriptions;
+using HRMS.WebApi.Areas.HelpPage.Models;
 
-namespace Fuji.WebApi.Areas.HelpPage.Controllers
+namespace HRMS.WebApi.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

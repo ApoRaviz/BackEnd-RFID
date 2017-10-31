@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Fuji.Common.ValueObject;
-using Fuji.Entity.ItemManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using HRMS.Repository.Entity.LeaveRequest;
 
-namespace Fuji.WebApi
+namespace HRMS.WebApi
 {
     public static class AutoMapperConfig
     {
@@ -14,8 +13,12 @@ namespace Fuji.WebApi
         {
             Mapper.Initialize(cfg =>
             {
-                //FUJI
-                cfg.CreateMap<ImportSerialHead, ItemImportDto>();
+                cfg.CreateMap<LeaveDto, Leave>();
+                cfg.CreateMap<Leave, LeaveDto>();
+
+                cfg.CreateMap<LeaveDetail, LeaveDetailDto>();
+                cfg.CreateMap<LeaveDetailDto, LeaveDetail>();
+
 
             });
         }

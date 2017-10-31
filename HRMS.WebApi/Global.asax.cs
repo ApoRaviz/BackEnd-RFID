@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace Fuji.WebApi
+namespace HRMS.WebApi
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

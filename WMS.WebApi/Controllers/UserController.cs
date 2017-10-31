@@ -106,7 +106,7 @@ namespace WMS.WebApi.Controllers
             {
                 string id = "";
                 PasswordHasher ph = new PasswordHasher();
-                User.PasswordHash = ph.HashPassword(User.PasswordHash);
+                User.PasswordHash = ph.HashPassword("1234!");
                 id = UserService.CreateUser(User);
                 response.SetData(id);
             }

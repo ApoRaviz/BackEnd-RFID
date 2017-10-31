@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InboundItems.cs" />
-    <Compile Include="InboundItemsHead.cs" />
-    <Compile Include="LabelRunning.cs" />
+    <Compile Include="InboundManagement\InboundItems.cs" />
+    <Compile Include="InboundManagement\InboundItemsHead.cs" />
+    <Compile Include="LabelManagement\LabelRunning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

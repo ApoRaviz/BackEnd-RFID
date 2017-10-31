@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Fuji.WebApi.Services
+namespace HRMS.WebApi.Services
 {
     public class EmailService : IIdentityMessageService
     {

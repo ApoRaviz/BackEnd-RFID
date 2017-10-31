@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Security;
 
-namespace Fuji.WebApi.Controllers
+namespace HRMS.WebApi.Controllers
 {
     //[Authorize]
     public class BaseApiController : ApiController

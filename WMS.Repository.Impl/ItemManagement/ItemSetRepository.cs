@@ -9,7 +9,6 @@ using WIM.Core.Repository;
 using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.ItemManagement;
 
 namespace WMS.Repository.Impl
 {
@@ -76,6 +75,7 @@ namespace WMS.Repository.Impl
             entity.CreatedDate = DateTime.Now;
             entity.UpdateDate = DateTime.Now;
             entity.UserUpdate = "1";
+            entity.Active = 1;
             Db.ItemSet_MT.Add(entity);
             Db.SaveChanges();
         }

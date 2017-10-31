@@ -9,9 +9,9 @@ using System.Web.Http.Cors;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using Fuji.WebApi.Controllers;
+using HRMS.WebApi.Controllers;
 
-namespace Fuji.WebApi
+namespace HRMS.WebApi
 {
     public static class WebApiConfig
     {

@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Isuzu.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Fuji.Repository.Impl">
+      <HintPath>..\Fuji.Repository.Impl\bin\Debug\Fuji.Repository.Impl.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.802.134\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
     </Reference>

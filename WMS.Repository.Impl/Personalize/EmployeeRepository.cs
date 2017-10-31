@@ -38,7 +38,7 @@ namespace WMS.Repository.Impl
         {
             Employee_MT Employee = (from i in Db.Employee_MT
                                     where i.PersonIDSys == id
-                                    select i).Include("Person_MT").SingleOrDefault();
+                                    select i).Include(b => b.Person_MT).SingleOrDefault();
             return Employee;
         }
 

@@ -2,13 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Repository;
-using System.Transactions;
-using WIM.Core.Common.Validation;
-using System.Data.Entity.Validation;
-using WIM.Core.Repository.Impl;
 
 namespace WIM.Core.Common
 {
@@ -24,7 +17,9 @@ namespace WIM.Core.Common
 
         public bool WriteUserLog(UserLog log)
         {
-            var logRepo = new GenericRepository<UserLog>(db);
+            return false;
+
+            /*var logRepo = new GenericRepository<UserLog>(db);
 
             using (var scope = new TransactionScope())
             {
@@ -39,13 +34,14 @@ namespace WIM.Core.Common
                 }
                 scope.Complete();
                 return true;
-            }
+            }*/
         }
 
         public IList<UserLog> UserLogData()
         {
-            var logRepo = new GenericRepository<UserLog>(db);
-            return logRepo.GetAll().ToList();
+            return null;
+            /*var logRepo = new GenericRepository<UserLog>(db);
+            return logRepo.GetAll().ToList();*/
         }
 
         public IList<ProcGetUserLog_Result> GetUserLogData(int? logId, DateTime? RequestDateFrom, DateTime? RequestDateTo)

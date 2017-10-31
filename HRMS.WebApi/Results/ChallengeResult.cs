@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace Fuji.WebApi.Results
+namespace HRMS.WebApi.Results
 {
     public class ChallengeResult : IHttpActionResult
     {
