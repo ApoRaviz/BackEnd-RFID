@@ -19,6 +19,8 @@ using WIM.Core.Entity.Status;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Linq.Expressions;
+using HRMS.Context;
+using HRMS.Entity.LeaveManagement;
 
 namespace HRMS.WebApi.Controllers
 {    

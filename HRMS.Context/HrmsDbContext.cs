@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HRMS.Context
 {
-    public class HrmsDbContext : DbContext
+    public class HRMSDbContext : DbContext
     {
        
         public DbSet<Leave> Leave { get; set; }
@@ -24,15 +24,15 @@ namespace HRMS.Context
         public DbSet<DayOff> DayOff { get; set; }
 
 
-        public HrmsDbContext() : base("name=DefaultConnection")
+        public HRMSDbContext() : base("name=DefaultConnection")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
         }
 
-        public static HrmsDbContext Create()
+        public static HRMSDbContext Create()
         {
-            return new HrmsDbContext();
+            return new HRMSDbContext();
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

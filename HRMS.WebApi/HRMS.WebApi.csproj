@@ -455,6 +455,18 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRMS.Context\HRMS.Context.csproj">
+      <Project>{d78e68ba-486e-4577-8773-bf08f50721e1}</Project>
+      <Name>HRMS.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Entity\HRMS.Entity.csproj">
+      <Project>{1646e0fc-8f7b-436f-983a-7c9873ca49cb}</Project>
+      <Name>HRMS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Repository.Impl\HRMS.Repository.Impl.csproj">
+      <Project>{95ca527d-583b-493d-ad2c-c488029145a1}</Project>
+      <Name>HRMS.Repository.Impl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
@@ -487,6 +499,9 @@
       <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
       <Name>WIM.Core.Security</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

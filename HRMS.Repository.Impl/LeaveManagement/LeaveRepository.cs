@@ -13,11 +13,11 @@ namespace HRMS.Repository.Impl.LeaveManagement
 {
     public class LeaveRepository : IGenericRepository<Leave>
     {
-        private HrmsDbContext Db;
+        private HRMSDbContext Db;
 
         public LeaveRepository()
         {
-            Db = new HrmsDbContext();
+            Db = new HRMSDbContext();
         }
 
         public void Delete(object id)
