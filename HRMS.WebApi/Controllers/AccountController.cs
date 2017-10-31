@@ -31,6 +31,7 @@ namespace HRMS.WebApi.Controllers
 
         public AccountController()
         {
+
         }
 
         public AccountController(ApplicationUserManager userManager,
