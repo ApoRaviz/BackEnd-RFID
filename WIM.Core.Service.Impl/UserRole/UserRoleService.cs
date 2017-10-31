@@ -51,7 +51,7 @@ namespace WIM.Core.Service.Impl
             return UserRole;            
         }                      
 
-        public string CreateUserRole(UserRoles UserRole,string username)
+        public string CreateUserRole(UserRoles UserRole)
         {
             using (var scope = new TransactionScope())
             {
@@ -60,7 +60,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IUserRoleRepository repo = new UserRoleRepository(Db);
-                        repo.Insert(UserRole, username);
+                        repo.Insert(UserRole);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -79,7 +79,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateUserRole(UserRoles UserRole ,string username)
+        public bool UpdateUserRole(UserRoles UserRole)
         {           
             using (var scope = new TransactionScope())
             {
@@ -88,7 +88,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IUserRoleRepository repo = new UserRoleRepository(Db);
-                        repo.Update(UserRole,username);
+                        repo.Update(UserRole);
                         scope.Complete();
                     }
                 }
@@ -195,7 +195,7 @@ namespace WIM.Core.Service.Impl
             return RoleUser;
         }
 
-        public string CreateUserRoles(string userid , string roleid , string username)
+        public string CreateUserRoles(string userid , string roleid )
         {
             using (var scope = new TransactionScope())
             {
@@ -207,7 +207,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IUserRoleRepository repo = new UserRoleRepository(Db);
-                        repo.Insert(data,username);
+                        repo.Insert(data);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -226,7 +226,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public string CreateRoleUsers(string userid, string roleid, string username)
+        public string CreateRoleUsers(string userid, string roleid)
         {
             using (var scope = new TransactionScope())
             {
@@ -238,7 +238,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IUserRoleRepository repo = new UserRoleRepository(Db);
-                        repo.Insert(data , username);
+                        repo.Insert(data );
                         Db.SaveChanges();
                         scope.Complete();
                     }

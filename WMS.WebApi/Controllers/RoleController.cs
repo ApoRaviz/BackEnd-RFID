@@ -7,7 +7,9 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.RoleAndPermission;
+using WIM.Core.Service;
 using WMS.Common;
 using WMS.Service;
 
@@ -167,7 +169,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = RoleService.UpdateRole(Id, Role);
+                bool isUpated = RoleService.UpdateRole( Role);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

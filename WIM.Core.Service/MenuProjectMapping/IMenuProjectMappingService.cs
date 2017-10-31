@@ -17,10 +17,10 @@ namespace WIM.Core.Service
         IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid , IEnumerable<MenuProjectMappingDto> menu);
         IEnumerable<MenuProjectMappingDto> GetMenuPermission(string userid,int projectid);
         IEnumerable<MenuDto> GetMenuDtoDefault(int i);
-        int CreateMenuProjectMapping(MenuDto MenuProjectMapping, int projectID,byte sort,string username);
-        int CreateMenuProjectMapping(MenuProjectMapping MenuProjectMapping , string username);
-        bool UpdateMenuProjectMapping(MenuProjectMapping MenuProjectMapping,string username);
-        bool UpdateMenuProjectMapping(List<MenuProjectMappingDto> MenuProjectMapping,string username);
+        int CreateMenuProjectMapping(MenuDto MenuProjectMapping, int projectID,byte sort);
+        int CreateMenuProjectMapping(MenuProjectMapping MenuProjectMapping);
+        bool UpdateMenuProjectMapping(MenuProjectMapping MenuProjectMapping);
+        bool UpdateMenuProjectMapping(List<MenuProjectMappingDto> MenuProjectMapping);
         bool DeleteMenuProjectMapping(List<MenuProjectMappingDto> id);        
     }
 }

@@ -60,7 +60,7 @@ namespace WMS.Service
             return null;
         }
 
-        public int CreateUnit(Unit_MT unit,string username)
+        public int CreateUnit(Unit_MT unit)
         {
             using (var scope = new TransactionScope())
             {
@@ -69,7 +69,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IUnitRepository repo = new UnitRepository(Db);
-                        repo.Insert(unit , username);
+                        repo.Insert(unit);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -88,7 +88,7 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateUnit(Unit_MT unit,string username)
+        public bool UpdateUnit(Unit_MT unit)
         {           
             using (var scope = new TransactionScope())
             {
@@ -97,7 +97,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IUnitRepository repo = new UnitRepository(Db);
-                        repo.Update(unit, username);
+                        repo.Update(unit);
                         Db.SaveChanges();
                         scope.Complete();
                     }

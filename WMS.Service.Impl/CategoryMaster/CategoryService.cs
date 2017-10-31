@@ -17,7 +17,6 @@ using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Repository.Impl;
 using WIM.Core.Context;
-using WIM.Repository;
 
 namespace WMS.Service
 {
@@ -87,7 +86,7 @@ namespace WMS.Service
             return categoryDto;
         }
 
-        public int CreateCategory(Category_MT category , string username)
+        public int CreateCategory(Category_MT category )
         {
             using (var scope = new TransactionScope()) {
 
@@ -98,7 +97,7 @@ namespace WMS.Service
                     category.CateID = Db.ProcGetNewID("CT");
                     try
                     {
-                        repo.Insert(category, username);
+                        repo.Insert(category);
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -117,7 +116,7 @@ namespace WMS.Service
             
         }
 
-        public bool UpdateCategory(Category_MT category , string username)
+        public bool UpdateCategory(Category_MT category)
         {
             using (var scope = new TransactionScope())
             {
@@ -127,7 +126,7 @@ namespace WMS.Service
                     ICategoryRepository repo = new CategoryRepository(Db);
                     try
                     {
-                        repo.Update(category,username);
+                        repo.Update(category);
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)

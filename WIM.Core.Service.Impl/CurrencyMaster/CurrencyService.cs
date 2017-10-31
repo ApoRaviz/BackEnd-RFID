@@ -49,7 +49,7 @@ namespace WIM.Core.Service.Impl
             return Currency;
         }
 
-        public int CreateCurrency(CurrencyUnit Currency, string username)
+        public int CreateCurrency(CurrencyUnit Currency)
         {
             using (var scope = new TransactionScope())
             {
@@ -58,7 +58,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICurrencyRepository repo = new CurrencyRepository(Db);
-                        repo.Insert(Currency, username);
+                        repo.Insert(Currency);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -77,7 +77,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateCurrency(CurrencyUnit Currency, string username)
+        public bool UpdateCurrency(CurrencyUnit Currency)
         {
             using (var scope = new TransactionScope())
             {
@@ -86,7 +86,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICurrencyRepository repo = new CurrencyRepository(Db);
-                        repo.Update(Currency, username);
+                        repo.Update(Currency);
                         Db.SaveChanges();
                         scope.Complete();
                     }

@@ -61,7 +61,7 @@ namespace WIM.Core.Service.Impl
             return Employee;
         }
 
-        public string CreateEmployee(Employee_MT Employee , string username)
+        public string CreateEmployee(Employee_MT Employee)
         {
             using (var scope = new TransactionScope())
             {
@@ -70,7 +70,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IEmployeeRepository repo = new EmployeeRepository(Db);
-                        repo.Insert(Employee, username);
+                        repo.Insert(Employee);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -89,7 +89,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateEmployee(Employee_MT Employee , string username)
+        public bool UpdateEmployee(Employee_MT Employee )
         {
             using (var scope = new TransactionScope())
             {
@@ -98,7 +98,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IEmployeeRepository repo = new EmployeeRepository(Db);
-                        repo.Update(Employee,username);
+                        repo.Update(Employee);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -117,7 +117,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateEmployeeByID(Employee_MT Employee,string username)
+        public bool UpdateEmployeeByID(Employee_MT Employee)
         {
             using (var scope = new TransactionScope())
             {
@@ -126,7 +126,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IEmployeeRepository repo = new EmployeeRepository(Db);
-                        repo.Update(Employee,username);
+                        repo.Update(Employee);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -145,7 +145,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool DeleteEmployee(string id ,string username)
+        public bool DeleteEmployee(string id)
         {
             using (var scope = new TransactionScope())
             {
@@ -159,7 +159,7 @@ namespace WIM.Core.Service.Impl
 
 
 
-                        repo.Update(existedEmployee, username);
+                        repo.Update(existedEmployee);
                         scope.Complete();
                         Db.SaveChanges();
                     }

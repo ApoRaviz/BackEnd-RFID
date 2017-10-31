@@ -70,7 +70,7 @@ namespace WIM.Core.Service.Impl
             return res;
         }
 
-        public string CreateRole(Role role , string username)
+        public string CreateRole(Role role )
         {
             using (var scope = new TransactionScope())
             {
@@ -80,7 +80,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IRoleRepository repo = new RoleRepository(Db);
-                        repo.Insert(role , username);
+                        repo.Insert(role);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -102,7 +102,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateRole( Role role , string username)
+        public bool UpdateRole( Role role )
         {           
             using (var scope = new TransactionScope())
             {     
@@ -111,7 +111,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IRoleRepository repo = new RoleRepository(Db);
-                        repo.Update(role , username);
+                        repo.Update(role);
                         Db.SaveChanges();
                         scope.Complete();
                     }

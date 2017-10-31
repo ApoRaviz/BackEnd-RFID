@@ -11,8 +11,8 @@ namespace WIM.Core.Service
     {
         IEnumerable<Country_MT> GetCountry();
         Country_MT GetCountryByCountryIDSys(int id);
-        int CreateCountry(Country_MT Country , string username);
-        bool UpdateCountry(Country_MT Country , string username);
+        int CreateCountry(Country_MT Country);
+        bool UpdateCountry(Country_MT Country);
         bool DeleteCountry(int id);
     }
 }

@@ -13,8 +13,8 @@ namespace WIM.Core.Service
     {
         IEnumerable<Api_MT> GetAPIs();
         ApiMTDto GetApiMT(string id);
-        string CreateApiMT(List<Api_MT> ApiMT ,string username );
-        bool UpdateApiMT( Api_MT ApiMT , string username);
+        string CreateApiMT(List<Api_MT> ApiMT);
+        bool UpdateApiMT( Api_MT ApiMT);
         bool DeleteApiMT(string id);        
     }
 }

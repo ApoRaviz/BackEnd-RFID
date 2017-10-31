@@ -75,7 +75,7 @@ namespace WIM.Core.Service.Impl
 
 
 
-        public Project_MT CreateProject(Project_MT project,string username)
+        public Project_MT CreateProject(Project_MT project)
         {
             using (var scope = new TransactionScope())
             {
@@ -84,7 +84,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IProjectRepository repo = new ProjectRepository(Db);
-                        repo.Insert(project,username);
+                        repo.Insert(project);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -103,7 +103,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateProject(Project_MT project,string username)
+        public bool UpdateProject(Project_MT project)
         {
             using (var scope = new TransactionScope())
             {
@@ -112,7 +112,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IProjectRepository repo = new ProjectRepository(Db);
-                        repo.Update(project,username);
+                        repo.Update(project);
                         Db.SaveChanges();
                         scope.Complete();
                     }

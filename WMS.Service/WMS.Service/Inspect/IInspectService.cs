@@ -12,8 +12,8 @@ namespace WMS.Service.Inspect
         IEnumerable<InspectType> GetInspectTypes();
         IEnumerable<Inspect_MT> GetInspects();
         Inspect_MT GetInspectBySupIDSys(int id);
-        int CreateInspect(Inspect_MT Inspect ,string username);
-        bool UpdateInspect(Inspect_MT Inspect ,string username);
+        int CreateInspect(Inspect_MT Inspect);
+        bool UpdateInspect(Inspect_MT Inspect);
         bool DeleteInspect(int id);
     }
 }

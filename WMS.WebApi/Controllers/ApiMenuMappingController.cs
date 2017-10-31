@@ -91,7 +91,7 @@ namespace WMS.WebApi.Controllers
             {
                 string id = "Not have data";
                 if(ApiMenuMapping != null)
-                 id = ApiMenuMappingService.CreateApiMenuMapping(ApiMenuMapping,User.Identity.GetUserName());
+                 id = ApiMenuMappingService.CreateApiMenuMapping(ApiMenuMapping);
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -110,7 +110,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ApiMenuMappingService.UpdateApiMenuMapping(ApiMenuMapping, User.Identity.GetUserName());
+                bool isUpated = ApiMenuMappingService.UpdateApiMenuMapping(ApiMenuMapping);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

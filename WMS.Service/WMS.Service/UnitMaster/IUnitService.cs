@@ -12,8 +12,8 @@ namespace WMS.Service
     {
         IEnumerable<Unit_MT> GetUnits();
         Unit_MT GetUnitByUnitIDSys(int id);
-        int CreateUnit(Unit_MT Unit,string username);
-        bool UpdateUnit(Unit_MT Unit,string username);
+        int CreateUnit(Unit_MT Unit);
+        bool UpdateUnit(Unit_MT Unit);
         bool DeleteUnit(int id);
     }
 }

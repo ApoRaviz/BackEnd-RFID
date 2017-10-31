@@ -8,9 +8,9 @@ using System.Transactions;
 using WIM.Core.Common.Validation;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
-using WIM.Repository.Inspect;
 using WMS.Context;
 using WMS.Entity.InspectionManagement;
+using WMS.Repository;
 using WMS.Repository.Impl;
 using WMS.Service.Inspect;
 
@@ -55,7 +55,7 @@ namespace WMS.Service.Impl.Inspect
             return Inspect;
         }
 
-        public int CreateInspect(Inspect_MT Inspect,string username)
+        public int CreateInspect(Inspect_MT Inspect)
         {
             using (var scope = new TransactionScope())
             {
@@ -64,7 +64,7 @@ namespace WMS.Service.Impl.Inspect
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IInspectRepository repo = new InspectRepository(Db);
-                        repo.Insert(Inspect,username);
+                        repo.Insert(Inspect;
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -78,7 +78,7 @@ namespace WMS.Service.Impl.Inspect
             }
         }
 
-        public bool UpdateInspect(Inspect_MT inspect , string username)
+        public bool UpdateInspect(Inspect_MT inspect )
         {
             using (var scope = new TransactionScope())
             {
@@ -87,7 +87,7 @@ namespace WMS.Service.Impl.Inspect
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IInspectRepository repo = new InspectRepository(Db);
-                        repo.Update(inspect,username);
+                        repo.Update(inspect);
                         Db.SaveChanges();
                         scope.Complete();
                     }

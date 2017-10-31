@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Repository;
-using WIM.Core.Repository.Impl;
 using WMS.Repository;
 using WMS.Common;
 using WMS.Context;

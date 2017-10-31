@@ -13,6 +13,8 @@ using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
 using System.Threading.Tasks;
 using WIM.Core.Entity.CustomerManagement;
+using WIM.Core.Service;
+using WIM.Core.Common.ValueObject;
 
 namespace WMS.WebApi.Controllers
 {
@@ -171,7 +173,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                customer.UserUpdate = User.Identity.Name;
+                customer.UpdateBy = User.Identity.Name;
                 int id = CustomerService.CreateCustomer(customer);
                 response.SetData(id);
             }
@@ -194,7 +196,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = CustomerService.UpdateCustomer(cusIDSys, customer);
+                bool isUpated = CustomerService.UpdateCustomer(customer);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

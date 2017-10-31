@@ -92,7 +92,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Inspect.UserUpdate = User.Identity.Name;
+                Inspect.UpdateBy = User.Identity.Name;
                 int id = InspectService.CreateInspect(Inspect);
                 response.SetData(id);
             }
@@ -114,7 +114,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = InspectService.UpdateInspect(inspectIDSys, Inspect);
+                bool isUpated = InspectService.UpdateInspect(Inspect);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

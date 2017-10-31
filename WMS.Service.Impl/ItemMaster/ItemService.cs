@@ -16,7 +16,7 @@ using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
 using WMS.Repository.Impl;
-using WIM.Repository.ItemManagement;
+using WMS.Repository;
 
 namespace WMS.Service
 {
@@ -74,7 +74,7 @@ namespace WMS.Service
             }
         }        
 
-        public int CreateItem(Item_MT item ,string username)
+        public int CreateItem(Item_MT item )
         {
             using (var scope = new TransactionScope())
             {       
@@ -83,7 +83,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IItemRepository repo = new ItemRepository(Db);
-                        repo.Insert(item,username);
+                        repo.Insert(item);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -102,7 +102,7 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateItem(Item_MT item, string username)
+        public bool UpdateItem(Item_MT item)
         {
             using (var scope = new TransactionScope())
             {
@@ -111,7 +111,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IItemRepository repo = new ItemRepository(Db);
-                        repo.Update(item,username);
+                        repo.Update(item);
                         Db.SaveChanges();
                         scope.Complete();
                     }

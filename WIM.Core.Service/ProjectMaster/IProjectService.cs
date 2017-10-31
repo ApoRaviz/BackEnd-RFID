@@ -16,8 +16,8 @@ namespace WIM.Core.Service
         List<Project_MT> ProjectCustomer(int CusID);
         //bool CreateUserProject(string UserID, int ProjectIDSys);
         Project_MT GetProjectByProjectIDSysIncludeCustomer(int id);
-        Project_MT CreateProject(Project_MT project , string username);
-        bool UpdateProject(Project_MT project , string username);
+        Project_MT CreateProject(Project_MT project);
+        bool UpdateProject(Project_MT project);
         bool DeleteProject(int id);
         //List<UserProjectMapping> GetUserProject(int CusIDSys, string UserID);
         //bool DeleteUserProject(int projectID, string UserID);

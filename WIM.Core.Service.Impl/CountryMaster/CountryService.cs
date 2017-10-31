@@ -46,7 +46,7 @@ namespace WIM.Core.Service.Impl
             return Country;
         }
 
-        public int CreateCountry(Country_MT Country , string username)
+        public int CreateCountry(Country_MT Country)
         {
             using (var scope = new TransactionScope())
             {
@@ -55,7 +55,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICountryRepository repo = new CountryRepository(Db);
-                        repo.Insert(Country , username);
+                        repo.Insert(Country);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -75,7 +75,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateCountry(Country_MT Country , string username)
+        public bool UpdateCountry(Country_MT Country)
         {
             using (var scope = new TransactionScope())
             {
@@ -84,7 +84,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICountryRepository repo = new CountryRepository(Db);
-                        repo.Update(Country , username);
+                        repo.Update(Country);
                         Db.SaveChanges();
                         scope.Complete();
                     }

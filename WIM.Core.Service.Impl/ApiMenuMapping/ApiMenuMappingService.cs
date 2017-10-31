@@ -64,7 +64,7 @@ namespace WIM.Core.Service.Impl
             return ApiMenuMapping;
         }
 
-        public string CreateApiMenuMapping(ApiMenuMappingDto ApiMenuMapping, string username)
+        public string CreateApiMenuMapping(ApiMenuMappingDto ApiMenuMapping)
         {
             using (var scope = new TransactionScope())
             {
@@ -81,7 +81,7 @@ namespace WIM.Core.Service.Impl
                         api.PUT = ApiMenuMapping.PUT;
                         api.DEL = ApiMenuMapping.DEL;
                         api.Type = ApiMenuMapping.Type;
-                        repo.Insert(api, username);
+                        repo.Insert(api);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -100,7 +100,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping, string username)
+        public string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping)
         {
             using (var scope = new TransactionScope())
             {
@@ -120,7 +120,7 @@ namespace WIM.Core.Service.Impl
                             api.PUT = c.PUT;
                             api.DEL = c.DEL;
                             api.Type = c.Type;
-                            repo.Insert(api, username);
+                            repo.Insert(api);
                         }
                         Db.SaveChanges();
                         scope.Complete();
@@ -140,7 +140,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateApiMenuMapping(ApiMenuMapping ApiMenuMapping, string username)
+        public bool UpdateApiMenuMapping(ApiMenuMapping ApiMenuMapping)
         {
             using (var scope = new TransactionScope())
             {
@@ -149,7 +149,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
-                        repo.Update(ApiMenuMapping, username);
+                        repo.Update(ApiMenuMapping);
                         Db.SaveChanges();
                         scope.Complete();
                     }

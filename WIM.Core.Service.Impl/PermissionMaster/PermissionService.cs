@@ -50,7 +50,7 @@ namespace WIM.Core.Service.Impl
             return Permission;
         }
 
-        public string CreatePermission(Permission Permission , string username)
+        public string CreatePermission(Permission Permission)
         {
             using (var scope = new TransactionScope())
             {
@@ -61,7 +61,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IPermissionRepository repo = new PermissionRepository(Db);
-                        repo.Insert(Permission , username);
+                        repo.Insert(Permission);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -80,7 +80,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdatePermission(Permission Permission , string username)
+        public bool UpdatePermission(Permission Permission)
         {
             using (var scope = new TransactionScope())
             {
@@ -89,7 +89,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IPermissionRepository repo = new PermissionRepository(Db);
-                        repo.Update(Permission,username);
+                        repo.Update(Permission);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -149,7 +149,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public string CreateRolePermission(string PermissionId, string RoleId , string username)
+        public string CreateRolePermission(string PermissionId, string RoleId)
         {
             using (var scope = new TransactionScope())
             {
@@ -162,7 +162,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
-                        repo.Insert(data , username);
+                        repo.Insert(data);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -182,7 +182,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public string CreateRolePermission(string RoleId, List<PermissionTree> tree, string username)
+        public string CreateRolePermission(string RoleId, List<PermissionTree> tree)
         {
             using (var scope = new TransactionScope())
             {
@@ -196,7 +196,7 @@ namespace WIM.Core.Service.Impl
                             RolePermission data = new RolePermission();
                             data.PermissionID = c.PermissionID;
                             data.RoleID = RoleId;
-                            repo.Insert(data,username);
+                            repo.Insert(data);
                         }
                         Db.SaveChanges();
                         scope.Complete();

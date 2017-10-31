@@ -16,8 +16,8 @@ namespace WIM.Core.Service
         CustomerDto GetCustomersInclude(int id, string[] tableNames);
         Customer_MT GetCustomerByCusIDSys(int id);
         CustomerDto GetCustomerByCusIDSysIncludeProjects(int id);
-        int CreateCustomer(Customer_MT customer,string username);
-        bool UpdateCustomer(Customer_MT customer , string username);
+        int CreateCustomer(Customer_MT customer);
+        bool UpdateCustomer(Customer_MT customer);
         bool DeleteCustomer(int id);
     }
 }

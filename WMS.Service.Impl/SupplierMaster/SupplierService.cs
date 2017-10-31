@@ -70,7 +70,7 @@ namespace WMS.Service
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
                         Supplier.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
-                        repo.Insert(Supplier,username);
+                        repo.Insert(Supplier);
                         Db.SaveChanges();
                         scope.Complete();
                      }
@@ -89,7 +89,7 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateSupplier(Supplier_MT supplier,string username)
+        public bool UpdateSupplier(Supplier_MT supplier)
         {           
             using (var scope = new TransactionScope())
             {
@@ -99,7 +99,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
-                        repo.Update(supplier,username);
+                        repo.Update(supplier;
                         Db.SaveChanges();
                         scope.Complete();
                     }

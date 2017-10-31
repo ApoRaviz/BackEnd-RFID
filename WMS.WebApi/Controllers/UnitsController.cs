@@ -91,7 +91,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = UnitService.UpdateUnit(unitIDSys, unit);
+                bool isUpated = UnitService.UpdateUnit(unit);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

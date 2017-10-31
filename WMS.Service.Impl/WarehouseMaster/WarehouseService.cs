@@ -48,7 +48,7 @@ namespace WMS.Master
                 return Warehouse;
         }
 
-        public int CreateWarehouse(Warehouse_MT Warehouse , string username)
+        public int CreateWarehouse(Warehouse_MT Warehouse)
         {
             using (var scope = new TransactionScope())
             {
@@ -58,7 +58,7 @@ namespace WMS.Master
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IWarehouseRepository repo = new WarehouseRepository(Db);
-                        repo.Insert(Warehouse,username);
+                        repo.Insert(Warehouse);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -78,7 +78,7 @@ namespace WMS.Master
             }
         }
 
-        public bool UpdateWarehouse(Warehouse_MT Warehouse ,string username)
+        public bool UpdateWarehouse(Warehouse_MT Warehouse )
         {
             using (var scope = new TransactionScope())
             {
@@ -88,7 +88,7 @@ namespace WMS.Master
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IWarehouseRepository repo = new WarehouseRepository(Db);
-                        repo.Update(Warehouse, username);
+                        repo.Update(Warehouse);
                         Db.SaveChanges();
                         scope.Complete();
                     }

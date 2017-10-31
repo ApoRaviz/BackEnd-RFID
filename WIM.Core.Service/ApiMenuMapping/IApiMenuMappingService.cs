@@ -13,9 +13,9 @@ namespace WIM.Core.Service
         IEnumerable<ApiMenuMappingDto> GetApiMenuMapping();
         ApiMenuMappingDto GetApiMenuMapping(string id);
         IEnumerable<ApiMenuMapping> GetListApiMenuMapping(int id);
-        string CreateApiMenuMapping(ApiMenuMappingDto ApiMenuMapping , string username);
-        string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping , string username);
-        bool UpdateApiMenuMapping(ApiMenuMapping ApiMenuMapping , string username);
+        string CreateApiMenuMapping(ApiMenuMappingDto ApiMenuMapping);
+        string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping);
+        bool UpdateApiMenuMapping(ApiMenuMapping ApiMenuMapping );
         bool DeleteApiMenuMapping(string id);        
     }
 }

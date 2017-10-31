@@ -67,7 +67,7 @@ namespace WIM.Core.Service.Impl
                         u.KeyOTP = keyOtp;
                         u.KeyOTPDate = DateTime.Now;
                         //Oil Comment
-                        repo.Update(u, "System");
+                        repo.Update(u);
                         Db.SaveChanges();
                     }
                 }
@@ -95,7 +95,7 @@ namespace WIM.Core.Service.Impl
             return query;
         }
 
-        public string CreateUser(User User, string username)
+        public string CreateUser(User User)
         {
             using (var scope = new TransactionScope())
             {
@@ -115,17 +115,17 @@ namespace WIM.Core.Service.Impl
                         User.LockoutEnabled = true;
                         User.LastLogin = DateTime.Now.Date;
                         User.LockoutEndDateUtc = DateTime.Now.Date;
-                        repo.Insert(User, username);
+                        repo.Insert(User);
 
                         if (userole != null)
                         {
                             foreach (var c in userole)
                             {
                                 c.UserID = User.UserID;
-                                repoRole.Insert(c,username);
+                                repoRole.Insert(c);
                             }
                         }
-
+                        Db.SaveChanges();
                         scope.Complete();
                     }
                 }
@@ -144,7 +144,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateUser(User User,string username)
+        public bool UpdateUser(User User)
         {
             using (var scope = new TransactionScope())
             {
@@ -159,7 +159,7 @@ namespace WIM.Core.Service.Impl
                             foreach (var c in User.UserRoles)
                             {
                                 c.UserID = User.UserID;
-                                repoRole.Insert(c , username);
+                                repoRole.Insert(c );
                             }
                             User.UserRoles = null;
                         }
@@ -169,7 +169,7 @@ namespace WIM.Core.Service.Impl
                         User.Name = User.Name;
                         User.Surname = User.Surname;
                         User.PhoneNumber = User.PhoneNumber;
-                        repo.Update(User , username);
+                        repo.Update(User );
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -235,7 +235,7 @@ namespace WIM.Core.Service.Impl
                         u.KeyAccess = key;
                         u.KeyAccessDate = DateTime.Now;
 
-                        repo.Update(u , "System");
+                        repo.Update(u );
                         scope.Complete();
                     }
                 }
@@ -247,7 +247,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool RegisterTokenMobile(KeyAccessModel param , string username)
+        public bool RegisterTokenMobile(KeyAccessModel param)
         {
             using (var scope = new TransactionScope())
             {
@@ -266,7 +266,7 @@ namespace WIM.Core.Service.Impl
                         u.TokenMobile = param.Token;
                         u.KeyAccess = null;
                         u.KeyAccessDate = null;
-                        repo.Update(u , username);
+                        repo.Update(u);
                         scope.Complete();
                     }
                 }
@@ -365,7 +365,7 @@ namespace WIM.Core.Service.Impl
             return user;
         }
 
-        public bool UodateTokenMobile(FirebaseTokenModel param , string username)
+        public bool UodateTokenMobile(FirebaseTokenModel param)
         {
             using (var scope = new TransactionScope())
             {
@@ -381,7 +381,7 @@ namespace WIM.Core.Service.Impl
                             return false;
                         }
                         u.TokenMobile = param.NewToken;
-                        repo.Update(u,username);
+                        repo.Update(u);
                         scope.Complete();
                     }
                 }

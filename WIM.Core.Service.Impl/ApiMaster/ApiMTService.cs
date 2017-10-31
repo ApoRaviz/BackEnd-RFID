@@ -50,7 +50,7 @@ namespace WIM.Core.Service.Impl
             return ApiMTDto;
         }
 
-        public string CreateApiMT(List<Api_MT> ApiMT , string username)
+        public string CreateApiMT(List<Api_MT> ApiMT)
         {
             using (var scope = new TransactionScope())
             {
@@ -66,7 +66,7 @@ namespace WIM.Core.Service.Impl
                             var chars = Enumerable.Range(0, 4)
                             .Select(x => pool[rnd.Next(0, pool.Length)]);
                             ApiMT[i].ApiIDSys = new string(chars.ToArray());
-                            repo.Insert(ApiMT[i] , username);
+                            repo.Insert(ApiMT[i]);
                         }
                         Db.SaveChanges();
                         scope.Complete();
@@ -88,7 +88,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateApiMT(Api_MT ApiMT,string username)
+        public bool UpdateApiMT(Api_MT ApiMT)
         {
             using (var scope = new TransactionScope())
             {
@@ -97,7 +97,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IApiMTRepository repo = new ApiMTRepository(Db);
-                        repo.Update(ApiMT, username);
+                        repo.Update(ApiMT);
                         Db.SaveChanges();
                         scope.Complete();
                     }

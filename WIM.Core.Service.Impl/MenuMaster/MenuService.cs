@@ -48,7 +48,7 @@ namespace WIM.Core.Service.Impl
             return Menu;
         }
 
-        public int CreateMenu(Menu_MT Menu, string username)
+        public int CreateMenu(Menu_MT Menu)
         {
             using (var scope = new TransactionScope())
             {
@@ -57,7 +57,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuRepository repo = new MenuRepository(Db);
-                        repo.Insert(Menu, username);
+                        repo.Insert(Menu);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -76,7 +76,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public int CreateMenu(MenuDto Menu, int projectID, byte sort, string username)
+        public int CreateMenu(MenuDto Menu, int projectID, byte sort)
         {
             using (var scope = new TransactionScope())
             {
@@ -93,7 +93,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuRepository repo = new MenuRepository(Db);
-                        repo.Insert(menu, username);
+                        repo.Insert(menu);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -114,7 +114,7 @@ namespace WIM.Core.Service.Impl
         }
 
 
-        public bool UpdateMenu(Menu_MT Menu, string username)
+        public bool UpdateMenu(Menu_MT Menu)
         {
             using (var scope = new TransactionScope())
             {
@@ -123,7 +123,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuRepository repo = new MenuRepository(Db);
-                        repo.Update(Menu, username);
+                        repo.Update(Menu);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -142,7 +142,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateMenu(List<MenuDto> menu, string username)
+        public bool UpdateMenu(List<MenuDto> menu)
         {
             using (var scope = new TransactionScope())
             {
@@ -159,7 +159,7 @@ namespace WIM.Core.Service.Impl
                             existedMenu.MenuParentID = c.MenuParentID;
                             existedMenu.MenuName = c.MenuName;
                             existedMenu.Sort = c.Sort;
-                            repo.Update(existedMenu, username);
+                            repo.Update(existedMenu);
                         }
                         Db.SaveChanges();
                         scope.Complete();

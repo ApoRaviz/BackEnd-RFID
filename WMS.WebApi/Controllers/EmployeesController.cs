@@ -11,7 +11,8 @@ using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
 using WMS.Common;
 using WMS.Service;
-using WIM.Core.Entity.Employee;
+using WIM.Core.Entity;
+using WIM.Core.Service;
 
 namespace WMS.WebApi.Controllers
 {
@@ -72,7 +73,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<string> response = new ResponseData<string>();
             try
             {
-                Employee.UserUpdate = User.Identity.Name;
+                Employee.UpdateBy = User.Identity.Name;
                 string id = Employeeservice.CreateEmployee(Employee);
                 response.SetData(id);
             }

@@ -14,9 +14,9 @@ using WMS.Common;
 using WMS.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WIM.Repository;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using WMS.Repository;
 
 namespace WMS.Service
 {
@@ -68,7 +68,7 @@ namespace WMS.Service
             return Mapper.Map<ItemSet_MT, ItemSetDto>(query.SingleOrDefault());
         }*/
 
-        public int CreateItemSet(ItemSet_MT ItemSet, string username)
+        public int CreateItemSet(ItemSet_MT ItemSet)
         {
             using (var scope = new TransactionScope())
             {
@@ -77,7 +77,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IItemSetRepository repo = new ItemSetRepository(Db);
-                        repo.Insert(ItemSet, username);
+                        repo.Insert(ItemSet);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -97,7 +97,7 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateItemSet(ItemSet_MT ItemSet, string username)
+        public bool UpdateItemSet(ItemSet_MT ItemSet)
         {
             using (var scope = new TransactionScope())
             {
@@ -106,7 +106,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IItemSetRepository repo = new ItemSetRepository(Db);
-                        repo.Update(ItemSet, username);
+                        repo.Update(ItemSet);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -133,13 +133,14 @@ namespace WMS.Service
                 {
                     IItemSetRepository repo = new ItemSetRepository(Db);
                     repo.Delete(id);
+                    Db.SaveChanges();
                     scope.Complete();
                 }
                 return true;
             }
         }
 
-        public int CreateItemSet(ItemSetDto ItemSet, string username)
+        public int CreateItemSet(ItemSetDto ItemSet)
         {
 
             using (var scope = new TransactionScope())
@@ -154,7 +155,7 @@ namespace WMS.Service
                         item.ProjectIDSys = ItemSet.ProjectIDSys;
                         item.LineID = ItemSet.LineID;
                         item.ItemSetCode = Db.ProcGetNewID("IS");
-                        repo.Insert(item, username);
+                        repo.Insert(item);
                         scope.Complete();
                     }
                 }
@@ -172,7 +173,7 @@ namespace WMS.Service
             }
         }
 
-        public int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp,string username)
+        public int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp)
         {
             using (var scope = new TransactionScope())
             {
@@ -187,7 +188,7 @@ namespace WMS.Service
                             item.Qty = c.Qty;
                             item.ItemIDSys = c.ItemIDSys;
                             item.ItemSetIDSys = id;
-                            repo.Insert(item,username);
+                            repo.Insert(item);
                         }
                         Db.SaveChanges();
                         scope.Complete();

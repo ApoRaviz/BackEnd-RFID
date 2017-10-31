@@ -155,7 +155,7 @@ namespace WIM.Core.Service.Impl
         //    return null;
         //}
 
-        public int CreateCustomer(Customer_MT customer , string username)
+        public int CreateCustomer(Customer_MT customer)
         {
             using (var scope = new TransactionScope())
             {
@@ -164,7 +164,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICustomerRepository repo = new CustomerRepository(Db);
-                        repo.Insert(customer,username);
+                        repo.Insert(customer);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -178,7 +178,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateCustomer(Customer_MT customer,string username)
+        public bool UpdateCustomer(Customer_MT customer)
         {
             using (var scope = new TransactionScope())
             {
@@ -188,7 +188,7 @@ namespace WIM.Core.Service.Impl
                     
                     try
                     {
-                        repo.Update(customer, username);
+                        repo.Update(customer);
                         Db.SaveChanges();
                         scope.Complete();
                     }

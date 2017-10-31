@@ -13,6 +13,7 @@ using System.Web.Http.Cors;
 using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.Currency;
+using WIM.Core.Service;
 
 namespace WMS.WebApi.Controllers
 {
@@ -75,7 +76,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Currency.UserUpdate = User.Identity.Name;
+                Currency.UpdateBy = User.Identity.Name;
                 int id = CurrencyService.CreateCurrency(Currency);
                 response.SetData(id);
             }
@@ -98,7 +99,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = CurrencyService.UpdateCurrency(CurrencyIDSys, Currency);
+                bool isUpated = CurrencyService.UpdateCurrency(Currency);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

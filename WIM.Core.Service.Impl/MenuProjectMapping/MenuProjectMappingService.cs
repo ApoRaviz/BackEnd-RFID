@@ -40,7 +40,7 @@ namespace WMS.Service
             return menu.OrderBy(c => c.MenuName);
         }
 
-        public int CreateMenuProjectMapping(MenuProjectMapping MenuProjectMapping, string username)
+        public int CreateMenuProjectMapping(MenuProjectMapping MenuProjectMapping)
         {
             using (var scope = new TransactionScope())
             {
@@ -49,7 +49,7 @@ namespace WMS.Service
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
-                        repo.Insert(MenuProjectMapping, username);
+                        repo.Insert(MenuProjectMapping);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -69,7 +69,7 @@ namespace WMS.Service
             }
         }
 
-        public int CreateMenuProjectMapping(MenuDto MenuProjectMapping, int projectID, byte sort, string username)
+        public int CreateMenuProjectMapping(MenuDto MenuProjectMapping, int projectID, byte sort)
         {
             using (var scope = new TransactionScope())
             {
@@ -84,7 +84,7 @@ namespace WMS.Service
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
-                        repo.Insert(menuProjectMapping, username);
+                        repo.Insert(menuProjectMapping);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -103,7 +103,7 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateMenuProjectMapping(MenuProjectMapping MenuProjectMapping, string username)
+        public bool UpdateMenuProjectMapping(MenuProjectMapping MenuProjectMapping)
         {
             using (var scope = new TransactionScope())
             {
@@ -112,7 +112,7 @@ namespace WMS.Service
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
-                        repo.Update(MenuProjectMapping, username);
+                        repo.Update(MenuProjectMapping);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -132,7 +132,7 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateMenuProjectMapping(List<MenuProjectMappingDto> menuProjectMapping, string username)
+        public bool UpdateMenuProjectMapping(List<MenuProjectMappingDto> menuProjectMapping)
         {
             using (var scope = new TransactionScope())
             {
@@ -151,10 +151,10 @@ namespace WMS.Service
                             menu.MenuName = c.MenuName;
                             menu.MenuIDSys = c.MenuIDSys;
                             menu.ProjectIDSys = c.ProjectIDSys;
-                            repo.Update(menu, username);
+                            repo.Update(menu);
                             if (c.ParentMenu != null)
                             {
-                                setParent(c, username);
+                                setParent(c);
                             }
                         }
                         Db.SaveChanges();
@@ -175,7 +175,7 @@ namespace WMS.Service
             }
         }
 
-        public void setParent(MenuProjectMappingDto mother, string username)
+        public void setParent(MenuProjectMappingDto mother)
         {
             using (CoreDbContext Db = new CoreDbContext())
             {
@@ -188,10 +188,10 @@ namespace WMS.Service
                     menu.MenuName = c.MenuName;
                     menu.MenuIDSys = c.MenuIDSys;
                     menu.ProjectIDSys = c.ProjectIDSys;
-                    repo.Update(menu, username);
+                    repo.Update(menu);
                     if (c.ParentMenu != null)
                     {
-                        setParent(c, username);
+                        setParent(c);
                     }
                 }
                 Db.SaveChanges();
