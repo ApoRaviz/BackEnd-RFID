@@ -53,7 +53,6 @@
     <Reference Include="AutoMapper, Version=6.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.1.0\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
     </Reference>
@@ -455,13 +454,25 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\HRMS.Repository.Entity.csproj">
-      <Project>{2d18ff9d-6137-464e-861b-417ffa24fdf1}</Project>
-      <Name>HRMS.Repository.Entity</Name>
+    <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">
+      <Project>{a3ea41df-d932-48b0-8100-a76e5df04b8e}</Project>
+      <Name>HRMS.Common.ValueObject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HRMS.Repository.Context\HRMS.Repository.Context.csproj">
-      <Project>{69a3a794-8780-43df-8b2c-055fbdc64d2d}</Project>
-      <Name>HRMS.Repository.Context</Name>
+    <ProjectReference Include="..\HRMS.Context\HRMS.Context.csproj">
+      <Project>{d78e68ba-486e-4577-8773-bf08f50721e1}</Project>
+      <Name>HRMS.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Entity\HRMS.Entity.csproj">
+      <Project>{1646e0fc-8f7b-436f-983a-7c9873ca49cb}</Project>
+      <Name>HRMS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Repository.Impl\HRMS.Repository.Impl.csproj">
+      <Project>{95ca527d-583b-493d-ad2c-c488029145a1}</Project>
+      <Name>HRMS.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Repository\HRMS.Repository.csproj">
+      <Project>{2d0b2680-d488-4b8a-bab8-cf286cd071e0}</Project>
+      <Name>HRMS.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
       <Project>{b7ea8787-86ea-48fc-945f-6cae2b397da4}</Project>

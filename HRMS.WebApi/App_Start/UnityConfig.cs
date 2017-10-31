@@ -4,8 +4,8 @@ using System.Web;
 using System.Web.Http;
 using HRMS.WebApi.Controllers;
 using Unity.WebApi;
-using HRMS.Service;
-using HRMS.Service.Impl;
+using HRMS.Service.LeaveManagement;
+using HRMS.Service.Impl.LeaveManagement;
 
 namespace HRMS.WebApi
 {
@@ -26,7 +26,7 @@ namespace HRMS.WebApi
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
 
-            container.RegisterType<IDemoService, DemoService>();           
+            container.RegisterType<ILeaveService, LeaveService>();          
 
 
         }

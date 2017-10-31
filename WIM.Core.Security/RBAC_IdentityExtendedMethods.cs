@@ -67,12 +67,12 @@ public static class RBAC_ExtendedMethods_4_Principal
                 var ci = _identity as ClaimsIdentity;
 
                 var exp = (from c in ci.Claims
-                           where c.Type == "ProjectIDSys"
-                           select c).ToList();
+                           where c.Type == "ProjectIDSys" 
+                           select c).SingleOrDefault();
 
                 if (exp != null)
                 {
-                    return int.Parse(exp[0].Value);
+                    return int.Parse(exp.Value);
                 }
             }
         }
