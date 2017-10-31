@@ -29,7 +29,7 @@ namespace Fuji.Service.Impl.PrintLabel
 
         public PrintLabelService()
         {
-            Repo = new GenericRepository<LabelRunning>(Db);
+            //Repo = new GenericRepository<LabelRunning>(Db);
             Db = FujiDbContext.Create();
         }        
 

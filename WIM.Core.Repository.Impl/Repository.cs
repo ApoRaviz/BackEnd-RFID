@@ -100,7 +100,31 @@ namespace WIM.Core.Repository.Impl
             entityForUpdate.UpdateBy = identity.Name;
             entityForUpdate.UpdateAt = DateTime.Now;
             return entityForUpdate;
-        }      
+        }
+        public TEntity Update(object entityToUpdate, IIdentity identity)
+        {
+            Type typeEntityToUpdate = entityToUpdate.GetType();
+            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
+            string namePropKey = GetPropertyNameOfKeyAttribute(properties);
+            var id = typeEntityToUpdate.GetProperty(namePropKey).GetValue(entityToUpdate, null);
+            TEntity entityForUpdate = GetByID(id);
+            if (entityForUpdate == null)
+            {
+                throw new Exception("Data Not Found.");
+            }
+            Type typeEntityForUpdate = entityForUpdate.GetType();
+            foreach (PropertyInfo prop in properties)
+            {
+                var value = prop.GetValue(entityToUpdate);
+                if (typeEntityForUpdate.GetProperty(prop.Name) != null && !prop.PropertyType.IsGenericType)
+                {
+                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
+                }
+            }
+            entityForUpdate.UpdateBy = identity.Name;
+            entityForUpdate.UpdateAt = DateTime.Now;
+            return entityForUpdate;
+        }
 
         private string GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
         {
