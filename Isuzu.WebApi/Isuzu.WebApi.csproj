@@ -68,8 +68,8 @@
     <Reference Include="Isuzu.Entity">
       <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
     </Reference>
-    <Reference Include="Isuzu.Repository">
-      <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
+    <Reference Include="Isuzu.Repository.Impl">
+      <HintPath>..\Isuzu.Service.Impl\bin\Debug\Isuzu.Repository.Impl.dll</HintPath>
     </Reference>
     <Reference Include="Isuzu.Service">
       <HintPath>..\Isuzu.Service\bin\Debug\Isuzu.Service.dll</HintPath>
@@ -299,6 +299,10 @@
     </Reference>
     <Reference Include="WIM.Core.Common.ValueObject">
       <HintPath>..\WIM.Core.Common.ValueObject\bin\Debug\WIM.Core.Common.ValueObject.dll</HintPath>
+    </Reference>
+    <Reference Include="WIM.Core.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
     </Reference>
     <Reference Include="WIM.Core.Security.Context">
       <HintPath>..\WIM.Core.Security.Context\bin\Debug\WIM.Core.Security.Context.dll</HintPath>
@@ -570,7 +574,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Isuzu.Service.Impl\Isuzu.Service.Impl.csproj">
-      <Project>{e8f620e3-cfe2-401c-a9ec-9de16eda37bb}</Project>
+      <Project>{E8F620E3-CFE2-401C-A9EC-9DE16EDA37BB}</Project>
       <Name>Isuzu.Service.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">

@@ -6,8 +6,7 @@ using Unity.WebApi;
 using WIM.Core.Common;
 using Isuzu.WebApi.Controllers;
 using Isuzu.Service;
-using Isuzu.Service.Impl;
-
+using Isuzu.Service.Impl.Inbound;
 
 namespace Isuzu.WebApi
 {

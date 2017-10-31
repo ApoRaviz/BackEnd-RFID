@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WIM.Core.Entity;
 
 namespace Isuzu.Entity
 {
    
 
     [Table("LabelRunning")]
-    public partial class LabelRunning
+    public partial class LabelRunning: BaseEntity
     {
         public int ID { get; set; }
 
