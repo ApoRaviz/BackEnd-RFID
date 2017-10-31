@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace Fuji.Entity.ProgramVersion
 {
     [Table("ProgramVersionHistory")]
-    public class ProgramVersionHistory
+    public class ProgramVersionHistory : BaseEntity
     {
         [Key]
         public int ID { get; set; }
@@ -17,6 +18,6 @@ namespace Fuji.Entity.ProgramVersion
         public string Version { get; set; }
         public string DownloadPath { get; set; }
         public string Description { get; set; }
-        public System.DateTime CreatedDate { get; set; }
+        //public System.DateTime CreatedDate { get; set; }
     }
 }

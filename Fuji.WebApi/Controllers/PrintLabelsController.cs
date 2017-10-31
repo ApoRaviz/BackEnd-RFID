@@ -39,7 +39,7 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
 
             try
             {
-                baseRunning = PrintLabelService.GetRunningByType(type, running);
+                baseRunning = PrintLabelService.GetRunningByType(type, running,"System");
                 response.SetData(baseRunning);
             }
             catch (ValidationException ex)

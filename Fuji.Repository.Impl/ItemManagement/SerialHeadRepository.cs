@@ -10,114 +10,115 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using Fuji.Common.ValueObject;
 using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
 namespace Fuji.Repository.Impl.ItemManagement
 {
-    public class SerialHeadRepository : IGenericRepository<ImportSerialHead>
+    public class SerialHeadRepository : Repository<ImportSerialHead>,ISerialHeadRepository
     {
-        private FujiDbContext Context { get; set; }
-        private DbSet<ImportSerialHead> DbSet;
+        private FujiDbContext Db { get; set; }
+      private DbSet<ImportSerialHead> DbSet { get; set; }
 
-        public SerialHeadRepository()
+        public SerialHeadRepository(FujiDbContext context):base(context)
         {
-            this.Context = new FujiDbContext();
-            this.DbSet = Context.Set<ImportSerialHead>();
+            DbSet = context.Set<ImportSerialHead>();
+            Db = context;
         }
 
-        #region Inherite Method
+        //#region Inherite Method
 
-        public virtual IEnumerable<ImportSerialHead> Get()
-        {
-            IQueryable<ImportSerialHead> query = DbSet;
-            return query.ToList();
-        }
+        //public virtual IEnumerable<ImportSerialHead> Get()
+        //{
+        //    IQueryable<ImportSerialHead> query = DbSet;
+        //    return query.ToList();
+        //}
 
-        public virtual ImportSerialHead GetByID(object id)
-        {
-            return DbSet.Find(id);
-        }
+        //public virtual ImportSerialHead GetByID(object id)
+        //{
+        //    return DbSet.Find(id);
+        //}
 
-        public virtual void Insert(ImportSerialHead entity)
-        {
-            DbSet.Add(entity);
-            this.Context.SaveChanges();
-        }
+        //public virtual void Insert(ImportSerialHead entity)
+        //{
+        //    DbSet.Add(entity);
+        //    this.Context.SaveChanges();
+        //}
 
-        public virtual void Delete(object id)
-        {
-            ImportSerialHead entityToDelete = DbSet.Find(id);
-            Delete(entityToDelete);
-        }
+        //public virtual void Delete(object id)
+        //{
+        //    ImportSerialHead entityToDelete = DbSet.Find(id);
+        //    Delete(entityToDelete);
+        //}
 
-        public virtual void Delete(ImportSerialHead entityToDelete)
-        {
-            if (Context.Entry(entityToDelete).State == EntityState.Detached)
-            {
-                DbSet.Attach(entityToDelete);
-            }
-            DbSet.Remove(entityToDelete);
-            this.Context.SaveChanges();
-        }
+        //public virtual void Delete(ImportSerialHead entityToDelete)
+        //{
+        //    if (Context.Entry(entityToDelete).State == EntityState.Detached)
+        //    {
+        //        DbSet.Attach(entityToDelete);
+        //    }
+        //    DbSet.Remove(entityToDelete);
+        //    this.Context.SaveChanges();
+        //}
 
-        public virtual void Update(ImportSerialHead entityToUpdate)
-        {
-            DbSet.Attach(entityToUpdate);
-            Context.Entry(entityToUpdate).State = EntityState.Modified;
-            this.Context.SaveChanges();
-        }
+        //public virtual void Update(ImportSerialHead entityToUpdate)
+        //{
+        //    DbSet.Attach(entityToUpdate);
+        //    Context.Entry(entityToUpdate).State = EntityState.Modified;
+        //    this.Context.SaveChanges();
+        //}
 
-        public virtual IEnumerable<ImportSerialHead> GetMany(Func<ImportSerialHead, bool> where)
-        {
-            return DbSet.Where(where).ToList();
-        }
+        //public virtual IEnumerable<ImportSerialHead> GetMany(Func<ImportSerialHead, bool> where)
+        //{
+        //    return DbSet.Where(where).ToList();
+        //}
 
 
-        public virtual IQueryable<ImportSerialHead> GetManyQueryable(Func<ImportSerialHead, bool> where)
-        {
-            return DbSet.Where(where).AsQueryable();
-        }
+        //public virtual IQueryable<ImportSerialHead> GetManyQueryable(Func<ImportSerialHead, bool> where)
+        //{
+        //    return DbSet.Where(where).AsQueryable();
+        //}
 
-        public ImportSerialHead Get(Func<ImportSerialHead, Boolean> where)
-        {
-            return DbSet.Where(where).FirstOrDefault<ImportSerialHead>();
-        }
+        //public ImportSerialHead Get(Func<ImportSerialHead, Boolean> where)
+        //{
+        //    return DbSet.Where(where).FirstOrDefault<ImportSerialHead>();
+        //}
 
-        public void Delete(Func<ImportSerialHead, Boolean> where)
-        {
-            IQueryable<ImportSerialHead> objects = DbSet.Where<ImportSerialHead>(where).AsQueryable();
-            foreach (ImportSerialHead obj in objects)
-                DbSet.Remove(obj);
-            this.Context.SaveChanges();
-        }
+        //public void Delete(Func<ImportSerialHead, Boolean> where)
+        //{
+        //    IQueryable<ImportSerialHead> objects = DbSet.Where<ImportSerialHead>(where).AsQueryable();
+        //    foreach (ImportSerialHead obj in objects)
+        //        DbSet.Remove(obj);
+        //    this.Context.SaveChanges();
+        //}
 
-        public virtual IEnumerable<ImportSerialHead> GetAll()
-        {
-            return DbSet.ToList();
-        }
+        //public virtual IEnumerable<ImportSerialHead> GetAll()
+        //{
+        //    return DbSet.ToList();
+        //}
 
-        public IQueryable<ImportSerialHead> GetWithInclude(System.Linq.Expressions.Expression<Func<ImportSerialHead, bool>> predicate, params string[] include)
-        {
-            IQueryable<ImportSerialHead> query = this.DbSet;
-            query = include.Aggregate(query, (current, inc) => current.Include(inc));
-            return query.Where(predicate);
-        }
+        //public IQueryable<ImportSerialHead> GetWithInclude(System.Linq.Expressions.Expression<Func<ImportSerialHead, bool>> predicate, params string[] include)
+        //{
+        //    IQueryable<ImportSerialHead> query = this.DbSet;
+        //    query = include.Aggregate(query, (current, inc) => current.Include(inc));
+        //    return query.Where(predicate);
+        //}
 
-        public bool Exists(object primaryKey)
-        {
-            return DbSet.Find(primaryKey) != null;
-        }
+        //public bool Exists(object primaryKey)
+        //{
+        //    return DbSet.Find(primaryKey) != null;
+        //}
 
-        public ImportSerialHead GetSingle(Func<ImportSerialHead, bool> predicate)
-        {
-            return DbSet.Single<ImportSerialHead>(predicate);
-        }
+        //public ImportSerialHead GetSingle(Func<ImportSerialHead, bool> predicate)
+        //{
+        //    return DbSet.Single<ImportSerialHead>(predicate);
+        //}
 
-        public ImportSerialHead GetFirst(Func<ImportSerialHead, bool> predicate)
-        {
-            return DbSet.First<ImportSerialHead>(predicate);
-        }
+        //public ImportSerialHead GetFirst(Func<ImportSerialHead, bool> predicate)
+        //{
+        //    return DbSet.First<ImportSerialHead>(predicate);
+        //}
 
-        #endregion
+        //#endregion
 
         //****CUSTOM****//
 
@@ -140,7 +141,7 @@ namespace Fuji.Repository.Impl.ItemManagement
 
         public ImportSerialHead GetItemBy(Func<ImportSerialHead, bool> where, bool isIncludeChild = false)
         {
-            var item = DbSet.Find(where);
+            var item = DbSet.Where(where).FirstOrDefault();
             if (isIncludeChild)
                 Context.Entry(item).Collection(c => c.ImportSerialDetail).Load();
             return item;
@@ -167,7 +168,17 @@ namespace Fuji.Repository.Impl.ItemManagement
         public void InsertItem(ImportSerialHead item, bool isIncludeChild = false)
         {
             var ret = DbSet.Add(item);
-            this.Context.SaveChanges();  
+            Db.SaveChanges();  
+        }
+
+        public void UpdateItem(ImportSerialHead item, string username)
+        {
+            item.UpdateBy = username;
+            item.UpdateAt = DateTime.Now;
+
+            DbSet.Attach(item);
+            Context.Entry(item).State = EntityState.Modified;
+            Db.SaveChanges();
         }
 
         public ImportSerialHead IncludeChild(ImportSerialHead item)

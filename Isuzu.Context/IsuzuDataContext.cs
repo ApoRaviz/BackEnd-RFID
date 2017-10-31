@@ -6,8 +6,6 @@ using Isuzu.Entity;
 
 namespace Isuzu.Context
 {
-  
-
     public class IsuzuDataContext : DbContext
     {
 
@@ -29,9 +27,6 @@ namespace Isuzu.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<LabelRunning>()
-            //    .Property(e => e.Type)
-            //    .IsUnicode(false);
         }
     }
 }

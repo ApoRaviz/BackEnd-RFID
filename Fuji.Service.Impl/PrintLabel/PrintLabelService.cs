@@ -18,22 +18,24 @@ using BarcodeLib;
 using Fuji.Common.ValueObject;
 using System.IO;
 using System.Drawing;
+using Fuji.Repository.Impl.LabelManagement;
 
 namespace Fuji.Service.Impl.PrintLabel
 {
     public class PrintLabelService : IPrintLabelService
     {
         private FujiDbContext Db { get; set; }
-        
-        private IGenericRepository<LabelRunning> Repo;
+        private LabelRunningRepository printRepo;
+        //private IGenericRepository<LabelRunning> Repo;
 
         public PrintLabelService()
         {
-            Repo = new GenericRepository<LabelRunning>(Db);
+           // Repo = new GenericRepository<LabelRunning>(Db);
             Db = FujiDbContext.Create();
+            printRepo = new LabelRunningRepository(new FujiDbContext());
         }        
 
-        public int GetRunningByType(string type, int running)
+        public int GetRunningByType(string type, int running,string userUpdate)
         {
             int baseRunning = 0;
             bool isNotUpdateDate;
@@ -42,7 +44,7 @@ namespace Fuji.Service.Impl.PrintLabel
                          select l
                          ).SingleOrDefault();
 
-            if (isNotUpdateDate = (label.CreateDate.Date == DateTime.Now.Date))
+            if (isNotUpdateDate = (label.CreateAt.Date == DateTime.Now.Date))
             {
                 baseRunning = label.Running;
             }
@@ -51,12 +53,12 @@ namespace Fuji.Service.Impl.PrintLabel
                 baseRunning = 0;
             }            
 
-            UpdateRunning(label, running, isNotUpdateDate);
+            UpdateRunning(label, running, isNotUpdateDate,userUpdate);
 
             return baseRunning;            
         }
 
-        private bool UpdateRunning(LabelRunning label, int running, bool isNotUpdateDate)
+        private bool UpdateRunning(LabelRunning label, int running, bool isNotUpdateDate,string userUpdate)
         {
             using (var scope = new TransactionScope())
             {
@@ -66,11 +68,12 @@ namespace Fuji.Service.Impl.PrintLabel
                 }
                 else
                 {
-                    label.CreateDate = DateTime.Now.Date;
+                    label.CreateAt = DateTime.Now.Date;
+                    label.CreateBy = userUpdate;
                     label.Running = running;
-                }                
+                }
 
-                Repo.Update(label);
+                printRepo.UpdateItem(label,userUpdate);
                 
                 try
                 {

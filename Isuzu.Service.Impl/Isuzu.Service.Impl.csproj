@@ -39,6 +39,9 @@
     <Reference Include="EPPlus">
       <HintPath>..\Fuji.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Isuzu.Common.ValueObject">
+      <HintPath>..\Isuzu.Common.ValueObject\bin\Debug\Isuzu.Common.ValueObject.dll</HintPath>
+    </Reference>
     <Reference Include="Isuzu.Entity">
       <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
     </Reference>
@@ -63,6 +66,12 @@
     <Reference Include="WIM.Core.Common.ValueObject">
       <HintPath>..\WIM.Core.Common.ValueObject\bin\Debug\WIM.Core.Common.ValueObject.dll</HintPath>
     </Reference>
+    <Reference Include="WIM.Core.Entity">
+      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="WIM.Core.Repository.Impl">
+      <HintPath>..\WIM.Core.Repository.Impl\bin\Debug\WIM.Core.Repository.Impl.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Inbound\InboundService.cs" />
@@ -73,10 +82,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Isuzu.Common.ValueObject\Isuzu.Common.ValueObject.csproj">
-      <Project>{bae81779-979d-4544-9184-4614986f3362}</Project>
-      <Name>Isuzu.Common.ValueObject</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Isuzu.Context\Isuzu.Context.csproj">
       <Project>{82d2b22a-90bc-440a-ba19-83914d0018ac}</Project>
       <Name>Isuzu.Context</Name>
