@@ -28,7 +28,6 @@ namespace HRMS.WebApi
 
             container.RegisterType<IDemoService, DemoService>();           
 
-
         }
     }
 }
