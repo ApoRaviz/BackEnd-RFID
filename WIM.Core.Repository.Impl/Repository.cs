@@ -13,11 +13,13 @@ namespace WIM.Core.Repository.Impl
     {
         protected DbContext Context;
         internal DbSet<TEntity> DbSet;
+        internal IIdentity Identity;
 
-        public Repository(DbContext context)
+        public Repository(DbContext context, IIdentity identity)
         {
             Context = context;
             this.DbSet = Context.Set<TEntity>();
+            Identity = identity;
         }
 
         public IEnumerable<TEntity> Get()
@@ -45,7 +47,7 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Find(id) != null;
         }       
 
-        public TEntity Insert(TEntity entityToInsert, IIdentity identity)
+        public TEntity Insert(TEntity entityToInsert)
         {
             Type typeEntityToInsert = entityToInsert.GetType(); 
             PropertyInfo[] properties = typeEntityToInsert.GetProperties();
@@ -61,42 +63,18 @@ namespace WIM.Core.Repository.Impl
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
                 }
             }
-
-            entityForInsert.CreateBy = identity.Name;
+            
+            entityForInsert.CreateBy = Identity.Name;
             entityForInsert.CreateAt = DateTime.Now;
-            entityForInsert.UpdateBy = identity.Name;
+            entityForInsert.UpdateBy = Identity.Name;
             entityForInsert.UpdateAt = DateTime.Now;
             entityForInsert.IsActive = true;
 
             DbSet.Add(entityForInsert);
             return entityForInsert;
-        }        
+        }                
 
-        public TEntity Update(TEntity entityToUpdate, IIdentity identity)
-        {
-            Type typeEntityToUpdate = entityToUpdate.GetType(); 
-            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
-            string namePropKey = GetPropertyNameOfKeyAttribute(properties);         
-            var id = typeEntityToUpdate.GetProperty(namePropKey).GetValue(entityToUpdate, null);
-            TEntity entityForUpdate = GetByID(id);
-            if (entityForUpdate == null)
-            {
-                throw new Exception("Data Not Found.");
-            }
-            Type typeEntityForUpdate = entityForUpdate.GetType();
-            foreach (PropertyInfo prop in properties)
-            {                
-                var value = prop.GetValue(entityToUpdate);                
-                if (typeEntityForUpdate.GetProperty(prop.Name) != null && !prop.PropertyType.IsGenericType)
-                {
-                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
-                }
-            }
-            entityForUpdate.UpdateBy = identity.Name;
-            entityForUpdate.UpdateAt = DateTime.Now;
-            return entityForUpdate;
-        }
-        public TEntity Update(object entityToUpdate, IIdentity identity)
+        public TEntity Update(object entityToUpdate)
         {
             Type typeEntityToUpdate = entityToUpdate.GetType();
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
@@ -116,7 +94,7 @@ namespace WIM.Core.Repository.Impl
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
                 }
             }
-            entityForUpdate.UpdateBy = identity.Name;
+            entityForUpdate.UpdateBy = Identity.Name;
             entityForUpdate.UpdateAt = DateTime.Now;
             return entityForUpdate;
         }

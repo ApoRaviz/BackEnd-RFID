@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using HRMS.Repository.Context;
-using HRMS.Repository.Entity.LeaveRequest;
 using HRMS.Service;
 using System;
 using System.Collections.Generic;
@@ -19,19 +17,29 @@ using WIM.Core.Entity.Status;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Linq.Expressions;
+using HRMS.Entity.LeaveManagement;
+using HRMS.Context;
+using HRMS.Repository.Impl.LeaveManagement;
+using HRMS.Repository.LeaveManagement;
+using HRMS.Service.LeaveManagement;
+using HRMS.Service.Impl.LeaveManagement;
+using HRMS.Common.ValueObject.LeaveManagement;
+using Microsoft.AspNet.Identity;
 
 namespace HRMS.WebApi.Controllers
 {    
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
-        private IDemoService DemoService;
 
-        public DemoController(IDemoService demoService)
+        private ILeaveService LeaveService;
+        public DemoController(ILeaveService leaveService)
         {
-            DemoService = demoService;
+            LeaveService = leaveService;           
         }
-
+         
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("new")]
         public HttpResponseMessage DemoAdd([FromBody]Leave leaveRequest)
@@ -42,15 +50,18 @@ namespace HRMS.WebApi.Controllers
 
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
-                    ILeaveRepository headRepo = new LeaveRepository(db);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
-                    Leave x = headRepo.Insert(leaveRequest, User.Identity);
+                    string y = LeaveService.GetName();
+
+                    ILeaveRepository headRepo = new LeaveRepository(db, User.Identity);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
+
+                    Leave x = headRepo.Insert(leaveRequest);
 
                     foreach (var entity in leaveRequest.LeaveDetails)
                     {
                         entity.LeaveIDSys = x.LeaveIDSys;
-                        dRepo.Insert(entity, User.Identity);
+                        dRepo.Insert(entity);
                     }
 
                     db.SaveChanges();
@@ -76,17 +87,17 @@ namespace HRMS.WebApi.Controllers
                 Leave leaveUpdated;
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
-                    ILeaveRepository repo = new LeaveRepository(db);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
+                    ILeaveRepository repo = new LeaveRepository(db, User.Identity);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
 
-                    leaveUpdated = repo.Update(leaveRequest, User.Identity);
+                    leaveUpdated = repo.Update(leaveRequest);
                  
                     dRepo.Delete(x => x.LeaveIDSys == leaveUpdated.LeaveIDSys);
           
                     foreach (var entity in leaveRequest.LeaveDetails)
                     {
                         var leaveForInsert = Mapper.Map<LeaveDetailDto, LeaveDetail> (entity);
-                        dRepo.Insert(leaveForInsert, User.Identity);
+                        dRepo.Insert(leaveForInsert);
                     }
 
                     db.SaveChanges();
@@ -104,13 +115,13 @@ namespace HRMS.WebApi.Controllers
         
     }
 
-    public interface ILeaveRepository : IRepository<Leave>
+    /*public interface ILeaveRepository : IRepository<Leave>
     {
         IEnumerable<Leave> GetTopSellingCourses(int count);
         IEnumerable<Leave> GetCoursesWithAuthors(int pageIndex, int pageSize);
-    }
+    }*/
 
-    public class LeaveRepository : Repository<Leave>, ILeaveRepository
+    /*public class LeaveRepository : Repository<Leave>, ILeaveRepository
     {
         private HRMSDbContext Db;
 
@@ -136,9 +147,9 @@ namespace HRMS.WebApi.Controllers
         }
 
 
-    }
+    }*/
 
-    public interface ILeaveDetailRepository : IRepository<LeaveDetail>
+    /*public interface ILeaveDetailRepository : IRepository<LeaveDetail>
     {
 
 
@@ -151,6 +162,6 @@ namespace HRMS.WebApi.Controllers
         {
 
         }
-    }
+    }*/
 
 }

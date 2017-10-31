@@ -44,8 +44,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Isuzu.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Fuji.Common.ValueObject">
+      <HintPath>..\Fuji.Common.ValueObject\bin\Debug\Fuji.Common.ValueObject.dll</HintPath>
+    </Reference>
+    <Reference Include="Fuji.Context">
+      <HintPath>..\Fuji.Context\bin\Debug\Fuji.Context.dll</HintPath>
+    </Reference>
+    <Reference Include="Fuji.Entity">
+      <HintPath>..\Fuji.Entity\bin\Debug\Fuji.Entity.dll</HintPath>
+    </Reference>
     <Reference Include="Fuji.Repository.Impl">
       <HintPath>..\Fuji.Repository.Impl\bin\Debug\Fuji.Repository.Impl.dll</HintPath>
+    </Reference>
+    <Reference Include="Fuji.Service">
+      <HintPath>..\Fuji.Service\bin\Debug\Fuji.Service.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.802.134\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
@@ -86,6 +98,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WIM.Core.Entity">
+      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItemImport\ItemImportService.cs" />
@@ -98,26 +113,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
-      <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
-      <Name>Fuji.Common.ValueObject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Context\Fuji.Context.csproj">
-      <Project>{9cc22b43-a4a9-44e9-8d84-b5bc04240248}</Project>
-      <Name>Fuji.Context</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
-      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
-      <Name>Fuji.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
-      <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
-      <Name>Fuji.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Service\Fuji.Service.csproj">
-      <Project>{4fbc9a8b-22ee-474c-a07e-00d5e770f751}</Project>
-      <Name>Fuji.Service</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>

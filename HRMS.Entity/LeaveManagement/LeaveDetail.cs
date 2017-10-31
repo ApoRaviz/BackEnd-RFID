@@ -5,19 +5,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace HRMS.Entity.LeaveManagement
 {
     [Table("LeaveDetails")]
-    public class LeaveDetail
+    public class LeaveDetail : BaseEntity
     {
+        public LeaveDetail()
+        {
+
+        }
+
         [Key]
         public int LeaveDetailIDSys { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        [IsHead]
         public int LeaveIDSys { get; set; }
-        public System.DateTime LeaveDate { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
-        public string UpdateBy { get; set; }
-        public System.DateTime UpdateAt { get; set; }
+        public virtual Leave Leave { get; set; }
     }
 }

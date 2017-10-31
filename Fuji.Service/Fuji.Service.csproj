@@ -36,6 +36,12 @@
     <Reference Include="EPPlus">
       <HintPath>..\Fuji.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Fuji.Common.ValueObject">
+      <HintPath>..\Fuji.Common.ValueObject\bin\Debug\Fuji.Common.ValueObject.dll</HintPath>
+    </Reference>
+    <Reference Include="Fuji.Entity">
+      <HintPath>..\Fuji.Entity\bin\Debug\Fuji.Entity.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,24 +56,6 @@
     <Compile Include="PrintLabel\IPrintLabelService.cs" />
     <Compile Include="ProgramVersion\IProgramVersionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
-      <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
-      <Name>Fuji.Common.ValueObject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Context\Fuji.Context.csproj">
-      <Project>{9cc22b43-a4a9-44e9-8d84-b5bc04240248}</Project>
-      <Name>Fuji.Context</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
-      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
-      <Name>Fuji.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
-      <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
-      <Name>Fuji.Repository</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PrintLabel\Report1.rdlc" />

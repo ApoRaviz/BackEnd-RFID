@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>2d0b2680-d488-4b8a-bab8-cf286cd071e0</ProjectGuid>
+    <ProjectGuid>{2D0B2680-D488-4B8A-BAB8-CF286CD071E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HRMS.Repository</RootNamespace>
@@ -30,24 +30,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
-    
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
-    
-    
-    <Reference Include="Microsoft.CSharp"/>
-    
-    <Reference Include="System.Data"/>
-    
-    <Reference Include="System.Net.Http"/>
-    
-    <Reference Include="System.Xml"/>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="LeaveManagement\ILeaveDetailRepository.cs" />
+    <Compile Include="LeaveManagement\ILeaveRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRMS.Entity\HRMS.Entity.csproj">
+      <Project>{1646e0fc-8f7b-436f-983a-7c9873ca49cb}</Project>
+      <Name>HRMS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
- </Project>
+</Project>

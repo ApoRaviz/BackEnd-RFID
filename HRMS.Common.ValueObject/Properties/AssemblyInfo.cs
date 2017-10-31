@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HRMS.Repository.Context")]
+[assembly: AssemblyTitle("HRMS.Common.ValueObject")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HRMS.Repository.Context")]
+[assembly: AssemblyProduct("HRMS.Common.ValueObject")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("69a3a794-8780-43df-8b2c-055fbdc64d2d")]
+[assembly: Guid("a3ea41df-d932-48b0-8100-a76e5df04b8e")]
 
 // Version information for an assembly consists of the following four values:
 //
