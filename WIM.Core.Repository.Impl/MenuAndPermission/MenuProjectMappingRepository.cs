@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.ValueObject;
@@ -16,10 +17,12 @@ namespace WIM.Core.Repository.Impl
     public class MenuProjectMappingRepository : Repository<MenuProjectMapping>,IMenuProjectMappingRepository
     {
         private CoreDbContext Db { get; set; }
+        private IIdentity User { get; set; }
 
-        public MenuProjectMappingRepository(CoreDbContext context): base(context)
+        public MenuProjectMappingRepository(CoreDbContext context,IIdentity identity): base(context,identity)
         {
             Db = context;
+            User = identity;
         }
 
         public IEnumerable<MenuProjectMappingDto> GetAllMenu(int id , IEnumerable<MenuProjectMappingDto> menu)

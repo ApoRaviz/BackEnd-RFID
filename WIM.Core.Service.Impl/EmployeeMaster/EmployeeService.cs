@@ -15,15 +15,17 @@ using WIM.Core.Context;
 using WIM.Core.Entity;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
 
     public class EmployeeService : IEmployeeService
     {
-
-        public EmployeeService()
+        private IIdentity user { get; set; }
+        public EmployeeService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<Employee_MT> GetEmployees()
@@ -31,7 +33,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Employee_MT> employee;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IEmployeeRepository repo = new EmployeeRepository(Db);
+                IEmployeeRepository repo = new EmployeeRepository(Db,user);
                 employee = repo.Get();
             }
             return employee;
@@ -42,7 +44,7 @@ namespace WIM.Core.Service.Impl
             Employee_MT Employee;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IEmployeeRepository repo = new EmployeeRepository(Db);
+                IEmployeeRepository repo = new EmployeeRepository(Db,user);
                 string[] include = { "Person_MT" };
                 Employee = repo.GetWithInclude((c => c.EmID == id),include).SingleOrDefault();
             }
@@ -54,7 +56,7 @@ namespace WIM.Core.Service.Impl
             Employee_MT Employee;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IEmployeeRepository repo = new EmployeeRepository(Db);
+                IEmployeeRepository repo = new EmployeeRepository(Db,user);
                 string[] include = { "Person_MT" };
                 Employee = repo.GetWithInclude((c => c.PersonIDSys == id), include).SingleOrDefault();
             }
@@ -69,7 +71,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        IEmployeeRepository repo = new EmployeeRepository(Db,user);
                         repo.Insert(Employee);
                         Db.SaveChanges();
                         scope.Complete();
@@ -97,7 +99,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        IEmployeeRepository repo = new EmployeeRepository(Db,user);
                         repo.Update(Employee);
                         Db.SaveChanges();
                         scope.Complete();
@@ -125,7 +127,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        IEmployeeRepository repo = new EmployeeRepository(Db,user);
                         repo.Update(Employee);
                         Db.SaveChanges();
                         scope.Complete();
@@ -153,7 +155,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        IEmployeeRepository repo = new EmployeeRepository(Db,user);
                         var existedEmployee = repo.GetByID(id);
                         //IsActive = False;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
@@ -15,10 +16,12 @@ namespace WIM.Core.Repository.Impl
     public class ApiMenuMappingRepository : Repository<ApiMenuMapping> , IApiMenuMappingRepository
     {
         private CoreDbContext Db { get; set; }
+        private IIdentity User { get; set; }
 
-        public ApiMenuMappingRepository(CoreDbContext context) : base(context)
+        public ApiMenuMappingRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
         {
             Db = context;
+            User = identity;
         }
         //public void Update(ApiMenuMapping entityToUpdate)
         //{

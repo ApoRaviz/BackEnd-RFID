@@ -17,14 +17,17 @@ using WIM.Core.Service;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Common.ValueObject;
+using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
     public class ApiMTService : IApiMTService
     {
+        private IIdentity user { get; set; }
 
-        public ApiMTService()
+        public ApiMTService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<Api_MT> GetAPIs()
@@ -32,7 +35,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Api_MT> apis;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IApiMTRepository repo = new ApiMTRepository(Db);
+                IApiMTRepository repo = new ApiMTRepository(Db,user);
                 apis = repo.Get();
             }
             return apis;
@@ -43,7 +46,7 @@ namespace WIM.Core.Service.Impl
             Api_MT ApiMT;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IApiMTRepository repo = new ApiMTRepository(Db);
+                IApiMTRepository repo = new ApiMTRepository(Db,user);
                 ApiMT = repo.GetByID(id);
             }
             ApiMTDto ApiMTDto = Mapper.Map<Api_MT, ApiMTDto>(ApiMT);
@@ -60,7 +63,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMTRepository repo = new ApiMTRepository(Db);
+                        IApiMTRepository repo = new ApiMTRepository(Db,user);
                         for (int i = 0; i < ApiMT.Count; i++)
                         {
                             var chars = Enumerable.Range(0, 4)
@@ -96,7 +99,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMTRepository repo = new ApiMTRepository(Db);
+                        IApiMTRepository repo = new ApiMTRepository(Db,user);
                         repo.Update(ApiMT);
                         Db.SaveChanges();
                         scope.Complete();
@@ -126,7 +129,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMTRepository repo = new ApiMTRepository(Db);
+                        IApiMTRepository repo = new ApiMTRepository(Db,user);
                         var existedApiMT = repo.GetByID(id);
                         repo.Delete(existedApiMT);
                         Db.SaveChanges();

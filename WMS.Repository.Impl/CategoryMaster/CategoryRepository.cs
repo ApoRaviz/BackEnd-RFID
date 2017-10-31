@@ -11,16 +11,20 @@ using WMS.Repository;
 using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
+using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace WMS.Repository.Impl
 {
     public class CategoryRepository : Repository<Category_MT> , ICategoryRepository
     {
         private WMSDbContext Db { get; set; }
+        private IIdentity user { get; set; }
 
-        public CategoryRepository(WMSDbContext context):base(context)
+        public CategoryRepository(WMSDbContext context,IIdentity identity):base(context,identity)
         {
             Db = context;
+            user = identity;
         }
 
        

@@ -20,15 +20,17 @@ using WIM.Core.Context;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
     public class UserService : IUserService
     {
         private object param = new { };
-
-        public UserService()
+        private IIdentity user { get; set; }
+        public UserService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<User> GetUsers()
@@ -36,7 +38,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<User> users;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IUserRepository repo = new UserRepository(Db);
+                IUserRepository repo = new UserRepository(Db,user);
                 users = repo.Get();
             }
             return users;
@@ -47,7 +49,7 @@ namespace WIM.Core.Service.Impl
             User User;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IUserRepository repo = new UserRepository(Db);
+                IUserRepository repo = new UserRepository(Db,user);
                 User = repo.GetByID(id);
             }
             return User;
@@ -60,7 +62,7 @@ namespace WIM.Core.Service.Impl
             {
                 using (CoreDbContext Db = new CoreDbContext())
                 {
-                    IUserRepository repo = new UserRepository(Db);
+                    IUserRepository repo = new UserRepository(Db,user);
                     u = repo.GetByID(userid);
                     if (keyOtp > 99999)
                     {
@@ -89,7 +91,7 @@ namespace WIM.Core.Service.Impl
             object query;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IUserRepository repo = new UserRepository(Db);
+                IUserRepository repo = new UserRepository(Db,user);
                 query = repo.GetCustomerByUser(userid);
             }
             return query;
@@ -103,8 +105,8 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IUserRepository repo = new UserRepository(Db);
-                        IRepository<UserRoles> repoRole = new Repository<UserRoles>(Db);
+                        IUserRepository repo = new UserRepository(Db,user);
+                        IRepository<UserRoles> repoRole = new Repository<UserRoles>(Db,user);
                         var userole = User.UserRoles;
                         User.UserRoles = null;
                         User.UserID = Guid.NewGuid().ToString();
@@ -152,8 +154,8 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IUserRepository repo = new UserRepository(Db);
-                        IRepository<UserRoles> repoRole = new Repository<UserRoles>(Db);
+                        IUserRepository repo = new UserRepository(Db,user);
+                        IRepository<UserRoles> repoRole = new Repository<UserRoles>(Db,user);
                         if (User.UserRoles != null)
                         {
                             foreach (var c in User.UserRoles)
@@ -168,7 +170,7 @@ namespace WIM.Core.Service.Impl
                         User.PasswordHash = User.PasswordHash;
                         User.Name = User.Name;
                         User.Surname = User.Surname;
-                        User.PhoneNumber = User.PhoneNumber;
+                        //User.PhoneNumber = User.PhoneNumber;
                         repo.Update(User );
                         Db.SaveChanges();
                         scope.Complete();
@@ -197,7 +199,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IUserRepository repo = new UserRepository(Db);
+                        IUserRepository repo = new UserRepository(Db,user);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();
@@ -230,7 +232,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IUserRepository repo = new UserRepository(Db);
+                        IUserRepository repo = new UserRepository(Db,user);
                         User u = repo.GetByID(userid);
                         u.KeyAccess = key;
                         u.KeyAccessDate = DateTime.Now;
@@ -255,7 +257,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IUserRepository repo = new UserRepository(Db);
+                        IUserRepository repo = new UserRepository(Db,user);
                         DateTime datew = DateTime.Now.AddMinutes(-2);
                         User u = repo.GetSingle(c => c.KeyAccess == param.Key
                         && c.KeyAccessDate > datew && c.KeyAccess != null);
@@ -294,7 +296,7 @@ namespace WIM.Core.Service.Impl
             List<User> user;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IUserRepository repo = new UserRepository(Db);
+                IUserRepository repo = new UserRepository(Db,this.user);
                 user = repo.GetMany(c => !(Db.UserRoles.Where(a => a.RoleID == RoleID).Select(a => a.UserID).Contains(c.UserID))).ToList();
             }
             return user.ToList();
@@ -359,7 +361,7 @@ namespace WIM.Core.Service.Impl
             User user;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IUserRepository repo = new UserRepository(Db);
+                IUserRepository repo = new UserRepository(Db,this.user);
                 user = repo.GetSingle(c => c.PersonIDSys == personIDSys);
             }
             return user;
@@ -373,7 +375,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IUserRepository repo = new UserRepository(Db);
+                        IUserRepository repo = new UserRepository(Db,user);
                         User u = repo.GetSingle(c => c.TokenMobile == param.Token
                         && c.KeyAccessDate == null && c.KeyAccess == null);
                         if (u is null)

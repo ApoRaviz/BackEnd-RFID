@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -22,12 +23,12 @@ namespace WMS.Service.Impl.Import
                             "<Import>{5}</Import></row>";
 
         private WMSDbContext Db;
-        private GenericRepository<ImportDefinitionHeader_MT> repo;
+        private Repository<ImportDefinitionHeader_MT> repo;
 
-        public ImportService()
+        public ImportService(IIdentity identity)
         {
             Db = new WMSDbContext();
-            repo = new GenericRepository<ImportDefinitionHeader_MT>(Db);
+            repo = new Repository<ImportDefinitionHeader_MT>(Db,identity);
         }
 
         public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)

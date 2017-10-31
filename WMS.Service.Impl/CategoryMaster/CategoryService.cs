@@ -17,14 +17,16 @@ using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Repository.Impl;
 using WIM.Core.Context;
+using System.Security.Principal;
 
 namespace WMS.Service
 {
     public class CategoryService : ICategoryService
     {
-
-        public CategoryService()
+        private IIdentity user { get; set; }
+        public CategoryService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<CategoryDto> GetCategories()
@@ -33,7 +35,7 @@ namespace WMS.Service
             using (WMSDbContext Db = new WMSDbContext())
             {
 
-            ICategoryRepository repo = new CategoryRepository(Db);
+            ICategoryRepository repo = new CategoryRepository(Db,user);
             IEnumerable<Category_MT> categorys = repo.Get();
 
             categoryDtos = categorys.Select(b => new CategoryDto()
@@ -54,7 +56,7 @@ namespace WMS.Service
             using (WMSDbContext Db = new WMSDbContext())
             {
 
-                ICategoryRepository repo = new CategoryRepository(Db);
+                ICategoryRepository repo = new CategoryRepository(Db,user);
                 IEnumerable<Category_MT> categorys = repo.GetMany(c=>c.ProjectIDSys == projectIDSys && c.IsActive == true);
                 categoryDtos = categorys.Select(b => new CategoryDto()
                 {
@@ -74,7 +76,7 @@ namespace WMS.Service
             using (WMSDbContext Db = new WMSDbContext())
             {
 
-                ICategoryRepository repo = new CategoryRepository(Db);
+                ICategoryRepository repo = new CategoryRepository(Db,user);
                 Category_MT category = repo.GetByID(id);
                 categoryDto = new CategoryDto();
                 categoryDto.CateIDSys = category.CateIDSys;
@@ -93,7 +95,7 @@ namespace WMS.Service
                 using (WMSDbContext Db = new WMSDbContext())
                 {
 
-                    ICategoryRepository repo = new CategoryRepository(Db);
+                    ICategoryRepository repo = new CategoryRepository(Db,user);
                     category.CateID = Db.ProcGetNewID("CT");
                     try
                     {
@@ -123,7 +125,7 @@ namespace WMS.Service
                 using (WMSDbContext Db = new WMSDbContext())
                 {
 
-                    ICategoryRepository repo = new CategoryRepository(Db);
+                    ICategoryRepository repo = new CategoryRepository(Db,user);
                     try
                     {
                         repo.Update(category);
@@ -151,7 +153,7 @@ namespace WMS.Service
                 using (WMSDbContext Db = new WMSDbContext())
                 {
 
-                    ICategoryRepository repo = new CategoryRepository(Db);
+                    ICategoryRepository repo = new CategoryRepository(Db,user);
                     var existedCategory = repo.GetByID(id);
                     try
                     {

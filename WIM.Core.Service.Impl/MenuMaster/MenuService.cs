@@ -17,13 +17,16 @@ using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
     public class MenuService : IMenuService
     {
-        public MenuService()
+        private IIdentity user { get; set; }
+        public MenuService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<Menu_MT> GetMenu()
@@ -31,7 +34,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Menu_MT> menu;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuRepository repo = new MenuRepository(Db);
+                IMenuRepository repo = new MenuRepository(Db,user);
                 menu = repo.Get().OrderBy(c => c.MenuParentID).OrderBy(c => c.Sort);
             }
             return menu;
@@ -42,7 +45,7 @@ namespace WIM.Core.Service.Impl
             Menu_MT Menu;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuRepository repo = new MenuRepository(Db);
+                IMenuRepository repo = new MenuRepository(Db,user);
                 Menu = repo.GetByID(id);
             }
             return Menu;
@@ -56,7 +59,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuRepository repo = new MenuRepository(Db);
+                        IMenuRepository repo = new MenuRepository(Db,user);
                         repo.Insert(Menu);
                         Db.SaveChanges();
                         scope.Complete();
@@ -92,7 +95,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuRepository repo = new MenuRepository(Db);
+                        IMenuRepository repo = new MenuRepository(Db,user);
                         repo.Insert(menu);
                         Db.SaveChanges();
                         scope.Complete();
@@ -122,7 +125,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuRepository repo = new MenuRepository(Db);
+                        IMenuRepository repo = new MenuRepository(Db,user);
                         repo.Update(Menu);
                         Db.SaveChanges();
                         scope.Complete();
@@ -150,7 +153,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuRepository repo = new MenuRepository(Db);
+                        IMenuRepository repo = new MenuRepository(Db,user);
 
                         foreach (var c in menu)
                         {
@@ -188,7 +191,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuRepository repo = new MenuRepository(Db);
+                        IMenuRepository repo = new MenuRepository(Db,user);
                         var existedMenu = repo.GetByID(id);
                         repo.Delete(existedMenu);
                         Db.SaveChanges();
@@ -223,7 +226,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<MenuDto> menudto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuRepository repo = new MenuRepository(Db);
+                IMenuRepository repo = new MenuRepository(Db,user);
                 menudto = repo.GetMany(c => c.MenuParentID == id).Select(b =>
                 new MenuDto()
                 {
@@ -244,7 +247,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<MenuDto> menudto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuRepository repo = new MenuRepository(Db);
+                IMenuRepository repo = new MenuRepository(Db,user);
                 var menuQuery = repo.Get();
                 Console.Write(menuQuery);
                 menudto = menuQuery.Select(b =>
@@ -267,7 +270,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<MenuDto> menudto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuRepository repo = new MenuRepository(Db);
+                IMenuRepository repo = new MenuRepository(Db,user);
                 var menuQuery = repo.Get().OrderBy(c => c.MenuParentID).OrderBy(c => c.Sort);
                 Console.Write(menuQuery);
                 menudto = menuQuery.Select(b =>
@@ -290,7 +293,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<MenuDto> menudto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuRepository repo = new MenuRepository(Db);
+                IMenuRepository repo = new MenuRepository(Db,user);
                 var menuQuery = repo.GetMany((c => !(Db.MenuProjectMapping).Where(a => a.ProjectIDSys == projectIDSys)
                 .Select(a=>a.MenuIDSys).Contains(c.MenuIDSys))).OrderBy(c => c.MenuParentID).OrderBy(c => c.Sort);
                 Console.Write(menuQuery);

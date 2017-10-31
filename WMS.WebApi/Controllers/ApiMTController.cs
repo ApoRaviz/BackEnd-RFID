@@ -94,7 +94,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ApiMTService.UpdateApiMT(id, ApiMT);
+                bool isUpated = ApiMTService.UpdateApiMT( ApiMT);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

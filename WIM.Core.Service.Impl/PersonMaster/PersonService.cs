@@ -16,14 +16,16 @@ using WIM.Core.Entity.Person;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Repository;
+using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 { 
     public class PersonService : IPersonService
     {
-
-        public PersonService()
+        private IIdentity user { get; set; }
+        public PersonService(IIdentity identity)
         {
+            user = identity;
         }        
 
         public IEnumerable<Person_MT> GetPersons()
@@ -31,7 +33,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Person_MT> Person;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPersonRepository repo = new PersonRepository(Db);
+                IPersonRepository repo = new PersonRepository(Db,user);
                 Person = repo.Get();
             }
             return Person;
@@ -42,7 +44,7 @@ namespace WIM.Core.Service.Impl
             Person_MT Person;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPersonRepository repo = new PersonRepository(Db);
+                IPersonRepository repo = new PersonRepository(Db,user);
                 Person = repo.GetSingle(b => (Db.User.Where(a => a.UserID == id).Select(d => d.PersonIDSys).Contains(b.PersonIDSys)));
             }
             return Person;            
@@ -53,7 +55,7 @@ namespace WIM.Core.Service.Impl
             PersonDto Person;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPersonRepository repo = new PersonRepository(Db);
+                IPersonRepository repo = new PersonRepository(Db,user);
                 var data = repo.GetByID(id);
                 Person = new PersonDto()
                 {
@@ -76,7 +78,7 @@ namespace WIM.Core.Service.Impl
             return Person;
         }
 
-        public int CreatePerson(Person_MT Person,string username)
+        public int CreatePerson(Person_MT Person)
         {
             using (var scope = new TransactionScope())
             {      
@@ -84,8 +86,8 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db);
-                        repo.Insert(Person,username);
+                        IPersonRepository repo = new PersonRepository(Db,user);
+                        repo.Insert(Person);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -104,7 +106,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdatePerson(Person_MT Person ,string username)
+        public bool UpdatePerson(Person_MT Person)
         {           
             using (var scope = new TransactionScope())
             {
@@ -112,8 +114,8 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db);
-                        repo.Update(Person,username);
+                        IPersonRepository repo = new PersonRepository(Db,user);
+                        repo.Update(Person);
                         scope.Complete();
                     }
                 }
@@ -131,7 +133,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdatePersonByID(Person_MT Person,string username)
+        public bool UpdatePersonByID(Person_MT Person)
         {
             using (var scope = new TransactionScope())
             {
@@ -139,8 +141,8 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db);
-                        repo.Update(Person,username);
+                        IPersonRepository repo = new PersonRepository(Db,user);
+                        repo.Update(Person);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -160,7 +162,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool DeletePerson(int id, string username)
+        public bool DeletePerson(int id)
         {
             using (var scope = new TransactionScope())
             {
@@ -169,9 +171,9 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db);
+                        IPersonRepository repo = new PersonRepository(Db,user);
                         Person_MT person = repo.GetByID(id);
-                        repo.Update(person, username);
+                        repo.Update(person);
                         //#Oil Comment
                         //Wait for Command Delete
                         Db.SaveChanges();

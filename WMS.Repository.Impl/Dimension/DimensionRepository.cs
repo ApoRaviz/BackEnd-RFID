@@ -12,16 +12,18 @@ using WIM.Core.Repository.Impl;
 using WMS.Repository;
 using WMS.Common;
 using WMS.Context;
+using System.Security.Principal;
 
 namespace WMS.Repository.Impl
 {
     public class DimensionRepository : Repository<DimensionLayout_MT>,IDimensionRepository
     {
         private WMSDbContext Db { get; set; }
-
-        public DimensionRepository(WMSDbContext context):base(context)
+        private IIdentity user { get; set; }
+        public DimensionRepository(WMSDbContext context,IIdentity identity):base(context,identity)
         {
             Db = context;
+            user = identity;
         }
     }
 }

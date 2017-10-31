@@ -19,14 +19,16 @@ using WIM.Core.Service;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace WMS.Service
 {
     public class MenuProjectMappingService : IMenuProjectMappingService
     {
-
-        public MenuProjectMappingService()
+        private IIdentity user { get; set; }
+        public MenuProjectMappingService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<MenuProjectMapping> GetMenuProjectMapping()
@@ -34,7 +36,7 @@ namespace WMS.Service
             IEnumerable<MenuProjectMapping> menu;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                 menu = repo.Get();
             }
             return menu.OrderBy(c => c.MenuName);
@@ -48,7 +50,7 @@ namespace WMS.Service
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                         repo.Insert(MenuProjectMapping);
                         Db.SaveChanges();
                         scope.Complete();
@@ -83,7 +85,7 @@ namespace WMS.Service
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                         repo.Insert(menuProjectMapping);
                         Db.SaveChanges();
                         scope.Complete();
@@ -111,7 +113,7 @@ namespace WMS.Service
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                         repo.Update(MenuProjectMapping);
                         Db.SaveChanges();
                         scope.Complete();
@@ -142,7 +144,7 @@ namespace WMS.Service
 
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                         foreach (var c in menuProjectMapping)
                         {
                             MenuProjectMapping menu = new MenuProjectMapping();
@@ -179,7 +181,7 @@ namespace WMS.Service
         {
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                 foreach (var c in mother.ParentMenu)
                 {
                     MenuProjectMapping menu = new MenuProjectMapping();
@@ -207,7 +209,7 @@ namespace WMS.Service
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                        IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                         for (int i = 0; i < menu.Count; i++)
                         {
                             MenuProjectMapping x = new MenuProjectMapping();
@@ -263,7 +265,7 @@ namespace WMS.Service
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                 MenuProjectMappingdto = repo.GetMany((c => c.ProjectIDSys == id)).OrderBy(c => c.MenuIDSysParent)
                .OrderBy(c => c.Sort).Select(b => new MenuProjectMappingDto()
                {
@@ -283,7 +285,7 @@ namespace WMS.Service
             IEnumerable<MenuDto> MenuProjectMappingdto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                 MenuProjectMappingdto = repo.GetMany((c => c.ProjectIDSys == id)).OrderBy(c => c.MenuIDSysParent)
                .OrderBy(c => c.Sort).Select(b => new MenuDto()
                {
@@ -303,7 +305,7 @@ namespace WMS.Service
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                 var MenuProjectMappingQuery = repo.GetAllMenu(projectid, menu);
                 MenuProjectMappingdto = MenuProjectMappingQuery;
             }
@@ -316,7 +318,7 @@ namespace WMS.Service
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db,user);
                 var menu = repo.GetMenuPermission(userid, projectid);
 
                 //var menu = db.MenuProjectMappings.SqlQuery(
@@ -349,7 +351,7 @@ namespace WMS.Service
             IEnumerable<MenuDto> MenuProjectMappingdto;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IMenuRepository repo = new MenuRepository(Db);
+                IMenuRepository repo = new MenuRepository(Db,user);
                 MenuProjectMappingdto = repo.GetMany((c => c.IsDefault == i)).Select(b =>
             new MenuDto()
             {

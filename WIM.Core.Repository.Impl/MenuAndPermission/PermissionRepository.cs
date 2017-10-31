@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
@@ -16,10 +17,11 @@ namespace WIM.Core.Repository.Impl
     public class PermissionRepository : Repository<Permission> , IPermissionRepository
     {
         private CoreDbContext Db { get; set; }
-
-        public PermissionRepository(CoreDbContext context):base(context)
+        private IIdentity User { get; set; }
+        public PermissionRepository(CoreDbContext context,IIdentity identity):base(context,identity)
         {
             Db = context;
+            User = identity;
         }
 
         public IEnumerable<Permission> GetPermissionByUserProject(int ProjectID, string UserID)

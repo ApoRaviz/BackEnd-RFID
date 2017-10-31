@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.ValueObject;
@@ -15,10 +16,12 @@ namespace WIM.Core.Repository.Impl
     public class RoleRepository : Repository<Role> , IRoleRepository
     {
         private CoreDbContext Db { get; set; }
+        private IIdentity User { get; set; }
 
-        public RoleRepository(CoreDbContext context):base(context)
+        public RoleRepository(CoreDbContext context,IIdentity identity):base(context,identity)
         {
             Db = context;
+            User = identity;
         }
 
         public string GetByUserAndProject(string UserID, int ProjectIDSys)

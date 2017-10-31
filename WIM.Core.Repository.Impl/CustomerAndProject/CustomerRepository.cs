@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
@@ -15,10 +16,12 @@ namespace WIM.Core.Repository.Impl
     public class CustomerRepository : Repository<Customer_MT>, ICustomerRepository
     {
         private CoreDbContext Db { get; set; }
+        private IIdentity User { get; set; }
 
-        public CustomerRepository(CoreDbContext context) : base(context)
+        public CustomerRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
         {
-            Db = new CoreDbContext();
+            Db = context;
+            User = identity;
         }
 
         public object GetByUserID(string userid)

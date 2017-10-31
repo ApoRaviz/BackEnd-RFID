@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -18,8 +19,10 @@ namespace WMS.Service.Impl.Inspect
 {
     public class InspectService : IInspectService
     {
-        public InspectService()
+        private IIdentity user { get; set; }
+        public InspectService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<InspectType> GetInspectTypes()
@@ -27,7 +30,7 @@ namespace WMS.Service.Impl.Inspect
             IEnumerable<InspectType> inspect;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IRepository<InspectType> repo = new Repository<InspectType>(Db);
+                IRepository<InspectType> repo = new Repository<InspectType>(Db,user);
                 inspect = repo.Get();
             }
                 return inspect;
@@ -38,7 +41,7 @@ namespace WMS.Service.Impl.Inspect
             IEnumerable<Inspect_MT> inspect;
             using (WMSDbContext Db = new WMSDbContext())
             {
-               IInspectRepository repo = new InspectRepository(Db);
+               IInspectRepository repo = new InspectRepository(Db,user);
                inspect = repo.Get();
             }
                 return inspect;
@@ -49,7 +52,7 @@ namespace WMS.Service.Impl.Inspect
             Inspect_MT Inspect;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IInspectRepository repo = new InspectRepository(Db);
+                IInspectRepository repo = new InspectRepository(Db,user);
                 Inspect = repo.GetByID(id);
             }
             return Inspect;
@@ -63,8 +66,8 @@ namespace WMS.Service.Impl.Inspect
                 { 
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IInspectRepository repo = new InspectRepository(Db);
-                        repo.Insert(Inspect;
+                        IInspectRepository repo = new InspectRepository(Db,user);
+                        repo.Insert(Inspect);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -86,7 +89,7 @@ namespace WMS.Service.Impl.Inspect
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IInspectRepository repo = new InspectRepository(Db);
+                        IInspectRepository repo = new InspectRepository(Db,user);
                         repo.Update(inspect);
                         Db.SaveChanges();
                         scope.Complete();
@@ -109,7 +112,7 @@ namespace WMS.Service.Impl.Inspect
 
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-                    IInspectRepository repo = new InspectRepository(Db);
+                    IInspectRepository repo = new InspectRepository(Db,user);
                     repo.Delete(id);
                     scope.Complete();
                 }

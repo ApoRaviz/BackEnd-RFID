@@ -15,14 +15,16 @@ using WIM.Core.Common.Helpers;
 using WMS.Repository.Impl;
 using WMS.Entity.WarehouseManagement;
 using WMS.Context;
+using System.Security.Principal;
 
 namespace WMS.Master
 {
     public class WarehouseService : IWarehouseService
     {
-        public WarehouseService()
+        private IIdentity user { get; set; }
+        public WarehouseService(IIdentity identity)
         {
-
+            user = identity;
         }
 
         public IEnumerable<Warehouse_MT> GetWarehouses()
@@ -30,7 +32,7 @@ namespace WMS.Master
             IEnumerable<Warehouse_MT> WarehouseName;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IWarehouseRepository repo = new WarehouseRepository(Db);
+                IWarehouseRepository repo = new WarehouseRepository(Db,user);
                 WarehouseName = repo.Get();
             }
             
@@ -42,7 +44,7 @@ namespace WMS.Master
             Warehouse_MT Warehouse;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IWarehouseRepository repo = new WarehouseRepository(Db);
+                IWarehouseRepository repo = new WarehouseRepository(Db,user);
                 Warehouse = repo.GetByID(id);
             }
                 return Warehouse;
@@ -57,7 +59,7 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IWarehouseRepository repo = new WarehouseRepository(Db);
+                        IWarehouseRepository repo = new WarehouseRepository(Db,user);
                         repo.Insert(Warehouse);
                         Db.SaveChanges();
                         scope.Complete();
@@ -87,7 +89,7 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IWarehouseRepository repo = new WarehouseRepository(Db);
+                        IWarehouseRepository repo = new WarehouseRepository(Db,user);
                         repo.Update(Warehouse);
                         Db.SaveChanges();
                         scope.Complete();
@@ -116,7 +118,7 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IWarehouseRepository repo = new WarehouseRepository(Db);
+                        IWarehouseRepository repo = new WarehouseRepository(Db,user);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

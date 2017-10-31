@@ -11,16 +11,18 @@ using WMS.Repository;
 using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
+using System.Security.Principal;
 
 namespace WMS.Repository.Impl
 {
     public class ItemRepository : Repository<Item_MT> , IItemRepository
     {
         private WMSDbContext Db { get; set; }
-
-        public ItemRepository(WMSDbContext context):base(context)
+        private IIdentity user { get; set; }
+        public ItemRepository(WMSDbContext context,IIdentity identity):base(context,identity)
         {
             Db = context;
+            user = identity;
         }
     }
 }

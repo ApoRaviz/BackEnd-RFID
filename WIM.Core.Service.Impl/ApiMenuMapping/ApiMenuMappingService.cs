@@ -16,15 +16,17 @@ using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Common.ValueObject;
+using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
     public class ApiMenuMappingService : IApiMenuMappingService
     {
+        private IIdentity user { get; set; }
 
-        public ApiMenuMappingService()
+        public ApiMenuMappingService(IIdentity identity)
         {
-
+            user = identity;
         }
 
         public IEnumerable<ApiMenuMappingDto> GetApiMenuMapping()
@@ -32,7 +34,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<ApiMenuMapping> ApiMenuMappings;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db,user);
                 ApiMenuMappings = repo.Get();
             }
             IEnumerable<ApiMenuMappingDto> ApiMenuMappingDtos = Mapper.Map<IEnumerable<ApiMenuMapping>, IEnumerable<ApiMenuMappingDto>>(ApiMenuMappings);
@@ -44,7 +46,7 @@ namespace WIM.Core.Service.Impl
             ApiMenuMapping ApiMenuMapping;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db,user);
                 ApiMenuMapping = repo.GetByID(id);
             }
             ApiMenuMappingDto ApiMenuMappingDto = Mapper.Map<ApiMenuMapping, ApiMenuMappingDto>(ApiMenuMapping);
@@ -56,7 +58,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<ApiMenuMapping> ApiMenuMapping;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db,user);
                 string[] include = { "Api_MT" };
                 ApiMenuMapping = repo.GetWithInclude((c => c.MenuIDSys == id), include).ToList();
             }
@@ -73,7 +75,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db,user);
                         api.ApiIDSys = ApiMenuMapping.ApiIDSys;
                         api.MenuIDSys = ApiMenuMapping.MenuIDSys;
                         api.GET = ApiMenuMapping.GET;
@@ -109,7 +111,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db,user);
                         foreach (var c in ApiMenuMapping)
                         {
                             ApiMenuMapping api = new ApiMenuMapping();
@@ -148,7 +150,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db,user);
                         repo.Update(ApiMenuMapping);
                         Db.SaveChanges();
                         scope.Complete();
@@ -176,7 +178,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db,user);
                         var existedApiMenuMapping = repo.GetByID(id);
                         repo.Delete(existedApiMenuMapping);
                         Db.SaveChanges();

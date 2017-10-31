@@ -15,21 +15,23 @@ using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Repository.Impl;
-
+using System.Security.Principal;
 
 namespace WMS.Service
 {
     public class UnitService : IUnitService
     {
-        public UnitService()
+        private IIdentity user { get; set; }
+        public UnitService(IIdentity identity)
         {
+            user = identity;
         }        
         public IEnumerable<Unit_MT> GetUnits()
         {
             IEnumerable<Unit_MT> unit;
             using(WMSDbContext Db = new WMSDbContext())
             {
-                IUnitRepository repo = new UnitRepository(Db);
+                IUnitRepository repo = new UnitRepository(Db,user);
                 unit = repo.Get();
             }
             return unit;
@@ -40,7 +42,7 @@ namespace WMS.Service
             Unit_MT unit;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IUnitRepository repo = new UnitRepository(Db);
+                IUnitRepository repo = new UnitRepository(Db,user);
                 string[] include = { "Project_MT" };
                 unit = repo.GetWithInclude(u => u.UnitIDSys == id, include).SingleOrDefault();
             }
@@ -68,7 +70,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IUnitRepository repo = new UnitRepository(Db);
+                        IUnitRepository repo = new UnitRepository(Db,user);
                         repo.Insert(unit);
                         Db.SaveChanges();
                         scope.Complete();
@@ -96,7 +98,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IUnitRepository repo = new UnitRepository(Db);
+                        IUnitRepository repo = new UnitRepository(Db,user);
                         repo.Update(unit);
                         Db.SaveChanges();
                         scope.Complete();
@@ -123,7 +125,7 @@ namespace WMS.Service
             {
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-                    IUnitRepository repo = new UnitRepository(Db);
+                    IUnitRepository repo = new UnitRepository(Db,user);
                     repo.Delete(id);
                     Db.SaveChanges();
                     scope.Complete();

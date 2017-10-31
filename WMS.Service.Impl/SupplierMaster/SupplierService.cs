@@ -17,14 +17,16 @@ using WIM.Core.Context;
 using WIM.Core.Entity.SupplierManagement;
 using WMS.Repository.Impl;
 using WMS.Context;
-
+using System.Security.Principal;
 
 namespace WMS.Service
 { 
     public class SupplierService : ISupplierService
     {
-        public SupplierService()
+        private IIdentity user { get; set; }
+        public SupplierService(IIdentity identity)
         {
+            user = identity;
         }        
 
         public IEnumerable<Supplier_MT> GetSuppliers()
@@ -32,7 +34,7 @@ namespace WMS.Service
             IEnumerable<Supplier_MT> supplier; 
             using (WMSDbContext Db = new WMSDbContext())
             {
-                ISupplierRepository repo = new SupplierRepository(Db);
+                ISupplierRepository repo = new SupplierRepository(Db,user);
                 supplier = repo.Get();
             }
             return supplier;
@@ -43,7 +45,7 @@ namespace WMS.Service
             IEnumerable<Supplier_MT> supplier;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                ISupplierRepository repo = new SupplierRepository(Db);
+                ISupplierRepository repo = new SupplierRepository(Db,user);
                 supplier = repo.GetMany(c=>c.ProjectIDSys == projectID);
             }
             return supplier;
@@ -54,13 +56,13 @@ namespace WMS.Service
             Supplier_MT Supplier;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                ISupplierRepository repo = new SupplierRepository(Db);
+                ISupplierRepository repo = new SupplierRepository(Db,user);
                 Supplier = repo.GetByID(id);
             }
             return Supplier;            
         }                      
 
-        public int CreateSupplier(Supplier_MT Supplier , string username)
+        public int CreateSupplier(Supplier_MT Supplier)
         {
             using (var scope = new TransactionScope())
             {
@@ -68,7 +70,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        ISupplierRepository repo = new SupplierRepository(Db);
+                        ISupplierRepository repo = new SupplierRepository(Db,user);
                         Supplier.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
                         repo.Insert(Supplier);
                         Db.SaveChanges();
@@ -98,8 +100,8 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        ISupplierRepository repo = new SupplierRepository(Db);
-                        repo.Update(supplier;
+                        ISupplierRepository repo = new SupplierRepository(Db,user);
+                        repo.Update(supplier);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -126,7 +128,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        ISupplierRepository repo = new SupplierRepository(Db);
+                        ISupplierRepository repo = new SupplierRepository(Db,user);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();
@@ -138,8 +140,6 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-
-
                 return true;
             }
         }

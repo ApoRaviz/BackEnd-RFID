@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using WIM.Core.Context;
 using WIM.Core.Entity.Person;
 using WIM.Core.Repository;
@@ -11,10 +12,11 @@ namespace WIM.Core.Repository.Impl
     public class PersonRepository : Repository<Person_MT> , IPersonRepository
     {
         private CoreDbContext Db { get; set; }
-
-        public PersonRepository(CoreDbContext context): base(context)
+        private IIdentity User { get; set; }
+        public PersonRepository(CoreDbContext context,IIdentity identity): base(context,identity)
         {
             Db = context;
+            User = identity;
         }
 
         public IEnumerable<Person_MT> Get()

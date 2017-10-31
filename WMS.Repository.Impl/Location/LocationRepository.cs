@@ -14,7 +14,7 @@ using WMS.Entity.WarehouseManagement;
 namespace WMS.Repository.Impl
 {
 
-    public class LocationRepository : IGenericRepository<Location_MT>
+    public class LocationRepository /*: IGenericRepository<Location_MT>*/
     {
         private WMSDbContext Db { get; set; }
 

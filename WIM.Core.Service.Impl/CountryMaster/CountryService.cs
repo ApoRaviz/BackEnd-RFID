@@ -15,13 +15,16 @@ using WIM.Core.Entity.Country;
 using WIM.Core.Context;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
     public class CountryService : ICountryService
     {
-        public CountryService()
+        private IIdentity user { get; set; }
+        public CountryService(IIdentity identity)
         {
+            user = identity;
         }
 
         public IEnumerable<Country_MT> GetCountry()
@@ -29,7 +32,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Country_MT> CountryName;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICountryRepository repo = new CountryRepository(Db);
+                ICountryRepository repo = new CountryRepository(Db,user);
                 CountryName = repo.Get();
             }
             return CountryName;
@@ -40,7 +43,7 @@ namespace WIM.Core.Service.Impl
             Country_MT Country;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICountryRepository repo = new CountryRepository(Db);
+                ICountryRepository repo = new CountryRepository(Db,user);
                 Country = repo.GetByID(id);
             }
             return Country;
@@ -54,7 +57,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICountryRepository repo = new CountryRepository(Db);
+                        ICountryRepository repo = new CountryRepository(Db,user);
                         repo.Insert(Country);
                         Db.SaveChanges();
                         scope.Complete();
@@ -83,7 +86,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICountryRepository repo = new CountryRepository(Db);
+                        ICountryRepository repo = new CountryRepository(Db,user);
                         repo.Update(Country);
                         Db.SaveChanges();
                         scope.Complete();
@@ -113,7 +116,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICountryRepository repo = new CountryRepository(Db);
+                        ICountryRepository repo = new CountryRepository(Db,user);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

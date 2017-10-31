@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
@@ -14,10 +15,11 @@ namespace WIM.Core.Repository.Impl
     public class CurrencyRepository : Repository<CurrencyUnit>, ICurrencyRepository
     {
         private CoreDbContext Db;
-
-        public CurrencyRepository(CoreDbContext context) : base(context)
+        private IIdentity User { get; set; }
+        public CurrencyRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
         {
-            Db = new CoreDbContext();
+            Db = context;
+            User = identity;
         }
     }
 }
