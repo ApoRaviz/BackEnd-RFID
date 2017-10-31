@@ -454,22 +454,6 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\HRMS.Repository.Entity.csproj">
-      <Project>{2d18ff9d-6137-464e-861b-417ffa24fdf1}</Project>
-      <Name>HRMS.Repository.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HRMS.Repository.Context\HRMS.Repository.Context.csproj">
-      <Project>{69a3a794-8780-43df-8b2c-055fbdc64d2d}</Project>
-      <Name>HRMS.Repository.Context</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
-      <Project>{b7ea8787-86ea-48fc-945f-6cae2b397da4}</Project>
-      <Name>HRMS.Service.Impl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
-      <Project>{93a81e85-aca4-4809-88dc-c3d67548ef83}</Project>
-      <Name>HRMS.Service</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
