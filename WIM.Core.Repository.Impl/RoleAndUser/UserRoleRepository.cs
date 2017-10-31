@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.UserManagement;
@@ -12,67 +13,13 @@ using WIM.Core.Repository;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class UserRoleRepository : IGenericRepository<UserRoles>
+    public class UserRoleRepository : Repository<UserRoles>,IUserRoleRepository
     {
         private CoreDbContext Db { get; set; }
 
-        public UserRoleRepository()
+        public UserRoleRepository(CoreDbContext context): base(context)
         {
             Db = new CoreDbContext();
-        }
-
-        public void Delete(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(UserRoles entityToDelete)
-        {
-            Db.UserRoles.Remove(entityToDelete);
-            Db.SaveChanges();
-        }
-
-        public void Delete(Func<UserRoles, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Exists(object primaryKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserRoles> Get()
-        {
-            var userrole = from c in Db.UserRoles
-                           select c;
-            return userrole.ToList();
-        }
-
-        public UserRoles Get(Func<UserRoles, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserRoles> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserRoles GetByID(object id)
-        {
-            var userrole = from c in Db.UserRoles
-                           where c.UserID == id
-                           select c;
-            return userrole.SingleOrDefault();
-        }
-
-        public IQueryable<UserRoles> GetByID(string id)
-        {
-            var userrole = from c in Db.UserRoles
-                           where c.UserID == id
-                           select c;
-            return userrole;
         }
 
         public IEnumerable<RoleUserDto> GetRoleByUserID(string userid)
@@ -90,24 +37,7 @@ namespace WIM.Core.Repository.Impl
                                           });
             return RoleUser;
         }
-
-        public IEnumerable<UserRoleDto> GetUserByRoleID(string roleid)
-        {
-            var RoleForPermissionQuery = from row in Db.UserRoles
-                                         where row.RoleID == roleid
-                                         select row;
-            var userlist = RoleForPermissionQuery.Include(a => a.User).Select(b => new UserRoleDto()
-            {
-                UserID = b.UserID,
-                Name = b.User.Name,
-                Email = b.User.Email,
-                //PhoneNumber = b.User.PhoneNumber.ToString(),
-                PasswordHash = b.User.PasswordHash,
-                Surname = b.User.Surname,
-
-            });
-            return userlist;
-        }
+        
 
         public UserRoleDto GetUserRoleByUserID(string id)
         {
@@ -134,47 +64,7 @@ namespace WIM.Core.Repository.Impl
             return RoleUser;
         }
 
-        public UserRoles GetUserRole(string UserId, string RoleId)
-        {
-            var RoleForPermissionQuery = from row in Db.UserRoles
-                                         where row.UserID == UserId && row.RoleID == RoleId
-                                         select row;
-            return RoleForPermissionQuery.SingleOrDefault();        }
-
-        public UserRoles GetFirst(Func<UserRoles, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserRoles> GetMany(Func<UserRoles, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<UserRoles> GetManyQueryable(Func<UserRoles, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserRoles GetSingle(Func<UserRoles, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<UserRoles> GetWithInclude(Expression<Func<UserRoles, bool>> predicate, params string[] include)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(UserRoles entity)
-        {
-            Db.UserRoles.Add(entity);
-            Db.SaveChanges();
-        }
-
-        public void Update(UserRoles entityToUpdate)
-        {
-            throw new NotImplementedException();
-        }
+        
+       
     }
 }

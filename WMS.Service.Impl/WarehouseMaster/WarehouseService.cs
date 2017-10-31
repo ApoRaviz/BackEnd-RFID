@@ -14,41 +14,54 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Repository.Impl;
 using WMS.Entity.WarehouseManagement;
+using WMS.Context;
 
 namespace WMS.Master
 {
     public class WarehouseService : IWarehouseService
     {
-        private WarehouseRepository repo;
-
         public WarehouseService()
         {
-            repo = new WarehouseRepository();
+
         }
 
         public IEnumerable<Warehouse_MT> GetWarehouses()
         {
-            var WarehouseName = repo.Get();
+            IEnumerable<Warehouse_MT> WarehouseName;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IWarehouseRepository repo = new WarehouseRepository(Db);
+                WarehouseName = repo.Get();
+            }
+            
             return WarehouseName;
         }
 
         public Warehouse_MT GetWarehouseByLocIDSys(int id)
         {
-            Warehouse_MT Warehouse = repo.GetByID(id);
-            return Warehouse;
+            Warehouse_MT Warehouse;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IWarehouseRepository repo = new WarehouseRepository(Db);
+                Warehouse = repo.GetByID(id);
+            }
+                return Warehouse;
         }
 
-        public int CreateWarehouse(Warehouse_MT Warehouse)
+        public int CreateWarehouse(Warehouse_MT Warehouse , string username)
         {
             using (var scope = new TransactionScope())
             {
-                Warehouse.CreatedDate = DateTime.Now;
-                Warehouse.UpdateDate = DateTime.Now;
-                Warehouse.UserUpdate = "1";
 
                 try
                 {
-                    repo.Insert(Warehouse);
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IWarehouseRepository repo = new WarehouseRepository(Db);
+                        repo.Insert(Warehouse,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -60,19 +73,25 @@ namespace WMS.Master
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return Warehouse.WHIDSys;
             }
         }
 
-        public bool UpdateWarehouse(int id, Warehouse_MT Warehouse)
+        public bool UpdateWarehouse(Warehouse_MT Warehouse ,string username)
         {
             using (var scope = new TransactionScope())
             {
 
                 try
                 {
-                    repo.Update(Warehouse);
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IWarehouseRepository repo = new WarehouseRepository(Db);
+                        repo.Update(Warehouse, username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -84,7 +103,7 @@ namespace WMS.Master
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return true;
             }
         }
@@ -95,8 +114,13 @@ namespace WMS.Master
             {
                 try
                 {
-                    repo.Delete(id);
-                    scope.Complete();
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IWarehouseRepository repo = new WarehouseRepository(Db);
+                        repo.Delete(id);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

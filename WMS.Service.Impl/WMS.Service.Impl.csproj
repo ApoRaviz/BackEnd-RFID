@@ -102,6 +102,10 @@
       <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
       <Name>WIM.Core.Security.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Repository\WMS.Repository.csproj">
+      <Project>{D6231BD3-DF3B-4053-90C3-DD2AF10097A7}</Project>
+      <Name>WMS.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
       <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
       <Name>WMS.Common.ValueObject</Name>

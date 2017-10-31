@@ -13,9 +13,9 @@ namespace WIM.Core.Service
         IEnumerable<Person_MT> GetPersons();
         Person_MT GetPersonByPersonIDSys(string id);
         PersonDto GetPersonByPersonID(int id);
-        int CreatePerson(Person_MT Person);
-        bool UpdatePerson(string id, Person_MT Person);
-        bool UpdatePersonByID(Person_MT Person);
-        bool DeletePerson(int id);        
+        int CreatePerson(Person_MT Person,string username);
+        bool UpdatePerson(Person_MT Person,string username);
+        bool UpdatePersonByID(Person_MT Person,string username);
+        bool DeletePerson(int id , string username);        
     }
 }

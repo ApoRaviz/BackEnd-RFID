@@ -14,61 +14,81 @@ using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity.Person;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Repository.Impl;
+using WIM.Core.Repository;
 
 namespace WIM.Core.Service.Impl
 { 
     public class PersonService : IPersonService
     {
-        private PersonRepository repo;
 
         public PersonService()
         {
-            repo = new PersonRepository();
         }        
 
         public IEnumerable<Person_MT> GetPersons()
-        {           
-            return repo.Get();
+        {
+            IEnumerable<Person_MT> Person;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPersonRepository repo = new PersonRepository(Db);
+                Person = repo.Get();
+            }
+            return Person;
         }
 
         public Person_MT GetPersonByPersonIDSys(string id)
         {
-            Person_MT Person = repo.GetByUserID(id);
+            Person_MT Person;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPersonRepository repo = new PersonRepository(Db);
+                Person = repo.GetSingle(b => (Db.User.Where(a => a.UserID == id).Select(d => d.PersonIDSys).Contains(b.PersonIDSys)));
+            }
             return Person;            
         }
 
         public PersonDto GetPersonByPersonID(int id)
         {
-            var data = repo.GetByID(id);
-            PersonDto Person = new PersonDto()
+            PersonDto Person;
+            using (CoreDbContext Db = new CoreDbContext())
             {
-                PersonIDSys = data.PersonIDSys,
-                PersonID = data.PersonID,
-                Age = data.Age,
-                BirthDate = data.BirthDate,
-                CreateDate = data.CreateDate,
-                Email = data.Email,
-                Name = data.Name,
-                Surname = data.Surname,
-                Religion = data.Religion,
-                Nationality = data.Nationality,
-                Gender = data.Gender,
-                UpdateDate = data.UpdateDate,
-                UserUpdate = data.UserUpdate,
-                Mobile = data.Mobile
-                
-            };
+                IPersonRepository repo = new PersonRepository(Db);
+                var data = repo.GetByID(id);
+                Person = new PersonDto()
+                {
+                    PersonIDSys = data.PersonIDSys,
+                    PersonID = data.PersonID,
+                    Age = data.Age,
+                    BirthDate = data.BirthDate,
+                    CreateDate = data.CreateAt,
+                    Email = data.Email,
+                    Name = data.Name,
+                    Surname = data.Surname,
+                    Religion = data.Religion,
+                    Nationality = data.Nationality,
+                    Gender = data.Gender,
+                    UpdateDate = data.UpdateAt,
+                    UserUpdate = data.UpdateBy,
+                    Mobile = data.Mobile
+                };
+            }
             return Person;
         }
 
-        public int CreatePerson(Person_MT Person)
+        public int CreatePerson(Person_MT Person,string username)
         {
             using (var scope = new TransactionScope())
             {      
                 try
                 {
-                    repo.Insert(Person);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPersonRepository repo = new PersonRepository(Db);
+                        repo.Insert(Person,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -84,14 +104,18 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdatePerson(string id, Person_MT Person)
+        public bool UpdatePerson(Person_MT Person ,string username)
         {           
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(id, Person);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPersonRepository repo = new PersonRepository(Db);
+                        repo.Update(Person,username);
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -107,14 +131,19 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdatePersonByID(Person_MT Person)
+        public bool UpdatePersonByID(Person_MT Person,string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(Person);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPersonRepository repo = new PersonRepository(Db);
+                        repo.Update(Person,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -131,16 +160,23 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool DeletePerson(int id)
+        public bool DeletePerson(int id, string username)
         {
             using (var scope = new TransactionScope())
             {
                               
                 try
                 {
-                //#Oil Comment
-                //Wait for Command Delete
-                scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPersonRepository repo = new PersonRepository(Db);
+                        Person_MT person = repo.GetByID(id);
+                        repo.Update(person, username);
+                        //#Oil Comment
+                        //Wait for Command Delete
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

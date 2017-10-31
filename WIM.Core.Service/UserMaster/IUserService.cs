@@ -13,13 +13,13 @@ namespace WIM.Core.Service
     {
         IEnumerable<User> GetUsers();
         User GetUserByUserID(string id);
-        string CreateUser(User User);
+        string CreateUser(User User , string username);
         //string CreateUserAndPerson(User User,Person_MT Person);
         bool GetKeyRegisterMobile(string userid,string key);
-        string GetFirebaseTokenMobileByUserID(string userid, int keyOtp);
-        bool RegisterTokenMobile(KeyAccessModel param);
-        bool UodateTokenMobile(FirebaseTokenModel param);
-        bool UpdateUser( User User);
+        string GetFirebaseTokenMobileByUserID(string userid, int keyOtp );
+        bool RegisterTokenMobile(KeyAccessModel param , string username);
+        bool UodateTokenMobile(FirebaseTokenModel param , string username);
+        bool UpdateUser( User User , string username);
         bool DeleteUser(int id);
         List<User> getUserNotHave(string RoleID);
         User GetUserByPersonIDSys(int personIDSys);

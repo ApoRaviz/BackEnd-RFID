@@ -18,44 +18,62 @@ using WIM.Core.Entity.SupplierManagement;
 using WMS.Repository.Impl;
 using WMS.Context;
 
+
 namespace WMS.Service
 { 
     public class SupplierService : ISupplierService
     {
-        private SupplierRepository repo;
-        private WMSDbContext proc;
-
         public SupplierService()
         {
-            repo = new SupplierRepository();
-            proc = new WMSDbContext();
         }        
 
         public IEnumerable<Supplier_MT> GetSuppliers()
-        {           
-            return repo.Get();
+        {
+            IEnumerable<Supplier_MT> supplier; 
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ISupplierRepository repo = new SupplierRepository(Db);
+                supplier = repo.Get();
+            }
+            return supplier;
         }
 
         public IEnumerable<Supplier_MT> GetSuppliersByProjectID(int projectID)
         {
-            var supplier = repo.GetByProjectID(projectID);
+            IEnumerable<Supplier_MT> supplier;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ISupplierRepository repo = new SupplierRepository(Db);
+                supplier = repo.GetMany(c=>c.ProjectIDSys == projectID);
+            }
             return supplier;
         }
 
         public Supplier_MT GetSupplierBySupIDSys(int id)
-        {           
-            Supplier_MT Supplier = repo.GetByID(id);                                  
+        {
+            Supplier_MT Supplier;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ISupplierRepository repo = new SupplierRepository(Db);
+                Supplier = repo.GetByID(id);
+            }
             return Supplier;            
         }                      
 
-        public int CreateSupplier(Supplier_MT Supplier)
+        public int CreateSupplier(Supplier_MT Supplier , string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Insert(Supplier);
-                    scope.Complete();
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        ISupplierRepository repo = new SupplierRepository(Db);
+                        Supplier.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
+                        repo.Insert(Supplier,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                     }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -71,15 +89,20 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateSupplier(int id, Supplier_MT supplier)
+        public bool UpdateSupplier(Supplier_MT supplier,string username)
         {           
             using (var scope = new TransactionScope())
             {
           
                 try
                 {
-                    repo.Update(supplier);
-                    scope.Complete();
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        ISupplierRepository repo = new SupplierRepository(Db);
+                        repo.Update(supplier,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -101,8 +124,13 @@ namespace WMS.Service
             {
                 try
                 {
-                    repo.Delete(id);
-                    scope.Complete();
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        ISupplierRepository repo = new SupplierRepository(Db);
+                        repo.Delete(id);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

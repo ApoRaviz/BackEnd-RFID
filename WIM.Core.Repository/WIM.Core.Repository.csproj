@@ -50,8 +50,13 @@
     <Compile Include="MenuAndPermission\IMenuProjectMappingRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuRepository.cs" />
     <Compile Include="MenuAndPermission\IPermissionRepository.cs" />
+    <Compile Include="Personalize\IEmployeeRepository.cs" />
+    <Compile Include="Personalize\IPersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="RoleAndUser\IRoleRepository.cs" />
+    <Compile Include="RoleAndUser\IUserRepository.cs" />
+    <Compile Include="RoleAndUser\IUserRoleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">

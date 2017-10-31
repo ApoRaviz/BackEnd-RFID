@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.Report
 {
     [Table("ReportLayoutHeader_MT")]
-    public class ReportLayoutHeader_MT
+    public class ReportLayoutHeader_MT : BaseEntity
     {        
         public ReportLayoutHeader_MT()
         {
@@ -29,9 +30,6 @@ namespace WMS.Entity.Report
         public Nullable<bool> IncludeHeader { get; set; }
         public Nullable<bool> AddHeaderLayout { get; set; }
         public string HeaderLayout { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }
         public string ForTable { get; set; }
 
         public virtual ICollection<ReportLayoutDetail_MT> ReportLayoutDetail_MT { get; set; }

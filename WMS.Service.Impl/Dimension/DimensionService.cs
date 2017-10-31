@@ -8,12 +8,14 @@ using System.Transactions;
 using WIM.Core.Common.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Dimension;
+using WIM.Repository.Dimension;
+using WMS.Context;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
     public class DimensionService : IDimensionService
     {
-        private CoreDbContext Db = CoreDbContext.Create();
 
         public DimensionService()
         {
@@ -21,22 +23,36 @@ namespace WMS.Service
 
         public List<DimensionLayout_MT> GetAllDimension()
         {
-            List<DimensionLayout_MT> dimension = Db.DimensionLayout_MT.ToList();
+            List<DimensionLayout_MT> dimension;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IDimensionRepository repo = new DimensionRepository(Db);
+                dimension = repo.Get().ToList();
+            }
+
             return dimension;
         }
 
         public List<string> GetColorInSystem(int? id)
         {
-            List<DimensionLayout_MT> dimension = Db.DimensionLayout_MT.ToList();
-            if (id == null)
-                return dimension.Select(x => x.Color).ToList();
-            else
-                return dimension.Where(x => x.DimensionIDSys != id).Select(x => x.Color).ToList();
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IDimensionRepository repo = new DimensionRepository(Db);
+                List<DimensionLayout_MT> dimension = repo.Get().ToList();
+                if (id == null)
+                    return dimension.Select(x => x.Color).ToList();
+                else
+                    return dimension.Where(x => x.DimensionIDSys != id).Select(x => x.Color).ToList();
+            }
         }
 
         public DimensionLayout_MT GetDimensionLayoutByDimensionIDSys(int id)
-        {
-            DimensionLayout_MT dimension = Db.DimensionLayout_MT.Find(id);            
+        { DimensionLayout_MT dimension;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IDimensionRepository repo = new DimensionRepository(Db);
+                dimension = repo.GetByID(id);
+            }
 
             return dimension;
         }
@@ -46,21 +62,25 @@ namespace WMS.Service
             int? DimensionIDSys = 0;
             using (var scope = new TransactionScope())
             {
-                data.CreatedDate = DateTime.Now;
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
-                
-                try
+                data.CreateAt = DateTime.Now;
+                data.UpdateAt = DateTime.Now;
+                data.UpdateBy = "1";
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    DimensionIDSys = Db.ProcCreateDimensionLayout(data.FormatName, data.Unit, data.Width, data.Length, data.Height, data.Weight
-                                              , data.Type, data.Color, data.CreatedDate, data.UpdatedDate, data.UserUpdate).FirstOrDefault();
-                    Db.SaveChanges();
+                    IDimensionRepository repo = new DimensionRepository(Db);
+                    try
+                    {
+                        DimensionIDSys = Db.ProcCreateDimensionLayout(data.FormatName, data.Unit, data.Width, data.Length, data.Height, data.Weight
+                                                  , data.Type, data.Color, data.CreateAt, data.UpdateAt, data.UpdateBy).FirstOrDefault();
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();                
+
             }
             return DimensionIDSys;
         }
@@ -70,20 +90,23 @@ namespace WMS.Service
             int? updateFlag = 0;
             using (var scope = new TransactionScope())
             {
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    IDimensionRepository repo = new DimensionRepository(Db);
+                    
 
-                try
-                {
-                    updateFlag = Db.ProcUpdateDimensionLayout(data.DimensionIDSys, data.FormatName, data.Unit, data.Width, data.Length, data.Height, data.Weight
-                                              , data.Type, data.Color, data.UpdatedDate, data.UserUpdate).FirstOrDefault();
-                    Db.SaveChanges();
+                    try
+                    {
+                        updateFlag = Db.ProcUpdateDimensionLayout(data.DimensionIDSys, data.FormatName, data.Unit, data.Width, data.Length, data.Height, data.Weight
+                                                  , data.Type, data.Color, data.UpdateAt, data.UpdateBy).FirstOrDefault();
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
             }
             return updateFlag;
         }
@@ -101,8 +124,12 @@ namespace WMS.Service
 
         public List<DimensionLayout_MT> GetBlock()
         {
-            List<DimensionLayout_MT> dimension = Db.DimensionLayout_MT.ToList();
-
+            List<DimensionLayout_MT> dimension;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IDimensionRepository repo = new DimensionRepository(Db);
+                dimension =repo.Get().ToList();
+            }
             return dimension;
         }
     }

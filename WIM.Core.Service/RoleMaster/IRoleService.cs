@@ -15,8 +15,8 @@ namespace WIM.Core.Service
         Role GetRoleByLocIDSys(string id);
         Role GetRoleByName(string name);
         List<RolePermissionDto> GetRoleNotPermissionID(string id);
-        string CreateRole(Role Role);
-        bool UpdateRole(string id, Role Role);
+        string CreateRole(Role Role , string username);
+        bool UpdateRole(Role Role , string username);
         bool DeleteRole(string id);
         List<RolePermissionDto> GetRoleByPermissionID(string id);
         List<Role> GetRoleByProjectUser(int id ,string userid);

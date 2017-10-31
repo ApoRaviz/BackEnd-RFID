@@ -65,14 +65,14 @@ namespace WMS.Service.Impl.WarehouseMaster
 
             using (var scope = new TransactionScope())
             {
-                data.CreatedDate = DateTime.Now;
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.CreatedDate = DateTime.Now;
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 try
                 {
                     ZoneSysID = Db.ProcCreateZoneLayout(data.ZoneName, data.Warehouse, data.Area, data.TotalFloor
-                                              , data.CreatedDate, data.UpdatedDate, data.UserUpdate, sb.ToString()).FirstOrDefault();
+                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
@@ -93,13 +93,13 @@ namespace WMS.Service.Impl.WarehouseMaster
 
             using (var scope = new TransactionScope())
             {
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 try
                 {
                     Db.ProcUpdateZoneLayout(data.ZoneIDSys, data.ZoneName, data.Warehouse, data.Area, data.TotalFloor
-                                              , data.UpdatedDate, data.UserUpdate, sb.ToString());
+                                              , data.UpdateAt, data.UpdateBy, sb.ToString());
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)

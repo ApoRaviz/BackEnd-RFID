@@ -53,6 +53,7 @@ namespace WIM.Core.Repository.Impl
             entity.CreateAt = DateTime.Now;
             entity.UpdateBy = username;
             entity.UpdateAt = DateTime.Now;
+            entity.IsActive = true;
 
             DbSet.Add(entity);
             return entity;

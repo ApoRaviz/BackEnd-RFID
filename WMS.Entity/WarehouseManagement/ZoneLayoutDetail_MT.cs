@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.WarehouseManagement
 {
     [Table("ZoneLayoutDetail_MT")]
-    public class ZoneLayoutDetail_MT
+    public class ZoneLayoutDetail_MT : BaseEntity
     {
         [Key]
         public int ZoneIDSys { get; set; }

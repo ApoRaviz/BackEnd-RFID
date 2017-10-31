@@ -9,17 +9,20 @@ using WIM.Core.Context;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
+using WMS.Repository;
 using WMS.Common;
+using WMS.Context;
 
 namespace WMS.Repository.Impl
 {
-    public class SupplierRepository : IGenericRepository<Supplier_MT>
+    public class SupplierRepository : Repository<Supplier_MT> , ISupplierRepository
     {
-        private CoreDbContext Db { get; set; }
+        private WMSDbContext Db { get; set; }
 
-        public SupplierRepository()
+        public SupplierRepository( WMSDbContext context):base(context)
         {
-            Db = new CoreDbContext();
+            Db = context;
         }
 
         public IEnumerable<Supplier_MT> Get()
@@ -48,10 +51,7 @@ namespace WMS.Repository.Impl
         public void Insert(Supplier_MT entity)
         {
             entity.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
-            entity.CreatedDate = DateTime.Now;
-            entity.UpdateDate = DateTime.Now;
-            entity.UserUpdate = "1";
-            entity.Active = 1;
+
             Db.Supplier_MT.Add(entity);
             Db.SaveChanges();
         }
@@ -59,15 +59,8 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var existedSupplier = this.GetByID(id);
-            existedSupplier.Active = 0;
-            existedSupplier.UpdateDate = DateTime.Now;
-            existedSupplier.UserUpdate = "1";
+            //existedSupplier.Active = 0;
             Db.SaveChanges();
-        }
-
-        public void Delete(Supplier_MT entityToDelete)
-        {
-            throw new NotImplementedException();
         }
 
         public void Update(Supplier_MT entityToUpdate)
@@ -86,54 +79,8 @@ namespace WMS.Repository.Impl
             existedSupplier.TelOffice = entityToUpdate.TelOffice;
             existedSupplier.TelExt = entityToUpdate.TelExt;
             existedSupplier.Mobile = entityToUpdate.Mobile;
-            existedSupplier.UpdateDate = DateTime.Now;
-            existedSupplier.UserUpdate = "1";
             Db.SaveChanges();
         }
 
-        public IEnumerable<Supplier_MT> GetMany(Func<Supplier_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Supplier_MT> GetManyQueryable(Func<Supplier_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Supplier_MT Get(Func<Supplier_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Func<Supplier_MT, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Supplier_MT> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Supplier_MT> GetWithInclude(Expression<Func<Supplier_MT, bool>> predicate, params string[] include)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Exists(object primaryKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Supplier_MT GetSingle(Func<Supplier_MT, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Supplier_MT GetFirst(Func<Supplier_MT, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

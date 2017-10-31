@@ -13,44 +13,67 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
 namespace WIM.Core.Service.Impl
 {
 
     public class EmployeeService : IEmployeeService
     {
-        private EmployeeRepository repo;
 
         public EmployeeService()
         {
-            repo = new EmployeeRepository();
         }
 
         public IEnumerable<Employee_MT> GetEmployees()
         {
-            return repo.Get();
+            IEnumerable<Employee_MT> employee;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IEmployeeRepository repo = new EmployeeRepository(Db);
+                employee = repo.Get();
+            }
+            return employee;
         }
 
         public Employee_MT GetEmployeeByEmployeeIDSys(string id)
         {
-            Employee_MT Employee = repo.GetByID(id);
+            Employee_MT Employee;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IEmployeeRepository repo = new EmployeeRepository(Db);
+                string[] include = { "Person_MT" };
+                Employee = repo.GetWithInclude((c => c.EmID == id),include).SingleOrDefault();
+            }
             return Employee;
         }
 
         public Employee_MT GetEmployeeByPerson(int id)
         {
-            Employee_MT Employee = repo.GetByPersonID(id);
+            Employee_MT Employee;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IEmployeeRepository repo = new EmployeeRepository(Db);
+                string[] include = { "Person_MT" };
+                Employee = repo.GetWithInclude((c => c.PersonIDSys == id), include).SingleOrDefault();
+            }
             return Employee;
         }
 
-        public string CreateEmployee(Employee_MT Employee)
+        public string CreateEmployee(Employee_MT Employee , string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Insert(Employee);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        repo.Insert(Employee, username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -66,14 +89,19 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateEmployee(string id, Employee_MT Employee)
+        public bool UpdateEmployee(Employee_MT Employee , string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(Employee);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        repo.Update(Employee,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -89,14 +117,19 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateEmployeeByID(Employee_MT Employee)
+        public bool UpdateEmployeeByID(Employee_MT Employee,string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(Employee);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        repo.Update(Employee,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -112,19 +145,24 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool DeleteEmployee(string id)
+        public bool DeleteEmployee(string id ,string username)
         {
             using (var scope = new TransactionScope())
             {
-                var existedEmployee = repo.GetByID(id);
-                existedEmployee.Active = 0;
-                existedEmployee.UpdateDate = DateTime.Now;
-                existedEmployee.UserUpdate = "1";
-
                 try
                 {
-                    repo.Update(existedEmployee);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        var existedEmployee = repo.GetByID(id);
+                        //IsActive = False;
+
+
+
+                        repo.Update(existedEmployee, username);
+                        scope.Complete();
+                        Db.SaveChanges();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

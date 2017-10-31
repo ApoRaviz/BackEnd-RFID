@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Globalization;
@@ -18,37 +17,53 @@ using WIM.Core.Common.Helpers;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
 namespace WIM.Core.Service.Impl
 {
     public class UserRoleService : IUserRoleService
     {
-        private UserRoleRepository repo;
-
         public UserRoleService()
         {
-            repo = new UserRoleRepository();
         }        
 
         public IEnumerable<UserRoles> GetUserRoles()
-        {           
-            return repo.Get();
+        {
+            IEnumerable<UserRoles> role;
+            using(CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRoleRepository repo = new UserRoleRepository(Db);
+                role = repo.Get();
+            }
+
+            return role;
         }
 
         public UserRoles GetUserRoleByLocIDSys(int id)
-        {           
-            UserRoles UserRole = repo.GetByID(id);                                  
+        {
+            UserRoles UserRole;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRoleRepository repo = new UserRoleRepository(Db);
+                UserRole = repo.GetByID(id);
+            }
             return UserRole;            
         }                      
 
-        public string CreateUserRole(UserRoles UserRole)
+        public string CreateUserRole(UserRoles UserRole,string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Insert(UserRole);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IUserRoleRepository repo = new UserRoleRepository(Db);
+                        repo.Insert(UserRole, username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -64,14 +79,18 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateUserRole(int id, UserRoles UserRole)
+        public bool UpdateUserRole(UserRoles UserRole ,string username)
         {           
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(UserRole);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IUserRoleRepository repo = new UserRoleRepository(Db);
+                        repo.Update(UserRole,username);
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -93,9 +112,13 @@ namespace WIM.Core.Service.Impl
             {
                 try
                 {
-                    var existedUserRole = repo.GetByID(id);
-                    repo.Delete(id);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IUserRoleRepository repo = new UserRoleRepository(Db);
+                        var existedUserRole = repo.GetByID(id);
+                        repo.Delete(id);
+                        scope.Complete();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,28 +144,58 @@ namespace WIM.Core.Service.Impl
         public List<RoleUserDto> GetRoleByUserID(string userid)
         {
             // #JobComment
-            List<RoleUserDto> RoleUser = repo.GetRoleByUserID(userid).ToList();
+            List<RoleUserDto> RoleUser;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRoleRepository repo = new UserRoleRepository(Db);
+                RoleUser = repo.GetRoleByUserID(userid).ToList();
+            }
             return RoleUser;
         }
 
         public List<UserRoleDto> GetUserByRoleID(string roleid)
         {
-            var RoleForPermissionQuery = repo.GetUserByRoleID(roleid);
+            List<UserRoleDto> RoleForPermissionQuery;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRoleRepository repo = new UserRoleRepository(Db);
+                string[] include = { "User" };
+                RoleForPermissionQuery = repo.GetWithInclude((row => row.RoleID == roleid),include).Select(b => new UserRoleDto()
+                {
+                    UserID = b.UserID,
+                    Name = b.User.Name,
+                    Email = b.User.Email,
+                    PhoneNumber = b.User.PhoneNumber,
+                    PasswordHash = b.User.PasswordHash,
+                    Surname = b.User.Surname,
+
+                }).ToList();
+            }
             return RoleForPermissionQuery.ToList();
         }
 
         public UserRoleDto GetUserRoleByUserID(string id)
         {
-            UserRoleDto UserRole = repo.GetUserRoleByUserID(id);
+            UserRoleDto UserRole;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRoleRepository repo = new UserRoleRepository(Db);
+                UserRole = repo.GetUserRoleByUserID(id);
+            }
             return UserRole;
         }
         public RoleUserDto GetRoleUserByRoleID(string id)
         {
-            RoleUserDto RoleUser = repo.GetRoleUserByRoleID(id);
+            RoleUserDto RoleUser;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRoleRepository repo = new UserRoleRepository(Db);
+                RoleUser = repo.GetRoleUserByRoleID(id);
+            }
             return RoleUser;
         }
 
-        public string CreateUserRoles(string userid , string roleid)
+        public string CreateUserRoles(string userid , string roleid , string username)
         {
             using (var scope = new TransactionScope())
             {
@@ -151,8 +204,13 @@ namespace WIM.Core.Service.Impl
                 data.UserID = userid;
                 try
                 {
-                    repo.Insert(data);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IUserRoleRepository repo = new UserRoleRepository(Db);
+                        repo.Insert(data,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -168,7 +226,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public string CreateRoleUsers(string userid, string roleid)
+        public string CreateRoleUsers(string userid, string roleid, string username)
         {
             using (var scope = new TransactionScope())
             {
@@ -177,8 +235,13 @@ namespace WIM.Core.Service.Impl
                 data.UserID = userid;
                 try
                 {
-                    repo.Insert(data);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IUserRoleRepository repo = new UserRoleRepository(Db);
+                        repo.Insert(data , username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -196,23 +259,28 @@ namespace WIM.Core.Service.Impl
 
         public bool DeleteRolePermission(string UserId, string RoleId)
         {
-            var RoleForPermissionQuery = repo.GetUserRole(UserId, RoleId);
-            if (RoleForPermissionQuery != null)
+            using (CoreDbContext Db = new CoreDbContext())
             {
-                using (var scope = new TransactionScope())
+                IUserRoleRepository repo = new UserRoleRepository(Db);
+                var RoleForPermissionQuery = repo.GetSingle(row => row.UserID == UserId && row.RoleID == RoleId);
+                if (RoleForPermissionQuery != null)
                 {
-                    /*RolePermission temp = RoleForPermissionQuery.Select(b => new RolePermission()
+                    using (var scope = new TransactionScope())
                     {
-                        RoleID = b.RoleID,
-                        PermissionID = b.PermissionID
-                    }).SingleOrDefault();*/
-                    UserRoles temp = new UserRoles();
-                    temp = RoleForPermissionQuery;
-                    if (temp != null)
-                    {
-                        repo.Delete(temp);
-                        scope.Complete();
-                        return true;
+                        /*RolePermission temp = RoleForPermissionQuery.Select(b => new RolePermission()
+                        {
+                            RoleID = b.RoleID,
+                            PermissionID = b.PermissionID
+                        }).SingleOrDefault();*/
+                        UserRoles temp = new UserRoles();
+                        temp = RoleForPermissionQuery;
+                        if (temp != null)
+                        {
+                            repo.Delete(temp);
+                            Db.SaveChanges();
+                            scope.Complete();
+                            return true;
+                        }
                     }
                 }
             }

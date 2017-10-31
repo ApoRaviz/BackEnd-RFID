@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.ImportManagement
 {
     [Table("ImportDefinitionHeader_MT")]
-    public class ImportDefinitionHeader_MT
+    public class ImportDefinitionHeader_MT : BaseEntity
     {
 
         public ImportDefinitionHeader_MT()
@@ -26,9 +27,6 @@ namespace WMS.Entity.ImportManagement
         public Nullable<int> MaxHeading { get; set; }
         public string Encoding { get; set; }
         public Nullable<bool> SkipFirstRecode { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }
         
         public virtual ICollection<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
         public List<ImportDefinitionDetail_MT> detail;

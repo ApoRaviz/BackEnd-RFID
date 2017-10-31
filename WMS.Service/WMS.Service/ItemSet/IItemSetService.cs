@@ -12,10 +12,10 @@ namespace WMS.Service
     {
         IEnumerable<ItemSetDto> GetItemSets();
         ItemSetDto GetItemSet(int id);      
-        int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp);
-        int CreateItemSet(ItemSet_MT ItemSet);
-        int CreateItemSet(ItemSetDto ItemSet);
-        bool UpdateItemSet(int id, ItemSet_MT ItemSet);
+        int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp , string username);
+        int CreateItemSet(ItemSet_MT ItemSet , string username);
+        int CreateItemSet(ItemSetDto ItemSet , string username);
+        bool UpdateItemSet(ItemSet_MT ItemSet , string username);
         bool DeleteItemSet(int id);
         bool DeleteItemSetDto(int id);
     }

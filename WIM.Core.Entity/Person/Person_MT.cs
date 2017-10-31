@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Entity.Person
@@ -25,9 +23,6 @@ namespace WIM.Core.Entity.Person
         public string Nationality { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
-        //public System.DateTime UpdateDate { get; set; }
-        //public System.DateTime CreateDate { get; set; }
-        //public string UserUpdate { get; set; }
 
     }
    

@@ -10,6 +10,8 @@ using WIM.Core.Common.Validation;
 using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Service;
+using WIM.Core.Common.ValueObject;
 
 namespace WMS.WebApi.Controllers
 {
@@ -89,7 +91,7 @@ namespace WMS.WebApi.Controllers
             {
                 string id = "Not have data";
                 if(ApiMenuMapping != null)
-                 id = ApiMenuMappingService.CreateApiMenuMapping(ApiMenuMapping);
+                 id = ApiMenuMappingService.CreateApiMenuMapping(ApiMenuMapping,User.Identity.GetUserName());
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -108,7 +110,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ApiMenuMappingService.UpdateApiMenuMapping(id, ApiMenuMapping);
+                bool isUpated = ApiMenuMappingService.UpdateApiMenuMapping(ApiMenuMapping, User.Identity.GetUserName());
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

@@ -34,6 +34,7 @@ namespace WIM.Core.Entity.UserManagement
         public string KeyAccess { get; set; }
         public Nullable<System.DateTime> KeyAccessDate { get; set; }
         public string TokenMobile { get; set; }
+        public string PhoneNumber { get; set; }
         //public DateTime CreateDate { get; set; }
         //public DateTime UpdateDate { get; set; }
         public string Surname { get; set; }

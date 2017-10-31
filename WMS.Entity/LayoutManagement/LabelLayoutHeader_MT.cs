@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.LayoutManagement
 {
     [Table("LabelLayoutHeader_MT")]
-    public class LabelLayoutHeader_MT
+    public class LabelLayoutHeader_MT : BaseEntity
     {        
         public LabelLayoutHeader_MT()
         {
@@ -24,9 +25,6 @@ namespace WMS.Entity.LayoutManagement
         public string WidthUnit { get; set; }
         public Nullable<decimal> Height { get; set; }
         public string HeightUnit { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }
         public string ForTable { get; set; }
         
         public virtual ICollection<LabelLayoutDetail_MT> LabelLayoutDetail_MT { get; set; }

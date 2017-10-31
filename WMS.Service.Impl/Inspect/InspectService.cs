@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Validation;
+using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using WIM.Repository.Inspect;
 using WMS.Context;
 using WMS.Entity.InspectionManagement;
 using WMS.Repository.Impl;
@@ -16,64 +18,86 @@ namespace WMS.Service.Impl.Inspect
 {
     public class InspectService : IInspectService
     {
-
-        private InspectRepository repo;
-
         public InspectService()
         {
-            repo = new InspectRepository ();
         }
 
         public IEnumerable<InspectType> GetInspectTypes()
         {
-            return repo.GetType();
+            IEnumerable<InspectType> inspect;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IRepository<InspectType> repo = new Repository<InspectType>(Db);
+                inspect = repo.Get();
+            }
+                return inspect;
         } 
 
         public IEnumerable<Inspect_MT> GetInspects()
         {
-            return repo.Get();
+            IEnumerable<Inspect_MT> inspect;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+               IInspectRepository repo = new InspectRepository(Db);
+               inspect = repo.Get();
+            }
+                return inspect;
         }
 
         public Inspect_MT GetInspectBySupIDSys(int id)
         {
-            Inspect_MT Inspect = repo.GetByID(id);
+            Inspect_MT Inspect;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IInspectRepository repo = new InspectRepository(Db);
+                Inspect = repo.GetByID(id);
+            }
             return Inspect;
         }
 
-        public int CreateInspect(Inspect_MT Inspect)
+        public int CreateInspect(Inspect_MT Inspect,string username)
         {
             using (var scope = new TransactionScope())
             {
-                Inspect.CreatedDate = DateTime.Now;
-                Inspect.UpdateDate = DateTime.Now;
-                Inspect.UserUpdate = "1";
                 try
-                {
-                    repo.Insert(Inspect);
+                { 
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IInspectRepository repo = new InspectRepository(Db);
+                        repo.Insert(Inspect,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                scope.Complete();
+                
                 return Inspect.InspectIDSys;
             }
         }
 
-        public bool UpdateInspect(int id, Inspect_MT inspect)
+        public bool UpdateInspect(Inspect_MT inspect , string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(inspect);
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IInspectRepository repo = new InspectRepository(Db);
+                        repo.Update(inspect,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
 
                 }
                 catch (DbEntityValidationException e)
                 {
                     HandleValidationException(e);
                 }
-                scope.Complete();
+                
                 return true;
             }
         }
@@ -82,8 +106,13 @@ namespace WMS.Service.Impl.Inspect
         {
             using (var scope = new TransactionScope())
             {
-                repo.Delete(id);
-                scope.Complete();
+
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    IInspectRepository repo = new InspectRepository(Db);
+                    repo.Delete(id);
+                    scope.Complete();
+                }
                 return true;
             }
         }

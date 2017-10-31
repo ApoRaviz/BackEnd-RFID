@@ -15,6 +15,9 @@ using WIM.Core.Common.Helpers;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Context;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
+using WIM.Core.Entity.MenuManagement;
 
 namespace WIM.Core.Service.Impl
 {
@@ -27,17 +30,27 @@ namespace WIM.Core.Service.Impl
 
         public IEnumerable<Permission> GetPermissions()
         {
-            using ()
-                return repo.Get();
+            IEnumerable<Permission> permission;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPermissionRepository repo = new PermissionRepository(Db);
+                permission = repo.Get();
+            }
+                return permission;
         }
 
         public Permission GetPermissionByLocIDSys(string id)
         {
-            Permission Permission = repo.GetByID(id);
+            Permission Permission;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPermissionRepository repo = new PermissionRepository(Db);
+                Permission = repo.GetByID(id);
+            }
             return Permission;
         }
 
-        public string CreatePermission(Permission Permission)
+        public string CreatePermission(Permission Permission , string username)
         {
             using (var scope = new TransactionScope())
             {
@@ -45,8 +58,13 @@ namespace WIM.Core.Service.Impl
 
                 try
                 {
-                    repo.Insert(Permission);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPermissionRepository repo = new PermissionRepository(Db);
+                        repo.Insert(Permission , username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -62,14 +80,19 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdatePermission(string id, Permission Permission)
+        public bool UpdatePermission(Permission Permission , string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(Permission);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPermissionRepository repo = new PermissionRepository(Db);
+                        repo.Update(Permission,username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -91,8 +114,13 @@ namespace WIM.Core.Service.Impl
             {
                 try
                 {
-                    repo.Delete(id);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPermissionRepository repo = new PermissionRepository(Db);
+                        repo.Delete(id);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,7 +149,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public string CreateRolePermission(string PermissionId, string RoleId)
+        public string CreateRolePermission(string PermissionId, string RoleId , string username)
         {
             using (var scope = new TransactionScope())
             {
@@ -131,8 +159,13 @@ namespace WIM.Core.Service.Impl
                 data.RoleID = RoleId;
                 try
                 {
-                    repo.InsertRolePermission(data);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                        repo.Insert(data , username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -149,22 +182,25 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public string CreateRolePermission(string RoleId, List<PermissionTree> tree)
+        public string CreateRolePermission(string RoleId, List<PermissionTree> tree, string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    //Permission.Id = db.ProcGetNewID("RL").FirstOrDefault().Substring(0, 13);
-                    foreach (var c in tree)
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
-                        RolePermission data = new RolePermission();
-                        data.PermissionID = c.PermissionID;
-                        data.RoleID = RoleId;
-                        repo.InsertRolePermission(data);
+                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                        foreach (var c in tree)
+                        {
+                            RolePermission data = new RolePermission();
+                            data.PermissionID = c.PermissionID;
+                            data.RoleID = RoleId;
+                            repo.Insert(data,username);
+                        }
+                        Db.SaveChanges();
+                        scope.Complete();
                     }
-
-                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -183,27 +219,33 @@ namespace WIM.Core.Service.Impl
 
         public bool DeleteRolePermission(string PermissionId, string RoleId)
         {
-            var RoleForPermissionQuery = repo.GetRolePermissionQuery(PermissionId, RoleId);
-            if (RoleForPermissionQuery != null)
+            using (CoreDbContext Db = new CoreDbContext())
             {
-                using (var scope = new TransactionScope())
+                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                RolePermission id = new RolePermission() {RoleID = RoleId , PermissionID = PermissionId };
+                var RoleForPermissionQuery = repo.GetByID(id);
+                if (RoleForPermissionQuery != null)
                 {
-                    RolePermission temp = new RolePermission();
-                    temp = RoleForPermissionQuery.SingleOrDefault();
-                    if (temp != null)
+                    using (var scope = new TransactionScope())
                     {
-                        try
+                        RolePermission temp = new RolePermission();
+                        temp = RoleForPermissionQuery;
+                        if (temp != null)
                         {
-                            repo.DeleteRolePermission(temp);
-                            scope.Complete();
+                            try
+                            {
+                                repo.Delete(temp);
+                                Db.SaveChanges();
+                                scope.Complete();
+                            }
+                            catch (DbUpdateConcurrencyException)
+                            {
+                                scope.Dispose();
+                                ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                                throw ex;
+                            }
+                            return true;
                         }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            scope.Dispose();
-                            ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                            throw ex;
-                        }
-                        return true;
                     }
                 }
             }
@@ -212,31 +254,37 @@ namespace WIM.Core.Service.Impl
 
         public List<PermissionTree> GetPermissionTree(int projectid)
         {
-            var menu = repo.GetRolePermissionNotApiQuery(projectid);
-            var menutemp = repo.GetMenuByPermissionsinProject(projectid);
-            List <PermissionTree> menutree = menutemp.Select(b => new PermissionTree()
+            List<PermissionTree> menutree;
+            using (CoreDbContext Db = new CoreDbContext())
             {
-                PermissionName = b.MenuName,
-                PermissionID = b.MenuIDSys.ToString()
-            }).ToList();
-            List<PermissionTree> permissionlist = menu.Select(b => new PermissionTree()
-            {
-                PermissionID = b.PermissionID,
-                PermissionName = b.PermissionName,
-                MenuIDSys = b.MenuIDSys,
-                Method = b.Method
-            }).ToList();
-            List<List<PermissionTree>> listpermission = permissionlist.GroupBy(a => a.MenuIDSys).Select(grp => grp.ToList()).ToList();
-            List<PermissionTree> temp;
-            Console.Write("abc");
-            for (int i = 0; i < menutree.Count; i++)
-            {
-                for (int j = 0; j < listpermission.Count; j++)
+                IPermissionRepository repo = new PermissionRepository(Db);
+                IRepository<Menu_MT> repomenu = new Repository<Menu_MT>(Db);
+                var menu = repo.GetMany(c => c.ProjectIDSys == projectid && !(Db.ApiMenuMapping.Where(a => a.Type =="A").Select(a => a.ApiIDSys+a.MenuIDSys).Contains(c.ApiIDSys+c.MenuIDSys)));
+                var menutemp = repomenu.GetMany(c => (Db.Permission.Where(a => a.ProjectIDSys == projectid).Select(b => b.MenuIDSys)).Contains(c.MenuIDSys));
+                menutree = menutemp.Select(b => new PermissionTree()
                 {
-                    temp = listpermission[j];
-                    if (menutree[i].PermissionID == temp[0].MenuIDSys.ToString())
+                    PermissionName = b.MenuName,
+                    PermissionID = b.MenuIDSys.ToString()
+                }).ToList();
+                List<PermissionTree> permissionlist = menu.Select(b => new PermissionTree()
+                {
+                    PermissionID = b.PermissionID,
+                    PermissionName = b.PermissionName,
+                    MenuIDSys = b.MenuIDSys,
+                    Method = b.Method
+                }).ToList();
+                List<List<PermissionTree>> listpermission = permissionlist.GroupBy(a => a.MenuIDSys).Select(grp => grp.ToList()).ToList();
+                List<PermissionTree> temp;
+                Console.Write("abc");
+                for (int i = 0; i < menutree.Count; i++)
+                {
+                    for (int j = 0; j < listpermission.Count; j++)
                     {
-                        menutree[i].Group = temp;
+                        temp = listpermission[j];
+                        if (menutree[i].PermissionID == temp[0].MenuIDSys.ToString())
+                        {
+                            menutree[i].Group = temp;
+                        }
                     }
                 }
             }
@@ -245,70 +293,88 @@ namespace WIM.Core.Service.Impl
 
         public List<Permission> GetPermissionByProjectID(int ProjectID)
         {
-            var temp = repo.GetPermissionByProjID(ProjectID);
-            List<Permission> permission = temp.ToList();
+            List<Permission> permission;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPermissionRepository repo = new PermissionRepository(Db);
+                var temp = repo.GetMany(c => c.ProjectIDSys == ProjectID);
+                permission = temp.ToList();
+            }
             return permission;
         }
 
         public List<Permission> GetPermissionByMenuID(int MenuIDSys, int ProjectIDSys)
         {
-            var temp = repo.GetPermissionByMenuID(MenuIDSys, ProjectIDSys);
-            List<Permission> permission = temp.ToList();
+            List<Permission> permission;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPermissionRepository repo = new PermissionRepository(Db);
+                var temp = repo.GetMany((c => c.MenuIDSys == MenuIDSys && c.ProjectIDSys == ProjectIDSys
+                && !(Db.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
+                permission = temp.ToList();
+            }
             return permission;
         }
 
         public List<Permission> GetPermissionAuto(int MenuIDSys, int ProjectIDSys)
         {
-            var temp = repo.GetPermissionAuto(MenuIDSys, ProjectIDSys);
-            List<Permission> permission = temp.ToList();
+            List<Permission> permission;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPermissionRepository repo = new PermissionRepository(Db);
+                var temp = repo.GetManyQueryable((c => c.MenuIDSys == MenuIDSys && c.ProjectIDSys == ProjectIDSys
+                && (Db.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
+                permission = temp.ToList();
+            }
             return permission;
         }
 
         public List<Permission> GetPermissionByRoleID(string RoleID, int ProjectIDSys)
         {
-            var temp = repo.GetPermissionByRoleID(RoleID, ProjectIDSys);
-            List<Permission> permission = temp.ToList();
+            List<Permission> permission;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPermissionRepository repo = new PermissionRepository(Db);
+                var temp = repo.GetManyQueryable(c => c.ProjectIDSys == ProjectIDSys && 
+                (Db.RolePermission.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
+                permission = temp.ToList();
+            }
             return permission;
         }
 
         public bool DeleteAllInRole(string permissionID)
         {
-            List<RolePermissionDto> temp = new List<RolePermissionDto>();
-            if (permissionID != null)
+            List<RolePermission> temp = new List<RolePermission>();
+            using (CoreDbContext Db = new CoreDbContext())
             {
-                var temp1 = repo.GetRolePermissionByPerID(permissionID);
-                var y = temp1.ToList();
-                temp = temp1.Select(b => new RolePermissionDto()
+                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                if (permissionID != null)
                 {
-                    RoleID = b.RoleID,
-                    Name = b.PermissionID
-                }).ToList();
-            }
-            RolePermission x = new RolePermission();
+                    temp = repo.GetMany(c => c.PermissionID == permissionID).ToList();
+                }
+                RolePermission x = new RolePermission();
 
-            using (var scope = new TransactionScope())
-            {
-                try
+                using (var scope = new TransactionScope())
                 {
-                    for (int i = 0; i < temp.Count; i++)
-                {
-
-                    x.RoleID = temp[i].RoleID;
-                    x.PermissionID = temp[i].Name;
-                    repo.Delete(x);
-                }
-                
-                    scope.Complete();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
-                }
-                catch (DbUpdateException)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
+                    try
+                    {
+                        for (int i = 0; i < temp.Count; i++)
+                        {
+                            repo.Delete(x);
+                        }
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        throw ex;
+                    }
+                    catch (DbUpdateException)
+                    {
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        throw ex;
+                    }
                 }
             }
             return true;
@@ -316,9 +382,13 @@ namespace WIM.Core.Service.Impl
 
         public List<Permission> GetPermissionByProjectID(int ProjectID, string UserID)
         {
-
-            var temp = repo.GetPermissionByUserProject(ProjectID, UserID);
-            List <Permission> permission = temp.ToList();
+            List<Permission> permission;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IPermissionRepository repo = new PermissionRepository(Db);
+                var temp = repo.GetPermissionByUserProject(ProjectID, UserID);
+                permission = temp.ToList();
+            }
             return permission;
         }
 

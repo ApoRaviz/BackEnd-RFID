@@ -18,50 +18,66 @@ using WIM.Core.Entity.Person;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
 namespace WIM.Core.Service.Impl
 {
     public class UserService : IUserService
     {
-        private UserRepository repo;
-        private UserRoleRepository repoRole;
         private object param = new { };
 
         public UserService()
         {
-            repo = new UserRepository();
-            repoRole = new UserRoleRepository();
         }
 
         public IEnumerable<User> GetUsers()
         {
-            return repo.Get();
+            IEnumerable<User> users;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRepository repo = new UserRepository(Db);
+                users = repo.Get();
+            }
+            return users;
         }
 
         public User GetUserByUserID(string id)
         {
-            User User = repo.GetByID(id);
+            User User;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRepository repo = new UserRepository(Db);
+                User = repo.GetByID(id);
+            }
             return User;
-        }        
+        }
 
         public string GetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
         {
             User u;
             try
             {
-                u = repo.GetByID(userid);
-                if (keyOtp > 99999)
+                using (CoreDbContext Db = new CoreDbContext())
                 {
-                    u.KeyOTP = keyOtp;
-                    u.KeyOTPDate = DateTime.Now;
-                    repo.Update(u);
+                    IUserRepository repo = new UserRepository(Db);
+                    u = repo.GetByID(userid);
+                    if (keyOtp > 99999)
+                    {
+                        u.KeyOTP = keyOtp;
+                        u.KeyOTPDate = DateTime.Now;
+                        //Oil Comment
+                        repo.Update(u, "System");
+                        Db.SaveChanges();
+                    }
                 }
-                
-            }catch(ValidationException e)
+
+            }
+            catch (ValidationException e)
             {
                 throw e;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new ValidationException();
             }
@@ -70,37 +86,48 @@ namespace WIM.Core.Service.Impl
 
         public object GetCustonersByUserID(string userid)
         {
-            var query = repo.GetCustomerByUser(userid);
+            object query;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRepository repo = new UserRepository(Db);
+                query = repo.GetCustomerByUser(userid);
+            }
             return query;
         }
 
-        public string CreateUser(User User)
+        public string CreateUser(User User, string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    var userole = User.UserRoles;
-                    User.UserRoles = null;
-                    User.UserID = Guid.NewGuid().ToString();
-                    User.EmailConfirmed = false;
-                    User.PhoneNumberConfirmed = false;
-                    User.TwoFactorEnabled = false;
-                    User.AccessFailedCount = 0;
-                    User.LockoutEnabled = true;
-                    User.LastLogin = DateTime.Now.Date;
-                    User.LockoutEndDateUtc = DateTime.Now.Date;
-                repo.Insert(User);
-                if(userole != null)
-                {
-                    foreach(var c in userole)
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
-                        c.UserID = User.UserID;
-                        repoRole.Insert(c);
-                    }
-                }
+                        IUserRepository repo = new UserRepository(Db);
+                        IRepository<UserRoles> repoRole = new Repository<UserRoles>(Db);
+                        var userole = User.UserRoles;
+                        User.UserRoles = null;
+                        User.UserID = Guid.NewGuid().ToString();
+                        User.EmailConfirmed = false;
+                        User.PhoneNumberConfirmed = false;
+                        User.TwoFactorEnabled = false;
+                        User.AccessFailedCount = 0;
+                        User.LockoutEnabled = true;
+                        User.LastLogin = DateTime.Now.Date;
+                        User.LockoutEndDateUtc = DateTime.Now.Date;
+                        repo.Insert(User, username);
 
-                    scope.Complete();
+                        if (userole != null)
+                        {
+                            foreach (var c in userole)
+                            {
+                                c.UserID = User.UserID;
+                                repoRole.Insert(c,username);
+                            }
+                        }
+
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -112,33 +139,40 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4009));
                     throw ex;
                 }
-                
+
                 return User.UserID;
             }
         }
 
-        public bool UpdateUser(User User)
+        public bool UpdateUser(User User,string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    if (User.UserRoles != null)
-                {
-                    foreach (var c in User.UserRoles)
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
-                        c.UserID = User.UserID;
-                        repoRole.Insert(c);
+                        IUserRepository repo = new UserRepository(Db);
+                        IRepository<UserRoles> repoRole = new Repository<UserRoles>(Db);
+                        if (User.UserRoles != null)
+                        {
+                            foreach (var c in User.UserRoles)
+                            {
+                                c.UserID = User.UserID;
+                                repoRole.Insert(c , username);
+                            }
+                            User.UserRoles = null;
+                        }
+                        User.Email = User.Email;
+                        User.UserName = User.UserName;
+                        User.PasswordHash = User.PasswordHash;
+                        User.Name = User.Name;
+                        User.Surname = User.Surname;
+                        User.PhoneNumber = User.PhoneNumber;
+                        repo.Update(User , username);
+                        Db.SaveChanges();
+                        scope.Complete();
                     }
-                    User.UserRoles = null;
-                }
-                User.Email = User.Email;
-                User.UserName = User.UserName;
-                User.PasswordHash = User.PasswordHash;
-                User.Name = User.Name;
-                User.Surname = User.Surname;
-                //User.PhoneNumber = User.PhoneNumber;
-                repo.Update(User);
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -150,7 +184,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                ;
                 return true;
             }
         }
@@ -161,8 +195,13 @@ namespace WIM.Core.Service.Impl
             {
                 try
                 {
-                    repo.Delete(id);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IUserRepository repo = new UserRepository(Db);
+                        repo.Delete(id);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -179,22 +218,26 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-   
+
 
         public bool GetKeyRegisterMobile(string userid, string key)
         {
             if (String.IsNullOrEmpty(userid))
                 throw new ValidationException();
-            
+
             using (var scope = new TransactionScope())
-            {
-                User u = repo.GetByID(userid);
-                u.KeyAccess = key;
-                u.KeyAccessDate = DateTime.Now;
-                try
+            {try
                 {
-                    repo.Update(u);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IUserRepository repo = new UserRepository(Db);
+                        User u = repo.GetByID(userid);
+                        u.KeyAccess = key;
+                        u.KeyAccessDate = DateTime.Now;
+
+                        repo.Update(u , "System");
+                        scope.Complete();
+                    }
                 }
                 catch (Exception)
                 {
@@ -204,23 +247,28 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool RegisterTokenMobile(KeyAccessModel param)
+        public bool RegisterTokenMobile(KeyAccessModel param , string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    DateTime datew = DateTime.Now.AddMinutes(-2);
-                    User u = repo.GetUserTokenRegis(param, datew);
-                    if (u is null)
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
-                        return false;
+                        IUserRepository repo = new UserRepository(Db);
+                        DateTime datew = DateTime.Now.AddMinutes(-2);
+                        User u = repo.GetSingle(c => c.KeyAccess == param.Key
+                        && c.KeyAccessDate > datew && c.KeyAccess != null);
+                        if (u is null)
+                        {
+                            return false;
+                        }
+                        u.TokenMobile = param.Token;
+                        u.KeyAccess = null;
+                        u.KeyAccessDate = null;
+                        repo.Update(u , username);
+                        scope.Complete();
                     }
-                    u.TokenMobile = param.Token;
-                    u.KeyAccess = null;
-                    u.KeyAccessDate = null;
-                    repo.Update(u);
-                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -243,7 +291,12 @@ namespace WIM.Core.Service.Impl
 
         public List<User> getUserNotHave(string RoleID)
         {
-            var user = repo.GetUserNotHave(RoleID);
+            List<User> user;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRepository repo = new UserRepository(Db);
+                user = repo.GetMany(c => !(Db.UserRoles.Where(a => a.RoleID == RoleID).Select(a => a.UserID).Contains(c.UserID))).ToList();
+            }
             return user.ToList();
         }
 
@@ -303,24 +356,34 @@ namespace WIM.Core.Service.Impl
 
         public User GetUserByPersonIDSys(int personIDSys)
         {
-            var user = repo.GetByPersonIDSys(personIDSys);
+            User user;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IUserRepository repo = new UserRepository(Db);
+                user = repo.GetSingle(c => c.PersonIDSys == personIDSys);
+            }
             return user;
         }
 
-        public bool UodateTokenMobile(FirebaseTokenModel param)
+        public bool UodateTokenMobile(FirebaseTokenModel param , string username)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    User u = repo.GetUserTokenRegis(param);
-                    if (u is null)
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
-                        return false;
+                        IUserRepository repo = new UserRepository(Db);
+                        User u = repo.GetSingle(c => c.TokenMobile == param.Token
+                        && c.KeyAccessDate == null && c.KeyAccess == null);
+                        if (u is null)
+                        {
+                            return false;
+                        }
+                        u.TokenMobile = param.NewToken;
+                        repo.Update(u,username);
+                        scope.Complete();
                     }
-                    u.TokenMobile = param.NewToken;
-                    repo.Update(u);
-                    scope.Complete();
                 }
                 catch (DbEntityValidationException e)
                 {

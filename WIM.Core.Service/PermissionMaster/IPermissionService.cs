@@ -17,12 +17,12 @@ namespace WIM.Core.Service
         List<Permission> GetPermissionAuto(int MenuIDSys, int ProjectIDSys);
         List<Permission> GetPermissionByProjectID(int ProjectID, string UserID);
         List<Permission> GetPermissionByRoleID(string RoleID, int ProjectIDSys);
-        string CreatePermission(Permission Permission);
-        bool UpdatePermission(string id, Permission Permission);
+        string CreatePermission(Permission Permission , string username);
+        bool UpdatePermission(Permission Permission , string username);
         bool DeletePermission(string id);
         bool DeleteAllInRole(string permissionID);
-        string CreateRolePermission(string PermissionId, string RoleId);
-        string CreateRolePermission(string RoleID , List<PermissionTree> tree);
+        string CreateRolePermission(string PermissionId, string RoleId, string username);
+        string CreateRolePermission(string RoleID , List<PermissionTree> tree, string username);
         bool DeleteRolePermission(string PermissionId, string RoleId);
         List<PermissionTree> GetPermissionTree(int projectid);
     }

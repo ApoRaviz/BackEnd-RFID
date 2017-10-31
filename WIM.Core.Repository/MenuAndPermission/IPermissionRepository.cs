@@ -9,5 +9,6 @@ namespace WIM.Core.Repository
 {
     public interface IPermissionRepository : IRepository<Permission>
     {
+        IEnumerable<Permission> GetPermissionByUserProject(int ProjectID, string UserID);
     }
 }

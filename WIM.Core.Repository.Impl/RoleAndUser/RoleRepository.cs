@@ -5,42 +5,20 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Repository;
-using WMS.Common;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class RoleRepository : IGenericRepository<Role>
+    public class RoleRepository : Repository<Role> , IRoleRepository
     {
         private CoreDbContext Db { get; set; }
 
-        public RoleRepository()
+        public RoleRepository(CoreDbContext context):base(context)
         {
-            Db = new CoreDbContext();
-        }
-
-        public IEnumerable<Role> Get()
-        {
-            var roles = from row in Db.Role
-                        select row;
-            return roles;
-        }
-
-        public IEnumerable<Role> Get(int projectIDSys)
-        {
-            var roles = from row in Db.Role
-                        where row.ProjectIDSys == projectIDSys
-                        select row;
-            return roles;
-        }
-        public Role GetByID(object id)
-        {
-            var role = from c in Db.Role
-                       where c.RoleID == id
-                       select c;
-            return role.SingleOrDefault();
+            Db = context;
         }
 
         public string GetByUserAndProject(string UserID, int ProjectIDSys)
@@ -50,38 +28,6 @@ namespace WIM.Core.Repository.Impl
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectIDSys
                        select new { r.RoleID }).SingleOrDefault();
             return res.RoleID;
-        }
-
-        public IEnumerable<RolePermission> GetRoleByPermissionID(string id)
-        {
-            var RoleForPermissionQuery = from row in Db.RolePermission
-                                         where row.PermissionID == id
-                                         select row;
-            return RoleForPermissionQuery;
-        }
-
-        public IEnumerable<RolePermissionDto> GetByRoleIDForDel(string id)
-        {
-            var rolepermission = from row in Db.RolePermission
-                                 where row.RoleID == id
-                                 select row;
-            var permissions = rolepermission.Select(b => new RolePermissionDto()
-            {
-                RoleID = b.RoleID,
-                Name = b.PermissionID
-            });
-
-            return permissions;
-        }
-
-        public IEnumerable<Role> GetNotPermissionID(string id)
-        {
-            var RoleForPermissionQuery = from row in Db.Role
-                                         where !(from o in Db.RolePermission
-                                                 where o.PermissionID == id
-                                                 select o.RoleID).Contains(row.RoleID)
-                                         select row;
-            return RoleForPermissionQuery;
         }
 
         public List<Role> GetByProjectUser(int id)
@@ -108,84 +54,6 @@ namespace WIM.Core.Repository.Impl
             return res;
         }
 
-        public void Insert(Role entity)
-        {
-            entity.RoleID = Guid.NewGuid().ToString();
-            Db.Role.Add(entity);
-            Db.SaveChanges();
-        }
-
-        public void Delete(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Role entityToDelete)
-        {
-            Db.Role.Remove(entityToDelete);
-            Db.SaveChanges();
-        }
-
-        public void Update(Role entityToUpdate)
-        {
-            var existedRole = (from c in Db.Role
-                               where c.RoleID == entityToUpdate.RoleID
-                               select c).SingleOrDefault();
-            existedRole.Name = entityToUpdate.Name;
-            existedRole.Description = entityToUpdate.Description;
-            existedRole.IsSysAdmin = entityToUpdate.IsSysAdmin;
-            Db.SaveChanges();
-        }
-
-        public IEnumerable<Role> GetMany(Func<Role, bool> where)
-        {
-            return Db.Role.Where(where);
-        }
-
-        public IQueryable<Role> GetManyQueryable(Func<Role, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Role Get(Func<Role, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Func<Role, bool> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Role> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Role> GetWithInclude(Expression<Func<Role, bool>> predicate, params string[] include)
-        {
-            return Db.Role.Where(predicate).Include(include[0]);
-        }
-
-        public IEnumerable<Role> GetWithIncludes(Func<Role, bool> where, params string[] include)
-        {
-           
-            return  Db.Role.Include(include[0]).Where(where);
-        }
-
-        public bool Exists(object primaryKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Role GetSingle(Func<Role, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Role GetFirst(Func<Role, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

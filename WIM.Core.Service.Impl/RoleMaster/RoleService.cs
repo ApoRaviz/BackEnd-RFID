@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -16,52 +15,75 @@ using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
 namespace WIM.Core.Service.Impl
 {
     public class RoleService : IRoleService
     {
-        private RoleRepository repo;
-        private UserRoleRepository repouser;
-
         public RoleService()
         {
-            repo = new RoleRepository();
-            repouser = new UserRoleRepository();
         }        
 
         public IEnumerable<Role> GetRoles()
-        {           
-            return repo.Get();
+        {
+            IEnumerable<Role> role;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRoleRepository repo = new RoleRepository(Db);
+                role = repo.Get();
+            }
+            return role;
         }
 
         public IEnumerable<Role> GetRoles(int projectIDSys)
         {
-            var roles = repo.Get(projectIDSys);
-            return roles.ToList();
+            IEnumerable<Role> role;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRoleRepository repo = new RoleRepository(Db);
+                role = repo.GetMany(c => c.ProjectIDSys == projectIDSys);
+            }
+            return role.ToList();
         }
 
         public Role GetRoleByLocIDSys(string id)
-        {           
-            Role Role = repo.GetByID(id);                                  
-            return Role;            
+        {
+            Role Role ;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRoleRepository repo = new RoleRepository(Db);
+                Role = repo.GetByID(id);
+            }
+                return Role;            
         }
 
         public string GetRoleByUserAndProject(string UserID, int ProjectIDSys)
         {
-            var res = repo.GetByUserAndProject(UserID,ProjectIDSys);
+            string res;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRoleRepository repo = new RoleRepository(Db);
+                res = repo.GetByUserAndProject(UserID, ProjectIDSys);
+            }
             return res;
         }
 
-        public string CreateRole(Role role)
+        public string CreateRole(Role role , string username)
         {
             using (var scope = new TransactionScope())
             {
                 role.RoleID = Guid.NewGuid().ToString();
                 try
                 {
-                    repo.Insert(role);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IRoleRepository repo = new RoleRepository(Db);
+                        repo.Insert(role , username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }catch(DbUnexpectedValidationException e)
                 {
                     Console.Write(e);
@@ -80,14 +102,19 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateRole(string id, Role role)
+        public bool UpdateRole( Role role , string username)
         {           
             using (var scope = new TransactionScope())
             {     
                 try
                 {
-                    repo.Update(role);
-                    scope.Complete();
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IRoleRepository repo = new RoleRepository(Db);
+                        repo.Update(role , username);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -103,54 +130,51 @@ namespace WIM.Core.Service.Impl
                 return true;
             }
         }
-//==========================================================================
+
         public bool DeleteRole(string id)
         {
-            //#Oil Comment
-            //Wait for reperformance code
-            List<UserRoleDto> users = new List<UserRoleDto>();
-            List<RolePermissionDto> permissions = new List<RolePermissionDto>();
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRoleRepository repo = new RoleRepository(Db);
+                IRepository<UserRoles> repouser = new Repository<UserRoles>(Db);
+                IRepository<RolePermission> repopermission = new Repository<RolePermission>(Db);
+                List<UserRoles> users = new List<UserRoles>();
+            List<RolePermission> permissions = new List<RolePermission>();
             if (id != "")
             {
-                var user = repouser.GetUserByRoleID(id);
-                permissions = repo.GetByRoleIDForDel(id).ToList();
+                users = repouser.GetMany(c => c.RoleID == id).ToList();
+                permissions = repopermission.GetMany(c => c.RoleID == id).ToList();
             }
 
-            UserRoles data = new UserRoles();
-            RolePermission permission = new RolePermission();
-            
-            using (var scope = new TransactionScope())
-            {
-                try
+                using (var scope = new TransactionScope())
                 {
-                    for (int i = 0; i < users.Count; i++)
+                    try
                     {
-                        data.UserID = users[i].UserID;
-                        data.RoleID = users[i].Name;
-                        repouser.Delete(data);
+                        for (int i = 0; i < users.Count; i++)
+                        {
+                            repouser.Delete(users[i]);
+                        }
+                        for (int i = 0; i < permissions.Count; i++)
+                        {
+                            repo.Delete(permissions[i]);
+                        }
+                        var existedRole = repo.GetByID(id);
+                        repo.Delete(existedRole);
+                        Db.SaveChanges();
+                        scope.Complete();
                     }
-                    for (int i = 0; i < permissions.Count; i++)
+                    catch (DbUpdateConcurrencyException)
                     {
-                        permission.PermissionID = permissions[i].Name;
-                        permission.RoleID = permissions[i].RoleID;
-                        repo.Delete(permission);
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        throw ex;
                     }
-                var existedRole = repo.GetByID(id);
-                repo.Delete(existedRole);
-                
-                scope.Complete();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
                 }
 
                 return true;
             }
         }
-//=========================================================================================
+
         public void HandleValidationException(DbEntityValidationException ex)
         {
             foreach (var eve in ex.EntityValidationErrors)
@@ -164,19 +188,28 @@ namespace WIM.Core.Service.Impl
 
         public List<RolePermissionDto> GetRoleByPermissionID(string id)
         {
-            List<RolePermissionDto> rolelist = repo.GetRoleByPermissionID(id)
-                .Select(b => new RolePermissionDto()
+            List<RolePermissionDto> rolelist;
+            using (CoreDbContext Db = new CoreDbContext())
             {
-                RoleID = b.RoleID                
+                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                rolelist = repo.GetMany(c => c.PermissionID == id)
+                .Select(b => new RolePermissionDto()
+                {
+                    RoleID = b.RoleID
 
-            }).ToList();
+                }).ToList();
+            }
             return rolelist;
         }
 
         public List<RolePermissionDto> GetRoleNotPermissionID(string id)
         {
-            var RoleForPermissionQuery = repo.GetNotPermissionID(id);
-            List<RolePermissionDto> rolelist = RoleForPermissionQuery.Select(b => new RolePermissionDto()
+            List<RolePermissionDto> rolelist;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRepository<Role> repo = new Repository<Role>(Db);
+                var RoleForPermissionQuery = repo.GetMany(c => !(Db.RolePermission.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
+                rolelist = RoleForPermissionQuery.Select(b => new RolePermissionDto()
                 {
                     RoleID = b.RoleID,
                     Name = b.Name,
@@ -184,6 +217,7 @@ namespace WIM.Core.Service.Impl
                     IsSysAdmin = b.IsSysAdmin
 
                 }).ToList();
+            }
             return rolelist;
         }
 
@@ -194,15 +228,25 @@ namespace WIM.Core.Service.Impl
 
         public List<Role> GetRoleByProjectUser(int id , string userid)
         {
-            string[] include = { "Project_MT" };
-            var role = repo.GetWithIncludes((x => x.ProjectIDSys == id && 
-            !(repouser.GetByID(userid).Include(p => p.Role).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))) , include).ToList();
-            return role.ToList();
+            List<Role> role;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRepository<Role> repo = new Repository<Role>(Db);
+                string[] include = { "Project_MT" };
+                role = repo.GetWithInclude((x => x.ProjectIDSys == id &&
+                !(Db.UserRoles.Include(p => p.Role).Where(c => c.UserID == userid).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))), include).ToList();
+            }
+                return role.ToList();
         }
 
         public List<Role> GetRoleByUserID(string id)
         {
-            var role = repo.GetByUser(id);
+            List<Role> role;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IRoleRepository repo = new RoleRepository(Db);
+                role = repo.GetByUser(id);
+            }
             return role;
         }
     }

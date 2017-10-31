@@ -20,5 +20,6 @@ namespace WIM.Core.Repository.Impl
         {
             Db = new CoreDbContext();
         }
+
     }
 }

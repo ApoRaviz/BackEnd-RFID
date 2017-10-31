@@ -12,9 +12,9 @@ namespace WIM.Core.Service
         IEnumerable<Employee_MT> GetEmployees();
         Employee_MT GetEmployeeByEmployeeIDSys(string id);
         Employee_MT GetEmployeeByPerson(int id);
-        string CreateEmployee(Employee_MT Employee);
-        bool UpdateEmployee(string id, Employee_MT Employee);
-        bool UpdateEmployeeByID(Employee_MT Employee);
-        bool DeleteEmployee(string id);        
+        string CreateEmployee(Employee_MT Employee,string username);
+        bool UpdateEmployee(Employee_MT Employee , string username);
+        bool UpdateEmployeeByID(Employee_MT Employee , string username);
+        bool DeleteEmployee(string id , string username);        
     }
 }

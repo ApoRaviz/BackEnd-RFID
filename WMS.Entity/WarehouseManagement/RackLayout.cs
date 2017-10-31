@@ -22,8 +22,6 @@ namespace WMS.Entity.WarehouseManagement
         public string Color { get; set; }
         public Nullable<int> Width { get; set; }
         public Nullable<int> Height { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }
+
     }
 }

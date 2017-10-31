@@ -12,15 +12,15 @@ namespace WIM.Core.Service
     {
         IEnumerable<UserRoles> GetUserRoles();
         UserRoles GetUserRoleByLocIDSys(int id);
-        string CreateUserRole(UserRoles UserRole);
-        bool UpdateUserRole(int id, UserRoles UserRole);
+        string CreateUserRole(UserRoles UserRole , string username);
+        bool UpdateUserRole(UserRoles UserRole , string username);
         bool DeleteUserRole(int id);
         List<RoleUserDto> GetRoleByUserID(string userid);
         List<UserRoleDto> GetUserByRoleID(string roleid);
         UserRoleDto GetUserRoleByUserID(string id);
         RoleUserDto GetRoleUserByRoleID(string id);
         bool DeleteRolePermission(string UserId, string RoleId);
-        string CreateUserRoles(string userid, string roleid);
-        string CreateRoleUsers(string userid, string roleid);
+        string CreateUserRoles(string userid, string roleid , string username);
+        string CreateRoleUsers(string userid, string roleid , string username);
     }
 }
