@@ -24,6 +24,7 @@ using HRMS.Repository.LeaveManagement;
 using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
 using HRMS.Common.ValueObject.LeaveManagement;
+using Microsoft.AspNet.Identity;
 
 namespace HRMS.WebApi.Controllers
 {    
@@ -36,7 +37,9 @@ namespace HRMS.WebApi.Controllers
         {
             LeaveService = leaveService;           
         }
-                
+         
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("new")]
         public HttpResponseMessage DemoAdd([FromBody]Leave leaveRequest)
