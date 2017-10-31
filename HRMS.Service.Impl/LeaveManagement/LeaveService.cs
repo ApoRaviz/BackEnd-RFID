@@ -39,6 +39,11 @@ namespace HRMS.Service.Impl.LeaveManagement
             throw new NotImplementedException();
         }
 
+        public string GetName()
+        {
+            return Identity.GetUserName();
+        }
+
         public bool RejectLeave(int id)
         {
             throw new NotImplementedException();

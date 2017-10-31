@@ -29,19 +29,14 @@ namespace WIM.Core.Entity.UserManagement
         public Nullable<System.DateTime> LockoutEndDateUtc { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
-        //public byte Active { get; set; }
         public bool IsSysAdmin { get; set; }
         public string KeyAccess { get; set; }
         public Nullable<System.DateTime> KeyAccessDate { get; set; }
         public string TokenMobile { get; set; }
-        public string PhoneNumber { get; set; }
-        //public DateTime CreateDate { get; set; }
-        //public DateTime UpdateDate { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
         public int PersonIDSys { get; set; }
-        //public string UserUpdate { get; set; }
 
 
         public Nullable<int> KeyOTP { get; set; }

@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace Fuji.Entity.ItemManagement
 {
     [Table("ImportSerialHead")]
-    public class ImportSerialHead
+    public partial class ImportSerialHead : BaseEntity
     {
         public ImportSerialHead()
         {
@@ -43,9 +44,9 @@ namespace Fuji.Entity.ItemManagement
         public string Spare8 { get; set; }
         public string Spare9 { get; set; }
         public string Spare10 { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+        //public System.DateTime CreatedDate { get; set; }
+        //public System.DateTime UpdateDate { get; set; }
+        //public string UserUpdate { get; set; }
 
         public virtual ICollection<ImportSerialDetail> ImportSerialDetail { get; set; }
     }

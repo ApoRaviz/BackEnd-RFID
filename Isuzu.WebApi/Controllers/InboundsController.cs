@@ -659,7 +659,7 @@ namespace Isuzu.Service.Impl
                     item.UserName = identity != null ? (!string.IsNullOrEmpty(identity.GetUserName()) ? identity.GetUserName() : "SYSTEMa") : "SYSTEMb";
 
                     bool result = InboundService.UpdateDeleteReason(item);
-                    result = InboundService.UpdateQtyInboundHead(item.InvNo);
+                    //result = InboundService.UpdateQtyInboundHead(item.InvNo, item.UserName);
                     response.SetData(result);
                     response.SetStatus(HttpStatusCode.OK);
                 }

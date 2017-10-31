@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-namespace Isuzu.Repository.ItemManagement
+namespace WIM.Core.Repository
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
@@ -15,7 +15,7 @@ namespace Isuzu.Repository.ItemManagement
         void Delete(object id);
         void Delete(TEntity entityToDelete);
         void Update(TEntity entityToUpdate);
-        IEnumerable<TEntity> GetMany(Func<TEntity, bool> where);
+        /*IEnumerable<TEntity> GetMany(Func<TEntity, bool> where);
         IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where);
         TEntity Get(Func<TEntity, Boolean> where);
         void Delete(Func<TEntity, Boolean> where);
@@ -23,6 +23,6 @@ namespace Isuzu.Repository.ItemManagement
         IQueryable<TEntity> GetWithInclude(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate, params string[] include);
         bool Exists(object primaryKey);
         TEntity GetSingle(Func<TEntity, bool> predicate);
-        TEntity GetFirst(Func<TEntity, bool> predicate);
-    }
+        TEntity GetFirst(Func<TEntity, bool> predicate);*/
+    }  
 }

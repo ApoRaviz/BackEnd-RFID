@@ -9,7 +9,7 @@ namespace Fuji.Service.PrintLabel
 {
     public interface IPrintLabelService
     {        
-        int GetRunningByType(string type, int running);
+        int GetRunningByType(string type, int running,string userUpdate);
         StreamContent GetReportStream(int running, int baseRunning, string type = "BXFJ");
     }
 }

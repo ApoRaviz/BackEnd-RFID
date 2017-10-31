@@ -23,6 +23,8 @@ using HRMS.Repository.Impl.LeaveManagement;
 using HRMS.Repository.LeaveManagement;
 using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
+using HRMS.Common.ValueObject.LeaveManagement;
+using Microsoft.AspNet.Identity;
 
 namespace HRMS.WebApi.Controllers
 {    
@@ -33,10 +35,11 @@ namespace HRMS.WebApi.Controllers
         private ILeaveService LeaveService;
         public DemoController(ILeaveService leaveService)
         {
-            //LeaveService = leaveService;
-            LeaveService = new LeaveService(User.Identity);
+            LeaveService = leaveService;           
         }
-
+         
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("new")]
         public HttpResponseMessage DemoAdd([FromBody]Leave leaveRequest)
@@ -47,8 +50,11 @@ namespace HRMS.WebApi.Controllers
 
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
+
+                    string y = LeaveService.GetName();
+
                     ILeaveRepository headRepo = new LeaveRepository(db, User.Identity);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
 
                     Leave x = headRepo.Insert(leaveRequest);
 
@@ -81,17 +87,17 @@ namespace HRMS.WebApi.Controllers
                 Leave leaveUpdated;
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
-                    ILeaveRepository repo = new LeaveRepository(db);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
+                    ILeaveRepository repo = new LeaveRepository(db, User.Identity);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
 
-                    leaveUpdated = repo.Update(leaveRequest, User.Identity);
+                    leaveUpdated = repo.Update(leaveRequest);
                  
                     dRepo.Delete(x => x.LeaveIDSys == leaveUpdated.LeaveIDSys);
           
                     foreach (var entity in leaveRequest.LeaveDetails)
                     {
                         var leaveForInsert = Mapper.Map<LeaveDetailDto, LeaveDetail> (entity);
-                        dRepo.Insert(leaveForInsert, User.Identity);
+                        dRepo.Insert(leaveForInsert);
                     }
 
                     db.SaveChanges();
