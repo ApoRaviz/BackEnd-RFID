@@ -30,7 +30,7 @@ namespace HRMS.WebApi
 
             container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
 
-            container.RegisterType<ILeaveService, LeaveService>();
+            container.RegisterType<ILeaveService, LeaveService>(new InjectionConstructor());
            
         }
     }
