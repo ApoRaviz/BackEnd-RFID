@@ -58,6 +58,7 @@
     <Compile Include="Dimension\DimensionRepository.cs" />
     <Compile Include="Inspect\InspectRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />
+    <Compile Include="ItemManagement\ItemSetDetailRepository.cs" />
     <Compile Include="ItemManagement\ItemSetRepository.cs" />
     <Compile Include="Location\LocationRepository.cs" />
     <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />

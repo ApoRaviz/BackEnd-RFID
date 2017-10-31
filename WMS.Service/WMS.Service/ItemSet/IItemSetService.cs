@@ -13,8 +13,8 @@ namespace WMS.Service
     {
         IEnumerable<ItemSetDto> GetDto();
         ItemSetDto GetDtoByID(int id,IIdentity UserIden);
-        ItemSetDto CreateItemSet(ItemSet_MT ItemSet, IIdentity UserIden);
-        bool UpdateItemSet(ItemSetDto ItemSet, IIdentity UserIden);
+        ItemSetDto CreateItemSet(ItemSet_MT ItemSet, IIdentity identity);
+        ItemSetDto UpdateItemSet(ItemSetDto ItemSet, IIdentity identity);
         bool DeleteItemSet(int id,IIdentity UserIden);
     }
 }

@@ -4,13 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
-using System.Security.Claims;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Context;
 using WIM.Core.Entity;
-using WIM.Core.Security;
 
 namespace WIM.Core.Repository.Impl
 {

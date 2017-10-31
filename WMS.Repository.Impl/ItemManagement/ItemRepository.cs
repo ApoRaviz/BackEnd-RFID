@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Repository;
@@ -111,7 +112,14 @@ namespace WMS.Repository.Impl
             Db.SaveChanges();
         }
 
+        public ItemSet_MT CreateItemSet(ItemSet_MT ItemSet, IIdentity identity)
+        {
+            throw new NotImplementedException();
+        }
 
-
+        public ItemSet_MT UpdateItemSet(ItemSetDto ItemSet, IIdentity identity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
