@@ -32,7 +32,7 @@ namespace WIM.Core.Repository.Impl
             {
                 return AuthHelper.GetIdentity();
             }
-        }
+        }       
 
         public IEnumerable<TEntity> Get()
         {
@@ -45,7 +45,7 @@ namespace WIM.Core.Repository.Impl
         }
 
         public IEnumerable<TEntity> GetAll()
-        {
+        {            
             return DbSet.ToList();
         }
 
@@ -76,9 +76,9 @@ namespace WIM.Core.Repository.Impl
                 }
             }
             
-            entityForInsert.CreateBy = Identity.Name;
+            entityForInsert.CreateBy = Identity.GetUserName();
             entityForInsert.CreateAt = DateTime.Now;
-            entityForInsert.UpdateBy = Identity.Name;
+            entityForInsert.UpdateBy = Identity..GetUserName();
             entityForInsert.UpdateAt = DateTime.Now;
             entityForInsert.IsActive = true;
 
@@ -106,7 +106,7 @@ namespace WIM.Core.Repository.Impl
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
                 }
             }
-            entityForUpdate.UpdateBy = Identity.Name;
+            entityForUpdate.UpdateBy = Identity..GetUserName();
             entityForUpdate.UpdateAt = DateTime.Now;
             return entityForUpdate;
         }
