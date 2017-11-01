@@ -8,7 +8,9 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.UserManagement;
+using WIM.Core.Service;
 using WMS.Common;
 using WMS.Service;
 

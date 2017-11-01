@@ -51,16 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\HRMS.Repository.Entity.csproj">
-      <Project>{2d18ff9d-6137-464e-861b-417ffa24fdf1}</Project>
-      <Name>HRMS.Repository.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HRMS.Repository.Context\HRMS.Repository.Context.csproj">
-      <Project>{69a3a794-8780-43df-8b2c-055fbdc64d2d}</Project>
-      <Name>HRMS.Repository.Context</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

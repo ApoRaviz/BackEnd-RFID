@@ -68,15 +68,15 @@ namespace WMS.Service.Impl.Label
 
             using (var scope = new TransactionScope())
             {
-                data.CreatedDate = DateTime.Now;
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.CreatedDate = DateTime.Now;
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 //Repo.Insert(customer);
                 try
                 {
                     ReportSysID = Db.ProcCreateLabelLayout(data.ForTable, data.FormatName, data.Width, data.WidthUnit, data.Height, data.HeightUnit
-                                              , data.CreatedDate, data.UpdatedDate, data.UserUpdate, sb.ToString()).FirstOrDefault();
+                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
@@ -97,13 +97,13 @@ namespace WMS.Service.Impl.Label
 
             using (var scope = new TransactionScope())
             {
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 try
                 {
                     Db.ProcUpdateLabelLayout(data.LabelIDSys, data.FormatName, data.Width, data.WidthUnit, data.Height, data.HeightUnit
-                                              , data.UpdatedDate, data.UserUpdate, sb.ToString());
+                                              , data.UpdateAt, data.UpdateBy, sb.ToString());
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)

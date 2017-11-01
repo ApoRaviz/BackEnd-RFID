@@ -8,8 +8,10 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.RoleAndPermission;
+using WIM.Core.Service;
 using WMS.Common;
 using WMS.Service;
 namespace WMS.WebApi.Controllers
@@ -82,7 +84,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<List<MenuProjectMappingDto>> response = new ResponseData<List<MenuProjectMappingDto>>();
             try
             {
-                List<MenuProjectMappingDto> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingDto(ProjectIDSys).ToList();
+                List<MenuProjectMappingDto> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingByID(ProjectIDSys).ToList();
                 response.SetData(MenuProjectMapping);
             }
             catch (ValidationException ex)
@@ -157,7 +159,7 @@ namespace WMS.WebApi.Controllers
             //IResponseData<IEnumerable<List<MenuProjectMappingDto>>> response2 = new ResponseData<IEnumerable<List<MenuProjectMappingDto>>>();
             try
             {
-                IEnumerable<List<MenuProjectMappingDto>> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingDto(ProjectIDSys).GroupBy(u => u.MenuIDSysParent).Select(grp => grp.ToList());
+                IEnumerable<List<MenuProjectMappingDto>> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingByID(ProjectIDSys).GroupBy(u => u.MenuIDSysParent).Select(grp => grp.ToList());
                 List<Permission> permission = PermissionService.GetPermissionByProjectID(ProjectIDSys);
                 List<List<MenuProjectMappingDto>> temp = MenuProjectMapping.ToList();
                 List<MenuProjectMappingDto> forfindPermission;
@@ -204,7 +206,7 @@ namespace WMS.WebApi.Controllers
             //IResponseData<IEnumerable<List<MenuProjectMappingDto>>> response2 = new ResponseData<IEnumerable<List<MenuProjectMappingDto>>>();
             try
             {
-                IEnumerable<List<MenuProjectMappingDto>> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingDto(User.Identity.GetProjectIDSys()).GroupBy(u => u.MenuIDSysParent).Select(grp => grp.ToList());
+                IEnumerable<List<MenuProjectMappingDto>> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingByID(User.Identity.GetProjectIDSys()).GroupBy(u => u.MenuIDSysParent).Select(grp => grp.ToList());
                 List<Permission> permission = PermissionService.GetPermissionByProjectID(User.Identity.GetProjectIDSys());
                 List<List<MenuProjectMappingDto>> temp = MenuProjectMapping.ToList();
                 List<MenuProjectMappingDto> forfindPermission;
@@ -488,7 +490,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = MenuProjectMappingService.UpdateMenuProjectMapping(MenuProjectMappingIDSys, MenuProjectMapping);
+                bool isUpated = MenuProjectMappingService.UpdateMenuProjectMapping(MenuProjectMapping);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

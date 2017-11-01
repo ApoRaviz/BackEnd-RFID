@@ -40,7 +40,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiMenuMappingDto.cs" />
+    <Compile Include="ApiMTDto.cs" />
+    <Compile Include="CustomerAutoCompleteDto.cs" />
+    <Compile Include="CustomerDto.cs" />
+    <Compile Include="EmployeeDto.cs" />
+    <Compile Include="MenuDto.cs" />
+    <Compile Include="MenuProjectMappingDto.cs" />
+    <Compile Include="PermissionRoleDto.cs" />
+    <Compile Include="PermissionTree.cs" />
+    <Compile Include="PersonDto.cs" />
+    <Compile Include="ProjectDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RolePermissionDto.cs" />
+    <Compile Include="RoleUserDto.cs" />
+    <Compile Include="UserDto.cs" />
+    <Compile Include="UserReq.cs" />
+    <Compile Include="UserRoleDto.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -71,7 +71,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Location.UserUpdate = User.Identity.Name;
+                Location.UpdateBy = User.Identity.Name;
                 int id = LocationService.CreateLocation(Location);
                 response.SetData(id);
             }

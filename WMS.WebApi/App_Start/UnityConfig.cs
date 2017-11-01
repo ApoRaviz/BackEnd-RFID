@@ -11,6 +11,8 @@ using WMS.Service.Impl.Inspect;
 using WMS.Master;
 using WMS.Service.WarehouseMaster;
 using WMS.Service.Impl.WarehouseMaster;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace WMS.WebApi
 {

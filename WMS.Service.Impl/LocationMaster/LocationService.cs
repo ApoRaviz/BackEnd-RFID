@@ -45,10 +45,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Location.LocNo = proc.ProcGetNewID("LC").FirstOrDefault().Substring(0, 13);
-                Location.CreatedDate = DateTime.Now;
-                Location.UpdateDate = DateTime.Now;
-                Location.UserUpdate = "1";
+               // Location.LocNo = proc.ProcGetNewID("LC").FirstOrDefault().Substring(0, 13);
+                //Location.CreatedDate = DateTime.Now;
+                //Location.UpdateDate = DateTime.Now;
+                //Location.UserUpdate = "1";
                 try
                 {
                     repo.Insert(Location);

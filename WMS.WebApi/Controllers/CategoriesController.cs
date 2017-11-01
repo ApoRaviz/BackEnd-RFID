@@ -89,7 +89,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = CategoryService.UpdateCategory(id, category);
+                bool isUpated = CategoryService.UpdateCategory(category);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

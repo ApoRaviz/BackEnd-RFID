@@ -16,24 +16,28 @@ using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
 using WMS.Repository.Impl;
+using WMS.Repository;
+using System.Security.Principal;
 
 namespace WMS.Service
 {
     public class ItemService : IItemService
     {
-        //private WMSDbContext db = WMSDbContext.Create();
-        private ItemRepository repo;
-
-        public ItemService()
+        private IIdentity user { get; set; }
+        public ItemService(IIdentity identity)
         {
-            repo = new ItemRepository();
+            user = identity;
         }
 
         public IEnumerable<ItemDto> GetItems()
         {
-            IEnumerable<Item_MT> items = repo.Get();
-
-            IEnumerable<ItemDto> itemDtos = Mapper.Map<IEnumerable<Item_MT>, IEnumerable<ItemDto>>(items);
+            IEnumerable<ItemDto> itemDtos;
+            using(WMSDbContext Db = new WMSDbContext())
+            {
+                IItemRepository repo = new ItemRepository(Db,user);
+                IEnumerable<Item_MT> items = repo.Get();
+                itemDtos = Mapper.Map<IEnumerable<Item_MT>, IEnumerable<ItemDto>>(items);
+            }
             return itemDtos;
         }
 
@@ -48,35 +52,44 @@ namespace WMS.Service
                             .SingleOrDefault();*/
 
             //return Mapper.Map<Item_MT, ItemDto>(item);
-            var query = repo.GetByID(id);
-
-            if (tableNames != null)
+            
+            using (WMSDbContext Db = new WMSDbContext())
             {
-                foreach (string tableName in tableNames)
+                IItemRepository repo = new ItemRepository(Db,user);
+                var query = repo.GetManyQueryable(c => c.ItemIDSys == id);
+
+                if (tableNames != null)
                 {
-                    switch (tableName)
+                    foreach (string tableName in tableNames)
                     {
-                        case "ItemUnitMapping":
-                            //query = query.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT));
-                            break;
-                        default:
-                            //query = query.Include(tableName);
-                            break;
+                        switch (tableName)
+                        {
+                            case "ItemUnitMapping":
+                                query = query.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT));
+                                break;
+                            default:
+                                query = query.Include(tableName);
+                                break;
+                        }
                     }
                 }
+                return Mapper.Map<Item_MT, ItemDto>(query.SingleOrDefault());
             }
-
-            return Mapper.Map<Item_MT, ItemDto>(query);
         }        
 
-        public int CreateItem(Item_MT item)
+        public int CreateItem(Item_MT item )
         {
             using (var scope = new TransactionScope())
             {       
                 try
                 {
-                 repo.Insert(item);
-                 scope.Complete();
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IItemRepository repo = new ItemRepository(Db,user);
+                        repo.Insert(item);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -92,14 +105,19 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateItem(int id, Item_MT item)
+        public bool UpdateItem(Item_MT item)
         {
             using (var scope = new TransactionScope())
             {
                 try
-                { 
-                    repo.Update(item);
-                    scope.Complete();
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IItemRepository repo = new ItemRepository(Db,user);
+                        repo.Update(item);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -122,8 +140,13 @@ namespace WMS.Service
                 
                 try
                 {
-                    repo.Delete(id);
-                    scope.Complete();
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IItemRepository repo = new ItemRepository(Db,user);
+                        repo.Delete(id);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

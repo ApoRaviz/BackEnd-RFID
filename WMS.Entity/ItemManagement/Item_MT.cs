@@ -5,13 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.SupplierManagement;
 
 namespace WMS.Entity.ItemManagement
 {
     [Table("Item_MT")]
-    public class Item_MT
+    public class Item_MT : BaseEntity
     {
         public Item_MT()
         {
@@ -48,10 +49,6 @@ namespace WMS.Entity.ItemManagement
         public Nullable<short> AlertExp { get; set; }
         public string TaxCond { get; set; }
         public byte TaxPerc { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
         public Nullable<int> ItemSetIDSys { get; set; }
         public string Remark { get; set; }
         public Nullable<int> UnitMinStock { get; set; }

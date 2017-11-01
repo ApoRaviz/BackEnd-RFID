@@ -10,6 +10,8 @@ using WIM.Core.Common.Validation;
 using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Service;
+using WIM.Core.Common.ValueObject;
 
 namespace WMS.WebApi.Controllers
 {
@@ -108,7 +110,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ApiMenuMappingService.UpdateApiMenuMapping(id, ApiMenuMapping);
+                bool isUpated = ApiMenuMappingService.UpdateApiMenuMapping(ApiMenuMapping);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

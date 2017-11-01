@@ -76,7 +76,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                data.UserUpdate = User.Identity.Name;               
+                data.UpdateBy = User.Identity.Name;               
                 int id = ReportService.CreateReportForItemMaster(data).Value;
                 response.SetData(id);
             }

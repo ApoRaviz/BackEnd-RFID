@@ -9,6 +9,7 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.UserManagement;
+using WIM.Core.Service;
 using WMS.Common;
 using WMS.Service;
 
@@ -207,7 +208,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ProjectService.UpdateProject(projectIDSys, project);
+                bool isUpated = ProjectService.UpdateProject(project);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

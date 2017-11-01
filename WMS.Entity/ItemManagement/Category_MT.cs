@@ -5,13 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 using WIM.Core.Entity.ProjectManagement;
 
 
 namespace WMS.Entity.ItemManagement
 {
     [Table("Category_MT")]
-    public class Category_MT
+    public class Category_MT : BaseEntity
     {        
         public Category_MT()
         {
@@ -24,10 +25,6 @@ namespace WMS.Entity.ItemManagement
         public int ProjectIDSys { get; set; }
         public string CateID { get; set; }
         public string CateName { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
 
         public virtual Project_MT Project_MT { get; set; }
         

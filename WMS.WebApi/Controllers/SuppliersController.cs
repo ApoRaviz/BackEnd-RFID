@@ -72,7 +72,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Supplier.UserUpdate = User.Identity.Name;
+                Supplier.UpdateBy = User.Identity.Name;
                 int id = SupplierService.CreateSupplier(Supplier);
                 response.SetData(id);
             }
@@ -95,7 +95,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = SupplierService.UpdateSupplier(supIDSys, Supplier);
+                bool isUpated = SupplierService.UpdateSupplier(Supplier);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity;
-using WIM.Core.Security;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -158,7 +157,12 @@ namespace WIM.Core.Repository.Impl
             return query.Where(predicate);
         }
 
-        
+        public IQueryable<TEntity> GetWithInclude(Func<TEntity, bool> predicate, params string[] include)
+        {
+            IQueryable<TEntity> query = this.DbSet;
+            query = include.Aggregate(query, (current, inc) => current.Include(inc));
+            return query.Where(predicate).AsQueryable();
+        }
 
         public TEntity GetSingle(Func<TEntity, bool> predicate)
         {

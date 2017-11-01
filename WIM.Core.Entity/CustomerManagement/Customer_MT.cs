@@ -10,7 +10,7 @@ using WIM.Core.Entity.ProjectManagement;
 namespace WIM.Core.Entity.CustomerManagement
 {
     [Table("Customer_MT")]
-    public class Customer_MT
+    public class Customer_MT : BaseEntity
     {        
         public Customer_MT()
         {
@@ -37,10 +37,10 @@ namespace WIM.Core.Entity.CustomerManagement
         public string Mobile1 { get; set; }
         public string Mobile2 { get; set; }
         public string Mobile3 { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+        public bool IsActive { get; set; }
+        //public System.DateTime CreatedDate { get; set; }
+        //public System.DateTime UpdateDate { get; set; }
+        //public string UserUpdate { get; set; }
 
         public virtual ICollection<Project_MT> Project_MT { get; set; }
 

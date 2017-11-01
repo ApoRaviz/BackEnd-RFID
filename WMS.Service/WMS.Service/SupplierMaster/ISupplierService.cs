@@ -14,7 +14,7 @@ namespace WMS.Service
         IEnumerable<Supplier_MT> GetSuppliersByProjectID(int projectID);
         Supplier_MT GetSupplierBySupIDSys(int id);
         int CreateSupplier(Supplier_MT Supplier);
-        bool UpdateSupplier(int id, Supplier_MT Supplier);
+        bool UpdateSupplier(Supplier_MT Supplier);
         bool DeleteSupplier(int id);        
     }
 }

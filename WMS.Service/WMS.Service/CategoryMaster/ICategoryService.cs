@@ -14,7 +14,7 @@ namespace WMS.Service
         IEnumerable<CategoryDto> GetCategoriesByProjectID(int projectID);
         CategoryDto GetCategory(int id);
         int CreateCategory(Category_MT category);
-        bool UpdateCategory(int id, Category_MT category);
+        bool UpdateCategory(Category_MT category);
         bool DeleteCategory(int id);        
     }
 }

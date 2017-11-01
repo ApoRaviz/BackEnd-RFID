@@ -40,21 +40,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IGenericRepository.cs" />
+    <Compile Include="ApiMaster\IApiMenuMappingRepository.cs" />
+    <Compile Include="ApiMaster\IApiMTRepository.cs" />
+    <Compile Include="Country\ICountryRepository.cs" />
+    <Compile Include="Currency\ICurrencyRepository.cs" />
+    <Compile Include="CustomerAndProject\ICustomerRepository.cs" />
+    <Compile Include="CustomerAndProject\IProjectRepository.cs" />
+    <Compile Include="MenuAndPermission\IMenuProjectMappingRepository.cs" />
+    <Compile Include="MenuAndPermission\IMenuRepository.cs" />
+    <Compile Include="MenuAndPermission\IPermissionRepository.cs" />
+    <Compile Include="Personalize\IEmployeeRepository.cs" />
+    <Compile Include="Personalize\IPersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="RoleAndUser\IRoleRepository.cs" />
+    <Compile Include="RoleAndUser\IUserRepository.cs" />
+    <Compile Include="RoleAndUser\IUserRoleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
