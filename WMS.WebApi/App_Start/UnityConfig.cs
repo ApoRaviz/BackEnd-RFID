@@ -32,7 +32,6 @@ namespace WMS.WebApi
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
 
-            container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
             //Register Service
             container.RegisterType<ICommonService, CommonService>();
             container.RegisterType<ICustomerService, CustomerService>();

@@ -52,7 +52,7 @@ namespace WMS.Service
                         scope.Complete();
                         return this.GetDtoByID(itemsetMT.ItemSetIDSys);
                     }
-                    catch (DbEntityValidationException e)
+                    catch (DbEntityValidationException)
                     {
                         ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                         throw ex;

@@ -49,15 +49,12 @@ namespace WMS.Service
                 PersonID = data.PersonID,
                 Age = data.Age,
                 BirthDate = data.BirthDate,
-                CreateDate = data.CreateDate,
                 Email = data.Email,
                 Name = data.Name,
                 Surname = data.Surname,
                 Religion = data.Religion,
                 Nationality = data.Nationality,
                 Gender = data.Gender,
-                UpdateDate = data.UpdateDate,
-                UserUpdate = data.UserUpdate,
                 Mobile = data.Mobile
                 
             };

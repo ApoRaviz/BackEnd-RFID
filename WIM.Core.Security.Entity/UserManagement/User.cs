@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Security.Entity.UserManagement
@@ -26,7 +27,7 @@ namespace WIM.Core.Security.Entity.UserManagement
     }*/
 
     //[Table("Users")]
-    public class User
+    public class User : BaseEntity
     {
         public User()
         {

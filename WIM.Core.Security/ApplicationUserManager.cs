@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using WIM.Core.Common.Mail;
 using WIM.Core.Security.Context;
 using WIM.Core.Security.Entity;
+using WIM.Core.Security.Entity.UserManagement;
 
 namespace WIM.Core.Security
 {
@@ -262,5 +263,37 @@ namespace WIM.Core.Security
             return ByteArraysEqual(buffer3, buffer4);
         }
 
+
+        //public string GetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
+        //{
+        //    using (SecurityDbContext Db = new SecurityDbContext()) {
+        //        User u;
+        //        try
+        //        {
+        //            UserReprository repo = new UserReprository();
+        //            u = repo.GetByID(userid);
+        //            if (keyOtp > 99999)
+        //            {
+        //                u.KeyOTP = keyOtp;
+        //                u.KeyOTPDate = DateTime.Now;
+        //                repo.Update(u);
+        //            }
+
+        //        }
+        //        catch (ValidationException e)
+        //        {
+        //            throw e;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            throw new ValidationException();
+        //        }
+        //    }
+        //    return u.TokenMobile;
+        //}
+
+
     }
+
+
 }

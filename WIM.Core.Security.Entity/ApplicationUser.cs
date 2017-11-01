@@ -20,11 +20,7 @@ namespace WIM.Core.Security.Entity
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public byte Active { get; set; }
         public DateTime LastLogin { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
         public bool IsSysAdmin { get; set; }
         //public int ProjectIDSys { get; set; }
 

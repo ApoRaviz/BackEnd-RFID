@@ -33,7 +33,7 @@ namespace WMS.WebApi.Controllers
             ResponseData<IEnumerable<ItemSetDto>> response = new ResponseData<IEnumerable<ItemSetDto>>();
             try
             {
-                IEnumerable<ItemSetDto> ItemSets = ItemSetService.GetDto();
+                IEnumerable<ItemSetDto> ItemSets = ItemSetService.GetDto(50);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(ItemSets);
             }
@@ -53,7 +53,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<ItemSetDto> response = new ResponseData<ItemSetDto>();
             try
             {
-                ItemSetDto ItemSet = ItemSetService.GetDtoByID(id,User.Identity);
+                ItemSetDto ItemSet = ItemSetService.GetDtoByID(id);
                 response.SetData(ItemSet);
             }
             catch (ValidationException ex)
@@ -74,7 +74,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                ItemSetService.CreateItemSet(ItemSet,User.Identity);
+                ItemSetService.CreateItemSet(ItemSet);
             }
             catch (ValidationException ex)
             {
@@ -112,7 +112,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ItemSetService.UpdateItemSet(ItemSet,User.Identity);
+                bool isUpated = ItemSetService.UpdateItemSet(ItemSet);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -123,23 +123,23 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // DELETE: api/ItemSets/5
-        [HttpDelete]
-        [Route("{id}")]
-        public HttpResponseMessage Delete(int id)
-        {
-            IResponseData<bool> response = new ResponseData<bool>();
-            try
-            {
-                bool isUpated = ItemSetService.DeleteItemSetDto(id);
-                response.SetData(isUpated);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
+        //// DELETE: api/ItemSets/5
+        //[HttpDelete]
+        //[Route("{id}")]
+        //public HttpResponseMessage Delete(int id)
+        //{
+        //    IResponseData<bool> response = new ResponseData<bool>();
+        //    try
+        //    {
+        //        bool isUpated = ItemSetService.DeleteItemSetDto(id);
+        //        response.SetData(isUpated);
+        //    }
+        //    catch (ValidationException ex)
+        //    {
+        //        response.SetErrors(ex.Errors);
+        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //    }
+        //    return Request.ReturnHttpResponseMessage(response);
+        //}
     }
 }

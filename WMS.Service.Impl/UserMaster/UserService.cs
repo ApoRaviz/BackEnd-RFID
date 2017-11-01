@@ -21,6 +21,7 @@ using WIM.Core.Entity.Person;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Context;
 using WMS.Repository.Impl;
+using WMS.Context;
 
 namespace WMS.Service
 {
@@ -49,24 +50,26 @@ namespace WMS.Service
 
         public string GetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
         {
-            User u;
-            try
-            {
-                u = repo.GetByID(userid);
-                if (keyOtp > 99999)
+            using (WMSDbContext DB = new WMSDbContext()) {
+                try
                 {
-                    u.KeyOTP = keyOtp;
-                    u.KeyOTPDate = DateTime.Now;
-                    repo.Update(u);
+                    UserRepository repo = new UserRepository(DB);
+                    u = repo.GetByID(userid);
+                    if (keyOtp > 99999)
+                    {
+                        u.KeyOTP = keyOtp;
+                        u.KeyOTPDate = DateTime.Now;
+                        repo.Update(u);
+                    }
+
+                } catch (ValidationException e)
+                {
+                    throw e;
                 }
-                
-            }catch(ValidationException e)
-            {
-                throw e;
-            }
-            catch (Exception e)
-            {
-                throw new ValidationException();
+                catch (Exception e)
+                {
+                    throw new ValidationException();
+                }
             }
             return u.TokenMobile;
         }
@@ -87,14 +90,10 @@ namespace WMS.Service
                     User.EmailConfirmed = false;
                     User.PhoneNumberConfirmed = false;
                     User.TwoFactorEnabled = false;
-                    User.CreateDate = DateTime.Now;
-                    User.UpdateDate = DateTime.Now;
                     User.AccessFailedCount = 0;
                     User.LockoutEnabled = true;
                     User.LastLogin = DateTime.Now.Date;
                     User.LockoutEndDateUtc = DateTime.Now.Date;
-                    User.UserUpdate = "1";
-                    User.Active = 1;
                 repo.Insert(User);
                 if(User.UserRoles != null)
                 {
@@ -143,8 +142,6 @@ namespace WMS.Service
                 User.Name = User.Name;
                 User.Surname = User.Surname;
                 //User.PhoneNumber = User.PhoneNumber;
-                User.UpdateDate = DateTime.Now;
-                User.UserUpdate = "1";
                 repo.Update(User);
                 }
                 catch (DbEntityValidationException e)

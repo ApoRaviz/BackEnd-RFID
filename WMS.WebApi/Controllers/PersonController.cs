@@ -101,7 +101,6 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Person.UserUpdate = User.Identity.Name;
                 int id = PersonService.CreatePerson(Person);
                 response.SetData(id);
             }

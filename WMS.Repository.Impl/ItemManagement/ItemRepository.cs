@@ -19,7 +19,7 @@ namespace WMS.Repository.Impl
     {
         private WMSDbContext Db;
 
-        public ItemRepository(WMSDbContext context) : base(context)
+        public ItemRepository(WMSDbContext context,IIdentity identity) : base(context, identity)
         {
             this.Db = context;
         }

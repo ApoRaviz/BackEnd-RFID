@@ -16,6 +16,7 @@ using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
 using WMS.Repository.Impl;
+using System.Security.Principal;
 
 namespace WMS.Service
 {
@@ -23,10 +24,11 @@ namespace WMS.Service
     {
         //private WMSDbContext db = WMSDbContext.Create();
         private ItemRepository repo;
+        private IIdentity Identity;
 
-        public ItemService()
+        public ItemService(IIdentity identity)
         {
-            repo = new ItemRepository();
+            Identity = identity;
         }
 
         public IEnumerable<ItemDto> GetItems()

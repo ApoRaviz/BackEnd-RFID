@@ -45,9 +45,6 @@ namespace WMS.Repository.Impl
 
         public void Insert(Person_MT entity)
         {
-            entity.CreateDate = DateTime.Now;
-            entity.UpdateDate = DateTime.Now;
-            entity.UserUpdate = "1";
             Db.Person_MT.Add(entity);
             Db.SaveChanges();
         }
@@ -77,8 +74,6 @@ namespace WMS.Repository.Impl
             existedPerson.Surname = entityToUpdate.Surname;
             existedPerson.Email = entityToUpdate.Email;
             existedPerson.Mobile = entityToUpdate.Mobile;
-            existedPerson.UpdateDate = DateTime.Now;
-            existedPerson.UserUpdate = "1";
             Db.Person_MT.Add(existedPerson);
             Db.SaveChanges();
         }
@@ -101,8 +96,6 @@ namespace WMS.Repository.Impl
             existedPerson.Surname = Person.Surname;
             existedPerson.Email = Person.Email;
             existedPerson.Mobile = Person.Mobile;
-            existedPerson.UpdateDate = DateTime.Now;
-            existedPerson.UserUpdate = "1";
             Db.Person_MT.Add(Person);
             return Person.PersonIDSys;
         }

@@ -14,9 +14,9 @@ namespace WMS.Repository.Impl.ItemManagement
         //private ItemSetRepository repo;
 
 
-        public ItemSetDetailRepository(WMSDbContext Context) : base(Context)
+        public ItemSetDetailRepository(WMSDbContext context, IIdentity identity) : base(context, identity)
     {
-            Db = Context;
+            Db = context;
         }
 
         public ItemSetDetail CreateItemSetDetail(ItemSetDetail ItemSetDetail, IIdentity identity)
@@ -24,7 +24,17 @@ namespace WMS.Repository.Impl.ItemManagement
             throw new NotImplementedException();
         }
 
+        public IEnumerable<ItemSetDetail> CreateItemSetDetail(IEnumerable<ItemSetDetail> ItemSetDetail, IIdentity identity)
+        {
+            throw new NotImplementedException();
+        }
+
         public ItemSetDetail UpdateItemSetDetail(ItemSetDetail ItemSetDetail, IIdentity identity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ItemSetDetail> UpdateItemSetDetail(IEnumerable<ItemSetDetail> ItemSetDetail, IIdentity identity)
         {
             throw new NotImplementedException();
         }
