@@ -18,7 +18,6 @@ using OnBarcode.Barcode.ASPNET;
 using BarcodeLib;
 using System.Threading.Tasks;
 using System.IO;
-using WMS.Common;
 using WMS.Service;
 using WMS.Service.Label;
 using WMS.Entity.LayoutManagement;

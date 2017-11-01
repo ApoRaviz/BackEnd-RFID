@@ -7,8 +7,6 @@ using System.Web.Http;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
-using WMS.Common;
 using WMS.Service;
 using WMS.Entity.WarehouseManagement;
 using WMS.Service.WarehouseMaster;

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.SupplierManagement;
-using WMS.Common;
 
 namespace WMS.Service
 {

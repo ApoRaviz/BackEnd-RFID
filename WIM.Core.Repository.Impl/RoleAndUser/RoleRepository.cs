@@ -13,15 +13,13 @@ using WIM.Core.Repository;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class RoleRepository : Repository<Role> , IRoleRepository
+    public class RoleRepository : Repository<Role>, IRoleRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public RoleRepository(CoreDbContext context,IIdentity identity):base(context,identity)
+        public RoleRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
 
         public string GetByUserAndProject(string UserID, int ProjectIDSys)
@@ -52,11 +50,11 @@ namespace WIM.Core.Repository.Impl
         {
             var res = (from ur in Db.UserRoles
                        join r in Db.Role on ur.RoleID equals r.RoleID
-                       where ur.UserID == UserID 
+                       where ur.UserID == UserID
                        select r).Include(b => b.Project_MT).ToList();
             return res;
         }
 
-        
+
     }
 }

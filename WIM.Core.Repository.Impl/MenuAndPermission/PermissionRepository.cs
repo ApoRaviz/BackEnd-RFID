@@ -17,11 +17,9 @@ namespace WIM.Core.Repository.Impl
     public class PermissionRepository : Repository<Permission> , IPermissionRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
-        public PermissionRepository(CoreDbContext context,IIdentity identity):base(context,identity)
+        public PermissionRepository(CoreDbContext context): base(context)
         {
             Db = context;
-            User = identity;
         }
 
         public IEnumerable<Permission> GetPermissionByUserProject(int ProjectID, string UserID)

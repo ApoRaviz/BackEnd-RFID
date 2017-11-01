@@ -11,13 +11,13 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
 using WMS.Repository.Impl;
 using WMS.Repository;
 using System.Security.Principal;
+using WMS.Common.ValueObject;
 
 namespace WMS.Service
 {
@@ -34,7 +34,7 @@ namespace WMS.Service
             IEnumerable<ItemDto> itemDtos;
             using(WMSDbContext Db = new WMSDbContext())
             {
-                IItemRepository repo = new ItemRepository(Db,user);
+                IItemRepository repo = new ItemRepository(Db);
                 IEnumerable<Item_MT> items = repo.Get();
                 itemDtos = Mapper.Map<IEnumerable<Item_MT>, IEnumerable<ItemDto>>(items);
             }
@@ -55,7 +55,7 @@ namespace WMS.Service
             
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IItemRepository repo = new ItemRepository(Db,user);
+                IItemRepository repo = new ItemRepository(Db);
                 var query = repo.GetManyQueryable(c => c.ItemIDSys == id);
 
                 if (tableNames != null)
@@ -85,7 +85,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IItemRepository repo = new ItemRepository(Db,user);
+                        IItemRepository repo = new ItemRepository(Db);
                         repo.Insert(item);
                         Db.SaveChanges();
                         scope.Complete();
@@ -113,7 +113,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IItemRepository repo = new ItemRepository(Db,user);
+                        IItemRepository repo = new ItemRepository(Db);
                         repo.Update(item);
                         Db.SaveChanges();
                         scope.Complete();
@@ -142,7 +142,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IItemRepository repo = new ItemRepository(Db,user);
+                        IItemRepository repo = new ItemRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

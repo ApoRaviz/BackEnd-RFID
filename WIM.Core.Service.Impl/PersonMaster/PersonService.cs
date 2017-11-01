@@ -33,7 +33,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Person_MT> Person;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPersonRepository repo = new PersonRepository(Db,user);
+                IPersonRepository repo = new PersonRepository(Db);
                 Person = repo.Get();
             }
             return Person;
@@ -44,7 +44,7 @@ namespace WIM.Core.Service.Impl
             Person_MT Person;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPersonRepository repo = new PersonRepository(Db,user);
+                IPersonRepository repo = new PersonRepository(Db);
                 Person = repo.GetSingle(b => (Db.User.Where(a => a.UserID == id).Select(d => d.PersonIDSys).Contains(b.PersonIDSys)));
             }
             return Person;            
@@ -55,7 +55,7 @@ namespace WIM.Core.Service.Impl
             PersonDto Person;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPersonRepository repo = new PersonRepository(Db,user);
+                IPersonRepository repo = new PersonRepository(Db);
                 var data = repo.GetByID(id);
                 Person = new PersonDto()
                 {
@@ -86,7 +86,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db,user);
+                        IPersonRepository repo = new PersonRepository(Db);
                         repo.Insert(Person);
                         Db.SaveChanges();
                         scope.Complete();
@@ -114,7 +114,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db,user);
+                        IPersonRepository repo = new PersonRepository(Db);
                         repo.Update(Person);
                         scope.Complete();
                     }
@@ -141,7 +141,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db,user);
+                        IPersonRepository repo = new PersonRepository(Db);
                         repo.Update(Person);
                         Db.SaveChanges();
                         scope.Complete();
@@ -171,7 +171,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPersonRepository repo = new PersonRepository(Db,user);
+                        IPersonRepository repo = new PersonRepository(Db);
                         Person_MT person = repo.GetByID(id);
                         repo.Update(person);
                         //#Oil Comment

@@ -9,7 +9,7 @@ using WIM.Core.Context;
 
 namespace WIM.Core.Common.Helpers
 {
-    public static class ApiHashtable
+    public class ApiHashTableHelper
     {
         private static CoreDbContext db;
         public static Hashtable apiTable;

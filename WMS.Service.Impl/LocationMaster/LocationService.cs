@@ -12,7 +12,6 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WIM.Core.Context;
 using WMS.Repository.Impl;
 using WMS.Context;

@@ -4,13 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using System.Web.Http.Cors;
-using WMS.Common;
-using WMS.Service;
 using WIM.Core.Entity;
 using WIM.Core.Service;
 

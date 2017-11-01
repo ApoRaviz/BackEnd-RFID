@@ -18,11 +18,9 @@ namespace WMS.Repository.Impl
     public class WarehouseRepository : Repository<Warehouse_MT> , IWarehouseRepository
     {
         private WMSDbContext Db;
-        private IIdentity user { get; set; }
-        public WarehouseRepository(WMSDbContext context,IIdentity identity):base(context,identity)
+        public WarehouseRepository(WMSDbContext context):base(context)
         {
             Db = context;
-            user = identity;
         }
     }
 }

@@ -10,7 +10,6 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
-using WMS.Common;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers

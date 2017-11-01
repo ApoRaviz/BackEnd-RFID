@@ -11,7 +11,6 @@ using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Repository.Impl;
@@ -31,7 +30,7 @@ namespace WMS.Service
             IEnumerable<Unit_MT> unit;
             using(WMSDbContext Db = new WMSDbContext())
             {
-                IUnitRepository repo = new UnitRepository(Db,user);
+                IUnitRepository repo = new UnitRepository(Db);
                 unit = repo.Get();
             }
             return unit;
@@ -42,7 +41,7 @@ namespace WMS.Service
             Unit_MT unit;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IUnitRepository repo = new UnitRepository(Db,user);
+                IUnitRepository repo = new UnitRepository(Db);
                 string[] include = { "Project_MT" };
                 unit = repo.GetWithInclude(u => u.UnitIDSys == id, include).SingleOrDefault();
             }
@@ -70,7 +69,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IUnitRepository repo = new UnitRepository(Db,user);
+                        IUnitRepository repo = new UnitRepository(Db);
                         repo.Insert(unit);
                         Db.SaveChanges();
                         scope.Complete();
@@ -98,7 +97,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IUnitRepository repo = new UnitRepository(Db,user);
+                        IUnitRepository repo = new UnitRepository(Db);
                         repo.Update(unit);
                         Db.SaveChanges();
                         scope.Complete();
@@ -125,7 +124,7 @@ namespace WMS.Service
             {
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-                    IUnitRepository repo = new UnitRepository(Db,user);
+                    IUnitRepository repo = new UnitRepository(Db);
                     repo.Delete(id);
                     Db.SaveChanges();
                     scope.Complete();

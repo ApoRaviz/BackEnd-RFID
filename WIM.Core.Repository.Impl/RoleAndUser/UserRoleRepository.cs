@@ -17,12 +17,10 @@ namespace WIM.Core.Repository.Impl
     public class UserRoleRepository : Repository<UserRoles>,IUserRoleRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public UserRoleRepository(CoreDbContext context,IIdentity identity): base(context,identity)
+        public UserRoleRepository(CoreDbContext context): base(context)
         {
             Db = context;
-            User = identity;
         }
 
         public IEnumerable<RoleUserDto> GetRoleByUserID(string userid)

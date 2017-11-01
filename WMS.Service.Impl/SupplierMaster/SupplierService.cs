@@ -12,7 +12,6 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WIM.Core.Context;
 using WIM.Core.Entity.SupplierManagement;
 using WMS.Repository.Impl;
@@ -34,7 +33,7 @@ namespace WMS.Service
             IEnumerable<Supplier_MT> supplier; 
             using (WMSDbContext Db = new WMSDbContext())
             {
-                ISupplierRepository repo = new SupplierRepository(Db,user);
+                ISupplierRepository repo = new SupplierRepository(Db);
                 supplier = repo.Get();
             }
             return supplier;
@@ -45,7 +44,7 @@ namespace WMS.Service
             IEnumerable<Supplier_MT> supplier;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                ISupplierRepository repo = new SupplierRepository(Db,user);
+                ISupplierRepository repo = new SupplierRepository(Db);
                 supplier = repo.GetMany(c=>c.ProjectIDSys == projectID);
             }
             return supplier;
@@ -56,7 +55,7 @@ namespace WMS.Service
             Supplier_MT Supplier;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                ISupplierRepository repo = new SupplierRepository(Db,user);
+                ISupplierRepository repo = new SupplierRepository(Db);
                 Supplier = repo.GetByID(id);
             }
             return Supplier;            
@@ -70,7 +69,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        ISupplierRepository repo = new SupplierRepository(Db,user);
+                        ISupplierRepository repo = new SupplierRepository(Db);
                         Supplier.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
                         repo.Insert(Supplier);
                         Db.SaveChanges();
@@ -100,7 +99,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        ISupplierRepository repo = new SupplierRepository(Db,user);
+                        ISupplierRepository repo = new SupplierRepository(Db);
                         repo.Update(supplier);
                         Db.SaveChanges();
                         scope.Complete();
@@ -128,7 +127,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        ISupplierRepository repo = new SupplierRepository(Db,user);
+                        ISupplierRepository repo = new SupplierRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

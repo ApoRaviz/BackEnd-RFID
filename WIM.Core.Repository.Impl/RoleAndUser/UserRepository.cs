@@ -13,15 +13,13 @@ using WIM.Core.Repository;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class UserRepository : Repository<User> , IUserRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public UserRepository(CoreDbContext context,IIdentity identity):base(context,identity)
+        public UserRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
 
         public object GetCustomerByUser(string userid)

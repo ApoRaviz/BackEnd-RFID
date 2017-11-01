@@ -13,7 +13,6 @@ using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
 using System.Web.Http.Cors;
 using System.Threading.Tasks;
-using WMS.Common;
 using WMS.Service;
 using WMS.Entity.Report;
 using WMS.Service.Report;

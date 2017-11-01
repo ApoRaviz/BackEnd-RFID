@@ -35,7 +35,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Api_MT> apis;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IApiMTRepository repo = new ApiMTRepository(Db,user);
+                IApiMTRepository repo = new ApiMTRepository(Db);
                 apis = repo.Get();
             }
             return apis;
@@ -46,7 +46,7 @@ namespace WIM.Core.Service.Impl
             Api_MT ApiMT;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IApiMTRepository repo = new ApiMTRepository(Db,user);
+                IApiMTRepository repo = new ApiMTRepository(Db);
                 ApiMT = repo.GetByID(id);
             }
             ApiMTDto ApiMTDto = Mapper.Map<Api_MT, ApiMTDto>(ApiMT);
@@ -63,7 +63,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMTRepository repo = new ApiMTRepository(Db,user);
+                        IApiMTRepository repo = new ApiMTRepository(Db);
                         for (int i = 0; i < ApiMT.Count; i++)
                         {
                             var chars = Enumerable.Range(0, 4)
@@ -99,7 +99,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMTRepository repo = new ApiMTRepository(Db,user);
+                        IApiMTRepository repo = new ApiMTRepository(Db);
                         repo.Update(ApiMT);
                         Db.SaveChanges();
                         scope.Complete();
@@ -129,7 +129,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IApiMTRepository repo = new ApiMTRepository(Db,user);
+                        IApiMTRepository repo = new ApiMTRepository(Db);
                         var existedApiMT = repo.GetByID(id);
                         repo.Delete(existedApiMT);
                         Db.SaveChanges();

@@ -10,7 +10,6 @@ using System.Transactions;
 using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WMS.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
@@ -18,6 +17,7 @@ using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WMS.Repository;
 using System.Security.Principal;
+using WMS.Common.ValueObject;
 
 namespace WMS.Service
 {
@@ -34,7 +34,7 @@ namespace WMS.Service
             IEnumerable<ItemSetDto> ItemSetDtos;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IItemSetRepository repo = new ItemSetRepository(Db,user);
+                IItemSetRepository repo = new ItemSetRepository(Db);
                 IEnumerable<ItemSet_MT> ItemSets = repo.Get();
                 ItemSetDtos = Mapper.Map<IEnumerable<ItemSet_MT>, IEnumerable<ItemSetDto>>(ItemSets);
             }
@@ -78,7 +78,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IItemSetRepository repo = new ItemSetRepository(Db,user);
+                        IItemSetRepository repo = new ItemSetRepository(Db);
                         repo.Insert(ItemSet);
                         Db.SaveChanges();
                         scope.Complete();
@@ -107,7 +107,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IItemSetRepository repo = new ItemSetRepository(Db,user);
+                        IItemSetRepository repo = new ItemSetRepository(Db);
                         repo.Update(ItemSet);
                         Db.SaveChanges();
                         scope.Complete();
@@ -133,7 +133,7 @@ namespace WMS.Service
             {
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-                    IItemSetRepository repo = new ItemSetRepository(Db,user);
+                    IItemSetRepository repo = new ItemSetRepository(Db);
                     repo.Delete(id);
                     Db.SaveChanges();
                     scope.Complete();
@@ -152,7 +152,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IItemSetRepository repo = new ItemSetRepository(Db,user);
+                        IItemSetRepository repo = new ItemSetRepository(Db);
                         item.ItemSetName = ItemSet.ItemSetName;
                         item.ProjectIDSys = ItemSet.ProjectIDSys;
                         item.LineID = ItemSet.LineID;
@@ -184,7 +184,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IRepository<ItemSetDetail> repo = new Repository<ItemSetDetail>(Db,user);
+                        IRepository<ItemSetDetail> repo = new Repository<ItemSetDetail>(Db);
                         foreach (var c in temp)
                         {
                             item.Qty = c.Qty;
@@ -225,8 +225,8 @@ namespace WMS.Service
         {
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IItemSetRepository repo = new ItemSetRepository(Db,user);
-                IRepository<ItemSetDetail> repodetail = new Repository<ItemSetDetail>(Db,user);
+                IItemSetRepository repo = new ItemSetRepository(Db);
+                IRepository<ItemSetDetail> repodetail = new Repository<ItemSetDetail>(Db);
                 var item = repo.GetManyQueryable(c=>c.ItemSetIDSys == id).Select(b => new ItemSetDto()
                 {
                     ItemSetCode = b.ItemSetCode,
@@ -258,7 +258,7 @@ namespace WMS.Service
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IItemSetRepository repo = new ItemSetRepository(Db,user);
+                        IItemSetRepository repo = new ItemSetRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

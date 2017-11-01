@@ -30,7 +30,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Project_MT> projects;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IProjectRepository repo = new ProjectRepository(Db,user);
+                IProjectRepository repo = new ProjectRepository(Db);
                 projects = repo.Get();
             }
             return projects;
@@ -41,7 +41,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Project_MT> projects;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IProjectRepository repo = new ProjectRepository(Db,user);
+                IProjectRepository repo = new ProjectRepository(Db);
                 projects = repo.GetMany((c => c.CusIDSys == CusIDSys)).ToList();
             }
             return projects;
@@ -53,7 +53,7 @@ namespace WIM.Core.Service.Impl
             Project_MT project;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IProjectRepository repo = new ProjectRepository(Db,user);
+                IProjectRepository repo = new ProjectRepository(Db);
                 project = repo.GetByID(id);
             }
             return project;
@@ -64,7 +64,7 @@ namespace WIM.Core.Service.Impl
             Project_MT project;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IProjectRepository repo = new ProjectRepository(Db,user);
+                IProjectRepository repo = new ProjectRepository(Db);
                 string[] include = {"Customer_MT"};
                 project = repo.GetWithInclude((c => c.ProjectIDSys == id), include).SingleOrDefault();
             }
@@ -86,7 +86,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IProjectRepository repo = new ProjectRepository(Db,user);
+                        IProjectRepository repo = new ProjectRepository(Db);
                         repo.Insert(project);
                         Db.SaveChanges();
                         scope.Complete();
@@ -114,7 +114,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IProjectRepository repo = new ProjectRepository(Db,user);
+                        IProjectRepository repo = new ProjectRepository(Db);
                         repo.Update(project);
                         Db.SaveChanges();
                         scope.Complete();
@@ -142,7 +142,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IProjectRepository repo = new ProjectRepository(Db,user);
+                        IProjectRepository repo = new ProjectRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();
@@ -176,7 +176,7 @@ namespace WIM.Core.Service.Impl
             List<Project_MT> project;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IProjectRepository repo = new ProjectRepository(Db,user);
+                IProjectRepository repo = new ProjectRepository(Db);
                 project = repo.GetMany(c => c.CusIDSys == CusID && (Db.MenuProjectMapping).Select(a => a.ProjectIDSys).Contains(c.ProjectIDSys)).ToList();
             }
             return project;
@@ -187,7 +187,7 @@ namespace WIM.Core.Service.Impl
             List<Project_MT> project;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IProjectRepository repo = new ProjectRepository(Db,user);
+                IProjectRepository repo = new ProjectRepository(Db);
                 project = repo.GetMany(c => c.CusIDSys == CusID).ToList();
             }
             return project;

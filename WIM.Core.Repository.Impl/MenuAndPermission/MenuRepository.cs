@@ -16,12 +16,10 @@ namespace WIM.Core.Repository.Impl
     public class MenuRepository : Repository<Menu_MT>,IMenuRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public MenuRepository(CoreDbContext context,IIdentity identity): base(context,identity)
+        public MenuRepository(CoreDbContext context): base(context)
         {
             Db = context;
-            User = identity;
         }
 
     }

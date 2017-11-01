@@ -15,11 +15,9 @@ namespace WIM.Core.Repository.Impl
     public class CurrencyRepository : Repository<CurrencyUnit>, ICurrencyRepository
     {
         private CoreDbContext Db;
-        private IIdentity User { get; set; }
-        public CurrencyRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
+        public CurrencyRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
     }
 }

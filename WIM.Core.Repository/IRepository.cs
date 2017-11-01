@@ -10,6 +10,8 @@ namespace WIM.Core.Repository
 {
     public interface IRepository<TEntity> where TEntity : BaseEntity
     {
+        IIdentity Identity { get; }
+
         IEnumerable<TEntity> Get();
         TEntity Get(Func<TEntity, Boolean> where);
         IEnumerable<TEntity> GetAll();

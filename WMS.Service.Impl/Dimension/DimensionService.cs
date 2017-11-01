@@ -28,7 +28,7 @@ namespace WMS.Service
             List<DimensionLayout_MT> dimension;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IDimensionRepository repo = new DimensionRepository(Db,user);
+                IDimensionRepository repo = new DimensionRepository(Db);
                 dimension = repo.Get().ToList();
             }
 
@@ -39,7 +39,7 @@ namespace WMS.Service
         {
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IDimensionRepository repo = new DimensionRepository(Db,user);
+                IDimensionRepository repo = new DimensionRepository(Db);
                 List<DimensionLayout_MT> dimension = repo.Get().ToList();
                 if (id == null)
                     return dimension.Select(x => x.Color).ToList();
@@ -52,7 +52,7 @@ namespace WMS.Service
         { DimensionLayout_MT dimension;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IDimensionRepository repo = new DimensionRepository(Db,user);
+                IDimensionRepository repo = new DimensionRepository(Db);
                 dimension = repo.GetByID(id);
             }
 
@@ -69,7 +69,7 @@ namespace WMS.Service
                 data.UpdateBy = "1";
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-                    IDimensionRepository repo = new DimensionRepository(Db,user);
+                    IDimensionRepository repo = new DimensionRepository(Db);
                     try
                     {
                         DimensionIDSys = Db.ProcCreateDimensionLayout(data.FormatName, data.Unit, data.Width, data.Length, data.Height, data.Weight
@@ -94,7 +94,7 @@ namespace WMS.Service
             {
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-                    IDimensionRepository repo = new DimensionRepository(Db,user);
+                    IDimensionRepository repo = new DimensionRepository(Db);
                     
 
                     try
@@ -129,7 +129,7 @@ namespace WMS.Service
             List<DimensionLayout_MT> dimension;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IDimensionRepository repo = new DimensionRepository(Db,user);
+                IDimensionRepository repo = new DimensionRepository(Db);
                 dimension =repo.Get().ToList();
             }
             return dimension;

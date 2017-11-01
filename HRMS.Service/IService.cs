@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using WMS.Master;
 
-
-namespace WMS.Common.ValueObject
+namespace HRMS.Service
 {
-    public class SupplierDto 
+    public interface IService
     {
-        
+        IIdentity Identity { get; }
     }
 }

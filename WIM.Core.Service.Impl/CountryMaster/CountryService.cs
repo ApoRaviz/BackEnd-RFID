@@ -32,7 +32,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Country_MT> CountryName;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICountryRepository repo = new CountryRepository(Db,user);
+                ICountryRepository repo = new CountryRepository(Db);
                 CountryName = repo.Get();
             }
             return CountryName;
@@ -43,7 +43,7 @@ namespace WIM.Core.Service.Impl
             Country_MT Country;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICountryRepository repo = new CountryRepository(Db,user);
+                ICountryRepository repo = new CountryRepository(Db);
                 Country = repo.GetByID(id);
             }
             return Country;
@@ -57,7 +57,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICountryRepository repo = new CountryRepository(Db,user);
+                        ICountryRepository repo = new CountryRepository(Db);
                         repo.Insert(Country);
                         Db.SaveChanges();
                         scope.Complete();
@@ -86,7 +86,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICountryRepository repo = new CountryRepository(Db,user);
+                        ICountryRepository repo = new CountryRepository(Db);
                         repo.Update(Country);
                         Db.SaveChanges();
                         scope.Complete();
@@ -116,7 +116,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICountryRepository repo = new CountryRepository(Db,user);
+                        ICountryRepository repo = new CountryRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

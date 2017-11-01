@@ -8,7 +8,6 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Entity.Dimension;
-using WMS.Common;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers

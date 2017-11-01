@@ -16,12 +16,10 @@ namespace WIM.Core.Repository.Impl
     public class CustomerRepository : Repository<Customer_MT>, ICustomerRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public CustomerRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
+        public CustomerRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
 
         public object GetByUserID(string userid)

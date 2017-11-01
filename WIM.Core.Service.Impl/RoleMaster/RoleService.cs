@@ -34,7 +34,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Role> role;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRoleRepository repo = new RoleRepository(Db,user);
+                IRoleRepository repo = new RoleRepository(Db);
                 role = repo.Get();
             }
             return role;
@@ -45,7 +45,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Role> role;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRoleRepository repo = new RoleRepository(Db,user);
+                IRoleRepository repo = new RoleRepository(Db);
                 role = repo.GetMany(c => c.ProjectIDSys == projectIDSys);
             }
             return role.ToList();
@@ -56,7 +56,7 @@ namespace WIM.Core.Service.Impl
             Role Role ;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRoleRepository repo = new RoleRepository(Db,user);
+                IRoleRepository repo = new RoleRepository(Db);
                 Role = repo.GetByID(id);
             }
                 return Role;            
@@ -67,7 +67,7 @@ namespace WIM.Core.Service.Impl
             string res;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRoleRepository repo = new RoleRepository(Db,user);
+                IRoleRepository repo = new RoleRepository(Db);
                 res = repo.GetByUserAndProject(UserID, ProjectIDSys);
             }
             return res;
@@ -82,7 +82,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IRoleRepository repo = new RoleRepository(Db,user);
+                        IRoleRepository repo = new RoleRepository(Db);
                         repo.Insert(role);
                         Db.SaveChanges();
                         scope.Complete();
@@ -113,7 +113,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IRoleRepository repo = new RoleRepository(Db,user);
+                        IRoleRepository repo = new RoleRepository(Db);
                         repo.Update(role);
                         Db.SaveChanges();
                         scope.Complete();
@@ -138,9 +138,9 @@ namespace WIM.Core.Service.Impl
         {
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRoleRepository repo = new RoleRepository(Db,user);
-                IRepository<UserRoles> repouser = new Repository<UserRoles>(Db,user);
-                IRepository<RolePermission> repopermission = new Repository<RolePermission>(Db,user);
+                IRoleRepository repo = new RoleRepository(Db);
+                IRepository<UserRoles> repouser = new Repository<UserRoles>(Db);
+                IRepository<RolePermission> repopermission = new Repository<RolePermission>(Db);
                 List<UserRoles> users = new List<UserRoles>();
             List<RolePermission> permissions = new List<RolePermission>();
             if (id != "")
@@ -194,7 +194,7 @@ namespace WIM.Core.Service.Impl
             List<RolePermissionDto> rolelist;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<RolePermission> repo = new Repository<RolePermission>(Db,user);
+                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
                 rolelist = repo.GetMany(c => c.PermissionID == id)
                 .Select(b => new RolePermissionDto()
                 {
@@ -210,7 +210,7 @@ namespace WIM.Core.Service.Impl
             List<RolePermissionDto> rolelist;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<Role> repo = new Repository<Role>(Db,user);
+                IRepository<Role> repo = new Repository<Role>(Db);
                 var RoleForPermissionQuery = repo.GetMany(c => !(Db.RolePermission.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
                 rolelist = RoleForPermissionQuery.Select(b => new RolePermissionDto()
                 {
@@ -234,7 +234,7 @@ namespace WIM.Core.Service.Impl
             List<Role> role;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<Role> repo = new Repository<Role>(Db,user);
+                IRepository<Role> repo = new Repository<Role>(Db);
                 string[] include = { "Project_MT" };
                 role = repo.GetWithInclude((x => x.ProjectIDSys == id &&
                 !(Db.UserRoles.Include(p => p.Role).Where(c => c.UserID == userid).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))), include).ToList();
@@ -247,7 +247,7 @@ namespace WIM.Core.Service.Impl
             List<Role> role;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRoleRepository repo = new RoleRepository(Db,user);
+                IRoleRepository repo = new RoleRepository(Db);
                 role = repo.GetByUser(id);
             }
             return role;

@@ -17,12 +17,10 @@ namespace WIM.Core.Repository.Impl
     public class ProjectRepository : Repository<Project_MT>, IProjectRepository
     {
         private CoreDbContext Db;
-        private IIdentity User { get; set; }
 
-        public ProjectRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
+        public ProjectRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
     }
 }

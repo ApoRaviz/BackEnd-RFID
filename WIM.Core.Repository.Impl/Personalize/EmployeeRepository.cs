@@ -14,12 +14,10 @@ namespace WIM.Core.Repository.Impl
     public class EmployeeRepository : Repository<Employee_MT> , IEmployeeRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public EmployeeRepository(CoreDbContext context,IIdentity identity): base(context,identity)
+        public EmployeeRepository(CoreDbContext context): base(context)
         {
             Db = context;
-            User = identity;
         }
 
     }

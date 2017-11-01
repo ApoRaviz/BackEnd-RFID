@@ -8,7 +8,6 @@ using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Repository;
 using WMS.Repository;
-using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
@@ -19,16 +18,11 @@ namespace WMS.Repository.Impl
     public class CategoryRepository : Repository<Category_MT> , ICategoryRepository
     {
         private WMSDbContext Db { get; set; }
-        private IIdentity user { get; set; }
 
-        public CategoryRepository(WMSDbContext context,IIdentity identity):base(context,identity)
+        public CategoryRepository(WMSDbContext context):base(context)
         {
             Db = context;
-            user = identity;
         }
-
-       
-
     }
 
 }

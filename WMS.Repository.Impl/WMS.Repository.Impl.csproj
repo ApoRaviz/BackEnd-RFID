@@ -79,10 +79,6 @@
       <Project>{d6231bd3-df3b-4053-90c3-dd2af10097a7}</Project>
       <Name>WMS.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
-      <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
-      <Name>WMS.Common.ValueObject</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
       <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
       <Name>WMS.Context</Name>

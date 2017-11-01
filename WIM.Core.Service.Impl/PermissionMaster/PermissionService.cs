@@ -35,7 +35,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<Permission> permission;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
                 permission = repo.Get();
             }
                 return permission;
@@ -46,7 +46,7 @@ namespace WIM.Core.Service.Impl
             Permission Permission;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
                 Permission = repo.GetByID(id);
             }
             return Permission;
@@ -62,7 +62,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPermissionRepository repo = new PermissionRepository(Db,user);
+                        IPermissionRepository repo = new PermissionRepository(Db);
                         repo.Insert(Permission);
                         Db.SaveChanges();
                         scope.Complete();
@@ -90,7 +90,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPermissionRepository repo = new PermissionRepository(Db,user);
+                        IPermissionRepository repo = new PermissionRepository(Db);
                         repo.Update(Permission);
                         Db.SaveChanges();
                         scope.Complete();
@@ -118,7 +118,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPermissionRepository repo = new PermissionRepository(Db,user);
+                        IPermissionRepository repo = new PermissionRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();
@@ -163,7 +163,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db,user);
+                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
                         repo.Insert(data);
                         Db.SaveChanges();
                         scope.Complete();
@@ -192,7 +192,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db,user);
+                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
                         foreach (var c in tree)
                         {
                             RolePermission data = new RolePermission();
@@ -223,7 +223,7 @@ namespace WIM.Core.Service.Impl
         {
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<RolePermission> repo = new Repository<RolePermission>(Db,user);
+                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
                 RolePermission id = new RolePermission() {RoleID = RoleId , PermissionID = PermissionId };
                 var RoleForPermissionQuery = repo.GetByID(id);
                 if (RoleForPermissionQuery != null)
@@ -259,8 +259,8 @@ namespace WIM.Core.Service.Impl
             List<PermissionTree> menutree;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
-                IRepository<Menu_MT> repomenu = new Repository<Menu_MT>(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
+                IRepository<Menu_MT> repomenu = new Repository<Menu_MT>(Db);
                 var menu = repo.GetMany(c => c.ProjectIDSys == projectid && !(Db.ApiMenuMapping.Where(a => a.Type =="A").Select(a => a.ApiIDSys+a.MenuIDSys).Contains(c.ApiIDSys+c.MenuIDSys)));
                 var menutemp = repomenu.GetMany(c => (Db.Permission.Where(a => a.ProjectIDSys == projectid).Select(b => b.MenuIDSys)).Contains(c.MenuIDSys));
                 menutree = menutemp.Select(b => new PermissionTree()
@@ -298,7 +298,7 @@ namespace WIM.Core.Service.Impl
             List<Permission> permission;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
                 var temp = repo.GetMany(c => c.ProjectIDSys == ProjectID);
                 permission = temp.ToList();
             }
@@ -310,7 +310,7 @@ namespace WIM.Core.Service.Impl
             List<Permission> permission;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
                 var temp = repo.GetMany((c => c.MenuIDSys == MenuIDSys && c.ProjectIDSys == ProjectIDSys
                 && !(Db.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
                 permission = temp.ToList();
@@ -323,7 +323,7 @@ namespace WIM.Core.Service.Impl
             List<Permission> permission;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
                 var temp = repo.GetManyQueryable((c => c.MenuIDSys == MenuIDSys && c.ProjectIDSys == ProjectIDSys
                 && (Db.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
                 permission = temp.ToList();
@@ -336,7 +336,7 @@ namespace WIM.Core.Service.Impl
             List<Permission> permission;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
                 var temp = repo.GetManyQueryable(c => c.ProjectIDSys == ProjectIDSys && 
                 (Db.RolePermission.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
                 permission = temp.ToList();
@@ -349,7 +349,7 @@ namespace WIM.Core.Service.Impl
             List<RolePermission> temp = new List<RolePermission>();
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<RolePermission> repo = new Repository<RolePermission>(Db,user);
+                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
                 if (permissionID != null)
                 {
                     temp = repo.GetMany(c => c.PermissionID == permissionID).ToList();
@@ -387,7 +387,7 @@ namespace WIM.Core.Service.Impl
             List<Permission> permission;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPermissionRepository repo = new PermissionRepository(Db,user);
+                IPermissionRepository repo = new PermissionRepository(Db);
                 var temp = repo.GetPermissionByUserProject(ProjectID, UserID);
                 permission = temp.ToList();
             }

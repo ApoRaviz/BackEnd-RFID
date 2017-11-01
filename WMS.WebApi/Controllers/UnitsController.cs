@@ -7,7 +7,6 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Common;
 using WMS.Entity.ItemManagement;
 using WMS.Service;
 

@@ -7,7 +7,7 @@ using WIM.Core.Common.ValueObject;
 using WMS.Master;
 
 
-namespace WMS.Common
+namespace WMS.Common.ValueObject
 {
     public class CategoryDto
     {

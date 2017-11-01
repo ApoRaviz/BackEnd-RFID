@@ -10,7 +10,6 @@ using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
-using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Service;

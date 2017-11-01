@@ -11,7 +11,6 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
-using WMS.Common;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers

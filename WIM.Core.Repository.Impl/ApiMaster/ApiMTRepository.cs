@@ -14,12 +14,10 @@ namespace WIM.Core.Repository.Impl
     public class ApiMTRepository : Repository<Api_MT>, IApiMTRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public ApiMTRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
+        public ApiMTRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
     }
 

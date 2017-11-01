@@ -10,7 +10,6 @@ using WIM.Core.Entity.Dimension;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WMS.Repository;
-using WMS.Common;
 using WMS.Context;
 using WMS.Entity.InspectionManagement;
 using System.Security.Principal;
@@ -20,11 +19,9 @@ namespace WMS.Repository.Impl
     public class InspectRepository : Repository<Inspect_MT> , IInspectRepository
     {
         private WMSDbContext Db { get; set; }
-        private IIdentity user { get; set; }
-        public InspectRepository(WMSDbContext context,IIdentity identity):base(context,identity)
+        public InspectRepository(WMSDbContext context):base(context)
         {
             Db = context;
-            user = identity;
         }
 
     }

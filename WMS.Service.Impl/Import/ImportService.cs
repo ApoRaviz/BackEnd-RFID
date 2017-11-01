@@ -28,7 +28,7 @@ namespace WMS.Service.Impl.Import
         public ImportService(IIdentity identity)
         {
             Db = new WMSDbContext();
-            repo = new Repository<ImportDefinitionHeader_MT>(Db,identity);
+            repo = new Repository<ImportDefinitionHeader_MT>(Db);
         }
 
         public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)

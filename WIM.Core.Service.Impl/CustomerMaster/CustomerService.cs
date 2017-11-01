@@ -33,7 +33,7 @@ namespace WIM.Core.Service.Impl
             object query;
             using(CoreDbContext Db = new CoreDbContext())
             {
-                ICustomerRepository repo = new CustomerRepository(Db,user);
+                ICustomerRepository repo = new CustomerRepository(Db);
                 query = repo.GetMany((x => x.IsActive == true));
             }
           
@@ -60,7 +60,7 @@ namespace WIM.Core.Service.Impl
             Customer_MT customer;
             using(CoreDbContext Db = new CoreDbContext())
             {
-                ICustomerRepository repo = new CustomerRepository(Db,user);
+                ICustomerRepository repo = new CustomerRepository(Db);
                 string[] include = {"Project_MT" };
                 customer = repo.GetWithInclude((c => c.IsActive == true && c.CusIDSys == id),include).SingleOrDefault();
             }
@@ -78,7 +78,7 @@ namespace WIM.Core.Service.Impl
             object query;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICustomerRepository repo = new CustomerRepository(Db,user);
+                ICustomerRepository repo = new CustomerRepository(Db);
                 query = repo.GetByUserID(userid);
             }
             return query;
@@ -89,7 +89,7 @@ namespace WIM.Core.Service.Impl
             object query;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICustomerRepository repo = new CustomerRepository(Db,user);
+                ICustomerRepository repo = new CustomerRepository(Db);
                 query = repo.GetProjectByUserIDCusID(userid, cusIDSys);
             }
             return query;
@@ -100,7 +100,7 @@ namespace WIM.Core.Service.Impl
             Customer_MT customer;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICustomerRepository repo = new CustomerRepository(Db,user);
+                ICustomerRepository repo = new CustomerRepository(Db);
                 string[] include = { "Project_MT" };
                 customer = repo.GetWithInclude((c => c.IsActive == true && c.CusIDSys == id), include).SingleOrDefault();
             }
@@ -112,7 +112,7 @@ namespace WIM.Core.Service.Impl
             Customer_MT customer , query;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICustomerRepository repo = new CustomerRepository(Db,user);
+                ICustomerRepository repo = new CustomerRepository(Db);
                 customer = repo.Get(c => c.CusIDSys == id && c.IsActive == true);
                 if (customer != null)
                 {
@@ -166,7 +166,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICustomerRepository repo = new CustomerRepository(Db,user);
+                        ICustomerRepository repo = new CustomerRepository(Db);
                         repo.Insert(customer);
                         Db.SaveChanges();
                         scope.Complete();
@@ -187,7 +187,7 @@ namespace WIM.Core.Service.Impl
             {
                 using (CoreDbContext Db = new CoreDbContext())
                 {
-                    ICustomerRepository repo = new CustomerRepository(Db,user);
+                    ICustomerRepository repo = new CustomerRepository(Db);
                     
                     try
                     {
@@ -210,7 +210,7 @@ namespace WIM.Core.Service.Impl
             {
                 using (CoreDbContext Db = new CoreDbContext())
                 {
-                    ICustomerRepository repo = new CustomerRepository(Db,user);
+                    ICustomerRepository repo = new CustomerRepository(Db);
                     var existedCustomer = repo.GetByID(id);
                     repo.Delete(existedCustomer);
                     // repo.Update(existedCustomer);

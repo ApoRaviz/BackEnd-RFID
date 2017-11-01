@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WMS.Repository;
-using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using System.Security.Principal;
@@ -18,11 +17,9 @@ namespace WMS.Repository.Impl
     public class ItemRepository : Repository<Item_MT> , IItemRepository
     {
         private WMSDbContext Db { get; set; }
-        private IIdentity user { get; set; }
-        public ItemRepository(WMSDbContext context,IIdentity identity):base(context,identity)
+        public ItemRepository(WMSDbContext context):base(context)
         {
             Db = context;
-            user = identity;
         }
     }
 }

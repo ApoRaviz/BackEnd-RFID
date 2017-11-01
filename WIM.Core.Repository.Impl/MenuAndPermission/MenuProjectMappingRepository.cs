@@ -14,15 +14,13 @@ using WIM.Core.Repository;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class MenuProjectMappingRepository : Repository<MenuProjectMapping>,IMenuProjectMappingRepository
+    public class MenuProjectMappingRepository : Repository<MenuProjectMapping>, IMenuProjectMappingRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public MenuProjectMappingRepository(CoreDbContext context,IIdentity identity): base(context,identity)
+        public MenuProjectMappingRepository(CoreDbContext context): base(context)
         {
             Db = context;
-            User = identity;
         }
 
         public IEnumerable<MenuProjectMappingDto> GetAllMenu(int id , IEnumerable<MenuProjectMappingDto> menu)

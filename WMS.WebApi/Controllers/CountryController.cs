@@ -11,7 +11,6 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
 using WMS.WebApi.Report;
-using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.Country;
 using WIM.Core.Service;

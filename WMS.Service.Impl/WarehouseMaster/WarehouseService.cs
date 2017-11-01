@@ -32,7 +32,7 @@ namespace WMS.Master
             IEnumerable<Warehouse_MT> WarehouseName;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IWarehouseRepository repo = new WarehouseRepository(Db,user);
+                IWarehouseRepository repo = new WarehouseRepository(Db);
                 WarehouseName = repo.Get();
             }
             
@@ -44,7 +44,7 @@ namespace WMS.Master
             Warehouse_MT Warehouse;
             using (WMSDbContext Db = new WMSDbContext())
             {
-                IWarehouseRepository repo = new WarehouseRepository(Db,user);
+                IWarehouseRepository repo = new WarehouseRepository(Db);
                 Warehouse = repo.GetByID(id);
             }
                 return Warehouse;
@@ -59,7 +59,7 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IWarehouseRepository repo = new WarehouseRepository(Db,user);
+                        IWarehouseRepository repo = new WarehouseRepository(Db);
                         repo.Insert(Warehouse);
                         Db.SaveChanges();
                         scope.Complete();
@@ -89,7 +89,7 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IWarehouseRepository repo = new WarehouseRepository(Db,user);
+                        IWarehouseRepository repo = new WarehouseRepository(Db);
                         repo.Update(Warehouse);
                         Db.SaveChanges();
                         scope.Complete();
@@ -118,7 +118,7 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        IWarehouseRepository repo = new WarehouseRepository(Db,user);
+                        IWarehouseRepository repo = new WarehouseRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

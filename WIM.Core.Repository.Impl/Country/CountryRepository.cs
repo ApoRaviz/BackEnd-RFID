@@ -16,12 +16,10 @@ namespace WIM.Core.Repository.Impl
     public class CountryRepository : Repository<Country_MT> ,ICountryRepository 
     {
         private CoreDbContext Db;
-        private IIdentity User { get; set; }
 
-        public CountryRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
+        public CountryRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
 
        

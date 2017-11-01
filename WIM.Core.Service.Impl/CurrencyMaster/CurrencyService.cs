@@ -33,7 +33,7 @@ namespace WIM.Core.Service.Impl
             IEnumerable<CurrencyUnit> CurrencyName;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICurrencyRepository repo = new CurrencyRepository(Db,user);
+                ICurrencyRepository repo = new CurrencyRepository(Db);
                 string[] include = { "Country_MT" };
                 CurrencyName = repo.GetWithInclude(null, include);
             }
@@ -45,7 +45,7 @@ namespace WIM.Core.Service.Impl
             CurrencyUnit Currency;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ICurrencyRepository repo = new CurrencyRepository(Db,user);
+                ICurrencyRepository repo = new CurrencyRepository(Db);
                 Currency = repo.GetByID(id);
             }
             return Currency;
@@ -59,7 +59,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICurrencyRepository repo = new CurrencyRepository(Db,user);
+                        ICurrencyRepository repo = new CurrencyRepository(Db);
                         repo.Insert(Currency);
                         Db.SaveChanges();
                         scope.Complete();
@@ -87,7 +87,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICurrencyRepository repo = new CurrencyRepository(Db,user);
+                        ICurrencyRepository repo = new CurrencyRepository(Db);
                         repo.Update(Currency);
                         Db.SaveChanges();
                         scope.Complete();
@@ -117,7 +117,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ICurrencyRepository repo = new CurrencyRepository(Db,user);
+                        ICurrencyRepository repo = new CurrencyRepository(Db);
                         repo.Delete(id);
                         Db.SaveChanges();
                         scope.Complete();

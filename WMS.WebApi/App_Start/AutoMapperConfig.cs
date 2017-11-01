@@ -6,7 +6,7 @@ using System.Web;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.ProjectManagement;
-using WMS.Common;
+using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
 
 namespace WMS.WebApi

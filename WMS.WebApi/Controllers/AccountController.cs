@@ -23,7 +23,6 @@ using WIM.Core.Security.Entity;
 using WMS.WebApi.Providers;
 using WMS.WebApi.Results;
 using WIM.Core.Security.Providers;
-using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service.Impl;

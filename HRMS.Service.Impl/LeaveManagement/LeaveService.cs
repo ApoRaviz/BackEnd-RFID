@@ -10,14 +10,8 @@ using System.Security.Principal;
 
 namespace HRMS.Service.Impl.LeaveManagement
 {
-    public class LeaveService : ILeaveService
-    {
-        private IIdentity Identity;
-
-        public LeaveService(IIdentity identity)
-        {
-            Identity = identity;
-        }
+    public class LeaveService : Service, ILeaveService
+    { 
 
         public bool ApproveLeave(int id)
         {

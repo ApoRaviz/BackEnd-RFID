@@ -16,12 +16,10 @@ namespace WIM.Core.Repository.Impl
     public class ApiMenuMappingRepository : Repository<ApiMenuMapping> , IApiMenuMappingRepository
     {
         private CoreDbContext Db { get; set; }
-        private IIdentity User { get; set; }
 
-        public ApiMenuMappingRepository(CoreDbContext context,IIdentity identity) : base(context,identity)
+        public ApiMenuMappingRepository(CoreDbContext context) : base(context)
         {
             Db = context;
-            User = identity;
         }
         //public void Update(ApiMenuMapping entityToUpdate)
         //{
