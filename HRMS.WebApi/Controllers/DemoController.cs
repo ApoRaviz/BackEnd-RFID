@@ -29,12 +29,13 @@ using Microsoft.AspNet.Identity;
 namespace HRMS.WebApi.Controllers
 {    
     [RoutePrefix("api/v1/demo")]
-    public class DemoController : BaseApiController
-    {        
+    public class DemoController : ApiController
+    {
+
         private ILeaveService LeaveService;
         public DemoController(ILeaveService leaveService)
         {
-            LeaveService = leaveService;
+            LeaveService = leaveService;           
         }
          
         [Authorize]
@@ -46,9 +47,10 @@ namespace HRMS.WebApi.Controllers
             ResponseData<Leave> response = new ResponseData<Leave>();
             try
             {
+
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
-                    
+
                     string y = LeaveService.GetName();
 
                     ILeaveRepository headRepo = new LeaveRepository(db, User.Identity);

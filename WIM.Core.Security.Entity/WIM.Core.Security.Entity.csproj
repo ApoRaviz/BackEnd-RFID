@@ -77,7 +77,6 @@
     <Compile Include="RoleAndPermission\Role.cs" />
     <Compile Include="RoleAndPermission\RolePermission.cs" />
     <Compile Include="RoleBindingModels.cs" />
-    <Compile Include="UserManagement\PasswordHistory.cs" />
     <Compile Include="UserManagement\User.cs" />
     <Compile Include="UserManagement\UserCustomerMapping.cs" />
     <Compile Include="UserManagement\UserProjectMapping.cs" />

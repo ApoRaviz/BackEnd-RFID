@@ -76,10 +76,6 @@
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
-      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
-      <Name>WIM.Core.Security.Context</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
       <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
       <Name>WIM.Core.Security</Name>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HRMS.Service.LeaveManagement
 {
-    public interface ILeaveService : IBaseService
+    public interface ILeaveService
     {
         string GetName();
         /// <summary>

@@ -5,15 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using System.Web;
 using Microsoft.AspNet.Identity.Owin;
 using System.Net.Http;
 using System.Configuration;
 using System.Web.Http.Routing;
 using WIM.Core.Security.Entity;
 using WIM.Core.Security;
-using Microsoft.Practices.Unity;
-using System.Web;
 
 namespace WIM.Core.Security.Providers
 {
@@ -42,7 +40,6 @@ namespace WIM.Core.Security.Providers
             //    context.SetError("password_expire", "Your current password is over 3 month,Please change your password.");
             //    return;
             //}
-
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
             oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
             oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
@@ -50,10 +47,6 @@ namespace WIM.Core.Security.Providers
             var ticket = new AuthenticationTicket(oAuthIdentity, null);
             
             context.Validated(ticket);
-
-            //var container = new UnityContainer();
-            //container.RegisterType<System.Security.Principal.IIdentity>(new InjectionFactory(o => oAuthIdentity));
-
             if (!user.EmailConfirmed)
             {                        
                 string code = await userManager.GenerateEmailConfirmationTokenAsync(user.Id);

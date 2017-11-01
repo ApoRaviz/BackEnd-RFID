@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using WIM.Core.Common.Mail;
 using WIM.Core.Security.Context;
 using WIM.Core.Security.Entity;
-using WIM.Core.Security.Entity.UserManagement;
 
 namespace WIM.Core.Security
 {
@@ -64,8 +63,6 @@ namespace WIM.Core.Security
                 };
             }
 
-            
-
             return appUserManager;
         }
 
@@ -85,7 +82,6 @@ namespace WIM.Core.Security
             catch (Exception)
             {
             }
-
             return _retVal;
         }
 

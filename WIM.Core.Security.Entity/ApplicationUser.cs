@@ -80,4 +80,14 @@ namespace WIM.Core.Security.Entity
 
     }
 
+    [Table("PasswordHistory")]
+    public class PasswordHistory
+    {
+        [Key]
+        public int ID { get; set; }
+        public string UserID { get; set; }
+        public string PasswordHash { get; set; }
+        public DateTime CreatedDate { get; set; }
+    }
+
 }
