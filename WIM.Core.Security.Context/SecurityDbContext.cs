@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using WIM.Core.Security.Entity;
+using WIM.Core.Security.Entity.UserManagement;
 
 namespace WIM.Core.Security.Context
 {    

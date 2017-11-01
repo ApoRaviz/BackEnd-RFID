@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
+using WIM.Core.Security.Context;
 
 namespace HRMS.Repository.Impl.LeaveManagement
 {
@@ -20,6 +21,6 @@ namespace HRMS.Repository.Impl.LeaveManagement
         {
             Db = context;
             Identity = identity;
-        }       
+        }     
     }
 }
