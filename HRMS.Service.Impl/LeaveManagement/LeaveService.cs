@@ -10,7 +10,7 @@ using System.Security.Principal;
 
 namespace HRMS.Service.Impl.LeaveManagement
 {
-    public class LeaveService : Service, ILeaveService
+    public class LeaveService : WIM.Core.Service.Impl.Service, ILeaveService
     { 
 
         public bool ApproveLeave(int id)
