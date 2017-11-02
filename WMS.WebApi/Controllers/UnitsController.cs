@@ -72,9 +72,7 @@ namespace WMS.WebApi.Controllers
             try
             {
                 unit.UnitID = "1";
-                unit.Active = 1;
                 unit.ProjectIDSys = User.Identity.GetProjectIDSys();
-                unit.UserUpdate = User.Identity.Name;
                 int id = UnitService.CreateUnit(unit);
                 unit.UnitIDSys = id;
                 response.SetData(unit);

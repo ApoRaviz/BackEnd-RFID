@@ -9,9 +9,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WIM.Core.Common.Mail;
+using WIM.Core.Common.Validation;
 using WIM.Core.Security.Context;
 using WIM.Core.Security.Entity;
-using WIM.Core.Security.Entity.UserManagement;
 
 namespace WIM.Core.Security
 {
@@ -264,33 +264,31 @@ namespace WIM.Core.Security
         }
 
 
-        //public string GetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
-        //{
-        //    using (SecurityDbContext Db = new SecurityDbContext()) {
-        //        User u;
-        //        try
-        //        {
-        //            UserReprository repo = new UserReprository();
-        //            u = repo.GetByID(userid);
-        //            if (keyOtp > 99999)
-        //            {
-        //                u.KeyOTP = keyOtp;
-        //                u.KeyOTPDate = DateTime.Now;
-        //                repo.Update(u);
-        //            }
-
-        //        }
-        //        catch (ValidationException e)
-        //        {
-        //            throw e;
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            throw new ValidationException();
-        //        }
-        //    }
-        //    return u.TokenMobile;
-        //}
+        public string SetOTPAndGetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
+        {
+            using (SecurityDbContext Db = new SecurityDbContext())
+            {
+                try
+                {
+                   var u = (from us in Db.Users where us.Id == userid select us).SingleOrDefault();
+                    if (keyOtp > 99999)
+                    {
+                        u.KeyOTP = keyOtp;
+                        u.KeyOTPDate = DateTime.Now;
+                    }
+                    Db.SaveChanges();
+                    return u.TokenMobile;
+                }
+                catch (ValidationException e)
+                {
+                    throw new ValidationException();
+                }
+                catch (Exception)
+                {
+                    throw new ValidationException();
+                }
+            }
+        }
 
 
     }

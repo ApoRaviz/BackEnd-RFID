@@ -56,6 +56,12 @@
       <Project>{449748D1-BC3D-459A-96E1-813F9388E44E}</Project>
       <Name>WIM.Core.Security.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Repository\WMS.Repository.csproj">
+      <Project>{d6231bd3-df3b-4053-90c3-dd2af10097a7}</Project>
+      <Name>WMS.Repository</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

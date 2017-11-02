@@ -15,8 +15,8 @@ namespace WIM.Core.Common.Helpers
             apiTable = new Hashtable();
 
             // #JobComment
-            var api = from row in db.Api_MT
-                      select row;
+            var api = (from row in db.Api_MT
+                      select row).ToList();
 
             foreach(var a in api)
             {

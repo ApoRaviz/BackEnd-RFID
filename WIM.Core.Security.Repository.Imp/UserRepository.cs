@@ -9,10 +9,8 @@ namespace WIM.Core.Security.Repository.Imp
     class UserRepository : Repository<User>, IUserRepository
     {
         private SecurityDbContext Db;
-        //private ItemSetRepository repo;
-        private IIdentity Identity;
 
-        public UserRepository(SecurityDbContext context, IIdentity identity) : base(context, identity)
+        public UserRepository(SecurityDbContext context) : base(context)
         {
             Db = context;
         }

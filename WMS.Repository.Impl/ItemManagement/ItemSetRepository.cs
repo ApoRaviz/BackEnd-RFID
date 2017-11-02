@@ -7,16 +7,14 @@ using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
 using WMS.Repository.ItemManagement;
 using System.Security.Principal;
+using WMS.Common.ValueObject;
 
 namespace WMS.Repository.Impl
 {
     public class ItemSetRepository : Repository<ItemSet_MT>, IItemSetRepository
     {
         private WMSDbContext Db;
-        //private ItemSetRepository repo;
-        private IIdentity Identity;
-
-        public ItemSetRepository(WMSDbContext Context,IIdentity identity) : base(Context, identity)
+        public ItemSetRepository(WMSDbContext Context) : base(Context)
         {
             Db = Context;
         }
@@ -32,13 +30,11 @@ namespace WMS.Repository.Impl
                                    where itsm.ItemSetIDSys == id
                                    select new ItemSetDto
                                    {
-                                       Active = itsm.Active,
                                        ItemSetCode = itsm.ItemSetCode,
                                        ItemSetIDSys = itsm.ItemSetIDSys,
                                        ItemSetName = itsm.ItemSetName,
                                        LineID = itsm.LineID,
-                                       ProjectIDSys = itsm.ProjectIDSys,
-                                       UserUpdate = itsm.UserUpdate
+                                       ProjectIDSys = itsm.ProjectIDSys
                                    }).FirstOrDefault();
             return ItemSets;
         }
@@ -49,14 +45,12 @@ namespace WMS.Repository.Impl
                                    where itsm.ItemSetIDSys == id
                                    select new ItemSetDto
                                    {
-                                       Active = itsm.Active,
                                        ItemSetCode = itsm.ItemSetCode,
                                        ItemSetDetail = GetDtoItemSetDetail(id).ToList(),
                                        ItemSetIDSys = itsm.ItemSetIDSys,
                                        ItemSetName = itsm.ItemSetName,
                                        LineID = itsm.LineID,
-                                       ProjectIDSys = itsm.ProjectIDSys,
-                                       UserUpdate = itsm.UserUpdate
+                                       ProjectIDSys = itsm.ProjectIDSys
                                    }).FirstOrDefault();
             return ItemSets;
         }
@@ -89,14 +83,12 @@ namespace WMS.Repository.Impl
             IEnumerable<ItemSetDto> ItemSets = (from itsm in Db.ItemSet_MT
                                                 select new ItemSetDto
                                                 {
-                                                    Active = itsm.Active,
                                                     ItemSetCode = itsm.ItemSetCode,
                                                     //ItemSetDetail = GetItemSetDetail(itsm.ItemSetIDSys).ToList(),
                                                     ItemSetIDSys = itsm.ItemSetIDSys,
                                                     ItemSetName = itsm.ItemSetName,
                                                     LineID = itsm.LineID,
-                                                    ProjectIDSys = itsm.ProjectIDSys,
-                                                    UserUpdate = itsm.UserUpdate
+                                                    ProjectIDSys = itsm.ProjectIDSys
                                                 }).ToList();
             return ItemSets;
         }

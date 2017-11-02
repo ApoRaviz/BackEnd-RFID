@@ -63,15 +63,12 @@ namespace WIM.Core.Service.Impl
                     PersonID = data.PersonID,
                     Age = data.Age,
                     BirthDate = data.BirthDate,
-                    CreateDate = data.CreateAt,
                     Email = data.Email,
                     Name = data.Name,
                     Surname = data.Surname,
                     Religion = data.Religion,
                     Nationality = data.Nationality,
                     Gender = data.Gender,
-                    UpdateDate = data.UpdateAt,
-                    UserUpdate = data.UpdateBy,
                     Mobile = data.Mobile
                 };
             }

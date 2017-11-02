@@ -14,7 +14,7 @@ namespace WMS.Repository.Impl.ItemManagement
         //private ItemSetRepository repo;
 
 
-        public ItemSetDetailRepository(WMSDbContext context, IIdentity identity) : base(context, identity)
+        public ItemSetDetailRepository(WMSDbContext context) : base(context)
     {
             Db = context;
         }
