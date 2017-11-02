@@ -130,6 +130,10 @@
       <Project>{4a90ad09-d706-4985-a8cd-73b2ba35403d}</Project>
       <Name>WMS.Repository.Impl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
+      <Project>{c9851706-907c-4291-8086-b1df3b41674d}</Project>
+      <Name>WMS.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMS.Service\WMS.Service\WMS.Service.csproj">
       <Project>{7ebe4831-beee-4f55-a5ca-71efa10522a7}</Project>
       <Name>WMS.Service</Name>
@@ -139,6 +143,21 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ApiMaster\" />
+    <Folder Include="ApiMenuMapping\" />
+    <Folder Include="CountryMaster\" />
+    <Folder Include="CurrencyMaster\" />
+    <Folder Include="CustomerMaster\" />
+    <Folder Include="EmployeeMaster\" />
+    <Folder Include="MenuMaster\" />
+    <Folder Include="MenuProjectMapping\" />
+    <Folder Include="PermissionMaster\" />
+    <Folder Include="PersonMaster\" />
+    <Folder Include="ProjectMaster\" />
+    <Folder Include="RoleMaster\" />
+    <Folder Include="UserMaster\" />
+    <Folder Include="UserRole\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

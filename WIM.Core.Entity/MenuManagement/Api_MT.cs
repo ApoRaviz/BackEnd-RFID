@@ -17,6 +17,7 @@ namespace WIM.Core.Entity.MenuManagement
             this.ApiMenuMappings = new HashSet<ApiMenuMapping>();
             // #JobComment
             this.Permissions = new HashSet<Permission>();
+            IsActive = true;
         }
 
         [Key]

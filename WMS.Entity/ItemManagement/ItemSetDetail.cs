@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
 
-namespace WMS.Entity.ItemManagement
+namespace WMS.Entity.ItemManagement 
 {
     [Table("ItemSetDetail")]
     public class ItemSetDetail : BaseEntity
