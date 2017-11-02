@@ -89,20 +89,6 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ApiMaster\" />
-    <Folder Include="ApiMenuMapping\" />
-    <Folder Include="CountryMaster\" />
-    <Folder Include="CurrencyMaster\" />
-    <Folder Include="CustomerMaster\" />
-    <Folder Include="EmployeeMaster\" />
-    <Folder Include="MenuMaster\" />
-    <Folder Include="MenuProjectMapping\" />
-    <Folder Include="PermissionMaster\" />
-    <Folder Include="PersonMaster\" />
-    <Folder Include="ProjectMaster\" />
-    <Folder Include="UserMaster\" />
-    <Folder Include="UserRole\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

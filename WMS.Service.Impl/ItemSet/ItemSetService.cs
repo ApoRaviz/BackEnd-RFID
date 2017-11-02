@@ -7,10 +7,10 @@ using System.Transactions;
 using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Common.ValueObject;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
