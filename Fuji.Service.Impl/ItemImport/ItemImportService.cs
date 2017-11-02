@@ -24,6 +24,7 @@ using BarcodeLib;
 using Microsoft.Reporting.WebForms;
 using System.IO;
 using Fuji.Repository.Impl.ItemManagement;
+using System.Security.Principal;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -35,16 +36,16 @@ namespace Fuji.Service.Impl.ItemImport
         #endregion
         
         private FujiDbContext Db { get; set; }
-        //private IGenericRepository<ImportSerialHead> Repo;
-
+        private IIdentity Identity;
         private SerialRepository SerialDetailRepo;
         private SerialHeadRepository SerialHeadRepo;
-        public ItemImportService()
+
+        public ItemImportService(IIdentity identity)
         {
             Db = FujiDbContext.Create();
-            //Repo = new GenericRepository<ImportSerialHead>(Db);
-            SerialDetailRepo = new SerialRepository(new FujiDbContext());
-            SerialHeadRepo = new SerialHeadRepository(new FujiDbContext());
+            SerialDetailRepo = new SerialRepository(new FujiDbContext(),identity);
+            SerialHeadRepo = new SerialHeadRepository(new FujiDbContext(), identity);
+            Identity = identity;
         }
 
         public IEnumerable<ImportSerialHead> GetItems()
@@ -80,8 +81,9 @@ namespace Fuji.Service.Impl.ItemImport
 
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    string err = ex.Message;
                     return new List<ImportSerialHead>() { };
                 }
 
@@ -274,7 +276,7 @@ namespace Fuji.Service.Impl.ItemImport
                                 detail.UpdateBy = item.UpdateBy;
                                 //detailRepo.Insert(detail);
                                 //Db.ImportSerialDetail.Add(detail);
-                                SerialDetailRepo.Insert(detail, userUpdate);
+                                SerialDetailRepo.InsertItem(detail, userUpdate);
                             }
                         }
                     //}
@@ -1092,7 +1094,7 @@ namespace Fuji.Service.Impl.ItemImport
                         item.UpdateAt = DateTime.Now;
                         item.UpdateBy = userUpdate;
                         //Db.ImportSerialDetail.Add(item);
-                        SerialDetailRepo.InsertItem(item);
+                        SerialDetailRepo.InsertItem(item,userUpdate);
                     }
 
                     //Db.SaveChanges();

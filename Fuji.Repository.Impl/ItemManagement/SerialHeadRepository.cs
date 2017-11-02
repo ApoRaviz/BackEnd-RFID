@@ -8,20 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using Fuji.Common.ValueObject;
+using Fuji.Repository.ItemManagement;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace Fuji.Repository.Impl.ItemManagement
 {
     public class SerialHeadRepository : Repository<ImportSerialHead>,ISerialHeadRepository
     {
         private FujiDbContext Db { get; set; }
-      private DbSet<ImportSerialHead> DbSet { get; set; }
+        private DbSet<ImportSerialHead> DbSet { get; set; }
+        private IIdentity Identity { get; set; }
 
-        public SerialHeadRepository(FujiDbContext context):base(context)
+        public SerialHeadRepository(FujiDbContext context,IIdentity identity) :base(context,identity)
         {
             DbSet = context.Set<ImportSerialHead>();
             Db = context;
+            Identity = identity;
         }
 
         //#region Inherite Method

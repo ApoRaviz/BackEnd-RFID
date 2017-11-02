@@ -60,6 +60,9 @@
     <Reference Include="WIM.Core.Entity">
       <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
     </Reference>
+    <Reference Include="WIM.Core.Security">
+      <HintPath>..\WIM.Core.Security\bin\Debug\WIM.Core.Security.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItemManagement\SerialHeadRepository.cs" />
