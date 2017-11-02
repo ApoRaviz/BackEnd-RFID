@@ -17,14 +17,12 @@ namespace Fuji.Repository.Impl.LabelManagement
     {
         FujiDbContext Db { get; set; }
         DbSet<LabelRunning> DbSet { get; set; }
-        private IIdentity Identity;
 
-        public LabelRunningRepository(FujiDbContext context,IIdentity identity) : base(context,identity)
+        public LabelRunningRepository(FujiDbContext context) : base(context)
         {
             Db = context;
             this.DbSet = Db.Set<LabelRunning>();
-            Identity = identity;
-    }
+        }
 
         public void UpdateItem(LabelRunning item, string username)
         {

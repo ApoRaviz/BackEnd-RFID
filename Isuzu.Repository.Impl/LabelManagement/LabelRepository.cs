@@ -15,12 +15,10 @@ namespace Isuzu.Repository.Impl.LabelManagement
     public class LabelRepository: Repository<LabelRunning>, ILabelRepository
     {
         private IsuzuDataContext Db { get; set; }
-        private IIdentity Identity;
 
-        public LabelRepository(IsuzuDataContext context,IIdentity identity) :base(context,identity)
+        public LabelRepository(IsuzuDataContext context) :base(context)
         {
             Db = context;
-            Identity = identity;
         }
     }
 }

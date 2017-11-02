@@ -32,7 +32,7 @@ namespace Fuji.Service.Impl.PrintLabel
         public PrintLabelService(IIdentity identity)
         {
             Db = FujiDbContext.Create();
-            printRepo = new LabelRunningRepository(new FujiDbContext(),identity);
+            printRepo = new LabelRunningRepository(new FujiDbContext());
             Identity = identity;
         }        
 

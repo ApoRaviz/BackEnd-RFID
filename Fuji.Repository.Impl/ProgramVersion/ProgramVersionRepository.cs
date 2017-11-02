@@ -15,12 +15,10 @@ namespace Fuji.Repository.Impl.ProgramVersion
     public class ProgramVersionRepository : Repository<ProgramVersionHistory>, IProgramVersionRepository
     {
         FujiDbContext Db { get; set; }
-        private IIdentity Identity { get; set; }
 
-        public ProgramVersionRepository(FujiDbContext context,IIdentity identity) : base(context, identity)
+        public ProgramVersionRepository(FujiDbContext context) : base(context)
         {
             Db = context;
-            Identity = identity;
         }
     }
 }

@@ -18,13 +18,11 @@ namespace Isuzu.Repository.Impl
     {
         private IsuzuDataContext Db { get; set; }
         private DbSet<InboundItemsHead> DbSet;
-        private IIdentity Identity;
 
-        public InboundHeadRepository(IsuzuDataContext context, IIdentity identity) :base(context, identity)
+        public InboundHeadRepository(IsuzuDataContext context) :base(context)
         {
             Db = context;
             this.DbSet = context.Set<InboundItemsHead>();
-            Identity = identity;
         }
 
         //#region InheritMethod

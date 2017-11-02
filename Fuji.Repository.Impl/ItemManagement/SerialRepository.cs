@@ -18,14 +18,11 @@ namespace Fuji.Repository.Impl.ItemManagement
         //private FujiDbContext Context { get; set; }
         private FujiDbContext Db { get; set; }
         private DbSet<ImportSerialDetail> DbSet { get; set; }
-        private IIdentity Identity { get; set; }
 
-        public SerialRepository(FujiDbContext context,IIdentity identity) : base(context,identity)
+        public SerialRepository(FujiDbContext context) : base(context)
         {
             Db = context;
             this.DbSet = context.Set<ImportSerialDetail>();
-            Identity = identity;
-
         }
 
         //#region Inherite Method

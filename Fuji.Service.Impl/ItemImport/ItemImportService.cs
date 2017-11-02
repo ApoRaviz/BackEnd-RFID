@@ -276,7 +276,7 @@ namespace Fuji.Service.Impl.ItemImport
                                 detail.UpdateBy = item.UpdateBy;
                                 //detailRepo.Insert(detail);
                                 //Db.ImportSerialDetail.Add(detail);
-                                SerialDetailRepo.Insert(detail, userUpdate);
+                                SerialDetailRepo.InsertItem(detail, userUpdate);
                             }
                         }
                     //}

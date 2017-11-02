@@ -26,7 +26,7 @@ namespace Fuji.Service.Impl.ProgramVersion
         public ProgramVersionService(IIdentity identity)
         {
             Db = FujiDbContext.Create();
-            programRepo = new ProgramVersionRepository(new FujiDbContext(), identity);
+            programRepo = new ProgramVersionRepository(new FujiDbContext());
             Identity = identity;
         }        
 

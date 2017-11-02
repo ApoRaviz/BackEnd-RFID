@@ -32,8 +32,8 @@ namespace Isuzu.Service.Impl.Inbound
         public InboundService(IIdentity identity)
         {
             Db = IsuzuDataContext.Create();
-            DetailRepo = new InboundRepository(new IsuzuDataContext(), identity);
-            HeadRepo = new InboundHeadRepository(new IsuzuDataContext(), identity);
+            DetailRepo = new InboundRepository(new IsuzuDataContext());
+            HeadRepo = new InboundHeadRepository(new IsuzuDataContext());
             Identity = identity;
         }
 
@@ -443,7 +443,7 @@ namespace Isuzu.Service.Impl.Inbound
                                 x.UpdateBy = userName;
                                 x.UpdateAt = DateTime.Now;
                                 x.Status = IsuzuStatus.NEW.ToString();
-                                DetailRepo.Insert(x, userName);
+                                DetailRepo.InsertItem(x, userName);
                             });
                             //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
                             var item = HeadRepo.GetItemFirstBy(f => f.InvNo==i.InvNo,true);
