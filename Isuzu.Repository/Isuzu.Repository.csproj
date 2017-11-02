@@ -50,11 +50,17 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WIM.Core.Entity">
+      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="WIM.Core.Repository">
+      <HintPath>..\WIM.Core.Repository\bin\Debug\WIM.Core.Repository.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InboundManagement\IGenericRepository.cs" />
-    <Compile Include="InboundManagement\IItemsRepository.cs" />
-    <Compile Include="InboundManagement\IItemsHeadRepository.cs" />
+    <Compile Include="InboundManagement\IInboundRepository.cs" />
+    <Compile Include="InboundManagement\IInboundHeadRepository.cs" />
+    <Compile Include="LabelManagement\ILabelRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +70,5 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

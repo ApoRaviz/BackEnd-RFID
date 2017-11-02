@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WIM.Core.Entity;
 
 namespace Isuzu.Entity
 {
     [Table("InboundItems")]
-    public partial class InboundItems
+    public partial class InboundItems : BaseEntity 
     {
         public string ID { get; set; }
 
@@ -50,17 +51,17 @@ namespace Isuzu.Entity
         [StringLength(50)]
         public string CartonNo { get; set; }
 
-        [StringLength(25)]
-        public string CreateBy { get; set; }
+        //[StringLength(25)]
+        //public string CreateBy { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
-        public DateTime? CreateAt { get; set; }
+        //[Column(TypeName = "smalldatetime")]
+        //public DateTime? CreateAt { get; set; }
 
-        [StringLength(25)]
-        public string UpdateBy { get; set; }
+        //[StringLength(25)]
+        //public string UpdateBy { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
-        public DateTime? UpdateAt { get; set; }
+        //[Column(TypeName = "smalldatetime")]
+        //public DateTime? UpdateAt { get; set; }
 
         [StringLength(50)]
         public string DeleteReason { get; set; }

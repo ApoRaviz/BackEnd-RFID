@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WIM.Core.Entity.Status
 {
     [Table("Status_MT")]
-    public class Status_MT
+    public class Status_MT : BaseEntity
     {
         [Key]
         public int StatusIDSys { get; set; }

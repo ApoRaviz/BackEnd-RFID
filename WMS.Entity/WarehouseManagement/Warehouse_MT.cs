@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.WarehouseManagement
 {
     [Table("Warehouse_MT")]
-    public class Warehouse_MT
+    public class Warehouse_MT : BaseEntity
     {
         [Key]
         public int WHIDSys { get; set; }
@@ -22,9 +23,6 @@ namespace WMS.Entity.WarehouseManagement
         public string Province { get; set; }
         public string Zipcode { get; set; }
         public string CountryCode { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+
     }
 }

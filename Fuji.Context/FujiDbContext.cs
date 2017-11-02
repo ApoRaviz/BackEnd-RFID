@@ -1,14 +1,12 @@
-﻿using Fuji.Entity.ItemManagement;
-using Fuji.Entity.LabelManagement;
-using Fuji.Entity.ProgramVersion;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Fuji.Entity.ItemManagement;
+using Fuji.Entity.LabelManagement;
+using Fuji.Entity.ProgramVersion;
 
 namespace Fuji.Context
 {
@@ -33,15 +31,6 @@ namespace Fuji.Context
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-        }
-
-        public ObjectResult<string> ProcGetNewID(string prefixes)
-        {
-            var prefixesParameter = prefixes != null ?
-                new ObjectParameter("Prefixes", prefixes) :
-                new ObjectParameter("Prefixes", typeof(string));
-
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcGetNewID", prefixesParameter);
         }
 
     }

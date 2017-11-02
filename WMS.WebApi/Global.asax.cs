@@ -21,7 +21,7 @@ namespace WMS.WebApi
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.Initialize();
-            ApiHashtable.Initialize();
+            ApiHashTableHelper.Initialize();
         }
     }
 }

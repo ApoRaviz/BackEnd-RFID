@@ -14,7 +14,7 @@ using WIM.Core.Entity.SupplierManagement;
 namespace WIM.Core.Entity.ProjectManagement
 {
     [Table("Project_MT")]
-    public class Project_MT
+    public class Project_MT : BaseEntity
     {
         public Project_MT()
         {
@@ -33,9 +33,9 @@ namespace WIM.Core.Entity.ProjectManagement
         public string ProjectName { get; set; }
         public int CusIDSys { get; set; }
         public string ProjectStatus { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+        //public System.DateTime CreatedDate { get; set; }
+        //public System.DateTime UpdateDate { get; set; }
+        //public string UserUpdate { get; set; }
         
         public virtual ICollection<Supplier_MT> Supplier_MT { get; set; }
 

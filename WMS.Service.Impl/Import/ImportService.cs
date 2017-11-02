@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -22,12 +23,12 @@ namespace WMS.Service.Impl.Import
                             "<Import>{5}</Import></row>";
 
         private WMSDbContext Db;
-        private GenericRepository<ImportDefinitionHeader_MT> repo;
+        private Repository<ImportDefinitionHeader_MT> repo;
 
-        public ImportService()
+        public ImportService(IIdentity identity)
         {
             Db = new WMSDbContext();
-            repo = new GenericRepository<ImportDefinitionHeader_MT>(Db);
+            repo = new Repository<ImportDefinitionHeader_MT>(Db);
         }
 
         public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)
@@ -63,15 +64,15 @@ namespace WMS.Service.Impl.Import
 
             using (var scope = new TransactionScope())
             {
-                data.CreatedDate = DateTime.Now;
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.CreatedDate = DateTime.Now;
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 //Repo.Insert(customer);
                 try
                 {
                     ReportSysID = Db.ProcCreateImportDefinition(data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
-                                              , data.CreatedDate, data.UpdatedDate, data.UserUpdate, sb.ToString()).FirstOrDefault();
+                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
@@ -99,13 +100,13 @@ namespace WMS.Service.Impl.Import
 
             using (var scope = new TransactionScope())
             {
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 try
                 {
                     Db.ProcUpdateImportDefinition(data.ImportIDSys, data.FormatName, data.Delimiter, data.MaxHeading
-                                              , data.Encoding, data.SkipFirstRecode, data.CreatedDate, data.UpdatedDate, data.UserUpdate, sb.ToString());
+                                              , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)

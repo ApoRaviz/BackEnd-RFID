@@ -164,7 +164,7 @@ public static class RBAC_ExtendedMethods_4_Principal
                 {
                     //url from base
                     string[] permissions = c.Value.Split('/');
-                    string permission = permissions[0] + ApiHashtable.apiTable[permissions[1]];
+                    string permission = permissions[0] + ApiHashTableHelper.apiTable[permissions[1]];
                     string[] permissUrlSplit = permission.Split('/');
 
                     string urlVerify = "";

@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="ItemManagement\ISerialHeadRepository.cs" />
     <Compile Include="ItemManagement\ISerialRepository.cs" />
+    <Compile Include="LabelManagement\ILabelRunningRepository.cs" />
+    <Compile Include="ProgramVersion\IProgramVersionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
       <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
       <Name>Fuji.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>

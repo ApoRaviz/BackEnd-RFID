@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.WarehouseManagement
 {
     [Table("ZoneLayoutHeader_MT")]
-    public class ZoneLayoutHeader_MT
+    public class ZoneLayoutHeader_MT : BaseEntity
     {
         public ZoneLayoutHeader_MT()
         {
@@ -22,9 +23,6 @@ namespace WMS.Entity.WarehouseManagement
         public string Warehouse { get; set; }
         public string Area { get; set; }
         public Nullable<int> TotalFloor { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }
 
         public virtual ICollection<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public List<ZoneLayoutDetail_MT> detail;

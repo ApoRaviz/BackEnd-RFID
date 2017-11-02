@@ -121,7 +121,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 string userName = User.Identity.GetUserName() ?? "SYSTEM";
-                bool result = ItemImportService.ClearPickingGroup(id);
+                bool result = ItemImportService.ClearPickingGroup(id, userName);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(result);
             }
@@ -331,8 +331,9 @@ namespace Fuji.WebApi.Controllers
             IResponseData<ImportSerialHead> response = new ResponseData<ImportSerialHead>();
             try
             {
-                item.UserUpdate = User.Identity.GetUserName();
-                ImportSerialHead newItem = ItemImportService.CreateItem(item);
+                string userUpdate = User.Identity.GetUserName();
+                //item.UserUpdate = userUpdate;
+                ImportSerialHead newItem = ItemImportService.CreateItem(item, userUpdate);
                 response.SetData(newItem);
             }
             catch (ValidationException ex)
@@ -353,8 +354,9 @@ namespace Fuji.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                item.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
-                bool isUpated = ItemImportService.UpdateItem(id, item);
+                string userUpdate = User.Identity.GetUserName() ?? "SYSTEM";
+                //item.UserUpdate = userUpdate;
+                bool isUpated = ItemImportService.UpdateItem(id, item, userUpdate);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -375,7 +377,8 @@ namespace Fuji.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                ItemImportService.DeleteItem(id);
+                string userUpdate = User.Identity.GetUserName() ?? "SYSTEM";
+                ItemImportService.DeleteItem(id,userUpdate);
                 response.SetData(true);
             }
             catch (ValidationException ex)
@@ -395,8 +398,9 @@ namespace Fuji.WebApi.Controllers
             IResponseData<Boolean> response = new ResponseData<Boolean>();
             try
             {
-                item.UserUpdate = User.Identity.GetUserName() ?? "SYSTEM";
-                bool result = ItemImportService.UpdateStausExport(item);
+                string userUpdate = User.Identity.GetUserName() ?? "SYSTEM";
+                //item.UserUpdate = userUpdate;
+                bool result = ItemImportService.UpdateStausExport(item, userUpdate);
                 if (result)
                     response.SetStatus(HttpStatusCode.OK);
                 else

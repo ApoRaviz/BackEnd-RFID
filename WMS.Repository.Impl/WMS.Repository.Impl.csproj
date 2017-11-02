@@ -47,34 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiMaster\ApiMenuMappingRepository.cs" />
-    <Compile Include="ApiMaster\ApiMTRepository.cs" />
     <Compile Include="CategoryMaster\CategoryRepository.cs" />
-    <Compile Include="Country\CountryRepository.cs" />
-    <Compile Include="Currency\CurrencyRepository.cs" />
-    <Compile Include="CustomerAndProject\CustomerRepository.cs" />
-    <Compile Include="CustomerAndProject\ProjectRepository.cs" />
     <Compile Include="Dimension\DimensionRepository.cs" />
     <Compile Include="Inspect\InspectRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />
     <Compile Include="ItemManagement\ItemSetRepository.cs" />
     <Compile Include="Location\LocationRepository.cs" />
-    <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
-    <Compile Include="MenuAndPermission\MenuRepository.cs" />
-    <Compile Include="MenuAndPermission\PermissionRepository.cs" />
-    <Compile Include="Personalize\EmployeeRepository.cs" />
-    <Compile Include="Personalize\PersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoleAndUser\RoleRepository.cs" />
-    <Compile Include="RoleAndUser\UserRepository.cs" />
-    <Compile Include="RoleAndUser\UserRoleRepository.cs" />
     <Compile Include="Supplier\SupplierRepository.cs" />
     <Compile Include="UnitMaster\UnitRepository.cs" />
     <Compile Include="Warehouse\WarehouseRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
-      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
       <Name>WIM.Core.Context</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
@@ -89,9 +75,9 @@
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
-      <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
-      <Name>WMS.Common.ValueObject</Name>
+    <ProjectReference Include="..\WIM.Repository\WMS.Repository.csproj">
+      <Project>{d6231bd3-df3b-4053-90c3-dd2af10097a7}</Project>
+      <Name>WMS.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
       <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>

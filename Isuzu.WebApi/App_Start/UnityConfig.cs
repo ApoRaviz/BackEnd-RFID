@@ -6,8 +6,8 @@ using Unity.WebApi;
 using WIM.Core.Common;
 using Isuzu.WebApi.Controllers;
 using Isuzu.Service;
-using Isuzu.Service.Impl;
-
+using Isuzu.Service.Impl.Inbound;
+using System.Security.Principal;
 
 namespace Isuzu.WebApi
 {
@@ -27,6 +27,8 @@ namespace Isuzu.WebApi
             //Register OWin Authen
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
+
+            container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
 
             //Register Service
             //container.RegisterType<ICommonService, CommonService>();
@@ -51,13 +53,13 @@ namespace Isuzu.WebApi
             //container.RegisterType<IUserRoleService, UserRoleService>();
             //container.RegisterType<IImportService, ImportService>();
             //container.RegisterType<IDimensionService, DimensionService>();
-            
+
             //Fuji
             //container.RegisterType<IItemImportService, ItemImportService>();
             //container.RegisterType<IProgramVersionService, ProgramVersionService>();
             //container.RegisterType<IPrintLabelService, PrintLabelService>();
             //container.RegisterType<IHelperService, HelperService>();
-            
+
             //Isuzu
             container.RegisterType<IInboundService, InboundService>();
 

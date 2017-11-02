@@ -7,8 +7,9 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.RoleAndPermission;
-using WMS.Common;
+using WIM.Core.Service;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers
@@ -82,13 +83,13 @@ namespace WMS.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("project")]
-        public HttpResponseMessage GetRoleByUserProject()
+        [Route("project/{userid}")]
+        public HttpResponseMessage GetRoleByUserProject(string userid)
         {
             IResponseData<List<Role>> response = new ResponseData<List<Role>>();
             try
             {
-                List<Role> Role = RoleService.GetRoleByProjectUser(User.Identity.GetProjectIDSys());
+                List<Role> Role = RoleService.GetRoleByProjectUser(User.Identity.GetProjectIDSys(),userid);
                 response.SetData(Role);
             }
             catch (ValidationException ex)
@@ -99,6 +100,23 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("user")]
+        public HttpResponseMessage GetRoleByUserIDProject()
+        {
+            IResponseData<List<Role>> response = new ResponseData<List<Role>>();
+            try
+            {
+                List<Role> Role = RoleService.GetRoleByUserID(User.Identity.GetUserId());
+                response.SetData(Role);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
         // get api/Roles/id
 
         [HttpGet]
@@ -150,7 +168,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = RoleService.UpdateRole(Id, Role);
+                bool isUpated = RoleService.UpdateRole( Role);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

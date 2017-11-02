@@ -44,9 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Isuzu.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Fuji.Repository.Impl">
-      <HintPath>..\Fuji.Repository.Impl\bin\Debug\Fuji.Repository.Impl.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.802.134\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
     </Reference>
@@ -86,6 +83,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WIM.Core.Entity">
+      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItemImport\ItemImportService.cs" />
@@ -109,6 +109,10 @@
     <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
       <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
       <Name>Fuji.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Repository.Impl\Fuji.Repository.Impl.csproj">
+      <Project>{76c721e6-b6f0-4132-b36e-9a9b68cbae0e}</Project>
+      <Name>Fuji.Repository.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
       <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>

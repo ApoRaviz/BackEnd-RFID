@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.ItemManagement
 {
     [Table("ItemUnitMapping")]
-    public class ItemUnitMapping
+    public class ItemUnitMapping : BaseEntity
     {
         [Key]
         public int ItemIDSys { get; set; }

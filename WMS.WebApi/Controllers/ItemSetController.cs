@@ -7,7 +7,7 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Common;
+using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
 using WMS.Service;
 
@@ -116,7 +116,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ItemSetService.UpdateItemSet(id, ItemSet);
+                bool isUpated = ItemSetService.UpdateItemSet(ItemSet);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

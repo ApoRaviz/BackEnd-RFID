@@ -9,7 +9,6 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
-using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.SupplierManagement;
 
@@ -72,7 +71,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Supplier.UserUpdate = User.Identity.Name;
+                Supplier.UpdateBy = User.Identity.Name;
                 int id = SupplierService.CreateSupplier(Supplier);
                 response.SetData(id);
             }
@@ -95,7 +94,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = SupplierService.UpdateSupplier(supIDSys, Supplier);
+                bool isUpated = SupplierService.UpdateSupplier(Supplier);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

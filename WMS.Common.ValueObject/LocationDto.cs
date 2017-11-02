@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WMS.Master.Common
+namespace WMS.Master.Common.ValueObject
 {
     class LocationDto
     {

@@ -90,7 +90,7 @@ namespace WMS.Repository.Impl
 
         public void Insert(User entity)
         {
-            entity.Active = 1;
+            //entity.Active = 1;
             Db.User.Add(entity);
             Db.SaveChanges();
         }
@@ -98,9 +98,9 @@ namespace WMS.Repository.Impl
         public void Delete(object id)
         {
             var existedUser = this.GetByID(id);
-            existedUser.Active = 0;
-            existedUser.UpdateDate = DateTime.Now;
-            existedUser.UserUpdate = "1";
+            //existedUser.Active = 0;
+            //existedUser.UpdateDate = DateTime.Now;
+            //existedUser.UserUpdate = "1";
             Db.SaveChanges();
         }
 
@@ -118,8 +118,8 @@ namespace WMS.Repository.Impl
             User.Name = entityToUpdate.Name;
             User.Surname = entityToUpdate.Surname;
             //User.PhoneNumber = User.PhoneNumber;
-            User.UpdateDate = DateTime.Now;
-            User.UserUpdate = "1";
+            //User.UpdateDate = DateTime.Now;
+            //User.UserUpdate = "1";
             User.TokenMobile = entityToUpdate.TokenMobile;
             User.KeyAccess = entityToUpdate.KeyAccess;
             User.KeyAccessDate = entityToUpdate.KeyAccessDate;

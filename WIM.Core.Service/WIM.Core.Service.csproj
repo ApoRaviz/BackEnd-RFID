@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -47,9 +50,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiMaster\IApiMTService.cs" />
+    <Compile Include="ApiMenuMapping\IApiMenuMappingService.cs" />
+    <Compile Include="CountryMaster\ICountryService.cs" />
+    <Compile Include="CurrencyMaster\ICurrencyService.cs" />
+    <Compile Include="CustomerMaster\ICustomerService.cs" />
+    <Compile Include="EmployeeMaster\IEmployeeService.cs" />
+    <Compile Include="MenuMaster\IMenuService.cs" />
+    <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
+    <Compile Include="PermissionMaster\IPermissionService.cs" />
+    <Compile Include="PersonMaster\IPersonService.cs" />
+    <Compile Include="ProjectMaster\IProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleMaster\IRoleService.cs" />
+    <Compile Include="UserMaster\IUserService.cs" />
+    <Compile Include="UserRole\IUserRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>

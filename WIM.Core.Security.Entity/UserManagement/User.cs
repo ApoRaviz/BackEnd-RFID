@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Security.Entity.UserManagement
@@ -26,7 +27,7 @@ namespace WIM.Core.Security.Entity.UserManagement
     }*/
 
     //[Table("Users")]
-    public class User
+    public class User : BaseEntity
     {
         public User()
         {
@@ -45,7 +46,6 @@ namespace WIM.Core.Security.Entity.UserManagement
         public Nullable<System.DateTime> LockoutEndDateUtc { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
-        public byte Active { get; set; }
         public bool IsSysAdmin { get; set; }
         public string KeyAccess { get; set; }
         public Nullable<System.DateTime> KeyAccessDate { get; set; }

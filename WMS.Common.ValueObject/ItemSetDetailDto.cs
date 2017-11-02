@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WMS.Master;
 
-namespace WMS.Common
+namespace WMS.Common.ValueObject
 {
     public class ItemSetDetailDto
     {
