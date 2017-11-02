@@ -36,7 +36,7 @@ namespace Fuji.Repository.ItemManagement
         IEnumerable<T> SqlQuery<T>(string sql, params object[] parameters);
         void ExceuteSql(string sql);
         bool IsAnyItemBy(Func<ImportSerialDetail, bool> where);
-        void InsertItem(ImportSerialDetail item);
+        void InsertItem(ImportSerialDetail item,string userName);
         void DeleteItems(Func<ImportSerialDetail, bool> predicate);
     }
 }

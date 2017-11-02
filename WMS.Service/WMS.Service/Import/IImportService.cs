@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Entity.ImportManagement;
 
 namespace WMS.Service.Import
 {
-    public interface IImportService
+    public interface IImportService : IService
     {
         List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable);
         ImportDefinitionHeader_MT GetImportDefinitionByImportIDSys(int id, string include);

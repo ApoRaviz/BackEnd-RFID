@@ -16,7 +16,7 @@ using WMS.Service.Import;
 
 namespace WMS.Service.Impl.Import
 {
-    public class ImportService : IImportService
+    public class ImportService : WIM.Core.Service.Impl.Service, IImportService
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
@@ -25,7 +25,7 @@ namespace WMS.Service.Impl.Import
         private WMSDbContext Db;
         private Repository<ImportDefinitionHeader_MT> repo;
 
-        public ImportService(IIdentity identity)
+        public ImportService()
         {
             Db = new WMSDbContext();
             repo = new Repository<ImportDefinitionHeader_MT>(Db);

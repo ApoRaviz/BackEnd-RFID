@@ -20,12 +20,11 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class CurrencyService : ICurrencyService
+    public class CurrencyService : Service, ICurrencyService
     {
-        private IIdentity user { get; set; }
-        public CurrencyService(IIdentity identity)
-        {
-            user = identity;
+
+        public CurrencyService()
+        { 
         }
 
         public IEnumerable<CurrencyUnit> GetCurrency()

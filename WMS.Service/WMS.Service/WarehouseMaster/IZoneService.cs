@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Service.WarehouseMaster
 {
-    public interface IZoneService
+    public interface IZoneService : IService
     {
         List<ZoneLayoutHeader_MT> GetAllZoneHeader();
         List<ZoneLayoutDetail_MT> GetAllZoneDetail();

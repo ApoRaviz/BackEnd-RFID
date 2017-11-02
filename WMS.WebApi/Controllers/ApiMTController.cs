@@ -17,7 +17,7 @@ namespace WMS.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/apimt")]
-    public class ApiMTController : ApiController
+    public class ApiMTController :  ApiController
     {
         private IApiMTService ApiMTService;
 

@@ -13,17 +13,15 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.Impl;
 using System.Security.Principal;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
-    public class UnitService : IUnitService
+    public class UnitService : WIM.Core.Service.Impl.Service, IUnitService
     {
-        private IIdentity user { get; set; }
-        public UnitService(IIdentity identity)
+        public UnitService()
         {
-            user = identity;
         }        
         public IEnumerable<Unit_MT> GetUnits()
         {

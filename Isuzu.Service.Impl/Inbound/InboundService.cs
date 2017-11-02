@@ -17,6 +17,7 @@ using OfficeOpenXml;
 using Isuzu.Context;
 using Isuzu.Entity;
 using Isuzu.Repository.Impl;
+using System.Security.Principal;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -25,13 +26,15 @@ namespace Isuzu.Service.Impl.Inbound
         private IsuzuDataContext Db { get; set; }
         private InboundRepository DetailRepo;
         private InboundHeadRepository HeadRepo;
+        private IIdentity Identity;
 
         private string connectionString = ConfigurationManager.ConnectionStrings["WIM_ISUZU"].ConnectionString;
-        public InboundService()
+        public InboundService(IIdentity identity)
         {
             Db = IsuzuDataContext.Create();
             DetailRepo = new InboundRepository(new IsuzuDataContext());
             HeadRepo = new InboundHeadRepository(new IsuzuDataContext());
+            Identity = identity;
         }
 
         #region =========================== HANDY ===========================
@@ -440,7 +443,7 @@ namespace Isuzu.Service.Impl.Inbound
                                 x.UpdateBy = userName;
                                 x.UpdateAt = DateTime.Now;
                                 x.Status = IsuzuStatus.NEW.ToString();
-                                DetailRepo.Insert(x, userName);
+                                DetailRepo.InsertItem(x, userName);
                             });
                             //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
                             var item = HeadRepo.GetItemFirstBy(f => f.InvNo==i.InvNo,true);

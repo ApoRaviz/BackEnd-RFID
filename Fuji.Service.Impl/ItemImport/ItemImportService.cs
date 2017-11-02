@@ -24,6 +24,7 @@ using BarcodeLib;
 using Microsoft.Reporting.WebForms;
 using System.IO;
 using Fuji.Repository.Impl.ItemManagement;
+using System.Security.Principal;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -80,8 +81,9 @@ namespace Fuji.Service.Impl.ItemImport
 
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    string err = ex.Message;
                     return new List<ImportSerialHead>() { };
                 }
 
@@ -274,7 +276,7 @@ namespace Fuji.Service.Impl.ItemImport
                                 detail.UpdateBy = item.UpdateBy;
                                 //detailRepo.Insert(detail);
                                 //Db.ImportSerialDetail.Add(detail);
-                                SerialDetailRepo.Insert(detail);
+                                SerialDetailRepo.InsertItem(detail, userUpdate);
                             }
                         }
                     //}
@@ -1092,7 +1094,7 @@ namespace Fuji.Service.Impl.ItemImport
                         item.UpdateAt = DateTime.Now;
                         item.UpdateBy = userUpdate;
                         //Db.ImportSerialDetail.Add(item);
-                        SerialDetailRepo.InsertItem(item);
+                        SerialDetailRepo.InsertItem(item,userUpdate);
                     }
 
                     //Db.SaveChanges();

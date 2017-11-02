@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Repository;
@@ -18,11 +19,10 @@ namespace Fuji.Repository.Impl.ItemManagement
         private FujiDbContext Db { get; set; }
         private DbSet<ImportSerialDetail> DbSet { get; set; }
 
-        public SerialRepository(FujiDbContext context): base(context)
+        public SerialRepository(FujiDbContext context) : base(context)
         {
             Db = context;
             this.DbSet = context.Set<ImportSerialDetail>();
-
         }
 
         //#region Inherite Method
@@ -155,15 +155,20 @@ namespace Fuji.Repository.Impl.ItemManagement
         {
             return DbSet.Any(where);
         }
-        public void InsertItem(ImportSerialDetail item)
+        public void InsertItem(ImportSerialDetail item,string userName)
         {
+            item.CreateBy = userName;
+            item.CreateAt = DateTime.Now;
+            item.UpdateBy = userName;
+            item.UpdateAt = DateTime.Now;
+
             DbSet.Add(item);
             Db.SaveChanges();
         }
 
-        public void UpdateItem(ImportSerialDetail item, string username)
+        public void UpdateItem(ImportSerialDetail item, string userName)
         {
-            item.UpdateBy = username;
+            item.UpdateBy = userName;
             item.UpdateAt = DateTime.Now;
 
             DbSet.Attach(item);

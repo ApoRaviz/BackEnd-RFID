@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace Isuzu.Repository.Impl
 {
@@ -18,7 +19,7 @@ namespace Isuzu.Repository.Impl
         private IsuzuDataContext Db { get; set; }
         private DbSet<InboundItemsHead> DbSet;
 
-        public InboundHeadRepository(IsuzuDataContext context):base(context)
+        public InboundHeadRepository(IsuzuDataContext context) :base(context)
         {
             Db = context;
             this.DbSet = context.Set<InboundItemsHead>();

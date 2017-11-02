@@ -12,19 +12,17 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Repository.Impl;
 using WMS.Entity.WarehouseManagement;
 using WMS.Context;
 using System.Security.Principal;
+using WMS.Repository.Impl;
 
 namespace WMS.Master
 {
-    public class WarehouseService : IWarehouseService
+    public class WarehouseService : WIM.Core.Service.Impl.Service, IWarehouseService
     {
-        private IIdentity user { get; set; }
-        public WarehouseService(IIdentity identity)
+        public WarehouseService()
         {
-            user = identity;
         }
 
         public IEnumerable<Warehouse_MT> GetWarehouses()

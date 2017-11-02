@@ -20,12 +20,11 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService : Service, ICustomerService
     {
-        private IIdentity user { get; set; }
-        public CustomerService(IIdentity identity)
+        public CustomerService()
         {
-            user = identity;
+
         }
 
         public object GetCustomerAll()

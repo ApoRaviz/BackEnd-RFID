@@ -13,13 +13,13 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
-using WMS.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.WarehouseManagement;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
-    public class LocationService : ILocationService
+    public class LocationService : WIM.Core.Service.Impl.Service, ILocationService
     {
         private WMSDbContext proc = new WMSDbContext();
         private LocationRepository repo;

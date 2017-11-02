@@ -14,18 +14,16 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity.SupplierManagement;
-using WMS.Repository.Impl;
 using WMS.Context;
 using System.Security.Principal;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 { 
-    public class SupplierService : ISupplierService
+    public class SupplierService : WIM.Core.Service.Impl.Service, ISupplierService
     {
-        private IIdentity user { get; set; }
-        public SupplierService(IIdentity identity)
+        public SupplierService()
         {
-            user = identity;
         }        
 
         public IEnumerable<Supplier_MT> GetSuppliers()

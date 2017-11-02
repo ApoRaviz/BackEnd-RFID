@@ -84,7 +84,7 @@ namespace WMS.WebApi.Controllers
                 }
                 else
                 {
-                    customer = this.UserService.GetCustonersByUserID(userid);
+                    customer = UserService.GetCustonersByUserID(userid);
                 }
 
                 response.SetData(customer);

@@ -19,6 +19,7 @@ using Fuji.Common.ValueObject;
 using System.IO;
 using System.Drawing;
 using Fuji.Repository.Impl.LabelManagement;
+using System.Security.Principal;
 
 namespace Fuji.Service.Impl.PrintLabel
 {
@@ -26,13 +27,13 @@ namespace Fuji.Service.Impl.PrintLabel
     {
         private FujiDbContext Db { get; set; }
         private LabelRunningRepository printRepo;
-        //private IGenericRepository<LabelRunning> Repo;
+        private IIdentity Identity;
 
-        public PrintLabelService()
+        public PrintLabelService(IIdentity identity)
         {
-           // Repo = new GenericRepository<LabelRunning>(Db);
             Db = FujiDbContext.Create();
             printRepo = new LabelRunningRepository(new FujiDbContext());
+            Identity = identity;
         }        
 
         public int GetRunningByType(string type, int running,string userUpdate)

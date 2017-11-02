@@ -12,7 +12,7 @@ using WMS.Service.Label;
 
 namespace WMS.Service.Impl.Label
 {
-    public class LabelService : ILabelService
+    public class LabelService : WIM.Core.Service.Impl.Service, ILabelService
     {
         string pXmlDetail = "<row><Label_Code>{0}</Label_Code><Label_Type>{1}</Label_Type><Label_From>{2}</Label_From>" +
                             "<Label_Item>{3}</Label_Item><Font_Name>{4}</Font_Name><Font_Size>{5}</Font_Size>" +

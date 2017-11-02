@@ -1,32 +1,24 @@
-﻿using AutoMapper;
-using System;
+﻿
 using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
 using WMS.Repository;
 using WIM.Core.Common.Validation;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.Impl;
-using WIM.Core.Context;
-using System.Security.Principal;
 using WMS.Common.ValueObject;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService : WIM.Core.Service.Impl.Service , ICategoryService
     {
-        private IIdentity user { get; set; }
-        public CategoryService(IIdentity identity)
+
+        public CategoryService()
         {
-            user = identity;
         }
 
         public IEnumerable<CategoryDto> GetCategories()

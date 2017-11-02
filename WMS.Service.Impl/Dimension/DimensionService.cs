@@ -15,12 +15,10 @@ using WMS.Repository.Impl;
 
 namespace WMS.Service
 {
-    public class DimensionService : IDimensionService
+    public class DimensionService : WIM.Core.Service.Impl.Service, IDimensionService
     {
-        private IIdentity user { get; set; }
-        public DimensionService(IIdentity identity)
+        public DimensionService()
         {
-            user = identity;
         }
 
         public List<DimensionLayout_MT> GetAllDimension()

@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRMS.Service
+namespace WIM.Core.Service
 {
     public interface IService
     {
