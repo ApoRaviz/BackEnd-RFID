@@ -17,7 +17,7 @@ namespace HRMS.Service.LeaveManagement
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Leave GetLeaveByID(int id);
+        LeaveDto GetLeaveByID(int id);
         /// <summary>
         /// ดึงข้อมูลในตาราง Leaves ออกมาเป็น List
         /// </summary>
@@ -35,7 +35,9 @@ namespace HRMS.Service.LeaveManagement
         /// <param name="leave"></param>
         /// <returns></returns>
         Leave UpdateLeave(LeaveDto leave);
+        IEnumerable<LeaveType> GetLeaveType();
         bool ApproveLeave(int id);
         bool RejectLeave(int id);
+
     }
 }

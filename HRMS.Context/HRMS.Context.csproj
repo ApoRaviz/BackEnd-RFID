@@ -62,6 +62,10 @@
       <Project>{1646e0fc-8f7b-436f-983a-7c9873ca49cb}</Project>
       <Name>HRMS.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

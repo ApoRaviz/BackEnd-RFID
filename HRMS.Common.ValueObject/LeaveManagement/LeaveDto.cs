@@ -13,6 +13,7 @@ namespace HRMS.Common.ValueObject.LeaveManagement
         public LeaveDto()
         {
             LeaveDetails = new HashSet<LeaveDetailDto>();
+            LeaveTypes = new HashSet<LeaveTypeDto>();
         }
 
         [Key]
@@ -20,10 +21,12 @@ namespace HRMS.Common.ValueObject.LeaveManagement
         public int StatusIDSys { get; set; }
         public decimal Duration { get; set; }
         public string Comment { get; set; }
+        public string LeaveTypeName { get; set; }
         public int LeaveTypeIDSys { get; set; }
         public string RequesterID { get; set; }
         public string ApproverID { get; set; }
         public virtual ICollection<LeaveDetailDto> LeaveDetails { get; set; }
+        public virtual ICollection<LeaveTypeDto> LeaveTypes { get; set; }
 
         [NotMapped]
         public string StatusTitle { get; set; }

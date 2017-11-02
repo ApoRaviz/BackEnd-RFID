@@ -23,6 +23,7 @@ using HRMS.Repository.Impl.LeaveManagement;
 using HRMS.Repository.LeaveManagement;
 using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
+using HRMS.Common.ValueObject.LeaveManagement;
 
 namespace HRMS.WebApi.Controllers
 {    
@@ -48,7 +49,7 @@ namespace HRMS.WebApi.Controllers
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
                     ILeaveRepository headRepo = new LeaveRepository(db, User.Identity);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
 
                     Leave x = headRepo.Insert(leaveRequest);
 
@@ -81,17 +82,17 @@ namespace HRMS.WebApi.Controllers
                 Leave leaveUpdated;
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
-                    ILeaveRepository repo = new LeaveRepository(db);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
+                    ILeaveRepository repo = new LeaveRepository(db, User.Identity);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
 
-                    leaveUpdated = repo.Update(leaveRequest, User.Identity);
+                    leaveUpdated = repo.Update(leaveRequest);
                  
                     dRepo.Delete(x => x.LeaveIDSys == leaveUpdated.LeaveIDSys);
           
                     foreach (var entity in leaveRequest.LeaveDetails)
                     {
                         var leaveForInsert = Mapper.Map<LeaveDetailDto, LeaveDetail> (entity);
-                        dRepo.Insert(leaveForInsert, User.Identity);
+                        dRepo.Insert(leaveForInsert);
                     }
 
                     db.SaveChanges();
@@ -108,6 +109,8 @@ namespace HRMS.WebApi.Controllers
         } 
         
     }
+
+
 
     /*public interface ILeaveRepository : IRepository<Leave>
     {
@@ -157,5 +160,6 @@ namespace HRMS.WebApi.Controllers
 
         }
     }*/
+
 
 }

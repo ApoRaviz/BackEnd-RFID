@@ -42,9 +42,14 @@
   <ItemGroup>
     <Compile Include="LeaveManagement\ILeaveDetailRepository.cs" />
     <Compile Include="LeaveManagement\ILeaveRepository.cs" />
+    <Compile Include="LeaveManagement\ILeaveTypeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">
+      <Project>{A3EA41DF-D932-48B0-8100-A76E5DF04B8E}</Project>
+      <Name>HRMS.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRMS.Entity\HRMS.Entity.csproj">
       <Project>{1646e0fc-8f7b-436f-983a-7c9873ca49cb}</Project>
       <Name>HRMS.Entity</Name>

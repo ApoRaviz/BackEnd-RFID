@@ -49,9 +49,14 @@
   <ItemGroup>
     <Compile Include="LeaveManagement\LeaveDetailRepository.cs" />
     <Compile Include="LeaveManagement\LeaveRepository.cs" />
+    <Compile Include="LeaveManagement\LeaveTypeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">
+      <Project>{A3EA41DF-D932-48B0-8100-A76E5DF04B8E}</Project>
+      <Name>HRMS.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRMS.Context\HRMS.Context.csproj">
       <Project>{d78e68ba-486e-4577-8773-bf08f50721e1}</Project>
       <Name>HRMS.Context</Name>
