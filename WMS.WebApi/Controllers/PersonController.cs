@@ -10,11 +10,12 @@ using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
-using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.Person;
-using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.UserManagement;
+using WIM.Core.Service;
+using WIM.Core.Common.ValueObject;
+using WIM.Core.Entity;
 
 namespace WMS.WebApi.Controllers
 {
@@ -101,6 +102,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
+                Person.UpdateBy = User.Identity.Name;
                 int id = PersonService.CreatePerson(Person);
                 response.SetData(id);
             }
@@ -123,7 +125,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = PersonService.UpdatePerson(User.Identity.GetUserId(), Person);
+                bool isUpated = PersonService.UpdatePerson( Person);//User.Identity.GetUserId(),
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

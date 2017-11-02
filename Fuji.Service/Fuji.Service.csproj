@@ -36,12 +36,6 @@
     <Reference Include="EPPlus">
       <HintPath>..\Fuji.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Fuji.Common.ValueObject">
-      <HintPath>..\Fuji.Common.ValueObject\bin\Debug\Fuji.Common.ValueObject.dll</HintPath>
-    </Reference>
-    <Reference Include="Fuji.Entity">
-      <HintPath>..\Fuji.Entity\bin\Debug\Fuji.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +53,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PrintLabel\Report1.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
+      <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
+      <Name>Fuji.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
+      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
+      <Name>Fuji.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

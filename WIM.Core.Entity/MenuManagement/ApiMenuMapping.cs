@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WIM.Core.Entity.MenuManagement
 {
     [Table("ApiMenuMapping")]
-    public class ApiMenuMapping 
+    public class ApiMenuMapping : BaseEntity
     {
 
         [Key]
@@ -30,30 +30,5 @@ namespace WIM.Core.Entity.MenuManagement
         //public bool IsActive { get { return GetActiveBool; } set { SetActiveBool = MenuIDSys; } }
 
     }
-
-    public class BaseEntity
-    {
-        [NotMapped]
-        bool xxx;
-        [NotMapped]
-        public virtual int SetActiveBool { get { return this.SetActiveBool; } set {
-            if(value == 1)
-                {
-                    xxx = true;
-                }
-            } }
-        [NotMapped]
-        public virtual bool GetActiveBool
-        {
-            get { return xxx;  }
-            set
-            {
-
-            }
-        }
-
-    }
-
-
 
 }

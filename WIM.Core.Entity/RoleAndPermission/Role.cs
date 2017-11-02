@@ -11,7 +11,7 @@ using WIM.Core.Entity.UserManagement;
 namespace WIM.Core.Entity.RoleAndPermission
 {
     [Table("Roles")]
-    public class Role
+    public class Role : BaseEntity
     {
         [Key]
         public string RoleID { get; set; }

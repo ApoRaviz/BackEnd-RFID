@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.Report
 {
     [Table("ReportLayoutDetail_MT")]
-    public class ReportLayoutDetail_MT
+    public class ReportLayoutDetail_MT : BaseEntity
     {
         [Key]
         public int ReportIDSys { get; set; }

@@ -10,7 +10,7 @@ using WIM.Core.Entity.MenuManagement;
 namespace WIM.Core.Entity.RoleAndPermission
 {
     [Table("Permissions")]
-    public class Permission
+    public class Permission : BaseEntity
     {
 
         [Key]

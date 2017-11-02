@@ -30,14 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,14 +40,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiMaster\IApiMenuMappingRepository.cs" />
+    <Compile Include="ApiMaster\IApiMTRepository.cs" />
+    <Compile Include="Country\ICountryRepository.cs" />
+    <Compile Include="Currency\ICurrencyRepository.cs" />
+    <Compile Include="CustomerAndProject\ICustomerRepository.cs" />
+    <Compile Include="CustomerAndProject\IProjectRepository.cs" />
     <Compile Include="IGenericRepository.cs" />
+    <Compile Include="MenuAndPermission\IMenuProjectMappingRepository.cs" />
+    <Compile Include="MenuAndPermission\IMenuRepository.cs" />
+    <Compile Include="MenuAndPermission\IPermissionRepository.cs" />
+    <Compile Include="Personalize\IEmployeeRepository.cs" />
+    <Compile Include="Personalize\IPersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="RoleAndUser\IRoleRepository.cs" />
+    <Compile Include="RoleAndUser\IUserRepository.cs" />
+    <Compile Include="RoleAndUser\IUserRoleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{c8c9f920-5e08-4a3a-af4f-fe3aa35421c8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
@@ -65,8 +76,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <Content Include="bin\Debug\WIM.Core.Repository.dll" />
+    <Content Include="bin\Debug\WIM.Core.Repository.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

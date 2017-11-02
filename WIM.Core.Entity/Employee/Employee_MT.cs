@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.Person;
 
-namespace WIM.Core.Entity.Employee
+namespace WIM.Core.Entity
 {
     [Table("Employee_MT")]
-    public class Employee_MT 
+    public class Employee_MT : BaseEntity
     {
         [Key]
         public string EmID { get; set; }
@@ -19,11 +19,11 @@ namespace WIM.Core.Entity.Employee
         public string Dept { get; set; }
         public string TelOffice { get; set; }
         public string TelEx { get; set; }
-        public byte Active { get; set; }
+        //public byte Active { get; set; }
         public int PersonIDSys { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+        //public System.DateTime CreatedDate { get; set; }
+        //public System.DateTime UpdateDate { get; set; }
+        //public string UserUpdate { get; set; }
         public Nullable<System.DateTime> HiredDate { get; set; }
         public Nullable<int> PositionIDSys { get; set; }
 

@@ -37,7 +37,7 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Isuzu.Context">
-      <HintPath>..\Isuzu.Context\bin\Debug\Isuzu.Context.dll</HintPath>
+      <HintPath>..\Isuzu.Context\obj\Debug\Isuzu.Context.dll</HintPath>
     </Reference>
     <Reference Include="Isuzu.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

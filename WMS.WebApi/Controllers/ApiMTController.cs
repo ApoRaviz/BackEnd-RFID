@@ -8,9 +8,10 @@ using WIM.Core.Common.Extensions;
 using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Common.ValueObject;
+using WIM.Core.Service;
 
 namespace WMS.WebApi.Controllers
 {
@@ -92,7 +93,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ApiMTService.UpdateApiMT(id, ApiMT);
+                bool isUpated = ApiMTService.UpdateApiMT( ApiMT);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

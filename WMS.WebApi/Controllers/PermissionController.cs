@@ -7,8 +7,9 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.RoleAndPermission;
-using WMS.Common;
+using WIM.Core.Service;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers
@@ -151,7 +152,7 @@ namespace WMS.WebApi.Controllers
                 Permission Permission = PermissionService.GetPermissionByLocIDSys(Id);
                 List<RolePermissionDto> Roles = RoleService.GetRoleByPermissionID(Id);
                 int ProjectID = 1; // wait for ProjectID
-                List<MenuProjectMappingDto> Menu = MenuProjectMapping.GetMenuProjectMappingDto(ProjectID).ToList();
+                List<MenuProjectMappingDto> Menu = MenuProjectMapping.GetMenuProjectMappingByID(ProjectID).ToList();
                 responseData.PermissionID = Permission.PermissionID;
                 responseData.PermissionName = Permission.PermissionName;
                 responseData.Roles = Roles;
@@ -244,7 +245,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = PermissionService.UpdatePermission(Id, Permission);
+                bool isUpated = PermissionService.UpdatePermission(Permission);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

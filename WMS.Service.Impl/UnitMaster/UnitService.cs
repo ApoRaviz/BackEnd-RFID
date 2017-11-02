@@ -11,29 +11,41 @@ using WMS.Repository;
 using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Repository.Impl;
+using System.Security.Principal;
 
 namespace WMS.Service
 {
     public class UnitService : IUnitService
     {
-        private UnitRepository repo;
-
-        public UnitService()
+        private IIdentity user { get; set; }
+        public UnitService(IIdentity identity)
         {
-            repo = new UnitRepository();
+            user = identity;
         }        
         public IEnumerable<Unit_MT> GetUnits()
         {
-            return repo.Get();
+            IEnumerable<Unit_MT> unit;
+            using(WMSDbContext Db = new WMSDbContext())
+            {
+                IUnitRepository repo = new UnitRepository(Db);
+                unit = repo.Get();
+            }
+            return unit;
         }
 
         public Unit_MT GetUnitByUnitIDSys(int id)
         {
-            return repo.GetByID(id);
+            Unit_MT unit;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IUnitRepository repo = new UnitRepository(Db);
+                string[] include = { "Project_MT" };
+                unit = repo.GetWithInclude(u => u.UnitIDSys == id, include).SingleOrDefault();
+            }
+                return unit;
         }
 
         public Unit_MT GetUnitByCusIDSysIncludeProjects(int id)
@@ -55,8 +67,13 @@ namespace WMS.Service
             {
                 try
                 {
-                    repo.Insert(unit);
-                    scope.Complete();
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IUnitRepository repo = new UnitRepository(Db);
+                        repo.Insert(unit);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -72,13 +89,19 @@ namespace WMS.Service
             }
         }
 
-        public bool UpdateUnit(int id, Unit_MT unit)
+        public bool UpdateUnit(Unit_MT unit)
         {           
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    repo.Update(unit);
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IUnitRepository repo = new UnitRepository(Db);
+                        repo.Update(unit);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -90,7 +113,7 @@ namespace WMS.Service
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                scope.Complete();
+                
                 return true;
             }
         }
@@ -99,8 +122,13 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                repo.Delete(id);
-                scope.Complete();
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    IUnitRepository repo = new UnitRepository(Db);
+                    repo.Delete(id);
+                    Db.SaveChanges();
+                    scope.Complete();
+                }
                 return true;
             }
         }

@@ -8,7 +8,6 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Entity.Dimension;
-using WMS.Common;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers
@@ -105,7 +104,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                data.UserUpdate = User.Identity.Name;
+                data.UpdateBy = User.Identity.Name;
                 int id = DimensionService.CreateDimensionOfLocation(data).Value;            
                 response.SetData(id);
             }

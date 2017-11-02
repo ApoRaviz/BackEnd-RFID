@@ -7,8 +7,6 @@ using System.Web.Http;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
-using WMS.Common;
 using WMS.Service;
 using WMS.Entity.WarehouseManagement;
 using WMS.Service.WarehouseMaster;
@@ -87,7 +85,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                data.UserUpdate = User.Identity.Name;
+                data.UpdateBy = User.Identity.Name;
                 int id = ZoneService.CreateZoneLayout(data).Value;
                 response.SetData(id);
             }

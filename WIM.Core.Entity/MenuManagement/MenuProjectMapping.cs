@@ -12,7 +12,7 @@ using WIM.Core.Entity.RoleAndPermission;
 namespace WIM.Core.Entity.MenuManagement
 {
     [Table("MenuProjectMapping")]
-    public class MenuProjectMapping
+    public class MenuProjectMapping : BaseEntity
     {        
         public MenuProjectMapping()
         {

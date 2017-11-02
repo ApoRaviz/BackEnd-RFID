@@ -5,12 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
+using WMS.Entity.ItemManagement;
 
 namespace WMS.Entity.WarehouseManagement
 {
 
     [Table("Location_MT")]
-    public class Location_MT
+    public class Location_MT : BaseEntity
     {
         [Key]
         public int LocIDSys { get; set; }
@@ -24,14 +26,8 @@ namespace WMS.Entity.WarehouseManagement
         public float Width { get; set; }
         public float Length { get; set; }
         public float Height { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+        public int CateIDSys { get; set; }
 
-        // #JobComment
-        //public int CateIDSys { get; set; }
-
-        //public virtual Category_MT Category_MT { get; set; }
+        public virtual Category_MT Category_MT { get; set; }
     }
 }

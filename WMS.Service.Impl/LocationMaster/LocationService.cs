@@ -12,7 +12,6 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WIM.Core.Context;
 using WMS.Repository.Impl;
 using WMS.Context;
@@ -45,10 +44,10 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                Location.LocNo = proc.ProcGetNewID("LC").FirstOrDefault().Substring(0, 13);
-                Location.CreatedDate = DateTime.Now;
-                Location.UpdateDate = DateTime.Now;
-                Location.UserUpdate = "1";
+               // Location.LocNo = proc.ProcGetNewID("LC").FirstOrDefault().Substring(0, 13);
+                //Location.CreatedDate = DateTime.Now;
+                //Location.UpdateDate = DateTime.Now;
+                //Location.UserUpdate = "1";
                 try
                 {
                     repo.Insert(Location);

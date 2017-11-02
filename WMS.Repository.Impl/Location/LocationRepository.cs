@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Repository;
-using WMS.Common;
+
 using WMS.Context;
 using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Repository.Impl
 {
 
-    public class LocationRepository : IGenericRepository<Location_MT>
+    public class LocationRepository /*: IGenericRepository<Location_MT>*/
     {
         private WMSDbContext Db { get; set; }
 
@@ -40,10 +40,10 @@ namespace WMS.Repository.Impl
 
         public void Insert(Location_MT entity)
         {
-            entity.CreatedDate = DateTime.Now;
-            entity.UpdateDate = DateTime.Now;
-            entity.UserUpdate = "1";
-            entity.Active = 1;
+            //entity.CreatedDate = DateTime.Now;
+            //entity.UpdateDate = DateTime.Now;
+            //entity.UserUpdate = "1";
+            //entity.Active = 1;
             Db.Location_MT.Add(entity);
             Db.SaveChanges();
         }
@@ -53,9 +53,9 @@ namespace WMS.Repository.Impl
             var existedLocation = (from c in Db.Location_MT
                                    where c.LocIDSys== (int)id
                                    select c).SingleOrDefault();
-            existedLocation.Active = 0;
-            existedLocation.UpdateDate = DateTime.Now;
-            existedLocation.UserUpdate = "1";
+            //existedLocation.Active = 0;
+            //existedLocation.UpdateDate = DateTime.Now;
+            //existedLocation.UserUpdate = "1";
             Db.SaveChanges();
         }
 
@@ -64,9 +64,9 @@ namespace WMS.Repository.Impl
             var existedLocation = (from c in Db.Location_MT
                                    where c.LocIDSys.Equals(entityToDelete.LocIDSys)
                                    select c).SingleOrDefault();
-            existedLocation.Active = 0;
-            existedLocation.UpdateDate = DateTime.Now;
-            existedLocation.UserUpdate = "1";
+            //existedLocation.Active = 0;
+            //existedLocation.UpdateDate = DateTime.Now;
+            //existedLocation.UserUpdate = "1";
             Db.SaveChanges();
         }
 
@@ -84,8 +84,8 @@ namespace WMS.Repository.Impl
             existedLocation.Width = entityToUpdate.Width;
             existedLocation.Length = entityToUpdate.Length;
             existedLocation.Height = entityToUpdate.Height;
-            existedLocation.UpdateDate = DateTime.Now;
-            existedLocation.UserUpdate = "1";
+            //existedLocation.UpdateDate = DateTime.Now;
+            //existedLocation.UserUpdate = "1";
             Db.SaveChanges();
         }
 

@@ -10,7 +10,7 @@ using WIM.Core.Entity.RoleAndPermission;
 namespace WIM.Core.Entity.MenuManagement
 {
     [Table("Api_MT")]
-    public class Api_MT
+    public class Api_MT : BaseEntity
     {
         public Api_MT()
         {

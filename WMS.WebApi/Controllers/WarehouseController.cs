@@ -70,7 +70,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Warehouse.UserUpdate = User.Identity.Name;
+                Warehouse.UpdateBy = User.Identity.Name;
                 int id = WarehouseService.CreateWarehouse(Warehouse);
                 response.SetData(id);
             }
@@ -93,7 +93,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = WarehouseService.UpdateWarehouse(LocIDSys, Warehouse);
+                bool isUpated = WarehouseService.UpdateWarehouse(Warehouse);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

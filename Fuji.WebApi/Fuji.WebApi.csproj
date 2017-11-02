@@ -71,9 +71,6 @@
     <Reference Include="Fuji.Service">
       <HintPath>..\Fuji.Service\bin\Debug\Fuji.Service.dll</HintPath>
     </Reference>
-    <Reference Include="Fuji.Service.Impl">
-      <HintPath>..\Fuji.Service.Impl\bin\Debug\Fuji.Service.Impl.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
     </Reference>
@@ -577,6 +574,10 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fuji.Service.Impl\Fuji.Service.Impl.csproj">
+      <Project>{e22348a1-e953-478b-9b69-cb3fcb3a45ce}</Project>
+      <Name>Fuji.Service.Impl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>

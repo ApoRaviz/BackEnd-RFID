@@ -14,7 +14,6 @@ using WMS.WebApi.Report;
 using System.IO;
 using System.Globalization;
 using Microsoft.AspNet.Identity;
-using WMS.Common;
 using WMS.Service;
 using WMS.Entity.ImportManagement;
 using WMS.Service.Import;

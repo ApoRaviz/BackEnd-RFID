@@ -7,7 +7,6 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Common;
 using WMS.Entity.WarehouseManagement;
 using WMS.Service;
 
@@ -71,7 +70,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Location.UserUpdate = User.Identity.Name;
+                Location.UpdateBy = User.Identity.Name;
                 int id = LocationService.CreateLocation(Location);
                 response.SetData(id);
             }

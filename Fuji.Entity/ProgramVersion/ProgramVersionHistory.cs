@@ -18,6 +18,5 @@ namespace Fuji.Entity.ProgramVersion
         public string Version { get; set; }
         public string DownloadPath { get; set; }
         public string Description { get; set; }
-        //public System.DateTime CreatedDate { get; set; }
     }
 }

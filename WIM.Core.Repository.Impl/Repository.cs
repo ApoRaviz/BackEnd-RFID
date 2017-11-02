@@ -4,7 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
+using WIM.Core.Common.Helpers;
+using WIM.Core.Context;
 using WIM.Core.Entity;
 
 namespace WIM.Core.Repository.Impl
@@ -13,13 +18,20 @@ namespace WIM.Core.Repository.Impl
     {
         protected DbContext Context;
         internal DbSet<TEntity> DbSet;
-        internal IIdentity Identity;
 
-        public Repository(DbContext context, IIdentity identity)
+        public Repository(DbContext context)
         {
             Context = context;
             this.DbSet = Context.Set<TEntity>();
-            Identity = identity;
+
+        }
+
+        public IIdentity Identity
+        {
+            get
+            {
+                return AuthHelper.GetIdentity();
+            }
         }
 
         public IEnumerable<TEntity> Get()
@@ -153,7 +165,12 @@ namespace WIM.Core.Repository.Impl
             return query.Where(predicate);
         }
 
-        
+        public IQueryable<TEntity> GetWithInclude(Func<TEntity, bool> predicate, params string[] include)
+        {
+            IQueryable<TEntity> query = this.DbSet;
+            query = include.Aggregate(query, (current, inc) => current.Include(inc));
+            return query.Where(predicate).AsQueryable();
+        }
 
         public TEntity GetSingle(Func<TEntity, bool> predicate)
         {

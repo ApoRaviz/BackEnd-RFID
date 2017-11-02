@@ -23,10 +23,6 @@ namespace WMS.Entity.ItemManagement
         public string LineID { get; set; }
         public string ItemSetCode { get; set; }
         public string ItemSetName { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
 
         //public virtual Project_MT Project_MT { get; set; }
         public virtual ICollection<ItemSetDetail> ItemSetDetails { get; set; }

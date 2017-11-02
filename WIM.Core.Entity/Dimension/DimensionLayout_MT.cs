@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WIM.Core.Entity.Dimension
 {
     [Table("DimensionLayout_MT")]
-    public class DimensionLayout_MT
+    public class DimensionLayout_MT : BaseEntity
     {
         [Key]
         public int DimensionIDSys { get; set; }
@@ -21,8 +21,8 @@ namespace WIM.Core.Entity.Dimension
         public Nullable<int> Weight { get; set; }
         public string Type { get; set; }
         public string Color { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }//1232312312312
+        //public Nullable<System.DateTime> CreatedDate { get; set; }
+        //public Nullable<System.DateTime> UpdatedDate { get; set; }
+        //public string UserUpdate { get; set; }//1232312312312
     }
 }

@@ -5,12 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 using WMS.Entity.ItemManagement;
 
 namespace WMS.Entity.InspectionManagement
 {
     [Table("Inspect_MT")]
-    public class Inspect_MT
+    public class Inspect_MT: BaseEntity
     {
         public Inspect_MT()
         {
@@ -21,10 +22,7 @@ namespace WMS.Entity.InspectionManagement
         public int InspectIDSys { get; set; }
         public string InspectID { get; set; }
         public string InspectName { get; set; }
-        public byte Active { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public string UserUpdate { get; set; }
+
 
         public virtual ICollection<ItemInspectMapping> ItemInspectMapping { get; set; }
     }

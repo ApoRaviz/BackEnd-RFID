@@ -7,127 +7,186 @@ using System.Transactions;
 using WIM.Core.Common.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WMS.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.ItemManagement;
-using System.Security.Principal;
-using WMS.Repository.Impl.ItemManagement;
-using WIM.Core.Security;
 
 namespace WMS.Service
 {
     public class ItemSetService : IItemSetService
     {
-        private WMSDbContext proc = WMSDbContext.Create();
-        // private Repository.ItemSetRepository repo;
-        private IItemSetRepository repoItemSet;
-        private IItemSetDetailRepository repoItemSetDetail;
-        private WMSDbContext Db;
-        private IIdentity Identity;
+        private WMSDbContext proc;
+        private ItemSetRepository repo;
 
-        public ItemSetService(IIdentity identity)
+        public ItemSetService()
         {
-            Identity = identity;
+            proc = new WMSDbContext();
+            repo = new ItemSetRepository();
         }
 
         public ItemSetDto CreateItemSet(ItemSet_MT ItemSet)
         {
-            using (WMSDbContext Db = new WMSDbContext())
-            {
-                repoItemSet = new ItemSetRepository(Db, Identity);
-                repoItemSetDetail = new ItemSetDetailRepository(Db, Identity);
-                using (TransactionScope scope = new TransactionScope())
-                {
-                    try
-                    {
-                        ItemSet_MT itemsetMT = repoItemSet.Insert(ItemSet);
-                        foreach (var entity in ItemSet.ItemSetDetails)
-                        {
-                            entity.ItemSetIDSys = itemsetMT.ItemSetIDSys;
-                            repoItemSetDetail.Insert(entity);
-                        }
-                        Db.SaveChanges();
-                        scope.Complete();
-                        return this.GetDtoByID(itemsetMT.ItemSetIDSys);
-                    }
-                    catch (DbEntityValidationException)
-                    {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                        throw ex;
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                        throw ex;
-                    }
-                }
-            }
+            IEnumerable<ItemSet_MT> ItemSets = repo.Get();
+
+            IEnumerable<ItemSetDto> ItemSetDtos = Mapper.Map<IEnumerable<ItemSet_MT>, IEnumerable<ItemSetDto>>(ItemSets);
+            return ItemSetDtos;
         }
 
 
-        public bool UpdateItemSet(ItemSetDto ItemSet)
+
+        /*public ItemSetDto GetItemSet(int id, string[] tableNames)
         {
-            using (WMSDbContext Db = new WMSDbContext())
+            
+            var query = (from i in db.ItemSet_MT
+                          where i.ItemSetIDSys == id && i.Active == 1
+                          select i);
+
+            if (tableNames != null)
             {
-                repoItemSet = new ItemSetRepository(Db, Identity);
-                repoItemSetDetail = new ItemSetDetailRepository(Db, Identity);
-                using (var scope = new TransactionScope())
+                foreach (string tableName in tableNames)
                 {
-                    try
+                    switch (tableName)
                     {
-                        ItemSet_MT leaveUpdated = repoItemSet.Update(ItemSet);
-                        repoItemSetDetail.Delete(t => t.ItemSetIDSys == leaveUpdated.ItemSetIDSys);
-                        foreach (var entity in ItemSet.ItemSetDetail)
-                        {
-                            var ItemSetDetailForInsert = Mapper.Map<ItemSetDetailDto, ItemSetDetail>(entity);
-                            repoItemSetDetail.Insert(ItemSetDetailForInsert);
-                        }
-                        Db.SaveChanges();
-                        scope.Complete();
-                        return true;
-                    }
-                    catch (DbEntityValidationException e)
-                    {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
-                    }
-                    catch (DbUpdateException)
-                    {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
+                        case "ItemSetUnitMapping":
+                            query = query.Include(it => it.ItemSetUnitMapping.Select(s => s.Unit_MT));
+                            break;
+                        default:
+                            query = query.Include(tableName);
+                            break;
                     }
                 }
+            }
+
+            return Mapper.Map<ItemSet_MT, ItemSetDto>(query.SingleOrDefault());
+        }*/
+
+        public int CreateItemSet(ItemSet_MT ItemSet)
+        {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    repo.Insert(ItemSet);
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+
+                return ItemSet.ItemSetIDSys;
+            }
+        }
+
+        public bool UpdateItemSet(int id, ItemSet_MT ItemSet)
+        {
+            using (var scope = new TransactionScope())
+            {
+                var existedItemSet = repo.GetByID(id);
+                existedItemSet.ProjectIDSys = ItemSet.ProjectIDSys;
+                existedItemSet.ItemSetCode = ItemSet.ItemSetCode;
+                existedItemSet.UpdateDate = DateTime.Now;
+                existedItemSet.UserUpdate = "1";
+
+                try
+                {
+                    repo.Update(existedItemSet);
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                return true;
             }
         }
 
         public bool DeleteItemSet(int id)
         {
-            repoItemSet = new ItemSetRepository(Db, Identity);
-            repoItemSetDetail = new ItemSetDetailRepository(Db, Identity);
-            using (WMSDbContext Db = new WMSDbContext())
+            using (var scope = new TransactionScope())
             {
-                using (var scope = new TransactionScope())
-                {
-                    try
-                    {
-                        repoItemSet.Delete(id);
-                        scope.Complete();
-                        return true;
-                    }
-                    catch (DbEntityValidationException e)
-                    {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
-                    }
-                    catch (DbUpdateException)
-                    {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
-                    }
-                }
+                var existedItemSet = repo.GetByID(id);
+                existedItemSet.Active = 0;
+                existedItemSet.UpdateDate = DateTime.Now;
+                existedItemSet.UserUpdate = "1";
+                repo.Update(existedItemSet);
+                scope.Complete();
+                return true;
+            }
+        }
 
+        public int CreateItemSet(ItemSetDto ItemSet)
+        {
+            using (var scope = new TransactionScope())
+            {
+                ItemSet_MT item = new ItemSet_MT();
+                item.ItemSetName = ItemSet.ItemSetName;
+                item.ProjectIDSys = ItemSet.ProjectIDSys;
+                item.LineID = ItemSet.LineID;
+                item.ItemSetCode = proc.ProcGetNewID("IS").FirstOrDefault();
+                item.CreatedDate = DateTime.Now;
+                item.UpdateDate = DateTime.Now;
+                item.UserUpdate = "1";
+
+
+                try
+                {
+                    repo.Insert(item);
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                return item.ItemSetIDSys;
+            }
+        }
+
+        public int CreateItemsetDetail(int id, List<ItemSetDetailDto> temp)
+        {
+            using (var scope = new TransactionScope())
+            {
+                ItemSetDetail item = new ItemSetDetail();
+                try
+                {
+                    foreach (var c in temp)
+                    {
+                        item.Qty = c.Qty;
+                        item.ItemIDSys = c.ItemIDSys;
+                        item.ItemSetIDSys = id;
+                        repo.Insert(item);
+                    }
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                return item.ItemIDSys;
             }
         }
 
@@ -139,19 +198,22 @@ namespace WMS.Service
 
         public IEnumerable<ItemSetDto> GetDto(int limit = 50)
         {
-            repoItemSet = new ItemSetRepository(Db, Identity);
-            return  repoItemSet.GetDto(limit);
+            var item = repo.GetItemSetDto(id);
+            var items = repo.GetItemSetDetailDto(id);
+            item.ItemSetDetail = items;
+            return item;
         }
 
-        public ItemSetDto GetDtoByID(int id)
+        public bool DeleteItemSetDto(int id)
         {
             using (WMSDbContext Db = new WMSDbContext())
             {
                 try
                 {
-                    return repoItemSet.GetDtoByID(id);
+                    repo.Delete(id);
+                    scope.Complete();
                 }
-                catch (DbEntityValidationException)
+                catch (DbEntityValidationException e)
                 {
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;

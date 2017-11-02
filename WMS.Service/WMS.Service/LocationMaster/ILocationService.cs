@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WMS.Common;
 using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Service

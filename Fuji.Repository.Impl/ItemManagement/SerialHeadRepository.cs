@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using Fuji.Common.ValueObject;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using Fuji.Repository.ItemManagement;
 
 namespace Fuji.Repository.Impl.ItemManagement
 {

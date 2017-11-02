@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.LayoutManagement
 {
     [Table("LabelLayoutDetail_MT")]
-    public class LabelLayoutDetail_MT
+    public class LabelLayoutDetail_MT : BaseEntity
     {
         [Key]
         public int LabelIDSys { get; set; }

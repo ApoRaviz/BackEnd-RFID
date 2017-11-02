@@ -9,9 +9,8 @@ using WIM.Core.Common.Validation;
 
 namespace WIM.Core.Common.Helpers
 {
-    public static class Helper
+    public class Helper
     {
-
         public static string GetHandleErrorMessageException(ErrorCode code, string internalMessage)
         {
 

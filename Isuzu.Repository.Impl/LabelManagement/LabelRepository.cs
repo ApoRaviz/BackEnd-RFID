@@ -1,4 +1,5 @@
-﻿using Isuzu.Context;
+﻿
+using Isuzu.Context;
 using Isuzu.Entity;
 using Isuzu.Repository.LabelManagement;
 using System;

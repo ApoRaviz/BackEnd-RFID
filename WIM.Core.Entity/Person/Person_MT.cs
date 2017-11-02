@@ -4,14 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Entity.Person
 {
     [Table("Person_MT")]
-    public class Person_MT
+    public class Person_MT : BaseEntity
     {      
         [Key] 
         public int PersonIDSys { get; set; }

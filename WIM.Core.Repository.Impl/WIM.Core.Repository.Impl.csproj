@@ -47,11 +47,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenericRepository.cs" />
+    <Compile Include="ApiMaster\ApiMenuMappingRepository.cs" />
+    <Compile Include="ApiMaster\ApiMTRepository.cs" />
+    <Compile Include="Country\CountryRepository.cs" />
+    <Compile Include="Currency\CurrencyRepository.cs" />
+    <Compile Include="CustomerAndProject\CustomerRepository.cs" />
+    <Compile Include="CustomerAndProject\ProjectRepository.cs" />
+    <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
+    <Compile Include="MenuAndPermission\MenuRepository.cs" />
+    <Compile Include="MenuAndPermission\PermissionRepository.cs" />
+    <Compile Include="Personalize\EmployeeRepository.cs" />
+    <Compile Include="Personalize\PersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="RoleAndUser\RoleRepository.cs" />
+    <Compile Include="RoleAndUser\UserRepository.cs" />
+    <Compile Include="RoleAndUser\UserRoleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Name>WIM.Core.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
       <Name>WIM.Core.Context</Name>
@@ -63,10 +84,6 @@
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

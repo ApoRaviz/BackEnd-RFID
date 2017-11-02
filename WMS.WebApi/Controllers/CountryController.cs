@@ -11,9 +11,9 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
 using WMS.WebApi.Report;
-using WMS.Common;
 using WMS.Service;
 using WIM.Core.Entity.Country;
+using WIM.Core.Service;
 
 namespace WMS.WebApi.Controllers
 {
@@ -97,7 +97,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = CountryService.UpdateCountry(CountryIDSys, Country);
+                bool isUpated = CountryService.UpdateCountry( Country);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
