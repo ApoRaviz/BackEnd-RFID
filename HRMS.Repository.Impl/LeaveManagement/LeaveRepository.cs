@@ -15,12 +15,10 @@ namespace HRMS.Repository.Impl.LeaveManagement
     public class LeaveRepository : Repository<Leave>, ILeaveRepository
     {
         private HRMSDbContext Db;
-        private IIdentity Identity;
 
-        public LeaveRepository(HRMSDbContext context, IIdentity identity) : base(context, identity)
+        public LeaveRepository(HRMSDbContext contex) : base(contex)
         {
-            Db = context;
-            Identity = identity;
+            Db = contex;
         }
 
         public LeaveDto GetDto(int id)

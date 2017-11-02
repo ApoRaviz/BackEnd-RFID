@@ -9,12 +9,10 @@ namespace HRMS.Repository.Impl.LeaveManagement
     public class LeaveTypeRepository : Repository<LeaveType>, ILeaveTypeRepository
     {
         private HRMSDbContext Db;
-        private IIdentity Identity;
 
-        public LeaveTypeRepository(HRMSDbContext context, IIdentity identity) : base(context, identity)
+        public LeaveTypeRepository(HRMSDbContext context) : base(context)
         {
             Db = context;
-            Identity = identity;
         }
     }
 }

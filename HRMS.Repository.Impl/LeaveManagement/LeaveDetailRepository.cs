@@ -13,10 +13,9 @@ namespace HRMS.Repository.Impl.LeaveManagement
 {
     public class LeaveDetailRepository : Repository<LeaveDetail>, ILeaveDetailRepository
     {
-        private IIdentity user;
-        public LeaveDetailRepository(DbContext context,IIdentity identity) : base(context,identity)
+
+        public LeaveDetailRepository(DbContext context) : base(context)
         {
-            user = identity;
         }
     }
 }

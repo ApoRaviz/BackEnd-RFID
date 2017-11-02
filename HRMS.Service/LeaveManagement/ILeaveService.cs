@@ -1,17 +1,12 @@
 ﻿using HRMS.Common.ValueObject.LeaveManagement;
 using HRMS.Entity.LeaveManagement;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+using WIM.Core.Service;
 
 namespace HRMS.Service.LeaveManagement
 {
     public interface ILeaveService : IService
     {
-        string GetName();
         /// <summary>
         /// ดึงข้อมูลออกมา 1 แถวโดย Where ที่ LeaveIDSys
         /// </summary>

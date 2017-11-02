@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IService.cs" />
     <Compile Include="LeaveManagement\ILeaveService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -52,6 +51,10 @@
     <ProjectReference Include="..\HRMS.Entity\HRMS.Entity.csproj">
       <Project>{1646e0fc-8f7b-436f-983a-7c9873ca49cb}</Project>
       <Name>HRMS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
+      <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
+      <Name>WIM.Core.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

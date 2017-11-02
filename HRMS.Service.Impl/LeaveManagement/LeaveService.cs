@@ -16,23 +16,19 @@ using HRMS.Context;
 using HRMS.Repository.LeaveManagement;
 using HRMS.Repository.Impl.LeaveManagement;
 using AutoMapper;
-using System.Data.Entity;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace HRMS.Service.Impl.LeaveManagement
 {
-    public class LeaveService : ILeaveService
+    public class LeaveService : WIM.Core.Service.Impl.Service, ILeaveService
     {
-        private IIdentity Identity;
-
-        public LeaveService(IIdentity identity)
-        {
-            Identity = identity;
-        }
 
         public bool ApproveLeave(int id)
         {
             throw new NotImplementedException();
         }
+
 
         public bool RejectLeave(int id)
         {
@@ -47,8 +43,8 @@ namespace HRMS.Service.Impl.LeaveManagement
                 {
                     try
                     {
-                        ILeaveRepository headRepo = new LeaveRepository(db, Identity);
-                        ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, Identity);
+                        ILeaveRepository headRepo = new LeaveRepository(db);
+                        ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
                         Leave leaveReq = headRepo.Insert(leave);
 
@@ -81,7 +77,7 @@ namespace HRMS.Service.Impl.LeaveManagement
             {
                 try
                 {
-                    ILeaveRepository repoGetLeave = new LeaveRepository(db, Identity);
+                    ILeaveRepository repoGetLeave = new LeaveRepository(db);
                     return repoGetLeave.GetDto(id);
                 }
                 catch (DbEntityValidationException)
@@ -103,7 +99,7 @@ namespace HRMS.Service.Impl.LeaveManagement
             {
                 try
                 {
-                    ILeaveRepository repoGetLeave = new LeaveRepository(db, Identity);
+                    ILeaveRepository repoGetLeave = new LeaveRepository(db);
                     return repoGetLeave.Get();
                 }
                 catch (DbEntityValidationException)
@@ -126,7 +122,7 @@ namespace HRMS.Service.Impl.LeaveManagement
             {
                 try
                 {
-                    ILeaveTypeRepository repoGetLT = new LeaveTypeRepository(db, Identity);
+                    ILeaveTypeRepository repoGetLT = new LeaveTypeRepository(db);
                     return repoGetLT.Get();
                 }
                 catch (DbEntityValidationException)
@@ -152,8 +148,8 @@ namespace HRMS.Service.Impl.LeaveManagement
                     try
                     {
                         Leave leaveUpdated;
-                        ILeaveRepository repo = new LeaveRepository(db, Identity);
-                        ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, Identity);
+                        ILeaveRepository repo = new LeaveRepository(db);
+                        ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
                         leaveUpdated = repo.Update(leave);
 
@@ -193,5 +189,6 @@ namespace HRMS.Service.Impl.LeaveManagement
                 }
             }
         }
+
     }
 }

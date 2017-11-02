@@ -27,7 +27,7 @@ namespace HRMS.WebApi
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
 
-            container.RegisterType<ILeaveService, LeaveService>(new InjectionConstructor());
+            container.RegisterType<ILeaveService, LeaveService>();
            
         }
     }
