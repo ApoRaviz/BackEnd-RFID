@@ -8,6 +8,13 @@ namespace WIM.Core.Entity
 {
     public class BaseEntity
     {
+        public BaseEntity()
+        {
+            IsActive = true;
+            CreateAt = DateTime.Now;
+            UpdateAt = DateTime.Now;
+        }
+
         public bool IsActive { get; set; }
         public string CreateBy { get; set; }
         public DateTime CreateAt { get; set; }

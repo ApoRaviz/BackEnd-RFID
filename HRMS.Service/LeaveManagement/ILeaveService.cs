@@ -11,7 +11,6 @@ namespace HRMS.Service.LeaveManagement
 {
     public interface ILeaveService : IService
     {
-        string GetName();
         /// <summary>
         /// ดึงข้อมูลออกมา 1 แถวโดย Where ที่ LeaveIDSys
         /// </summary>

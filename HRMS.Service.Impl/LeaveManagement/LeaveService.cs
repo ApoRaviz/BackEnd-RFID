@@ -31,12 +31,7 @@ namespace HRMS.Service.Impl.LeaveManagement
         public IEnumerable<Leave> GetLeaves()
         {
             throw new NotImplementedException();
-        }
-
-        public string GetName()
-        {
-            return Identity.GetUserName();
-        }
+        }        
 
         public bool RejectLeave(int id)
         {

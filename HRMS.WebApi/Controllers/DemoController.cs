@@ -51,8 +51,6 @@ namespace HRMS.WebApi.Controllers
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
 
-                    string y = LeaveService.GetName();
-
                     ILeaveRepository headRepo = new LeaveRepository(db);
                     ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
