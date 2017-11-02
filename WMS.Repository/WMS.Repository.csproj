@@ -41,11 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CategoryMaster\ICategoryRepository.cs" />
+    <Compile Include="Dimension\IDimensionRepository.cs" />
+    <Compile Include="Inspect\IInspectRepository.cs" />
+    <Compile Include="ItemManagement\IItemRepository.cs" />
     <Compile Include="ItemManagement\IItemSetDetailRepository.cs" />
     <Compile Include="ItemManagement\IItemSetRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Supplier\ISupplierRepository.cs" />
+    <Compile Include="UnitMaster\IUnitRepository.cs" />
     <Compile Include="UserManagement\IUserRepository.cs" />
+    <Compile Include="Warehouse\IWarehouseRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">

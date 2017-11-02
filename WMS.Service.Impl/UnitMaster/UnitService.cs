@@ -13,8 +13,8 @@ using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.Impl;
 using System.Security.Principal;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {

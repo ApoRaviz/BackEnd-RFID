@@ -77,10 +77,6 @@
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Repository\WMS.Repository.csproj">
-      <Project>{d6231bd3-df3b-4053-90c3-dd2af10097a7}</Project>
-      <Name>WMS.Repository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
       <Project>{30A80D17-B62F-4F7D-9430-B02425001E3B}</Project>
       <Name>WMS.Common.ValueObject</Name>
@@ -92,6 +88,10 @@
     <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
       <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
       <Name>WMS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
+      <Project>{c9851706-907c-4291-8086-b1df3b41674d}</Project>
+      <Name>WMS.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
       <Project>{c9851706-907c-4291-8086-b1df3b41674d}</Project>
