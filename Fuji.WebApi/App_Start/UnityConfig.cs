@@ -11,7 +11,7 @@ using System.Web.Http;
 using Unity.WebApi;
 
 using Fuji.WebApi.Controllers;
-
+using System.Security.Principal;
 
 namespace Fuji.WebApi
 {
@@ -31,6 +31,8 @@ namespace Fuji.WebApi
             //Register OWin Authen
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
+
+            container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
 
             //Fuji
             container.RegisterType<IItemImportService, ItemImportService>();

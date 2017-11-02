@@ -13,6 +13,7 @@ using WIM.Core.Repository.Impl;
 using Fuji.Context;
 using Fuji.Entity.ProgramVersion;
 using Fuji.Repository.Impl.ProgramVersion;
+using System.Security.Principal;
 
 namespace Fuji.Service.Impl.ProgramVersion
 {
@@ -20,13 +21,13 @@ namespace Fuji.Service.Impl.ProgramVersion
     {
         private FujiDbContext Db { get; set; }
         private ProgramVersionRepository programRepo;
-        //private IGenericRepository<ProgramVersionHistory> Repo;
+        private IIdentity Identity;
 
-        public ProgramVersionService()
+        public ProgramVersionService(IIdentity identity)
         {
-            //Repo = new GenericRepository<ProgramVersionHistory>(Db);
             Db = FujiDbContext.Create();
             programRepo = new ProgramVersionRepository(new FujiDbContext());
+            Identity = identity;
         }        
 
         public ProgramVersionHistory GetProgramVersion(string programName)

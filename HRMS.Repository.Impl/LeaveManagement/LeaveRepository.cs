@@ -17,7 +17,7 @@ namespace HRMS.Repository.Impl.LeaveManagement
 
         public LeaveRepository(HRMSDbContext context) : base(context)
         {
-            Db = context;
+            Db = context;            
         }       
     }
 }

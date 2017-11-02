@@ -9,6 +9,7 @@ using System.Data.Entity;
 using Isuzu.Context;
 using Isuzu.Repository.ItemManagement;
 using WIM.Core.Repository.Impl;
+using System.Security.Principal;
 
 namespace Isuzu.Repository.Impl
 {
@@ -18,7 +19,7 @@ namespace Isuzu.Repository.Impl
         private IsuzuDataContext Db { get; set; }
         private DbSet<InboundItems> DbSet;
 
-        public InboundRepository(IsuzuDataContext context):base(context)
+        public InboundRepository(IsuzuDataContext context) :base(context)
         {
            Db = context;
            this.DbSet = context.Set<InboundItems>();
