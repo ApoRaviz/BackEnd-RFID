@@ -8,7 +8,7 @@ using WIM.Core.Entity.RoleAndPermission;
 
 namespace WIM.Core.Service
 {
-    public interface IPermissionService
+    public interface IPermissionService : IService
     {
         IEnumerable<Permission> GetPermissions();
         Permission GetPermissionByLocIDSys(string id);

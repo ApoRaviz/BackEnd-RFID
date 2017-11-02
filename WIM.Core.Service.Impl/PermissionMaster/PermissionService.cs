@@ -22,12 +22,11 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class PermissionService : IPermissionService
+    public class PermissionService : Service, IPermissionService
     {
-        private IIdentity user { get; set; }
-        public PermissionService(IIdentity identity)
+
+        public PermissionService()
         {
-            user = identity;
         }
 
         public IEnumerable<Permission> GetPermissions()

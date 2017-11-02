@@ -23,12 +23,10 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class UserRoleService : IUserRoleService
+    public class UserRoleService : Service, IUserRoleService
     {
-        private IIdentity user { get; set; }
-        public UserRoleService(IIdentity identity)
+        public UserRoleService()
         {
-            user = identity;
         }        
 
         public IEnumerable<UserRoles> GetUserRoles()

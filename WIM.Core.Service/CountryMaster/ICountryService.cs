@@ -7,7 +7,7 @@ using WIM.Core.Entity.Country;
 
 namespace WIM.Core.Service
 {
-    public interface ICountryService
+    public interface ICountryService : IService
     {
         IEnumerable<Country_MT> GetCountry();
         Country_MT GetCountryByCountryIDSys(int id);

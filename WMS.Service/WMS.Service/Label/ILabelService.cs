@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Entity.LayoutManagement;
 
 namespace WMS.Service.Label
 {
-    public interface ILabelService
+    public interface ILabelService : IService
     {
         List<LabelLayoutHeader_MT> GetAllLabelHeader(string forTable);
         int? CreateLabelForItemMaster(LabelLayoutHeader_MT data);

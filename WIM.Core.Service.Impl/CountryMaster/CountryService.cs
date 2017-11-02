@@ -19,12 +19,11 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class CountryService : ICountryService
+    public class CountryService : Service, ICountryService
     {
-        private IIdentity user { get; set; }
-        public CountryService(IIdentity identity)
+
+        public CountryService()
         {
-            user = identity;
         }
 
         public IEnumerable<Country_MT> GetCountry()

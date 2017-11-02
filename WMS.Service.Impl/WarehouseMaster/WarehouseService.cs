@@ -19,12 +19,10 @@ using System.Security.Principal;
 
 namespace WMS.Master
 {
-    public class WarehouseService : IWarehouseService
+    public class WarehouseService : WIM.Core.Service.Impl.Service, IWarehouseService
     {
-        private IIdentity user { get; set; }
-        public WarehouseService(IIdentity identity)
+        public WarehouseService()
         {
-            user = identity;
         }
 
         public IEnumerable<Warehouse_MT> GetWarehouses()

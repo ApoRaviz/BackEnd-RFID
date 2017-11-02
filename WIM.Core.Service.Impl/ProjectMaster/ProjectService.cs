@@ -17,12 +17,10 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class ProjectService : IProjectService
+    public class ProjectService : Service, IProjectService
     {
-        private IIdentity user { get; set; }
-        public ProjectService(IIdentity identity)
+        public ProjectService()
         {
-            user = identity;
         }
 
         public IEnumerable<Project_MT> GetProjects()

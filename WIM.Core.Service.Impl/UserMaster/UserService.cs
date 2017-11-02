@@ -24,13 +24,11 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class UserService : IUserService
+    public class UserService : Service, IUserService
     {
         private object param = new { };
-        private IIdentity user { get; set; }
-        public UserService(IIdentity identity)
+        public UserService()
         {
-            user = identity;
         }
 
         public IEnumerable<User> GetUsers()

@@ -12,7 +12,7 @@ using WMS.Service.WarehouseMaster;
 
 namespace WMS.Service.Impl.WarehouseMaster
 {
-    public class ZoneService : IZoneService
+    public class ZoneService : WIM.Core.Service.Impl.Service, IZoneService
     {
         string pXmlDetail = "<row><ZoneID>{0}</ZoneID><Name>{1}</Name><Left>{2}</Left><Top>{3}</Top>" +
                             "<Width>{4}</Width><Length>{5}</Length><Use>{6}</Use><Floor>{7}</Floor><ZoneParentID>{8}</ZoneParentID></row>";

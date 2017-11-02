@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Common;
 using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {
-    public interface ICategoryService
+    public interface ICategoryService : IService
     {
         IEnumerable<CategoryDto> GetCategories();
         IEnumerable<CategoryDto> GetCategoriesByProjectID(int projectID);

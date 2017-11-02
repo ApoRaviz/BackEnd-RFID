@@ -17,12 +17,10 @@ using WMS.Service.Inspect;
 
 namespace WMS.Service.Impl.Inspect
 {
-    public class InspectService : IInspectService
+    public class InspectService : WIM.Core.Service.Impl.Service, IInspectService
     {
-        private IIdentity user { get; set; }
-        public InspectService(IIdentity identity)
+        public InspectService()
         {
-            user = identity;
         }
 
         public IEnumerable<InspectType> GetInspectTypes()

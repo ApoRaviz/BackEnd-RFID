@@ -20,12 +20,12 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 { 
-    public class PersonService : IPersonService
+    public class PersonService : Service, IPersonService
     {
-        private IIdentity user { get; set; }
-        public PersonService(IIdentity identity)
+
+        public PersonService()
         {
-            user = identity;
+
         }        
 
         public IEnumerable<Person_MT> GetPersons()

@@ -7,7 +7,7 @@ using WIM.Core.Entity.Currency;
 
 namespace WIM.Core.Service
 {
-    public interface ICurrencyService
+    public interface ICurrencyService : IService
     {
         IEnumerable<CurrencyUnit> GetCurrency();
         CurrencyUnit GetCurrencyByCurrIDSys(int id);

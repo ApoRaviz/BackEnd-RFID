@@ -8,7 +8,7 @@ using WIM.Core.Entity.CustomerManagement;
 
 namespace WIM.Core.Service
 {
-    public interface ICustomerService
+    public interface ICustomerService : IService
     {
         object GetCustomers(string userid);
         object GetProjectByCustomer(string userid,int cusIDSys);

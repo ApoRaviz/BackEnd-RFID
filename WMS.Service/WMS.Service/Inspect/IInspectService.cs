@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Entity.InspectionManagement;
 
 namespace WMS.Service.Inspect
 {
-    public interface IInspectService
+    public interface IInspectService : IService
     {
         IEnumerable<InspectType> GetInspectTypes();
         IEnumerable<Inspect_MT> GetInspects();

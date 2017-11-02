@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.SupplierManagement;
+using WIM.Core.Service;
 
 namespace WMS.Service
 {
-    public interface ISupplierService
+    public interface ISupplierService : IService
     {
         IEnumerable<Supplier_MT> GetSuppliers();
         IEnumerable<Supplier_MT> GetSuppliersByProjectID(int projectID);

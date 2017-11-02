@@ -18,12 +18,10 @@ using System.Security.Principal;
 
 namespace WMS.Service
 {
-    public class UnitService : IUnitService
+    public class UnitService : WIM.Core.Service.Impl.Service, IUnitService
     {
-        private IIdentity user { get; set; }
-        public UnitService(IIdentity identity)
+        public UnitService()
         {
-            user = identity;
         }        
         public IEnumerable<Unit_MT> GetUnits()
         {

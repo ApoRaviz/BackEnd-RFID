@@ -21,12 +21,10 @@ using WMS.Common.ValueObject;
 
 namespace WMS.Service
 {
-    public class ItemSetService : IItemSetService
+    public class ItemSetService : WIM.Core.Service.Impl.Service, IItemSetService
     {
-        private IIdentity user { get; set; }
-        public ItemSetService(IIdentity identity)
+        public ItemSetService()
         {
-            user = identity;
         }
 
         public IEnumerable<ItemSetDto> GetItemSets()

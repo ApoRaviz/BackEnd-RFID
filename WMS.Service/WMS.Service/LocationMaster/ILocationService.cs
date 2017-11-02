@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Service
 {
-    public interface ILocationService
+    public interface ILocationService : IService
     {
         IEnumerable<Location_MT> GetLocations();
         Location_MT GetLocationByLocIDSys(int id);
