@@ -18,14 +18,12 @@ namespace Fuji.Repository.Impl.ItemManagement
     public class SerialHeadRepository : Repository<ImportSerialHead>,ISerialHeadRepository
     {
         private FujiDbContext Db { get; set; }
-        private DbSet<ImportSerialHead> DbSet { get; set; }
-        private IIdentity Identity { get; set; }
+      private DbSet<ImportSerialHead> DbSet { get; set; }
 
-        public SerialHeadRepository(FujiDbContext context,IIdentity identity) :base(context,identity)
+        public SerialHeadRepository(FujiDbContext context):base(context)
         {
             DbSet = context.Set<ImportSerialHead>();
             Db = context;
-            Identity = identity;
         }
 
         //#region Inherite Method

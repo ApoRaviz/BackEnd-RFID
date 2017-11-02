@@ -10,6 +10,8 @@ namespace WIM.Core.Repository
 {
     public interface IRepository<TEntity> where TEntity : BaseEntity
     {
+        IIdentity Identity { get; }
+
         IEnumerable<TEntity> Get();
         TEntity Get(Func<TEntity, Boolean> where);
         IEnumerable<TEntity> GetAll();
@@ -24,8 +26,8 @@ namespace WIM.Core.Repository
         IEnumerable<TEntity> GetMany(Func<TEntity, bool> where);
         IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where);        
         void Delete(Func<TEntity, Boolean> where);        
-        IQueryable<TEntity> GetWithInclude(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate, params string[] include);
-        
+        //IQueryable<TEntity> GetWithInclude(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate, params string[] include);
+        IQueryable<TEntity> GetWithInclude(Func<TEntity, bool> where, params string[] include);
         TEntity GetSingle(Func<TEntity, bool> predicate);
         TEntity GetFirst(Func<TEntity, bool> predicate);
     }

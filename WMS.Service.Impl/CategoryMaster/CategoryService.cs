@@ -12,116 +12,136 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Common;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Repository.Impl;
+using WIM.Core.Context;
+using System.Security.Principal;
+using WMS.Common.ValueObject;
 
 namespace WMS.Service
 {
     public class CategoryService : ICategoryService
     {
-        private CategoryRepository repo;
-        private WMSDbContext proc;
-        public CategoryService()
+        private IIdentity user { get; set; }
+        public CategoryService(IIdentity identity)
         {
-            proc = new WMSDbContext();
-            repo = new CategoryRepository();
+            user = identity;
         }
 
         public IEnumerable<CategoryDto> GetCategories()
         {
+            IEnumerable<CategoryDto> categoryDtos;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+
+            ICategoryRepository repo = new CategoryRepository(Db);
             IEnumerable<Category_MT> categorys = repo.Get();
 
-            IEnumerable<CategoryDto> categoryDtos = categorys.Select(b => new CategoryDto()
+            categoryDtos = categorys.Select(b => new CategoryDto()
             {
                 CateIDSys = b.CateIDSys,
                 CateID = b.CateID,
                 CateName = b.CateName,
-                Active = b.Active,
+                IsActive = b.IsActive,
                 ProjectIDSys = b.ProjectIDSys
             });
+            }
             return categoryDtos;
         }
 
         public IEnumerable<CategoryDto> GetCategoriesByProjectID(int projectIDSys)
         {
-            IEnumerable<Category_MT> categorys = repo.GetByProjectID(projectIDSys);
-            IEnumerable<CategoryDto> categoryDtos = categorys.Select(b => new CategoryDto()
+            IEnumerable<CategoryDto> categoryDtos;
+            using (WMSDbContext Db = new WMSDbContext())
             {
-                CateIDSys = b.CateIDSys,
-                CateID = b.CateID,
-                CateName = b.CateName,
-                Active = b.Active,
-                ProjectIDSys = b.ProjectIDSys
-            });
+
+                ICategoryRepository repo = new CategoryRepository(Db);
+                IEnumerable<Category_MT> categorys = repo.GetMany(c=>c.ProjectIDSys == projectIDSys && c.IsActive == true);
+                categoryDtos = categorys.Select(b => new CategoryDto()
+                {
+                    CateIDSys = b.CateIDSys,
+                    CateID = b.CateID,
+                    CateName = b.CateName,
+                    IsActive = b.IsActive,
+                    ProjectIDSys = b.ProjectIDSys
+                });
+            }
             return categoryDtos;
         }
 
         public CategoryDto GetCategory(int id)
         {
-            Category_MT category = repo.GetByID(id);
-            CategoryDto categoryDto = new CategoryDto();
-            categoryDto.CateIDSys = category.CateIDSys;
-            categoryDto.CateID = category.CateID;
-            categoryDto.CateName = category.CateName;
-            categoryDto.Active = category.Active;
-            categoryDto.ProjectIDSys = category.ProjectIDSys;
+            CategoryDto categoryDto;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+
+                ICategoryRepository repo = new CategoryRepository(Db);
+                Category_MT category = repo.GetByID(id);
+                categoryDto = new CategoryDto();
+                categoryDto.CateIDSys = category.CateIDSys;
+                categoryDto.CateID = category.CateID;
+                categoryDto.CateName = category.CateName;
+                categoryDto.IsActive = category.IsActive;
+                categoryDto.ProjectIDSys = category.ProjectIDSys;
+            }
             return categoryDto;
         }
 
-        public int CreateCategory(Category_MT category)
+        public int CreateCategory(Category_MT category )
         {
-            using (var scope = new TransactionScope())
-            {
-                category.CateID = proc.ProcGetNewID("CT").FirstOrDefault();
-                category.Active = 1;
-                category.CreatedDate = DateTime.Now;
-                category.UpdateDate = DateTime.Now;
-                category.UserUpdate = "1";
-                try
+            using (var scope = new TransactionScope()) {
+
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    repo.Insert(category);
-                    scope.Complete();
+
+                    ICategoryRepository repo = new CategoryRepository(Db);
+                    category.CateID = Db.ProcGetNewID("CT");
+                    try
+                    {
+                        repo.Insert(category);
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                return category.CateIDSys;
             }
+                return category.CateIDSys;
+            
         }
 
-        public bool UpdateCategory(int id, Category_MT category)
+        public bool UpdateCategory(Category_MT category)
         {
             using (var scope = new TransactionScope())
             {
-                var existedCategory = repo.GetByID(id);
-                existedCategory.CateName = category.CateName;
-                existedCategory.UpdateDate = DateTime.Now;
-                existedCategory.UserUpdate = "1";
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    repo.Update(existedCategory);
-                    scope.Complete();
+
+                    ICategoryRepository repo = new CategoryRepository(Db);
+                    try
+                    {
+                        repo.Update(category);
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                
                 return true;
             }
         }
@@ -130,23 +150,24 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                var existedCategory = repo.GetByID(id);
-                existedCategory.Active = 0;
-                existedCategory.UpdateDate = DateTime.Now;
-                existedCategory.UserUpdate = "1";
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    repo.Update(existedCategory);
-                    scope.Complete();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
-                }
 
+                    ICategoryRepository repo = new CategoryRepository(Db);
+                    var existedCategory = repo.GetByID(id);
+                    try
+                    {
+                        repo.Delete(existedCategory);
+                        scope.Complete();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        throw ex;
+                    }
 
+                }
                 return true;
             }
         }

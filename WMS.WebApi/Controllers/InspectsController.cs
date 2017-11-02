@@ -9,7 +9,6 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
-using WMS.Common;
 using WMS.Service;
 using WMS.Service.Inspect;
 using WMS.Entity.InspectionManagement;
@@ -92,7 +91,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Inspect.UserUpdate = User.Identity.Name;
+                Inspect.UpdateBy = User.Identity.Name;
                 int id = InspectService.CreateInspect(Inspect);
                 response.SetData(id);
             }
@@ -114,7 +113,7 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                bool isUpated = InspectService.UpdateInspect(inspectIDSys, Inspect);
+                bool isUpated = InspectService.UpdateInspect(Inspect);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

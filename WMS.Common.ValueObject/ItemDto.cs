@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 using WMS.Master;
 
-namespace WMS.Common
+namespace WMS.Common.ValueObject
 {
     public class ItemDto
     {

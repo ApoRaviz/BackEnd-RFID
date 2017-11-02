@@ -13,7 +13,6 @@ using WIM.Core.Common.Validation;
 using WIM.Core.Common.Extensions;
 using System.Web.Http.Cors;
 using System.Threading.Tasks;
-using WMS.Common;
 using WMS.Service;
 using WMS.Entity.Report;
 using WMS.Service.Report;
@@ -76,7 +75,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                data.UserUpdate = User.Identity.Name;               
+                data.UpdateBy = User.Identity.Name;               
                 int id = ReportService.CreateReportForItemMaster(data).Value;
                 response.SetData(id);
             }

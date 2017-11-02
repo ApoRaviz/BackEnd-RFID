@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace WMS.Entity.WarehouseManagement
 {
     [Table("RackLayout_MT")]
-    public class RackLayout_MT
+    public class RackLayout_MT : BaseEntity
     {
         [Key]
         public int ZoneIDSys { get; set; }
@@ -19,8 +20,5 @@ namespace WMS.Entity.WarehouseManagement
         public string Floor { get; set; }
         public Nullable<int> Left { get; set; }
         public Nullable<int> Top { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> UpdatedDate { get; set; }
-        public string UserUpdate { get; set; }
     }
 }

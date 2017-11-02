@@ -12,7 +12,7 @@ namespace WMS.Master
         IEnumerable<Warehouse_MT> GetWarehouses();
         Warehouse_MT GetWarehouseByLocIDSys(int id);
         int CreateWarehouse(Warehouse_MT Warehouse);
-        bool UpdateWarehouse(int id, Warehouse_MT Warehouse);
+        bool UpdateWarehouse(Warehouse_MT Warehouse);
         bool DeleteWarehouse(int id);        
     }
 }

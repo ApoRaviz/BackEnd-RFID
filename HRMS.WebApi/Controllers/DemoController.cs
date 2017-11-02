@@ -24,6 +24,7 @@ using HRMS.Repository.LeaveManagement;
 using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
 using HRMS.Common.ValueObject.LeaveManagement;
+using Microsoft.AspNet.Identity;
 
 namespace HRMS.WebApi.Controllers
 {    
@@ -36,7 +37,9 @@ namespace HRMS.WebApi.Controllers
         {
             LeaveService = leaveService;           
         }
-                
+         
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("new")]
         public HttpResponseMessage DemoAdd([FromBody]Leave leaveRequest)
@@ -50,8 +53,8 @@ namespace HRMS.WebApi.Controllers
 
                     string y = LeaveService.GetName();
 
-                    ILeaveRepository headRepo = new LeaveRepository(db, User.Identity);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
+                    ILeaveRepository headRepo = new LeaveRepository(db);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
                     Leave x = headRepo.Insert(leaveRequest);
 
@@ -84,8 +87,8 @@ namespace HRMS.WebApi.Controllers
                 Leave leaveUpdated;
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
-                    ILeaveRepository repo = new LeaveRepository(db, User.Identity);
-                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db, User.Identity);
+                    ILeaveRepository repo = new LeaveRepository(db);
+                    ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
 
                     leaveUpdated = repo.Update(leaveRequest);
                  

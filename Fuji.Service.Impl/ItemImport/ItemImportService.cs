@@ -36,16 +36,16 @@ namespace Fuji.Service.Impl.ItemImport
         #endregion
         
         private FujiDbContext Db { get; set; }
-        private IIdentity Identity;
+        //private IGenericRepository<ImportSerialHead> Repo;
+
         private SerialRepository SerialDetailRepo;
         private SerialHeadRepository SerialHeadRepo;
-
-        public ItemImportService(IIdentity identity)
+        public ItemImportService()
         {
             Db = FujiDbContext.Create();
-            SerialDetailRepo = new SerialRepository(new FujiDbContext(),identity);
-            SerialHeadRepo = new SerialHeadRepository(new FujiDbContext(), identity);
-            Identity = identity;
+            //Repo = new GenericRepository<ImportSerialHead>(Db);
+            SerialDetailRepo = new SerialRepository(new FujiDbContext());
+            SerialHeadRepo = new SerialHeadRepository(new FujiDbContext());
         }
 
         public IEnumerable<ImportSerialHead> GetItems()
@@ -276,7 +276,7 @@ namespace Fuji.Service.Impl.ItemImport
                                 detail.UpdateBy = item.UpdateBy;
                                 //detailRepo.Insert(detail);
                                 //Db.ImportSerialDetail.Add(detail);
-                                SerialDetailRepo.InsertItem(detail, userUpdate);
+                                SerialDetailRepo.Insert(detail, userUpdate);
                             }
                         }
                     //}

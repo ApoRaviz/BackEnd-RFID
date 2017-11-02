@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
       <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
       <Name>WMS.Entity</Name>

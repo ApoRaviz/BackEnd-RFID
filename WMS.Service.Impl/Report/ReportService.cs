@@ -57,16 +57,16 @@ namespace WMS.Service.Impl.Report
 
             using (var scope = new TransactionScope())
             {
-                data.CreatedDate = DateTime.Now;
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.CreatedDate = DateTime.Now;
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 //Repo.Insert(customer);
                 try
                 {
                     ReportSysID = Db.ProcCreateReportLayout(data.ForTable, data.FormatName, data.FormatType, data.FileExtention, data.Delimiter, data.TextGualifier
                                               , data.Encoding, data.StartExportRow, data.IncludeHeader, data.AddHeaderLayout, data.HeaderLayout
-                                              , data.CreatedDate, data.UpdatedDate, data.UserUpdate, sb.ToString()).FirstOrDefault();
+                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)
@@ -95,14 +95,14 @@ namespace WMS.Service.Impl.Report
 
             using (var scope = new TransactionScope())
             {
-                data.UpdatedDate = DateTime.Now;
-                data.UserUpdate = "1";
+                //data.UpdatedDate = DateTime.Now;
+                //data.UserUpdate = "1";
 
                 try
                 {
                     Db.ProcUpdateReportLayout(data.ReportIDSys, data.FormatName, data.FormatType, data.FileExtention, data.Delimiter, data.TextGualifier
                                               , data.Encoding, data.StartExportRow, data.IncludeHeader, data.AddHeaderLayout, data.HeaderLayout
-                                              , data.CreatedDate, data.UpdatedDate, data.UserUpdate, sb.ToString());
+                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
                     Db.SaveChanges();
                 }
                 catch (DbEntityValidationException e)

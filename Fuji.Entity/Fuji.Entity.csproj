@@ -45,9 +45,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WIM.Core.Entity">
-      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItemManagement\ImportSerialDetail.cs" />
@@ -59,6 +56,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WIM.Core.Entity.MenuManagement
 {
     [Table("Menu_MT")]
-    public class Menu_MT
+    public class Menu_MT : BaseEntity
     {        
         public Menu_MT()
         {
