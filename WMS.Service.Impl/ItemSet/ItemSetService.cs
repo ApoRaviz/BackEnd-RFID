@@ -14,7 +14,7 @@ using WMS.Common.ValueObject;
 
 namespace WMS.Service
 {
-    public class ItemSetService : IItemSetService
+    public class ItemSetService : WIM.Core.Service.Impl.Service ,IItemSetService
     {
         private WMSDbContext proc;
         private ItemSetRepository repo;

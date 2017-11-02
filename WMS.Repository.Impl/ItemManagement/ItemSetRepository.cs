@@ -5,7 +5,6 @@ using WMS.Context;
 using WMS.Common;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
-using WMS.Repository.ItemManagement;
 using System.Security.Principal;
 using WMS.Common.ValueObject;
 
