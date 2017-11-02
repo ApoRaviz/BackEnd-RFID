@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA0CB63C-87C2-470E-9651-3CCD1D8C8BE4}</ProjectGuid>
+    <ProjectGuid>{DD34FC8E-6D76-4571-93E3-98DD2F1FB361}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WIM.Core.Repository</RootNamespace>
-    <AssemblyName>WIM.Core.Repository</AssemblyName>
+    <RootNamespace>HRMS.Common</RootNamespace>
+    <AssemblyName>HRMS.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,20 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IRepository.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
-      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
-      <Name>WIM.Core.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

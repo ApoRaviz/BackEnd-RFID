@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace HRMS.Entity.LeaveManagement
 {
     [Table("LeaveHistory")]
-    public class LeaveHistory
+    public class LeaveHistory : BaseEntity
     {
         [Key]
         public int LeaveHistoryIDSys { get; set; }
@@ -19,10 +20,6 @@ namespace HRMS.Entity.LeaveManagement
         public decimal Duration { get; set; }
         public int LeaveTypeIDSys { get; set; }
         public string Comment { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
-        public string UpdateBy { get; set; }
-        public System.DateTime UpdateAt { get; set; }
 
     }
 }

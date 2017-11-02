@@ -5,20 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
 
 namespace HRMS.Entity.LeaveManagement
 {
     [Table("DayOffs")]
-    public class DayOff
+    public class DayOff : BaseEntity
     {
+
+        public DayOff()
+        {
+
+        }
+
         [Key]
         public int DayOffIDSys { get; set; }
         public System.DateTime DateDayOff { get; set; }
-        public int LeaveTypeIDSys { get; set; }
         public string Title { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
-        public string UpdateBy { get; set; }
-        public System.DateTime UpdateAt { get; set; }
+        public string Remark { get; set; }
     }
 }

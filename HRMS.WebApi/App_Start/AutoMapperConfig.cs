@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using HRMS.Common.ValueObject.LeaveManagement;
+using HRMS.Entity.LeaveManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using HRMS.Repository.Entity.LeaveRequest;
-using HRMS.Entity.LeaveManagement;
 
 namespace HRMS.WebApi
 {
@@ -19,7 +19,6 @@ namespace HRMS.WebApi
 
                 cfg.CreateMap<LeaveDetail, LeaveDetailDto>();
                 cfg.CreateMap<LeaveDetailDto, LeaveDetail>();
-
 
             });
         }
