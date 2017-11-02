@@ -14,7 +14,7 @@ namespace HRMS.Service.Impl.LeaveManagement
     { 
 
         public bool ApproveLeave(int id)
-        {
+        {            
             throw new NotImplementedException();
         }
 

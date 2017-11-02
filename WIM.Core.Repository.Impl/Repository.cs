@@ -78,7 +78,7 @@ namespace WIM.Core.Repository.Impl
             
             entityForInsert.CreateBy = Identity.GetUserName();
             entityForInsert.CreateAt = DateTime.Now;
-            entityForInsert.UpdateBy = Identity..GetUserName();
+            entityForInsert.UpdateBy = Identity.GetUserName();
             entityForInsert.UpdateAt = DateTime.Now;
             entityForInsert.IsActive = true;
 
@@ -106,7 +106,7 @@ namespace WIM.Core.Repository.Impl
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
                 }
             }
-            entityForUpdate.UpdateBy = Identity..GetUserName();
+            entityForUpdate.UpdateBy = Identity.GetUserName();
             entityForUpdate.UpdateAt = DateTime.Now;
             return entityForUpdate;
         }
