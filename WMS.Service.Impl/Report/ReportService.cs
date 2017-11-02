@@ -16,7 +16,7 @@ using WMS.Service.Report;
 
 namespace WMS.Service.Impl.Report
 {
-    public class ReportService : IReportService
+    public class ReportService : WIM.Core.Service.Impl.Service, IReportService
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><ColumnOrder>{1}</ColumnOrder></row>";
 

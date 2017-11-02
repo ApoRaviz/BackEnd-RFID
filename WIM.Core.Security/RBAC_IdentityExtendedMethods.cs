@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Threading;
-using System.Web;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
-using WMS.WebApi;
 
 public static class RBAC_ExtendedMethods_4_Principal
 {

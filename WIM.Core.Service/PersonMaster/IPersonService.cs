@@ -8,7 +8,7 @@ using WIM.Core.Entity.Person;
 
 namespace WIM.Core.Service
 {
-    public interface IPersonService
+    public interface IPersonService : IService
     {
         IEnumerable<Person_MT> GetPersons();
         Person_MT GetPersonByPersonIDSys(string id);

@@ -9,7 +9,7 @@ using WIM.Core.Entity.MenuManagement;
 
 namespace WIM.Core.Service
 {
-    public interface IApiMTService
+    public interface IApiMTService : IService
     {
         IEnumerable<Api_MT> GetAPIs();
         ApiMTDto GetApiMT(string id);

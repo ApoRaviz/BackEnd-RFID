@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WIM.Core.Common.Mail;
+using WIM.Core.Common.Validation;
 using WIM.Core.Security.Context;
 using WIM.Core.Security.Entity;
 
@@ -262,5 +263,35 @@ namespace WIM.Core.Security
             return ByteArraysEqual(buffer3, buffer4);
         }
 
+
+        public string SetOTPAndGetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
+        {
+            using (SecurityDbContext Db = new SecurityDbContext())
+            {
+                try
+                {
+                   var u = (from us in Db.Users where us.Id == userid select us).SingleOrDefault();
+                    if (keyOtp > 99999)
+                    {
+                        u.KeyOTP = keyOtp;
+                        u.KeyOTPDate = DateTime.Now;
+                    }
+                    Db.SaveChanges();
+                    return u.TokenMobile;
+                }
+                catch (ValidationException e)
+                {
+                    throw new ValidationException();
+                }
+                catch (Exception)
+                {
+                    throw new ValidationException();
+                }
+            }
+        }
+
+
     }
+
+
 }

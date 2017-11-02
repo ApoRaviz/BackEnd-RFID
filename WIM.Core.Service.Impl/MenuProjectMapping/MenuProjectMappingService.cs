@@ -21,14 +21,13 @@ using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 
-namespace WMS.Service
+namespace WIM.Core.Service.Impl
 {
-    public class MenuProjectMappingService : IMenuProjectMappingService
+    public class MenuProjectMappingService : Service, IMenuProjectMappingService
     {
-        private IIdentity user { get; set; }
-        public MenuProjectMappingService(IIdentity identity)
+
+        public MenuProjectMappingService()
         {
-            user = identity;
         }
 
         public IEnumerable<MenuProjectMapping> GetMenuProjectMapping()

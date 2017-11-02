@@ -21,12 +21,11 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class MenuService : IMenuService
+    public class MenuService : Service, IMenuService
     {
-        private IIdentity user { get; set; }
-        public MenuService(IIdentity identity)
+        public MenuService()
         {
-            user = identity;
+
         }
 
         public IEnumerable<Menu_MT> GetMenu()

@@ -7,7 +7,7 @@ using WIM.Core.Entity;
 
 namespace WIM.Core.Service
 {
-    public interface IEmployeeService
+    public interface IEmployeeService : IService
     {
         IEnumerable<Employee_MT> GetEmployees();
         Employee_MT GetEmployeeByEmployeeIDSys(string id);

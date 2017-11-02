@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {
-    public interface IUnitService
+    public interface IUnitService : IService
     {
         IEnumerable<Unit_MT> GetUnits();
         Unit_MT GetUnitByUnitIDSys(int id);

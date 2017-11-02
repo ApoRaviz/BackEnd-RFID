@@ -15,9 +15,11 @@ namespace WMS.Common.ValueObject
         public string LineID { get; set; }
         public string ItemSetCode { get; set; }
         public string ItemSetName { get; set; }
-        public byte Active { get; set; }
+        public int Active { get; set; }
+        public string UserUpdate { get; set; }
+        public DateTime UpdateDate { get; set; }
 
-       public List<ItemSetDetailDto> ItemSetDetail { get; set; }
+        public ICollection<ItemSetDetailDto> ItemSetDetail { get; set; }
 
        
     }

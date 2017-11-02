@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Master
 {
-    public interface IWarehouseService
+    public interface IWarehouseService : IService
     {
         IEnumerable<Warehouse_MT> GetWarehouses();
         Warehouse_MT GetWarehouseByLocIDSys(int id);

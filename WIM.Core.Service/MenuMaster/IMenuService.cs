@@ -9,7 +9,7 @@ using WIM.Core.Entity.MenuManagement;
 
 namespace WIM.Core.Service
 {
-    public interface IMenuService
+    public interface IMenuService : IService
     {
         IEnumerable<Menu_MT> GetMenu();
         IEnumerable<MenuDto> GetMenuDto();

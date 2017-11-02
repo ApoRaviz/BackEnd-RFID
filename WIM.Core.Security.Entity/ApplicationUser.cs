@@ -22,6 +22,9 @@ namespace WIM.Core.Security.Entity
         public string Surname { get; set; }
         public DateTime LastLogin { get; set; }
         public bool IsSysAdmin { get; set; }
+        public int KeyOTP { get; set; }
+        public DateTime KeyOTPDate { get; set; }
+        public string TokenMobile { get; set; }
         //public int ProjectIDSys { get; set; }
 
 

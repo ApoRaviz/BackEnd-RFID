@@ -21,9 +21,6 @@ namespace WIM.Core.Common.ValueObject
         public string Nationality { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public System.DateTime CreateDate { get; set; }
-        public string UserUpdate { get; set; }
 
         public User User { get; set; }
         public Employee_MT Employee { get; set; }

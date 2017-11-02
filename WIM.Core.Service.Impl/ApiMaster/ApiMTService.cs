@@ -21,13 +21,12 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class ApiMTService : IApiMTService
+    public class ApiMTService : Service , IApiMTService
     {
-        private IIdentity user { get; set; }
 
-        public ApiMTService(IIdentity identity)
+        public ApiMTService()
         {
-            user = identity;
+
         }
 
         public IEnumerable<Api_MT> GetAPIs()

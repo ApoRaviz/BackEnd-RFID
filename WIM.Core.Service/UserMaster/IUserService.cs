@@ -9,7 +9,7 @@ using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Service
 {
-    public interface IUserService
+    public interface IUserService : IService
     {
         IEnumerable<User> GetUsers();
         User GetUserByUserID(string id);

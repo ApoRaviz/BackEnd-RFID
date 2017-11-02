@@ -8,7 +8,7 @@ using WIM.Core.Entity.RoleAndPermission;
 
 namespace WIM.Core.Service
 {
-    public interface IRoleService
+    public interface IRoleService : IService
     {
         IEnumerable<Role> GetRoles();
         IEnumerable<Role> GetRoles(int projectIDSys);

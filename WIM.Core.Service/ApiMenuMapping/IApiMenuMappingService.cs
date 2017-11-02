@@ -8,7 +8,7 @@ using WIM.Core.Entity.MenuManagement;
 
 namespace WIM.Core.Service
 {
-    public interface IApiMenuMappingService
+    public interface IApiMenuMappingService : IService
     {
         IEnumerable<ApiMenuMappingDto> GetApiMenuMapping();
         ApiMenuMappingDto GetApiMenuMapping(string id);

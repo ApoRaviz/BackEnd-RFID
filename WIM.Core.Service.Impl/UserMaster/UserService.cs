@@ -24,13 +24,11 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class UserService : IUserService
+    public class UserService : Service, IUserService
     {
         private object param = new { };
-        private IIdentity user { get; set; }
-        public UserService(IIdentity identity)
+        public UserService()
         {
-            user = identity;
         }
 
         public IEnumerable<User> GetUsers()
@@ -57,21 +55,18 @@ namespace WIM.Core.Service.Impl
 
         public string GetFirebaseTokenMobileByUserID(string userid, int keyOtp = 0)
         {
-            User u;
             try
             {
                 using (CoreDbContext Db = new CoreDbContext())
                 {
-                    IUserRepository repo = new UserRepository(Db);
-                    u = repo.GetByID(userid);
+                    var u = (from us in Db.User where us.UserID == userid select us).SingleOrDefault();
                     if (keyOtp > 99999)
                     {
                         u.KeyOTP = keyOtp;
                         u.KeyOTPDate = DateTime.Now;
-                        //Oil Comment
-                        repo.Update(u);
-                        Db.SaveChanges();
                     }
+                    Db.SaveChanges();
+                    return u.TokenMobile;
                 }
 
             }
@@ -83,7 +78,6 @@ namespace WIM.Core.Service.Impl
             {
                 throw new ValidationException();
             }
-            return u.TokenMobile;
         }
 
         public object GetCustonersByUserID(string userid)

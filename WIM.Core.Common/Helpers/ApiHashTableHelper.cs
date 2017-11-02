@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Linq;
-using System.Web;
-using WIM.Core.Security.Context;
-using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Context;
 
 namespace WIM.Core.Common.Helpers
@@ -20,8 +15,8 @@ namespace WIM.Core.Common.Helpers
             apiTable = new Hashtable();
 
             // #JobComment
-            var api = from row in db.Api_MT
-                      select row;
+            var api = (from row in db.Api_MT
+                      select row).ToList();
 
             foreach(var a in api)
             {

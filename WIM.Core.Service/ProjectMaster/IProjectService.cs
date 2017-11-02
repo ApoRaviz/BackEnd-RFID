@@ -8,7 +8,7 @@ using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Service
 {
-    public interface IProjectService
+    public interface IProjectService : IService
     {
         IEnumerable<Project_MT> GetProjects();
         Project_MT GetProjectByProjectIDSys(int id);

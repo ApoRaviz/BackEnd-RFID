@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Service;
 using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
 
 namespace WMS.Service
 {
-    public interface IItemService
+    public interface IItemService : IService
     {
         IEnumerable<ItemDto> GetItems();
         ItemDto GetItem(int id, string[] tableNames);        

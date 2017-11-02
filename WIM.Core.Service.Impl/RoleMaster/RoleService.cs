@@ -21,12 +21,10 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class RoleService : IRoleService
+    public class RoleService : Service, IRoleService
     {
-        private IIdentity user { get; set; }
-        public RoleService(IIdentity identity)
+        public RoleService()
         {
-            user = identity;
         }        
 
         public IEnumerable<Role> GetRoles()

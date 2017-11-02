@@ -19,7 +19,7 @@ using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Service
 {
-    public class LocationService : ILocationService
+    public class LocationService : WIM.Core.Service.Impl.Service, ILocationService
     {
         private WMSDbContext proc = new WMSDbContext();
         private LocationRepository repo;

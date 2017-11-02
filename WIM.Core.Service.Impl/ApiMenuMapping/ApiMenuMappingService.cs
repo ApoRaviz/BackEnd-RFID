@@ -20,13 +20,13 @@ using System.Security.Principal;
 
 namespace WIM.Core.Service.Impl
 {
-    public class ApiMenuMappingService : IApiMenuMappingService
+    public class ApiMenuMappingService : Service, IApiMenuMappingService
     {
-        private IIdentity user { get; set; }
 
-        public ApiMenuMappingService(IIdentity identity)
+
+        public ApiMenuMappingService()
         {
-            user = identity;
+
         }
 
         public IEnumerable<ApiMenuMappingDto> GetApiMenuMapping()

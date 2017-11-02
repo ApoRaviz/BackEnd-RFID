@@ -8,7 +8,7 @@ using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Service
 {
-    public interface IUserRoleService
+    public interface IUserRoleService : IService
     {
         IEnumerable<UserRoles> GetUserRoles();
         UserRoles GetUserRoleByLocIDSys(int id);

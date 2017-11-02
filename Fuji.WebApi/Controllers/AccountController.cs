@@ -492,7 +492,6 @@ namespace Fuji.WebApi.Controllers
                 _userManager.Dispose();
                 _userManager = null;
             }
-
             base.Dispose(disposing);
         }
 
