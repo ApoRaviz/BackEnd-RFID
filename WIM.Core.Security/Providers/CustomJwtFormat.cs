@@ -30,16 +30,11 @@ namespace WIM.Core.Security.Providers
 
             string audienceId = ConfigurationManager.AppSettings["as:AudienceId"];
 
-            string symmetricKeyAsBase64 = ConfigurationManager.AppSettings["as:AudienceSecret"];
+            string audienceSecret = ConfigurationManager.AppSettings["as:AudienceSecret"];
 
-            var keyByteArray = TextEncodings.Base64Url.Decode(symmetricKeyAsBase64);
+            var keyByteArray = TextEncodings.Base64Url.Decode(audienceSecret);
 
             var signingKey = new HmacSigningCredentials(keyByteArray);
-
-            /*var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.Default.GetBytes(symmetricKeyAsBase64));
-            var signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(
-                securityKey,
-                SecurityAlgorithms.HmacSha256Signature);*/
 
             var issued = data.Properties.IssuedUtc;
 

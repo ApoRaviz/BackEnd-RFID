@@ -58,10 +58,6 @@
       <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
       <Name>WIM.Core.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
-      <Project>{E365F321-091B-4D42-8934-6E919C7FF6B1}</Project>
-      <Name>WIM.Core.Repository.Impl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>

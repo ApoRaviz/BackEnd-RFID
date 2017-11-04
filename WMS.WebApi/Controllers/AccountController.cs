@@ -9,7 +9,6 @@ using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WMS.WebApi.Providers.Firebase;
 using WMS.WebApi.Providers.Firebase.Model;
@@ -26,6 +25,7 @@ using WIM.Core.Security.Providers;
 using WMS.Service;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service.Impl;
+using Microsoft.Owin.Security.Cookies;
 
 namespace WMS.WebApi.Controllers
 {
