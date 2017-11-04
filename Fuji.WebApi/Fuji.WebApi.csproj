@@ -291,9 +291,21 @@
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
+    <Reference Include="WIM.Core.Common.ValueObject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WIM.Core.Common.ValueObject\bin\Debug\WIM.Core.Common.ValueObject.dll</HintPath>
+    </Reference>
     <Reference Include="WIM.Core.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="WIM.Core.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WIM.Core.Service\bin\Debug\WIM.Core.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="WIM.Core.Service.Impl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WIM.Core.Service.Impl\bin\Debug\WIM.Core.Service.Impl.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WordApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=dd9255e6bcd130c8, processorArchitecture=MSIL">
@@ -362,6 +374,9 @@
     <Compile Include="Controllers\ApiLogHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\ImportSerialController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\MenuProjectMappingController.cs" />
+    <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Controllers\PrintLabelsController.cs" />
     <Compile Include="Controllers\ProgramVersionController.cs" />
     <Compile Include="Controllers\HelpersController.cs" />

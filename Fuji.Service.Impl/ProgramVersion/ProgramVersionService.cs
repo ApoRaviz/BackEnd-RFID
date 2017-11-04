@@ -17,22 +17,22 @@ using System.Security.Principal;
 
 namespace Fuji.Service.Impl.ProgramVersion
 {
-    public class ProgramVersionService : IProgramVersionService
+    public class ProgramVersionService : WIM.Core.Service.Impl.Service,IProgramVersionService
     {
-        private FujiDbContext Db { get; set; }
-        private ProgramVersionRepository programRepo;
-        private IIdentity Identity;
 
-        public ProgramVersionService(IIdentity identity)
+        public ProgramVersionService()
         {
-            Db = FujiDbContext.Create();
-            programRepo = new ProgramVersionRepository(new FujiDbContext());
-            Identity = identity;
         }        
 
         public ProgramVersionHistory GetProgramVersion(string programName)
         {
-            return (from v in Db.ProgramVersionHistory where v.ProgramName == programName select v).OrderByDescending(v => v.ID).Take(1).FirstOrDefault();            
+            ProgramVersionHistory item;
+            using (FujiDbContext Db = new FujiDbContext())
+            {
+                item = (from v in Db.ProgramVersionHistory where v.ProgramName == programName select v).OrderByDescending(v => v.ID).Take(1).FirstOrDefault();
+            }
+            return item;
+                
         }
 
         public void HandleValidationException(DbEntityValidationException ex)
