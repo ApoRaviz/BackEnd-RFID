@@ -20,30 +20,33 @@ using System.IO;
 using System.Drawing;
 using Fuji.Repository.Impl.LabelManagement;
 using System.Security.Principal;
+using Fuji.Repository.LabelManagement;
 
 namespace Fuji.Service.Impl.PrintLabel
 {
-    public class PrintLabelService : IPrintLabelService
+    public class PrintLabelService : WIM.Core.Service.Impl.Service,IPrintLabelService
     {
-        private FujiDbContext Db { get; set; }
-        private LabelRunningRepository printRepo;
-        private IIdentity Identity;
+        //private FujiDbContext Db { get; set; }
+        //private LabelRunningRepository printRepo;
 
-        public PrintLabelService(IIdentity identity)
+        public PrintLabelService()
         {
-            Db = FujiDbContext.Create();
-            printRepo = new LabelRunningRepository(new FujiDbContext());
-            Identity = identity;
+            //Db = FujiDbContext.Create();
+            //printRepo = new LabelRunningRepository(new FujiDbContext());
         }        
 
         public int GetRunningByType(string type, int running,string userUpdate)
         {
             int baseRunning = 0;
             bool isNotUpdateDate;
-            LabelRunning label = (from l in Db.LabelRunning
-                         where l.Type.Equals(type)
-                         select l
-                         ).SingleOrDefault();
+            LabelRunning label;
+            using (FujiDbContext Db = new FujiDbContext())
+            { 
+                label = (from l in Db.LabelRunning
+                                      where l.Type.Equals(type)
+                                      select l
+                             ).SingleOrDefault();
+            }
 
             if (isNotUpdateDate = (label.CreateAt.Date == DateTime.Now.Date))
             {
@@ -74,19 +77,25 @@ namespace Fuji.Service.Impl.PrintLabel
                     label.Running = running;
                 }
 
-                printRepo.UpdateItem(label,userUpdate);
-                
-                try
+                using (FujiDbContext Db = new FujiDbContext())
                 {
-                    Db.SaveChanges();
+                    ILabelRunningRepository printRepo = new LabelRunningRepository(Db);
+
+                    try
+                    {
+                        printRepo.Update(label);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                   
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return true;
+               
             }
+            return true;
         }
 
         public StreamContent GetReportStream(int running,int baseRunning,string type= "BXFJ")

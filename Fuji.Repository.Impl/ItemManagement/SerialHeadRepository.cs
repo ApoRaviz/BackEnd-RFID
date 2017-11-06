@@ -184,7 +184,7 @@ namespace Fuji.Repository.Impl.ItemManagement
 
         public ImportSerialHead IncludeChild(ImportSerialHead item)
         {
-            this.Context.Entry(item).Collection(c => c.ImportSerialDetail).Load();
+            Db.Entry(item).Collection(c => c.ImportSerialDetail).Load();
             return item;
         }
     }
