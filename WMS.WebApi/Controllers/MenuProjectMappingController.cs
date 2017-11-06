@@ -363,7 +363,7 @@ namespace WMS.WebApi.Controllers
         {
             Menu = new List<MenuProjectMappingDto>();
             int ProID = User.Identity.GetProjectIDSys();
-            List<MenuProjectMappingDto> res = new List<MenuProjectMappingDto>();
+            IEnumerable<MenuProjectMappingDto> res = new List<MenuProjectMappingDto>();
             if (User.IsSysAdmin())
             { MenuPermis = MenuProjectMappingService.GetMenuProjectMappingByID(ProID);
                 res = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
@@ -372,7 +372,7 @@ namespace WMS.WebApi.Controllers
             { MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserId(), ProID);
                 res = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
             }
-            IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID,MenuPermis).ToList();
+            IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID,MenuPermis);
              
 
             foreach (MenuProjectMappingDto resX in res)

@@ -64,6 +64,10 @@
       <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
       <Name>WIM.Core.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
+      <Project>{7526F7F0-D2AA-442F-B170-1DB30880E0EF}</Project>
+      <Name>WIM.Core.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

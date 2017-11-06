@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
@@ -49,12 +50,17 @@ namespace WIM.Core.Repository.Impl
             return DbSet.ToList();
         }
 
+        public TEntity GetByID(params object[] id)
+        {
+            return DbSet.Find(id);
+        }
+
         public TEntity GetByID(object id)
         {
             return DbSet.Find(id);
-        }       
+        }
 
-            public bool Exists(object id)
+        public bool Exists(object id)
         {
             return DbSet.Find(id) != null;
         }       
@@ -90,8 +96,12 @@ namespace WIM.Core.Repository.Impl
         {
             Type typeEntityToUpdate = entityToUpdate.GetType();
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
-            string namePropKey = GetPropertyNameOfKeyAttribute(properties);
-            var id = typeEntityToUpdate.GetProperty(namePropKey).GetValue(entityToUpdate, null);
+            List<string> namePropKey = GetPropertyNameOfKeyAttribute(properties);
+            object[] id = new object[namePropKey.Count];
+            for (int i = 0; i < namePropKey.Count; i++)
+            {
+                id[i] = typeEntityToUpdate.GetProperty(namePropKey[i]).GetValue(entityToUpdate, null);
+            }
             TEntity entityForUpdate = GetByID(id);
             if (entityForUpdate == null)
             {
@@ -111,16 +121,18 @@ namespace WIM.Core.Repository.Impl
             return entityForUpdate;
         }
 
-        private string GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
+        private List<string> GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
         {
+            List<string> name = new List<string>();
             foreach (PropertyInfo prop in properties)
             {
                 KeyAttribute attr = prop.GetCustomAttribute<KeyAttribute>();
                 if (attr != null)
                 {
-                    return prop.Name;
+                    name.Add(prop.Name);
                 }
             }
+            return name;
             throw new Exception("The Object Found KeyAttribute.");
         }
 

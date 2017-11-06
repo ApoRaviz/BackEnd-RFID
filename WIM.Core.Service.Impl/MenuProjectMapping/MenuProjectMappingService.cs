@@ -265,7 +265,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
-                MenuProjectMappingdto = repo.GetMany((c => c.ProjectIDSys == id)).OrderBy(c => c.MenuIDSysParent)
+                string[] include = { "Menu_MT" };
+                MenuProjectMappingdto = repo.GetWithInclude((c => c.ProjectIDSys == id),include).OrderBy(c => c.MenuIDSysParent)
                .OrderBy(c => c.Sort).Select(b => new MenuProjectMappingDto()
                {
                    MenuIDSys = b.MenuIDSys,
@@ -274,9 +275,9 @@ namespace WIM.Core.Service.Impl
                    MenuIDSysParent = b.MenuIDSysParent,
                    Url = b.Menu_MT.Url,
                    Sort = b.Sort
-               });
+               }).ToList();
             }
-            return MenuProjectMappingdto.ToList();
+            return MenuProjectMappingdto;
         }
 
         public IEnumerable<MenuDto> GetMenuDtoByProjectID(int id)

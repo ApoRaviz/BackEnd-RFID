@@ -130,7 +130,7 @@
       <Project>{c9851706-907c-4291-8086-b1df3b41674d}</Project>
       <Name>WMS.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Service\WMS.Service\WMS.Service.csproj">
+    <ProjectReference Include="..\WMS.Service\WMS.Service.csproj">
       <Project>{7ebe4831-beee-4f55-a5ca-71efa10522a7}</Project>
       <Name>WMS.Service</Name>
     </ProjectReference>

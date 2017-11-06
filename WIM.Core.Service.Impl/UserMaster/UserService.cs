@@ -291,7 +291,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IUserRepository repo = new UserRepository(Db);
-                user = repo.GetMany(c => !(Db.UserRoles.Where(a => a.RoleID == RoleID).Select(a => a.UserID).Contains(c.UserID))).ToList();
+                CoreDbContext Db2 = new CoreDbContext();
+                user = repo.GetMany(c => !(Db2.UserRoles.Where(a => a.RoleID == RoleID).Select(a => a.UserID).Contains(c.UserID))).ToList();
             }
             return user.ToList();
         }

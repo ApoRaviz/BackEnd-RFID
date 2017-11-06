@@ -21,10 +21,10 @@ namespace WIM.Core.Entity.MenuManagement
         }
 
         [Key]
-        [Column(Order = 1)]
+        [Column(Order = 0)]
         public int MenuIDSys { get; set; }
         [Key]
-        [Column(Order = 2)]
+        [Column(Order = 1)]
         public int ProjectIDSys { get; set; }
         public byte Sort { get; set; }
         public string MenuName { get; set; }
