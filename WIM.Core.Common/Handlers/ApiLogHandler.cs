@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Routing;
-using WIM.Core.Common;
 
-namespace Master.WebApi.Controllers
+namespace WIM.Core.Common.Handlers
 {
     public class ApiLogHandler : DelegatingHandler
     {
@@ -94,5 +94,5 @@ namespace Master.WebApi.Controllers
 
             return JsonConvert.SerializeObject(dict, Formatting.Indented);
         }
-    }    
+    }
 }
