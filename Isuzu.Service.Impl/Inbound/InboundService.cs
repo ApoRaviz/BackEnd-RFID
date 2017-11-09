@@ -510,10 +510,6 @@ namespace Isuzu.Service.Impl.Inbound
                                       by p.InvNo into g
                                       select new { InvNo = g.Key, GroupList = g.ToList() }).ToList();
 
-
-
-
-
                     try
                     {
                         itemGroups.ForEach(i =>
@@ -522,18 +518,21 @@ namespace Isuzu.Service.Impl.Inbound
                         //if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
                         if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
                             {
-                                i.GroupList.ForEach(x =>
-                                {
-                                    x.ID = Guid.NewGuid().ToString();
-                                    x.Status = IsuzuStatus.NEW.ToString();
-                                    DetailRepo.Insert(x);
-                                });
-                            //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
-                            var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
+                                
+                                //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
+                                var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
                                 if (item != null)
                                 {
+                                    i.GroupList.ForEach(x =>
+                                    {
+                                        x.ID = Guid.NewGuid().ToString();
+                                        x.Status = IsuzuStatus.NEW.ToString();
+                                        item.InboundItems.Add(x);
+                                    });
+                                    
                                     item.Qty = item.InboundItems.Count;
                                     HeadRepo.Update(item);
+                                    Db.SaveChanges();
                                 }
 
                             }
@@ -541,19 +540,25 @@ namespace Isuzu.Service.Impl.Inbound
                             {
                                 InboundItemsHead item = new InboundItemsHead();
                                 item.InvNo = i.InvNo;
+                                item.Status = IsuzuStatus.NEW.ToString();
+                                HeadRepo.Insert(item);
+                                Db.SaveChanges();
+
+                                item = HeadRepo.GetItemFirstBy(b => b.InvNo == i.InvNo,true);
                                 i.GroupList.ForEach(x =>
                                 {
                                     x.ID = Guid.NewGuid().ToString();
                                     x.Status = IsuzuStatus.NEW.ToString();
                                     item.InboundItems.Add(x);
                                 });
-                                item.Status = IsuzuStatus.NEW.ToString();
                                 item.Qty = i.GroupList.Count;
-                                HeadRepo.Insert(item);
+                                item.IsExport = false;
+                                HeadRepo.Update(item);
+                                Db.SaveChanges();
                             }
                         });
 
-                        Db.SaveChanges();
+                        
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
