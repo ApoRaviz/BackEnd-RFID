@@ -50,8 +50,28 @@ namespace WIM.Core.Repository.Impl
                        join r in Db.Role on ur.RoleID equals r.RoleID
                        join mp in Db.MenuProjectMapping on ps.MenuIDSys equals mp.MenuIDSys
                        where r.ProjectIDSys == projectid && ur.UserID == userid && mp.ProjectIDSys == projectid
-                       select mp);
+                       select mp).Include(x => x.Menu_MT);
             return menu;
+        }
+
+        public IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
+        {
+            var MenuProjectMappingQuery = (from row in x.MenuProjectMapping
+                                           join o in menu.AsEnumerable() on row.MenuIDSys equals o.MenuIDSys into joined
+                                           from i in joined.DefaultIfEmpty()
+                                           where row.ProjectIDSys == id
+                                           orderby row.MenuIDSysParent, row.Sort
+                                           select row).Include(a => a.Menu_MT);
+            IEnumerable <MenuProjectMappingDto> Menu = MenuProjectMappingQuery.Select(row => new MenuProjectMappingDto
+                                           {
+                                               MenuIDSys = row.MenuIDSys,
+                                               ProjectIDSys = row.ProjectIDSys,
+                                               MenuName = row.MenuName,
+                                               MenuIDSysParent = row.MenuIDSysParent,
+                                               Url = row.Menu_MT.Url ?? String.Empty,
+                                               Sort = row.Sort
+                                           });
+            return Menu;
         }
     }
 }
