@@ -7,8 +7,8 @@
     <ProjectGuid>{D6231BD3-DF3B-4053-90C3-DD2AF10097A7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WIM.Repository</RootNamespace>
-    <AssemblyName>WIM.Repository</AssemblyName>
+    <RootNamespace>WMS.Repository</RootNamespace>
+    <AssemblyName>WMS.Repository</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
