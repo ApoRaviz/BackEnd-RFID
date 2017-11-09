@@ -66,7 +66,7 @@ namespace HRMS.WebApi.Controllers
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                LoginProvider = externalLogin?.LoginProvider
             };
         }
 
@@ -541,8 +541,10 @@ namespace HRMS.WebApi.Controllers
 
             public IList<Claim> GetClaims()
             {
-                IList<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider));
+                IList<Claim> claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider)
+                };
 
                 if (UserName != null)
                 {

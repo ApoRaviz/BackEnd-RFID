@@ -31,14 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=6.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.6.1.0\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -110,10 +110,6 @@
       <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
       <Name>WIM.Core.Service</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Repository\WMS.Repository.csproj">
-      <Project>{D6231BD3-DF3B-4053-90C3-DD2AF10097A7}</Project>
-      <Name>WMS.Repository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
       <Project>{30a80d17-b62f-4f7d-9430-b02425001e3b}</Project>
       <Name>WMS.Common.ValueObject</Name>
@@ -127,14 +123,14 @@
       <Name>WMS.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Repository.Impl\WMS.Repository.Impl.csproj">
-      <Project>{4a90ad09-d706-4985-a8cd-73b2ba35403d}</Project>
+      <Project>{4A90AD09-D706-4985-A8CD-73B2BA35403D}</Project>
       <Name>WMS.Repository.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">
       <Project>{c9851706-907c-4291-8086-b1df3b41674d}</Project>
       <Name>WMS.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Service\WMS.Service\WMS.Service.csproj">
+    <ProjectReference Include="..\WMS.Service\WMS.Service.csproj">
       <Project>{7ebe4831-beee-4f55-a5ca-71efa10522a7}</Project>
       <Name>WMS.Service</Name>
     </ProjectReference>

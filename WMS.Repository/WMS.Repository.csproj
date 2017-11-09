@@ -41,20 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CategoryMaster\ICategoryRepository.cs" />
+    <Compile Include="Dimension\IDimensionRepository.cs" />
+    <Compile Include="Inspect\IInspectRepository.cs" />
+    <Compile Include="ItemManagement\IItemRepository.cs" />
     <Compile Include="ItemManagement\IItemSetDetailRepository.cs" />
     <Compile Include="ItemManagement\IItemSetRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Supplier\ISupplierRepository.cs" />
+    <Compile Include="UnitMaster\IUnitRepository.cs" />
     <Compile Include="UserManagement\IUserRepository.cs" />
+    <Compile Include="Warehouse\IWarehouseRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
       <Name>WIM.Core.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
-      <Project>{E365F321-091B-4D42-8934-6E919C7FF6B1}</Project>
-      <Name>WIM.Core.Repository.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>

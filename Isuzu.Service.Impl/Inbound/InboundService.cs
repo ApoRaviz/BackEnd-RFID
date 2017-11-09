@@ -18,30 +18,28 @@ using Isuzu.Context;
 using Isuzu.Entity;
 using Isuzu.Repository.Impl;
 using System.Security.Principal;
+using Isuzu.Repository.ItemManagement;
 
 namespace Isuzu.Service.Impl.Inbound
 {
     public class InboundService : IInboundService
     {
-        private IsuzuDataContext Db { get; set; }
-        private InboundRepository DetailRepo;
-        private InboundHeadRepository HeadRepo;
-        private IIdentity Identity;
-
+        #region stringConnection
         private string connectionString = ConfigurationManager.ConnectionStrings["WIM_ISUZU"].ConnectionString;
-        public InboundService(IIdentity identity)
+        #endregion 
+        
+        public InboundService()
         {
-            Db = IsuzuDataContext.Create();
-            DetailRepo = new InboundRepository(new IsuzuDataContext());
-            HeadRepo = new InboundHeadRepository(new IsuzuDataContext());
-            Identity = identity;
+           
         }
 
         #region =========================== HANDY ===========================
         public InboundItemHandyDto GetInboundItemByISZJOrder_HANDY(string iszjOrder)
         {
-          
-            return (
+            InboundItemHandyDto item;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+               item  = (
                         from i in Db.InboundItems
                         select new InboundItemHandyDto
                         {
@@ -52,17 +50,22 @@ namespace Isuzu.Service.Impl.Inbound
                             ISZJOrder = i.ISZJOrder
                         }
                     ).SingleOrDefault();
+            }
+            return item;
         }
 
         public bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem)
         {
-            bool isRFIDNeedRepeat = (
+            bool isRFIDNeedRepeat;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                isRFIDNeedRepeat = (
                                from i in Db.InboundItems
                                where i.ISZJOrder == inboundItem.ISZJOrder
                                && !string.IsNullOrEmpty(i.RFIDTag)
                                select i
                            ).Any();
-
+            }
             return isRFIDNeedRepeat;
         }
 
@@ -70,80 +73,87 @@ namespace Isuzu.Service.Impl.Inbound
         {
             using (var scope = new TransactionScope())
             {
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    InboundItems itemRFIDIsDuplicatedAnother = (
-                                from i in Db.InboundItems
-                                where i.RFIDTag == inboundItem.RFIDTag
-                                && i.ISZJOrder != inboundItem.ISZJOrder
-                                select i
-                            ).SingleOrDefault();
-
-                    if (itemRFIDIsDuplicatedAnother != null)
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    try
                     {
-                        ValidationException ve = new ValidationException();
-                        ve.Add(new ValidationError(((int)ErrorCode.RFIDIsDuplicatedAnother).ToString(), string.Format("RFID {0} ถูก Register โดย Order {1} ไปแล้ว ", inboundItem.RFIDTag, itemRFIDIsDuplicatedAnother.ISZJOrder)));
-                        throw ve;
+                        InboundItems itemRFIDIsDuplicatedAnother = (
+                                    from i in Db.InboundItems
+                                    where i.RFIDTag == inboundItem.RFIDTag
+                                    && i.ISZJOrder != inboundItem.ISZJOrder
+                                    select i
+                                ).SingleOrDefault();
+
+                        if (itemRFIDIsDuplicatedAnother != null)
+                        {
+                            ValidationException ve = new ValidationException();
+                            ve.Add(new ValidationError(((int)ErrorCode.RFIDIsDuplicatedAnother).ToString(), string.Format("RFID {0} ถูก Register โดย Order {1} ไปแล้ว ", inboundItem.RFIDTag, itemRFIDIsDuplicatedAnother.ISZJOrder)));
+                            throw ve;
+                        }
+
+                        var inboundItemExist = (
+                                    from i in Db.InboundItems
+                                    where i.ID == inboundItem.ID
+                                        && i.ISZJOrder == inboundItem.ISZJOrder
+                                        && i.InvNo == inboundItem.InvNo
+                                    select i
+                                ).SingleOrDefault();
+
+
+                        /*if (!string.IsNullOrEmpty(inboundItemExist.RFIDTag))
+                        {
+                            ValidationException ve = new ValidationException();
+                            ve.Add(new ValidationError(((int)ErrorCode.RFIDNotEmpty).ToString(), ErrorCode.RFIDNotEmpty.GetDescription()));
+                            throw ve;
+
+                        }*/
+
+                        inboundItemExist.RFIDTag = inboundItem.RFIDTag;
+                        inboundItemExist.Status = "RECEIVED";
+                        DetailRepo.Update(inboundItemExist);
+                        Db.SaveChanges();
+                        scope.Complete();
                     }
-
-                    var inboundItemExist = (
-                                from i in Db.InboundItems
-                                where i.ID == inboundItem.ID
-                                    && i.ISZJOrder == inboundItem.ISZJOrder
-                                    && i.InvNo == inboundItem.InvNo
-                                select i
-                            ).SingleOrDefault();
-           
-
-                    /*if (!string.IsNullOrEmpty(inboundItemExist.RFIDTag))
+                    catch (DbEntityValidationException e)
                     {
-                        ValidationException ve = new ValidationException();
-                        ve.Add(new ValidationError(((int)ErrorCode.RFIDNotEmpty).ToString(), ErrorCode.RFIDNotEmpty.GetDescription()));
-                        throw ve;
-                      
-                    }*/
-
-                    inboundItemExist.RFIDTag = inboundItem.RFIDTag;
-                    inboundItemExist.Status = "RECEIVED";
-                    inboundItemExist.CreateBy = username;
-                    inboundItemExist.CreateAt = DateTime.Now;
-                    inboundItemExist.UpdateBy = username;
-                    inboundItemExist.UpdateAt = DateTime.Now;
-                    DetailRepo.UpdateItem(inboundItemExist, username);
-                    //Db.SaveChanges();
+                        HandleValidationException(e);
+                    }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
+                
             }
         }
 
         public int GetAmountInboundItemInInvoiceByRFID_HANDY(string rfid)
         {
-            var inboundItem = (
+            int cnt;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                var inboundItem = (
                        from i in Db.InboundItems
                        where i.RFIDTag == rfid
                        select i
                    ).SingleOrDefault();
-            if (inboundItem == null)
-            {
-                return 0;
+                if (inboundItem == null)
+                {
+                    return 0;
+                }
+
+                 cnt = (
+                           from i in Db.InboundItems
+                           where i.InvNo == inboundItem.InvNo
+                           select i
+                       ).Count();
             }
-
-            var cnt = (
-                       from i in Db.InboundItems
-                       where i.InvNo == inboundItem.InvNo
-                       select i
-                   ).Count();
-
             return cnt;
         }
 
         public InboundItemHandyDto GetInboundItemByRFID_HANDY(string rfid)
         {
-            return (
+            InboundItemHandyDto item;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                item = (
                         from i in Db.InboundItems
                         where i.RFIDTag == rfid
                         select new InboundItemHandyDto
@@ -155,12 +165,17 @@ namespace Isuzu.Service.Impl.Inbound
                             ISZJOrder = i.ISZJOrder
                         }
                     ).SingleOrDefault();
+            }
+            return item;
 
         }
 
         public InboundItemCartonHandyDto GetInboundItemCartonByRFID_HANDY(string rfid)
         {
-            return (
+            InboundItemCartonHandyDto item;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                item = (
                         from i in Db.InboundItems
                         where i.RFIDTag == rfid
                         select new InboundItemCartonHandyDto
@@ -170,11 +185,16 @@ namespace Isuzu.Service.Impl.Inbound
                             RFIDTag = i.RFIDTag
                         }
                     ).SingleOrDefault();
+            }
+            return item;
         }
 
         public IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string invNo)
         {
-            var items = (
+            IEnumerable<InboundItemHandyDto> items;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                 items = (
                     from i in Db.InboundItems
                     where i.InvNo == invNo
                     && new List<string> { "RECEIVED", "HOLD" }.Contains(i.Status)
@@ -187,6 +207,7 @@ namespace Isuzu.Service.Impl.Inbound
                         ISZJOrder = i.ISZJOrder
                     }
                 ).ToList();
+            }
             return items;
 
         }
@@ -195,23 +216,27 @@ namespace Isuzu.Service.Impl.Inbound
         {
             using (var scope = new TransactionScope())
             {
-                var queryForHolding = (
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+
+                    var queryForHolding = (
                         from i in Db.InboundItems
                         where i.InvNo == inboundItemHolding.InvNo
                         && inboundItemHolding.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
-                foreach (InboundItems item in queryForHolding)
-                {
-                    item.Status = "HOLD";
-                    item.UpdateBy = username;
-                    item.UpdateAt = DateTime.Now;
-                    DetailRepo.UpdateItem(item,username);
+                    foreach (InboundItems item in queryForHolding)
+                    {
+                        item.Status = "HOLD";
+                        DetailRepo.Update(item);
+                    }
+                    Db.SaveChanges();
+                    scope.Complete();
                 }
 
-                //Db.SaveChanges();
-                scope.Complete();
+                
             }
         }
 
@@ -219,23 +244,26 @@ namespace Isuzu.Service.Impl.Inbound
         {
             using (var scope = new TransactionScope())
             {
-                var queryForShipping = (
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    var queryForShipping = (
                         from i in Db.InboundItems
                         where i.InvNo == inboundItemShipping.InvNo
                         && inboundItemShipping.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
-                
-                foreach (InboundItems item in queryForShipping)
-                {
-                    item.Status = "SHIPPED";
-                    item.UpdateBy = username;
-                    item.UpdateAt = DateTime.Now;
-                    DetailRepo.UpdateItem(item,username);
+
+                    foreach (InboundItems item in queryForShipping)
+                    {
+                        item.Status = "SHIPPED";
+                        DetailRepo.Update(item);
+                    }
+                    Db.SaveChanges();
+                    scope.Complete();
                 }
 
-                //Db.SaveChanges();
-                scope.Complete();
+                
             }
         }
 
@@ -243,23 +271,25 @@ namespace Isuzu.Service.Impl.Inbound
         {
             using (var scope = new TransactionScope())
             {
-                var queryForPacking = (
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    var queryForPacking = (
                         from i in Db.InboundItems
                         where i.RFIDTag == inboundItemCartonPacking.RFIDTag
                         select i
                     );
 
-              
-                foreach (InboundItems item in queryForPacking)
-                {
-                    item.CartonNo = inboundItemCartonPacking.CartonNo;
-                    item.UpdateBy = username;
-                    item.UpdateAt = DateTime.Now;
-                    DetailRepo.UpdateItem(item,username);
-                }
 
-                //Db.SaveChanges();
-                scope.Complete();
+                    foreach (InboundItems item in queryForPacking)
+                    {
+                        item.CartonNo = inboundItemCartonPacking.CartonNo;
+                        DetailRepo.Update(item);
+                    }
+
+                    Db.SaveChanges();
+                    scope.Complete();
+                }
             }
         }
 
@@ -282,33 +312,38 @@ namespace Isuzu.Service.Impl.Inbound
 
             using (var scope = new TransactionScope())
             {
-                var queryForPacking = (
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    var queryForPacking = (
                         from i in Db.InboundItems
                         where inboundItemCasePacking.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
-                foreach (InboundItems item in queryForPacking)
-                {
-                    item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
-                    item.UpdateBy = username;
-                    item.UpdateAt = DateTime.Now;
-                    DetailRepo.UpdateItem(item,username);
+                    foreach (InboundItems item in queryForPacking)
+                    {
+                        item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
+                        DetailRepo.Update(item);
+                    }
+                    Db.SaveChanges();
+                    scope.Complete();
                 }
-                
-
-                //Db.SaveChanges();
-                scope.Complete();
             }
         }
 
         public IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids)
         {
-            return (
-                    from i in Db.InboundItems
-                    where rfids.RFIDTags.Contains(i.RFIDTag)
-                    select i
-                ).ToList();
+            IEnumerable<InboundItems> items;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                items = (
+                   from i in Db.InboundItems
+                   where rfids.RFIDTags.Contains(i.RFIDTag)
+                   select i
+               ).ToList();
+            }
+            return items;
 
         }
         #endregion
@@ -316,11 +351,15 @@ namespace Isuzu.Service.Impl.Inbound
         #region =========================== DEFAULT ===========================
         public InboundItems GetInboundItemByISZJOrder(string iszjOrder)
         {
-            return (
-                        from i in Db.InboundItems
-                        where i.ISZJOrder == iszjOrder
-                        select i
-                    ).SingleOrDefault();
+            InboundItems item;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                item = (
+                           from i in Db.InboundItems
+                           where i.ISZJOrder == iszjOrder
+                           select i).SingleOrDefault();
+            }
+            return item;
         }
         public IEnumerable<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord)
         {
@@ -328,25 +367,61 @@ namespace Isuzu.Service.Impl.Inbound
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    try
+                    {
+                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
+                        output.Direction = ParameterDirection.Output;
 
-                    var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                    output.Direction = ParameterDirection.Output;
+                        items = DetailRepo.SqlQuery<InboundItems>("ProcPagingInboundItems @page,@size,@totalRecord out"
+                            , new SqlParameter("@page", pageIndex)
+                            , new SqlParameter("@size", pageSize)
+                            , output).ToList();
 
-                    items = DetailRepo.SqlQuery<InboundItems>("ProcPagingInboundItems @page,@size,@totalRecord out"
-                        , new SqlParameter("@page", pageIndex)
-                        , new SqlParameter("@size", pageSize)
-                        , output).ToList();
-
-                    totalRecord = Convert.ToInt32(output.Value);
+                        totalRecord = Convert.ToInt32(output.Value);
+                        scope.Complete();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItems>() { };
+                    }
                 }
-                catch (Exception)
+
+            }
+            return items;
+
+        }
+        public IEnumerable<InboundItems> GetInboundItemDeletedPaging(int pageIndex, int pageSize, out int totalRecord)
+        {
+            List<InboundItems> items = new List<InboundItems>();
+            totalRecord = 0;
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    return new List<InboundItems>() { };
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    try
+                    {
+                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
+                        output.Direction = ParameterDirection.Output;
+
+                        DetailRepo.SqlQuery<InboundItems>("ProcPagingInboundItemsDeleted @page,@size,@totalRecord out"
+                            , new SqlParameter("@page", pageIndex)
+                            , new SqlParameter("@size", pageSize)
+                            , output).ToList();
+
+                        totalRecord = Convert.ToInt32(output.Value);
+                        scope.Complete();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItems>() { };
+                    }
                 }
 
-                scope.Complete();
+                
                 return items;
             }
 
@@ -360,22 +435,27 @@ namespace Isuzu.Service.Impl.Inbound
 
             using (var scope = new TransactionScope())
             {
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    items = (isShipped) ? DetailRepo.SqlQuery<InboundItems>(sql
-                        , new SqlParameter("@Qty", qty)
-                        , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
-                        : DetailRepo.SqlQuery<InboundItems>(sql
-                        , new SqlParameter("@Qty",qty)).ToList();
-                }
-                catch (Exception)
-                {
-                    return new List<InboundItems>() { };
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    try
+                    {
+                        items = (isShipped) ? DetailRepo.SqlQuery<InboundItems>(sql
+                            , new SqlParameter("@Qty", qty)
+                            , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
+                            : DetailRepo.SqlQuery<InboundItems>(sql
+                            , new SqlParameter("@Qty", qty)).ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItems>() { };
+                    }
                 }
 
                 scope.Complete();
-                return items;
+                
             }
+            return items;
 
         }
         public IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo, bool isShipped = false)
@@ -387,105 +467,101 @@ namespace Isuzu.Service.Impl.Inbound
 
             using (var scope = new TransactionScope())
             {
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    items = (isShipped) ? DetailRepo.SqlQuery<InboundItems>(sql
-                       , new SqlParameter("@InvNo", invNo)
-                       , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
-                       : DetailRepo.SqlQuery<InboundItems>(sql
-                       , new SqlParameter("@Qty", invNo)).ToList();
-                }
-                catch (Exception)
-                {
-                    return new List<InboundItems>() { };
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    try
+                    {
+                        items = (isShipped) ? DetailRepo.SqlQuery<InboundItems>(sql
+                           , new SqlParameter("@InvNo", invNo)
+                           , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
+                           : DetailRepo.SqlQuery<InboundItems>(sql
+                           , new SqlParameter("@Qty", invNo)).ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItems>() { };
+                    }
                 }
 
                 scope.Complete();
-                return items;
             }
-
+            return items;
         }
         public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList, string userName)
         {
             List<InboundItems> duplicateList = new List<InboundItems>();
             List<string> isuzuOrders = itemList.Select(x => x.ISZJOrder).ToList();
-
-            duplicateList = (from p in Db.InboundItems
-                             where isuzuOrders.Contains(p.ISZJOrder)
-                             select p).ToList();
-
-            if (duplicateList.Count > 0)
-                return duplicateList;
-
-            var itemGroups = (from p in itemList
-                              group p
-                              by p.InvNo into g
-                              select new { InvNo = g.Key, GroupList = g.ToList() }).ToList();
-
-
-
             using (var scope = new TransactionScope())
             {
-
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    itemGroups.ForEach(i =>
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    duplicateList = (from p in Db.InboundItems
+                                     where isuzuOrders.Contains(p.ISZJOrder)
+                                     select p).ToList();
+
+                    if (duplicateList.Count > 0)
+                        return duplicateList;
+
+                    var itemGroups = (from p in itemList
+                                      group p
+                                      by p.InvNo into g
+                                      select new { InvNo = g.Key, GroupList = g.ToList() }).ToList();
+
+
+
+
+
+                    try
                     {
-                        
+                        itemGroups.ForEach(i =>
+                        {
+
                         //if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
-                        if(HeadRepo.IsItemExistBy(a => a.InvNo==i.InvNo))
-                        {
-                            i.GroupList.ForEach(x =>
+                        if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
                             {
-                                x.ID = Guid.NewGuid().ToString();
-                                x.CreateBy = userName;
-                                x.CreateAt = DateTime.Now;
-                                x.UpdateBy = userName;
-                                x.UpdateAt = DateTime.Now;
-                                x.Status = IsuzuStatus.NEW.ToString();
-                                DetailRepo.InsertItem(x, userName);
-                            });
+                                i.GroupList.ForEach(x =>
+                                {
+                                    x.ID = Guid.NewGuid().ToString();
+                                    x.Status = IsuzuStatus.NEW.ToString();
+                                    DetailRepo.Insert(x);
+                                });
                             //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
-                            var item = HeadRepo.GetItemFirstBy(f => f.InvNo==i.InvNo,true);
-                            if (item != null)
-                            {
-                                item.Qty = item.InboundItems.Count;
-                                HeadRepo.UpdateItem(item,userName);
+                            var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
+                                if (item != null)
+                                {
+                                    item.Qty = item.InboundItems.Count;
+                                    HeadRepo.Update(item);
+                                }
+
                             }
-                                
-                        }
-                        else
-                        {
-                            InboundItemsHead item = new InboundItemsHead();
-                            item.InvNo = i.InvNo;
-                            i.GroupList.ForEach(x =>
+                            else
                             {
-                                x.ID = Guid.NewGuid().ToString();
-                                x.CreateBy = userName;
-                                x.CreateAt = DateTime.Now;
-                                x.UpdateBy = userName;
-                                x.UpdateAt = DateTime.Now;
-                                x.Status = IsuzuStatus.NEW.ToString();
-                                item.InboundItems.Add(x);
-                            });
-                            item.CreateBy = userName;
-                            item.CreateAt = DateTime.Now;
-                            item.UpdateBy = userName;
-                            item.UpdateAt = DateTime.Now;
-                            item.Status = IsuzuStatus.NEW.ToString();
-                            item.Qty = i.GroupList.Count;
-                            HeadRepo.InsertItem(item,userName);
-                        }
-                    });
+                                InboundItemsHead item = new InboundItemsHead();
+                                item.InvNo = i.InvNo;
+                                i.GroupList.ForEach(x =>
+                                {
+                                    x.ID = Guid.NewGuid().ToString();
+                                    x.Status = IsuzuStatus.NEW.ToString();
+                                    item.InboundItems.Add(x);
+                                });
+                                item.Status = IsuzuStatus.NEW.ToString();
+                                item.Qty = i.GroupList.Count;
+                                HeadRepo.Insert(item);
+                            }
+                        });
 
-                    //Db.SaveChanges();
-
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
             }
 
             return new List<InboundItems>();
@@ -511,25 +587,32 @@ namespace Isuzu.Service.Impl.Inbound
           
             using (var scope = new TransactionScope())
             {
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    items = DetailRepo.SqlQuery<InboundItems>(sql).ToList();
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    try
+                    {
+                        items = DetailRepo.SqlQuery<InboundItems>(sql).ToList();
+                        scope.Complete();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItems>() { };
+                    }
                 }
-                catch (Exception)
-                {
-                    return new List<InboundItems>() { };
-                }
-
-                scope.Complete();
-                return items;
+  
             }
+            return items;
 
         }
         public IEnumerable<InboundItemsHead> GetInboundGroup(int max = 50)
         {
             List<InboundItemsHead> items = new List<InboundItemsHead>();
-
-            items = HeadRepo.GetItemAll(max).ToList();
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                items = HeadRepo.GetItemAll(max).ToList();
+            }
 
             //var itemGroups = (from p in Db.InboundItems
             //                orderby p.CreateAt descending
@@ -545,16 +628,22 @@ namespace Isuzu.Service.Impl.Inbound
             return items;
         }
         public InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo, bool isAddItems = false)
-        { 
-            InboundItemsHead item = (from p in Db.InboundItemsHead
-                                     where p.InvNo.Equals(invNo)
-                                     select p).FirstOrDefault();
-            if (item != null)
+        {
+            InboundItemsHead item;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-                if(isAddItems)
+                IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+
+                 item = (from p in Db.InboundItemsHead
+                                         where p.InvNo.Equals(invNo)
+                                         select p).FirstOrDefault();
+                if (item != null)
                 {
-                    Db.Entry(item).Collection(c => c.InboundItems).Load();
-                    item.InboundItems = (from p in item.InboundItems where p.Status != IsuzuStatus.DELETED.ToString() select p).ToList();
+                    if (isAddItems)
+                    {
+                        Db.Entry(item).Collection(c => c.InboundItems).Load();
+                        item.InboundItems = (from p in item.InboundItems where p.Status != IsuzuStatus.DELETED.ToString() select p).ToList();
+                    }
                 }
             }
             //items = items.ForEach(f => {
@@ -584,27 +673,33 @@ namespace Isuzu.Service.Impl.Inbound
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                    output.Direction = ParameterDirection.Output;
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
+                        output.Direction = ParameterDirection.Output;
 
-                    items = HeadRepo.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHead @page,@size,@totalRecord out"
-                        , new SqlParameter("@page", pageIndex)
-                        , new SqlParameter("@size", pageSize)
-                        , output).ToList();
+                        items = HeadRepo.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHead @page,@size,@totalRecord out"
+                            , new SqlParameter("@page", pageIndex)
+                            , new SqlParameter("@size", pageSize)
+                            , output).ToList();
 
-                    totalRecord = Convert.ToInt32(output.Value);
+                        totalRecord = Convert.ToInt32(output.Value);
+                        scope.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        var x = ex.Message;
+                        return new List<InboundItemsHead>() { };
+                    }
                 }
-                catch (Exception ex)
-                {
-                    var x = ex.Message;
-                    return new List<InboundItemsHead>() { };
-                }
 
-                scope.Complete();
-                return items;
+               
+               
             }
+            return items;
 
         }
         public IEnumerable<InboundItemsHead> GetDataGroupByColumn(string column, string keyword)
@@ -620,16 +715,21 @@ namespace Isuzu.Service.Impl.Inbound
             List<InboundItemsHead> items = new List<InboundItemsHead>() { };
             using (var scope = new TransactionScope())
             {
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    items = HeadRepo.SqlQuery<InboundItemsHead>(sql,new SqlParameter("@keyword", keyword)).ToList();
-                }
-                catch (Exception)
-                {
-                    return new List<InboundItemsHead>() { };
-                }
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        items = HeadRepo.SqlQuery<InboundItemsHead>(sql, new SqlParameter("@keyword", keyword)).ToList();
+                        scope.Complete();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItemsHead>() { };
+                    }
 
-                scope.Complete();
+                }
+                
                 return items;
             }
 
@@ -638,30 +738,35 @@ namespace Isuzu.Service.Impl.Inbound
         {
             using (var scope = new TransactionScope())
             {
-                InboundItemsHead queryUpdateHead = (from p in Db.InboundItemsHead
-                                                    where p.InvNo.Equals(item.InvNo)
-                                                    && p.Status == IsuzuStatus.SHIPPED.ToString()
-                                                    select p).FirstOrDefault();
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    InboundItemsHead queryUpdateHead = (from p in Db.InboundItemsHead
+                                                        where p.InvNo.Equals(item.InvNo)
+                                                        && p.Status == IsuzuStatus.SHIPPED.ToString()
+                                                        select p).FirstOrDefault();
 
-                try
-                {
-                  
-                    if (queryUpdateHead != null)
+                    try
                     {
-                        queryUpdateHead.IsExport = true;
-                        queryUpdateHead.UpdateBy = item.UpdateBy;
-                        queryUpdateHead.UpdateAt = DateTime.Now;
-                        HeadRepo.UpdateItem(queryUpdateHead,item.UpdateBy);
+
+                        if (queryUpdateHead != null)
+                        {
+                            queryUpdateHead.IsExport = true;
+                            HeadRepo.Update(queryUpdateHead);
+                        }
+                        Db.SaveChanges();
+                        scope.Complete();
+                        
                     }
-                    //Db.SaveChanges();
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return true;
+                
+               
             }
+            return true;
         }
         public bool UpdateDeleteReason(IsuzuDeleteReason reason)
         {
@@ -670,69 +775,77 @@ namespace Isuzu.Service.Impl.Inbound
                 //InboundItems queryUpdate = (from p in Db.InboundItems
                 //                            where p.ISZJOrder.Equals(reason.ISZJOrder)
                 //                            select p).FirstOrDefault();
-
-                var queryUpdate = HeadRepo.GetItemFirstBy(f => f.InvNo == reason.InvNo,true);
-
-                try
+                using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    if (queryUpdate != null)
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    var queryUpdate = HeadRepo.GetItemFirstBy(f => f.InvNo == reason.InvNo, true);
+
+                    try
                     {
-                        queryUpdate.InboundItems.ToList().ForEach(f => {
-                            if (f.ISZJOrder == reason.ISZJOrder)
+                        if (queryUpdate != null)
+                        {
+                            queryUpdate.InboundItems.ToList().ForEach(f =>
                             {
-                                f.Status = IsuzuStatus.DELETED.ToString();
-                                f.DeleteReason = reason.Reason;
-                                f.PathDeleteReason = reason.Paths;
-                                f.UpdateAt = DateTime.Now;
-                                f.UpdateBy = reason.UserName;
-                            }
-                        });
-                        queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
-                        HeadRepo.UpdateItem(queryUpdate, reason.UserName);
-                           
-                        //    queryUpdate.Status = IsuzuStatus.DELETED.ToString();
-                        //    queryUpdate.DeleteReason = reason.Reason;
-                        //    queryUpdate.PathDeleteReason = reason.Paths;
-                        //    queryUpdate.UpdateAt = DateTime.Now;
-                        //    queryUpdate.UpdateBy = reason.UserName;
-                        //    DetailRepo.UpdateItem(queryUpdate,reason.UserName);
+                                if (f.ISZJOrder == reason.ISZJOrder)
+                                {
+                                    f.Status = IsuzuStatus.DELETED.ToString();
+                                    f.DeleteReason = reason.Reason;
+                                    f.PathDeleteReason = reason.Paths;
+                                }
+                            });
+                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
+                            HeadRepo.Update(queryUpdate);
+
+                            //    queryUpdate.Status = IsuzuStatus.DELETED.ToString();
+                            //    queryUpdate.DeleteReason = reason.Reason;
+                            //    queryUpdate.PathDeleteReason = reason.Paths;
+                            //    queryUpdate.UpdateAt = DateTime.Now;
+                            //    queryUpdate.UpdateBy = reason.UserName;
+                            //    DetailRepo.UpdateItem(queryUpdate,reason.UserName);
+                        }
+                        Db.SaveChanges();
+                        scope.Complete();
                     }
-                    //Db.SaveChanges();
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-
-                scope.Complete();
-                return true;
+                
+               
             }
-
+            return true;
         }
         public bool UpdateQtyInboundHead(string invNo,string userUpdate)
         {
             using (var scope = new TransactionScope())
             {
-                InboundItemsHead queryUpdate = (from p in Db.InboundItemsHead
-                                                where p.InvNo.Equals(invNo)
-                                                select p).FirstOrDefault();
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    InboundItemsHead queryUpdate = (from p in Db.InboundItemsHead
+                                                    where p.InvNo.Equals(invNo)
+                                                    select p).FirstOrDefault();
 
-                try
-                {
-                    if (queryUpdate != null)
+                    try
                     {
-                        queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
-                        HeadRepo.UpdateItem(queryUpdate, userUpdate);
+                        if (queryUpdate != null)
+                        {
+                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
+                            HeadRepo.Update(queryUpdate);
+                        }
+                        Db.SaveChanges();
+                        scope.Complete();
                     }
-                    //Db.SaveChanges();
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return true;
+                
+               
             }
+            return true;
         }
         public IsuzuDataImport OpenReadExcel(string localFileName)
         {
@@ -905,6 +1018,7 @@ namespace Isuzu.Service.Impl.Inbound
                 newItem.CreateBy = reader["CreateBy"].ToString();
                 newItem.UpdateAt = reader["UpdateAt"] is DBNull ? new DateTime(1900, 1, 1) : Convert.ToDateTime(reader["UpdateAt"]);
                 newItem.UpdateBy = reader["UpdateBy"].ToString();
+                newItem.IsActive = Convert.ToBoolean(reader["IsActive"]);
             }
 
             return newItem;
@@ -947,6 +1061,7 @@ namespace Isuzu.Service.Impl.Inbound
                 newItem.UpdateAt = reader["UpdateAt"] is DBNull ? new DateTime(1900, 1, 1) : Convert.ToDateTime(reader["UpdateAt"]);
                 newItem.CaseNo = reader["CaseNo"].ToString();
                 newItem.CartonNo = reader["CartonNo"].ToString();
+                newItem.IsActive = Convert.ToBoolean(reader["IsActive"]);
                 //newItem.IsExport = Convert.ToBoolean(reader["IsExport"]);
             }
 

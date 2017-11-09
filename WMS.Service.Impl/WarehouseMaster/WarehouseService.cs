@@ -12,10 +12,10 @@ using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
-using WMS.Repository.Impl;
 using WMS.Entity.WarehouseManagement;
 using WMS.Context;
 using System.Security.Principal;
+using WMS.Repository.Impl;
 
 namespace WMS.Master
 {

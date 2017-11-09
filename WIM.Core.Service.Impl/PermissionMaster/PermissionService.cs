@@ -260,8 +260,9 @@ namespace WIM.Core.Service.Impl
             {
                 IPermissionRepository repo = new PermissionRepository(Db);
                 IRepository<Menu_MT> repomenu = new Repository<Menu_MT>(Db);
-                var menu = repo.GetMany(c => c.ProjectIDSys == projectid && !(Db.ApiMenuMapping.Where(a => a.Type =="A").Select(a => a.ApiIDSys+a.MenuIDSys).Contains(c.ApiIDSys+c.MenuIDSys)));
-                var menutemp = repomenu.GetMany(c => (Db.Permission.Where(a => a.ProjectIDSys == projectid).Select(b => b.MenuIDSys)).Contains(c.MenuIDSys));
+                CoreDbContext Db2 = new CoreDbContext();
+                var menu = repo.GetMany(c => c.ProjectIDSys == projectid && !(Db2.ApiMenuMapping.Where(a => a.Type =="A").Select(a => a.ApiIDSys+a.MenuIDSys).Contains(c.ApiIDSys+c.MenuIDSys)));
+                var menutemp = repomenu.GetMany(c => (Db2.Permission.Where(a => a.ProjectIDSys == projectid).Select(b => b.MenuIDSys)).Contains(c.MenuIDSys));
                 menutree = menutemp.Select(b => new PermissionTree()
                 {
                     PermissionName = b.MenuName,
@@ -310,8 +311,9 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPermissionRepository repo = new PermissionRepository(Db);
+                CoreDbContext Db2 = new CoreDbContext();
                 var temp = repo.GetMany((c => c.MenuIDSys == MenuIDSys && c.ProjectIDSys == ProjectIDSys
-                && !(Db.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
+                && !(Db2.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
                 permission = temp.ToList();
             }
             return permission;
@@ -323,8 +325,9 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPermissionRepository repo = new PermissionRepository(Db);
+                CoreDbContext Db2 = new CoreDbContext();
                 var temp = repo.GetManyQueryable((c => c.MenuIDSys == MenuIDSys && c.ProjectIDSys == ProjectIDSys
-                && (Db.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
+                && (Db2.ApiMenuMapping.Where(b => b.Type == "A" && b.MenuIDSys == MenuIDSys).Select(a => a.ApiIDSys).Contains(c.ApiIDSys))));
                 permission = temp.ToList();
             }
             return permission;
@@ -336,8 +339,9 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPermissionRepository repo = new PermissionRepository(Db);
+                CoreDbContext Db2 = new CoreDbContext();
                 var temp = repo.GetManyQueryable(c => c.ProjectIDSys == ProjectIDSys && 
-                (Db.RolePermission.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
+                (Db2.RolePermission.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
                 permission = temp.ToList();
             }
             return permission;

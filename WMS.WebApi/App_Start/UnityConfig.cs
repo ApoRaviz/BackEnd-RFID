@@ -13,6 +13,8 @@ using WMS.Service.WarehouseMaster;
 using WMS.Service.Impl.WarehouseMaster;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
+using WMS.Service.LocationMaster;
+using WMS.Service.Impl.LocationMaster;
 
 namespace WMS.WebApi
 {

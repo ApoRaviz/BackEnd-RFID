@@ -45,7 +45,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPersonRepository repo = new PersonRepository(Db);
-                Person = repo.GetSingle(b => (Db.User.Where(a => a.UserID == id).Select(d => d.PersonIDSys).Contains(b.PersonIDSys)));
+                CoreDbContext Db2 = new CoreDbContext();
+                Person = repo.GetSingle(b => (Db2.User.Where(a => a.UserID == id).Select(d => d.PersonIDSys).Contains(b.PersonIDSys)));
             }
             return Person;            
         }
@@ -61,7 +62,6 @@ namespace WIM.Core.Service.Impl
                 {
                     PersonIDSys = data.PersonIDSys,
                     PersonID = data.PersonID,
-                    Age = data.Age,
                     BirthDate = data.BirthDate,
                     Email = data.Email,
                     Name = data.Name,

@@ -27,6 +27,7 @@ namespace Isuzu.Service
         //Default
         InboundItems GetInboundItemByISZJOrder(string iszjOrder);
         IEnumerable<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord);
+        IEnumerable<InboundItems> GetInboundItemDeletedPaging(int pageIndex, int pageSize, out int totalRecord);
         List<InboundItems> ImportInboundItemList(List<InboundItems> itemList,string userName);
         IEnumerable<InboundItems> GetInboundItemByQty(int Qty, bool isShipped = false);
         IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false);

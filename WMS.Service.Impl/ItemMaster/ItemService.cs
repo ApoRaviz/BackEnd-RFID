@@ -14,10 +14,10 @@ using WIM.Core.Common.Helpers;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
-using WMS.Repository.Impl;
 using WMS.Repository;
 using System.Security.Principal;
 using WMS.Common.ValueObject;
+using WMS.Repository.Impl;
 
 namespace WMS.Service
 {

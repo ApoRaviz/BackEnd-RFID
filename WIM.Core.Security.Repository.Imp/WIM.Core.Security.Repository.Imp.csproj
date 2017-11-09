@@ -81,10 +81,6 @@
       <Project>{098b63f0-95bb-421f-ac45-047f397fa475}</Project>
       <Name>WIM.Core.Security.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Repository.Impl\WMS.Repository.Impl.csproj">
-      <Project>{4A90AD09-D706-4985-A8CD-73B2BA35403D}</Project>
-      <Name>WMS.Repository.Impl</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

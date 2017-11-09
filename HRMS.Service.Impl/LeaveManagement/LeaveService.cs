@@ -10,7 +10,7 @@ using System.Security.Principal;
 
 namespace HRMS.Service.Impl.LeaveManagement
 {
-    public class LeaveService : Service, ILeaveService
+    public class LeaveService : WIM.Core.Service.Impl.Service, ILeaveService
     { 
 
         public bool ApproveLeave(int id)
@@ -31,12 +31,7 @@ namespace HRMS.Service.Impl.LeaveManagement
         public IEnumerable<Leave> GetLeaves()
         {
             throw new NotImplementedException();
-        }
-
-        public string GetName()
-        {
-            return Identity.GetUserName();
-        }
+        }        
 
         public bool RejectLeave(int id)
         {

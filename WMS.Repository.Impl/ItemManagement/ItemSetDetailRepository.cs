@@ -3,8 +3,8 @@ using System.Security.Principal;
 using WIM.Core.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using WMS.Repository.ItemManagement;
 using System.Collections.Generic;
+using WIM.Repository.ItemManagement;
 
 namespace WMS.Repository.Impl.ItemManagement 
 {

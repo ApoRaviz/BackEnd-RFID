@@ -69,6 +69,10 @@
     <Reference Include="WIM.Core.Entity">
       <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
     </Reference>
+    <Reference Include="WIM.Core.Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WIM.Core.Repository\bin\Debug\WIM.Core.Repository.dll</HintPath>
+    </Reference>
     <Reference Include="WIM.Core.Repository.Impl">
       <HintPath>..\WIM.Core.Repository.Impl\bin\Debug\WIM.Core.Repository.Impl.dll</HintPath>
     </Reference>

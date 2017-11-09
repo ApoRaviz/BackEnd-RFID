@@ -175,7 +175,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IProjectRepository repo = new ProjectRepository(Db);
-                project = repo.GetMany(c => c.CusIDSys == CusID && (Db.MenuProjectMapping).Select(a => a.ProjectIDSys).Contains(c.ProjectIDSys)).ToList();
+                CoreDbContext Db2 = new CoreDbContext();
+                project = repo.GetMany(c => c.CusIDSys == CusID && (Db2.MenuProjectMapping).Select(a => a.ProjectIDSys).Contains(c.ProjectIDSys)).ToList();
             }
             return project;
         }
