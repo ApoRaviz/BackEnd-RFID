@@ -279,7 +279,7 @@ namespace WIM.Core.Security
                     Db.SaveChanges();
                     return u.TokenMobile;
                 }
-                catch (ValidationException e)
+                catch (ValidationException)
                 {
                     throw new ValidationException();
                 }

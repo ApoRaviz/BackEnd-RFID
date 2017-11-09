@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WIM.Core.Service;
 using WMS.Entity.WarehouseManagement;
 
-namespace WMS.Service
+namespace WMS.Service.LocationMaster
 {
     public interface ILocationService : IService
     {
