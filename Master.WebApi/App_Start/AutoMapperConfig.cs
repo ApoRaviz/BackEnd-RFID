@@ -15,11 +15,7 @@ namespace Master.WebApi
     {
         public static void Initialize()
         {
-            Mapper.Initialize(cfg =>
-            {
-                
-
-            });
+            
         }
     }
 }

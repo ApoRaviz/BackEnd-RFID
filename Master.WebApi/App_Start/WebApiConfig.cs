@@ -9,8 +9,8 @@ using System.Web.Http.Cors;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using Master.WebApi.Controllers;
 using WIM.Core.Common.Http;
+using WIM.Core.Common.Handlers;
 
 namespace Master.WebApi
 {
@@ -34,7 +34,7 @@ namespace Master.WebApi
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-           // config.MessageHandlers.Add(new ApiLogHandler());
+           config.MessageHandlers.Add(new ApiLogHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
