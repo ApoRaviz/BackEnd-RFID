@@ -209,7 +209,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IRepository<Role> repo = new Repository<Role>(Db);
-                var RoleForPermissionQuery = repo.GetMany(c => !(Db.RolePermission.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
+                CoreDbContext Db2 = new CoreDbContext();
+                var RoleForPermissionQuery = repo.GetMany(c => !(Db2.RolePermission.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
                 rolelist = RoleForPermissionQuery.Select(b => new RolePermissionDto()
                 {
                     RoleID = b.RoleID,

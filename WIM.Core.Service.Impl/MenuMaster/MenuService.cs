@@ -293,8 +293,9 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IMenuRepository repo = new MenuRepository(Db);
-                var menuQuery = repo.GetMany((c => !(Db.MenuProjectMapping).Where(a => a.ProjectIDSys == projectIDSys)
-                .Select(a=>a.MenuIDSys).Contains(c.MenuIDSys))).OrderBy(c => c.MenuParentID).OrderBy(c => c.Sort);
+                CoreDbContext Db2 = new CoreDbContext();
+                var menuQuery = repo.GetMany((c => !(Db2.MenuProjectMapping).Where(a => a.ProjectIDSys == projectIDSys)
+                .Any(b => b.MenuIDSys == c.MenuIDSys))).OrderBy(c => c.MenuParentID).OrderBy(c => c.Sort);
                 Console.Write(menuQuery);
                 menudto = menuQuery.Select(b => new MenuDto()
                 {

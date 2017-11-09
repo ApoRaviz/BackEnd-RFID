@@ -102,6 +102,7 @@
     <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="HandheldErrorLog.cs" />
+    <Compile Include="Handlers\ApiLogHandler.cs" />
     <Compile Include="Helpers\ApiHashTableHelper.cs" />
     <Compile Include="Helpers\AuthHelper.cs" />
     <Compile Include="Helpers\DownloadHelper.cs" />

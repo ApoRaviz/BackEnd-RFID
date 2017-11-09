@@ -9,6 +9,7 @@ using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WMS.Entity.WarehouseManagement;
 using WMS.Service;
+using WMS.Service.LocationMaster;
 
 namespace WMS.WebApi.Controllers
 {
