@@ -363,7 +363,7 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public IEnumerable<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord)
         {
-            List<InboundItems> items = new List<InboundItems>();
+            IEnumerable<InboundItems> items = new List<InboundItems>();
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
@@ -372,15 +372,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
-                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                        output.Direction = ParameterDirection.Output;
-
-                        items = DetailRepo.SqlQuery<InboundItems>("ProcPagingInboundItems @page,@size,@totalRecord out"
-                            , new SqlParameter("@page", pageIndex)
-                            , new SqlParameter("@size", pageSize)
-                            , output).ToList();
-
-                        totalRecord = Convert.ToInt32(output.Value);
+                        items = Db.ProcPagingInboundItems(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception)
@@ -395,7 +387,7 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public IEnumerable<InboundItems> GetInboundItemDeletedPaging(int pageIndex, int pageSize, out int totalRecord)
         {
-            List<InboundItems> items = new List<InboundItems>();
+            IEnumerable<InboundItems> items = new List<InboundItems>();
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
@@ -404,15 +396,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
-                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                        output.Direction = ParameterDirection.Output;
-
-                        DetailRepo.SqlQuery<InboundItems>("ProcPagingInboundItemsDeleted @page,@size,@totalRecord out"
-                            , new SqlParameter("@page", pageIndex)
-                            , new SqlParameter("@size", pageSize)
-                            , output).ToList();
-
-                        totalRecord = Convert.ToInt32(output.Value);
+                        items = Db.ProcPagingInboundItemsDeleted(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception)
@@ -674,7 +658,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord)
         {
             DataSet dset = new DataSet();
-            List<InboundItemsHead> items = new List<InboundItemsHead>() { };
+            IEnumerable<InboundItemsHead> items = new List<InboundItemsHead>() { };
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
@@ -683,15 +667,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     try
                     {
-                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                        output.Direction = ParameterDirection.Output;
-
-                        items = HeadRepo.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHead @page,@size,@totalRecord out"
-                            , new SqlParameter("@page", pageIndex)
-                            , new SqlParameter("@size", pageSize)
-                            , output).ToList();
-
-                        totalRecord = Convert.ToInt32(output.Value);
+                        items = Db.ProcPagingInboundItemHead(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception ex)
