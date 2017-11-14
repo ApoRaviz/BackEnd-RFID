@@ -10,11 +10,8 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
-using WMS.Service;
-using WIM.Core.Entity.CustomerManagement;
-using Newtonsoft.Json.Linq;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/helpers")]

@@ -37,7 +37,7 @@ namespace WIM.Core.Context
         public DbSet<Supplier_MT> Supplier_MT { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Permission> Permission { get; set; }
-        public DbSet<RolePermission> RolePermission { get; set; }
+        public DbSet<RolePermissions> RolePermissions { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<CurrencyUnit> CurrencyUnit { get; set; }
@@ -57,6 +57,7 @@ namespace WIM.Core.Context
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //modelBuilder.Types().Configure(t => t.MapToStoredProcedures());
             base.OnModelCreating(modelBuilder);
 
         }
@@ -68,7 +69,6 @@ namespace WIM.Core.Context
                 ParameterName = "Prefixes",
                 Value = prefixes
             };
-
             return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
 

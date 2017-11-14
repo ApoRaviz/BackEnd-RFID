@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
+using WIM.Core.Entity.CustomerManagement;
 
 namespace WIM.Core.Common
 {
@@ -61,7 +63,8 @@ namespace WIM.Core.Common
 
         public string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)
         {
-            return db.ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword).FirstOrDefault();
+            var z = db.ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword)/*.FirstOrDefault()*/;
+            return z;
         }
 
         public void InsertLog(HandheldErrorLog errorLog)

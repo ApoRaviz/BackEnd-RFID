@@ -155,14 +155,14 @@ namespace WIM.Core.Service.Impl
             using (var scope = new TransactionScope())
             {
                 //Permission.Id = db.ProcGetNewID("RL").FirstOrDefault().Substring(0, 13);
-                RolePermission data = new RolePermission();
+                RolePermissions data = new RolePermissions();
                 data.PermissionID = PermissionId;
                 data.RoleID = RoleId;
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                        IRepository<RolePermissions> repo = new Repository<RolePermissions>(Db);
                         repo.Insert(data);
                         Db.SaveChanges();
                         scope.Complete();
@@ -191,10 +191,10 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                        IRepository<RolePermissions> repo = new Repository<RolePermissions>(Db);
                         foreach (var c in tree)
                         {
-                            RolePermission data = new RolePermission();
+                            RolePermissions data = new RolePermissions();
                             data.PermissionID = c.PermissionID;
                             data.RoleID = RoleId;
                             repo.Insert(data);
@@ -222,20 +222,19 @@ namespace WIM.Core.Service.Impl
         {
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
-                RolePermission id = new RolePermission() {RoleID = RoleId , PermissionID = PermissionId };
-                var RoleForPermissionQuery = repo.GetByID(id);
-                if (RoleForPermissionQuery != null)
+                IRepository<RolePermissions> repo = new Repository<RolePermissions>(Db);
+                RolePermissions id = new RolePermissions() { RoleID = RoleId, PermissionID = PermissionId };
+                if (id != null)
                 {
                     using (var scope = new TransactionScope())
                     {
-                        RolePermission temp = new RolePermission();
-                        temp = RoleForPermissionQuery;
+                        RolePermissions temp = new RolePermissions();
+                        temp = id;
                         if (temp != null)
                         {
                             try
                             {
-                                repo.Delete(temp);
+                                repo.Delete(id);
                                 Db.SaveChanges();
                                 scope.Complete();
                             }
@@ -341,7 +340,7 @@ namespace WIM.Core.Service.Impl
                 IPermissionRepository repo = new PermissionRepository(Db);
                 CoreDbContext Db2 = new CoreDbContext();
                 var temp = repo.GetManyQueryable(c => c.ProjectIDSys == ProjectIDSys && 
-                (Db2.RolePermission.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
+                (Db2.RolePermissions.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
                 permission = temp.ToList();
             }
             return permission;
@@ -349,15 +348,15 @@ namespace WIM.Core.Service.Impl
 
         public bool DeleteAllInRole(string permissionID)
         {
-            List<RolePermission> temp = new List<RolePermission>();
+            List<RolePermissions> temp = new List<RolePermissions>();
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                IRepository<RolePermissions> repo = new Repository<RolePermissions>(Db);
                 if (permissionID != null)
                 {
                     temp = repo.GetMany(c => c.PermissionID == permissionID).ToList();
                 }
-                RolePermission x = new RolePermission();
+                RolePermissions x = new RolePermissions();
 
                 using (var scope = new TransactionScope())
                 {
@@ -365,7 +364,7 @@ namespace WIM.Core.Service.Impl
                     {
                         for (int i = 0; i < temp.Count; i++)
                         {
-                            repo.Delete(x);
+                            repo.Delete(temp[i]);
                         }
                         Db.SaveChanges();
                         scope.Complete();

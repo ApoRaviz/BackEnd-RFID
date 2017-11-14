@@ -88,9 +88,9 @@ namespace WMS.WebApi.Controllers
             {
                 string userid = User.Identity.GetUserId();
                 object customer;
-                bool admin = User.IsSysAdmin();
                 if (User.IsSysAdmin())
                 {
+
                     customer = CustomerService.GetCustomerAll();
                 }
                 else
