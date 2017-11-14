@@ -23,10 +23,10 @@ namespace WIM.Core.Repository.Impl
             Db = context;
         }
 
-        public IEnumerable<MenuProjectMappingDto> GetAllMenu(int id , IEnumerable<MenuProjectMappingDto> menu)
+        public virtual IEnumerable<MenuProjectMappingDto> GetAllMenu(int id , IEnumerable<MenuProjectMappingDto> menu)
         {
-            var MenuProjectMappingQuery = (from row in Db.MenuProjectMapping
-                                           join o in menu on row.MenuIDSys equals o.MenuIDSys into joined
+            var MenuProjectMappingQuery = (from row in Db.MenuProjectMapping.AsEnumerable()
+                                           join o in menu.AsEnumerable() on row.MenuIDSys equals o.MenuIDSys into joined
                                            from i in joined.DefaultIfEmpty()
                                            where row.ProjectIDSys == id
                                            orderby row.MenuIDSysParent, row.Sort
@@ -35,10 +35,12 @@ namespace WIM.Core.Repository.Impl
                                                MenuIDSys = row.MenuIDSys,
                                                ProjectIDSys = row.ProjectIDSys,
                                                MenuName = row.MenuName,
-                                               MenuIDSysParent = row.MenuIDSysParent,
-                                               Url = i.Url ?? String.Empty,
+                                               MenuIDSysParent = row.MenuIDSysParent ,
+                                               Url = i==null ? string.Empty : i.Url,
                                                Sort = row.Sort
-                                           });
+                                           }).ToList();
+
+
             return MenuProjectMappingQuery;
         }
 
@@ -57,8 +59,8 @@ namespace WIM.Core.Repository.Impl
         public IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
         {
             var MenuProjectMappingQuery = (from row in x.MenuProjectMapping
-                                           join o in menu.AsEnumerable() on row.MenuIDSys equals o.MenuIDSys into joined
-                                           from i in joined.DefaultIfEmpty()
+                                           join o in menu on row.MenuIDSys equals o.MenuIDSys into joined
+                                           from i in joined.AsEnumerable().DefaultIfEmpty()
                                            where row.ProjectIDSys == id
                                            orderby row.MenuIDSysParent, row.Sort
                                            select row).Include(a => a.Menu_MT);

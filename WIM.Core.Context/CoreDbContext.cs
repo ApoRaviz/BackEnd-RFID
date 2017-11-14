@@ -43,6 +43,7 @@ namespace WIM.Core.Context
         public DbSet<CurrencyUnit> CurrencyUnit { get; set; }
         public DbSet<Country_MT> Country_MT { get; set; }
         public DbSet<Status_MT> Status_MT { get; set; }
+        public DbSet<Module_MT> Module_MT { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {
@@ -72,7 +73,8 @@ namespace WIM.Core.Context
             return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
 
-        
+  
+
 
     }
 }

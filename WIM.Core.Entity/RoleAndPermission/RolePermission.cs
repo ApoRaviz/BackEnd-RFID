@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.RoleAndPermission
 {
-    [Table("RolePermission")]
+    [Table("RolePermissions")]
     public class RolePermission : BaseEntity
     {
         [Key]

@@ -73,7 +73,21 @@ namespace WIM.Core.Service.Impl
             return null;
         }
 
+        public object GetProjectByProjectIDSysIncludeModule(int id)
+        {
+            object project;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IProjectRepository repo = new ProjectRepository(Db);
+                project = repo.GetProjectByProjectIDSysInclude(id);
+            }
+            if (project != null)
+            {
+                return project;
+            }
+            return null;
 
+        }
 
 
         public Project_MT CreateProject(Project_MT project)

@@ -339,8 +339,7 @@ namespace WIM.Core.Service.Impl
                     MenuIDSysParent = b.MenuIDSysParent,
                     Url = b.Menu_MT.Url,
                     Sort = b.Sort
-                }
-                   );
+                }).ToList();
             }
             return MenuProjectMappingdto;
 

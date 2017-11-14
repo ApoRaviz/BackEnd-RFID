@@ -438,7 +438,7 @@ namespace Fuji.WebApi.Controllers
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
-        [Route("importSerial/bycolumn/{column}/{keyword}")]
+        [Route("importSerial/bycolumn")]
         public HttpResponseMessage GetDataByColumn([FromBody]ParameterSearch param)
         {
             ResponseData<FujiDataImportSerialHead> response = new ResponseData<FujiDataImportSerialHead>();

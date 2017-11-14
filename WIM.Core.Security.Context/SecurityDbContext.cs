@@ -46,7 +46,7 @@ namespace WIM.Core.Security.Context
                 {
                     m.MapLeftKey("RoleID");
                     m.MapRightKey("PermissionID");
-                    m.ToTable("RolePermission");
+                    m.ToTable("RolePermissions");
                 });
             modelBuilder.Entity<ApplicationUserClaim>().ToTable("UserClaims");
             modelBuilder.Entity<ApplicationUserLogin>().ToTable("UserLogins");

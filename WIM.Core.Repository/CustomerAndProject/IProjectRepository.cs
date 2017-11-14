@@ -9,5 +9,6 @@ namespace WIM.Core.Repository
 {
     public interface IProjectRepository : IRepository<Project_MT>
     {
+        object GetProjectByProjectIDSysInclude(int projectIDSys);
     }
 }

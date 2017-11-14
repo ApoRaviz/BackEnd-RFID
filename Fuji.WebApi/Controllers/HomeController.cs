@@ -1,4 +1,6 @@
-﻿using Fuji.Service.Impl.PrintLabel;
+﻿using Fuji.Service.Impl.ItemImport;
+using Fuji.Service.Impl.PrintLabel;
+using Fuji.Service.ItemImport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,9 @@ namespace Fuji.WebApi.Controllers
     {
         public ActionResult Index()
         {
+            IItemImportService ser = new ItemImportService();
+            ser.Test();
+
             ViewBag.Title = "Home Page";
 
             return View();
