@@ -476,6 +476,7 @@ namespace Isuzu.Service.Impl
 
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
         [HttpPost]
         [Route("import")]
         public async Task<HttpResponseMessage> PostFormData()

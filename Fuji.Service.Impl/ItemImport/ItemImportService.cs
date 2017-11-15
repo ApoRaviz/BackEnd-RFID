@@ -64,7 +64,7 @@ namespace Fuji.Service.Impl.ItemImport
         {
             DataSet dset = new DataSet();
             totalRecord = 0;
-            List<ImportSerialHead> items = new List<ImportSerialHead>() { };
+            IEnumerable<ImportSerialHead> items = new List<ImportSerialHead>() { };
             using (var scope = new TransactionScope())
             {
                 using (FujiDbContext Db = new FujiDbContext())
@@ -72,18 +72,7 @@ namespace Fuji.Service.Impl.ItemImport
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
                     try
                     {
-                        var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
-                        output.Direction = ParameterDirection.Output;
-
-                        items = SerialHeadRepo.SqlQuery<ImportSerialHead>("ProcPagingImportSerialHead @page,@size,@sort,@sortdecending,@totalrow out"
-                            , new SqlParameter("@page", pageIndex)
-                            , new SqlParameter("@size", pageSize)
-                            , new SqlParameter("@sort", "CreateAt")
-                            , new SqlParameter("@sortdecending", "DESC")
-                            , output).ToList();
-
-                        totalRecord = Convert.ToInt32(output.Value);
-
+                        items = Db.ProcPagingImportSerialHead(pageIndex, pageSize,out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception ex)
@@ -183,12 +172,11 @@ namespace Fuji.Service.Impl.ItemImport
                     try
                     {
                         //item.HeadID = Db.ProcGetNewID("IS").FirstOrDefault();
-                        item.HeadID = SerialHeadRepo.SqlQuerySingle<string>("ProcGetNewID @Prefixes", new SqlParameter("@Prefixes", "IS"));
+                        item.HeadID = Db.ProcGetNewID("IS");
                         item.Status = FujiStatus.NEW.ToString();
+                        item.IsExport = false;
                         item.Location = "";
                         item.ReceivingDate = item.ReceivingDate;
-                        //Repo.Insert(item);
-                        //Db.Entry(item).Collection(c => c.ImportSerialDetail).Load();
                         SerialHeadRepo.Insert(item);
                         Db.SaveChanges();
 
@@ -201,10 +189,6 @@ namespace Fuji.Service.Impl.ItemImport
                                 {
                                     detail.HeadID = item.HeadID;
                                     detail.DetailID = Guid.NewGuid().ToString();
-                                    //detail.CreateAt = DateTime.Now;
-                                    //detail.CreateBy = item.CreateBy;
-                                    //detail.UpdateAt = DateTime.Now;
-                                    //detail.UpdateBy = item.UpdateBy;
                                     SerialDetailRepo.Update(detail);
                                     Db.SaveChanges();
                                     //detailRepo.Insert(detail);
@@ -249,10 +233,6 @@ namespace Fuji.Service.Impl.ItemImport
                             f.InvoiceNumber = item.InvoiceNumber;
                             f.ReceivingDate = item.ReceivingDate;
                             f.DeliveryNote = item.DeliveryNote;
-                            f.SerialFormat1 = item.SerialFormat1;
-                            f.SerialFormat2 = item.SerialFormat2;
-                            f.SerialName1 = item.SerialName1;
-                            f.SerialName2 = item.SerialName2;
                             f.Remark = item.Remark;
                             //existedItem.UpdateDate = DateTime.Now;
                             f.Qty = item.Qty;
@@ -330,9 +310,7 @@ namespace Fuji.Service.Impl.ItemImport
                     {
                         queryUpdateHead.ForEach(f =>
                         {
-                            //f.UserUpdate = item.UserUpdate;
-                            //f.UpdateDate = DateTime.Now;
-                            f.IsRFID = 1;
+                            f.IsExport = true;
                             SerialHeadRepo.Update(f);
                         });
                         Db.SaveChanges();
@@ -552,54 +530,45 @@ namespace Fuji.Service.Impl.ItemImport
             return "";
         }
 
-        public IEnumerable<ImportSerialHead> GetDataByColumn(string column, string keyword)
+        public IEnumerable<ImportSerialHead> GetDataByColumn(ParameterSearch parameterSearch, out int totalRecord)
         {
-            string sql = "";
-            DataSet dset = new DataSet();
-            List<ImportSerialHead> items = new List<ImportSerialHead>() { };
-            switch (column.Trim().ToUpper())
-            {
-                default:
-                case "HEADID":
-                    sql += "SELECT * FROM [dbo].[ImportSerialHead] WHERE [HeadID] LIKE '%' + @keyword + '%' AND [Status] <> 'DELETED'";
-                    break;
-                case "ITEMCODE":
-                    sql += "SELECT * FROM [dbo].[ImportSerialHead] WHERE [ItemCode] LIKE '%' + @keyword + '%' AND [Status] <> 'DELETED'";
-                    break;
-                case "WHID":
-                    sql += "SELECT * FROM [dbo].[ImportSerialHead] WHERE [WHID] LIKE '%' + @keyword + '%' AND [Status] <> 'DELETED'";
-                    break;
-                case "LOTNUMBER":
-                    sql += "SELECT * FROM [dbo].[ImportSerialHead] WHERE [LotNumber] LIKE '%' + @keyword + '%' AND [Status] <> 'DELETED'";
-                    break;
-                case "INVOICENUMBER":
-                    sql += "SELECT * FROM [dbo].[ImportSerialHead] WHERE [InvoiceNumber] LIKE '%' + @keyword + '%' AND [Status] <> 'DELETED'";
-                    break;
-                case "LOCATION":
-                    sql += "SELECT * FROM [dbo].[ImportSerialHead] WHERE [Location] LIKE '%' + @keyword + '%' AND [Status] <> 'DELETED'";
-                    break;
-            }
+            totalRecord = 0;
+            string sql = "SELECT * FROM [dbo].[ImportSerialHead]";
 
-           
+            IEnumerable<ImportSerialHead> items = new List<ImportSerialHead>();
+
+            int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
 
             using (var scope = new TransactionScope())
             {
                 using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
-                    try
+
+                    if (cnt > 0)
                     {
-                        items = SerialHeadRepo.SqlQuery<ImportSerialHead>(sql, new SqlParameter("@keyword", keyword)).ToList();
-                        scope.Complete();
+                        sql += " WHERE ";
+                        for (int i = 0; i < cnt; i++)
+                        {
+                            if (parameterSearch.Columns[i] == "CreateAt")
+                                sql += string.Format(" {0} = '{1}' AND ", "CONVERT(DATE," + parameterSearch.Columns[i] + ")", parameterSearch.Keywords[i]);
+                            else
+                                sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                        }
+                        sql = sql.Substring(0, sql.Length - 4);
+                        sql += " AND [Status] <> 'DELETED'";
+
+                        items = SerialHeadRepo.SqlQuery<ImportSerialHead>(sql).ToList();
+                        totalRecord = items.Count();
                     }
-                    catch (Exception)
+                    else
                     {
-                        return new List<ImportSerialHead>() { };
+                        items = Db.ProcPagingImportSerialHead(parameterSearch.PageIndex, parameterSearch.PageSize, out totalRecord);
                     }
-                    
                 }
-               
+
             }
+
             return items;
 
         }
@@ -636,15 +605,49 @@ namespace Fuji.Service.Impl.ItemImport
                     ISerialRepository SerialDetailRepo = new SerialRepository(Db);
                     //, ItemGroup, BoxNumber, ItemType
                     SerialDetailRepo.ExceuteSql(@"
+                   insert into dbo.ImportSerialDetailTemp
+                   select * from dbo.ImportSerialDetail where DetailID in (
+                     select DetailID from (
+                      select 
+                      ROW_NUMBER() OVER(PARTITION BY ItemCode ,SerialNumber, itemType ORDER BY CreateAt DESC) AS Row  
+                      ,DetailID
+                      from dbo.ImportSerialDetail
+                      where HeadID = '0' and Status = 'NEW'
+                      ) a
+                     where Row > 1
+                    )
+                    union 
+                    select * from dbo.ImportSerialDetail where DetailID in (
+                         select DetailID from (
+                              select 
+                              ROW_NUMBER() OVER(PARTITION BY ItemGroup, itemType ORDER BY CreateAt DESC) AS Row  
+                              ,DetailID
+                              from dbo.ImportSerialDetail
+                              where HeadID = '0' and Status = 'NEW'
+                              ) a
+                         where Row > 1
+                    )                    
+
                     delete from dbo.ImportSerialDetail where DetailID in (
-	                    select DetailID from (
-		                    select 
-		                    ROW_NUMBER() OVER(PARTITION BY SerialNumber ORDER BY CreateAt DESC) AS Row  
-		                    ,DetailID
-		                    from dbo.ImportSerialDetail
-		                    where HeadID = '0' and Status = 'NEW'
-		                    ) a
-	                    where Row > 1
+                     select DetailID from (
+                      select 
+                      ROW_NUMBER() OVER(PARTITION BY ItemCode ,SerialNumber, itemType ORDER BY CreateAt DESC) AS Row  
+                      ,DetailID
+                      from dbo.ImportSerialDetail
+                      where HeadID = '0' and Status = 'NEW'
+                      ) a
+                     where Row > 1
+                    )
+
+                    delete from dbo.ImportSerialDetail where DetailID in (
+                         select DetailID from (
+                              select 
+                              ROW_NUMBER() OVER(PARTITION BY ItemGroup, itemType ORDER BY CreateAt DESC) AS Row  
+                              ,DetailID
+                              from dbo.ImportSerialDetail
+                              where HeadID = '0' and Status = 'NEW'
+                              ) a
+                         where Row > 1
                     )
                 ");
 
@@ -777,6 +780,7 @@ namespace Fuji.Service.Impl.ItemImport
                                                            && b.HeadID != "0"
                                                            && b.ItemCode == a.ItemCode
                                                            && b.SerialNumber == a.SerialNumber
+                                                           && b.ItemType == a.ItemType
                                                            && a.Status != FujiStatus.SHIPPED.ToString()
                                                            && a.Status != FujiStatus.DELETED.ToString()
                                                        )
@@ -980,11 +984,7 @@ namespace Fuji.Service.Impl.ItemImport
                 newItem.Remark = data["Remark"].ToString();
                 newItem.Location = data["Location"].ToString();
                 newItem.Status = data["Status"].ToString();
-                newItem.SerialFormat1 = data["SerialFormat1"].ToString();
-                newItem.SerialFormat2 = data["SerialFormat2"].ToString();
-                newItem.SerialName1 = data["SerialName1"].ToString();
-                newItem.SerialName2 = data["SerialName2"].ToString();
-                newItem.IsRFID = Convert.ToByte(data["IsRFID"]);
+                newItem.IsExport = Convert.ToBoolean(data["IsExport"]);
                 newItem.Qty = Convert.ToInt32(data["Qty"]);
                 newItem.Spare1 = data["Spare1"].ToString();
                 newItem.Spare2 = data["Spare2"].ToString();
@@ -1040,11 +1040,7 @@ namespace Fuji.Service.Impl.ItemImport
                 newItem.Remark = data["Remark"].ToString();
                 newItem.Location = data["Location"].ToString();
                 newItem.Status = data["Status"].ToString();
-                newItem.SerialFormat1 = data["SerialFormat1"].ToString();
-                newItem.SerialFormat2 = data["SerialFormat2"].ToString();
-                newItem.SerialName1 = data["SerialName1"].ToString();
-                newItem.SerialName2 = data["SerialName2"].ToString();
-                newItem.IsRFID = Convert.ToByte(data["IsRFID"]);
+                newItem.IsExport = Convert.ToBoolean(data["IsExport"]);
                 newItem.Qty = Convert.ToInt32(data["Qty"]);
                 newItem.Spare1 = data["Spare1"].ToString();
                 newItem.Spare2 = data["Spare2"].ToString();
@@ -1207,7 +1203,7 @@ namespace Fuji.Service.Impl.ItemImport
                             if (parameterSearch.Columns[i] == "InvoiceNumber")
                                 sql += string.Format(" A.{0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
                             else if (parameterSearch.Columns[i] == "CreateAt")
-                                sql += string.Format(" {0} LIKE '%{1}%' AND ", "CONVERT(DATE,B." + parameterSearch.Columns[i] + ")", parameterSearch.Keywords[i]);
+                                sql += string.Format(" {0} = '{1}' AND ", "CONVERT(DATE,B." + parameterSearch.Columns[i] + ")", parameterSearch.Keywords[i]);
                             else
                                 sql += string.Format(" B.{0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
                         }
@@ -1220,8 +1216,8 @@ namespace Fuji.Service.Impl.ItemImport
                         sql += " WHERE ";
                         for (int i = 0; i < cnt; i++)
                         {
-                            if (parameterSearch.Columns[i] == "CreatedDate")
-                                sql += string.Format(" {0} LIKE '%{1}%' AND ", "CONVERT(DATE," + parameterSearch.Columns[i] + ")", parameterSearch.Keywords[i]);
+                            if (parameterSearch.Columns[i] == "CreateAt")
+                                sql += string.Format(" {0} = '{1}' AND ", "CONVERT(DATE," + parameterSearch.Columns[i] + ")", parameterSearch.Keywords[i]);
                             else
                                 sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
                         }
@@ -1236,15 +1232,7 @@ namespace Fuji.Service.Impl.ItemImport
                 }
                 else
                 {
-                    var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
-                    output.Direction = ParameterDirection.Output;
-
-
-                    items = SerialDetailRepo.SqlQuery<ImportSerialDetail>("ProcPagingImportSerialDetail @page,@size,@totalrow out"
-                        , new SqlParameter("@page", parameterSearch.PageIndex)
-                        , new SqlParameter("@size", parameterSearch.PageSize)
-                        , output).ToList();
-                    totalRecord = Convert.ToInt32(output.Value);
+                    items = Db.ProcPagingImportSerialDetail(parameterSearch.PageIndex, parameterSearch.PageSize,out totalRecord);
                 }
             }
 

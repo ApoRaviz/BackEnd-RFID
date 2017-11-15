@@ -45,6 +45,9 @@ namespace Fuji.WebApi
             container.RegisterType<IMenuService, MenuService>();
             container.RegisterType<IMenuProjectMappingService, MenuProjectMappingService>();
             container.RegisterType<IPermissionService, PermissionService>();
+            container.RegisterType<ICustomerService, CustomerService>();
+            container.RegisterType<IProjectService, ProjectService>();
+            container.RegisterType<IUserService, UserService>();
         }
     }
 }
