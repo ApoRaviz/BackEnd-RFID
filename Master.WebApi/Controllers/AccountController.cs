@@ -298,10 +298,14 @@ namespace Master.WebApi.Controllers
             IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
             try
             {
-                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
-                if (!ModelState.IsValid && string.IsNullOrEmpty(roleID) ) 
+                string roleID = "";
+                if (!User.IsSysAdmin())
                 {
-                    return null;
+                    roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
+                    if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
+                    {
+                        return null;
+                    }
                 }
                 //object CanAccessProject = ApplicationUserManager.GetUserAccessProject(User.Identity.GetUserId());
                 Dictionary<string, string> Json = new Dictionary<string, string>();
@@ -311,9 +315,12 @@ namespace Master.WebApi.Controllers
                 //{
                 //    UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
                 //}
-                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
+                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True")); 
                 oAuthIdentity.AddClaim(new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys.ToString()));
-                oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                if (User.IsSysAdmin())
+                { oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user)); }
+                else
+                { oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID)); }
                 oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
                 AuthenticationProperties props = new AuthenticationProperties();
                 props.IssuedUtc = DateTime.Now;

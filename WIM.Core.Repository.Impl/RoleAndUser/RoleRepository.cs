@@ -27,7 +27,7 @@ namespace WIM.Core.Repository.Impl
             var res = (from ur in Db.UserRoles
                        join r in Db.Role on ur.RoleID equals r.RoleID
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectIDSys
-                       select new { r.RoleID }).SingleOrDefault();
+                       select r).SingleOrDefault();
             return res.RoleID;
         }
 
