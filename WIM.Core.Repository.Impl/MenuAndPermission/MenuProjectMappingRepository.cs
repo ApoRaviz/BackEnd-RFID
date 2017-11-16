@@ -68,7 +68,7 @@ namespace WIM.Core.Repository.Impl
         public IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
         { 
             var MenuProjectMappingQuery = (from row in x.MenuProjectMapping
-                                           join o in menu on row.MenuIDSys equals o.MenuIDSys into joined
+                                           join o in menu.AsEnumerable() on row.MenuIDSys equals o.MenuIDSys into joined
                                            from i in joined.AsEnumerable().DefaultIfEmpty()
                                            where row.ProjectIDSys == id
                                            orderby row.MenuIDSysParent, row.Sort
@@ -79,9 +79,9 @@ namespace WIM.Core.Repository.Impl
                                                ProjectIDSys = row.ProjectIDSys,
                                                MenuName = row.MenuName,
                                                MenuIDSysParent = row.MenuIDSysParent,
-                                               Url = row.Menu_MT.Url ?? String.Empty,
+                                               Url = row==null ? String.Empty:  row.Menu_MT.Url,
                                                Sort = row.Sort
-                                           });
+                                           }).ToList();
             return Menu;
         }
 
