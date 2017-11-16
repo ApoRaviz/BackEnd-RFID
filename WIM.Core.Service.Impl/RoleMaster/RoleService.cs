@@ -33,7 +33,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IRoleRepository repo = new RoleRepository(Db);
-                role = repo.Get();
+                string[] include = { "Project_MT" };
+                role = repo.GetWithInclude(x =>x.IsActive == true,include).ToList();
             }
             return role;
         }
@@ -44,9 +45,9 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IRoleRepository repo = new RoleRepository(Db);
-                role = repo.GetMany(c => c.ProjectIDSys == projectIDSys);
+                role = repo.GetManyQueryable(c => c.ProjectIDSys == projectIDSys).Include(x => x.Project_MT).ToList();
             }
-            return role.ToList();
+            return role;
         }
 
         public Role GetRoleByLocIDSys(string id)

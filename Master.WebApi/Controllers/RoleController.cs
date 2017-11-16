@@ -34,7 +34,16 @@ namespace Master.WebApi.Controllers
             ResponseData<IEnumerable<Role>> response = new ResponseData<IEnumerable<Role>>();
             try
             {
-                IEnumerable<Role> Role = RoleService.GetRoles(User.Identity.GetProjectIDSys());
+                IEnumerable<Role> Role;
+                if (User.IsSysAdmin())
+                {
+                    Role = RoleService.GetRoles();
+                }
+                else
+                {
+                    Role = RoleService.GetRoles(User.Identity.GetProjectIDSys());
+                }
+                
                 response.SetData(Role);
             }
             catch (ValidationException ex)

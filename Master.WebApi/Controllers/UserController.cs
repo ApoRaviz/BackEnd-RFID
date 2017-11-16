@@ -107,7 +107,7 @@ namespace Master.WebApi.Controllers
             {
                 string id = "";
                 PasswordHasher ph = new PasswordHasher();
-                User.PasswordHash = ph.HashPassword("1234!");
+                User.PasswordHash = ph.HashPassword(User.PasswordHash);
                 id = UserService.CreateUser(User);
                 response.SetData(id);
             }

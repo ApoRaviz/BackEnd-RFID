@@ -17,5 +17,6 @@ namespace WIM.Core.Common
         IList<ProcGetUserLog_Result> GetUserLogData(string RequestMethod, string RequestUrl, DateTime? RequestDateFrom, DateTime? RequestDateTo);
         IList<ProcGetTableColumnsDescription_Result> GetTableColumnsDescription(string TableName);
         string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);
+        T AutoMapper<T>(object data);
     }
 }

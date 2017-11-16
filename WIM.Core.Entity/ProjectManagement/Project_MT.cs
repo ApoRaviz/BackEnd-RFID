@@ -32,7 +32,7 @@ namespace WIM.Core.Entity.ProjectManagement
         public string ProjectID { get; set; }
         public string ProjectName { get; set; }
         public int CusIDSys { get; set; }
-        public int ModuleIDSys { get; set; }
+        public Nullable<int> ModuleIDSys { get; set; }
         public string ProjectStatus { get; set; }
         //public System.DateTime CreatedDate { get; set; }
         //public System.DateTime UpdateDate { get; set; }
