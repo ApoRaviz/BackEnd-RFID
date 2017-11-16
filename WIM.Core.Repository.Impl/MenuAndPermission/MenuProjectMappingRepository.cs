@@ -47,7 +47,7 @@ namespace WIM.Core.Repository.Impl
         public IQueryable<MenuProjectMapping> GetMenuPermission(string userid, int projectid)
         {
             var menu = (from ur in Db.UserRoles
-                       join rp in Db.RolePermission on ur.RoleID equals rp.RoleID
+                       join rp in Db.RolePermissions on ur.RoleID equals rp.RoleID
                        join ps in Db.Permission on rp.PermissionID equals ps.PermissionID
                        join r in Db.Role on ur.RoleID equals r.RoleID
                        join mp in Db.MenuProjectMapping on ps.MenuIDSys equals mp.MenuIDSys
@@ -56,8 +56,17 @@ namespace WIM.Core.Repository.Impl
             return menu;
         }
 
-        public IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
+        public IQueryable<MenuProjectMapping> GetMenuProject(int id)
         {
+            var menu = (from i in Db.MenuProjectMapping
+                        where i.ProjectIDSys == id
+                        orderby i.MenuIDSysParent, i.Sort
+                        select i).Include(y => y.Menu_MT);
+           return menu;
+        }
+
+        public IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
+        { 
             var MenuProjectMappingQuery = (from row in x.MenuProjectMapping
                                            join o in menu.AsEnumerable() on row.MenuIDSys equals o.MenuIDSys into joined
                                            from i in joined.AsEnumerable().DefaultIfEmpty()
@@ -75,5 +84,7 @@ namespace WIM.Core.Repository.Impl
                                            }).ToList();
             return Menu;
         }
+
+
     }
 }

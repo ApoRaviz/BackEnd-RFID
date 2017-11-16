@@ -12,7 +12,7 @@ using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 
-namespace WMS.WebApi.Auth
+namespace WIM.WebApi.Auth
 {
     public class IdentityAuthAttribute : AuthorizationFilterAttribute
     {

@@ -37,7 +37,7 @@ namespace WIM.Core.Entity.ProjectManagement
         //public System.DateTime CreatedDate { get; set; }
         //public System.DateTime UpdateDate { get; set; }
         //public string UserUpdate { get; set; }
-        
+
         public virtual ICollection<Supplier_MT> Supplier_MT { get; set; }
 
         public virtual ICollection<Menu_MT> Menu_MT { get; set; }

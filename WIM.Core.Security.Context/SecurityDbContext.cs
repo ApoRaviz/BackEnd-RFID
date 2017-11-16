@@ -20,11 +20,11 @@ namespace WIM.Core.Security.Context
             return new SecurityDbContext();
         }
 
-        //public DbSet<User> User { get; set; }
-        //public DbSet<RolePermission> RolePermission { get; set; }
-        //public DbSet<Role> Role { get; set; }
-        //public DbSet<UserRole> UserRole { get; set; }
-        //public DbSet<Permission> Permission { get; set; }        
+        //public DbSet<Entity.UserManagement.User> User { get; set; }
+        //public DbSet<Entity.RoleAndPermission.RolePermission> RolePermission { get; set; }
+        //public DbSet<Entity.RoleAndPermission.Role> Role { get; set; }
+        //public DbSet<Entity.UserManagement.UserRole> UserRole { get; set; }
+        //public DbSet<Entity.RoleAndPermission.Permission> Permission { get; set; }
         public DbSet<PasswordHistory> PasswordHistory { get; set; }
         //public DbSet<UserProjectMapping> UserProjectMapping { get; set; }
         //public DbSet<UserCustomerMapping> UserCustomerMapping { get; set; }

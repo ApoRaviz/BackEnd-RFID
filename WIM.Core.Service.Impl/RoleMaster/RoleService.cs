@@ -138,9 +138,9 @@ namespace WIM.Core.Service.Impl
             {
                 IRoleRepository repo = new RoleRepository(Db);
                 IRepository<UserRoles> repouser = new Repository<UserRoles>(Db);
-                IRepository<RolePermission> repopermission = new Repository<RolePermission>(Db);
+                IRepository<RolePermissions> repopermission = new Repository<RolePermissions>(Db);
                 List<UserRoles> users = new List<UserRoles>();
-            List<RolePermission> permissions = new List<RolePermission>();
+            List<RolePermissions> permissions = new List<RolePermissions>();
             if (id != "")
             {
                 users = repouser.GetMany(c => c.RoleID == id).ToList();
@@ -192,7 +192,7 @@ namespace WIM.Core.Service.Impl
             List<RolePermissionDto> rolelist;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                IRepository<RolePermissions> repo = new Repository<RolePermissions>(Db);
                 rolelist = repo.GetMany(c => c.PermissionID == id)
                 .Select(b => new RolePermissionDto()
                 {
@@ -210,7 +210,7 @@ namespace WIM.Core.Service.Impl
             {
                 IRepository<Role> repo = new Repository<Role>(Db);
                 CoreDbContext Db2 = new CoreDbContext();
-                var RoleForPermissionQuery = repo.GetMany(c => !(Db2.RolePermission.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
+                var RoleForPermissionQuery = repo.GetMany(c => !(Db2.RolePermissions.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
                 rolelist = RoleForPermissionQuery.Select(b => new RolePermissionDto()
                 {
                     RoleID = b.RoleID,

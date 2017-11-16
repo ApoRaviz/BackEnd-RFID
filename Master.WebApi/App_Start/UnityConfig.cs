@@ -5,6 +5,8 @@ using System.Web.Http;
 using Unity.WebApi;
 using WIM.Core.Common;
 using Master.WebApi.Controllers;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi
 {
@@ -24,8 +26,19 @@ namespace Master.WebApi
             //Register OWin Authen
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
+            container.RegisterType<ICustomerService, CustomerService>();
+            container.RegisterType<IProjectService, ProjectService>();
+            container.RegisterType<IMenuService, MenuService>();
+            container.RegisterType<IMenuProjectMappingService, MenuProjectMappingService>();
+            container.RegisterType<IRoleService, RoleService>();
+            container.RegisterType<IPermissionService, PermissionService>();
+            container.RegisterType<IUserService, UserService>();
+            container.RegisterType<IApiMTService, ApiMTService>();
+            container.RegisterType<IApiMenuMappingService, ApiMenuMappingService>();
+            container.RegisterType<IUserRoleService, UserRoleService>();
+            container.RegisterType<IEmployeeService, EmployeeService>();
+            container.RegisterType<IPersonService, PersonService>();
 
-            
         }
     }
 }

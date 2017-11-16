@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using WMS.WebApi.Controllers;
 using WIM.Core.Common.Http;
-using WMS.WebApi.Auth;
+using WIM.WebApi.Auth;
 
 namespace WMS.WebApi
 {
@@ -44,7 +44,7 @@ namespace WMS.WebApi
             );
 
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
-            //config.Filters.Add(new IdentityAuthAttribute());
+            config.Filters.Add(new IdentityAuthAttribute());
 
         }       
     }
