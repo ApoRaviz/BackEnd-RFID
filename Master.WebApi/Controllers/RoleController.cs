@@ -95,10 +95,18 @@ namespace Master.WebApi.Controllers
         [Route("project/{userid}")]
         public HttpResponseMessage GetRoleByUserProject(string userid)
         {
-            IResponseData<List<Role>> response = new ResponseData<List<Role>>();
+            IResponseData<IEnumerable<Role>> response = new ResponseData<IEnumerable<Role>>();
             try
             {
-                List<Role> Role = RoleService.GetRoleByProjectUser(User.Identity.GetProjectIDSys(),userid);
+                IEnumerable<Role> Role;
+                if (User.IsSysAdmin())
+                {
+                    Role = RoleService.GetRoles();
+                }
+                else
+                {
+                    Role = RoleService.GetRoleByProjectUser(User.Identity.GetProjectIDSys(), userid);
+                }
                 response.SetData(Role);
             }
             catch (ValidationException ex)

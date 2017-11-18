@@ -34,6 +34,18 @@ namespace WIM.Core.Service.Impl
             return projects;
         }
 
+        public IEnumerable<Project_MT> GetProjects(int projectID)
+        {
+            IEnumerable<Project_MT> projects;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                CoreDbContext db = new CoreDbContext();
+                IProjectRepository repo = new ProjectRepository(Db);
+                projects = repo.GetMany(x => (db.Project_MT.Where(c => c.ProjectIDSys == projectID).Select(a=>a.CusIDSys).Contains(x.CusIDSys)));
+            }
+            return projects;
+        }
+
         public object GetProjectsByCusID(int CusIDSys)
         {
             IEnumerable<Project_MT> projects;
@@ -98,7 +110,7 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IProjectRepository repo = new ProjectRepository(Db);
+                        IProjectRepository repo = new ProjectRepository(Db); 
                         project.ProjectID = Db.ProcGetNewID("PJ");
                         repo.Insert(project);
                         Db.SaveChanges();

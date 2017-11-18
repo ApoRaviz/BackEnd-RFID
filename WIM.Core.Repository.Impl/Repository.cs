@@ -72,13 +72,13 @@ namespace WIM.Core.Repository.Impl
 
             TEntity entityForInsert = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { });
 
-            Type typeEntityForUpdate = entityForInsert.GetType();
+            Type typeEntityForInsert = entityForInsert.GetType();
             foreach (PropertyInfo prop in properties)
             {                
                 var value = prop.GetValue(entityToInsert, null);                
                 if (!prop.PropertyType.IsGenericType || prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
-                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
                 }
             }
             

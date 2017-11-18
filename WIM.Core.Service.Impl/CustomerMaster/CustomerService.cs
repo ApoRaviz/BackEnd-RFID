@@ -66,7 +66,7 @@ namespace WIM.Core.Service.Impl
             }
             if (customer != null)
             {
-                CustomerDto customerDto = Mapper.Map<Customer_MT, CustomerDto>(customer);
+                CustomerDto customerDto = new CommonService().AutoMapper<CustomerDto>(customer);
 
                 return customerDto;
             }

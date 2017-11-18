@@ -25,25 +25,25 @@ namespace WIM.Core.Context
 {
     public class CoreDbContext : DbContext
     {
-        public DbSet<Api_MT> Api_MT { get; set; }
-        public DbSet<ApiMenuMapping> ApiMenuMapping { get; set; }
-        public DbSet<Customer_MT> Customer_MT { get; set; }
-        public DbSet<DimensionLayout_MT> DimensionLayout_MT { get; set; }
-        public DbSet<Employee_MT> Employee_MT { get; set; }
-        public DbSet<Menu_MT> Menu_MT { get; set; }
-        public DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
-        public DbSet<Person_MT> Person_MT { get; set; }
+        public virtual DbSet<Api_MT> Api_MT { get; set; }
+        public virtual DbSet<ApiMenuMapping> ApiMenuMapping { get; set; }
+        public virtual DbSet<Customer_MT> Customer_MT { get; set; }
+        public virtual DbSet<DimensionLayout_MT> DimensionLayout_MT { get; set; }
+        public virtual DbSet<Employee_MT> Employee_MT { get; set; }
+        public virtual DbSet<Menu_MT> Menu_MT { get; set; }
+        public virtual DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
+        public virtual DbSet<Person_MT> Person_MT { get; set; }
         public DbSet<Project_MT> Project_MT { get; set; }
-        public DbSet<Supplier_MT> Supplier_MT { get; set; }
-        public DbSet<Role> Role { get; set; }
-        public DbSet<Permission> Permission { get; set; }
-        public DbSet<RolePermissions> RolePermissions { get; set; }
-        public DbSet<User> User { get; set; }
-        public DbSet<UserRoles> UserRoles { get; set; }
-        public DbSet<CurrencyUnit> CurrencyUnit { get; set; }
-        public DbSet<Country_MT> Country_MT { get; set; }
-        public DbSet<Status_MT> Status_MT { get; set; }
-        public DbSet<Module_MT> Module_MT { get; set; }
+        public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<Permission> Permission { get; set; }
+        public virtual DbSet<RolePermissions> RolePermissions { get; set; }
+        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserRoles> UserRoles { get; set; }
+        public virtual DbSet<CurrencyUnit> CurrencyUnit { get; set; }
+        public virtual DbSet<Country_MT> Country_MT { get; set; }
+        public virtual DbSet<Status_MT> Status_MT { get; set; }
+        public virtual DbSet<Module_MT> Module_MT { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {

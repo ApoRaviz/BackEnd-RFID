@@ -13,9 +13,6 @@ namespace WIM.Core.Entity.RoleAndPermission
     [Table("Roles")]
     public class Role : BaseEntity
     {
-        public Role()
-        {
-        }
 
         [Key]
         public string RoleID { get; set; }

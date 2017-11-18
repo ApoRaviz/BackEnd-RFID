@@ -34,8 +34,10 @@ namespace WIM.Core.Service.Impl
             {
                 IRoleRepository repo = new RoleRepository(Db);
                 string[] include = { "Project_MT" };
-                role = repo.GetWithInclude(x =>x.IsActive == true,include).ToList();
-            }
+                role = /*repo.GetWithInclude(x =>x.IsActive == true,include).ToList();*/
+                       (from i in Db.Role
+                        select i).Include(x => x.Project_MT).OrderBy(c => c.Project_MT.ProjectName).ToList();
+                        }
             return role;
         }
 
@@ -235,9 +237,10 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IRepository<Role> repo = new Repository<Role>(Db);
+                CoreDbContext db = new CoreDbContext();
                 string[] include = { "Project_MT" };
                 role = repo.GetWithInclude((x => x.ProjectIDSys == id &&
-                !(Db.UserRoles.Include(p => p.Role).Where(c => c.UserID == userid).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))), include).ToList();
+                !(db.UserRoles.Include(p => p.Role).Where(c => c.UserID == userid).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))), include).ToList();
             }
                 return role.ToList();
         }

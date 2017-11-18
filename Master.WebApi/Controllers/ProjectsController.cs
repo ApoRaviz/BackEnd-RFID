@@ -10,6 +10,7 @@ using WIM.Core.Common.Validation;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
 {
@@ -31,7 +32,16 @@ namespace Master.WebApi.Controllers
             ResponseData<IEnumerable<Project_MT>> response = new ResponseData<IEnumerable<Project_MT>>();
             try
             {
-                IEnumerable<Project_MT> Projects = ProjectService.GetProjects();
+                IEnumerable<Project_MT> Projects;
+                if (User.IsSysAdmin())
+                {
+                    Projects = ProjectService.GetProjects();
+                }
+                else
+                {
+                    Projects = ProjectService.GetProjects(User.Identity.GetProjectIDSys());
+                }
+                
                 response.SetData(Projects);
             }
             catch (ValidationException ex)

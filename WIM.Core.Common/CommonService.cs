@@ -82,10 +82,8 @@ namespace WIM.Core.Common
             foreach (PropertyInfo prop in properties)
             {
                 var value = prop.GetValue(data);
-                if (respType.GetProperty(prop.Name) != null && !prop.PropertyType.IsGenericType)
-                {
-                    respType.GetProperty(prop.Name).SetValue(resp, value, null);
-                }
+                if(respType.GetProperty(prop.Name) != null) 
+                respType.GetProperty(prop.Name).SetValue(resp, value, null);
             }
 
             return resp;
