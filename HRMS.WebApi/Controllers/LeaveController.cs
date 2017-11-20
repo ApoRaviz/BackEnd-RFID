@@ -12,13 +12,13 @@ using HRMS.Common.ValueObject.LeaveManagement;
 
 namespace HRMS.WebApi.Controllers
 {
-    [RoutePrefix("api/v1/leave")]
+    [RoutePrefix("HRMS/api/v1/leave")]
     public class LeaveController : ApiController
     {
         private ILeaveService LeaveService;
         public LeaveController(ILeaveService leaveService)
         {
-            LeaveService = new LeaveService(User.Identity);
+            LeaveService = new LeaveService();
         }
 
         //Create LeaveReq
@@ -43,7 +43,7 @@ namespace HRMS.WebApi.Controllers
 
         //Update LeaveReq
         [HttpPut]
-        [Route("")]
+        [Route("{LeaveIDSys}")]
         public HttpResponseMessage Put([FromBody]LeaveDto leaveRequest)
         {
             ResponseData<Leave> response = new ResponseData<Leave>();
@@ -98,5 +98,23 @@ namespace HRMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        //Get LeaveType Data
+        [HttpGet]
+        [Route("leaveType")]
+        public HttpResponseMessage GetLT()
+        {
+            ResponseData<IEnumerable<LeaveTypeDto>> response = new ResponseData<IEnumerable<LeaveTypeDto>>();
+            try
+            {
+                IEnumerable<LeaveTypeDto> leaveType = LeaveService.GetLeaveType();
+                response.SetData(leaveType);
+            }
+            catch (Validation.ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
     }
 }

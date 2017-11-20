@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.Status
 {
-    [Table("Status_MT")]
-    public class Status_MT : BaseEntity
+    [Table("Module_MT")]
+    public class Module_MT : BaseEntity
     {
         [Key]
-        public int StatusIDSys { get; set; }
-        public string Title { get; set; }
-
-        public virtual ICollection<StatusSubModules> StatusSubModule { get; set; }
+        public int ModuleIDSys { get; set; }
+        public string Acronym { get; set; }
+        public string ModuleName { get; set; }
     }
 }

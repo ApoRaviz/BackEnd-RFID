@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity;
 using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
@@ -43,6 +44,9 @@ namespace WIM.Core.Context
         public DbSet<CurrencyUnit> CurrencyUnit { get; set; }
         public DbSet<Country_MT> Country_MT { get; set; }
         public DbSet<Status_MT> Status_MT { get; set; }
+        public DbSet<SubModules> SubModule { get; set; }
+        public DbSet<Module_MT> Module_MT { get; set; }
+        public DbSet<StatusSubModules> StatusSubModule { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {
@@ -72,6 +76,21 @@ namespace WIM.Core.Context
             return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
 
+        public IEnumerable<SubModuleDto> AutoCompleteSM(string txtsearch)
+        {
+            var submodule = from i in SubModule
+                            join m in Module_MT on i.ModuleIDSys equals m.ModuleIDSys
+                            where i.SubModuleName.Contains(txtsearch) || m.ModuleName.Contains(txtsearch)
+                            select new SubModuleDto()
+                            {
+                                SubModuleIDSys = i.SubModuleIDSys,
+                                ModuleIDSys = i.ModuleIDSys,
+                                ModuleName = m.ModuleName,
+                                SubModuleName = i.SubModuleName,
+                                LabelSubModuleName = m.ModuleName + " : " + i.SubModuleName
+                        };
+            return submodule.ToList();
+        }
         
 
     }

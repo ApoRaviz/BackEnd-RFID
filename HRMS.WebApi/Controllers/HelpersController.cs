@@ -10,6 +10,7 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Data.Entity;
+using WIM.Core.Common.ValueObject;
 
 namespace HRMS.WebApi.Controllers
 {
@@ -117,6 +118,30 @@ namespace HRMS.WebApi.Controllers
             try
             {
                 string result = CommonService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
+                response.SetData(result);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("SMautocomplete")]
+        public HttpResponseMessage GetSMAutoComplete(string txt)
+        {
+            IResponseData<IEnumerable<SubModuleDto>> response = new ResponseData<IEnumerable<SubModuleDto>>();
+            if (string.IsNullOrEmpty(txt))
+            {
+                response.SetData(null);
+                Request.ReturnHttpResponseMessage(response);
+            }
+
+            try
+            {
+                IEnumerable<SubModuleDto> result = CommonService.SMAutoComplete(txt);
                 response.SetData(result);
             }
             catch (ValidationException ex)

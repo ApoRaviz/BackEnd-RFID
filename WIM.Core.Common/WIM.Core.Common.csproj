@@ -156,6 +156,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
       <Name>WIM.Core.Context</Name>

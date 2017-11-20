@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="LeaveManagement\LeaveService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusManagement\StatusService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">
@@ -87,6 +88,14 @@
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Name>WIM.Core.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
       <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>

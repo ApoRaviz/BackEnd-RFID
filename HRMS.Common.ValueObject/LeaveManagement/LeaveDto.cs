@@ -25,8 +25,8 @@ namespace HRMS.Common.ValueObject.LeaveManagement
         public int LeaveTypeIDSys { get; set; }
         public string RequesterID { get; set; }
         public string ApproverID { get; set; }
-        public virtual ICollection<LeaveDetailDto> LeaveDetails { get; set; }
-        public virtual ICollection<LeaveTypeDto> LeaveTypes { get; set; }
+        public IEnumerable<LeaveDetailDto> LeaveDetails { get; set; }
+        public virtual IEnumerable<LeaveTypeDto> LeaveTypes { get; set; }
 
         [NotMapped]
         public string StatusTitle { get; set; }

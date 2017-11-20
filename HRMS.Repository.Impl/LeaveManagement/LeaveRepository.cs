@@ -23,31 +23,33 @@ namespace HRMS.Repository.Impl.LeaveManagement
 
         public LeaveDto GetDto(int id)
         {
-            LeaveDto leave = (from l in Db.Leaves where l.LeaveIDSys == id
-                              join st in Db.Status_MT on l.StatusIDSys equals st.StatusIDSys
-                              join lt in Db.LeaveTypes on l.LeaveTypeIDSys equals lt.LeaveTypeIDSys
-                              select new LeaveDto
-                              {
-                                  LeaveTypeIDSys = l.LeaveTypeIDSys,
-                                  StatusIDSys = l.StatusIDSys,
-                                  StatusTitle = st.Title,
-                                  Comment = l.Comment,
-                                  LeaveTypeName = lt.Name,
-                                  LeaveDetails = GetDetailDto(l.LeaveIDSys).ToList()
+            LeaveDto leave = (from l in Db.Leaves
+                     where l.LeaveIDSys == id
+                     join st in Db.Status_MT on l.StatusIDSys equals st.StatusIDSys
+                     join lt in Db.LeaveTypes on l.LeaveTypeIDSys equals lt.LeaveTypeIDSys
+                     select new LeaveDto
+                     {
+                         LeaveTypeIDSys = l.LeaveTypeIDSys,
+                         StatusIDSys = l.StatusIDSys,
+                         StatusTitle = st.Title,
+                         Comment = l.Comment,
+                         LeaveTypeName = lt.Name,
+                     }).SingleOrDefault();
 
-                              }).SingleOrDefault();
             return leave;
         }
 
         public IEnumerable<LeaveDetailDto> GetDetailDto(int id)
         {
-            IEnumerable<LeaveDetailDto> leave = (from ld in Db.LeaveDetails where ld.LeaveIDSys == id
-                              select new LeaveDetailDto
-                              {
-                                  LeaveIDSys = ld.LeaveIDSys,
-                                  StartDate = ld.StartDate,
-                                  EndDate = ld.EndDate
-                              }).ToList();
+            IEnumerable<LeaveDetailDto> leave = (from ld in Db.LeaveDetails
+                                                 where ld.LeaveIDSys == id
+                                                 select new LeaveDetailDto
+                                                 {
+                                                     LeaveIDSys = ld.LeaveIDSys,
+                                                     LeaveDetailIDSys = ld.LeaveDetailIDSys,
+                                                     StartDate = ld.StartDate,
+                                                     EndDate = ld.EndDate
+                                                 }).ToList();
             return leave;
         }
     }

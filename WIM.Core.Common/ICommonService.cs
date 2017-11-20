@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 
 namespace WIM.Core.Common
 {
@@ -15,5 +16,6 @@ namespace WIM.Core.Common
         IList<ProcGetUserLog_Result> GetUserLogData(string RequestMethod, string RequestUrl, DateTime? RequestDateFrom, DateTime? RequestDateTo);
         IList<ProcGetTableColumnsDescription_Result> GetTableColumnsDescription(string TableName);
         string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);
+        IEnumerable<SubModuleDto> SMAutoComplete(string key);
     }
 }

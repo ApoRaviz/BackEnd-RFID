@@ -116,14 +116,14 @@ namespace HRMS.Service.Impl.LeaveManagement
 
         }
 
-        public IEnumerable<LeaveType> GetLeaveType()
+        public IEnumerable<LeaveTypeDto> GetLeaveType()
         {
             using (HRMSDbContext db = new HRMSDbContext())
             {
                 try
                 {
                     ILeaveTypeRepository repoGetLT = new LeaveTypeRepository(db);
-                    return repoGetLT.Get();
+                    return repoGetLT.GetDto();
                 }
                 catch (DbEntityValidationException)
                 {

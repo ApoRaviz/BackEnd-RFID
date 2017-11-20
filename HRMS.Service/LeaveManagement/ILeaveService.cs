@@ -30,7 +30,8 @@ namespace HRMS.Service.LeaveManagement
         /// <param name="leave"></param>
         /// <returns></returns>
         Leave UpdateLeave(LeaveDto leave);
-        IEnumerable<LeaveType> GetLeaveType();
+        IEnumerable<LeaveTypeDto> GetLeaveType();
+
         bool ApproveLeave(int id);
         bool RejectLeave(int id);
 

@@ -51,6 +51,9 @@
     <Compile Include="LeaveManagement\LeaveRepository.cs" />
     <Compile Include="LeaveManagement\LeaveTypeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusManagement\ProjectRepository.cs" />
+    <Compile Include="StatusManagement\SubModuleRepository.cs" />
+    <Compile Include="StatusManagement\StatusRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">
@@ -68,6 +71,14 @@
     <ProjectReference Include="..\HRMS.Repository\HRMS.Repository.csproj">
       <Project>{2d0b2680-d488-4b8a-bab8-cf286cd071e0}</Project>
       <Name>HRMS.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Name>WIM.Core.Context</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>

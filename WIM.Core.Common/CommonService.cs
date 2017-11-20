@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
+using WIM.Core.Common.ValueObject;
+using WIM.Core.Context;
 
 namespace WIM.Core.Common
 {
@@ -62,6 +64,14 @@ namespace WIM.Core.Common
         public string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)
         {
             return db.ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword).FirstOrDefault();
+        }
+
+        public IEnumerable<SubModuleDto> SMAutoComplete(string key)
+        {
+            using(CoreDbContext Db = new CoreDbContext())
+            {
+               return Db.AutoCompleteSM(key);
+            }
         }
 
         public void InsertLog(HandheldErrorLog errorLog)
