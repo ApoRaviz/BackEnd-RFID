@@ -3,14 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Context;
-using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
-using WMS.Common;
 using WMS.Context;
 using WMS.Repository.UserManagement;
 
@@ -21,7 +16,7 @@ namespace WMS.Repository.Impl
         private WMSDbContext Db;
         //private ItemSetRepository repo;
         private IIdentity Identity;
-
+        
         public UserRepository(WMSDbContext context, IIdentity identity) : base(context, identity)
         {
             Db = context;

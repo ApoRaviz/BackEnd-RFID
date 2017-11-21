@@ -65,9 +65,6 @@
     <Reference Include="Fuji.Common.ValueObject">
       <HintPath>..\Fuji.Common.ValueObject\bin\Debug\Fuji.Common.ValueObject.dll</HintPath>
     </Reference>
-    <Reference Include="Fuji.Entity">
-      <HintPath>..\Fuji.Entity\bin\Debug\Fuji.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="Fuji.Service">
       <HintPath>..\Fuji.Service\bin\Debug\Fuji.Service.dll</HintPath>
     </Reference>
@@ -589,6 +586,10 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
+      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
+      <Name>Fuji.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fuji.Service.Impl\Fuji.Service.Impl.csproj">
       <Project>{e22348a1-e953-478b-9b69-cb3fcb3a45ce}</Project>
       <Name>Fuji.Service.Impl</Name>
