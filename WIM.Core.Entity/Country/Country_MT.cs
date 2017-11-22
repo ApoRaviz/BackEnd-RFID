@@ -13,7 +13,6 @@ namespace WIM.Core.Entity.Country
     public class Country_MT : BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int CountryIDSys { get; set; }
         public string CountryName { get; set; }
         public string CountryCode { get; set; }

@@ -12,7 +12,6 @@ namespace WIM.Core.Entity.Dimension
     public class DimensionLayout_MT : BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int DimensionIDSys { get; set; }
         public string FormatName { get; set; }
         public string Unit { get; set; }

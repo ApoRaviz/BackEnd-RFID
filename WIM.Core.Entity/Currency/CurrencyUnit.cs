@@ -13,7 +13,6 @@ namespace WIM.Core.Entity.Currency
     public class CurrencyUnit : BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int CurrencyIDSys { get; set; }
         public string CurrencyID { get; set; }
         public string CurrencyName { get; set; }

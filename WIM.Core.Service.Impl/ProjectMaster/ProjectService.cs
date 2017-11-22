@@ -113,6 +113,7 @@ namespace WIM.Core.Service.Impl
                     {
                         IProjectRepository repo = new ProjectRepository(Db); 
                         project.ProjectID = Db.ProcGetNewID("PJ");
+                        project.ProjectStatus = "Active";
                         projectnew = repo.Insert(project);
                         Db.SaveChanges();
                         scope.Complete();
@@ -122,11 +123,11 @@ namespace WIM.Core.Service.Impl
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException e)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
+                    throw e;
                 }
                 return projectnew;
             }
