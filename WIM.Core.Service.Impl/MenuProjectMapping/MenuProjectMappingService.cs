@@ -45,12 +45,13 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                MenuProjectMapping data = new MenuProjectMapping();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
-                        repo.Insert(MenuProjectMapping);
+                        data = repo.Insert(MenuProjectMapping);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -66,7 +67,7 @@ namespace WIM.Core.Service.Impl
                     throw ex;
                 }
 
-                return MenuProjectMapping.MenuIDSys;
+                return data.MenuIDSys;
             }
         }
 

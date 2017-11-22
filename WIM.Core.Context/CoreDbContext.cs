@@ -35,7 +35,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Person_MT> Person_MT { get; set; }
         public DbSet<Project_MT> Project_MT { get; set; }
         public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
+        public DbSet<Role> Role { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<RolePermissions> RolePermissions { get; set; }
         public virtual DbSet<User> User { get; set; }

@@ -22,6 +22,7 @@ namespace WIM.Core.Entity.ProjectManagement
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int ModuleIDSys { get; set; }
         public string Acronym { get; set; }
         public string ModuleName { get; set; }

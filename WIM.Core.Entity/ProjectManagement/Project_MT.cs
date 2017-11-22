@@ -28,6 +28,7 @@ namespace WIM.Core.Entity.ProjectManagement
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int ProjectIDSys { get; set; }
         public string ProjectID { get; set; }
         public string ProjectName { get; set; }

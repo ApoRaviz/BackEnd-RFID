@@ -20,6 +20,7 @@ namespace WIM.Core.Entity.CustomerManagement
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int CusIDSys { get; set; }
         public string CusID { get; set; }
         public string CusName { get; set; }

@@ -106,13 +106,14 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                Project_MT projectnew = new Project_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IProjectRepository repo = new ProjectRepository(Db); 
                         project.ProjectID = Db.ProcGetNewID("PJ");
-                        repo.Insert(project);
+                        projectnew = repo.Insert(project);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -127,7 +128,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return project;
+                return projectnew;
             }
         }
 

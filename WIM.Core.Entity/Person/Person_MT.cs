@@ -11,7 +11,8 @@ namespace WIM.Core.Entity.Person
     [Table("Person_MT")]
     public class Person_MT : BaseEntity
     {      
-        [Key] 
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int PersonIDSys { get; set; }
         public string PersonID { get; set; }
         public string Name { get; set; }

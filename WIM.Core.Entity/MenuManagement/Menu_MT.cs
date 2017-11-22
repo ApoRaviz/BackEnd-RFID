@@ -18,6 +18,7 @@ namespace WIM.Core.Entity.MenuManagement
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int MenuIDSys { get; set; }
         public int MenuParentID { get; set; }
         public string MenuName { get; set; }

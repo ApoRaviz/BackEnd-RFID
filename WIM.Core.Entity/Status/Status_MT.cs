@@ -12,6 +12,7 @@ namespace WIM.Core.Entity.Status
     public class Status_MT : BaseEntity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int StatusIDSys { get; set; }
         public string Title { get; set; }
     }
