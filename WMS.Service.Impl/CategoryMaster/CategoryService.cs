@@ -19,6 +19,7 @@ namespace WMS.Service
 
         public CategoryService()
         {
+            
         }
 
         public IEnumerable<CategoryDto> GetCategories()
