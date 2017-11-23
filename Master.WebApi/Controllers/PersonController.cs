@@ -16,7 +16,7 @@ using WIM.Core.Service;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/Persons")]

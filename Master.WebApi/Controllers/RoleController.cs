@@ -12,7 +12,7 @@ using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Service;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/Roles")]
@@ -34,7 +34,16 @@ namespace WMS.WebApi.Controllers
             ResponseData<IEnumerable<Role>> response = new ResponseData<IEnumerable<Role>>();
             try
             {
-                IEnumerable<Role> Role = RoleService.GetRoles(User.Identity.GetProjectIDSys());
+                IEnumerable<Role> Role;
+                if (User.IsSysAdmin())
+                {
+                    Role = RoleService.GetRoles();
+                }
+                else
+                {
+                    Role = RoleService.GetRoles(User.Identity.GetProjectIDSys());
+                }
+                
                 response.SetData(Role);
             }
             catch (ValidationException ex)
@@ -86,10 +95,18 @@ namespace WMS.WebApi.Controllers
         [Route("project/{userid}")]
         public HttpResponseMessage GetRoleByUserProject(string userid)
         {
-            IResponseData<List<Role>> response = new ResponseData<List<Role>>();
+            IResponseData<IEnumerable<Role>> response = new ResponseData<IEnumerable<Role>>();
             try
             {
-                List<Role> Role = RoleService.GetRoleByProjectUser(User.Identity.GetProjectIDSys(),userid);
+                IEnumerable<Role> Role;
+                if (User.IsSysAdmin())
+                {
+                    Role = RoleService.GetRoles();
+                }
+                else
+                {
+                    Role = RoleService.GetRoleByProjectUser(User.Identity.GetProjectIDSys(), userid);
+                }
                 response.SetData(Role);
             }
             catch (ValidationException ex)

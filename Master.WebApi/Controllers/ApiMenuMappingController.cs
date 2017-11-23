@@ -12,7 +12,7 @@ using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Service;
 using WIM.Core.Common.ValueObject;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/ApiMenuMapping")]

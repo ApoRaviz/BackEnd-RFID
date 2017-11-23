@@ -54,12 +54,13 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                Menu_MT Menunew = new Menu_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuRepository repo = new MenuRepository(Db);
-                        repo.Insert(Menu);
+                        Menunew = repo.Insert(Menu);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -74,7 +75,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return Menu.MenuIDSys;
+                return Menunew.MenuIDSys;
             }
         }
 
@@ -82,6 +83,7 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                Menu_MT menunew = new Menu_MT();
                 Menu_MT menu = new Menu_MT();
                 menu.MenuName = Menu.MenuName;
                 menu.MenuParentID = Menu.MenuParentID;
@@ -95,7 +97,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IMenuRepository repo = new MenuRepository(Db);
-                        repo.Insert(menu);
+                        menunew = repo.Insert(menu);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -111,7 +113,7 @@ namespace WIM.Core.Service.Impl
                     throw ex;
                 }
 
-                return menu.MenuIDSys;
+                return menunew.MenuIDSys;
             }
         }
 

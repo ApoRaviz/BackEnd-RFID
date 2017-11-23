@@ -72,13 +72,23 @@ namespace WIM.Core.Repository.Impl
 
             TEntity entityForInsert = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { });
 
-            Type typeEntityForUpdate = entityForInsert.GetType();
+            Type typeEntityForInsert = entityForInsert.GetType();
             foreach (PropertyInfo prop in properties)
             {                
                 var value = prop.GetValue(entityToInsert, null);                
-                if (!prop.PropertyType.IsGenericType)
+                if (!prop.PropertyType.IsGenericType || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime))
                 {
-                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                }else if(prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    if(typeEntityForInsert.GetProperty(prop.Name).GetValue(entityToInsert) != null)
+                    {
+                        typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                    }
+                    else
+                    {
+                        typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                    }
                 }
             }
             
@@ -144,11 +154,21 @@ namespace WIM.Core.Repository.Impl
 
         public void Delete(TEntity entityToDelete)
         {
-            if (Context.Entry(entityToDelete).State == EntityState.Detached)
+            Type typeEntityToUpdate = entityToDelete.GetType();
+            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
+            List<string> namePropKey = GetPropertyNameOfKeyAttribute(properties);
+            object[] id = new object[namePropKey.Count];
+            for (int i = 0; i < namePropKey.Count; i++)
             {
-                DbSet.Attach(entityToDelete);
+                id[i] = typeEntityToUpdate.GetProperty(namePropKey[i]).GetValue(entityToDelete, null);
             }
-            DbSet.Remove(entityToDelete);
+            TEntity entityForDelete = GetByID(id);
+
+            if (Context.Entry(entityForDelete).State == EntityState.Detached)
+            {
+                DbSet.Attach(entityForDelete);
+            }
+            DbSet.Remove(entityForDelete);
         }
 
        

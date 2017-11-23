@@ -22,8 +22,8 @@ namespace WIM.Core.Security.Entity
         public string Surname { get; set; }
         public DateTime LastLogin { get; set; }
         public bool IsSysAdmin { get; set; }
-        public int KeyOTP { get; set; }
-        public DateTime KeyOTPDate { get; set; }
+        public Nullable<int> KeyOTP { get; set; }
+        public Nullable<System.DateTime> KeyOTPDate { get; set; }
         public string TokenMobile { get; set; }
         //public int ProjectIDSys { get; set; }
 
@@ -36,8 +36,6 @@ namespace WIM.Core.Security.Entity
             //userIdentity.AddClaim(new Claim("Permission", Permission.ToString()));
 
             //userIdentity.RemoveClaim(userIdentity.FindFirst("role"));
-
-
             return userIdentity;
         }
 

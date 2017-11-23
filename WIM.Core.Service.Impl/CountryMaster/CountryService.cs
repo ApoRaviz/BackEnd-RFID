@@ -52,12 +52,13 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                Country_MT Countrynew = new Country_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICountryRepository repo = new CountryRepository(Db);
-                        repo.Insert(Country);
+                        Countrynew = repo.Insert(Country);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -73,7 +74,7 @@ namespace WIM.Core.Service.Impl
                     throw ex;
                 }
                 
-                return Country.CountryIDSys;
+                return Countrynew.CountryIDSys;
             }
         }
 

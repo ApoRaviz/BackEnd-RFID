@@ -21,7 +21,7 @@ namespace WIM.Core.Entity.RoleAndPermission
         public string Method { get; set; }
         public string ApiIDSys { get; set; }
 
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+        public virtual ICollection<RolePermissions> RolePermissions { get; set; }
         public virtual MenuProjectMapping MenuProjectMapping { get; set; }
         public virtual Api_MT Api_MT { get; set; }
         public ApiMenuMapping Api { get; set; }

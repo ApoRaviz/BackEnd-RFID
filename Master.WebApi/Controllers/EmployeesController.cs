@@ -4,40 +4,35 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common;
 using WIM.Core.Common.Extensions;
-using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using System.Web.Http.Cors;
-using WMS.Service;
-using WIM.Core.Entity.Currency;
+using WIM.Core.Entity;
 using WIM.Core.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
-    [RoutePrefix("api/v1/currency")]
-    public class CurrencyController : ApiController
+    [RoutePrefix("api/v1/Employees")]
+    public class EmployeesController : ApiController
     {
+        private IEmployeeService Employeeservice;
 
-        private ICurrencyService CurrencyService;
-
-        public CurrencyController(ICurrencyService CurrencyService)
+        public EmployeesController(IEmployeeService employeeservice)
         {
-            this.CurrencyService = CurrencyService;
+            this.Employeeservice = employeeservice;
         }
 
-        //get api/Currencys
+        // GET: api/Employees
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<CurrencyUnit>> response = new ResponseData<IEnumerable<CurrencyUnit>>();
+            ResponseData<IEnumerable<Employee_MT>> response = new ResponseData<IEnumerable<Employee_MT>>();
             try
             {
-                IEnumerable<CurrencyUnit> Currency = CurrencyService.GetCurrency();
-                response.SetData(Currency);
+                IEnumerable<Employee_MT> Employees = Employeeservice.GetEmployees();
+                response.SetData(Employees);
             }
             catch (ValidationException ex)
             {
@@ -47,17 +42,16 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // get api/Currencys/id
-
+        // GET: api/Employees/1
         [HttpGet]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Get(int CurrencyIDSys)
+        [Route("{EmID}")]
+        public HttpResponseMessage Get(string EmID)
         {
-            IResponseData<CurrencyUnit> response = new ResponseData<CurrencyUnit>();
+            IResponseData<Employee_MT> response = new ResponseData<Employee_MT>();
             try
             {
-                CurrencyUnit Currency = CurrencyService.GetCurrencyByCurrIDSys(CurrencyIDSys);
-                response.SetData(Currency);
+                Employee_MT Employee = Employeeservice.GetEmployeeByEmployeeIDSys(EmID);
+                response.SetData(Employee);
             }
             catch (ValidationException ex)
             {
@@ -67,16 +61,16 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // POST: api/Suppliers
+        // POST: api/Employees
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]CurrencyUnit Currency)
+        public HttpResponseMessage Post([FromBody]Employee_MT Employee)
         {
-            IResponseData<int> response = new ResponseData<int>();
+            IResponseData<string> response = new ResponseData<string>();
             try
             {
-                Currency.UpdateBy = User.Identity.Name;
-                int id = CurrencyService.CreateCurrency(Currency);
+                Employee.UpdateBy = User.Identity.Name;
+                string id = Employeeservice.CreateEmployee(Employee);
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -87,18 +81,18 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // PUT: api/Suppliers/5
+        // PUT: api/Employees/5
 
         [HttpPut]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Put(int CurrencyIDSys, [FromBody]CurrencyUnit Currency)
+        [Route("")]
+        public HttpResponseMessage Put( [FromBody]Employee_MT Employee)
         {
 
             IResponseData<bool> response = new ResponseData<bool>();
 
             try
             {
-                bool isUpated = CurrencyService.UpdateCurrency(Currency);
+                bool isUpated = Employeeservice.UpdateEmployeeByID(Employee);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -110,15 +104,16 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        // DELETE: api/Employees/5
         [HttpDelete]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Delete(int CurrencyIDSys)
+        [Route("{EmID}")]
+        public HttpResponseMessage Delete(string EmID)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpdated = CurrencyService.DeleteCurrency(CurrencyIDSys);
-                response.SetData(isUpdated);
+                bool isUpated = Employeeservice.DeleteEmployee(EmID);
+                response.SetData(isUpated);
             }
             catch (ValidationException ex)
             {
@@ -128,11 +123,5 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        private ICurrencyService GetCurrencyService()
-        {
-            return CurrencyService;
-        }
-
     }
-
 }

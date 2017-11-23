@@ -13,9 +13,9 @@ using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Service;
-using WMS.Common;
-using WMS.Service;
-namespace WMS.WebApi.Controllers
+
+
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/MenuProjectMappings")]

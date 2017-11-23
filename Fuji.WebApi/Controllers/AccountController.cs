@@ -268,20 +268,67 @@ namespace Fuji.WebApi.Controllers
 
         [Route("assignProject")]
         [HttpPost]
-        public IHttpActionResult AssignProjectClaimToUser([FromBody]AssignProjectClaimBinding projectClaimBinding)
+        public async Task<HttpResponseMessage> AssignProjectClaimToUserAsync([FromBody]AssignProjectClaimBinding projectClaimBinding)
         {
-            if (!ModelState.IsValid)
-            {  
-                return BadRequest(ModelState);
-            }            
-
-            var identity = User.Identity as ClaimsIdentity;
-            foreach (var claim in identity.Claims)
+            IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
+            try
             {
-                UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
+                if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
+                {
+                    return null;
+                }
+               
+                //object CanAccessProject = ApplicationUserManager.GetUserAccessProject(User.Identity.GetUserId());
+                Dictionary<string, string> Json = new Dictionary<string, string>();
+                ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager, "JWT");
+                //foreach (var claim in oAuthIdentity.Claims)
+                //{
+                //    UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+                //}
+                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
+                oAuthIdentity.AddClaim(new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys.ToString()));
+                oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
+                AuthenticationProperties props = new AuthenticationProperties();
+                props.IssuedUtc = DateTime.Now;
+                props.ExpiresUtc = DateTime.Now.AddMinutes(this.ExToken);
+                var ticket = new AuthenticationTicket(oAuthIdentity, props);
+                CustomJwtFormat auth = new CustomJwtFormat(System.Configuration.ConfigurationManager.AppSettings["as:baseUrl"]);
+                string token = auth.Protect(ticket);
+                TimeSpan spEx = TimeSpan.FromMinutes(ExToken);
+                Json.Add("access_token", token);
+                Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
+                Json.Add("status", "200");
+
+                var Project = new ProjectService().GetProjectByProjectIDSysIncludeModule(projectClaimBinding.ProjectIDSys);
+                if(Project != null)
+                    Json.Add("project", Newtonsoft.Json.JsonConvert.SerializeObject(Project));
+
+                response.SetData(Json);
             }
-            UserManager.AddClaim(User.Identity.GetUserId(), new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys));
-            return Ok();
+            catch (WIM.Core.Common.Validation.ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+
+
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            //var identity = User.Identity as ClaimsIdentity;
+            //foreach (var claim in identity.Claims)
+            //{
+            //    UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+            //}
+            //UserManager.AddClaim(User.Identity.GetUserId(), new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys));
+            //return Ok();
         }
 
         // POST api/Account/Logout
@@ -772,7 +819,8 @@ namespace Fuji.WebApi.Controllers
 
     public class AssignProjectClaimBinding
     {
-        public string ProjectIDSys { get; set; }
+        public int ProjectIDSys { get; set; }
+        public string OTP { get; set; }
     }
 
     public class AssignOTPClaimBinding

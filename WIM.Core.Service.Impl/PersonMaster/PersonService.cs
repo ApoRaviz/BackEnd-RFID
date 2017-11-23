@@ -78,13 +78,14 @@ namespace WIM.Core.Service.Impl
         public int CreatePerson(Person_MT Person)
         {
             using (var scope = new TransactionScope())
-            {      
+            {
+                Person_MT Personnew = new Person_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IPersonRepository repo = new PersonRepository(Db);
-                        repo.Insert(Person);
+                        Personnew = repo.Insert(Person);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -99,7 +100,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return Person.PersonIDSys;
+                return Personnew.PersonIDSys;
             }
         }
 

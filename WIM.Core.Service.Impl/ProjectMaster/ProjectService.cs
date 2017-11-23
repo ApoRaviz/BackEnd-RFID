@@ -34,6 +34,18 @@ namespace WIM.Core.Service.Impl
             return projects;
         }
 
+        public IEnumerable<Project_MT> GetProjects(int projectID)
+        {
+            IEnumerable<Project_MT> projects;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                CoreDbContext db = new CoreDbContext();
+                IProjectRepository repo = new ProjectRepository(Db);
+                projects = repo.GetMany(x => (db.Project_MT.Where(c => c.ProjectIDSys == projectID).Select(a=>a.CusIDSys).Contains(x.CusIDSys)));
+            }
+            return projects;
+        }
+
         public object GetProjectsByCusID(int CusIDSys)
         {
             IEnumerable<Project_MT> projects;
@@ -73,19 +85,36 @@ namespace WIM.Core.Service.Impl
             return null;
         }
 
+        public object GetProjectByProjectIDSysIncludeModule(int id)
+        {
+            object project;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IProjectRepository repo = new ProjectRepository(Db);
+                project = repo.GetProjectByProjectIDSysInclude(id);
+            }
+            if (project != null)
+            {
+                return project;
+            }
+            return null;
 
+        }
 
 
         public Project_MT CreateProject(Project_MT project)
         {
             using (var scope = new TransactionScope())
             {
+                Project_MT projectnew = new Project_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IProjectRepository repo = new ProjectRepository(Db);
-                        repo.Insert(project);
+                        IProjectRepository repo = new ProjectRepository(Db); 
+                        project.ProjectID = Db.ProcGetNewID("PJ");
+                        project.ProjectStatus = "Active";
+                        projectnew = repo.Insert(project);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -94,13 +123,13 @@ namespace WIM.Core.Service.Impl
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException e)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
+                    throw e;
                 }
-                return project;
+                return projectnew;
             }
         }
 

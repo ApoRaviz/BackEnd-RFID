@@ -13,7 +13,7 @@ using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/UserRoles")]

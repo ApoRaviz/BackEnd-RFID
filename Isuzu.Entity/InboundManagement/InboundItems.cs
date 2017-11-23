@@ -65,7 +65,7 @@ namespace Isuzu.Entity
 
         [StringLength(50)]
         public string DeleteReason { get; set; }
-
+        
         [StringLength(100)]
         public string PathDeleteReason { get; set; }
 

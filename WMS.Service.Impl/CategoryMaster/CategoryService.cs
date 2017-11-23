@@ -93,6 +93,7 @@ namespace WMS.Service
                     try
                     {
                         repo.Insert(category);
+                        Db.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -122,6 +123,7 @@ namespace WMS.Service
                     try
                     {
                         repo.Update(category);
+                        Db.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -151,6 +153,7 @@ namespace WMS.Service
                     try
                     {
                         repo.Delete(existedCategory);
+                        Db.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbUpdateConcurrencyException)

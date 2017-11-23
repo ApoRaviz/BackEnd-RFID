@@ -11,6 +11,7 @@ namespace WIM.Core.Service
     public interface IProjectService : IService
     {
         IEnumerable<Project_MT> GetProjects();
+        IEnumerable<Project_MT> GetProjects(int projectID);
         Project_MT GetProjectByProjectIDSys(int id);
         List<Project_MT> ProjectHaveMenu(int CusID);
         List<Project_MT> ProjectCustomer(int CusID);

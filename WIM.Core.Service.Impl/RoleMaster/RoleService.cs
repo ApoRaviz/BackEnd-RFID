@@ -18,6 +18,7 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
+using WIM.Core.Entity.ProjectManagement;
 
 namespace WIM.Core.Service.Impl
 {
@@ -33,8 +34,22 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IRoleRepository repo = new RoleRepository(Db);
-                role = repo.Get();
-            }
+                string[] include = { "Project_MT" };
+                role = /*repo.GetWithInclude(x =>x.IsActive == true,include).ToList();*/
+                       (from i in Db.Role
+                        select i).Include("Project_MT").OrderBy(c => c.Project_MT.ProjectName)
+                        .ToList().Select(a => new Role()
+                        {
+                            RoleID = a.RoleID,
+                            Name = a.Name,
+                            ProjectIDSys = a.ProjectIDSys,
+                            Project_MT = new Project_MT()
+                            {
+                                ProjectIDSys = a.ProjectIDSys,
+                                ProjectName = a.Project_MT.ProjectName
+                            }
+                        });
+                        }
             return role;
         }
 
@@ -44,9 +59,22 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IRoleRepository repo = new RoleRepository(Db);
-                role = repo.GetMany(c => c.ProjectIDSys == projectIDSys);
+                role = (from i in Db.Role
+                        where i.ProjectIDSys == projectIDSys
+                        select i).Include(x => x.Project_MT)
+                        .OrderBy(c => c.Project_MT.ProjectName).ToList().Select(a => new Role()
+                        {
+                            RoleID = a.RoleID,
+                            Name = a.Name,
+                            ProjectIDSys = a.ProjectIDSys,
+                            Project_MT = new Project_MT()
+                            {
+                                ProjectIDSys = a.ProjectIDSys,
+                                ProjectName = a.Project_MT.ProjectName
+                            }
+                        });
             }
-            return role.ToList();
+            return role;
         }
 
         public Role GetRoleByLocIDSys(string id)
@@ -74,14 +102,15 @@ namespace WIM.Core.Service.Impl
         public string CreateRole(Role role )
         {
             using (var scope = new TransactionScope())
-            {
+            {   Role rolenew = new Role();
                 role.RoleID = Guid.NewGuid().ToString();
                 try
                 {
+                    
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IRoleRepository repo = new RoleRepository(Db);
-                        repo.Insert(role);
+                        rolenew = repo.Insert(role);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -99,7 +128,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return role.RoleID;
+                return rolenew.RoleID;
             }
         }
 
@@ -138,9 +167,9 @@ namespace WIM.Core.Service.Impl
             {
                 IRoleRepository repo = new RoleRepository(Db);
                 IRepository<UserRoles> repouser = new Repository<UserRoles>(Db);
-                IRepository<RolePermission> repopermission = new Repository<RolePermission>(Db);
+                IRepository<RolePermissions> repopermission = new Repository<RolePermissions>(Db);
                 List<UserRoles> users = new List<UserRoles>();
-            List<RolePermission> permissions = new List<RolePermission>();
+            List<RolePermissions> permissions = new List<RolePermissions>();
             if (id != "")
             {
                 users = repouser.GetMany(c => c.RoleID == id).ToList();
@@ -192,7 +221,7 @@ namespace WIM.Core.Service.Impl
             List<RolePermissionDto> rolelist;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IRepository<RolePermission> repo = new Repository<RolePermission>(Db);
+                IRepository<RolePermissions> repo = new Repository<RolePermissions>(Db);
                 rolelist = repo.GetMany(c => c.PermissionID == id)
                 .Select(b => new RolePermissionDto()
                 {
@@ -210,7 +239,7 @@ namespace WIM.Core.Service.Impl
             {
                 IRepository<Role> repo = new Repository<Role>(Db);
                 CoreDbContext Db2 = new CoreDbContext();
-                var RoleForPermissionQuery = repo.GetMany(c => !(Db2.RolePermission.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
+                var RoleForPermissionQuery = repo.GetMany(c => !(Db2.RolePermissions.Where(a => a.PermissionID == id).Select(b => b.RoleID).Contains(c.RoleID)));
                 rolelist = RoleForPermissionQuery.Select(b => new RolePermissionDto()
                 {
                     RoleID = b.RoleID,
@@ -234,9 +263,20 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IRepository<Role> repo = new Repository<Role>(Db);
+                CoreDbContext db = new CoreDbContext();
                 string[] include = { "Project_MT" };
                 role = repo.GetWithInclude((x => x.ProjectIDSys == id &&
-                !(Db.UserRoles.Include(p => p.Role).Where(c => c.UserID == userid).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))), include).ToList();
+                !(db.UserRoles.Include(p => p.Role).Where(c => c.UserID == userid).Any(p => p.Role.ProjectIDSys == x.ProjectIDSys))), include).Select(a => new Role()
+                {
+                    RoleID = a.RoleID,
+                    Name = a.Name,
+                    ProjectIDSys = a.ProjectIDSys,
+                    Project_MT = new Project_MT()
+                    {
+                        ProjectIDSys = a.ProjectIDSys,
+                        ProjectName = a.Project_MT.ProjectName
+                    }
+                }).ToList();
             }
                 return role.ToList();
         }

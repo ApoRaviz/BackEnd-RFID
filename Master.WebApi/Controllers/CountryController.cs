@@ -10,12 +10,10 @@ using WMS.Master;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
-using WMS.WebApi.Report;
-using WMS.Service;
 using WIM.Core.Entity.Country;
 using WIM.Core.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/country")]

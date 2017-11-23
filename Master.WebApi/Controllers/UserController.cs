@@ -13,7 +13,7 @@ using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/Users")]
@@ -107,7 +107,7 @@ namespace WMS.WebApi.Controllers
             {
                 string id = "";
                 PasswordHasher ph = new PasswordHasher();
-                User.PasswordHash = ph.HashPassword("1234!");
+                User.PasswordHash = ph.HashPassword(User.PasswordHash);
                 id = UserService.CreateUser(User);
                 response.SetData(id);
             }

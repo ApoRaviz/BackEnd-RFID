@@ -10,9 +10,8 @@ using WIM.Core.Common.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Service;
-using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/Permissions")]

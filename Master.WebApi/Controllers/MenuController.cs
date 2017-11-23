@@ -10,9 +10,8 @@ using WIM.Core.Common.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Service;
-using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     // [Authorize]
     [RoutePrefix("api/v1/Menus")]
@@ -34,7 +33,7 @@ namespace WMS.WebApi.Controllers
             //IResponseData<IEnumerable<List<MenuDto>>> response2 = new ResponseData<IEnumerable<List<MenuDto>>>();
             try
             {
-                List<MenuDto> Menu = MenuService.GetMenuDto().ToList();
+                List<MenuDto> Menu = MenuService.GetMenuDto().OrderBy(a => a.MenuName).ToList();
                 //response2.SetData(Menu);
 
 

@@ -8,11 +8,9 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Entity.ProjectManagement;
-using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
-using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Fuji.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/projects")]

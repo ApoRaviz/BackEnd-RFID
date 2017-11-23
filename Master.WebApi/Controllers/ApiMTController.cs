@@ -13,7 +13,7 @@ using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/apimt")]
@@ -35,7 +35,7 @@ namespace WMS.WebApi.Controllers
             try
             {
                 IEnumerable<Api_MT> apis = ApiMTService.GetAPIs();
-                var group = apis.GroupBy(a => a.Controller);
+                var group = apis.OrderBy(b => b.Controller).GroupBy(a => a.Controller);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(group);
             }

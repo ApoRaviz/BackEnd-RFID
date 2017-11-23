@@ -47,8 +47,13 @@ namespace Fuji.Context
         public void ProcDeleteImportSerialDetail()
         {
         }
-        public void ProcGetDataAutoComplete()
+        public string ProcGetDataAutoComplete(string columnNames,string tableName,string conditionColumnNames,string keyword)
         {
+            return this.Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword"
+                , new SqlParameter("@columnNames", columnNames)
+                , new SqlParameter("@tableName", tableName)
+                , new SqlParameter("@conditionColumnNames", conditionColumnNames)
+                , new SqlParameter("@keyword", keyword)).FirstOrDefault();
         }
         public void ProcGetImportSerialHead()
         {
