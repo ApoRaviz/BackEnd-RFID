@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
             try
             {
                 IEnumerable<Api_MT> apis = ApiMTService.GetAPIs();
-                var group = apis.GroupBy(a => a.Controller);
+                var group = apis.OrderBy(b => b.Controller).GroupBy(a => a.Controller);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(group);
             }

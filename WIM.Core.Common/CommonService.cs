@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
+using System.Reflection;
 using WIM.Core.Entity.CustomerManagement;
 
 namespace WIM.Core.Common
@@ -69,6 +70,23 @@ namespace WIM.Core.Common
 
         public void InsertLog(HandheldErrorLog errorLog)
         {
+
+        }
+
+        public T AutoMapper<T>(object data)
+        {
+            Type typeEntityToUpdate = data.GetType();
+            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
+            T resp = Activator.CreateInstance<T>();
+            Type respType = resp.GetType();
+            foreach (PropertyInfo prop in properties)
+            {
+                var value = prop.GetValue(data);
+                if(respType.GetProperty(prop.Name) != null) 
+                respType.GetProperty(prop.Name).SetValue(resp, value, null);
+            }
+
+            return resp;
 
         }
     }

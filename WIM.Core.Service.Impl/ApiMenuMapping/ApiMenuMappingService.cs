@@ -71,6 +71,7 @@ namespace WIM.Core.Service.Impl
             using (var scope = new TransactionScope())
             {
                 ApiMenuMapping api = new ApiMenuMapping();
+                ApiMenuMapping apinew = new ApiMenuMapping();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
@@ -98,7 +99,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return api.ApiIDSys;
+                return apinew.ApiIDSys;
             }
         }
 

@@ -95,6 +95,7 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                User usernew = new User();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
@@ -111,14 +112,15 @@ namespace WIM.Core.Service.Impl
                         User.LockoutEnabled = true;
                         User.LastLogin = DateTime.Now.Date;
                         User.LockoutEndDateUtc = DateTime.Now.Date;
-                        repo.Insert(User);
+                        User.TokenMobile = "csgB-N8-waE:APA91bGFH7LKHsHjaW9Xec7XzvpR5DdDo6l3BA9G1TufgF_ECePlKE0Yg7Z4zfYmRuiUXtR8faSLa-hG2Zvn-2CaIseVxqIaQ_dfQa0cPvn3HzEHTuyHFrln0GY02pRVDEFngOGnfHSN";
+                        usernew = repo.Insert(User);
 
                         if (userole != null)
                         {
                             foreach (var c in userole)
                             {
-                                c.UserID = User.UserID;
-                                repoRole.Insert(c);
+                                c.UserID = usernew.UserID;
+                                 repoRole.Insert(c);
                             }
                         }
                         Db.SaveChanges();
@@ -357,7 +359,7 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IUserRepository repo = new UserRepository(Db);
-                user = repo.GetSingle(c => c.PersonIDSys == personIDSys);
+                user = repo.Get(c => c.PersonIDSys == personIDSys);
             }
             return user;
         }

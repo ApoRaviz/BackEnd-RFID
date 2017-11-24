@@ -33,7 +33,7 @@ namespace Master.WebApi.Controllers
             //IResponseData<IEnumerable<List<MenuDto>>> response2 = new ResponseData<IEnumerable<List<MenuDto>>>();
             try
             {
-                List<MenuDto> Menu = MenuService.GetMenuDto().ToList();
+                List<MenuDto> Menu = MenuService.GetMenuDto().OrderBy(a => a.MenuName).ToList();
                 //response2.SetData(Menu);
 
 

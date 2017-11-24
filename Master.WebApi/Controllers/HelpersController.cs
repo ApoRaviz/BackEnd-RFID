@@ -19,6 +19,11 @@ namespace Master.WebApi.Controllers
     {
 
         private ICommonService CommonService;
+
+        public HelpersController()
+        {
+        }
+
         public HelpersController(ICommonService commonService)
         {
             this.CommonService = commonService;

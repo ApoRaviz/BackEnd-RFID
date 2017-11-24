@@ -56,13 +56,13 @@ namespace WIM.Core.Service.Impl
             using (var scope = new TransactionScope())
             {
                 Permission.PermissionID = Guid.NewGuid().ToString();
-
+                Permission Permissionnew = new Permission();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IPermissionRepository repo = new PermissionRepository(Db);
-                        repo.Insert(Permission);
+                        Permissionnew = repo.Insert(Permission);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -77,7 +77,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return Permission.PermissionID;
+                return Permissionnew.PermissionID;
             }
         }
 
@@ -158,12 +158,13 @@ namespace WIM.Core.Service.Impl
                 RolePermissions data = new RolePermissions();
                 data.PermissionID = PermissionId;
                 data.RoleID = RoleId;
+                RolePermissions datanew = new RolePermissions();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IRepository<RolePermissions> repo = new Repository<RolePermissions>(Db);
-                        repo.Insert(data);
+                        datanew = repo.Insert(data);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -187,7 +188,7 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
-                try
+               try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
