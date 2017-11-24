@@ -14,7 +14,7 @@ namespace Fuji.Common.ValueObject
     public class FujiReportHelper
     {
 
-        public static void parseExcelToDownload(DataTable dt,string filePath,string fileName, HttpResponse response)
+        public static MemoryStream parseExcelToDownload(DataTable dt,string filePath)
         {
             MemoryStream ms = new MemoryStream();
             using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
@@ -51,8 +51,8 @@ namespace Fuji.Common.ValueObject
 
                 package.SaveAs(ms);
             }
-
-            DownloadFile(ms, fileName,response);
+            return ms;
+            //DownloadFile(ms, fileName,response);
         }
 
         public static DataTable getFujiPickingGroupDataTable(FujiPickingGroup item)

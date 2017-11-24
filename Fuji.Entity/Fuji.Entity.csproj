@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ItemManagement\ImportSerialDetailTemp.cs" />
     <Compile Include="ItemManagement\ImportSerialDetail.cs" />
     <Compile Include="ItemManagement\ImportSerialHead.cs" />
     <Compile Include="LabelManagement\LabelRunning.cs" />

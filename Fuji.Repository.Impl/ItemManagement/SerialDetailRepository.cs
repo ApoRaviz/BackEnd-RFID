@@ -13,13 +13,13 @@ using WIM.Core.Repository.Impl;
 
 namespace Fuji.Repository.Impl.ItemManagement
 {
-    public class SerialRepository : Repository<ImportSerialDetail>, ISerialRepository
+    public class SerialDetailRepository : Repository<ImportSerialDetail>, ISerialDetailRepository
     {
         //private FujiDbContext Context { get; set; }
         private FujiDbContext Db { get; set; }
         private DbSet<ImportSerialDetail> DbSet { get; set; }
 
-        public SerialRepository(FujiDbContext context) : base(context)
+        public SerialDetailRepository(FujiDbContext context) : base(context)
         {
             Db = context;
             this.DbSet = context.Set<ImportSerialDetail>();

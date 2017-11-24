@@ -11,13 +11,16 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Data;
+using WIM.Core.Common.SqlLogs;
 
 namespace Fuji.Context
 {
+    [DbConfigurationType(typeof(LogDbConfiguration))]
     public class FujiDbContext : DbContext
     {
         public DbSet<ImportSerialHead> ImportSerialHead { get; set; }
         public DbSet<ImportSerialDetail> ImportSerialDetail { get; set; }
+        public DbSet<ImportSerialDetailTemp> ImportSerialDetailTemp { get; set; }
         public DbSet<LabelRunning> LabelRunning { get; set; }
         public DbSet<ProgramVersionHistory> ProgramVersionHistory { get; set; }
       
