@@ -371,7 +371,7 @@ namespace Master.WebApi.Controllers
                 if (User.IsSysAdmin())
                 {
                     MenuPermis = MenuProjectMappingService.GetMenuProjectByID(ProID,Db);
-                    MenuRes = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
+                    MenuRes = MenuPermis.Where(x => /*x.MenuIDSysParent != 0 &&*/ x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
                 }
                 else
                 {
