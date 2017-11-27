@@ -128,29 +128,5 @@ namespace HRMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [HttpGet]
-        [Route("SMautocomplete")]
-        public HttpResponseMessage GetSMAutoComplete(string txt)
-        {
-            IResponseData<IEnumerable<SubModuleDto>> response = new ResponseData<IEnumerable<SubModuleDto>>();
-            if (string.IsNullOrEmpty(txt))
-            {
-                response.SetData(null);
-                Request.ReturnHttpResponseMessage(response);
-            }
-
-            try
-            {
-                IEnumerable<SubModuleDto> result = CommonService.SMAutoComplete(txt);
-                response.SetData(result);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
     }
 }

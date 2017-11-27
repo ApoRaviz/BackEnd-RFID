@@ -6,9 +6,6 @@ using HRMS.WebApi.Controllers;
 using Unity.WebApi;
 using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
-using System.Security.Principal;
-using HRMS.Service.StatusManagement;
-using HRMS.Service.Impl.StatusManagement;
 using WIM.Core.Common;
 
 namespace HRMS.WebApi
@@ -31,7 +28,6 @@ namespace HRMS.WebApi
             container.RegisterType<AccountController>(new InjectionConstructor());
 
             container.RegisterType<ILeaveService, LeaveService>();
-            container.RegisterType<IStatusService, StatusService>();
             container.RegisterType<ICommonService, CommonService>();
         }
     }

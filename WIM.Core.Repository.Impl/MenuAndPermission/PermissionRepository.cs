@@ -26,7 +26,7 @@ namespace WIM.Core.Repository.Impl
         {
             var temp = from ur in Db.UserRoles
                        join r in Db.Role on ur.RoleID equals r.RoleID
-                       join rp in Db.RolePermissions on r.RoleID equals rp.RoleID
+                       join rp in Db.RolePermission on r.RoleID equals rp.RoleID
                        join ps in Db.Permission on rp.PermissionID equals ps.PermissionID
                        where ur.UserID == UserID && r.ProjectIDSys == ProjectID
                        select ps;

@@ -50,6 +50,7 @@
     <Compile Include="PermissionRoleDto.cs" />
     <Compile Include="PermissionTree.cs" />
     <Compile Include="PersonDto.cs" />
+    <Compile Include="StatusSubModuleDto.cs" />
     <Compile Include="SubModuleDto.cs" />
     <Compile Include="StatusDto.cs" />
     <Compile Include="ProjectDto.cs" />

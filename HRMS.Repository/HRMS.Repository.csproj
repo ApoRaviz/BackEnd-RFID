@@ -44,9 +44,6 @@
     <Compile Include="LeaveManagement\ILeaveRepository.cs" />
     <Compile Include="LeaveManagement\ILeaveTypeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatusManagement\IProjectRepository.cs" />
-    <Compile Include="StatusManagement\ISubModuleRepository.cs" />
-    <Compile Include="StatusManagement\IStatusRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">

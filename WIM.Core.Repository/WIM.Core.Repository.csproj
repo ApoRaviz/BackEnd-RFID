@@ -57,6 +57,9 @@
     <Compile Include="RoleAndUser\IRoleRepository.cs" />
     <Compile Include="RoleAndUser\IUserRepository.cs" />
     <Compile Include="RoleAndUser\IUserRoleRepository.cs" />
+    <Compile Include="StatusManagement\IStatusRepository.cs" />
+    <Compile Include="StatusManagement\IStatusSubModuleRepositoy.cs" />
+    <Compile Include="StatusManagement\ISubModuleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -65,6 +68,10 @@
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{c8c9f920-5e08-4a3a-af4f-fe3aa35421c8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Name>WIM.Core.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>

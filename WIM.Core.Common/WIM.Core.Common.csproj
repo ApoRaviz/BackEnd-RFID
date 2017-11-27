@@ -162,20 +162,12 @@
       <Name>WIM.Core.Common.ValueObject</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
-      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
       <Name>WIM.Core.Context</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
-      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
-      <Name>WIM.Core.Security.Context</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
-      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
-      <Name>WIM.Core.Security.Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

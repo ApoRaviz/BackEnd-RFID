@@ -7,14 +7,13 @@ using WIM.Core.Entity.Status;
 
 namespace WIM.Core.Common.ValueObject
 {
-    public class SubModuleDto 
+    public class StatusSubModuleDto 
     {
         public int StatusIDSys { get; set; }
+        public string Title { get; set; }
         public int SubModuleIDSys { get; set; }
-        public int ModuleIDSys { get; set; }
         public string SubModuleName { get; set; }
+        public int ModuleIDSys { get; set; }
         public string ModuleName { get; set; }
-        public string LabelSubModuleName { get; set; }
-        //public virtual Module_MT Module_MT { get; set; }
     }
 }

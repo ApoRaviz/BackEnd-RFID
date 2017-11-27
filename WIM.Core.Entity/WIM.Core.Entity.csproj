@@ -59,7 +59,6 @@
     <Compile Include="RoleAndPermission\Permission.cs" />
     <Compile Include="RoleAndPermission\Role.cs" />
     <Compile Include="RoleAndPermission\RolePermission.cs" />
-    <Compile Include="Status\Module_MT.cs" />
     <Compile Include="Status\SubModules.cs" />
     <Compile Include="Status\StatusSubModules.cs" />
     <Compile Include="Status\Status_MT.cs" />

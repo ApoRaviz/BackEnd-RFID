@@ -5,14 +5,14 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using Validation = WIM.Core.Common.Validation;
-using HRMS.Service.StatusManagement;
-using HRMS.Service.Impl.StatusManagement;
 using WIM.Core.Entity.Status;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Service.StatusManagement;
+using WIM.Core.Service.Impl.StatusManagement;
 
-namespace HRMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
-    [RoutePrefix("Master/api/v1/Status")]
+    [RoutePrefix("api/v1/Status")]
     public class StatusController : ApiController
     {
         private IStatusService StatusService;
@@ -46,13 +46,13 @@ namespace HRMS.WebApi.Controllers
         //Update Status
         [HttpPut]
         [Route("{StatusIDSys}")]
-        public HttpResponseMessage Put([FromBody]Status_MT statusUpdate)
+        public HttpResponseMessage Put([FromBody]StatusDto statusUpdate)
         {
             ResponseData<Status_MT> response = new ResponseData<Status_MT>();
             try
             {
                 Status_MT isUpdated = StatusService.UpdateStatus(statusUpdate);
-                response.SetData(statusUpdate);
+                response.SetData(isUpdated);
             }
             catch (Validation.ValidationException ex)
             {
@@ -86,10 +86,10 @@ namespace HRMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<Status_MT>> response = new ResponseData<IEnumerable<Status_MT>>();
+            ResponseData<IEnumerable<StatusSubModuleDto>> response = new ResponseData<IEnumerable<StatusSubModuleDto>>();
             try
             {
-                IEnumerable<Status_MT> status = StatusService.GetStatus();
+                IEnumerable<StatusSubModuleDto> status = StatusService.GetStatus();
                 response.SetData(status);
             }
             catch (Validation.ValidationException ex)

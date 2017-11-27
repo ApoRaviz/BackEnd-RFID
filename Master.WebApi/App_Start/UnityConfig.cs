@@ -7,6 +7,8 @@ using WIM.Core.Common;
 using Master.WebApi.Controllers;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
+using WIM.Core.Service.StatusManagement;
+using WIM.Core.Service.Impl.StatusManagement;
 
 namespace Master.WebApi
 {
@@ -39,6 +41,7 @@ namespace Master.WebApi
             container.RegisterType<IUserRoleService, UserRoleService>();
             container.RegisterType<IEmployeeService, EmployeeService>();
             container.RegisterType<IPersonService, PersonService>();
+            container.RegisterType<IStatusService, StatusService>();
 
         }
     }

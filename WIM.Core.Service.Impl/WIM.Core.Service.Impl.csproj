@@ -66,6 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleMaster\RoleService.cs" />
     <Compile Include="Service.cs" />
+    <Compile Include="StatusManagement\StatusService.cs" />
     <Compile Include="UserMaster\UserService.cs" />
     <Compile Include="UserRole\UserRoleService.cs" />
   </ItemGroup>
@@ -75,7 +76,7 @@
       <Name>WIM.Core.Common.ValueObject</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
-      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Project>{52D8BFB8-8342-4323-BB58-B867D7D01E8A}</Project>
       <Name>WIM.Core.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
@@ -87,7 +88,7 @@
       <Name>WIM.Core.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
-      <Project>{E365F321-091B-4D42-8934-6E919C7FF6B1}</Project>
+      <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
       <Name>WIM.Core.Repository.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">

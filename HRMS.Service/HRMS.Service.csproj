@@ -42,7 +42,6 @@
   <ItemGroup>
     <Compile Include="LeaveManagement\ILeaveService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatusManagement\IStatusService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">

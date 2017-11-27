@@ -1,43 +1,31 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HRMS.Entity.LeaveManagement;
-using HRMS.Common.ValueObject.LeaveManagement;
-using System.Security.Principal;
 using System.Transactions;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.Helpers;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
-using HRMS.Context;
-using HRMS.Repository.LeaveManagement;
-using HRMS.Repository.Impl.LeaveManagement;
-using AutoMapper;
-using WIM.Core.Service;
-using WIM.Core.Service.Impl;
-using HRMS.Service.StatusManagement;
 using WIM.Core.Context;
 using WIM.Core.Entity.Status;
-using HRMS.Repository.Impl.StatusManagement;
-using HRMS.Repository.StatusManagement;
-using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Common;
+using WIM.Core.Service.StatusManagement;
+using WIM.Core.Repository.Impl.StatusManagement;
+using WIM.Core.Repository.StatusManagement;
 
-namespace HRMS.Service.Impl.StatusManagement
+namespace WIM.Core.Service.Impl.StatusManagement
 {
-    public class StatusService : WIM.Core.Service.Impl.Service, IStatusService
+    public class StatusService : Service, IStatusService
     {
 
-        public IEnumerable<Status_MT> GetStatus()
+        public IEnumerable<StatusSubModuleDto> GetStatus()
         {
             using (CoreDbContext db = new CoreDbContext())
             {
                 try
                 {
                     IStatusRepository repoGetLeave = new StatusRepository(db);
-                    return repoGetLeave.Get();
+                    return repoGetLeave.GetDto();
                 }
                 catch (DbEntityValidationException)
                 {
@@ -150,7 +138,7 @@ namespace HRMS.Service.Impl.StatusManagement
             }
         }
 
-        public Status_MT UpdateStatus(Status_MT status)
+        public Status_MT UpdateStatus(StatusDto status)
         {
             using (CoreDbContext db = new CoreDbContext())
             {
@@ -158,10 +146,31 @@ namespace HRMS.Service.Impl.StatusManagement
                 {
                     try
                     {
-                        Status_MT statusUpdated;
+                        Status_MT statusUpdated = new Status_MT();
+                        statusUpdated.StatusIDSys = status.StatusIDSys;
+                        statusUpdated.Title = status.Title;
                         IStatusRepository repo = new StatusRepository(db);
-                        statusUpdated = repo.Update(status);
+                        statusUpdated = repo.Update(statusUpdated);
                         db.SaveChanges();
+                        
+                        IStatusSubModuleRepository updateSM = new StatusSubModuleRepository(db);
+                        List<StatusSubModules> delete = updateSM.GetMany(a => a.StatusIDSys == status.StatusIDSys).ToList();
+                        int count = delete.Count();
+                        for (int i = 0; i < count; i++)
+                        {
+                            updateSM.Delete(delete[i]);
+                        }
+                            db.SaveChanges();
+               
+                        foreach (var i in status.StatusSubModule)
+                        {
+                            StatusSubModules x = new CommonService().AutoMapper<StatusSubModules>(i);
+                            x.StatusIDSys = status.StatusIDSys;
+                            updateSM.Insert(x);
+                        }
+                        if (status.StatusSubModule != null)
+                            db.SaveChanges();
+                        
                         scope.Complete();
                         return statusUpdated;
                     }
@@ -178,29 +187,6 @@ namespace HRMS.Service.Impl.StatusManagement
                     }
                 }
             }
-        }
-
-        public IEnumerable<ProjectDto> GetProject()
-        {
-            using (CoreDbContext db = new CoreDbContext())
-            {
-                try
-                {
-                    IProjectRepository project = new ProjectRepository(db);
-                    return project.GetDto();
-                }
-                catch (DbEntityValidationException)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                catch (DbUpdateException)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-            }
-
         }
 
         public void HandleValidationException(DbEntityValidationException ex)
