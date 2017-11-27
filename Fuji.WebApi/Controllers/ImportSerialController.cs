@@ -10,12 +10,10 @@ using System.Diagnostics;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.Reporting.WebForms;
-using BarcodeLib;
 using System.Drawing;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
-using OfficeOpenXml;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
@@ -153,7 +151,7 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-
+        [Authorize]
         [HttpGet]
         [Route("importSerial/exportPickingGroup/{id}")]
         public HttpResponseMessage ExportPickingGroup(string id)
@@ -169,10 +167,15 @@ namespace Fuji.WebApi.Controllers
                 string fileName = "{0}_{1}.{2}";
                 fileName = String.Format(fileName, "Export_Picking_Group", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getFujiPickingGroupDataTable(pickingGroup);
-                FujiReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
+                var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
+                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
 
             }
-            result = new HttpResponseMessage(HttpStatusCode.OK);
             return result;
         }
 
@@ -248,7 +251,7 @@ namespace Fuji.WebApi.Controllers
             return result;
         }
 
-        //[Authorize]
+        [Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/export/{id}")]
@@ -261,18 +264,26 @@ namespace Fuji.WebApi.Controllers
             ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id,true);
             if (serialHead != null)
             {
+                ItemImportService.UpdateStausExport(serialHead);
+
                 string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
 
                 string fileName = "{0}_{1}.{2}";
                 fileName = String.Format(fileName, "Import_For_L-CAT", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getImportSerailDataTable(serialHead);
-                FujiReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
+                var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
+                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
 
             }
-            result = new HttpResponseMessage(HttpStatusCode.OK);
             return result;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("importSerial/export-waranty/{id}")]
         public HttpResponseMessage ExportToWarantyExcel(string id)
@@ -289,13 +300,19 @@ namespace Fuji.WebApi.Controllers
                 string fileName = "{0}_{1}.{2}";
                 fileName = String.Format(fileName, "Export_To_Waranty", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getImportSerailGroupDataTable(serialHead);
-                FujiReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
+                var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
+                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
 
             }
-            result = new HttpResponseMessage(HttpStatusCode.OK);
             return result;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("importSerial/export-receive/{id}")]
         public HttpResponseMessage ExportToReceiveExcel(string id)
@@ -312,10 +329,15 @@ namespace Fuji.WebApi.Controllers
                 string fileName = "{0}_{1}.{2}";
                 fileName = String.Format(fileName, "Export_All_Receive", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getImportSerailByStatusDataTable(serialHead);
-                FujiReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
+                var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
+                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
 
             }
-            result = new HttpResponseMessage(HttpStatusCode.OK);
             return result;
         }
 

@@ -9,6 +9,11 @@ namespace WIM.Core.Common.ValueObject
 {
     public class RoleUserDto
     {
+        public RoleUserDto()
+        {
+            Project_MT = new Project_MT();
+        }
+
         public string RoleID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="BoxLabelBooking" targetNamespace="http://tempuri.org/BoxLabelBooking.xsd" xmlns:mstns="http://tempuri.org/BoxLabelBooking.xsd" xmlns="http://tempuri.org/BoxLabelBooking.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="BoxLabelBooking" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="BoxLabelBooking" msprop:Generator_UserDSName="BoxLabelBooking">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataList" msprop:Generator_TableClassName="DataListDataTable" msprop:Generator_TableVarName="tableDataList" msprop:Generator_TablePropName="DataList" msprop:Generator_RowDeletingName="DataListRowDeleting" msprop:Generator_RowChangingName="DataListRowChanging" msprop:Generator_RowEvHandlerName="DataListRowChangeEventHandler" msprop:Generator_RowDeletedName="DataListRowDeleted" msprop:Generator_UserTableName="DataList" msprop:Generator_RowChangedName="DataListRowChanged" msprop:Generator_RowEvArgName="DataListRowChangeEvent" msprop:Generator_RowClassName="DataListRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Barcode" msprop:Generator_ColumnVarNameInTable="columnBarcode" msprop:Generator_ColumnPropNameInRow="Barcode" msprop:Generator_ColumnPropNameInTable="BarcodeColumn" msprop:Generator_UserColumnName="Barcode" type="xs:string" minOccurs="0" />
+              <xs:element name="BarcodeInfo" msprop:Generator_ColumnVarNameInTable="columnBarcodeInfo" msprop:Generator_ColumnPropNameInRow="BarcodeInfo" msprop:Generator_ColumnPropNameInTable="BarcodeInfoColumn" msprop:Generator_UserColumnName="BarcodeInfo" type="xs:string" minOccurs="0" />
+              <xs:element name="QRcode" msprop:Generator_ColumnVarNameInTable="columnQRcode" msprop:Generator_ColumnPropNameInRow="QRcode" msprop:Generator_ColumnPropNameInTable="QRcodeColumn" msprop:Generator_UserColumnName="QRcode" type="xs:string" minOccurs="0" />
+              <xs:element name="Tel" msprop:Generator_ColumnVarNameInTable="columnTel" msprop:Generator_ColumnPropNameInRow="Tel" msprop:Generator_ColumnPropNameInTable="TelColumn" msprop:Generator_UserColumnName="Tel" type="xs:string" minOccurs="0" />
+              <xs:element name="Remark" msprop:Generator_ColumnVarNameInTable="columnRemark" msprop:Generator_ColumnPropNameInRow="Remark" msprop:Generator_ColumnPropNameInTable="RemarkColumn" msprop:Generator_UserColumnName="Remark" type="xs:string" minOccurs="0" />
+              <xs:element name="ProvinceCode" msprop:Generator_ColumnVarNameInTable="columnProvinceCode" msprop:Generator_ColumnPropNameInRow="ProvinceCode" msprop:Generator_ColumnPropNameInTable="ProvinceCodeColumn" msprop:Generator_UserColumnName="ProvinceCode" type="xs:string" minOccurs="0" />
+              <xs:element name="PeyerID" msprop:Generator_ColumnVarNameInTable="columnPeyerID" msprop:Generator_ColumnPropNameInRow="PeyerID" msprop:Generator_ColumnPropNameInTable="PeyerIDColumn" msprop:Generator_UserColumnName="PeyerID" type="xs:string" minOccurs="0" />
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" type="xs:string" minOccurs="0" />
+              <xs:element name="DelRoute" msprop:Generator_ColumnVarNameInTable="columnDelRoute" msprop:Generator_ColumnPropNameInRow="DelRoute" msprop:Generator_ColumnPropNameInTable="DelRouteColumn" msprop:Generator_UserColumnName="DelRoute" type="xs:string" minOccurs="0" />
+              <xs:element name="CusRef" msprop:Generator_ColumnVarNameInTable="columnCusRef" msprop:Generator_ColumnPropNameInRow="CusRef" msprop:Generator_ColumnPropNameInTable="CusRefColumn" msprop:Generator_UserColumnName="CusRef" type="xs:string" minOccurs="0" />
+              <xs:element name="Address" msprop:Generator_ColumnVarNameInTable="columnAddress" msprop:Generator_ColumnPropNameInRow="Address" msprop:Generator_ColumnPropNameInTable="AddressColumn" msprop:Generator_UserColumnName="Address" type="xs:string" minOccurs="0" />
+              <xs:element name="BoxNumber" msprop:Generator_ColumnVarNameInTable="columnBoxNumber" msprop:Generator_ColumnPropNameInRow="BoxNumber" msprop:Generator_ColumnPropNameInTable="BoxNumberColumn" msprop:Generator_UserColumnName="BoxNumber" type="xs:string" minOccurs="0" />
+              <xs:element name="TotalBox" msprop:Generator_ColumnVarNameInTable="columnTotalBox" msprop:Generator_ColumnPropNameInRow="TotalBox" msprop:Generator_ColumnPropNameInTable="TotalBoxColumn" msprop:Generator_UserColumnName="TotalBox" type="xs:string" minOccurs="0" />
+              <xs:element name="BookingID" msprop:Generator_ColumnVarNameInTable="columnBookingID" msprop:Generator_ColumnPropNameInRow="BookingID" msprop:Generator_ColumnPropNameInTable="BookingIDColumn" msprop:Generator_UserColumnName="BookingID" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -53,8 +53,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ItemManagement\SerialDetailTempRepository.cs" />
     <Compile Include="ItemManagement\SerialHeadRepository.cs" />
-    <Compile Include="ItemManagement\SerialRepository.cs" />
+    <Compile Include="ItemManagement\SerialDetailRepository.cs" />
     <Compile Include="LabelManagement\LabelRunningRepository.cs" />
     <Compile Include="ProgramVersion\ProgramVersionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

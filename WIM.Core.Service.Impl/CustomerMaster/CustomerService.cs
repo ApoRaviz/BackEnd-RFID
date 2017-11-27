@@ -162,12 +162,13 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                Customer_MT customernew = new Customer_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICustomerRepository repo = new CustomerRepository(Db);
-                        repo.Insert(customer);
+                        customernew = repo.Insert(customer);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -177,7 +178,7 @@ namespace WIM.Core.Service.Impl
                     HandleValidationException(e);
                 }
 
-                return customer.CusIDSys;
+                return customernew.CusIDSys;
             }
         }
 

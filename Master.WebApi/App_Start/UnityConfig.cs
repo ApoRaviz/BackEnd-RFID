@@ -30,6 +30,8 @@ namespace Master.WebApi
             container.RegisterType<AccountController>(new InjectionConstructor());
             container.RegisterType<ICommonService, CommonService>();
             container.RegisterType<ICustomerService, CustomerService>();
+            container.RegisterType<ICurrencyService, CurrencyService>();
+            container.RegisterType<ICountryService, CountryService>();
             container.RegisterType<IProjectService, ProjectService>();
             container.RegisterType<IMenuService, MenuService>();
             container.RegisterType<IMenuProjectMappingService, MenuProjectMappingService>();
