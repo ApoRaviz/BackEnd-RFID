@@ -4,7 +4,7 @@ using BarcodeLib;
 using QRCoder;
 using System.IO;
 using TMS.Common.ValueObject.Labels;
-using TMS.Service.Label;
+using TMS.Service.Labels;
 using Microsoft.Reporting.WebForms;
 using System.Drawing;
 using System.Configuration;
@@ -12,8 +12,10 @@ using System.Collections.Specialized;
 using System.Net;
 using Newtonsoft.Json;
 using System.Text;
+using WIM.Core.Common;
+using System;
 
-namespace TMS.Service.Impl.Label
+namespace TMS.Service.Impl.Labels
 {
     public class LabelService : WIM.Core.Service.Impl.Service, ILabelService
     {
@@ -40,20 +42,23 @@ namespace TMS.Service.Impl.Label
         }
 
 
-        public List<BoxLabelBookingModel> GetDataImportBookingByDate(GroupDateImportBookingModel param)
+        public List<BoxLabelBookingModel> GetDataImportBookingByDate(string[] param)
         {
             WebClient oWeb = new WebClient();
             string url = YtdmUrl + "pro_booking/proc/booking_manager.json.php";
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("auth", "asAdfreytwasdSSwersdf00SSd98632er");
-            parameters.Add("date_import", param.DateImport.ToString("yyyy-MM-dd hh:mm:ss"));
-            parameters.Add("user_id", param.UserID);
+            string paramStr = string.Join(",", param);
+            parameters.Add("date_import", paramStr);
+            //parameters.Add("user_id", param.UserID);
             parameters.Add("action", "GetBookingByCustomer");
             var responseBytes = oWeb.UploadValues(url, parameters);
             string json = Encoding.ASCII.GetString(responseBytes);
             List<BoxLabelBookingModel> res = JsonConvert.DeserializeObject<List<BoxLabelBookingModel>>(json);
             return res;
         }
+
+    
 
         public StreamContent GetBoxLabelBookingStream(string[] BookingIDs)
         {
@@ -76,27 +81,29 @@ namespace TMS.Service.Impl.Label
             List<BoxLabelBookingModel> Bookings = JsonConvert.DeserializeObject<List<BoxLabelBookingModel>>(json);
 
             string barcodeStr = "";
+            CommonService CommonService = new CommonService();
+
 
             foreach (BoxLabelBookingModel Booking in Bookings)
             {
-                int j = 0;
-                int total = Booking.TotalBox;
-                BoxLabelBookingModel b = new BoxLabelBookingModel();
-                for (int i = 0; i < total; i++)
+                BoxLabelBookingModel BookingNew = new BoxLabelBookingModel();
+                for (int i = 1; i <= Booking.TotalBox; i++)
                 {
-                    BoxLabelBookingModel BookingNew = ;
                     barcodeStr = Booking.BookingID + " " + (i) + " " + Booking.TotalBox + " " + Booking.DelRoute;
-                    BookingNew.BarcodeInfo = barcodeStr;
-                    BookingNew.BoxNumber = i;
-                    BookingNew.Barcode = bc.EncodeToByte(TYPE.CODE128, barcodeStr, Color.Black, Color.White, 900, 96);
-                    BookingNew.QRcode = GenerateQrCodeToByte(barcodeStr);// bc.EncodeToByte(TYPE.Q, BoxLabelBooking.BookingID, Color.Black, Color.White, 587, 96);
-                    DataList.CopyTo(BookingNew);
+                    Booking.BarcodeInfo = barcodeStr;
+                    Booking.BoxNumber = i;
+                    Booking.Barcode = bc.EncodeToByte(TYPE.CODE128, barcodeStr, Color.Black, Color.White, 1900, 180);
+                    Booking.QRcode = GenerateQrCodeToByte(barcodeStr);// bc.EncodeToByte(TYPE.Q, BoxLabelBooking.BookingID, Color.Black, Color.White, 587, 96);
+
+                    BookingNew = CommonService.AutoMapper<BoxLabelBookingModel>(Booking); ;
+                    BookingNew.Barcode = Booking.Barcode;
+                    BookingNew.QRcode = Booking.QRcode;
+                    DataList.Add(BookingNew);
 
 
 
 
                 }
-                j++;
             }
 
             using (var reportViewer = new ReportViewer())

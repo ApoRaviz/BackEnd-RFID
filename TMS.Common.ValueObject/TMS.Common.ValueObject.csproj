@@ -41,10 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BarcodeModele.cs" />
+    <Compile Include="Bookings\BookingModel.cs" />
     <Compile Include="Labels\BoxLabelBooking.cs" />
     <Compile Include="Labels\BookingIDArrModel.cs" />
+    <Compile Include="Labels\DateImportArrBooking.cs" />
     <Compile Include="Labels\GroupDateImportBookingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\Bookings\TrackingModel.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

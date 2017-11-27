@@ -350,6 +350,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\LabelController.cs" />
+    <Compile Include="Controllers\TrackingController.cs" />
     <Compile Include="DataSet\BoxLabelBooking.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

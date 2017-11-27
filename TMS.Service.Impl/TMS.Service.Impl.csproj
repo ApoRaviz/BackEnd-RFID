@@ -69,9 +69,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Label\LabelService.cs" />
+    <Compile Include="Labels\LabelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="TrackingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TMS.Common.ValueObject\TMS.Common.ValueObject.csproj">

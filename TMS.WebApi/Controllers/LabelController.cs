@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using TMS.Service.Label;
-using TMS.Service.Impl.Label;
+using TMS.Service.Labels;
+using TMS.Service.Impl.Labels;
 using WIM.Core.Common.Http;
 using TMS.Common.ValueObject.Labels;
 using WIM.Core.Common.Extensions;
@@ -32,24 +32,22 @@ namespace TMS.WebApi.Controllers
             response.SetStatus(HttpStatusCode.OK);
             response.SetData(LabelService.GetGroupImportBooking());
             return Request.ReturnHttpResponseMessage(response);
-
-
         }
 
 
         [HttpGet]
-        [Route("importbooking/{date}/{user_id}")]
-        public HttpResponseMessage GetImportBookingByDate(DateTime date ,string user_id)
+        [Route("importbooking")]
+        public HttpResponseMessage GetImportBookingByDate([FromUri]DateImportArrBooking paramReq)
         {
             //string[] BookingIDs = BookingIDs;
             ILabelService LabelService = new LabelService();
             IResponseData<List<BoxLabelBookingModel>> response = new ResponseData<List<BoxLabelBookingModel>>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
             response.SetStatus(HttpStatusCode.OK);
-            GroupDateImportBookingModel param = new GroupDateImportBookingModel();
-            param.DateImport = date;
-            param.UserID = user_id;
-            response.SetData(LabelService.GetDataImportBookingByDate(param));
+            //GroupDateImportBookingModel param = new GroupDateImportBookingModel();
+            //param.DateImport = date;
+            //param.UserID = user_id;
+            response.SetData(LabelService.GetDataImportBookingByDate(paramReq.DateImport));
             return Request.ReturnHttpResponseMessage(response);
 
 
@@ -76,9 +74,9 @@ namespace TMS.WebApi.Controllers
 
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpGet]
+        [HttpPost]
         [Route("print/lablebooking")]
-        public HttpResponseMessage GetPrintLabelBoking([FromUri]BookingIDArrModel BookingIDs)
+        public HttpResponseMessage GetPrintLabelBoking([FromBody]BookingIDArrModel BookingIDs)
         {
             //string[] BookingIDs = BookingIDs;
             ILabelService LabelService = new LabelService();

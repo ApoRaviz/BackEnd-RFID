@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Label\ILabelService.cs" />
+    <Compile Include="Labels\ILabelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\IReportTrackingBooking.cs" />
+    <Compile Include="ITrackingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TMS.Common.ValueObject\TMS.Common.ValueObject.csproj">
