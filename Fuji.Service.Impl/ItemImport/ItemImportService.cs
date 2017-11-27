@@ -177,7 +177,7 @@ namespace Fuji.Service.Impl.ItemImport
                 using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     try
                     {
                         //item.HeadID = Db.ProcGetNewID("IS").FirstOrDefault();
@@ -230,7 +230,7 @@ namespace Fuji.Service.Impl.ItemImport
                 using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     try
                     {
                         var queryUpdateHead = SerialHeadRepo.GetItemsBy(p => p.HeadID == id).ToList();
@@ -307,8 +307,9 @@ namespace Fuji.Service.Impl.ItemImport
         {
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext())
+                using (FujiDbContext Db = new FujiDbContext("UpdateStausExport(ImportSerialHead)"))
                 {
+                  
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
 
                     List<ImportSerialHead> queryUpdateHead = (from p in Db.ImportSerialHead
@@ -346,7 +347,7 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 using (FujiDbContext Db = new FujiDbContext())
                 {
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
 
                     List<ImportSerialDetail> queryDetailsList = new List<ImportSerialDetail>() { };
                     for (int i = 0; i < itemCodes.Count(); i++)
@@ -427,7 +428,7 @@ namespace Fuji.Service.Impl.ItemImport
             List<FujiPickingGroup> items = new List<FujiPickingGroup>();
             using (FujiDbContext Db = new FujiDbContext())
             {
-                ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
 
                 var itemGroups = (from p in SerialDetailRepo.GetAll()
                                   orderby p.CreateAt descending
@@ -455,7 +456,7 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 using (FujiDbContext Db = new FujiDbContext())
                 {
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     try
                     {
                         SerialDetailRepo.SqlQuery<ImportSerialDetail>(sql, new SqlParameter("@HeadID", headID));
@@ -477,7 +478,7 @@ namespace Fuji.Service.Impl.ItemImport
             FujiPickingGroup retItem;
             using (FujiDbContext Db = new FujiDbContext())
             {
-                ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                 var itemGroups = (from p in SerialDetailRepo.GetItemsBy(p => p.OrderNo.Contains(orderNo))
                                   orderby p.CreateAt descending
                                   group p
@@ -503,7 +504,7 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 using (FujiDbContext Db = new FujiDbContext())
                 {
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     var itemGroups = (from p in Db.ImportSerialDetail
                                       where p.OrderNo.Equals(orderID)
                                       select p).ToList();
@@ -611,53 +612,30 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 using (FujiDbContext Db = new FujiDbContext())
                 {
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     //, ItemGroup, BoxNumber, ItemType
                     SerialDetailRepo.ExceuteSql(@"
-                   insert into dbo.ImportSerialDetailTemp
-                   select * from dbo.ImportSerialDetail where DetailID in (
-                     select DetailID from (
-                      select 
-                      ROW_NUMBER() OVER(PARTITION BY ItemCode ,SerialNumber, itemType ORDER BY CreateAt DESC) AS Row  
-                      ,DetailID
-                      from dbo.ImportSerialDetail
-                      where HeadID = '0' and Status = 'NEW'
-                      ) a
-                     where Row > 1
-                    )
-                    union 
-                    select * from dbo.ImportSerialDetail where DetailID in (
-                         select DetailID from (
-                              select 
-                              ROW_NUMBER() OVER(PARTITION BY ItemGroup, itemType ORDER BY CreateAt DESC) AS Row  
-                              ,DetailID
-                              from dbo.ImportSerialDetail
-                              where HeadID = '0' and Status = 'NEW'
-                              ) a
-                         where Row > 1
-                    )                    
-
                     delete from dbo.ImportSerialDetail where DetailID in (
-                     select DetailID from (
-                      select 
-                      ROW_NUMBER() OVER(PARTITION BY ItemCode ,SerialNumber, itemType ORDER BY CreateAt DESC) AS Row  
-                      ,DetailID
-                      from dbo.ImportSerialDetail
-                      where HeadID = '0' and Status = 'NEW'
-                      ) a
-                     where Row > 1
+	                    select DetailID from (
+		                    select 
+		                    ROW_NUMBER() OVER(PARTITION BY SerialNumber ORDER BY CreateAt DESC) AS Row  
+		                    ,DetailID
+		                    from dbo.ImportSerialDetail
+		                    where HeadID = '0' and Status = 'NEW'
+		                    ) a
+	                    where Row > 1
                     )
-
                     delete from dbo.ImportSerialDetail where DetailID in (
                          select DetailID from (
                               select 
-                              ROW_NUMBER() OVER(PARTITION BY ItemGroup, itemType ORDER BY CreateAt DESC) AS Row  
+                              ROW_NUMBER() OVER(PARTITION BY itemGroup, itemType ORDER BY CreateAt DESC) AS Row  
                               ,DetailID
                               from dbo.ImportSerialDetail
                               where HeadID = '0' and Status = 'NEW'
                               ) a
                          where Row > 1
                     )
+
                 ");
 
                     scope.Complete();
@@ -665,15 +643,57 @@ namespace Fuji.Service.Impl.ItemImport
             }
         }
 
+        public void ReGenerateRFID(List<string> itemGroupsFromScan)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (var Db = new FujiDbContext())
+                {
+                    var query = (from d in Db.ImportSerialDetail
+                                 where d.HeadID == "0"
+                                    && new List<string> {
+                                    FujiStatus.NEW.ToString(),
+                                    FujiStatus.SCANNED.ToString()
+                                    }.Contains(d.Status)
+                                 select d
+                        );
+
+                    foreach (ImportSerialDetail detail in query)
+                    {
+                        foreach (string scan in itemGroupsFromScan)
+                        {
+                            if (scan.EndsWith(detail.ItemGroup))
+                            {
+                                detail.ItemGroup = scan;
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                }
+            }
+
+        }
+
         public bool SetScanned(SetScannedRequest receive)
         {
+            ReGenerateRFID(receive.ItemGroups);
+
             RemoveRegisterDuplicate();
 
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext())
+                using (FujiDbContext Db = new FujiDbContext("SetScanned(SetScannedRequest)"))
                 {
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
 
                     var query = (from d in Db.ImportSerialDetail
@@ -778,12 +798,13 @@ namespace Fuji.Service.Impl.ItemImport
 
                 using (var scope = new TransactionScope())
                 {
-                    using (FujiDbContext Db = new FujiDbContext())
+                    using (FujiDbContext Db = new FujiDbContext("Receive(ReceiveRequest)"))
                     {
-                        ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                        ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                         ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
+                        ISerialDetailTempRepository SerialDetailTempRepo = new SerialDetailTempRepository(Db);
 
-                        var serialsRemainInStock = (from a in SerialDetailRepo.GetAll()
+                    var serialsRemainInStock = (from a in SerialDetailRepo.GetAll()
                                                     where SerialDetailRepo.IsAnyItemBy(b =>
                                                            receive.ItemGroups.Contains(b.ItemGroup)
                                                            && b.HeadID != "0"
@@ -817,44 +838,78 @@ namespace Fuji.Service.Impl.ItemImport
                         }
 
                         var query = (from d in Db.ImportSerialDetail
-                                 where receive.ItemGroups.Contains(d.ItemGroup)
+                                    where receive.ItemGroups.Contains(d.ItemGroup)
                                     && d.HeadID == receive.HeadID
                                     && d.Status == FujiStatus.SCANNED.ToString()
-                                 select d
-                             );
+                                    select d
+                                ).ToList();
+
+                        query.ForEach(f =>
+                        {
+                            var item = TranslateDetailTemp(f);
+                            if (item != null)
+                                SerialDetailTempRepo.Insert(item);
+                        });
 
                         try
                         {
-                            foreach (ImportSerialDetail detail in query)
-                            {
-                                detail.HeadID = receive.HeadID;
-                                detail.ItemCode = receive.ItemCode;
-                                detail.Status = FujiStatus.RECEIVED.ToString();
-                                SerialDetailRepo.Update(detail);
-                            }
-
-                            ImportSerialHead importHead = (from h in Db.ImportSerialHead
-                                                           where h.HeadID == receive.HeadID
-                                                           select h
-                                     ).SingleOrDefault();
-
-                            importHead.Status = FujiStatus.RECEIVED.ToString();
-                            importHead.Location = receive.LocationID;
-                            SerialHeadRepo.Update(importHead);
-
                             Db.SaveChanges();
-                            scope.Complete();
-                            return true;
                         }
                         catch (DbEntityValidationException e)
                         {
                             HandleValidationException(e);
                         }
+                        catch (Exception ex)
+                        {
+                            throw new ValidationException(new ValidationError("5000", "เกิดข้อผิดพลาด ติดต่อ IT\n\n\n" + ex.Message));
+                        }
+
+
+                        foreach (ImportSerialDetail detail in query)
+                        {
+                            detail.HeadID = receive.HeadID;
+                            detail.ItemCode = receive.ItemCode;
+                            detail.Status = FujiStatus.RECEIVED.ToString();
+                            SerialDetailRepo.Update(detail);
+                        }
+
+                        try
+                        {
+                            Db.SaveChanges();
+                        }
+                        catch (DbEntityValidationException e)
+                        {
+                            HandleValidationException(e);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ValidationException(new ValidationError("5001", "เกิดข้อผิดพลาด ติดต่อ IT\n\n\n" + ex.Message));
+                        }
+
+
+                            ImportSerialHead importHead = (from h in Db.ImportSerialHead
+                                                            where h.HeadID == receive.HeadID
+                                                            select h
+                                        ).SingleOrDefault();
+
+                            importHead.Status = FujiStatus.RECEIVED.ToString();
+                            importHead.Location = receive.LocationID;
+                            SerialHeadRepo.Update(importHead);
+
+                        try
+                        {
+                            Db.SaveChanges();
+                            scope.Complete();
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ValidationException(new ValidationError("5002", "เกิดข้อผิดพลาด ติดต่อ IT\n\n\n" + ex.Message));
+                        }
                     }
 
                 
                 }
-            return false;
         }
 
         public List<string> GetItemGroupByOrderNo_Handy(string orderNo)
@@ -862,7 +917,7 @@ namespace Fuji.Service.Impl.ItemImport
             List<string> itemGroups;
             using (FujiDbContext Db = new FujiDbContext())
             {
-                ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                 var items = SerialDetailRepo.GetItemsBy(d => d.OrderNo == orderNo && d.Status == FujiStatus.IMP_PICKING.ToString());
 
                 itemGroups = (from d in items
@@ -886,7 +941,7 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 using (FujiDbContext Db = new FujiDbContext())
                 {
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     IQueryable queryDetailsList = (from d in Db.ImportSerialDetail
                                                    where confirmRequest.ItemGroups.Contains(d.ItemGroup)
                                                    && d.OrderNo == confirmRequest.OrderNumber
@@ -901,7 +956,7 @@ namespace Fuji.Service.Impl.ItemImport
                             SerialDetailRepo.Update(item);
                         }
 
-                        //Db.SaveChanges();
+                        Db.SaveChanges();
                         scope.Complete();
                         return true;
                     }
@@ -975,6 +1030,30 @@ namespace Fuji.Service.Impl.ItemImport
             Stream stream = new MemoryStream(bytes);
             return new StreamContent(stream);
 
+        }
+
+        private ImportSerialDetailTemp TranslateDetailTemp(ImportSerialDetail detail)
+        {
+            ImportSerialDetailTemp item = new ImportSerialDetailTemp();
+            if (detail != null)
+            {
+                item.HeadID = detail.HeadID;
+                item.BoxNumber = detail.BoxNumber;
+                item.CreateAt = detail.CreateAt;
+                item.CreateBy = detail.CreateBy;
+                item.DetailID = detail.DetailID;
+                item.IsActive = detail.IsActive;
+                item.ItemCode = detail.ItemCode;
+                item.ItemGroup = detail.ItemGroup;
+                item.ItemType = detail.ItemType;
+                item.OrderNo = detail.OrderNo;
+                item.SerialNumber = detail.SerialNumber;
+                item.Status = detail.Status;
+                item.UpdateAt = detail.UpdateAt;
+                item.UpdateBy = detail.UpdateBy;
+
+            }
+            return item;
         }
 
         #region TranslateDataSet
@@ -1158,7 +1237,7 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 using (FujiDbContext Db = new FujiDbContext())
                 {
-                    ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     int itemType = 0;
                     try
                     {
@@ -1200,7 +1279,7 @@ namespace Fuji.Service.Impl.ItemImport
 
             using (FujiDbContext Db = new FujiDbContext())
             {
-                ISerialRepository SerialDetailRepo = new SerialRepository(Db);
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
 
                 if (cnt > 0)
                 {

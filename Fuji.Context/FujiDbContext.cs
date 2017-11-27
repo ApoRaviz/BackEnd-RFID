@@ -11,6 +11,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Data;
+using Fuji.Common.SqlLog;
 
 namespace Fuji.Context
 {
@@ -18,14 +19,24 @@ namespace Fuji.Context
     {
         public DbSet<ImportSerialHead> ImportSerialHead { get; set; }
         public DbSet<ImportSerialDetail> ImportSerialDetail { get; set; }
+        public DbSet<ImportSerialDetailTemp> ImportSerialDetailTemp { get; set; }
         public DbSet<LabelRunning> LabelRunning { get; set; }
         public DbSet<ProgramVersionHistory> ProgramVersionHistory { get; set; }
       
 
-        public FujiDbContext() : base("name=WIM_FUJI")
+        public FujiDbContext(string methodLog = "") : base("name=WIM_FUJI")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
+            if (!string.IsNullOrEmpty(methodLog))
+            {
+                string projectName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location).Split('.').FirstOrDefault();
+                string className = new System.Diagnostics.StackFrame(1)?.GetMethod()?.ReflectedType.Name;
+                this.Database.Log = s => LogWriter.WritetoFile(projectName
+                   , className + "." + methodLog
+                   , s);
+
+            }
         }
 
         public static FujiDbContext Create()

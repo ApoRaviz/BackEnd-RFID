@@ -1,0 +1,168 @@
+﻿option {
+    text-align: left;
+    /* reset to left*/
+}
+
+.loadingModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba( 255, 255, 255, .8 ) url('https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif') 50% 50% no-repeat;
+}
+
+body.loading {
+    overflow: hidden;
+}
+
+    body.loading .loadingModal {
+        display: block;
+    }
+
+.ui-autocomplete-loading {
+    background: url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/images/ui-anim_basic_16x16.gif') no-repeat right center
+}
+
+.form-control-border-none {
+    border: none !important;
+    box-shadow: none;
+    padding: 0px;
+    height: 30px;
+}
+
+.disabled {
+    background-color: #eee;
+    cursor: not-allowed !important;
+}
+
+.col-sm-2 {
+    width: 21%;
+}
+
+#info1, #info2 {
+    font-size: 150%;
+}
+
+.w3-pale-green, .w3-hover-pale-green:hover {
+    color: #000 !important;
+    background-color: rgb(135, 233, 144) !important
+}
+
+.w3-pale-blue, .w3-hover-pale-blue:hover {
+    color: #000 !important;
+    background-color: rgb(96, 159, 255) !important
+}
+
+.w3-leftbar {
+    border-left: 6px solid #ccc !important
+}
+
+.w3-rightbar {
+    border-right: 6px solid #ccc !important
+}
+
+.w3-border-blue, .w3-hover-border-blue:hover {
+    border-color: rgb(96, 159, 255) !important
+}
+
+.panel-heading .accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings'; /* essential for enabling glyphicon */
+    content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+    float: right;
+    color: grey; /* adjust as needed */
+}
+
+.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+}
+
+.material-switch > input[type="checkbox"] {
+    display: none;
+}
+
+.material-switch > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative;
+    width: 40px;
+}
+
+    .material-switch > label::before {
+        background: rgb(0, 0, 0);
+        box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        content: '';
+        height: 16px;
+        margin-top: -8px;
+        position: absolute;
+        opacity: 0.3;
+        transition: all 0.4s ease-in-out;
+        width: 40px;
+    }
+
+    .material-switch > label::after {
+        background: rgb(255, 255, 255);
+        border-radius: 16px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        content: '';
+        height: 24px;
+        left: -4px;
+        margin-top: -8px;
+        position: absolute;
+        top: -4px;
+        transition: all 0.3s ease-in-out;
+        width: 24px;
+    }
+
+.material-switch > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+
+.material-switch > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    left: 20px;
+}
+
+#Fuji_Form3 .material-switch > input[type="checkbox"] + label {
+    border: 0px solid #21B1D5;
+    padding: 0px;
+    background: green;
+    border-radius: 0px;
+    margin: 2px;
+    transition: background 0.1s;
+}
+
+#Fuji_Form3 .material-switch > input[type="checkbox"]:checked + label {
+    border: 0px solid #21B1D5;
+    background: green;
+    padding: 0px;
+    border-radius: 0px;
+    margin: 2px;
+    box-shadow: 0px 2px 2px #8B8B8B;
+    transition: background 0.1s;
+}
+
+input[type="checkbox"] + label {
+    border: 1px solid #C2BABA;
+    padding: 3px;
+    background: #ffffff;
+    border-radius: 5px;
+    margin: 2px;
+    transition: background 0.5s;
+}
+
+input[type="checkbox"]:checked + label {
+    border: 1px solid #21B1D5;
+    background: #53FF7E;
+    padding: 3px;
+    border-radius: 5px;
+    margin: 2px;
+    box-shadow: 0.1px 2px 2px #8B8B8B;
+    transition: background 0.5s;
+}
