@@ -17,8 +17,6 @@ namespace WIM.Core.Common
     using System.Linq;
     using System.Data.SqlClient;
     using Newtonsoft.Json.Linq;
-    using WIM.Core.Entity.CustomerManagement;
-    using WIM.Core.Context;
 
     public partial class CommonContext : DbContext
     {
@@ -27,7 +25,9 @@ namespace WIM.Core.Common
             : base("name=CORE")//CommonContext
         {
         }
-    
+
+        
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -83,7 +83,7 @@ namespace WIM.Core.Common
             var keywordParameter = /*new ObjectParameter("@keyword", keyword);*/
             new SqlParameter("keyword", keyword);
             string x;
-            using (CoreDbContext Db = new CoreDbContext())
+            using (CommonContext Db = new CommonContext())
             {
                 var y = Db.Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
                 x = y.FirstOrDefault();

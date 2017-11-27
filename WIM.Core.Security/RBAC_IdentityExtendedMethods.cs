@@ -17,7 +17,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (_identity != null && _identity.IsAuthenticated)
             {
                 var ci = _identity as ClaimsIdentity;
-                string _userId = ci != null ? ci.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+                string _userId = ci?.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (!string.IsNullOrEmpty(_userId))
                 {
@@ -87,7 +87,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (_principal != null && _principal.Identity != null && _principal.Identity.IsAuthenticated)
             {
                 var ci = _principal.Identity as ClaimsIdentity;
-                string _userId = ci != null ? ci.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+                string _userId = ci?.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (!string.IsNullOrEmpty(_userId))
                 {
@@ -177,10 +177,8 @@ public static class RBAC_ExtendedMethods_4_Principal
 
                             // urlVerify   /api/v1/customers/1
 
-                            int reqUrlNum = 0;
-                            int permissUrlNum = 0;
-                            bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out reqUrlNum);
-                            bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out permissUrlNum);
+                            bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out int reqUrlNum);
+                            bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out int permissUrlNum);
 
                             if ((permissUrlSplit[i] == reqUrlSplit[i]) || (permissUrlSplit[i] == "@parameter_string") ||
                                 (isReqUrlNum && permissUrlSplit[i] == "1"))
@@ -208,9 +206,9 @@ public static class RBAC_ExtendedMethods_4_Principal
                 }
             }
         }
-        catch (IndexOutOfRangeException ex)
+        catch (IndexOutOfRangeException)
         {
-            throw ex;
+            throw;
         }
         catch (Exception ex)
         {
@@ -261,7 +259,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (_principal != null && _principal.Identity != null && _principal.Identity.IsAuthenticated)
             {
                 var ci = _principal.Identity as ClaimsIdentity;
-                string _userId = ci != null ? ci.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+                string _userId = ci?.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (!string.IsNullOrEmpty(_userId))
                 {
@@ -286,7 +284,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (identity != null)
             {
                 var claim = identity.FindFirst(claimType);
-                _retVal = claim != null ? claim.Value : null;
+                _retVal = claim?.Value;
             }
         }
         catch (Exception)

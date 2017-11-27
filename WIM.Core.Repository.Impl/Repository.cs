@@ -212,7 +212,7 @@ namespace WIM.Core.Repository.Impl
         public TEntity GetFirst(Func<TEntity, bool> predicate)
         {
             return DbSet.First<TEntity>(predicate);
-        }       
+        }      
 
     }
 }

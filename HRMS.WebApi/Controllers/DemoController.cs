@@ -25,9 +25,17 @@ using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
 using HRMS.Common.ValueObject.LeaveManagement;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json.Linq;
+using WIM.Core.Entity.ProjectManagement;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
+using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
+using Newtonsoft.Json;
 
 namespace HRMS.WebApi.Controllers
-{    
+{
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
@@ -35,9 +43,9 @@ namespace HRMS.WebApi.Controllers
         private ILeaveService LeaveService;
         public DemoController(ILeaveService leaveService)
         {
-            LeaveService = leaveService;           
+            LeaveService = leaveService;
         }
-         
+
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
@@ -64,7 +72,7 @@ namespace HRMS.WebApi.Controllers
 
                     db.SaveChanges();
                 }
-                
+
                 response.SetData(leaveRequest);
             }
             catch (Validation.ValidationException ex)
@@ -77,9 +85,36 @@ namespace HRMS.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage DemoUpdate([FromBody]LeaveDto leaveRequest)
+        public HttpResponseMessage DemoUpdate([FromBody]ProjectConfig projectConfig)
         {
-            ResponseData<Leave> response = new ResponseData<Leave>();
+            Project_MT project = new Project_MT();
+            ResponseData<Project_MT> response = new ResponseData<Project_MT>();
+
+            using (CoreDbContext db = new CoreDbContext())
+            {
+                Project_MT project1 = db.Project_MT.SingleOrDefault(p => p.ProjectIDSys == 1);
+                project1.ProjectConfig = projectConfig;
+                db.SaveChanges();
+
+                var projects = (
+                      from p in db.Project_MT
+                      select p
+                ).ToList();
+
+                try
+                {
+                    project = projects.FirstOrDefault(p => p.ProjectConfig.Main.Service.IsImport);
+                }
+                catch (NullReferenceException)
+                {
+
+                }                
+                response.SetData(project);
+
+            }
+            return Request.ReturnHttpResponseMessage(response);
+
+            /*ResponseData<Leave> response = new ResponseData<Leave>();
             try
             {
                 Leave leaveUpdated;
@@ -108,9 +143,8 @@ namespace HRMS.WebApi.Controllers
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
-            return Request.ReturnHttpResponseMessage(response);
-        } 
-        
+            return Request.ReturnHttpResponseMessage(response);*/
+        }        
     }
 
     /*public interface ILeaveRepository : IRepository<Leave>
