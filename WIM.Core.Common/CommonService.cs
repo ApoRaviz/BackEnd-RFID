@@ -18,6 +18,12 @@ namespace WIM.Core.Common
             return db.ProcGetTableDescription(tableName).FirstOrDefault();
         }
 
+        public string GetTableDescriptionWms(String tableName)
+        {
+            ObjectParameter result = new ObjectParameter("tableName", tableName);
+            return db.ProcGetTableDescriptionWms(tableName);
+        }
+
         public bool WriteUserLog(UserLog log)
         {
             return false;
@@ -59,7 +65,7 @@ namespace WIM.Core.Common
 
         public IList<ProcGetTableColumnsDescription_Result> GetTableColumnsDescription(string TableName)
         {
-            return db.ProcGetTableColumnsDescription(TableName).ToList();
+            return db.ProcGetTableColumnsDescription(TableName);
         }
 
         public string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)

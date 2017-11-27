@@ -13,7 +13,10 @@ namespace WMS.Entity.ImportManagement
     public class ImportDefinitionDetail_MT : BaseEntity
     {
         [Key]
+        [Column(Order = 0)]
         public int ImportIDSys { get; set; }
+        [Key]
+        [Column(Order = 1)]
         public string ColumnName { get; set; }
         public string Mandatory { get; set; }
         public string FixedValue { get; set; }

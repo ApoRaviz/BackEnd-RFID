@@ -29,7 +29,7 @@ namespace WMS.Service
         public IEnumerable<Supplier_MT> GetSuppliers()
         {
             IEnumerable<Supplier_MT> supplier; 
-            using (WMSDbContext Db = new WMSDbContext())
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 ISupplierRepository repo = new SupplierRepository(Db);
                 supplier = repo.Get();
@@ -40,7 +40,7 @@ namespace WMS.Service
         public IEnumerable<Supplier_MT> GetSuppliersByProjectID(int projectID)
         {
             IEnumerable<Supplier_MT> supplier;
-            using (WMSDbContext Db = new WMSDbContext())
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 ISupplierRepository repo = new SupplierRepository(Db);
                 supplier = repo.GetMany(c=>c.ProjectIDSys == projectID);
@@ -51,7 +51,7 @@ namespace WMS.Service
         public Supplier_MT GetSupplierBySupIDSys(int id)
         {
             Supplier_MT Supplier;
-            using (WMSDbContext Db = new WMSDbContext())
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 ISupplierRepository repo = new SupplierRepository(Db);
                 Supplier = repo.GetByID(id);
@@ -65,7 +65,7 @@ namespace WMS.Service
             {
                 try
                 {
-                    using (WMSDbContext Db = new WMSDbContext())
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
                         Supplier.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
@@ -95,7 +95,7 @@ namespace WMS.Service
           
                 try
                 {
-                    using (WMSDbContext Db = new WMSDbContext())
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
                         repo.Update(supplier);
@@ -123,7 +123,7 @@ namespace WMS.Service
             {
                 try
                 {
-                    using (WMSDbContext Db = new WMSDbContext())
+                    using (CoreDbContext Db = new CoreDbContext())
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
                         repo.Delete(id);

@@ -173,6 +173,10 @@
       <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
       <Name>WIM.Core.Security.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
+      <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
+      <Name>WMS.Context</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Repository;
-using WMS.Entity.WarehouseManagement;
+using WMS.Entity.LayoutManagement;
 
-namespace WMS.Repository
+namespace WMS.Repository.Label
 {
-    public interface IWarehouseRepository: IRepository<Warehouse_MT>
+    public interface ILabelLayoutHeaderRepository : IRepository<LabelLayoutHeader_MT>
     {
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using WIM.Core.Repository;
 using WMS.Entity.WarehouseManagement;
 
-namespace WMS.Repository
+namespace WMS.Repository.Warehouse
 {
-    public interface IWarehouseRepository: IRepository<Warehouse_MT>
+    public interface IZoneLayoutDetailRepository : IRepository<ZoneLayoutDetail_MT>
     {
     }
 }

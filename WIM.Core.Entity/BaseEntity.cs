@@ -15,10 +15,10 @@ namespace WIM.Core.Entity
             UpdateAt = DateTime.Now;
         }
 
-        public bool IsActive { get; set; }
+        public Nullable<bool> IsActive { get; set; }
         public string CreateBy { get; set; }
-        public DateTime CreateAt { get; set; }
+        public Nullable<DateTime> CreateAt { get; set; }
         public string UpdateBy { get; set; }
-        public DateTime UpdateAt { get; set; }
+        public Nullable<DateTime> UpdateAt { get; set; }
     }
 }

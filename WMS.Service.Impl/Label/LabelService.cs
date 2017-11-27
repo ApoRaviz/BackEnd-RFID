@@ -8,6 +8,8 @@ using System.Transactions;
 using WIM.Core.Common.Validation;
 using WMS.Context;
 using WMS.Entity.LayoutManagement;
+using WMS.Repository.Impl.Label;
+using WMS.Repository.Label;
 using WMS.Service.Label;
 
 namespace WMS.Service.Impl.Label
@@ -19,43 +21,50 @@ namespace WMS.Service.Impl.Label
                             "<Label_Top>{6}</Label_Top><Label_Left>{7}</Label_Left><Label_Width>{8}</Label_Width>" +
                             "<Label_Height>{9}</Label_Height><Label_BarcodeType>{10}</Label_BarcodeType><Label_Text>{11}</Label_Text><PxPerInch_Ratio>{12}</PxPerInch_Ratio></row>";
 
-        private WMSDbContext Db;
+
 
         public LabelService()
         {
-            Db = new WMSDbContext();
         }
 
         public List<LabelLayoutHeader_MT> GetAllLabelHeader(string forTable)
         {
-            List<LabelLayoutHeader_MT> label = Db.LabelLayoutHeader_MT.Where(x => x.ForTable == forTable).ToList();
-            return label;
+            using (WMSDbContext Db = new WMSDbContext()) {
+                ILabelLayoutHeaderRepository repo = new LabelLayoutHeaderRepository(Db);
+                List<LabelLayoutHeader_MT> label = repo.GetMany(x => x.ForTable == forTable).ToList();
+                return label;
+            }
         }
 
         public LabelLayoutHeader_MT GetLabelLayoutByReportIDSys(int id, string include)
         {
-            LabelLayoutHeader_MT label = Db.LabelLayoutHeader_MT.Find(id);
-            if (string.IsNullOrEmpty(include))
+            using (WMSDbContext Db = new WMSDbContext())
             {
+                ILabelLayoutHeaderRepository repo = new LabelLayoutHeaderRepository(Db);
+
+                LabelLayoutHeader_MT label = repo.GetByID(id);
+                if (string.IsNullOrEmpty(include))
+                {
+                    return label;
+                }
+
+                string[] includes = include.Replace(" ", "").Split(',');
+                foreach (string inc in includes)
+                {
+                    //if (inc.ToLower()[includes.Length - 1].Equals('s'))
+                    //{
+                    //    Db.Entry(report).Collection(inc).Load();
+                    //}
+                    //else
+                    //{
+                    //    Db.Entry(report).Reference(inc).Load();
+                    //}
+
+                    Db.Entry(label).Collection(inc).Load();
+                }
+
                 return label;
             }
-
-            string[] includes = include.Replace(" ", "").Split(',');
-            foreach (string inc in includes)
-            {
-                //if (inc.ToLower()[includes.Length - 1].Equals('s'))
-                //{
-                //    Db.Entry(report).Collection(inc).Load();
-                //}
-                //else
-                //{
-                //    Db.Entry(report).Reference(inc).Load();
-                //}
-
-                Db.Entry(label).Collection(inc).Load();
-            }
-
-            return label;
         }
 
         public int? CreateLabelForItemMaster(LabelLayoutHeader_MT data)
@@ -68,23 +77,26 @@ namespace WMS.Service.Impl.Label
 
             using (var scope = new TransactionScope())
             {
-                //data.CreatedDate = DateTime.Now;
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
+                data.CreateAt = DateTime.Now;
+                data.UpdateAt = DateTime.Now;
+                data.UpdateBy = Identity.Name;
 
                 //Repo.Insert(customer);
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    ReportSysID = Db.ProcCreateLabelLayout(data.ForTable, data.FormatName, data.Width, data.WidthUnit, data.Height, data.HeightUnit
-                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
-                    Db.SaveChanges();
+                    try
+                    {
+                        ReportSysID = Db.ProcCreateLabelLayout(data.ForTable, data.FormatName, data.Width, data.WidthUnit, data.Height, data.HeightUnit
+                                                  , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
+                    return ReportSysID;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return ReportSysID;
             }
         }
 
@@ -97,21 +109,24 @@ namespace WMS.Service.Impl.Label
 
             using (var scope = new TransactionScope())
             {
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
-
-                try
+                data.UpdateAt = DateTime.Now;
+                data.UpdateBy = Identity.Name;
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    Db.ProcUpdateLabelLayout(data.LabelIDSys, data.FormatName, data.Width, data.WidthUnit, data.Height, data.HeightUnit
-                                              , data.UpdateAt, data.UpdateBy, sb.ToString());
-                    Db.SaveChanges();
+                    try
+                    {
+                        Db.ProcUpdateLabelLayout(data.LabelIDSys, data.FormatName, data.Width, data.WidthUnit, data.Height, data.HeightUnit
+                                                  , data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    
+                    return true;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return true;
             }
         }
 

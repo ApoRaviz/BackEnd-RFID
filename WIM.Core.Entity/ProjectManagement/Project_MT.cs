@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.RoleAndPermission;
-using WIM.Core.Entity.SupplierManagement;
 //using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Entity.ProjectManagement
@@ -18,7 +17,6 @@ namespace WIM.Core.Entity.ProjectManagement
     {
         public Project_MT()
         {
-            this.Supplier_MT = new HashSet<Supplier_MT>();
             this.Menu_MT = new HashSet<Menu_MT>();
             this.MenuProjectMappings = new HashSet<MenuProjectMapping>();
 
@@ -37,8 +35,6 @@ namespace WIM.Core.Entity.ProjectManagement
         //public System.DateTime CreatedDate { get; set; }
         //public System.DateTime UpdateDate { get; set; }
         //public string UserUpdate { get; set; }
-
-        public virtual ICollection<Supplier_MT> Supplier_MT { get; set; }
 
         public virtual ICollection<Menu_MT> Menu_MT { get; set; }
 

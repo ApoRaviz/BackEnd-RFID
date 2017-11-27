@@ -13,8 +13,13 @@ namespace WMS.Entity.WarehouseManagement
     public class ZoneLayoutDetail_MT : BaseEntity
     {
         [Key]
+        [Column(Order = 0)]
         public int ZoneIDSys { get; set; }
+        [Key]
+        [Column(Order = 1)]
         public int Floor { get; set; }
+        [Key]
+        [Column(Order = 2)]
         public int ZoneID { get; set; }
         public Nullable<int> ZoneParentID { get; set; }
         public string Name { get; set; }

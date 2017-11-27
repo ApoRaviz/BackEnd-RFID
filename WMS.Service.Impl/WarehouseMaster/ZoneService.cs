@@ -8,6 +8,8 @@ using System.Transactions;
 using WIM.Core.Common.Validation;
 using WMS.Context;
 using WMS.Entity.WarehouseManagement;
+using WMS.Repository.Impl.Warehouse;
+using WMS.Repository.Warehouse;
 using WMS.Service.WarehouseMaster;
 
 namespace WMS.Service.Impl.WarehouseMaster
@@ -20,7 +22,6 @@ namespace WMS.Service.Impl.WarehouseMaster
         string pXmlRack = "<row><ZoneIDSys>{0}</ZoneIDSys><ZoneID>{1}</ZoneID><RackID>{2}</RackID><BlockID>{3}</BlockID>" +
                             "<Floor>{4}</Floor><Left>{5}</Left><Top>{6}</Top></row>";
 
-        private WMSDbContext Db = WMSDbContext.Create();
 
         public ZoneService()
         {
@@ -28,31 +29,43 @@ namespace WMS.Service.Impl.WarehouseMaster
 
         public List<ZoneLayoutHeader_MT> GetAllZoneHeader()
         {
-            List<ZoneLayoutHeader_MT> zone = Db.ZoneLayoutHeader_MT.ToList();
-            return zone;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IZoneLayoutHeaderRepository repo = new ZoneLayoutHeaderRepository(Db);
+                List<ZoneLayoutHeader_MT> zone = repo.Get().ToList();
+                return zone;
+            }
         }
 
         public List<ZoneLayoutDetail_MT> GetAllZoneDetail()
         {
-            List<ZoneLayoutDetail_MT> zone = Db.ZoneLayoutDetail_MT.ToList();
-            return zone;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IZoneLayoutDetailRepository repo = new ZoneLayoutDetailRepository(Db);
+                List<ZoneLayoutDetail_MT> zone = repo.Get().ToList();
+                return zone;
+            }
         }
 
         public ZoneLayoutHeader_MT GetZoneLayoutByZoneIDSys(int id, string include)
         {
-            ZoneLayoutHeader_MT zone = Db.ZoneLayoutHeader_MT.Find(id);
-            if (string.IsNullOrEmpty(include))
+            using (WMSDbContext Db = new WMSDbContext())
             {
+                IZoneLayoutHeaderRepository repo = new ZoneLayoutHeaderRepository(Db);
+                ZoneLayoutHeader_MT zone = repo.GetByID(id);
+                if (string.IsNullOrEmpty(include))
+                {
+                    return zone;
+                }
+
+                string[] includes = include.Replace(" ", "").Split(',');
+                foreach (string inc in includes)
+                {
+                    Db.Entry(zone).Collection(inc).Load();
+                }
+
                 return zone;
             }
-
-            string[] includes = include.Replace(" ", "").Split(',');
-            foreach (string inc in includes)
-            {
-                Db.Entry(zone).Collection(inc).Load();
-            }
-
-            return zone;
         }
 
         public int? CreateZoneLayout(ZoneLayoutHeader_MT data)
@@ -61,26 +74,34 @@ namespace WMS.Service.Impl.WarehouseMaster
             int? ZoneSysID = 0;
 
             foreach (ZoneLayoutDetail_MT d in data.detail)
+            {
+                d.IsActive = true;
+                d.CreateAt = DateTime.Now;
+                d.UpdateAt = DateTime.Now;
+                d.UpdateBy = Identity.Name;
                 sb.AppendFormat(pXmlDetail, d.ZoneID.ToString(), d.Name, d.Left.ToString(), d.Top.ToString(), d.Width.ToString(), d.Length.ToString(), d.Use, d.Floor, d.ZoneParentID);
-
+            }
             using (var scope = new TransactionScope())
             {
-                //data.CreatedDate = DateTime.Now;
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    data.CreateAt = DateTime.Now;
+                    data.UpdateAt = DateTime.Now;
+                    data.UpdateBy = Identity.Name;
 
-                try
-                {
-                    ZoneSysID = Db.ProcCreateZoneLayout(data.ZoneName, data.Warehouse, data.Area, data.TotalFloor
-                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
-                    Db.SaveChanges();
+                    try
+                    {
+                        ZoneSysID = Db.ProcCreateZoneLayout(data.ZoneName, data.Warehouse, data.Area, data.TotalFloor
+                                                  , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
+                    return ZoneSysID;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return ZoneSysID;
             }
         }
 
@@ -89,25 +110,32 @@ namespace WMS.Service.Impl.WarehouseMaster
             System.Text.StringBuilder sb = new StringBuilder();
 
             foreach (ZoneLayoutDetail_MT d in data.detail)
+            {
+                d.IsActive = true;
+                d.UpdateAt = DateTime.Now;
+                d.UpdateBy = Identity.Name;
                 sb.AppendFormat(pXmlDetail, d.ZoneID.ToString(), d.Name, d.Left.ToString(), d.Top.ToString(), d.Width.ToString(), d.Length.ToString(), d.Use, d.Floor, d.ZoneParentID);
-
+            }
             using (var scope = new TransactionScope())
             {
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    data.UpdateAt = DateTime.Now;
+                    data.UpdateBy = Identity.Name;
 
-                try
-                {
-                    Db.ProcUpdateZoneLayout(data.ZoneIDSys, data.ZoneName, data.Warehouse, data.Area, data.TotalFloor
-                                              , data.UpdateAt, data.UpdateBy, sb.ToString());
-                    Db.SaveChanges();
+                    try
+                    {
+                        Db.ProcUpdateZoneLayout(data.ZoneIDSys, data.ZoneName, data.Warehouse, data.Area, data.TotalFloor
+                                                  , data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
+                    return true;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return true;
             }
         }
 
@@ -119,35 +147,50 @@ namespace WMS.Service.Impl.WarehouseMaster
             if (data != null && data[0].RackID != 0)
             {
                 foreach (RackLayout_MT d in data)
+                {
+                    d.IsActive = true;
+                    d.CreateAt = DateTime.Now;
+                    d.UpdateAt = DateTime.Now;
+                    d.UpdateBy = Identity.Name;
                     sb.AppendFormat(pXmlRack, d.ZoneIDSys.ToString(), d.ZoneID.ToString(), d.RackID.ToString(), d.BlockID.ToString(), d.Floor, d.Left.ToString(), d.Top.ToString());
-            }
+                }
+                }
 
             using (var scope = new TransactionScope())
             {
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    Db.ProcCreateRackLayout(data[0].ZoneIDSys, data[0].ZoneID, DateTime.Now, DateTime.Now, "1", sb.ToString());
-                    Db.SaveChanges();
+                    try
+                    {
+                        Db.ProcCreateRackLayout(data[0].ZoneIDSys, data[0].ZoneID, DateTime.Now, DateTime.Now, Identity.Name, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
+                    return RackSysID;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                scope.Complete();
-                return RackSysID;
             }
         }
 
         public List<RackLayout> GetAllRackDetail(int ZoneIDSys, int ZoneID)
         {
-            List<RackLayout> rack = Db.ProcGetRackLayout(ZoneIDSys, ZoneID).ToList();
-            return rack;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                List<RackLayout> rack = Db.ProcGetRackLayout(ZoneIDSys, ZoneID);
+                return rack;
+            }
         }
 
         public List<RackLayout> GetRackDetailByZoneIDSys(int ZoneIDSys)
         {
-            List<RackLayout> rack = Db.ProcGetRackLayoutByZoneIDSys(ZoneIDSys).ToList();
-            return rack;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                List<RackLayout> rack = Db.ProcGetRackLayoutByZoneIDSys(ZoneIDSys);
+                return rack;
+            }
         }
 
         public void HandleValidationException(DbEntityValidationException ex)

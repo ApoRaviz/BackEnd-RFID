@@ -13,7 +13,10 @@ namespace WMS.Entity.LayoutManagement
     public class LabelLayoutDetail_MT : BaseEntity
     {
         [Key]
+        [Column(Order = 0)]
         public int LabelIDSys { get; set; }
+        [Key]
+        [Column(Order = 1)]
         public string Label_Code { get; set; }
         public string Label_Type { get; set; }
         public string Label_From { get; set; }

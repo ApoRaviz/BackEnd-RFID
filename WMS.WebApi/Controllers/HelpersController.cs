@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 
 namespace WMS.WebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/v1/helpers")]
     public class HelpersController : ApiController
     {
@@ -40,7 +40,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<string> response = new ResponseData<string>();
             try
             {
-                string tableDescription = CommonService.GetTableDescription(tableName);
+                string tableDescription = CommonService.GetTableDescriptionWms(tableName);
                 response.SetData(tableDescription);
             }
             catch (ValidationException ex)
