@@ -8,7 +8,7 @@ using WIM.Core.Repository;
 
 namespace Fuji.Repository.ItemManagement
 {
-    public interface ISerialRepository: IRepository<ImportSerialDetail>
+    public interface ISerialDetailRepository: IRepository<ImportSerialDetail>
     {
         //IEnumerable<ImportSerialDetail> Get();
         //ImportSerialDetail GetByID(object id);

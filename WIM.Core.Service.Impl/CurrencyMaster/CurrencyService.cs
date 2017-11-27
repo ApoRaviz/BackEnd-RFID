@@ -34,7 +34,7 @@ namespace WIM.Core.Service.Impl
             {
                 ICurrencyRepository repo = new CurrencyRepository(Db);
                 string[] include = { "Country_MT" };
-                CurrencyName = repo.GetWithInclude(null, include);
+                CurrencyName = repo.GetWithInclude(a => a.CurrencyIDSys == a.CurrencyIDSys, include);
             }
             return CurrencyName;
         }
@@ -52,6 +52,7 @@ namespace WIM.Core.Service.Impl
 
         public int CreateCurrency(CurrencyUnit Currency)
         {
+            CurrencyUnit Currencynew = new CurrencyUnit();
             using (var scope = new TransactionScope())
             {
                 try
@@ -59,7 +60,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ICurrencyRepository repo = new CurrencyRepository(Db);
-                        repo.Insert(Currency);
+                        Currencynew = repo.Insert(Currency);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -74,7 +75,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return Currency.CurrencyIDSys;
+                return Currencynew.CurrencyIDSys;
             }
         }
 

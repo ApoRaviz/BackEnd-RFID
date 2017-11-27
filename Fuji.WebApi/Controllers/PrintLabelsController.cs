@@ -14,6 +14,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Drawing.Printing;
 using Fuji.Service.PrintLabel;
+using Fuji.Common.ValueObject;
 
 namespace Fuji.WebApi.Controllers.ExternalInterface
 {
@@ -26,32 +27,29 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
             this.PrintLabelService = printLabelService;
         }
 
-        //[Authorize]
+        [Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
-        [Route("{type}/{running}")]
-        public HttpResponseMessage Get(string type, int running)
+        [Route("")]
+        public HttpResponseMessage Get([FromBody]ParameterBoxLabel item)
         {
             int baseRunning = 0;
             IResponseData<int> response = new ResponseData<int>();
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
+            HttpResponseMessage result = new HttpResponseMessage();
 
 
             try
             {
-                baseRunning = PrintLabelService.GetRunningByType(type, running,"System");
-                response.SetData(baseRunning);
+                baseRunning = PrintLabelService.GetRunningByType(item.Type, item.Running);
+                result.StatusCode = HttpStatusCode.OK;
+                result.Content = PrintLabelService.GetReportStream(item.Running, baseRunning);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
             catch (ValidationException ex)
             {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
+                result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
             }
 
-           
-            result.StatusCode = HttpStatusCode.OK; 
-            result.Content = PrintLabelService.GetReportStream(running,baseRunning);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             return result;
             //return Request.ReturnHttpResponseMessage(response);
 

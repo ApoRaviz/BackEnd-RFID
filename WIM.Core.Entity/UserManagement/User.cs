@@ -31,15 +31,19 @@ namespace WIM.Core.Entity.UserManagement
         public int AccessFailedCount { get; set; }
         public bool IsSysAdmin { get; set; }
         public string KeyAccess { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public Nullable<System.DateTime> KeyAccessDate { get; set; }
+
         public string TokenMobile { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
         public int PersonIDSys { get; set; }
 
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public Nullable<int> KeyOTP { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public Nullable<System.DateTime> KeyOTPDate { get; set; }
 
         public virtual ICollection<UserRoles> UserRoles { get; set; }

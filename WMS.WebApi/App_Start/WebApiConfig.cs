@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using WMS.WebApi.Controllers;
 using WIM.Core.Common.Http;
 using WIM.WebApi.Auth;
+using WIM.Core.Common.Handlers;
 
 namespace WMS.WebApi
 {

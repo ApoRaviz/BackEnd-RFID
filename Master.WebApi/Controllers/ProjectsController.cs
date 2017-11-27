@@ -175,6 +175,7 @@ namespace Master.WebApi.Controllers
             IResponseData<Project_MT> response = new ResponseData<Project_MT>();
             try
             {
+                project.CusIDSys = project.Customer_MT.CusIDSys;
                 project.Customer_MT = null;
                 Project_MT newProject = ProjectService.CreateProject(project);
                 response.SetData(newProject);

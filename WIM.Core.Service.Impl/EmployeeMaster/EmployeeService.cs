@@ -65,12 +65,13 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                Employee_MT Employeenew = new Employee_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IEmployeeRepository repo = new EmployeeRepository(Db);
-                        repo.Insert(Employee);
+                        Employeenew = repo.Insert(Employee);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -85,7 +86,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return Employee.EmID;
+                return Employeenew.EmID;
             }
         }
 
