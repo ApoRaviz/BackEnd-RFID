@@ -199,6 +199,10 @@
       <DependentUpon>CommonDataModel.edmx</DependentUpon>
       <LastGenOutput>CommonDataModel.cs</LastGenOutput>
     </Content>
+    <Content Include="DllLibrary\BarcodeLib.dll" />
+    <Content Include="DllLibrary\EPPlus.dll" />
+    <Content Include="DllLibrary\OnBarcode.Barcode.ASPNET.dll" />
+    <Content Include="DllLibrary\QRCoder.dll" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
   </ItemGroup>
   <ItemGroup>
