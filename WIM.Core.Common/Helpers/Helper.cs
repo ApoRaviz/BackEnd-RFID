@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Common.Validation;
 
 namespace WIM.Core.Common.Helpers
@@ -16,7 +12,7 @@ namespace WIM.Core.Common.Helpers
 
             return string.Format("Error #{0}: {1}", (int)code, internalMessage ?? code.GetDescription());
         }
-
+        
         public static ValidationError GetHandleErrorMessageException(ErrorCode code)
         {
             ValidationError error = new ValidationError(code.ToString(), code.GetDescription(), code.GetHttpCode());
@@ -139,7 +135,6 @@ namespace WIM.Core.Common.Helpers
         public static HttpStatusCode GetHttpCode(this Enum value)
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());
-
             HttpCodeAttribute[] attributes =
                 (HttpCodeAttribute[])fi.GetCustomAttributes(typeof(HttpCodeAttribute), false);
 

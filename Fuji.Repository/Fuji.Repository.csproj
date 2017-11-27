@@ -48,7 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItemManagement\ISerialHeadRepository.cs" />
-    <Compile Include="ItemManagement\ISerialRepository.cs" />
+    <Compile Include="ItemManagement\ISerialDetailRepository.cs" />
+    <Compile Include="ItemManagement\ISerialDetailTempRepository.cs" />
     <Compile Include="LabelManagement\ILabelRunningRepository.cs" />
     <Compile Include="ProgramVersion\IProgramVersionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

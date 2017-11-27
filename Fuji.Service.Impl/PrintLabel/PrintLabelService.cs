@@ -35,7 +35,7 @@ namespace Fuji.Service.Impl.PrintLabel
             //printRepo = new LabelRunningRepository(new FujiDbContext());
         }        
 
-        public int GetRunningByType(string type, int running,string userUpdate)
+        public int GetRunningByType(string type, int running)
         {
             int baseRunning = 0;
             bool isNotUpdateDate;
@@ -57,12 +57,12 @@ namespace Fuji.Service.Impl.PrintLabel
                 baseRunning = 0;
             }            
 
-            UpdateRunning(label, running, isNotUpdateDate,userUpdate);
+            UpdateRunning(label, running, isNotUpdateDate);
 
             return baseRunning;            
         }
 
-        private bool UpdateRunning(LabelRunning label, int running, bool isNotUpdateDate,string userUpdate)
+        private bool UpdateRunning(LabelRunning label, int running, bool isNotUpdateDate)
         {
             using (var scope = new TransactionScope())
             {
@@ -72,8 +72,6 @@ namespace Fuji.Service.Impl.PrintLabel
                 }
                 else
                 {
-                    label.CreateAt = DateTime.Now.Date;
-                    label.CreateBy = userUpdate;
                     label.Running = running;
                 }
 
@@ -118,7 +116,7 @@ namespace Fuji.Service.Impl.PrintLabel
                     + DateTime.Now.ToString("yyMMdd", new System.Globalization.CultureInfo("en-US"))
                     + (baseRunning + i).ToString("0000");
 
-                byte[] barcodeImage = bc.EncodeToByte(TYPE.CODE128, barcodeInfoImage, Color.Black, Color.White, 287, 96);
+                byte[] barcodeImage = bc.EncodeToByte(TYPE.CODE128, barcodeInfoImage, Color.Black, Color.White, 587, 96);
 
                 FujiDataLabelBarcode barcode = new FujiDataLabelBarcode(barcodeImage, barcodeInfo);
                 barcodeList.Add(barcode);

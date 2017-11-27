@@ -45,6 +45,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WIM.Core.Common">
+      <HintPath>..\WIM.Core.Common\bin\Debug\WIM.Core.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FujiDbContext.cs" />
