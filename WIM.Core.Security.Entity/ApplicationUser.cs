@@ -36,8 +36,6 @@ namespace WIM.Core.Security.Entity
             //userIdentity.AddClaim(new Claim("Permission", Permission.ToString()));
 
             //userIdentity.RemoveClaim(userIdentity.FindFirst("role"));
-
-
             return userIdentity;
         }
 

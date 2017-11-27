@@ -9,7 +9,6 @@ using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WMS.WebApi.Providers.Firebase;
 using WMS.WebApi.Providers.Firebase.Model;
@@ -26,6 +25,7 @@ using WIM.Core.Security.Providers;
 using WMS.Service;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service.Impl;
+using Microsoft.Owin.Security.Cookies;
 
 namespace WMS.WebApi.Controllers
 {
@@ -326,6 +326,11 @@ namespace WMS.WebApi.Controllers
                 Json.Add("access_token", token);
                 Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                 Json.Add("status", "200");
+
+                var Project = new ProjectService().GetProjectByProjectIDSysIncludeModule(projectClaimBinding.ProjectIDSys);
+                if (Project != null)
+                    Json.Add("project", Newtonsoft.Json.JsonConvert.SerializeObject(Project));
+
                 response.SetData(Json);
             }
             catch (WIM.Core.Common.Validation.ValidationException ex)

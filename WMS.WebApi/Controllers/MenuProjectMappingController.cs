@@ -9,6 +9,7 @@ using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Service;
@@ -358,39 +359,61 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-     
+
         public void GenMenu()
         {
+            IEnumerable<MenuProjectMappingDto> MenuRes;
             Menu = new List<MenuProjectMappingDto>();
             int ProID = User.Identity.GetProjectIDSys();
-            List<MenuProjectMappingDto> res = new List<MenuProjectMappingDto>();
-            if (User.IsSysAdmin())
-            { MenuPermis = MenuProjectMappingService.GetMenuProjectMappingByID(ProID);
-                res = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
-            }
-            else
-            { MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserId(), ProID);
-                res = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
-            }
-            IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID,MenuPermis).ToList();
-             
-
-            foreach (MenuProjectMappingDto resX in res)
+            IEnumerable<MenuProjectMappingDto> res = new List<MenuProjectMappingDto>();
+            using (CoreDbContext Db = new CoreDbContext())
             {
-                FindParentMenu(MenuAll, resX, resX.MenuIDSysParent);
-                if (MenuParent != null)
+                if (User.IsSysAdmin())
                 {
-                    Menu.Add(MenuParent);
-                    MenuParent = null;
+                    MenuPermis = MenuProjectMappingService.GetMenuProjectByID(ProID,Db);
+                    MenuRes = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
                 }
-
-            }
-            List<MenuProjectMappingDto> resByZero = res.Where(x => x.MenuIDSysParent == 0 && x.Url != null).ToList();
-            if(resByZero != null)
-            {
-                foreach(var resp in resByZero)
+                else
                 {
-                    Menu.Add(resp);
+                    MenuPermis = MenuProjectMappingService.GetMenuProjectPermission(User.Identity.GetUserId(), ProID,Db);
+                    MenuRes = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
+                }
+                IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID, MenuPermis.AsEnumerable(),Db).Select(row => new MenuProjectMappingDto
+                {
+                    MenuIDSys = row.MenuIDSys,
+                    ProjectIDSys = row.ProjectIDSys,
+                    MenuName = row.MenuName,
+                    MenuIDSysParent = row.MenuIDSysParent,
+                    Url = row.Url ?? String.Empty,
+                    Sort = row.Sort
+                }); ;
+                //MenuRes = MenuProjectRes.Select(row => new MenuProjectMappingDto
+                //{
+                //    MenuIDSys = row.MenuIDSys,
+                //    ProjectIDSys = row.ProjectIDSys,
+                //    MenuName = row.MenuName,
+                //    MenuIDSysParent = row.MenuIDSysParent,
+                //    Url = row.Menu_MT.Url ?? String.Empty,
+                //    Sort = row.Sort
+                //});
+
+                foreach (MenuProjectMappingDto resX in MenuRes)
+                {
+                    FindParentMenu(MenuAll, resX, resX.MenuIDSysParent);
+                    if (MenuParent != null)
+                    {
+                        Menu.Add(MenuParent);
+                        MenuParent = null;
+                    }
+
+                }
+                List<MenuProjectMappingDto> resByZero = MenuRes.Where(x => x.MenuIDSysParent == 0 && x.Url != null).ToList();
+                if (resByZero != null)
+                {
+                    foreach (var resp in resByZero)
+                    {
+                        Menu.Add(resp);
+                    }
                 }
             }
         }
@@ -434,7 +457,7 @@ namespace WMS.WebApi.Controllers
 
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
             }
             return false;
@@ -600,14 +623,14 @@ namespace WMS.WebApi.Controllers
 
         public List<MenuProjectMappingDto> Sorting(List<MenuProjectMappingDto> data)
         {
-            
+
             var change = data.OrderBy(x => x.Sort).ToList();
             data = change;
             foreach (var menu in data)
             {
-                if(menu.ParentMenu != null)
+                if (menu.ParentMenu != null)
                 {
-                   menu.ParentMenu = Sorting(menu.ParentMenu);
+                    menu.ParentMenu = Sorting(menu.ParentMenu);
                 }
             }
             return data;

@@ -8,7 +8,7 @@ namespace WIM.Core.Service.Impl
         public IIdentity Identity
         {
             get
-            {
+            { 
                 return AuthHelper.GetIdentity();
             }
         }

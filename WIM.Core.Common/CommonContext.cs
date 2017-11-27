@@ -14,7 +14,17 @@ namespace WIM.Core.Common
         static public CommonContext Create()
         {
             var entityBuilder = new EntityConnectionStringBuilder();
-            entityBuilder.ProviderConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            entityBuilder.ProviderConnectionString = ConfigurationManager.ConnectionStrings["CORE"].ConnectionString;
+            entityBuilder.Provider = "System.Data.SqlClient";
+            //entityBuilder.Metadata = @"res://*/CommonDataModel.csdl|res://*/CommonDataModel.ssdl|res://*/CommonDataModel.msl";
+
+            return new CommonContext(entityBuilder.ConnectionString);
+        }
+
+        static public CommonContext Create(string Dbname)
+        {
+            var entityBuilder = new EntityConnectionStringBuilder();
+            entityBuilder.ProviderConnectionString = ConfigurationManager.ConnectionStrings[Dbname].ConnectionString;
             entityBuilder.Provider = "System.Data.SqlClient";
             entityBuilder.Metadata = @"res://*/CommonDataModel.csdl|res://*/CommonDataModel.ssdl|res://*/CommonDataModel.msl";
 

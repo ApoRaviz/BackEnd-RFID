@@ -44,6 +44,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WIM.Core.Service">
+      <HintPath>..\WIM.Core.Service\bin\Debug\WIM.Core.Service.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItemImport\IItemImportService.cs" />

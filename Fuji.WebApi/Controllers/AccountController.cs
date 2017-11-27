@@ -19,6 +19,14 @@ using Microsoft.VisualBasic;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 using WIM.Core.Security.Providers;
+using WIM.Core.Common.Http;
+using Fuji.WebApi.Providers.Firebase;
+using WIM.Core.Service.Impl;
+using RestSharp;
+using WIM.Core.Common.Validation;
+using System.Net;
+using WIM.Core.Entity.UserManagement;
+using WIM.Core.Common.Extensions;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -28,6 +36,8 @@ namespace Fuji.WebApi.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private int ExToken = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
+
 
         public AccountController()
         {
@@ -103,22 +113,222 @@ namespace Fuji.WebApi.Controllers
             return Ok();
         }
 
+
+        [HttpGet]
+        [Route("users/mobile/otp")]
+        public HttpResponseMessage GetOTP()
+        {
+            IResponseData<string> response = new ResponseData<string>();
+            try
+            {
+                Firebase fireb = new Firebase();
+                FirebaseModelSand fireBaseParam = new FirebaseModelSand();
+                string token;
+                UserService users = new UserService();
+                Random rnd = new Random();
+                int key;
+                key = rnd.Next(100000, 999999);
+                token = users.GetFirebaseTokenMobileByUserID(User.Identity.GetUserId(), key);
+                fireBaseParam.to = token;
+                fireBaseParam.notification.title = "OTP";
+                fireBaseParam.notification.body = key.ToString();
+                IRestResponse res = fireb.SendNotificationsToMobile(fireBaseParam);
+                response.SetData("OTP");
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("users/mobile/otp")]
+        public async Task<HttpResponseMessage> CheckOTPAsync([FromBody]AssignOTPClaimBinding OTPClaimBinding)
+        {
+            IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return null;
+                }
+
+                Dictionary<string, string> Json = new Dictionary<string, string>();
+                User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
+
+                if ( DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
+                {
+                    ApplicationUser user = await UserManager.FindByIdAsync(users.UserID);
+                    ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager, "JWT");
+                    foreach (var claim in oAuthIdentity.Claims)
+                    {
+                        UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+                    }
+                    oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
+                    oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
+                    oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
+                    oAuthIdentity.AddClaim(new Claim("OTP", users.KeyOTP.ToString()));
+                    AuthenticationProperties props = new AuthenticationProperties();
+                    props.IssuedUtc = DateTime.Now;
+                    props.ExpiresUtc = DateTime.Now.AddMinutes(this.ExToken);
+                    var ticket = new AuthenticationTicket(oAuthIdentity, props);
+                    CustomJwtFormat auth = new CustomJwtFormat(System.Configuration.ConfigurationManager.AppSettings["as:baseUrl"]);
+                    string token = auth.Protect(ticket);
+                    TimeSpan spEx = TimeSpan.FromMinutes(ExToken);
+                    Json.Add("access_token", token);
+                    Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
+                    Json.Add("status", "200");
+                }
+                else if (DateTime.Now.AddMinutes(-2) > users.KeyOTPDate)
+                {
+
+                    Json.Add("message", "OTP Expires");
+                    Json.Add("status", "4011");
+                }
+                //else if (!OTPClaimBinding.OTP.Equals(users.KeyOTP))
+                //{
+
+                //    Json.Add("message", "OTP Invalid");
+                //    Json.Add("status", "4012");
+                //}
+
+
+                response.SetData(Json);
+            }
+            catch (WIM.Core.Common.Validation.ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("renewtoken")]
+        public async Task<HttpResponseMessage> ReTokenAsy([FromBody]ParamReToken param)
+        {
+            IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
+            try
+            {
+                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), User.Identity.GetProjectIDSys());
+                if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
+                {
+                    return null;
+                }
+
+
+                Dictionary<string, string> Json = new Dictionary<string, string>();
+
+
+
+                if (!string.IsNullOrEmpty(param.Time))
+                {
+                    ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+                    ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager, "JWT");
+                    foreach (var claim in oAuthIdentity.Claims)
+                    {
+                        UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+                    }
+                    oAuthIdentity.AddClaim(new Claim("ProjectIDSys", User.Identity.GetProjectIDSys().ToString()));
+                    oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                    oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
+                    oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
+                    AuthenticationProperties props = new AuthenticationProperties();
+                    DateTime dateLatest = Convert.ToDateTime((param.Time));
+                    DateTime dateCur = DateTime.Now;
+                    double timeAdd = ExToken - (dateCur - dateLatest).TotalMinutes;
+                    timeAdd = (timeAdd > ExToken) ? ExToken : timeAdd;
+                    TimeSpan spEx = TimeSpan.FromMinutes(timeAdd);
+                    props.IssuedUtc = DateTime.Now;
+                    props.ExpiresUtc = DateTime.Now.AddMinutes(timeAdd);
+                    var ticket = new AuthenticationTicket(oAuthIdentity, props);
+                    CustomJwtFormat auth = new CustomJwtFormat(System.Configuration.ConfigurationManager.AppSettings["as:baseUrl"]);
+                    string token = auth.Protect(ticket);
+                    Json.Add("access_token", token);
+                    Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
+                    Json.Add("status", "200");
+                }
+                else
+                {
+                    Json.Add("status", "401");
+                }
+
+                response.SetData(Json);
+            }
+            catch (WIM.Core.Common.Validation.ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         [Route("assignProject")]
         [HttpPost]
-        public IHttpActionResult AssignProjectClaimToUser([FromBody]AssignProjectClaimBinding projectClaimBinding)
+        public async Task<HttpResponseMessage> AssignProjectClaimToUserAsync([FromBody]AssignProjectClaimBinding projectClaimBinding)
         {
-            if (!ModelState.IsValid)
-            {  
-                return BadRequest(ModelState);
-            }            
-
-            var identity = User.Identity as ClaimsIdentity;
-            foreach (var claim in identity.Claims)
+            IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
+            try
             {
-                UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
+                if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
+                {
+                    return null;
+                }
+               
+                //object CanAccessProject = ApplicationUserManager.GetUserAccessProject(User.Identity.GetUserId());
+                Dictionary<string, string> Json = new Dictionary<string, string>();
+                ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager, "JWT");
+                //foreach (var claim in oAuthIdentity.Claims)
+                //{
+                //    UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+                //}
+                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
+                oAuthIdentity.AddClaim(new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys.ToString()));
+                oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
+                AuthenticationProperties props = new AuthenticationProperties();
+                props.IssuedUtc = DateTime.Now;
+                props.ExpiresUtc = DateTime.Now.AddMinutes(this.ExToken);
+                var ticket = new AuthenticationTicket(oAuthIdentity, props);
+                CustomJwtFormat auth = new CustomJwtFormat(System.Configuration.ConfigurationManager.AppSettings["as:baseUrl"]);
+                string token = auth.Protect(ticket);
+                TimeSpan spEx = TimeSpan.FromMinutes(ExToken);
+                Json.Add("access_token", token);
+                Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
+                Json.Add("status", "200");
+
+                var Project = new ProjectService().GetProjectByProjectIDSysIncludeModule(projectClaimBinding.ProjectIDSys);
+                if(Project != null)
+                    Json.Add("project", Newtonsoft.Json.JsonConvert.SerializeObject(Project));
+
+                response.SetData(Json);
             }
-            UserManager.AddClaim(User.Identity.GetUserId(), new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys));
-            return Ok();
+            catch (WIM.Core.Common.Validation.ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+
+
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            //var identity = User.Identity as ClaimsIdentity;
+            //foreach (var claim in identity.Claims)
+            //{
+            //    UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
+            //}
+            //UserManager.AddClaim(User.Identity.GetUserId(), new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys));
+            //return Ok();
         }
 
         // POST api/Account/Logout
@@ -609,6 +819,20 @@ namespace Fuji.WebApi.Controllers
 
     public class AssignProjectClaimBinding
     {
-        public string ProjectIDSys { get; set; }
+        public int ProjectIDSys { get; set; }
+        public string OTP { get; set; }
+    }
+
+    public class AssignOTPClaimBinding
+    {
+        public int OTP { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class ParamReToken
+    {
+        public string Time { get; set; }
+        //public string Token { get; set; }
     }
 }

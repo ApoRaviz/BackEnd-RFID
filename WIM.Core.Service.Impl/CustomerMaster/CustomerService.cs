@@ -17,6 +17,7 @@ using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Common.ValueObject;
 using System.Security.Principal;
+using WIM.Core.Common;
 
 namespace WIM.Core.Service.Impl
 {
@@ -65,7 +66,7 @@ namespace WIM.Core.Service.Impl
             }
             if (customer != null)
             {
-                CustomerDto customerDto = Mapper.Map<Customer_MT, CustomerDto>(customer);
+                CustomerDto customerDto = new CommonService().AutoMapper<CustomerDto>(customer);
 
                 return customerDto;
             }
@@ -130,7 +131,7 @@ namespace WIM.Core.Service.Impl
                             }
                         }
                     }
-                    CustomerDto customerDto = Mapper.Map<Customer_MT, CustomerDto>(query);
+                    CustomerDto customerDto = new CommonService().AutoMapper<CustomerDto>(query)/* Mapper.Map<Customer_MT, CustomerDto>(query)*/; 
                     return customerDto;
                 }
             }

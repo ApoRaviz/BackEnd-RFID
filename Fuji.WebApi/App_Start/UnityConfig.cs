@@ -12,6 +12,9 @@ using Unity.WebApi;
 
 using Fuji.WebApi.Controllers;
 using System.Security.Principal;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
+using WIM.Core.Common;
 
 namespace Fuji.WebApi
 {
@@ -39,6 +42,14 @@ namespace Fuji.WebApi
             container.RegisterType<IProgramVersionService, ProgramVersionService>();
             container.RegisterType<IPrintLabelService, PrintLabelService>();
 
+            //CORE
+            container.RegisterType<IMenuService, MenuService>();
+            container.RegisterType<IMenuProjectMappingService, MenuProjectMappingService>();
+            container.RegisterType<IPermissionService, PermissionService>();
+            container.RegisterType<ICustomerService, CustomerService>();
+            container.RegisterType<IProjectService, ProjectService>();
+            container.RegisterType<IUserService, UserService>();
+            container.RegisterType<ICommonService, CommonService>();
         }
     }
 }

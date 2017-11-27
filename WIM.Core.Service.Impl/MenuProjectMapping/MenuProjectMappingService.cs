@@ -265,7 +265,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
-                MenuProjectMappingdto = repo.GetMany((c => c.ProjectIDSys == id)).OrderBy(c => c.MenuIDSysParent)
+                string[] include = { "Menu_MT" };
+                MenuProjectMappingdto = repo.GetWithInclude((c => c.ProjectIDSys == id), include).OrderBy(c => c.MenuIDSysParent)
                .OrderBy(c => c.Sort).Select(b => new MenuProjectMappingDto()
                {
                    MenuIDSys = b.MenuIDSys,
@@ -274,9 +275,9 @@ namespace WIM.Core.Service.Impl
                    MenuIDSysParent = b.MenuIDSysParent,
                    Url = b.Menu_MT.Url,
                    Sort = b.Sort
-               });
+               }).ToList();
             }
-            return MenuProjectMappingdto.ToList();
+            return MenuProjectMappingdto;
         }
 
         public IEnumerable<MenuDto> GetMenuDtoByProjectID(int id)
@@ -338,8 +339,7 @@ namespace WIM.Core.Service.Impl
                     MenuIDSysParent = b.MenuIDSysParent,
                     Url = b.Menu_MT.Url,
                     Sort = b.Sort
-                }
-                   );
+                }).ToList();
             }
             return MenuProjectMappingdto;
 
@@ -365,6 +365,54 @@ namespace WIM.Core.Service.Impl
                 ).ToList();
             }
 
+            return MenuProjectMappingdto;
+        }
+
+        public IEnumerable<MenuProjectMappingDto> GetMenuProjectByID(int id, CoreDbContext x)
+        {
+            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto;
+            IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(x);
+            MenuProjectMappingdto = repo.GetMenuProject(id)
+           .Select(b => new MenuProjectMappingDto()
+           {
+               MenuIDSys = b.MenuIDSys,
+               ProjectIDSys = b.ProjectIDSys,
+               MenuName = b.MenuName,
+               MenuIDSysParent = b.MenuIDSysParent,
+               Url = b.Menu_MT.Url,
+               Sort = b.Sort
+           });
+            return MenuProjectMappingdto;
+        }
+
+        public IEnumerable<MenuProjectMappingDto> GetMenuProjectPermission(string userid, int projectid, CoreDbContext x)
+        {
+            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto;
+            CoreDbContext Db = x;
+            IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+            var menu = repo.GetMenuPermission(userid, projectid);
+            MenuProjectMappingdto = menu.Select(b => new MenuProjectMappingDto()
+            {
+                MenuIDSys = b.MenuIDSys,
+                ProjectIDSys = b.ProjectIDSys,
+                MenuName = b.MenuName,
+                MenuIDSysParent = b.MenuIDSysParent,
+                Url = b.Menu_MT.Url,
+                Sort = b.Sort
+            }
+               );
+            return MenuProjectMappingdto;
+        }
+
+        public IEnumerable<MenuProjectMappingDto> GetAllMenu(int projectid, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
+        {
+            IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto;
+            using (CoreDbContext Db = x)
+            {
+                IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(Db);
+                var MenuProjectMappingQuery = repo.GetAllMenuWithContext(projectid, menu,x);
+                MenuProjectMappingdto = MenuProjectMappingQuery.ToList();
+            }
             return MenuProjectMappingdto;
         }
 

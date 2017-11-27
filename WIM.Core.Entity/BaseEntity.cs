@@ -11,6 +11,8 @@ namespace WIM.Core.Entity
         public BaseEntity()
         {
             IsActive = true;
+            CreateAt = DateTime.Now;
+            UpdateAt = DateTime.Now;
         }
 
         public bool IsActive { get; set; }

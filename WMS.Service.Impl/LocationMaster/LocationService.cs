@@ -16,8 +16,9 @@ using WIM.Core.Context;
 using WMS.Context;
 using WMS.Entity.WarehouseManagement;
 using WMS.Repository.Impl;
+using WMS.Service.LocationMaster;
 
-namespace WMS.Service
+namespace WMS.Service.Impl.LocationMaster
 {
     public class LocationService : WIM.Core.Service.Impl.Service, ILocationService
     {

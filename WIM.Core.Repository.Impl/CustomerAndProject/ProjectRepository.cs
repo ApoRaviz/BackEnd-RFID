@@ -22,5 +22,20 @@ namespace WIM.Core.Repository.Impl
         {
             Db = context;
         }
+
+        public object GetProjectByProjectIDSysInclude(int projectIDSys)
+        {
+            var query = from pm in Db.Project_MT
+                        join mo in Db.Module_MT on pm.ModuleIDSys equals mo.ModuleIDSys
+                        where pm.ProjectIDSys == projectIDSys
+                        select new
+                        {
+                            pm.ProjectID,
+                            pm.ProjectIDSys,
+                            pm.ProjectName,
+                            mo.FrontEndPath
+                        };
+            return query.ToList();
+        }
     }
 }

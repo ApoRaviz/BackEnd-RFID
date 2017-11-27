@@ -9,7 +9,7 @@ namespace WIM.Core.Security.Context
     public class SecurityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
     {
         public SecurityDbContext()
-            : base("DefaultConnection")
+            : base("CORE")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
@@ -20,11 +20,11 @@ namespace WIM.Core.Security.Context
             return new SecurityDbContext();
         }
 
-        //public DbSet<User> User { get; set; }
-        //public DbSet<RolePermission> RolePermission { get; set; }
-        //public DbSet<Role> Role { get; set; }
-        //public DbSet<UserRole> UserRole { get; set; }
-        //public DbSet<Permission> Permission { get; set; }        
+        //public DbSet<Entity.UserManagement.User> User { get; set; }
+        //public DbSet<Entity.RoleAndPermission.RolePermission> RolePermission { get; set; }
+        //public DbSet<Entity.RoleAndPermission.Role> Role { get; set; }
+        //public DbSet<Entity.UserManagement.UserRole> UserRole { get; set; }
+        //public DbSet<Entity.RoleAndPermission.Permission> Permission { get; set; }
         public DbSet<PasswordHistory> PasswordHistory { get; set; }
         //public DbSet<UserProjectMapping> UserProjectMapping { get; set; }
         //public DbSet<UserCustomerMapping> UserCustomerMapping { get; set; }
@@ -46,7 +46,7 @@ namespace WIM.Core.Security.Context
                 {
                     m.MapLeftKey("RoleID");
                     m.MapRightKey("PermissionID");
-                    m.ToTable("RolePermission");
+                    m.ToTable("RolePermissions");
                 });
             modelBuilder.Entity<ApplicationUserClaim>().ToTable("UserClaims");
             modelBuilder.Entity<ApplicationUserLogin>().ToTable("UserLogins");

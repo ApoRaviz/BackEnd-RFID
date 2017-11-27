@@ -400,6 +400,31 @@ namespace Isuzu.Service.Impl
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("itemImportDeleted/{pageIndex}/{pageSize}")]
+        public HttpResponseMessage GetItemDeletedByPaging(int pageIndex, int pageSize)
+        {
+            ResponseData<IsuzuDataInboundItems> respones = new ResponseData<IsuzuDataInboundItems>();
+            try
+            {
+                int totalRecord = 0;
+                IEnumerable<InboundItems> items = InboundService.GetInboundItemDeletedPaging(pageIndex, pageSize, out totalRecord);
+                if (totalRecord > 0)
+                {
+                    IsuzuDataInboundItems ret = new IsuzuDataInboundItems(totalRecord, items);
+                    respones.SetStatus(HttpStatusCode.OK);
+                    respones.SetData(ret);
+                }
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("itemImport/bycolumns")]
         public HttpResponseMessage SearchItemByColumn([FromBody]ParameterSearch parameterSearch)
@@ -451,6 +476,7 @@ namespace Isuzu.Service.Impl
 
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
         [HttpPost]
         [Route("import")]
         public async Task<HttpResponseMessage> PostFormData()
@@ -572,8 +598,8 @@ namespace Isuzu.Service.Impl
                
                 if (item != null)
                 {
-                    var identity = User.Identity as ClaimsIdentity;
-                    item.UpdateBy = identity != null ? (!string.IsNullOrEmpty(identity.GetUserName()) ? identity.GetUserName() : "SYSTEMa") : "SYSTEMb";
+                    //var identity = User.Identity as ClaimsIdentity;
+                    //item.UpdateBy = identity != null ? (!string.IsNullOrEmpty(identity.GetUserName()) ? identity.GetUserName() : "SYSTEMa") : "SYSTEMb";
 
                     bool result = InboundService.UpdateStausExport(item);
                     response.SetData(result);
@@ -655,9 +681,7 @@ namespace Isuzu.Service.Impl
 
                 if (item != null)
                 {
-                    var identity = User.Identity as ClaimsIdentity;
-                    item.UserName = identity != null ? (!string.IsNullOrEmpty(identity.GetUserName()) ? identity.GetUserName() : "SYSTEMa") : "SYSTEMb";
-
+                   
                     bool result = InboundService.UpdateDeleteReason(item);
                     //result = InboundService.UpdateQtyInboundHead(item.InvNo, item.UserName);
                     response.SetData(result);

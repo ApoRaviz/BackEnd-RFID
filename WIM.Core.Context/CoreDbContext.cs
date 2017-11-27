@@ -61,6 +61,7 @@ namespace WIM.Core.Context
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //modelBuilder.Types().Configure(t => t.MapToStoredProcedures());
             base.OnModelCreating(modelBuilder);
 
         }
@@ -72,7 +73,6 @@ namespace WIM.Core.Context
                 ParameterName = "Prefixes",
                 Value = prefixes
             };
-
             return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
 
@@ -92,6 +92,7 @@ namespace WIM.Core.Context
             return submodule.ToList();
         }
         
+
 
     }
 }

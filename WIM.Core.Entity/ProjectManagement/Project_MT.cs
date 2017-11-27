@@ -32,11 +32,12 @@ namespace WIM.Core.Entity.ProjectManagement
         public string ProjectID { get; set; }
         public string ProjectName { get; set; }
         public int CusIDSys { get; set; }
+        public Nullable<int> ModuleIDSys { get; set; }
         public string ProjectStatus { get; set; }
         //public System.DateTime CreatedDate { get; set; }
         //public System.DateTime UpdateDate { get; set; }
         //public string UserUpdate { get; set; }
-        
+
         public virtual ICollection<Supplier_MT> Supplier_MT { get; set; }
 
         public virtual ICollection<Menu_MT> Menu_MT { get; set; }
