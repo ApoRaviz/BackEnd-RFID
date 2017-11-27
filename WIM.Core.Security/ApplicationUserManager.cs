@@ -77,6 +77,10 @@ namespace WIM.Core.Security
             ApplicationUser _retVal = null;
             try
             {
+                var query = db.Users.Where(p => p.Id == _userId)
+                    .Include(p => p.Roles).Include(x => x.Roles.Select(r => r.Role.Permissions));
+                var query2 = db.Users.Where(p => p.Id == _userId).FirstOrDefault();
+                var query3 = db.Users.Where(p => p.Id == _userId).Include(p => p.Roles).FirstOrDefault();
                 _retVal = db.Users.Where(p => p.Id == _userId)
                     .Include(p => p.Roles).Include(x => x.Roles.Select(r => r.Role.Permissions)).FirstOrDefault();
             }

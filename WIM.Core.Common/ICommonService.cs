@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.CustomerManagement;
 
 namespace WIM.Core.Common
 {
@@ -15,5 +17,6 @@ namespace WIM.Core.Common
         IList<ProcGetUserLog_Result> GetUserLogData(string RequestMethod, string RequestUrl, DateTime? RequestDateFrom, DateTime? RequestDateTo);
         IList<ProcGetTableColumnsDescription_Result> GetTableColumnsDescription(string TableName);
         string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);
+        T AutoMapper<T>(object data);
     }
 }

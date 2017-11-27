@@ -8,6 +8,8 @@ using Isuzu.WebApi.Controllers;
 using Isuzu.Service;
 using Isuzu.Service.Impl.Inbound;
 using System.Security.Principal;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace Isuzu.WebApi
 {
@@ -63,6 +65,13 @@ namespace Isuzu.WebApi
             //Isuzu
             container.RegisterType<IInboundService, InboundService>();
 
+            //CORE
+            container.RegisterType<IMenuService, MenuService>();
+            container.RegisterType<IMenuProjectMappingService, MenuProjectMappingService>();
+            container.RegisterType<IPermissionService, PermissionService>();
+            container.RegisterType<ICustomerService, CustomerService>();
+            container.RegisterType<IProjectService, ProjectService>();
+            container.RegisterType<IUserService, UserService>();
 
         }
     }

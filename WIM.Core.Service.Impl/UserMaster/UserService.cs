@@ -357,7 +357,7 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IUserRepository repo = new UserRepository(Db);
-                user = repo.GetSingle(c => c.PersonIDSys == personIDSys);
+                user = repo.Get(c => c.PersonIDSys == personIDSys);
             }
             return user;
         }

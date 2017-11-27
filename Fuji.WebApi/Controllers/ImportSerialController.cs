@@ -437,22 +437,21 @@ namespace Fuji.WebApi.Controllers
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpGet]
-        [Route("importSerial/bycolumn/{column}/{keyword}")]
-        public HttpResponseMessage GetDataByColumn(string column, string keyword)
+        [HttpPost]
+        [Route("importSerial/bycolumn")]
+        public HttpResponseMessage GetDataByColumn([FromBody]ParameterSearch param)
         {
-
-            ResponseData<IEnumerable<ImportSerialHead>> response = new ResponseData<IEnumerable<ImportSerialHead>>();
-            if (string.IsNullOrEmpty(keyword))
-            {
-                response.SetData(null);
-                Request.ReturnHttpResponseMessage(response);
-            }
-
+            ResponseData<FujiDataImportSerialHead> response = new ResponseData<FujiDataImportSerialHead>();
             try
             {
-                IEnumerable<ImportSerialHead> result = ItemImportService.GetDataByColumn(column, keyword);
-                response.SetData(result);
+                int totalRecord;
+                IEnumerable<ImportSerialHead> result = ItemImportService.GetDataByColumn(param, out totalRecord);
+                if (result != null)
+                {
+                    FujiDataImportSerialHead ret = new FujiDataImportSerialHead(totalRecord,result);
+                    response.SetData(ret);
+                }
+                
             }
             catch (ValidationException ex)
             {

@@ -23,10 +23,10 @@ namespace WIM.Core.Repository.Impl
             Db = context;
         }
 
-        public IEnumerable<MenuProjectMappingDto> GetAllMenu(int id , IEnumerable<MenuProjectMappingDto> menu)
+        public virtual IEnumerable<MenuProjectMappingDto> GetAllMenu(int id , IEnumerable<MenuProjectMappingDto> menu)
         {
-            var MenuProjectMappingQuery = (from row in Db.MenuProjectMapping
-                                           join o in menu on row.MenuIDSys equals o.MenuIDSys into joined
+            var MenuProjectMappingQuery = (from row in Db.MenuProjectMapping.AsEnumerable()
+                                           join o in menu.AsEnumerable() on row.MenuIDSys equals o.MenuIDSys into joined
                                            from i in joined.DefaultIfEmpty()
                                            where row.ProjectIDSys == id
                                            orderby row.MenuIDSysParent, row.Sort
@@ -35,17 +35,19 @@ namespace WIM.Core.Repository.Impl
                                                MenuIDSys = row.MenuIDSys,
                                                ProjectIDSys = row.ProjectIDSys,
                                                MenuName = row.MenuName,
-                                               MenuIDSysParent = row.MenuIDSysParent,
-                                               Url = i.Url ?? String.Empty,
+                                               MenuIDSysParent = row.MenuIDSysParent ,
+                                               Url = i==null ? string.Empty : i.Url,
                                                Sort = row.Sort
-                                           });
+                                           }).ToList();
+
+
             return MenuProjectMappingQuery;
         }
 
         public IQueryable<MenuProjectMapping> GetMenuPermission(string userid, int projectid)
         {
             var menu = (from ur in Db.UserRoles
-                       join rp in Db.RolePermission on ur.RoleID equals rp.RoleID
+                       join rp in Db.RolePermissions on ur.RoleID equals rp.RoleID
                        join ps in Db.Permission on rp.PermissionID equals ps.PermissionID
                        join r in Db.Role on ur.RoleID equals r.RoleID
                        join mp in Db.MenuProjectMapping on ps.MenuIDSys equals mp.MenuIDSys
@@ -54,11 +56,20 @@ namespace WIM.Core.Repository.Impl
             return menu;
         }
 
-        public IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
+        public IQueryable<MenuProjectMapping> GetMenuProject(int id)
         {
+            var menu = (from i in Db.MenuProjectMapping
+                        where i.ProjectIDSys == id
+                        orderby i.MenuIDSysParent, i.Sort
+                        select i).Include(y => y.Menu_MT);
+           return menu;
+        }
+
+        public IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x)
+        { 
             var MenuProjectMappingQuery = (from row in x.MenuProjectMapping
                                            join o in menu.AsEnumerable() on row.MenuIDSys equals o.MenuIDSys into joined
-                                           from i in joined.DefaultIfEmpty()
+                                           from i in joined.AsEnumerable().DefaultIfEmpty()
                                            where row.ProjectIDSys == id
                                            orderby row.MenuIDSysParent, row.Sort
                                            select row).Include(a => a.Menu_MT);
@@ -68,10 +79,12 @@ namespace WIM.Core.Repository.Impl
                                                ProjectIDSys = row.ProjectIDSys,
                                                MenuName = row.MenuName,
                                                MenuIDSysParent = row.MenuIDSysParent,
-                                               Url = row.Menu_MT.Url ?? String.Empty,
+                                               Url = row==null ? String.Empty:  row.Menu_MT.Url,
                                                Sort = row.Sort
-                                           });
+                                           }).ToList();
             return Menu;
         }
+
+
     }
 }

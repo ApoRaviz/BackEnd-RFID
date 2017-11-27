@@ -12,11 +12,12 @@ namespace Fuji.Service.ItemImport
 {
     public interface IItemImportService: IService
     {
+        string Test();
         IEnumerable<ImportSerialHead> GetItems();
         IEnumerable<ImportSerialHead> GetItems(int pageIndex, int pageSize,out int totalRecord);
         IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 50);
         IEnumerable<ImportSerialDetail> GetImportSerialDetailByHeadID(string headID);
-        IEnumerable<ImportSerialHead> GetDataByColumn(string column, string keyword);
+        IEnumerable<ImportSerialHead> GetDataByColumn(ParameterSearch parameterSearch, out int totalRecord);
         ImportSerialHead GetItemByDocID(string id, bool isIncludeChild = false);
         ItemImportDto GetItemByDocID_Handy(string id);
         string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);

@@ -363,7 +363,7 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public IEnumerable<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord)
         {
-            List<InboundItems> items = new List<InboundItems>();
+            IEnumerable<InboundItems> items = new List<InboundItems>();
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
@@ -372,15 +372,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
-                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                        output.Direction = ParameterDirection.Output;
-
-                        items = DetailRepo.SqlQuery<InboundItems>("ProcPagingInboundItems @page,@size,@totalRecord out"
-                            , new SqlParameter("@page", pageIndex)
-                            , new SqlParameter("@size", pageSize)
-                            , output).ToList();
-
-                        totalRecord = Convert.ToInt32(output.Value);
+                        items = Db.ProcPagingInboundItems(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception)
@@ -395,7 +387,7 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public IEnumerable<InboundItems> GetInboundItemDeletedPaging(int pageIndex, int pageSize, out int totalRecord)
         {
-            List<InboundItems> items = new List<InboundItems>();
+            IEnumerable<InboundItems> items = new List<InboundItems>();
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
@@ -404,15 +396,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
-                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                        output.Direction = ParameterDirection.Output;
-
-                        DetailRepo.SqlQuery<InboundItems>("ProcPagingInboundItemsDeleted @page,@size,@totalRecord out"
-                            , new SqlParameter("@page", pageIndex)
-                            , new SqlParameter("@size", pageSize)
-                            , output).ToList();
-
-                        totalRecord = Convert.ToInt32(output.Value);
+                        items = Db.ProcPagingInboundItemsDeleted(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception)
@@ -510,10 +494,6 @@ namespace Isuzu.Service.Impl.Inbound
                                       by p.InvNo into g
                                       select new { InvNo = g.Key, GroupList = g.ToList() }).ToList();
 
-
-
-
-
                     try
                     {
                         itemGroups.ForEach(i =>
@@ -522,18 +502,21 @@ namespace Isuzu.Service.Impl.Inbound
                         //if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
                         if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
                             {
-                                i.GroupList.ForEach(x =>
-                                {
-                                    x.ID = Guid.NewGuid().ToString();
-                                    x.Status = IsuzuStatus.NEW.ToString();
-                                    DetailRepo.Insert(x);
-                                });
-                            //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
-                            var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
+                                
+                                //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
+                                var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
                                 if (item != null)
                                 {
+                                    i.GroupList.ForEach(x =>
+                                    {
+                                        x.ID = Guid.NewGuid().ToString();
+                                        x.Status = IsuzuStatus.NEW.ToString();
+                                        item.InboundItems.Add(x);
+                                    });
+                                    
                                     item.Qty = item.InboundItems.Count;
                                     HeadRepo.Update(item);
+                                    Db.SaveChanges();
                                 }
 
                             }
@@ -541,19 +524,25 @@ namespace Isuzu.Service.Impl.Inbound
                             {
                                 InboundItemsHead item = new InboundItemsHead();
                                 item.InvNo = i.InvNo;
+                                item.Status = IsuzuStatus.NEW.ToString();
+                                HeadRepo.Insert(item);
+                                Db.SaveChanges();
+
+                                item = HeadRepo.GetItemFirstBy(b => b.InvNo == i.InvNo,true);
                                 i.GroupList.ForEach(x =>
                                 {
                                     x.ID = Guid.NewGuid().ToString();
                                     x.Status = IsuzuStatus.NEW.ToString();
                                     item.InboundItems.Add(x);
                                 });
-                                item.Status = IsuzuStatus.NEW.ToString();
                                 item.Qty = i.GroupList.Count;
-                                HeadRepo.Insert(item);
+                                item.IsExport = false;
+                                HeadRepo.Update(item);
+                                Db.SaveChanges();
                             }
                         });
 
-                        Db.SaveChanges();
+                        
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -669,7 +658,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord)
         {
             DataSet dset = new DataSet();
-            List<InboundItemsHead> items = new List<InboundItemsHead>() { };
+            IEnumerable<InboundItemsHead> items = new List<InboundItemsHead>() { };
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
@@ -678,15 +667,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     try
                     {
-                        var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
-                        output.Direction = ParameterDirection.Output;
-
-                        items = HeadRepo.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHead @page,@size,@totalRecord out"
-                            , new SqlParameter("@page", pageIndex)
-                            , new SqlParameter("@size", pageSize)
-                            , output).ToList();
-
-                        totalRecord = Convert.ToInt32(output.Value);
+                        items = Db.ProcPagingInboundItemHead(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception ex)

@@ -14,5 +14,6 @@ namespace WIM.Core.Repository
         IEnumerable<MenuProjectMappingDto> GetAllMenu(int id, IEnumerable<MenuProjectMappingDto> menu);
         IEnumerable<MenuProjectMappingDto> GetAllMenuWithContext(int id, IEnumerable<MenuProjectMappingDto> menu,CoreDbContext x);
         IQueryable<MenuProjectMapping> GetMenuPermission(string userid, int projectid);
+        IQueryable<MenuProjectMapping> GetMenuProject(int id);
     }
 }

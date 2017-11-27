@@ -28,11 +28,6 @@ namespace Fuji.Entity.ItemManagement
         public string Remark { get; set; }
         public string Location { get; set; }
         public string Status { get; set; }
-        public string SerialFormat1 { get; set; }
-        public string SerialFormat2 { get; set; }
-        public string SerialName1 { get; set; }
-        public string SerialName2 { get; set; }
-        public byte IsRFID { get; set; }
         public int Qty { get; set; }
         public string Spare1 { get; set; }
         public string Spare2 { get; set; }
@@ -44,9 +39,7 @@ namespace Fuji.Entity.ItemManagement
         public string Spare8 { get; set; }
         public string Spare9 { get; set; }
         public string Spare10 { get; set; }
-        //public System.DateTime CreatedDate { get; set; }
-        //public System.DateTime UpdateDate { get; set; }
-        //public string UserUpdate { get; set; }
+        public bool IsExport { get; set; }
 
         public virtual ICollection<ImportSerialDetail> ImportSerialDetail { get; set; }
     }

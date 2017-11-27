@@ -298,10 +298,14 @@ namespace Master.WebApi.Controllers
             IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
             try
             {
-                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
-                if (!ModelState.IsValid && string.IsNullOrEmpty(roleID) ) 
+                string roleID = "";
+                if (!User.IsSysAdmin())
                 {
-                    return null;
+                    roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), projectClaimBinding.ProjectIDSys);
+                    if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
+                    {
+                        return null;
+                    }
                 }
                 //object CanAccessProject = ApplicationUserManager.GetUserAccessProject(User.Identity.GetUserId());
                 Dictionary<string, string> Json = new Dictionary<string, string>();
@@ -311,9 +315,12 @@ namespace Master.WebApi.Controllers
                 //{
                 //    UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
                 //}
-                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
+                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True")); 
                 oAuthIdentity.AddClaim(new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys.ToString()));
-                oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                if (User.IsSysAdmin())
+                { oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user)); }
+                else
+                { oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID)); }
                 oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
                 AuthenticationProperties props = new AuthenticationProperties();
                 props.IssuedUtc = DateTime.Now;
@@ -325,6 +332,11 @@ namespace Master.WebApi.Controllers
                 Json.Add("access_token", token);
                 Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                 Json.Add("status", "200");
+
+                var Project = new ProjectService().GetProjectByProjectIDSysIncludeModule(projectClaimBinding.ProjectIDSys);
+                if (Project != null)
+                    Json.Add("project", Newtonsoft.Json.JsonConvert.SerializeObject(Project));
+
                 response.SetData(Json);
             }
             catch (WIM.Core.Common.Validation.ValidationException ex)
