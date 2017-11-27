@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{075C6141-16E3-402D-8389-3B87CADA20B0}"
 EndProject
@@ -168,6 +168,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{31D0FD73-C303-449A-A3ED-D9D9F21CA113}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{90203035-CFAB-41DA-B61E-984AB51FD30E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuji.Common", "Fuji.Common\Fuji.Common.csproj", "{F614AE62-A53C-4952-880E-380AC277E8A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -399,6 +401,10 @@ Global
 		{BAC719E2-6937-40F5-846C-4392A5DFDC66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAC719E2-6937-40F5-846C-4392A5DFDC66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAC719E2-6937-40F5-846C-4392A5DFDC66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F614AE62-A53C-4952-880E-380AC277E8A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F614AE62-A53C-4952-880E-380AC277E8A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F614AE62-A53C-4952-880E-380AC277E8A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F614AE62-A53C-4952-880E-380AC277E8A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -485,6 +491,7 @@ Global
 		{DAE81666-5C73-4BB0-8731-EDA09194C03A} = {D4CADD1C-ADA0-4D83-9378-9E75295AF2B5}
 		{31D0FD73-C303-449A-A3ED-D9D9F21CA113} = {D4CADD1C-ADA0-4D83-9378-9E75295AF2B5}
 		{90203035-CFAB-41DA-B61E-984AB51FD30E} = {D4CADD1C-ADA0-4D83-9378-9E75295AF2B5}
+		{F614AE62-A53C-4952-880E-380AC277E8A7} = {B45DF483-3E3E-4E1B-94FC-70DED1B35981}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A988AAD2-BAE7-4EE3-9908-4E6C802AFADF}

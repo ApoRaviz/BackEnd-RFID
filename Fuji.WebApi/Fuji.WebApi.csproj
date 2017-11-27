@@ -591,6 +591,10 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fuji.Common\Fuji.Common.csproj">
+      <Project>{f614ae62-a53c-4952-880e-380ac277e8a7}</Project>
+      <Name>Fuji.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>

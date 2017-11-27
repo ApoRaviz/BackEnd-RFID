@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fuji.Common.SqlLog;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using WIM.Core.Common.SqlLogs;
+//using WIM.Core.Common.SqlLogs;
 
 namespace Fuji.WebApi
 {
@@ -22,7 +23,7 @@ namespace Fuji.WebApi
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.Initialize();
-            DbConfiguration.SetConfiguration(new LogDbConfiguration());
+            DbConfiguration.SetConfiguration(new LogDBConfiguration());
         }
     }
 }
