@@ -127,7 +127,8 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/customers/projects",
                     "POST/api/v1/account/assignProject",
                     "GET/api/v1/Persons",
-                    "GET/api/v1/helpers/tableColumnsDescription"
+                    "GET/api/v1/helpers/tableColumnsDescription",
+                    "GET/api/v1/Projects/select"
 
                 };
             string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";

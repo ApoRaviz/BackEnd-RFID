@@ -111,23 +111,33 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        //[HttpGet]
-        //[Route("user/{CusIDSys}/{UserID}")]
-        //public HttpResponseMessage GetUserProject(int CusIDSys, string UserID)
-        //{
-        //    ResponseData<List<UserProjectMapping>> response = new ResponseData<List<UserProjectMapping>>();
-        //    try
-        //    {
-        //        List<UserProjectMapping> Projects = ProjectService.GetUserProject(CusIDSys, UserID);
-        //        response.SetData(Projects);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
+        [HttpGet]
+        [Route("select")]
+        public HttpResponseMessage GetSelect()
+        {
+            
+                IResponseData<IEnumerable<Project_MT>> response = new ResponseData<IEnumerable<Project_MT>>();
+            IEnumerable<Project_MT> Project;
+                try
+                {
+                if (User.IsSysAdmin())
+                {
+                    Project = ProjectService.GetProjects();
+                }
+                else
+                {
+                    Project = ProjectService.GetProjects().Where(a => a.ProjectIDSys == User.Identity.GetProjectIDSys());
+                }
+                    response.SetData(Project);
+                }
+                catch (ValidationException ex)
+                {
+                    response.SetErrors(ex.Errors);
+                    response.SetStatus(HttpStatusCode.PreconditionFailed);
+                }
+                return Request.ReturnHttpResponseMessage(response);
+            
+        }
 
 
         // GET: api/Projects/5
