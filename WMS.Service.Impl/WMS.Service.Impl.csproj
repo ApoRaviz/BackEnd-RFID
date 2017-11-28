@@ -123,7 +123,7 @@
       <Name>WMS.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Repository.Impl\WMS.Repository.Impl.csproj">
-      <Project>{4A90AD09-D706-4985-A8CD-73B2BA35403D}</Project>
+      <Project>{4a90ad09-d706-4985-a8cd-73b2ba35403d}</Project>
       <Name>WMS.Repository.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj">

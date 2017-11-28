@@ -5,8 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common;
-using WIM.Core.Common.Extensions;
-using WMS.Service;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
 using System.Web.Http.Cors;
@@ -14,6 +12,7 @@ using System.Threading.Tasks;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Service;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Common.Extensions;
 
 namespace WMS.WebApi.Controllers
 {
