@@ -19,6 +19,7 @@ namespace WIM.Core.Common
     using Newtonsoft.Json.Linq;
     using WIM.Core.Entity.CustomerManagement;
     using WIM.Core.Context;
+    using System.Collections.Generic;
 
     public partial class CommonContext : DbContext
     {
@@ -37,13 +38,26 @@ namespace WIM.Core.Common
     
         public virtual ObjectResult<string> ProcGetTableDescription(string tableName)
         {
+
             var tableNameParameter = tableName != null ?
                 new ObjectParameter("tableName", tableName) :
                 new ObjectParameter("tableName", typeof(string));
-    
+            
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcGetTableDescription", tableNameParameter);
         }
-    
+
+        public virtual string ProcGetTableDescriptionWms(string tableName)
+        {
+            var tableNameParameter = /*new ObjectParameter("@tableName", tableName);*/
+            new SqlParameter("tableName", tableName);
+
+            using (WMS.Context.WMSDbContext Db = new WMS.Context.WMSDbContext())
+            {
+                return Db.Database.SqlQuery<string>("ProcGetTableDescription @tableName",tableNameParameter).FirstOrDefault();
+            }
+        }
+
         public virtual ObjectResult<ProcGetUserLog_Result> ProcGetUserLog(Nullable<int> logID, string requestMethod, string requestUrl, Nullable<System.DateTime> requestDateFrom, Nullable<System.DateTime> requestDateTo)
         {
             var logIDParameter = logID.HasValue ?
@@ -91,54 +105,34 @@ namespace WIM.Core.Common
             //var y = ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreQuery<string>
             //    ("exec ProcGetDataAutoComplete @columnNames,@tableName,@conditionColumnNames,@keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
             return x;
-            //var columnNamesParameter = columnNames != null ?
-            //    new ObjectParameter("columnNames", columnNames) :
-            //    new ObjectParameter("columnNames", typeof(string));
-
-            //var tableNameParameter = tableName != null ?
-            //    new ObjectParameter("tableName", tableName) :
-            //    new ObjectParameter("tableName", typeof(string));
-
-            //var conditionColumnNamesParameter = conditionColumnNames != null ?
-            //    new ObjectParameter("conditionColumnNames", conditionColumnNames) :
-            //    new ObjectParameter("conditionColumnNames", typeof(string));
-
-            //var keywordParameter = keyword != null ?
-            //    new ObjectParameter("keyword", keyword) :
-            //    new ObjectParameter("keyword", typeof(string));
-
-            //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcGetDataAutoComplete", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
-
+            
         }
 
-        //public virtual ObjectResult<Customer_MT> ProcGetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)
-        //{
-        //    var columnNamesParameter = columnNames != null ?
-        //        new ObjectParameter("columnNames", columnNames) :
-        //        new ObjectParameter("columnNames", typeof(string));
+        
 
-        //    var tableNameParameter = tableName != null ?
-        //        new ObjectParameter("tableName", tableName) :
-        //        new ObjectParameter("tableName", typeof(string));
-
-        //    var conditionColumnNamesParameter = conditionColumnNames != null ?
-        //        new ObjectParameter("conditionColumnNames", conditionColumnNames) :
-        //        new ObjectParameter("conditionColumnNames", typeof(string));
-
-        //    var keywordParameter = keyword != null ?
-        //        new ObjectParameter("keyword", keyword) :
-        //        new ObjectParameter("keyword", typeof(string));
-
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Customer_MT>("ProcGetDataAutoComplete", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
-        //}
-
-        public virtual ObjectResult<ProcGetTableColumnsDescription_Result> ProcGetTableColumnsDescription(string tableName)
+        public virtual List<ProcGetTableColumnsDescription_Result> ProcGetTableColumnsDescription(string tableName)
         {
-            var tableNameParameter = tableName != null ?
-                new ObjectParameter("tableName", tableName) :
-                new ObjectParameter("tableName", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ProcGetTableColumnsDescription_Result>("ProcGetTableColumnsDescription", tableNameParameter);
+            //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ProcGetTableColumnsDescription_Result>("ProcGetTableColumnsDescription", tableNameParameter);
+            var tableNameParameter = /*new ObjectParameter("@tableName", tableName);*/
+            new SqlParameter("tableName", tableName);
+            List<ProcGetTableColumnsDescription_Result> x;
+            using (WMS.Context.WMSDbContext Db = new WMS.Context.WMSDbContext())
+            {
+                x = Db.Database.SqlQuery<ProcGetTableColumnsDescription_Result>("ProcGetTableColumnsDescription @tableName", tableNameParameter).ToList();
+            }
+            
+            if (x.Count == 0)
+                {
+                    using (CoreDbContext db = new CoreDbContext())
+                    {
+                    var tableNameParameter2 = /*new ObjectParameter("@tableName", tableName);*/
+                        new SqlParameter("tableName", tableName);
+                    x = db.Database.SqlQuery<ProcGetTableColumnsDescription_Result>("ProcGetTableColumnsDescription @tableName", tableNameParameter2).ToList();
+                    }
+
+                }
+            return x;
+            
         }
     }
 }

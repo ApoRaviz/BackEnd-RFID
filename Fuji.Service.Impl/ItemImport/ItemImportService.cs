@@ -307,8 +307,9 @@ namespace Fuji.Service.Impl.ItemImport
         {
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext())
+                using (FujiDbContext Db = new FujiDbContext("UpdateStausExport(ImportSerialHead)"))
                 {
+                  
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
 
                     List<ImportSerialHead> queryUpdateHead = (from p in Db.ImportSerialHead
@@ -690,7 +691,7 @@ namespace Fuji.Service.Impl.ItemImport
 
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext())
+                using (FujiDbContext Db = new FujiDbContext("SetScanned(SetScannedRequest)"))
                 {
                     ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -797,7 +798,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 using (var scope = new TransactionScope())
                 {
-                    using (FujiDbContext Db = new FujiDbContext())
+                    using (FujiDbContext Db = new FujiDbContext("Receive(ReceiveRequest)"))
                     {
                         ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                         ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);

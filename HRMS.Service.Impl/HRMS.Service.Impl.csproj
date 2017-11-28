@@ -108,6 +108,10 @@
       <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
       <Name>WIM.Core.Service.Impl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
+      <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
+      <Name>WIM.Core.Service.Impl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
       <Project>{7526F7F0-D2AA-442F-B170-1DB30880E0EF}</Project>
       <Name>WIM.Core.Service</Name>

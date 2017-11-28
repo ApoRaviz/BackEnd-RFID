@@ -17,8 +17,7 @@ namespace WIM.Core.Common.Helpers
         {
             ValidationError error = new ValidationError(code.ToString(), code.GetDescription(), code.GetHttpCode());
             return error;
-        }
-
+        }        
     }
 
     public enum ErrorCode

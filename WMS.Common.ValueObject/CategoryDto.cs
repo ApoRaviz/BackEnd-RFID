@@ -14,7 +14,7 @@ namespace WMS.Common.ValueObject
         public int CateIDSys { get; set; }
         public string CateID { get; set; }
         public string CateName { get; set; }
-        public bool IsActive { get; set; }
+        public Nullable<bool> IsActive { get; set; }
         public string UserUpdate { get; set; }
        
         public int ProjectIDSys { get; set; }

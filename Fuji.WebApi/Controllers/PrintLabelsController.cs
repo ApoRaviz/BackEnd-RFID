@@ -29,7 +29,7 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
 
         [Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpGet]
+        [HttpPost]
         [Route("")]
         public HttpResponseMessage Get([FromBody]ParameterBoxLabel item)
         {

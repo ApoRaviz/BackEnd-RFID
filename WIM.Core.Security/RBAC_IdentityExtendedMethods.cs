@@ -17,7 +17,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (_identity != null && _identity.IsAuthenticated)
             {
                 var ci = _identity as ClaimsIdentity;
-                string _userId = ci != null ? ci.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+                string _userId = ci?.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (!string.IsNullOrEmpty(_userId))
                 {
@@ -87,7 +87,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (_principal != null && _principal.Identity != null && _principal.Identity.IsAuthenticated)
             {
                 var ci = _principal.Identity as ClaimsIdentity;
-                string _userId = ci != null ? ci.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+                string _userId = ci?.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (!string.IsNullOrEmpty(_userId))
                 {
@@ -126,13 +126,26 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/Users/customers",
                     "GET/api/v1/customers/projects",
                     "POST/api/v1/account/assignProject",
-                    "GET/api/v1/Persons"
+                    "GET/api/v1/Persons",
+                    "GET/api/v1/helpers/tableColumnsDescription"
+
                 };
             string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
 
             string[] urlIgnoreChkOTP = {
                     "POST/api/v1/account/assignProject"
                 };
+
+
+            int indexFirstslash = reqUrl.IndexOf('/');
+            int indexapiv1 = reqUrl.IndexOf("/api/v1");
+            if (indexFirstslash != -1 && indexapiv1 != -1)
+            {
+                string first = reqUrl.Substring(0, indexFirstslash);
+                string second = reqUrl.Substring(indexapiv1);
+                //reqUrl = reqUrl.Substring(indexFirstslash, indexapiv1 - indexFirstslash);
+                reqUrl = first + second;
+            }
             if (urlIgnore.Contains(reqUrl) || reqUrl.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrl)))
             {
                 return true;
@@ -148,9 +161,11 @@ public static class RBAC_ExtendedMethods_4_Principal
                           select c).ToList();
 
             // Sub String v1/customers/ => v1/customers  
+            
             if (reqUrl.Last() == '/')
             {
                 reqUrl = reqUrl.Substring(0, reqUrl.Length - 1);
+                
             }
 
             //url request
@@ -177,10 +192,8 @@ public static class RBAC_ExtendedMethods_4_Principal
 
                             // urlVerify   /api/v1/customers/1
 
-                            int reqUrlNum = 0;
-                            int permissUrlNum = 0;
-                            bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out reqUrlNum);
-                            bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out permissUrlNum);
+                            bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out int reqUrlNum);
+                            bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out int permissUrlNum);
 
                             if ((permissUrlSplit[i] == reqUrlSplit[i]) || (permissUrlSplit[i] == "@parameter_string") ||
                                 (isReqUrlNum && permissUrlSplit[i] == "1"))
@@ -208,9 +221,9 @@ public static class RBAC_ExtendedMethods_4_Principal
                 }
             }
         }
-        catch (IndexOutOfRangeException ex)
+        catch (IndexOutOfRangeException)
         {
-            throw ex;
+            throw;
         }
         catch (Exception ex)
         {
@@ -261,7 +274,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (_principal != null && _principal.Identity != null && _principal.Identity.IsAuthenticated)
             {
                 var ci = _principal.Identity as ClaimsIdentity;
-                string _userId = ci != null ? ci.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+                string _userId = ci?.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (!string.IsNullOrEmpty(_userId))
                 {
@@ -286,7 +299,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (identity != null)
             {
                 var claim = identity.FindFirst(claimType);
-                _retVal = claim != null ? claim.Value : null;
+                _retVal = claim?.Value;
             }
         }
         catch (Exception)
