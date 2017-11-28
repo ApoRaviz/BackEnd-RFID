@@ -48,7 +48,7 @@ namespace Fuji.Service.Impl.PrintLabel
                              ).SingleOrDefault();
             }
 
-            if (isNotUpdateDate = (label.CreateAt.Date == DateTime.Now.Date))
+            if (isNotUpdateDate = (label.CreateAt == DateTime.Now.Date))
             {
                 baseRunning = label.Running;
             }
