@@ -97,6 +97,34 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("customers/{userID}")]
+        public HttpResponseMessage GetCustonersByUserID(string userID)
+        {
+            ResponseData<object> response = new ResponseData<object>();
+            try
+            {
+                string userid = userID.ToString();//User.Identity.GetUserId();
+                object customer;
+                if (User.IsSysAdmin())
+                {
+                    customer = CustomerService.GetCustomerAll();
+                }
+                else
+                {
+                    customer = UserService.GetCustonersByUserID(userid);
+                }
+
+                response.SetData(customer);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Suppliers
         [HttpPost]
         [Route("")]

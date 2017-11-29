@@ -74,18 +74,6 @@
     <Reference Include="EPPlus">
       <HintPath>..\WIM.Core.Common\DllLibrary\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Fuji.Common.ValueObject">
-      <HintPath>..\Fuji.Common.ValueObject\bin\Debug\Fuji.Common.ValueObject.dll</HintPath>
-    </Reference>
-    <Reference Include="Fuji.Entity">
-      <HintPath>..\Fuji.Entity\bin\Debug\Fuji.Entity.dll</HintPath>
-    </Reference>
-    <Reference Include="Fuji.Service">
-      <HintPath>..\Fuji.Service\obj\Debug\Fuji.Service.dll</HintPath>
-    </Reference>
-    <Reference Include="Fuji.Service.Impl">
-      <HintPath>..\Fuji.Service.Impl\obj\Debug\Fuji.Service.Impl.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
     </Reference>
@@ -406,7 +394,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiLogHandler.cs" />
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
@@ -617,9 +604,33 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
+      <Project>{a97ea57c-9bbe-4650-8aad-28fdbca2677f}</Project>
+      <Name>Fuji.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fuji.Common\Fuji.Common.csproj">
       <Project>{f614ae62-a53c-4952-880e-380ac277e8a7}</Project>
       <Name>Fuji.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
+      <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
+      <Name>Fuji.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Repository.Impl\Fuji.Repository.Impl.csproj">
+      <Project>{76c721e6-b6f0-4132-b36e-9a9b68cbae0e}</Project>
+      <Name>Fuji.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Repository\Fuji.Repository.csproj">
+      <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
+      <Name>Fuji.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Service.Impl\Fuji.Service.Impl.csproj">
+      <Project>{e22348a1-e953-478b-9b69-cb3fcb3a45ce}</Project>
+      <Name>Fuji.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fuji.Service\Fuji.Service.csproj">
+      <Project>{4fbc9a8b-22ee-474c-a07e-00d5e770f751}</Project>
+      <Name>Fuji.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>

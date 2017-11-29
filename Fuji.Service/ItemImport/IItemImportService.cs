@@ -12,7 +12,6 @@ namespace Fuji.Service.ItemImport
 {
     public interface IItemImportService: IService
     {
-        string Test();
         IEnumerable<ImportSerialHead> GetItems();
         IEnumerable<ImportSerialHead> GetItems(int pageIndex, int pageSize,out int totalRecord);
         IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 50);
