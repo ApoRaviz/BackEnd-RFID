@@ -30,7 +30,6 @@ using WIM.Core.Entity.ProjectManagement;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
 using Newtonsoft.Json;
 

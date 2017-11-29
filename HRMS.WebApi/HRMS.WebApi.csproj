@@ -515,10 +515,6 @@
       <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
       <Name>WIM.Core.Security.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Repository.Imp\WIM.Core.Security.Repository.Imp.csproj">
-      <Project>{316e0cec-584a-46e7-a1d7-4368bb07848c}</Project>
-      <Name>WIM.Core.Security.Repository.Imp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Security.Repository\WIM.Core.Security.Repository.csproj">
       <Project>{098b63f0-95bb-421f-ac45-047f397fa475}</Project>
       <Name>WIM.Core.Security.Repository</Name>
