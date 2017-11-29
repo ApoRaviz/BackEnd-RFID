@@ -18,8 +18,8 @@ namespace WMS.Repository.Impl
 {
     public class SupplierRepository : Repository<Supplier_MT> , ISupplierRepository
     {
-        private WMSDbContext Db { get; set; }
-        public SupplierRepository( WMSDbContext context):base(context)
+        private CoreDbContext Db { get; set; }
+        public SupplierRepository(CoreDbContext context):base(context)
         {
             Db = context;
         }

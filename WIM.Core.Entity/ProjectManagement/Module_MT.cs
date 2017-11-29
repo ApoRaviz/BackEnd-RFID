@@ -5,10 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Entity.CustomerManagement;
-using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Entity.RoleAndPermission;
-using WIM.Core.Entity.SupplierManagement;
 //using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Entity.ProjectManagement

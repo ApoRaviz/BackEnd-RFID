@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BarcodeLib">
-      <HintPath>..\Fuji.WebApi\DLL\BarcodeLib.dll</HintPath>
+      <HintPath>..\WIM.Core.Common\DllLibrary\BarcodeLib.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus">
-      <HintPath>..\Fuji.WebApi\DLL\EPPlus.dll</HintPath>
+      <HintPath>..\WIM.Core.Common\DllLibrary\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WebDesign, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.340.80\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
@@ -50,10 +50,10 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OnBarcode.Barcode.ASPNET">
-      <HintPath>..\Fuji.WebApi\DLL\OnBarcode.Barcode.ASPNET.dll</HintPath>
+      <HintPath>..\WIM.Core.Common\DllLibrary\OnBarcode.Barcode.ASPNET.dll</HintPath>
     </Reference>
     <Reference Include="QRCoder">
-      <HintPath>..\Fuji.WebApi\DLL\QRCoder.dll</HintPath>
+      <HintPath>..\WIM.Core.Common\DllLibrary\QRCoder.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -71,7 +71,6 @@
   <ItemGroup>
     <Compile Include="Labels\LabelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="TrackingService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,21 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="SqlServerTypes\x64\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

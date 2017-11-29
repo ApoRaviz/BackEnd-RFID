@@ -12,6 +12,8 @@ using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Validation;
 using WMS.Context;
 using WMS.Entity.Report;
+using WMS.Repository.Impl.Report;
+using WMS.Repository.Report;
 using WMS.Service.Report;
 
 namespace WMS.Service.Impl.Report
@@ -20,67 +22,88 @@ namespace WMS.Service.Impl.Report
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><ColumnOrder>{1}</ColumnOrder></row>";
 
-        private WMSDbContext Db = WMSDbContext.Create();
 
         public List<ReportLayoutHeader_MT> GetAllReportHeader(string forTable)
         {
-            List<ReportLayoutHeader_MT> report = Db.ReportLayoutHeader_MT.Where(x => x.ForTable == forTable).ToList();
+            List<ReportLayoutHeader_MT> report;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IReportLayoutHeaderRepository repo = new ReportLayoutHeaderRepository(Db);
+                report = repo.GetMany(x => x.ForTable == forTable).ToList();
+            }
+                
             return report;
         }
 
         public ReportLayoutHeader_MT GetReportLayoutByReportIDSys(int id, string include)
         {
-            ReportLayoutHeader_MT report = Db.ReportLayoutHeader_MT.Find(id);
-            if (string.IsNullOrEmpty(include))
+            using(WMSDbContext Db = WMSDbContext.Create())
             {
+                IReportLayoutHeaderRepository repo = new ReportLayoutHeaderRepository(Db);
+                ReportLayoutHeader_MT report = repo.GetByID(id);
+                if (string.IsNullOrEmpty(include))
+                {
+                    return report;
+                }
+
+                string[] includes = include.Replace(" ", "").Split(',');
+                foreach (string inc in includes)
+                {
+                    Db.Entry(report).Collection(inc).Load();
+                }
+
                 return report;
             }
+            
 
-            string[] includes = include.Replace(" ", "").Split(',');
-            foreach (string inc in includes)
-            {
-                Db.Entry(report).Collection(inc).Load();
-            }
-
-            return report;
+            
         }
 
         public int? CreateReportForItemMaster(ReportLayoutHeader_MT data)
         {
-            System.Text.StringBuilder sb = new StringBuilder();
-            int? ReportSysID = 0;
-
-            int orderNo = 1;
-
-            foreach (ReportLayoutDetail_MT d in data.detail)
-                sb.AppendFormat(pXmlDetail, d.ColumnName, orderNo++);
-
-            using (var scope = new TransactionScope())
+            using (WMSDbContext Db = new WMSDbContext())
             {
-                //data.CreatedDate = DateTime.Now;
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
+                System.Text.StringBuilder sb = new StringBuilder();
+                int? ReportSysID = 0;
 
-                //Repo.Insert(customer);
-                try
+                int orderNo = 1;
+
+                foreach (ReportLayoutDetail_MT d in data.detail)
                 {
-                    ReportSysID = Db.ProcCreateReportLayout(data.ForTable, data.FormatName, data.FormatType, data.FileExtention, data.Delimiter, data.TextGualifier
-                                              , data.Encoding, data.StartExportRow, data.IncludeHeader, data.AddHeaderLayout, data.HeaderLayout
-                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
-                    Db.SaveChanges();
+                    d.IsActive = true;
+                    d.CreateAt = DateTime.Now;
+                    d.UpdateAt = DateTime.Now;
+                    d.UpdateBy = Identity.Name;
+                    sb.AppendFormat(pXmlDetail, d.ColumnName, orderNo++);
                 }
-                catch (DbEntityValidationException e)
+
+                using (var scope = new TransactionScope())
                 {
-                    HandleValidationException(e);
+                    data.CreateAt = DateTime.Now;
+                    data.UpdateAt = DateTime.Now;
+                    data.UpdateBy = Identity.Name;
+                    data.CreateBy = Identity.Name;
+                    //Repo.Insert(customer);
+                    try
+                    {
+                        ReportSysID = Db.ProcCreateReportLayout(data.ForTable, data.FormatName, data.FormatType, data.FileExtention, data.Delimiter, data.TextGualifier
+                                                  , data.Encoding, data.StartExportRow, data.IncludeHeader, data.AddHeaderLayout, data.HeaderLayout
+                                                  , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
+                    scope.Complete();
+                    return ReportSysID;
                 }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                scope.Complete();
-                return ReportSysID;
             }
         }
 
@@ -91,58 +114,69 @@ namespace WMS.Service.Impl.Report
             int orderNo = 1;
 
             foreach (ReportLayoutDetail_MT d in data.detail)
+            {
+                d.IsActive = true;
+                d.UpdateAt = DateTime.Now;
+                d.UpdateBy = Identity.Name;
                 sb.AppendFormat(pXmlDetail, d.ColumnName, orderNo++);
+            }
 
             using (var scope = new TransactionScope())
             {
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
-
-                try
+                    data.UpdateAt = DateTime.Now;
+                    data.UpdateBy = Identity.Name;
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    Db.ProcUpdateReportLayout(data.ReportIDSys, data.FormatName, data.FormatType, data.FileExtention, data.Delimiter, data.TextGualifier
-                                              , data.Encoding, data.StartExportRow, data.IncludeHeader, data.AddHeaderLayout, data.HeaderLayout
-                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
-                    Db.SaveChanges();
+                    try
+                    {
+                        Db.ProcUpdateReportLayout(data.ReportIDSys, data.FormatName, data.FormatType, data.FileExtention, data.Delimiter, data.TextGualifier
+                                                  , data.Encoding, data.StartExportRow, data.IncludeHeader, data.AddHeaderLayout, data.HeaderLayout
+                                                  , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
+                    scope.Complete();
+                    return true;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                scope.Complete();
-                return true;
             }
         }
 
         public DataTable GetReportData(int ReportIDSys)
         {
-            DbProviderFactory dbFactory = DbProviderFactories.GetFactory(Db.Database.Connection);
-
-            using (var cmd = dbFactory.CreateCommand())
+            //Oil Comment
+            using (WMSDbContext Db = new WMSDbContext())
             {
-                cmd.Connection = Db.Database.Connection;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "dbo.ProcGetReportData";
+                DbProviderFactory dbFactory = DbProviderFactories.GetFactory(Db.Database.Connection);
 
-                DbParameter param = cmd.CreateParameter();
-                param.ParameterName = "@ReportID";
-                param.Value = ReportIDSys;
-
-                cmd.Parameters.Add(param);
-                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter())
+                using (var cmd = dbFactory.CreateCommand())
                 {
-                    adapter.SelectCommand = cmd;
+                    cmd.Connection = Db.Database.Connection;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "dbo.ProcGetReportData";
 
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
+                    DbParameter param = cmd.CreateParameter();
+                    param.ParameterName = "@ReportID";
+                    param.Value = ReportIDSys;
 
-                    return dt;
+                    cmd.Parameters.Add(param);
+                    using (DbDataAdapter adapter = dbFactory.CreateDataAdapter())
+                    {
+                        adapter.SelectCommand = cmd;
+
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        return dt;
+                    }
                 }
             }
         }

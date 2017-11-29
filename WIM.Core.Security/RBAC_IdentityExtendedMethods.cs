@@ -126,13 +126,27 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/Users/customers",
                     "GET/api/v1/customers/projects",
                     "POST/api/v1/account/assignProject",
-                    "GET/api/v1/Persons"
+                    "GET/api/v1/Persons",
+                    "GET/api/v1/helpers/tableColumnsDescription",
+                    "GET/api/v1/Projects/select"
+
                 };
             string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
 
             string[] urlIgnoreChkOTP = {
                     "POST/api/v1/account/assignProject"
                 };
+
+
+            int indexFirstslash = reqUrl.IndexOf('/');
+            int indexapiv1 = reqUrl.IndexOf("/api/v1");
+            if (indexFirstslash != -1 && indexapiv1 != -1)
+            {
+                string first = reqUrl.Substring(0, indexFirstslash);
+                string second = reqUrl.Substring(indexapiv1);
+                //reqUrl = reqUrl.Substring(indexFirstslash, indexapiv1 - indexFirstslash);
+                reqUrl = first + second;
+            }
             if (urlIgnore.Contains(reqUrl) || reqUrl.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrl)))
             {
                 return true;
@@ -148,9 +162,11 @@ public static class RBAC_ExtendedMethods_4_Principal
                           select c).ToList();
 
             // Sub String v1/customers/ => v1/customers  
+            
             if (reqUrl.Last() == '/')
             {
                 reqUrl = reqUrl.Substring(0, reqUrl.Length - 1);
+                
             }
 
             //url request
