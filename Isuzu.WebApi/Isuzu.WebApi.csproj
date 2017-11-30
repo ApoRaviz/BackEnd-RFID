@@ -322,16 +322,6 @@
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
-    <Reference Include="WIM.Core.Common">
-      <HintPath>..\WIM.Core.Common\bin\Debug\WIM.Core.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Common.ValueObject">
-      <HintPath>..\WIM.Core.Common.ValueObject\bin\Debug\WIM.Core.Common.ValueObject.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="WIM.Core.Security.Context">
       <HintPath>..\WIM.Core.Security.Context\bin\Debug\WIM.Core.Security.Context.dll</HintPath>
     </Reference>
@@ -628,6 +618,10 @@
       <Project>{6efdbe1e-e1b8-46bd-835a-867b6ac88125}</Project>
       <Name>Isuzu.Repository.Impl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Isuzu.Repository\Isuzu.Repository.csproj">
+      <Project>{13dd01f7-c348-4566-ad0e-db5f790ed5f2}</Project>
+      <Name>Isuzu.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Isuzu.Service.Impl\Isuzu.Service.Impl.csproj">
       <Project>{e8f620e3-cfe2-401c-a9ec-9de16eda37bb}</Project>
       <Name>Isuzu.Service.Impl</Name>
@@ -635,6 +629,30 @@
     <ProjectReference Include="..\Isuzu.Service\Isuzu.Service.csproj">
       <Project>{1add2f62-608b-446d-ae85-2468953751d1}</Project>
       <Name>Isuzu.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{c8c9f920-5e08-4a3a-af4f-fe3aa35421c8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Name>WIM.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
+      <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
+      <Name>WIM.Core.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
       <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
