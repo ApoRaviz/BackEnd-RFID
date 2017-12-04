@@ -8,8 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Helpers;
+
 using Isuzu.Service;
 using Isuzu.Common.ValueObject;
 using System.IO;
@@ -19,6 +18,8 @@ using Isuzu.Entity;
 using Isuzu.Repository.Impl;
 using System.Security.Principal;
 using Isuzu.Repository.ItemManagement;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace Isuzu.Service.Impl.Inbound
 {

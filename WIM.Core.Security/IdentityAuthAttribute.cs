@@ -9,8 +9,9 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.WebApi.Auth
 {

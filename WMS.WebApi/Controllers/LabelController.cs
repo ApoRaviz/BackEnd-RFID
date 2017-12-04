@@ -6,9 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Extensions;
+
 using WMS.WebApi.Report;
 using System.Drawing;
 using System.Data;
@@ -23,6 +21,9 @@ using WMS.Service.Label;
 using WMS.Entity.LayoutManagement;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Entity.SupplierManagement;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.WebApi.Controllers
 {

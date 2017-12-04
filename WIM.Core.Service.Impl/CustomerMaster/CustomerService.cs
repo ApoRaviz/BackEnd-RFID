@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
 using System.Data.Entity;
 //using System.Web.Mvc;
 //using Newtonsoft.Json;
@@ -18,6 +17,7 @@ using WIM.Core.Repository.Impl;
 using WIM.Core.Common.ValueObject;
 using System.Security.Principal;
 using WIM.Core.Common;
+using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.Core.Service.Impl
 {

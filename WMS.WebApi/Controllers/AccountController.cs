@@ -12,9 +12,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using WMS.WebApi.Providers.Firebase;
 using WMS.WebApi.Providers.Firebase.Model;
-using WIM.Core.Common.Http;
 using System.Net;
-using WIM.Core.Common.Extensions;
 using RestSharp;
 using System.Security.Principal;
 using WIM.Core.Security;
@@ -26,6 +24,9 @@ using WMS.Service;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service.Impl;
 using Microsoft.Owin.Security.Cookies;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.WebApi.Controllers
 {
@@ -159,7 +160,7 @@ namespace WMS.WebApi.Controllers
                 IRestResponse res = fireb.SendNotificationsToMobile(fireBaseParam);
                 response.SetData("OTP");
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -220,7 +221,7 @@ namespace WMS.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -283,7 +284,7 @@ namespace WMS.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -333,7 +334,7 @@ namespace WMS.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

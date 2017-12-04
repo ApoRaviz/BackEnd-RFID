@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Validation;
 using WMS.Context;
 using WMS.Entity.LayoutManagement;
 using WMS.Repository.Impl.Label;

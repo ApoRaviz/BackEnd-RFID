@@ -19,14 +19,14 @@ using Microsoft.VisualBasic;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 using WIM.Core.Security.Providers;
-using WIM.Core.Common.Http;
 using Fuji.WebApi.Providers.Firebase;
 using WIM.Core.Service.Impl;
 using RestSharp;
-using WIM.Core.Common.Validation;
 using System.Net;
 using WIM.Core.Entity.UserManagement;
-using WIM.Core.Common.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -197,7 +197,7 @@ namespace Fuji.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -258,7 +258,7 @@ namespace Fuji.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -308,7 +308,7 @@ namespace Fuji.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

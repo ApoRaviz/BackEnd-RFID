@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WMS.Repository;
-using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
@@ -17,6 +16,8 @@ using WIM.Core.Entity.SupplierManagement;
 using WMS.Context;
 using System.Security.Principal;
 using WMS.Repository.Impl;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace WMS.Service
 { 

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Reflection;
-using WIM.Core.Entity.CustomerManagement;
 
 namespace WIM.Core.Common
 {

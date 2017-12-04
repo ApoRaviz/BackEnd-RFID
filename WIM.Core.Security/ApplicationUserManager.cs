@@ -8,8 +8,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using WIM.Core.Common.Mail;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Mail;
+using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Security.Context;
 using WIM.Core.Security.Entity;
 

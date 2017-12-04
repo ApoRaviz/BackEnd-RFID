@@ -14,15 +14,14 @@ using System.Drawing;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
 using System.Data;
 using Fuji.Service.ItemImport;
 using Fuji.Common.ValueObject;
 using Fuji.Entity.ItemManagement;
 using Microsoft.AspNet.Identity;
-using Fuji.Service.Impl.PrintLabel;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace Fuji.WebApi.Controllers
 {

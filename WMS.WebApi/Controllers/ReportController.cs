@@ -8,14 +8,14 @@ using WIM.Core.Common.Helpers;
 using WMS.WebApi.Report;
 using System.IO;
 using System.Data;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Extensions;
 using System.Web.Http.Cors;
 using System.Threading.Tasks;
 using WMS.Service;
 using WMS.Entity.Report;
 using WMS.Service.Report;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.WebApi.Controllers
 {
