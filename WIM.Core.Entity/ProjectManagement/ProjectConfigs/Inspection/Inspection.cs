@@ -8,6 +8,6 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Inspection
 {
     public class Inspection
     {
-
+        public ReceivingDataType ReceivingDataType { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace Master.WebApi.Controllers
                 }
                 else
                 {
-                    Projects = ProjectService.GetProjects(User.Identity.GetProjectIDSys());
+                    Projects = ProjectService.GetProjects(1063);
                 }
                 
                 response.SetData(Projects);
@@ -229,6 +229,7 @@ namespace Master.WebApi.Controllers
             try
             {
                 project.Customer_MT = null;
+                
                 bool isUpated = ProjectService.UpdateProject(project);
                 response.SetData(isUpated);
             }

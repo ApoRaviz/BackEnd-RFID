@@ -57,6 +57,11 @@
     <Compile Include="MenuManagement\Menu_MT.cs" />
     <Compile Include="Person\Person_MT.cs" />
     <Compile Include="ProjectManagement\Module_MT.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Delivery\DeliveryCompany.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Delivery\Service.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Inspection\ReceivingDataType.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Inventory\DeliveryCompany.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Inventory\Service.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Allocate.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Business.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Delivery\Delivery.cs" />
@@ -64,10 +69,12 @@
     <Compile Include="ProjectManagement\ProjectConfigs\Inventory\Inventory.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Main.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Order\Order.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Order\ReceivingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\ProjectConfig.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\Receiving.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\ReceivingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Service.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\SendingDataType.cs" />
     <Compile Include="ProjectManagement\Project_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleAndPermission\Permission.cs" />

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Receiving
 {
-    public class Receiving
+    public class SendingDataType
     {
-        public ReceivingDataType ReceivingDataType { get; set; }
-        public SendingDataType SendingDataType { get; set; }
+        public bool IsEmail { get; set; }
+        public bool IsFTP { get; set; }
+        public bool IsInterface { get; set; }
+
     }
 }

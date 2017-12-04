@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Inventory
 {
-    public class Inventory
+    public class Service
     {
-        public Service Service { get; set; }
-        public bool IsFixDelivery { get; set; }
-        public virtual ICollection<DeliveryCompany> DeliveryCompany { get; set; }
+        public bool IsQC { get; set; }
+        public bool IsDelivery { get; set; }
     }
 }
