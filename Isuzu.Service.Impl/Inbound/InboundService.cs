@@ -370,14 +370,14 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
                         items = Db.ProcPagingInboundItems(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        string err = e.Message;
                         return new List<InboundItems>() { };
                     }
                 }
@@ -394,7 +394,6 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
                         items = Db.ProcPagingInboundItemsDeleted(pageIndex, pageSize, out totalRecord);

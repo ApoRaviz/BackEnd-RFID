@@ -41,20 +41,12 @@ namespace Fuji.Service.Impl.ItemImport
 
         //private SerialRepository SerialDetailRepo;
         //private SerialHeadRepository SerialHeadRepo;
+
         public ItemImportService()
         {
             //Db = FujiDbContext.Create();
             //SerialDetailRepo = new SerialRepository(new FujiDbContext());
             //SerialHeadRepo = new SerialHeadRepository(new FujiDbContext());
-        }
-
-        public string Test()
-        {
-            using (FujiDbContext Db = new FujiDbContext())
-            {
-                Db.ProcGetDataAutoComplete("WHID,ItemCode", "ImportSerialHead", "WHID", "aa");
-            }
-            return string.Empty;
         }
 
         public IEnumerable<ImportSerialHead> GetItems()
