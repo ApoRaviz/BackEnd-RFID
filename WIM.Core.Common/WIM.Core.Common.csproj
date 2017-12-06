@@ -96,23 +96,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommonDataModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Constants\Constant.cs" />
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="CommonService.cs" />
-    <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />
-    <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="HandheldErrorLog.cs" />
     <Compile Include="Handlers\ApiLogHandler.cs" />
     <Compile Include="Helpers\ApiHashTableHelper.cs" />
     <Compile Include="Helpers\AuthHelper.cs" />
-    <Compile Include="Helpers\DownloadHelper.cs" />
-    <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Http\HttpMessageHandler.cs" />
     <Compile Include="ICommonService.cs" />
-    <Compile Include="Http\IResponseData.cs" />
-    <Compile Include="Http\ResponseData.cs" />
     <Compile Include="IResourceItem.cs" />
-    <Compile Include="Mail\EmailService.cs" />
     <Compile Include="ProcGetTableColumnsDescription_Result.cs">
       <DependentUpon>CommonDataModel.tt</DependentUpon>
     </Compile>
@@ -123,10 +113,6 @@
     <Compile Include="UserLog.cs">
       <DependentUpon>CommonDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Validation\ElementNotFound.cs" />
-    <Compile Include="Validation\IValidationException.cs" />
-    <Compile Include="Validation\ValidationError.cs" />
-    <Compile Include="Validation\ValidationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="CommonDataModel.edmx">

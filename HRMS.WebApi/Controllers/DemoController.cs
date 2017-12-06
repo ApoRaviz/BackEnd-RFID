@@ -9,9 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Web.Http;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using Validation = WIM.Core.Common.Validation;
+
+using Validation = WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Status;
 using WIM.Core.Repository;
@@ -33,6 +32,11 @@ using System.Text;
 using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
 using Newtonsoft.Json;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Validation;
+using System.Web.Http.ModelBinding;
+using WIM.Core.Entity.ProjectManagement.ProjectConfigs.Main;
 
 namespace HRMS.WebApi.Controllers
 {
@@ -83,8 +87,11 @@ namespace HRMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+
+        //[ValidateModel]
+        [CheckModelForNull]
         [HttpPost]
-        [Route("")]
+        [Route("")]/*[FromBody]*/
         public HttpResponseMessage DemoUpdate([FromBody]ProjectConfig projectConfig)
         {
             Project_MT project = new Project_MT();
@@ -92,6 +99,7 @@ namespace HRMS.WebApi.Controllers
 
             using (CoreDbContext db = new CoreDbContext())
             {
+
                 Project_MT project1 = db.Project_MT.SingleOrDefault(p => p.ProjectIDSys == 1);
                 project1.ProjectConfig = projectConfig;
                 db.SaveChanges();
@@ -108,7 +116,7 @@ namespace HRMS.WebApi.Controllers
                 catch (NullReferenceException)
                 {
 
-                }                
+                }
                 response.SetData(project);
 
             }
@@ -144,7 +152,41 @@ namespace HRMS.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);*/
-        }        
+        }
+
+        [CheckModelForNull]
+        [HttpPost]
+        [Route("oil")]
+        public HttpResponseMessage DemoUpdateOil([FromBody]Main projectConfig)
+        {
+            Project_MT project = new Project_MT();
+            ResponseData<Project_MT> response = new ResponseData<Project_MT>();
+
+            using (CoreDbContext db = new CoreDbContext())
+            {
+
+                Project_MT project1 = db.Project_MT.SingleOrDefault(p => p.ProjectIDSys == 1);
+                project1.ProjectConfig.Main = projectConfig;
+                db.SaveChanges();
+
+                var projects = (
+                      from p in db.Project_MT
+                      select p
+                ).ToList();
+
+                try
+                {
+                    project = projects.FirstOrDefault(p => p.ProjectConfig.Main.Service.IsImport);
+                }
+                catch (NullReferenceException)
+                {
+
+                }
+                response.SetData(project);
+
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
     }
 
     /*public interface ILeaveRepository : IRepository<Leave>
@@ -195,5 +237,7 @@ namespace HRMS.WebApi.Controllers
 
         }
     }*/
+
+
 
 }

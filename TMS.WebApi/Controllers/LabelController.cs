@@ -4,9 +4,9 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using TMS.Service.Labels;
 using TMS.Service.Impl.Labels;
-using WIM.Core.Common.Http;
+using WIM.Core.Common.Utility.Http;
 using TMS.Common.ValueObject.Labels;
-using WIM.Core.Common.Extensions;
+using WIM.Core.Common.Utility.Extensions;
 using System.Collections.Generic;
 using System;
 

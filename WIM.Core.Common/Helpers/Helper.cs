@@ -64,6 +64,9 @@ namespace WIM.Core.Common.Helpers
         [ErrorMessage("Cannot delete data!, This data has not in system or has been delete."), HttpCode(HttpStatusCode.ExpectationFailed)]
         E4017 = 4017,
 
+        [ErrorMessage("Service Less than one!"), HttpCode(HttpStatusCode.PreconditionFailed)]
+        E4112 = 4112,
+
         [ErrorMessage("Program has a problem.\nPlease contact IT!!!")]
         E5000 = 5000,
 

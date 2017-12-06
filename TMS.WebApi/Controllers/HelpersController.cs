@@ -6,9 +6,9 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using WIM.Core.Common;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 using System.Data.Entity;
 
 namespace TMS.WebApi.Controllers

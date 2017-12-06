@@ -10,15 +10,15 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+
 using System.Text;
 using System.Security.Claims;
 using Isuzu.Service.Impl;
 using Isuzu.Common.ValueObject;
 using Isuzu.Entity;
-using System.Net.Http.Headers;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace Isuzu.Service.Impl
 {

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
@@ -134,6 +134,12 @@ namespace Master.WebApi.Controllers
             try
             {
                 string id = "";
+                User.PasswordHash = "Zxcv123!";
+                User.EmailConfirmed = true;
+                User.LockoutEndDateUtc = DateTime.Now;
+                User.SecurityStamp = "28617a11-3dbd-4c33-8fc2-7670667051ea";
+                User.KeyAccess = "1061";
+                User.KeyAccessDate = DateTime.Now;
                 PasswordHasher ph = new PasswordHasher();
                 User.PasswordHash = ph.HashPassword(User.PasswordHash);
                 id = UserService.CreateUser(User);

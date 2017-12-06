@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WMS.Repository;
-using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
@@ -17,6 +16,8 @@ using WMS.Context;
 using WMS.Entity.WarehouseManagement;
 using WMS.Repository.Impl;
 using WMS.Service.LocationMaster;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace WMS.Service.Impl.LocationMaster
 {

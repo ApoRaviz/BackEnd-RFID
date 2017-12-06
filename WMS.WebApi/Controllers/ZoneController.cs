@@ -4,12 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Extensions;
+
 using WMS.Service;
 using WMS.Entity.WarehouseManagement;
 using WMS.Service.WarehouseMaster;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.WebApi.Controllers
 {

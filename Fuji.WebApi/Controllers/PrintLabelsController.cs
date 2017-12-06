@@ -6,8 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
 using BarcodeLib;
 using System.Drawing;
 using System.Xml;
@@ -15,6 +13,8 @@ using System.Xml.Linq;
 using System.Drawing.Printing;
 using Fuji.Service.PrintLabel;
 using Fuji.Common.ValueObject;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 
 namespace Fuji.WebApi.Controllers.ExternalInterface
 {

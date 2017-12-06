@@ -489,6 +489,10 @@
       <Project>{2cf56a5a-150b-4805-91d6-35127991297e}</Project>
       <Name>Master.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{c8c9f920-5e08-4a3a-af4f-fe3aa35421c8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>

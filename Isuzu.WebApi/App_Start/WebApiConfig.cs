@@ -10,8 +10,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Isuzu.WebApi.Controllers;
-using WIM.Core.Common.Http;
-using WIM.WebApi.Auth;
 
 namespace Isuzu.WebApi
 {
@@ -44,7 +42,7 @@ namespace Isuzu.WebApi
             );
 
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
-           config.Filters.Add(new IdentityAuthAttribute());
+           //config.Filters.Add(new IdentityAuthAttribute());
 
         }       
     }
