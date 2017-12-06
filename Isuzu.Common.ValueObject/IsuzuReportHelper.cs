@@ -14,7 +14,7 @@ namespace Isuzu.Common.ValueObject
     public class IsuzuReportHelper
     {
 
-        public static void parseExcelToDownload(DataTable dt, string filePath, string fileName, HttpResponse response)
+        public static MemoryStream parseExcelToDownload(DataTable dt, string filePath, string fileName, HttpResponse response)
         {
             MemoryStream ms = new MemoryStream();
             using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
@@ -52,7 +52,8 @@ namespace Isuzu.Common.ValueObject
                 package.SaveAs(ms);
             }
 
-            DownloadFile(ms, fileName, response);
+            return ms;
+            //DownloadFile(ms, fileName, response);
 
         }
 

@@ -152,6 +152,10 @@
       <DependentUpon>CommonDataModel.edmx</DependentUpon>
       <LastGenOutput>CommonDataModel.cs</LastGenOutput>
     </Content>
+    <Content Include="DllLibrary\BarcodeLib.dll" />
+    <Content Include="DllLibrary\EPPlus.dll" />
+    <Content Include="DllLibrary\OnBarcode.Barcode.ASPNET.dll" />
+    <Content Include="DllLibrary\QRCoder.dll" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

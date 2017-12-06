@@ -223,31 +223,27 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        //[Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/header/{id}")]
         public HttpResponseMessage GetHeaderPDF(string id)
         {
-            IResponseData<int> response = new ResponseData<int>();
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
-
+            HttpResponseMessage result = new HttpResponseMessage();
             try
             {
-                response.SetData(1);
+                ImportSerialHead item = ItemImportService.GetItemByDocID(id, true);
+                if (item != null)
+                {
+                    result.Content = ItemImportService.GetReportStream(item);
+                }
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
             catch (ValidationException ex)
             {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
+                result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
             }
 
-            ImportSerialHead item = ItemImportService.GetItemByDocID(id,true);
-            if (item != null)
-            {
-                result.Content = ItemImportService.GetReportStream(item);
-            }
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             return result;
         }
 
@@ -288,8 +284,6 @@ namespace Fuji.WebApi.Controllers
         [Route("importSerial/export-waranty/{id}")]
         public HttpResponseMessage ExportToWarantyExcel(string id)
         {
-
-            IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
             ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id,true);
@@ -318,7 +312,6 @@ namespace Fuji.WebApi.Controllers
         public HttpResponseMessage ExportToReceiveExcel(string id)
         {
 
-            IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
             ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id,true);

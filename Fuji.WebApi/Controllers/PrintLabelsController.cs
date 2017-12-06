@@ -18,7 +18,7 @@ using Fuji.Common.ValueObject;
 
 namespace Fuji.WebApi.Controllers.ExternalInterface
 {
-    [RoutePrefix("api/v1/external/printLabel")]
+    [RoutePrefix("api/v1/External/printLabel")]
     public class PrintLabelsController : ApiController
     {
         private IPrintLabelService PrintLabelService;
@@ -34,7 +34,6 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
         public HttpResponseMessage Get([FromBody]ParameterBoxLabel item)
         {
             int baseRunning = 0;
-            IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage();
 
 
@@ -51,8 +50,6 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
             }
 
             return result;
-            //return Request.ReturnHttpResponseMessage(response);
-
 
         }
  
