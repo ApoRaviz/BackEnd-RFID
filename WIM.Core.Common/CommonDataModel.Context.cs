@@ -100,6 +100,7 @@ namespace WIM.Core.Common
             using (CoreDbContext Db = new CoreDbContext())
             {
                 var y = Db.Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
+               
                 x = y.FirstOrDefault();
             }
             //var y = ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreQuery<string>

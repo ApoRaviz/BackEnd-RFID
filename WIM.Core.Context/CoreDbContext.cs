@@ -73,7 +73,30 @@ namespace WIM.Core.Context
             return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
 
-  
+        public virtual string ProcGetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)
+        {
+            var columnNamesParameter = /*new ObjectParameter("@columnNames", columnNames);*/
+            new SqlParameter("columnNames", columnNames);
+
+            var tableNameParameter = /*new ObjectParameter("@tableName", tableName);*/
+            new SqlParameter("tableName", tableName);
+
+            var conditionColumnNamesParameter = /*new ObjectParameter("@conditionColumnNames", conditionColumnNames);*/
+            new SqlParameter("conditionColumnNames", conditionColumnNames);
+
+            var keywordParameter = /*new ObjectParameter("@keyword", keyword);*/
+            new SqlParameter("keyword", keyword);
+            string x;
+
+            var y = Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
+
+            x = y.FirstOrDefault();
+
+            //var y = ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreQuery<string>
+            //    ("exec ProcGetDataAutoComplete @columnNames,@tableName,@conditionColumnNames,@keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
+            return x;
+
+        }
 
 
     }

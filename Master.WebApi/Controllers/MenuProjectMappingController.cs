@@ -161,7 +161,7 @@ namespace Master.WebApi.Controllers
             try
             {
                 IEnumerable<List<MenuProjectMappingDto>> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingByID(ProjectIDSys).GroupBy(u => u.MenuIDSysParent).Select(grp => grp.ToList());
-                List<Permission> permission = PermissionService.GetPermissionByProjectID(ProjectIDSys);
+                List<List<Permission>> permission = PermissionService.GetPermissionByProjectID(ProjectIDSys).GroupBy(c => c.MenuIDSys).Select(grp => grp.ToList()).ToList();
                 List<List<MenuProjectMappingDto>> temp = MenuProjectMapping.ToList();
                 List<MenuProjectMappingDto> forfindPermission;
                 for (int i = 0; i < temp.Count; i++)
@@ -172,9 +172,10 @@ namespace Master.WebApi.Controllers
                         forfindPermission[j].have = 0;
                         for (int k = 0; k < permission.Count; k++)
                         {
-                            if (permission[k].MenuIDSys == forfindPermission[j].MenuIDSys)
+                            if (permission[k][0].MenuIDSys == forfindPermission[j].MenuIDSys)
                             {
                                 forfindPermission[j].IsPermission = 1;
+                                break;
                             }
                         }
                     }

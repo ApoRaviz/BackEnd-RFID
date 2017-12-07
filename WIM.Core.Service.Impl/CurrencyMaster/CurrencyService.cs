@@ -36,7 +36,7 @@ namespace WIM.Core.Service.Impl
             {
                 ICurrencyRepository repo = new CurrencyRepository(Db);
                 string[] include = { "Country_MT" };
-                CurrencyName = repo.GetWithInclude(a => a.CurrencyIDSys == a.CurrencyIDSys, include);
+                CurrencyName = repo.GetWithInclude(a => a.CurrencyIDSys == a.CurrencyIDSys, include).ToList();
             }
             return CurrencyName;
         }
