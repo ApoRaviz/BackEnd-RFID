@@ -52,6 +52,7 @@
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Currency\CurrencyRepository.cs" />
     <Compile Include="CustomerAndProject\CustomerRepository.cs" />
+    <Compile Include="CustomerAndProject\ModuleRepository.cs" />
     <Compile Include="CustomerAndProject\ProjectRepository.cs" />
     <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
     <Compile Include="MenuAndPermission\MenuRepository.cs" />
