@@ -17,7 +17,7 @@ namespace WIM.Core.Entity
 
         public Nullable<bool> IsActive { get; set; }
         public string CreateBy { get; set; }
-        public Nullable<DateTime> CreateAt { get; set; }
+        public DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<DateTime> UpdateAt { get; set; }
     }
