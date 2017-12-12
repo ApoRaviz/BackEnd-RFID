@@ -76,7 +76,7 @@ namespace WIM.Core.Common.Utility.Helpers
         [ErrorMessage("Your Token Timeout!, Please login again."), HttpCode(HttpStatusCode.Unauthorized), Action("A1")]
         E401 = 401,
 
-        [ErrorMessage("Your Token Timeout!, Please login again."), HttpCode(HttpStatusCode.Unauthorized), Action("A1")]
+        [ErrorMessage("Your Token Timeout!, Cannot POST,PUT,DELETE Please login again."), HttpCode(HttpStatusCode.Unauthorized), Action("A1")]
         E402 = 402,
 
         [ErrorMessage("Forbidden!, Not have permission to access this."), HttpCode(HttpStatusCode.Forbidden)]

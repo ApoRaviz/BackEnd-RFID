@@ -565,8 +565,6 @@ namespace Isuzu.Service.Impl
         [Route("export/{id}")]
         public HttpResponseMessage ExportToExcel(string id)
         {
-
-            IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
             IEnumerable<InboundItems> inboundItems = InboundService.GetInboundItemByInvoiceNumber(id,true);
@@ -577,10 +575,14 @@ namespace Isuzu.Service.Impl
                 string fileName = "{0}_{1}.{2}";
                 fileName = String.Format(fileName, "Export_Isuzu_", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = IsuzuReportHelper.getExportInboundDataTable(inboundItems.ToList());
-                IsuzuReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
-
+                var ms = IsuzuReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
+                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
             }
-            result = new HttpResponseMessage(HttpStatusCode.OK);
             return result;
         }
 
@@ -616,7 +618,7 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(response);
         }
 
-
+        [Authorize]
         [HttpPost]
         [Route("deleteResonPath")]
         public async Task<HttpResponseMessage> PostDeleteReason()

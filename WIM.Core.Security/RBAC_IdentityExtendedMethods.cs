@@ -128,7 +128,8 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "POST/api/v1/account/assignProject",
                     "GET/api/v1/Persons",
                     "GET/api/v1/helpers/tableColumnsDescription",
-                    "GET/api/v1/Projects/select"
+                    "GET/api/v1/Projects/select",
+                    "POST/api/v1/account/Logout"
 
                 };
             string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
@@ -137,6 +138,11 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "POST/api/v1/account/assignProject"
                 };
 
+            if (reqUrl.Last() == '/')
+            {
+                reqUrl = reqUrl.Substring(0, reqUrl.Length - 1);
+
+            }
 
             int indexFirstslash = reqUrl.IndexOf('/');
             int indexapiv1 = reqUrl.IndexOf("/api/v1");
@@ -163,11 +169,7 @@ public static class RBAC_ExtendedMethods_4_Principal
 
             // Sub String v1/customers/ => v1/customers  
             
-            if (reqUrl.Last() == '/')
-            {
-                reqUrl = reqUrl.Substring(0, reqUrl.Length - 1);
-                
-            }
+            
 
             //url request
             string[] reqUrlSplit = reqUrl.Split('/');

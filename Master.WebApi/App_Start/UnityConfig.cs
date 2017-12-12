@@ -41,6 +41,7 @@ namespace Master.WebApi
             container.RegisterType<IUserRoleService, UserRoleService>();
             container.RegisterType<IEmployeeService, EmployeeService>();
             container.RegisterType<IPersonService, PersonService>();
+            container.RegisterType<IModuleService, ModuleService>();
 
         }
     }
