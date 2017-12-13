@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Transactions;
 
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Repository;

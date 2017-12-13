@@ -2,13 +2,13 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using Validation = WIM.Core.Common.Validation;
+using Validation = WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.Status;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Service.StatusManagement;
 using WIM.Core.Service.Impl.StatusManagement;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace Master.WebApi.Controllers
 {

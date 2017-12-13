@@ -179,6 +179,8 @@ namespace Master.WebApi.Controllers
 
         // POST: api/Projects
         [HttpPost]
+        [CheckModelForNull]
+        [ValidateModel]
         [Route("")]
         public HttpResponseMessage Post([FromBody]Project_MT project)
         {
@@ -222,6 +224,8 @@ namespace Master.WebApi.Controllers
         //}
         // PUT: api/Projects/5
         [HttpPut]
+        [CheckModelForNull]
+        [ValidateModel]
         [Route("{projectIDSys}")]
         public HttpResponseMessage Put(int projectIDSys, [FromBody]Project_MT project)
         {

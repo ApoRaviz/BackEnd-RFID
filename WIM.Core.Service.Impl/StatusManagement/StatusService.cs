@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Helpers;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Context;
@@ -12,6 +10,8 @@ using WIM.Core.Common;
 using WIM.Core.Service.StatusManagement;
 using WIM.Core.Repository.Impl.StatusManagement;
 using WIM.Core.Repository.StatusManagement;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace WIM.Core.Service.Impl.StatusManagement
 {

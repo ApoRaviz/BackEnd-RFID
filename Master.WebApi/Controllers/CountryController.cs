@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common;
-using WMS.Master;
 using System.Web.Http.Cors;
 using WIM.Core.Entity.Country;
 using WIM.Core.Service;
