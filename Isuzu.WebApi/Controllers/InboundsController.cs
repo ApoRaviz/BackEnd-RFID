@@ -19,6 +19,7 @@ using Isuzu.Entity;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using System.Net.Http.Headers;
 
 namespace Isuzu.Service.Impl
 {
@@ -279,7 +280,7 @@ namespace Isuzu.Service.Impl
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("items/{pageIndex}/{pageSize}")]
-        public HttpResponseMessage GetByPaging(int pageIndex,int pageSize)
+        public HttpResponseMessage GetByPaging([FromUri]int pageIndex, [FromUri]int pageSize)
         {
             IResponseData<IsuzuDataInboundGroupItems> respones = new ResponseData<IsuzuDataInboundGroupItems>();
             try
@@ -306,7 +307,7 @@ namespace Isuzu.Service.Impl
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("itemsInvNo/{invNo}")]
-        public HttpResponseMessage GetByInvNo(string invNo)
+        public HttpResponseMessage GetByInvNo([FromUri]string invNo)
         {
             IResponseData<InboundItemsHead> respones = new ResponseData<InboundItemsHead>();
             try
@@ -350,7 +351,7 @@ namespace Isuzu.Service.Impl
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("search/bycolumn/{column}/{keyword}")]
-        public HttpResponseMessage GetDataByColumn(string column, string keyword)
+        public HttpResponseMessage GetDataByColumn([FromUri]string column, [FromUri]string keyword)
         {
 
             IResponseData<IEnumerable<InboundItemsHead>> response = new ResponseData<IEnumerable<InboundItemsHead>>();
@@ -378,7 +379,7 @@ namespace Isuzu.Service.Impl
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("itemImport/{pageIndex}/{pageSize}")]
-        public HttpResponseMessage GetItemByPaging(int pageIndex, int pageSize)
+        public HttpResponseMessage GetItemByPaging([FromUri]int pageIndex, [FromUri]int pageSize)
         {
             IResponseData<IsuzuDataInboundItems> respones = new ResponseData<IsuzuDataInboundItems>();
             try
@@ -403,7 +404,7 @@ namespace Isuzu.Service.Impl
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("itemImportDeleted/{pageIndex}/{pageSize}")]
-        public HttpResponseMessage GetItemDeletedByPaging(int pageIndex, int pageSize)
+        public HttpResponseMessage GetItemDeletedByPaging([FromUri]int pageIndex, [FromUri]int pageSize)
         {
             ResponseData<IsuzuDataInboundItems> respones = new ResponseData<IsuzuDataInboundItems>();
             try
@@ -544,7 +545,7 @@ namespace Isuzu.Service.Impl
 
         [HttpGet]
         [Route("generateRFID/{qty}")]
-        public HttpResponseMessage GenerateRFID(string qty)
+        public HttpResponseMessage GenerateRFID([FromUri]string qty)
         {
             ResponseData<bool> response = new ResponseData<bool>();
            
@@ -563,7 +564,7 @@ namespace Isuzu.Service.Impl
 
         [HttpGet]
         [Route("export/{id}")]
-        public HttpResponseMessage ExportToExcel(string id)
+        public HttpResponseMessage ExportToExcel([FromUri]string id)
         {
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
@@ -576,7 +577,7 @@ namespace Isuzu.Service.Impl
                 fileName = String.Format(fileName, "Export_Isuzu_", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = IsuzuReportHelper.getExportInboundDataTable(inboundItems.ToList());
                 var ms = IsuzuReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
-                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content = new ByteArrayContent(ms.ToArray());
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
