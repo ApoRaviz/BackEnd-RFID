@@ -33,9 +33,12 @@ using System.Text;
 using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
 using Newtonsoft.Json;
+using System.Web.Http.Filters;
+using System.Web.Http.Controllers;
 
 namespace HRMS.WebApi.Controllers
 {
+    //[ValidateModel]
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
@@ -83,13 +86,32 @@ namespace HRMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("")]
+        public HttpResponseMessage DemoUpdateGet(string data)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, data.Length + 5);
+        }
+
+        [HttpGet]
+        [Route("")]
+        public HttpResponseMessage DemoUpdateGet2()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, "555 OK");
+        }
+
+
+
+
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage DemoUpdate([FromBody]ProjectConfig projectConfig)
-        {
+        public HttpResponseMessage DemoUpdate(string data, [FromBody]ProjectConfig projectConfig)
+        {           
+
             Project_MT project = new Project_MT();
             ResponseData<Project_MT> response = new ResponseData<Project_MT>();
 
+           
             using (CoreDbContext db = new CoreDbContext())
             {
                 Project_MT project1 = db.Project_MT.SingleOrDefault(p => p.ProjectIDSys == 1);
@@ -196,4 +218,15 @@ namespace HRMS.WebApi.Controllers
         }
     }*/
 
+    public class ValidateModelAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            if (actionContext.ModelState.IsValid == false)
+            {
+                actionContext.Response = actionContext.Request.CreateErrorResponse(
+                    HttpStatusCode.BadRequest, actionContext.ModelState);
+            }
+        }
+    }
 }

@@ -7,7 +7,6 @@ using System.Web.Http;
 using WIM.Core.Common.Extensions;
 using WIM.Core.Common.Http;
 using WIM.Core.Common.Validation;
-using WMS.Service;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Service;
 using WIM.Core.Common.ValueObject;
