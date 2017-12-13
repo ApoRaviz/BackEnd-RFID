@@ -167,7 +167,7 @@ namespace Fuji.WebApi.Controllers
                 fileName = String.Format(fileName, "Export_Picking_Group", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getFujiPickingGroupDataTable(pickingGroup);
                 var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
-                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content = new ByteArrayContent(ms.ToArray()); 
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
@@ -222,31 +222,27 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        //[Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/header/{id}")]
         public HttpResponseMessage GetHeaderPDF(string id)
         {
-            IResponseData<int> response = new ResponseData<int>();
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
-
+            HttpResponseMessage result = new HttpResponseMessage();
             try
             {
-                response.SetData(1);
+                ImportSerialHead item = ItemImportService.GetItemByDocID(id, true);
+                if (item != null)
+                {
+                    result.Content = ItemImportService.GetReportStream(item);
+                }
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
             catch (ValidationException ex)
             {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
+                result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
             }
 
-            ImportSerialHead item = ItemImportService.GetItemByDocID(id,true);
-            if (item != null)
-            {
-                result.Content = ItemImportService.GetReportStream(item);
-            }
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             return result;
         }
 
@@ -271,7 +267,7 @@ namespace Fuji.WebApi.Controllers
                 fileName = String.Format(fileName, "Import_For_L-CAT", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getImportSerailDataTable(serialHead);
                 var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
-                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content = new ByteArrayContent(ms.ToArray());
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
@@ -287,8 +283,6 @@ namespace Fuji.WebApi.Controllers
         [Route("importSerial/export-waranty/{id}")]
         public HttpResponseMessage ExportToWarantyExcel(string id)
         {
-
-            IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
             ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id,true);
@@ -300,7 +294,7 @@ namespace Fuji.WebApi.Controllers
                 fileName = String.Format(fileName, "Export_To_Waranty", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getImportSerailGroupDataTable(serialHead);
                 var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
-                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content = new ByteArrayContent(ms.ToArray());
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
@@ -317,7 +311,6 @@ namespace Fuji.WebApi.Controllers
         public HttpResponseMessage ExportToReceiveExcel(string id)
         {
 
-            IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
             ImportSerialHead serialHead = ItemImportService.GetItemByDocID(id,true);
@@ -329,7 +322,7 @@ namespace Fuji.WebApi.Controllers
                 fileName = String.Format(fileName, "Export_All_Receive", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
                 DataTable dt = FujiReportHelper.getImportSerailByStatusDataTable(serialHead);
                 var ms = FujiReportHelper.parseExcelToDownload(dt, filePath);
-                result.Content = new ByteArrayContent(ms.GetBuffer());
+                result.Content = new ByteArrayContent(ms.ToArray());
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {

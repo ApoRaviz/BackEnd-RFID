@@ -36,6 +36,8 @@ namespace WIM.WebApi.Auth
             {
                 //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
                 ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E401));
+                if(actionContext.Request.Method.Equals(HttpMethod.Post).Equals(HttpMethod.Put))
+                    ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E402));
                 IResponseData<int> response = new ResponseData<int>();
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);
