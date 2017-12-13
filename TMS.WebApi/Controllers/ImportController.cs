@@ -7,13 +7,14 @@ using System.IO;
 using System.Web;
 using System.Text;
 using System.Collections.Specialized;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Collections.Generic;
 using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace TMS.WebApi.Controllers
 {

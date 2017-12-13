@@ -9,8 +9,9 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.WebApi.Auth
 {
@@ -35,6 +36,8 @@ namespace WIM.WebApi.Auth
             {
                 //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
                 ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E401));
+                if(actionContext.Request.Method.Equals(HttpMethod.Post).Equals(HttpMethod.Put))
+                    ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E402));
                 IResponseData<int> response = new ResponseData<int>();
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);

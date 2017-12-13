@@ -13,7 +13,10 @@ namespace WMS.Entity.Report
     public class ReportLayoutDetail_MT : BaseEntity
     {
         [Key]
+        [Column(Order = 0)]
         public int ReportIDSys { get; set; }
+        [Key]
+        [Column(Order = 1)]
         public string ColumnName { get; set; }
         public Nullable<int> ColumnOrder { get; set; }
 

@@ -8,7 +8,7 @@ using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Repository
 {
-    public interface IWarehouseRepository:IRepository<Warehouse_MT>
+    public interface IWarehouseRepository: IRepository<Warehouse_MT>
     {
     }
 }

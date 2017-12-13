@@ -6,13 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 
 namespace Fuji.WebApi.Controllers
 {
-    [RoutePrefix("api/v1/external/programVersion")]
+    [RoutePrefix("api/v1/External/programVersion")]
     public class ProgramVersionController : ApiController
     {
         private IProgramVersionService ProgramVersionService;

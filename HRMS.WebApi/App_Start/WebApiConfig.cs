@@ -10,6 +10,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using HRMS.WebApi.Controllers;
+using WIM.Core.Common.Utility.Validation;
 
 namespace HRMS.WebApi
 {
@@ -41,10 +42,11 @@ namespace HRMS.WebApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            //config.Filters.Add(new CheckModelForNullAttribute());
+            //config.Filters.Add(new ValidateModelAttribute());
+
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
             //config.Filters.Add(new IdentityAuthAttribute());
-
-            config.Filters.Add(new ValidateModelAttribute());
 
         }       
     }

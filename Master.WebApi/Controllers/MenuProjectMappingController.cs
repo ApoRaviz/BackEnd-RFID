@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
@@ -371,7 +371,7 @@ namespace Master.WebApi.Controllers
                 if (User.IsSysAdmin())
                 {
                     MenuPermis = MenuProjectMappingService.GetMenuProjectByID(ProID,Db);
-                    MenuRes = MenuPermis.Where(x => x.MenuIDSysParent != 0 && x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
+                    MenuRes = MenuPermis.Where(x => /*x.MenuIDSysParent != 0 &&*/ x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
                 }
                 else
                 {

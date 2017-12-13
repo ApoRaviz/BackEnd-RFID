@@ -6,17 +6,17 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using WIM.Core.Common;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
 using System.Data.Entity;
 using WMS.Service;
 using WIM.Core.Entity.CustomerManagement;
 using Newtonsoft.Json.Linq;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.WebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/v1/helpers")]
     public class HelpersController : ApiController
     {
@@ -40,7 +40,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<string> response = new ResponseData<string>();
             try
             {
-                string tableDescription = CommonService.GetTableDescription(tableName);
+                string tableDescription = CommonService.GetTableDescriptionWms(tableName);
                 response.SetData(tableDescription);
             }
             catch (ValidationException ex)

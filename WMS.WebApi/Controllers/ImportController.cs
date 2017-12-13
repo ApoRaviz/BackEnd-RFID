@@ -4,12 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
 using WMS.Service;
 using WMS.Service.Import;
 using WMS.Entity.ImportManagement;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.WebApi.Controllers
 {

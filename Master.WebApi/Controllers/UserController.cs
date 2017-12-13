@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
@@ -96,6 +96,34 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("customers/{userID}")]
+        public HttpResponseMessage GetCustonersByUserID(string userID)
+        {
+            ResponseData<object> response = new ResponseData<object>();
+            try
+            {
+                string userid = userID.ToString();//User.Identity.GetUserId();
+                object customer;
+                if (User.IsSysAdmin())
+                {
+                    customer = CustomerService.GetCustomerAll();
+                }
+                else
+                {
+                    customer = UserService.GetCustonersByUserID(userid);
+                }
+
+                response.SetData(customer);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Suppliers
         [HttpPost]
         [Route("")]
@@ -105,6 +133,12 @@ namespace Master.WebApi.Controllers
             try
             {
                 string id = "";
+                User.PasswordHash = "Zxcv123!";
+                User.EmailConfirmed = true;
+                User.LockoutEndDateUtc = DateTime.Now;
+                User.SecurityStamp = "28617a11-3dbd-4c33-8fc2-7670667051ea";
+                User.KeyAccess = "1061";
+                User.KeyAccessDate = DateTime.Now;
                 PasswordHasher ph = new PasswordHasher();
                 User.PasswordHash = ph.HashPassword(User.PasswordHash);
                 id = UserService.CreateUser(User);

@@ -6,8 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
 using BarcodeLib;
 using System.Drawing;
 using System.Xml;
@@ -15,10 +13,12 @@ using System.Xml.Linq;
 using System.Drawing.Printing;
 using Fuji.Service.PrintLabel;
 using Fuji.Common.ValueObject;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
 
 namespace Fuji.WebApi.Controllers.ExternalInterface
 {
-    [RoutePrefix("api/v1/external/printLabel")]
+    [RoutePrefix("api/v1/External/printLabel")]
     public class PrintLabelsController : ApiController
     {
         private IPrintLabelService PrintLabelService;
@@ -34,7 +34,6 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
         public HttpResponseMessage Get([FromBody]ParameterBoxLabel item)
         {
             int baseRunning = 0;
-            IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage();
 
 
@@ -51,8 +50,6 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
             }
 
             return result;
-            //return Request.ReturnHttpResponseMessage(response);
-
 
         }
  

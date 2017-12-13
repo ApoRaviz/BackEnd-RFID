@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Reflection;
-using WIM.Core.Entity.CustomerManagement;
 
 namespace WIM.Core.Common
 {
@@ -16,6 +15,12 @@ namespace WIM.Core.Common
         {
             ObjectParameter result = new ObjectParameter("tableName", tableName);
             return db.ProcGetTableDescription(tableName).FirstOrDefault();
+        }
+
+        public string GetTableDescriptionWms(String tableName)
+        {
+            ObjectParameter result = new ObjectParameter("tableName", tableName);
+            return db.ProcGetTableDescriptionWms(tableName);
         }
 
         public bool WriteUserLog(UserLog log)
@@ -59,7 +64,7 @@ namespace WIM.Core.Common
 
         public IList<ProcGetTableColumnsDescription_Result> GetTableColumnsDescription(string TableName)
         {
-            return db.ProcGetTableColumnsDescription(TableName).ToList();
+            return db.ProcGetTableColumnsDescription(TableName);
         }
 
         public string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)

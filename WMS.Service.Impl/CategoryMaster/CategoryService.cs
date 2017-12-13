@@ -4,13 +4,15 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using System.Transactions;
 using WMS.Repository;
-using WIM.Core.Common.Validation;
+
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Common.ValueObject;
 using WMS.Repository.Impl;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace WMS.Service
 {

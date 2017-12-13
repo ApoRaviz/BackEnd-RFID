@@ -121,10 +121,12 @@ namespace WIM.Core.Repository.Impl
             foreach (PropertyInfo prop in properties)
             {
                 var value = prop.GetValue(entityToUpdate);
-                if (typeEntityForUpdate.GetProperty(prop.Name) != null && !prop.PropertyType.IsGenericType)
+                if (typeEntityForUpdate.GetProperty(prop.Name) != null 
+                    && (!prop.PropertyType.IsGenericType || Nullable.GetUnderlyingType(prop.PropertyType) != null))
                 {
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
                 }
+
             }
             entityForUpdate.UpdateBy = Identity.GetUserName();
             entityForUpdate.UpdateAt = DateTime.Now;

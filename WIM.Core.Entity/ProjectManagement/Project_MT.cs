@@ -13,7 +13,6 @@ using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
 using WIM.Core.Entity.RoleAndPermission;
-using WIM.Core.Entity.SupplierManagement;
 //using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Entity.ProjectManagement
@@ -23,7 +22,6 @@ namespace WIM.Core.Entity.ProjectManagement
     {
         public Project_MT()
         {
-            this.Supplier_MT = new HashSet<Supplier_MT>();
             this.Menu_MT = new HashSet<Menu_MT>();
             this.MenuProjectMappings = new HashSet<MenuProjectMapping>();
             this.Roles = new HashSet<Role>();
@@ -54,8 +52,6 @@ namespace WIM.Core.Entity.ProjectManagement
                 Config = StringHelper.Compress(JsonConvert.SerializeObject(value));
             }
         }
-
-        public virtual ICollection<Supplier_MT> Supplier_MT { get; set; }
 
         public virtual ICollection<Menu_MT> Menu_MT { get; set; }
 

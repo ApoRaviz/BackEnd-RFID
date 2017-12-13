@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Dimension;
 using WMS.Context;
@@ -64,14 +64,14 @@ namespace WMS.Service
             {
                 data.CreateAt = DateTime.Now;
                 data.UpdateAt = DateTime.Now;
-                data.UpdateBy = "1";
+                data.UpdateBy = Identity.Name;
                 using (WMSDbContext Db = new WMSDbContext())
                 {
                     IDimensionRepository repo = new DimensionRepository(Db);
                     try
                     {
                         DimensionIDSys = Db.ProcCreateDimensionLayout(data.FormatName, data.Unit, data.Width, data.Length, data.Height, data.Weight
-                                                  , data.Type, data.Color, data.CreateAt, data.UpdateAt, data.UpdateBy).FirstOrDefault();
+                                                  , data.Type, data.Color, data.CreateAt, data.UpdateAt, data.UpdateBy);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -98,7 +98,7 @@ namespace WMS.Service
                     try
                     {
                         updateFlag = Db.ProcUpdateDimensionLayout(data.DimensionIDSys, data.FormatName, data.Unit, data.Width, data.Length, data.Height, data.Weight
-                                                  , data.Type, data.Color, data.UpdateAt, data.UpdateBy).FirstOrDefault();
+                                                  , data.Type, data.Color, data.UpdateAt, data.UpdateBy);
                         Db.SaveChanges();
                     }
                     catch (DbEntityValidationException e)

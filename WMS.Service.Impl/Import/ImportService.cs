@@ -8,10 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ImportManagement;
+using WMS.Repository.Impl.ImportDefinition;
+using WMS.Repository.ImportDefinition;
 using WMS.Service.Import;
 
 namespace WMS.Service.Impl.Import
@@ -22,36 +25,41 @@ namespace WMS.Service.Impl.Import
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
                             "<Import>{5}</Import></row>";
 
-        private WMSDbContext Db;
-        private Repository<ImportDefinitionHeader_MT> repo;
 
         public ImportService()
         {
-            Db = new WMSDbContext();
-            repo = new Repository<ImportDefinitionHeader_MT>(Db);
         }
 
         public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)
         {
-            List<ImportDefinitionHeader_MT> import = Db.ImportDefinitionHeader_MT.Where(x => x.ForTable == forTable).ToList();
-            return import;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
+                List<ImportDefinitionHeader_MT> import = repo.GetMany(x => x.ForTable == forTable).ToList();
+                return import;
+            }
+
         }
 
         public ImportDefinitionHeader_MT GetImportDefinitionByImportIDSys(int id, string include)
         {
-            ImportDefinitionHeader_MT import = Db.ImportDefinitionHeader_MT.Find(id);
-            if (string.IsNullOrEmpty(include))
+            using (WMSDbContext Db = new WMSDbContext())
             {
+                IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
+                ImportDefinitionHeader_MT import = repo.GetByID(id);
+                if (string.IsNullOrEmpty(include))
+                {
+                    return import;
+                }
+
+                string[] includes = include.Replace(" ", "").Split(',');
+                foreach (string inc in includes)
+                {
+                    Db.Entry(import).Collection(inc).Load();
+                }
+
                 return import;
             }
-
-            string[] includes = include.Replace(" ", "").Split(',');
-            foreach (string inc in includes)
-            {
-                Db.Entry(import).Collection(inc).Load();
-            }
-
-            return import;
         }
 
         public int? CreateImportDifinitionForItemMaster(ImportDefinitionHeader_MT data)
@@ -59,35 +67,45 @@ namespace WMS.Service.Impl.Import
             System.Text.StringBuilder sb = new StringBuilder();
             int? ReportSysID = 0;
 
+
+
             foreach (ImportDefinitionDetail_MT d in data.detail)
+            {
+                d.IsActive = true;
+                d.CreateAt = DateTime.Now;
+                d.UpdateAt = DateTime.Now;
+                d.UpdateBy = Identity.Name;
                 sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import);
+            }
 
             using (var scope = new TransactionScope())
             {
-                //data.CreatedDate = DateTime.Now;
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
-
-                //Repo.Insert(customer);
-                try
+                data.IsActive = true;
+                data.CreateAt = DateTime.Now;
+                data.UpdateAt = DateTime.Now;
+                data.UpdateBy = Identity.Name;
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    ReportSysID = Db.ProcCreateImportDefinition(data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
-                                              , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString()).FirstOrDefault();
-                    Db.SaveChanges();
+                    try
+                    {
+                        ReportSysID = Db.ProcCreateImportDefinition(data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
+                                                  , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        // #JobComment
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
+                    scope.Complete();
+                    return ReportSysID;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    // #JobComment
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                scope.Complete();
-                return ReportSysID;
             }
         }
 
@@ -96,31 +114,39 @@ namespace WMS.Service.Impl.Import
             System.Text.StringBuilder sb = new StringBuilder();
 
             foreach (ImportDefinitionDetail_MT d in data.detail)
+            {
+                d.IsActive = true;
+                d.UpdateAt = DateTime.Now;
+                d.UpdateBy = Identity.Name;
                 sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import);
+            }
 
             using (var scope = new TransactionScope())
             {
-                //data.UpdatedDate = DateTime.Now;
-                //data.UserUpdate = "1";
+                data.UpdateAt = DateTime.Now;
+                data.UpdateBy = Identity.Name;
 
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    Db.ProcUpdateImportDefinition(data.ImportIDSys, data.FormatName, data.Delimiter, data.MaxHeading
-                                              , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
-                    Db.SaveChanges();
+                    try
+                    {
+                        Db.ProcUpdateImportDefinition(data.ImportIDSys, data.FormatName, data.Delimiter, data.MaxHeading
+                                                  , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
+                    scope.Complete();
+                    return true;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                scope.Complete();
-                return true;
             }
         }
 
@@ -141,23 +167,26 @@ namespace WMS.Service.Impl.Import
 
             using (var scope = new TransactionScope())
             {
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    result = Db.ProcImportDataToTable(ImportIDSys, DateTime.Now, DateTime.Now, "1", data).FirstOrDefault();
-                    Db.SaveChanges();
+                    try
+                    {
+                        result = Db.ProcImportDataToTable(ImportIDSys, DateTime.Now, DateTime.Now, "1", data);
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
+                    scope.Complete();
+                    return result;
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                scope.Complete();
-                return result;
             }
         }
 
@@ -165,22 +194,27 @@ namespace WMS.Service.Impl.Import
         {
             using (var scope = new TransactionScope())
             {
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    Db.ProcInsertImportHistory(ImportIDSys, fileName, result, success, DateTime.Now, user);
-                    Db.SaveChanges();
+                    try
+                    {
+
+                        Db.ProcInsertImportHistory(ImportIDSys, fileName, result, success, DateTime.Now, user);
+                        Db.SaveChanges();
+
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw ex;
+                    }
+                    scope.Complete();
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-                scope.Complete();
             }
         }
 
@@ -188,23 +222,26 @@ namespace WMS.Service.Impl.Import
         {
             using (var scope = new TransactionScope())
             {
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    Db.ProcDeleteImportDefinition(ImportIDSys);
-                    Db.SaveChanges();
-                }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
-                }
+                    try
+                    {
+                        Db.ProcDeleteImportDefinition(ImportIDSys);
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        throw ex;
+                    }
 
-                scope.Complete();
+                    scope.Complete();
+                }
             }
 
             return true;

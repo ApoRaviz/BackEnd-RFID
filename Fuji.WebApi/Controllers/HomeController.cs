@@ -14,7 +14,7 @@ namespace Fuji.WebApi.Controllers
         public ActionResult Index()
         {
             IItemImportService ser = new ItemImportService();
-            ser.Test();
+            //ser.Test();
 
             ViewBag.Title = "Home Page";
 

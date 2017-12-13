@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIM.Core.Common.Constants
+namespace WIM.Core.Common.Utility.Constants
 {
     public partial class Constant
     {

@@ -123,6 +123,10 @@
       <Project>{4fbc9a8b-22ee-474c-a07e-00d5e770f751}</Project>
       <Name>Fuji.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
