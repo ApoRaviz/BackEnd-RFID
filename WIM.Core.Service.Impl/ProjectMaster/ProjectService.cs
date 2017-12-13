@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
+
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
@@ -14,6 +14,8 @@ using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace WIM.Core.Service.Impl
 {

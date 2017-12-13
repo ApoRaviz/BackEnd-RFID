@@ -81,10 +81,10 @@
       <HintPath>..\Fuji.Entity\bin\Debug\Fuji.Entity.dll</HintPath>
     </Reference>
     <Reference Include="Fuji.Service">
-      <HintPath>..\Fuji.Service\obj\Debug\Fuji.Service.dll</HintPath>
+      <HintPath>..\Fuji.Service\bin\Debug\Fuji.Service.dll</HintPath>
     </Reference>
     <Reference Include="Fuji.Service.Impl">
-      <HintPath>..\Fuji.Service.Impl\obj\Debug\Fuji.Service.Impl.dll</HintPath>
+      <HintPath>..\Fuji.Service.Impl\bin\Debug\Fuji.Service.Impl.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
@@ -471,7 +471,6 @@
     <Content Include="Global.asax" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
@@ -550,6 +549,18 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -620,6 +631,10 @@
     <ProjectReference Include="..\Fuji.Common\Fuji.Common.csproj">
       <Project>{f614ae62-a53c-4952-880e-380ac277e8a7}</Project>
       <Name>Fuji.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>

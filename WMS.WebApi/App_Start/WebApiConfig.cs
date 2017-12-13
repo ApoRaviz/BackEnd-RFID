@@ -10,7 +10,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using WMS.WebApi.Controllers;
-using WIM.Core.Common.Http;
 using WIM.WebApi.Auth;
 using WIM.Core.Common.Handlers;
 

@@ -57,10 +57,6 @@
     <Reference Include="WIM.Core.Entity">
       <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
     </Reference>
-    <Reference Include="WIM.Core.Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Repository\bin\Debug\WIM.Core.Repository.dll</HintPath>
-    </Reference>
     <Reference Include="WIM.Core.Repository.Impl">
       <HintPath>..\WIM.Core.Repository.Impl\bin\Debug\WIM.Core.Repository.Impl.dll</HintPath>
     </Reference>
@@ -98,9 +94,17 @@
       <Project>{1add2f62-608b-446d-ae85-2468953751d1}</Project>
       <Name>Isuzu.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

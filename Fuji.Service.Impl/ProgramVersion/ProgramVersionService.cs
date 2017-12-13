@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
 using Fuji.Service.ProgramVersion;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
@@ -14,6 +13,7 @@ using Fuji.Context;
 using Fuji.Entity.ProgramVersion;
 using Fuji.Repository.Impl.ProgramVersion;
 using System.Security.Principal;
+using WIM.Core.Common.Utility.Validation;
 
 namespace Fuji.Service.Impl.ProgramVersion
 {

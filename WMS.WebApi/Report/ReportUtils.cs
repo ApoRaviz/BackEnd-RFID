@@ -14,7 +14,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Xml;
 using System.Text;
-using WIM.Core.Common.Constants;
 using System.Reflection;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -22,6 +21,8 @@ using System.Data;
 using WIM.Core.Common.Helpers;
 using WMS.Entity.LayoutManagement;
 using WMS.Entity.Report;
+using WIM.Core.Common.Constants;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace WMS.WebApi.Report
 {

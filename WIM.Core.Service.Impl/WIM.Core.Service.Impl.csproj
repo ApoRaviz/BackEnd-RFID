@@ -71,6 +71,10 @@
     <Compile Include="UserRole\UserRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>

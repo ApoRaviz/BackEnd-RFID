@@ -9,7 +9,9 @@ using System.Web.Http.Cors;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using Fuji.WebApi.Controllers;
+//using Fuji.WebApi.Controllers;
+using WIM.WebApi.Auth;
+using WIM.Core.Common.Handlers;
 
 namespace Fuji.WebApi
 {
@@ -42,7 +44,7 @@ namespace Fuji.WebApi
             );
 
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
-           //config.Filters.Add(new IdentityAuthAttribute());
+           config.Filters.Add(new IdentityAuthAttribute());
 
         }       
     }

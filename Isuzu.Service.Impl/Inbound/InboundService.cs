@@ -8,8 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Helpers;
+
 using Isuzu.Service;
 using Isuzu.Common.ValueObject;
 using System.IO;
@@ -19,6 +18,8 @@ using Isuzu.Entity;
 using Isuzu.Repository.Impl;
 using System.Security.Principal;
 using Isuzu.Repository.ItemManagement;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -369,14 +370,14 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
                         items = Db.ProcPagingInboundItems(pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        string err = e.Message;
                         return new List<InboundItems>() { };
                     }
                 }
@@ -393,7 +394,6 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
                         items = Db.ProcPagingInboundItemsDeleted(pageIndex, pageSize, out totalRecord);

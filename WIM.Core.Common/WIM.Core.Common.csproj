@@ -37,7 +37,7 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServerCompact, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.SqlServerCompact.6.1.3\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.6.2.0\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -96,23 +96,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommonDataModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Constants\Constant.cs" />
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="CommonService.cs" />
-    <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />
-    <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="HandheldErrorLog.cs" />
     <Compile Include="Handlers\ApiLogHandler.cs" />
     <Compile Include="Helpers\ApiHashTableHelper.cs" />
     <Compile Include="Helpers\AuthHelper.cs" />
-    <Compile Include="Helpers\DownloadHelper.cs" />
-    <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Http\HttpMessageHandler.cs" />
     <Compile Include="ICommonService.cs" />
-    <Compile Include="Http\IResponseData.cs" />
-    <Compile Include="Http\ResponseData.cs" />
     <Compile Include="IResourceItem.cs" />
-    <Compile Include="Mail\EmailService.cs" />
     <Compile Include="ProcGetTableColumnsDescription_Result.cs">
       <DependentUpon>CommonDataModel.tt</DependentUpon>
     </Compile>
@@ -123,10 +113,6 @@
     <Compile Include="UserLog.cs">
       <DependentUpon>CommonDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Validation\ElementNotFound.cs" />
-    <Compile Include="Validation\IValidationException.cs" />
-    <Compile Include="Validation\ValidationError.cs" />
-    <Compile Include="Validation\ValidationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="CommonDataModel.edmx">

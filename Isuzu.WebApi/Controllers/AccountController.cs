@@ -19,14 +19,15 @@ using Microsoft.VisualBasic;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 using WIM.Core.Security.Providers;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
+
 using System.Net;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service.Impl;
 using Isuzu.WebApi.Providers.Firebase;
 using RestSharp;
-using WIM.Core.Common.Validation;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace Isuzu.WebApi.Controllers
 {
@@ -194,7 +195,7 @@ namespace Isuzu.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -255,7 +256,7 @@ namespace Isuzu.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -300,7 +301,7 @@ namespace Isuzu.WebApi.Controllers
                 Json.Add("status", "200");
                 response.SetData(Json);
             }
-            catch (WIM.Core.Common.Validation.ValidationException ex)
+            catch (ValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

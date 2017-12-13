@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Repository;
-using WIM.Core.Common.Validation;
 using Fuji.Service.PrintLabel;
 using WIM.Core.Repository.Impl;
 using Fuji.Context;
@@ -21,6 +20,7 @@ using System.Drawing;
 using Fuji.Repository.Impl.LabelManagement;
 using System.Security.Principal;
 using Fuji.Repository.LabelManagement;
+using WIM.Core.Common.Utility.Validation;
 
 namespace Fuji.Service.Impl.PrintLabel
 {

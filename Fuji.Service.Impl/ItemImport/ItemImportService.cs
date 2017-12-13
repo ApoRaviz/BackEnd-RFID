@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Validation;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
@@ -26,6 +25,8 @@ using System.IO;
 using Fuji.Repository.Impl.ItemManagement;
 using System.Security.Principal;
 using Fuji.Repository.ItemManagement;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -40,20 +41,12 @@ namespace Fuji.Service.Impl.ItemImport
 
         //private SerialRepository SerialDetailRepo;
         //private SerialHeadRepository SerialHeadRepo;
+
         public ItemImportService()
         {
             //Db = FujiDbContext.Create();
             //SerialDetailRepo = new SerialRepository(new FujiDbContext());
             //SerialHeadRepo = new SerialHeadRepository(new FujiDbContext());
-        }
-
-        public string Test()
-        {
-            using (FujiDbContext Db = new FujiDbContext())
-            {
-                Db.ProcGetDataAutoComplete("WHID,ItemCode", "ImportSerialHead", "WHID", "aa");
-            }
-            return string.Empty;
         }
 
         public IEnumerable<ImportSerialHead> GetItems()
@@ -164,7 +157,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 if (itemHead == null)
                 {
-                    throw new WIM.Core.Common.Validation.ValidationException(new ValidationError(((int)ErrorCode.DataNotFound).ToString(), ErrorCode.DataNotFound.GetDescription()));
+                    throw new ValidationException(new ValidationError(((int)ErrorCode.DataNotFound).ToString(), ErrorCode.DataNotFound.GetDescription()));
                 }
             }
             return itemHead;

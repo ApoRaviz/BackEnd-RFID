@@ -7,9 +7,6 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using System.Web.Http;
-using WIM.Core.Common.Http;
-using WIM.Core.Common.Validation;
-using WIM.Core.Common.Extensions;
 using WMS.WebApi.Report;
 using System.IO;
 using System.Globalization;
@@ -17,6 +14,9 @@ using Microsoft.AspNet.Identity;
 using WMS.Service;
 using WMS.Entity.ImportManagement;
 using WMS.Service.Import;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.WebApi.Controllers
 {

@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using TMS.Service;
 using TMS.Service.Impl;
-using WIM.Core.Common.Extensions;
-using WIM.Core.Common.Http;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
 using SearchBookings = TMS.Common.ValueObject.Search.Bookings;
 
 namespace TMS.WebApi.Controllers
