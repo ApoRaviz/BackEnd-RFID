@@ -10,6 +10,7 @@ using WIM.Core.Service.Impl;
 using WIM.Core.Service.StatusManagement;
 using WIM.Core.Service.Impl.StatusManagement;
 
+
 namespace Master.WebApi
 {
     public static class UnityConfig
@@ -43,7 +44,9 @@ namespace Master.WebApi
             container.RegisterType<IUserRoleService, UserRoleService>();
             container.RegisterType<IEmployeeService, EmployeeService>();
             container.RegisterType<IPersonService, PersonService>();
-
+            container.RegisterType<IStatusService, StatusService>();
+            container.RegisterType<IStatusService, StatusService>();
+            container.RegisterType<IModuleService, ModuleService>();
         }
     }
 }

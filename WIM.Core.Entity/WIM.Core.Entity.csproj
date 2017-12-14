@@ -72,9 +72,12 @@
     <Compile Include="ProjectManagement\ProjectConfigs\Order\Order.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Order\ReceivingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\ProjectConfig.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\Duration.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\ReceivingDurationTime.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\Receiving.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\ReceivingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Service.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\DateTimeToReceiveData.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\SendingDataType.cs" />
     <Compile Include="ProjectManagement\Project_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
