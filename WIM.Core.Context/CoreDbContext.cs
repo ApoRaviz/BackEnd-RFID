@@ -7,12 +7,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity;
 using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.Dimension;
+using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.Person;
 using WIM.Core.Entity.ProjectManagement;
@@ -20,6 +20,7 @@ using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.Status;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
+
 
 namespace WIM.Core.Context
 {
@@ -37,7 +38,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
         public DbSet<Role> Role { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
-        public virtual DbSet<RolePermissions> RolePermission { get; set; }
+        public virtual DbSet<RolePermissions> RolePermissions { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<CurrencyUnit> CurrencyUnit { get; set; }
@@ -45,6 +46,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Status_MT> Status_MT { get; set; }
         public virtual DbSet<SubModules> SubModule { get; set; }
         public virtual DbSet<Module_MT> Module_MT { get; set; }
+        public virtual DbSet<LabelControl> LabelControl { get; set; }
         public virtual DbSet<StatusSubModules> StatusSubModule { get; set; }
 
         public CoreDbContext() : base("name=CORE")
