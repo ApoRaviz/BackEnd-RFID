@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WMS.Service;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Service;
 using WIM.Core.Common.ValueObject;

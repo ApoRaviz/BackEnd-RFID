@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common;
-using WMS.Service;
 using System.Web.Http.Cors;
 using System.Threading.Tasks;
 using WIM.Core.Entity.CustomerManagement;
