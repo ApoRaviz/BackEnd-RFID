@@ -20,6 +20,5 @@ namespace HRMS.Common.ValueObject.LeaveManagement
         public DateTime EndDate { get; set; }
 
         public int LeaveIDSys { get; set; }
-        public virtual LeaveDto Leave { get; set; }
     }
 }

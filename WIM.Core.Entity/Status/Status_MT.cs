@@ -14,5 +14,7 @@ namespace WIM.Core.Entity.Status
         [Key]
         public int StatusIDSys { get; set; }
         public string Title { get; set; }
+
+        public virtual ICollection<StatusSubModules> StatusSubModule { get; set; }
     }
 }

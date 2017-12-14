@@ -30,12 +30,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -48,21 +60,53 @@
       <Project>{a3ea41df-d932-48b0-8100-a76e5df04b8e}</Project>
       <Name>HRMS.Common.ValueObject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HRMS.Context\HRMS.Context.csproj">
+      <Project>{D78E68BA-486E-4577-8773-BF08F50721E1}</Project>
+      <Name>HRMS.Context</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRMS.Entity\HRMS.Entity.csproj">
       <Project>{1646E0FC-8F7B-436F-983A-7C9873CA49CB}</Project>
       <Name>HRMS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Repository.Impl\HRMS.Repository.Impl.csproj">
+      <Project>{95CA527D-583B-493D-AD2C-C488029145A1}</Project>
+      <Name>HRMS.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Repository\HRMS.Repository.csproj">
+      <Project>{2D0B2680-D488-4B8A-BAB8-CF286CD071E0}</Project>
+      <Name>HRMS.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
       <Project>{93a81e85-aca4-4809-88dc-c3d67548ef83}</Project>
       <Name>HRMS.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{c8c9f920-5e08-4a3a-af4f-fe3aa35421c8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Name>WIM.Core.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
+      <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
+      <Name>WIM.Core.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
+      <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
+      <Name>WIM.Core.Service.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
       <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
@@ -74,7 +118,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

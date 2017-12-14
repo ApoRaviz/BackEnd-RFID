@@ -13,9 +13,9 @@ namespace HRMS.Repository.Impl.LeaveManagement
 {
     public class LeaveDetailRepository : Repository<LeaveDetail>, ILeaveDetailRepository
     {
+
         public LeaveDetailRepository(DbContext context) : base(context)
         {
-
         }
     }
 }

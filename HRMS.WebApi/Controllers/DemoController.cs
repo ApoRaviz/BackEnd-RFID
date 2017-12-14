@@ -29,7 +29,6 @@ using WIM.Core.Entity.ProjectManagement;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
 using Newtonsoft.Json;
 using WIM.Core.Common.Utility.Http;
@@ -40,6 +39,7 @@ using WIM.Core.Entity.ProjectManagement.ProjectConfigs.Main;
 
 namespace HRMS.WebApi.Controllers
 {
+    //[ValidateModel]
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
@@ -62,6 +62,7 @@ namespace HRMS.WebApi.Controllers
 
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
+                    
 
                     ILeaveRepository headRepo = new LeaveRepository(db);
                     ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
@@ -87,16 +88,32 @@ namespace HRMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-
-        //[ValidateModel]
-        [CheckModelForNull]
-        [HttpPost]
-        [Route("")]/*[FromBody]*/
-        public HttpResponseMessage DemoUpdate([FromBody]ProjectConfig projectConfig)
+        [HttpGet]
+        [Route("")]
+        public HttpResponseMessage DemoUpdateGet(string data)
         {
+            return Request.CreateResponse(HttpStatusCode.OK, data.Length + 5);
+        }
+
+        [HttpGet]
+        [Route("")]
+        public HttpResponseMessage DemoUpdateGet2()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, "555 OK");
+        }
+
+
+
+
+        [HttpPost]
+        [Route("")]
+        public HttpResponseMessage DemoUpdate(string data, [FromBody]ProjectConfig projectConfig)
+        {           
+
             Project_MT project = new Project_MT();
             ResponseData<Project_MT> response = new ResponseData<Project_MT>();
 
+           
             using (CoreDbContext db = new CoreDbContext())
             {
 
@@ -238,6 +255,15 @@ namespace HRMS.WebApi.Controllers
         }
     }*/
 
-
-
+    public class ValidateModelAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            if (actionContext.ModelState.IsValid == false)
+            {
+                actionContext.Response = actionContext.Request.CreateErrorResponse(
+                    HttpStatusCode.BadRequest, actionContext.ModelState);
+            }
+        }
+    }
 }

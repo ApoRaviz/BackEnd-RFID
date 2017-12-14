@@ -15,6 +15,7 @@ namespace HRMS.Entity.LeaveManagement
         public Leave()
         {
             LeaveDetails = new HashSet<LeaveDetail>();
+            LeaveTypes = new HashSet<LeaveType>();
         }
 
         [Key]
@@ -26,6 +27,7 @@ namespace HRMS.Entity.LeaveManagement
         public string RequesterID { get; set; }
         public string ApproverID { get; set; }
         public virtual ICollection<LeaveDetail> LeaveDetails { get; set; }
+        public virtual ICollection<LeaveType> LeaveTypes { get; set; }
 
         [NotMapped]
         public string StatusTitle { get; set; }
