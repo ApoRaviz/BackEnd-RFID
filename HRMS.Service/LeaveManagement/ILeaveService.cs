@@ -1,11 +1,6 @@
 ﻿using HRMS.Common.ValueObject.LeaveManagement;
 using HRMS.Entity.LeaveManagement;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Service;
 
 namespace HRMS.Service.LeaveManagement
@@ -17,7 +12,7 @@ namespace HRMS.Service.LeaveManagement
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Leave GetLeaveByID(int id);
+        LeaveDto GetLeaveByID(int id);
         /// <summary>
         /// ดึงข้อมูลในตาราง Leaves ออกมาเป็น List
         /// </summary>
@@ -35,7 +30,10 @@ namespace HRMS.Service.LeaveManagement
         /// <param name="leave"></param>
         /// <returns></returns>
         Leave UpdateLeave(LeaveDto leave);
+        IEnumerable<LeaveTypeDto> GetLeaveType();
+
         bool ApproveLeave(int id);
         bool RejectLeave(int id);
+
     }
 }

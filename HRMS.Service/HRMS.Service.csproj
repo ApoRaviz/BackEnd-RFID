@@ -52,13 +52,21 @@
       <Project>{1646e0fc-8f7b-436f-983a-7c9873ca49cb}</Project>
       <Name>HRMS.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
-      <Project>{7526F7F0-D2AA-442F-B170-1DB30880E0EF}</Project>
+      <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
       <Name>WIM.Core.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

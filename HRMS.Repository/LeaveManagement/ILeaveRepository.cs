@@ -1,4 +1,5 @@
-﻿using HRMS.Entity.LeaveManagement;
+﻿using HRMS.Common.ValueObject.LeaveManagement;
+using HRMS.Entity.LeaveManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace HRMS.Repository.LeaveManagement
 {
     public interface ILeaveRepository : IRepository<Leave>
     {
-        
+        LeaveDto GetDto(int id);
     }
+    
+
 }

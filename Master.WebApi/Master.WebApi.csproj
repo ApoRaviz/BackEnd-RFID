@@ -328,6 +328,7 @@
     <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="DataSet\MasterDataSet.Designer.cs">
@@ -491,7 +492,7 @@
       <Name>Master.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
-      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
       <Name>WIM.Core.Common.Utility</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
@@ -529,10 +530,6 @@
     <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
       <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
       <Name>WIM.Core.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.Service.Impl\WMS.Service.Impl.csproj">
-      <Project>{dc9513cf-fdab-4170-8131-4a1fd5d048be}</Project>
-      <Name>WMS.Service.Impl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

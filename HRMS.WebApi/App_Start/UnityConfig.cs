@@ -6,7 +6,7 @@ using HRMS.WebApi.Controllers;
 using Unity.WebApi;
 using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
-using System.Security.Principal;
+using WIM.Core.Common;
 
 namespace HRMS.WebApi
 {
@@ -27,8 +27,8 @@ namespace HRMS.WebApi
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
 
-            container.RegisterType<ILeaveService, LeaveService>(new InjectionConstructor());
-           
+            container.RegisterType<ILeaveService, LeaveService>();
+            container.RegisterType<ICommonService, CommonService>();
         }
     }
 }

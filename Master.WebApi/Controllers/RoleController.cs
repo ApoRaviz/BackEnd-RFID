@@ -10,7 +10,7 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Service;
-using WMS.Service;
+
 
 namespace Master.WebApi.Controllers
 {

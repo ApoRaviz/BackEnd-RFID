@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Transactions;
 
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Repository;
@@ -116,9 +115,14 @@ namespace WIM.Core.Service.Impl
                         IProjectRepository repo = new ProjectRepository(Db); 
                         project.ProjectID = Db.ProcGetNewID("PJ");
                         project.ProjectStatus = "Active";
+                        
                         projectnew = repo.Insert(project);
                         Db.SaveChanges();
                         scope.Complete();
+
+                        //    Project_MT project1 = db.Project_MT.SingleOrDefault(p => p.ProjectIDSys == 1);
+                        //    project1.ProjectConfig = projectConfig;
+                        //    db.SaveChanges();
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -131,6 +135,7 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw e;
                 }
+
                 return projectnew;
             }
         }
