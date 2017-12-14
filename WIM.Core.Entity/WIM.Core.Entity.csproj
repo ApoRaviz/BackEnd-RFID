@@ -52,6 +52,8 @@
     <Compile Include="Dimension\DimensionLayout_MT.cs" />
     <Compile Include="Employee\Employee_MT.cs" />
     <Compile Include="IsHeadAttribute.cs" />
+    <Compile Include="LabelManagement\LabelConfigs\LabelConfig.cs" />
+    <Compile Include="LabelManagement\LabelControl.cs" />
     <Compile Include="MenuManagement\ApiMenuMapping.cs" />
     <Compile Include="MenuManagement\Api_MT.cs" />
     <Compile Include="MenuManagement\MenuProjectMapping.cs" />

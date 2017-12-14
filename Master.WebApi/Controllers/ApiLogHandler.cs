@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Routing;
 using WIM.Core.Common;
-using WMS.Service;
 
 namespace Master.WebApi.Controllers
 {
