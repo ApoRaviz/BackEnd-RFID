@@ -37,7 +37,7 @@ namespace WIM.Core.Repository.Impl
                             where row.ProjectIDSys == id
                             select row.CusIDSys).SingleOrDefault();
             var role = (from row in Db.Role
-                        join row2 in Db.RolePermission on row.RoleID equals row2.RoleID
+                        join row2 in Db.RolePermissions on row.RoleID equals row2.RoleID
                         join row3 in Db.Permission on row2.PermissionID equals row3.PermissionID
                         join row4 in Db.Project_MT on row3.ProjectIDSys equals row4.ProjectIDSys
                         where row4.CusIDSys == customer

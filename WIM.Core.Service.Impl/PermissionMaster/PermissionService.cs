@@ -343,7 +343,7 @@ namespace WIM.Core.Service.Impl
                 IPermissionRepository repo = new PermissionRepository(Db);
                 CoreDbContext Db2 = new CoreDbContext();
                 var temp = repo.GetManyQueryable(c => c.ProjectIDSys == ProjectIDSys && 
-                (Db2.RolePermission.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
+                (Db2.RolePermissions.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
                 permission = temp.ToList();
             }
             return permission;
