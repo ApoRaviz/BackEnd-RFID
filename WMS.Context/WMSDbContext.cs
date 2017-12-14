@@ -33,6 +33,8 @@ namespace WMS.Context
         public DbSet<LabelLayoutDetail_MT> LabelLayoutDetail_MT { get; set; }
         public DbSet<ImportDefinitionHeader_MT> ImportDefinitionHeader_MT { get; set; }
         public DbSet<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
+        public DbSet<ItemInspectMapping> ItemInspectMapping { get; set; }
+        public DbSet<ItemUnitMapping> ItemUnitMapping { get; set; }
         public DbSet<ReportLayoutHeader_MT> ReportLayoutHeader_MT { get; set; }
         public DbSet<Location_MT> Location_MT { get; set; }
         public DbSet<Supplier_MT> Supplier_MT { get; set; }

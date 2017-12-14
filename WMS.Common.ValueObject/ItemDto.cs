@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.ValueObject;
+using WMS.Entity.InspectionManagement;
+using WMS.Entity.ItemManagement;
 using WMS.Master;
 
 namespace WMS.Common.ValueObject
@@ -23,31 +25,33 @@ namespace WMS.Common.ValueObject
         public string ItemColor { get; set; }
         public string Description { get; set; }
         public string ExpControl { get; set; }
-        public string SerialControl { get; set; }
+        public bool SerialControl { get; set; }
         public string SerialDigit { get; set; }
         public string SerialFormat { get; set; }
-        public string SupID { get; set; }
+        public string SupIDSys { get; set; }
         public string Spare1 { get; set; }
         public string Spare2 { get; set; }
         public string Spare3 { get; set; }
         public string Spare4 { get; set; }
         public string Spare5 { get; set; }
-        public string InspectCont { get; set; }
-        public string ExpireCont { get; set; }
-        public string DimensionCont { get; set; }
-        public string BoxCont { get; set; }
-        public string LotCont { get; set; }
-        public string PalletCont { get; set; }
-        public string ItemSetCont { get; set; }
+        public string InspectControl { get; set; }
+        public string ExpireControl { get; set; }
+        public string DimensionControl { get; set; }
+        public string BoxControl { get; set; }
+        public string LotControl { get; set; }
+        public string PalletControl { get; set; }
+        public string ItemSetControl { get; set; }
         public string MiniAlert { get; set; }
         public string AlertExp { get; set; }
         public string TaxCond { get; set; }
         public byte TaxPerc { get; set; }
         public byte Active { get; set; }
+        public string Remark { get; set; }
 
         public int ProjectIDSys { get; set; }
         public ProjectDto Project_MT { get; set; }
 
         public ICollection<ItemUnitDto> ItemUnitMapping { get; set; }
+        public ICollection<object> ItemInspectMapping { get; set; }
     }
 }

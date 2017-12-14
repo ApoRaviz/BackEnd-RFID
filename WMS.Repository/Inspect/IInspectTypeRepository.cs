@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Repository;
-using WMS.Entity.ItemManagement;
+using WMS.Entity.InspectionManagement;
 
-namespace WMS.Repository
+namespace WMS.Repository.Inspect
 {
-    public interface IItemRepository : IRepository<Item_MT>
+    public interface IInspectTypeRepository : IRepository<InspectType>
     {
-        Item_MT GetManyWithUnit(int id);
     }
 }

@@ -19,11 +19,12 @@ namespace WMS.Common.ValueObject
         public float Width { get; set; }
         public float Length { get; set; }
         public float Height { get; set; }
-        public byte MainUnit { get; set; }
+        public bool MainUnit { get; set; }
         public byte Sequence { get; set; }
         public short QtyInParent { get; set; }
         public Nullable<decimal> Cost { get; set; }
         public Nullable<decimal> Price { get; set; }
+        public Nullable<int> CurrencyIDSys { get; set; }
 
     }
 }

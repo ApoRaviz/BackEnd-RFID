@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using WIM.Core.Repository;
 using WMS.Entity.ItemManagement;
 
-namespace WMS.Repository
+namespace WMS.Repository.ItemManagement
 {
-    public interface IItemRepository : IRepository<Item_MT>
+    public interface IItemInspectRepository : IRepository<ItemInspectMapping>
     {
-        Item_MT GetManyWithUnit(int id);
     }
 }

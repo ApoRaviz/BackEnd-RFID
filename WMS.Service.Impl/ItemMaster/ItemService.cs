@@ -19,6 +19,9 @@ using WMS.Common.ValueObject;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using WMS.Repository.ItemManagement;
+using WMS.Repository.Impl.ItemManagement;
+using WMS.Entity.InspectionManagement;
 
 namespace WMS.Service
 {
@@ -36,6 +39,7 @@ namespace WMS.Service
                 IItemRepository repo = new ItemRepository(Db);
                 IEnumerable<Item_MT> items = repo.Get();
                 itemDtos = Mapper.Map<IEnumerable<Item_MT>, IEnumerable<ItemDto>>(items);
+                
             }
             return itemDtos;
         }
@@ -55,37 +59,57 @@ namespace WMS.Service
             using (WMSDbContext Db = new WMSDbContext())
             {
                 IItemRepository repo = new ItemRepository(Db);
-                var query = repo.GetManyQueryable(c => c.ItemIDSys == id);
+                var query = repo.GetManyWithUnit(id);
 
-                if (tableNames != null)
+                var inspect = query.ItemInspectMapping.Select(a => new Inspect_MT() {
+                    InspectID = a.Inspect_MT.InspectID,
+                    InspectIDSys = a.Inspect_MT.InspectIDSys,
+                    InspectName = a.Inspect_MT.InspectName,
+                    CreateAt = a.Inspect_MT.CreateAt,
+                    CreateBy = a.Inspect_MT.CreateBy,
+                    UpdateAt = a.Inspect_MT.UpdateAt,
+                    UpdateBy = a.Inspect_MT.UpdateBy
+                }).ToList();
+                var sending = Mapper.Map<Item_MT, ItemDto>(query);
+                sending.ItemInspectMapping.Clear();
+                foreach(var data in inspect)
                 {
-                    foreach (string tableName in tableNames)
-                    {
-                        switch (tableName)
-                        {
-                            case "ItemUnitMapping":
-                                query = query.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT));
-                                break;
-                            default:
-                                query = query.Include(tableName);
-                                break;
-                        }
-                    }
+                    sending.ItemInspectMapping.Add(data);
                 }
-                return Mapper.Map<Item_MT, ItemDto>(query.SingleOrDefault());
+                return sending;
             }
         }        
 
         public int CreateItem(Item_MT item )
         {
             using (var scope = new TransactionScope())
-            {       
+            {
+                Item_MT itemresponse = new Item_MT();
                 try
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IItemRepository repo = new ItemRepository(Db);
-                        repo.Insert(item);
+                        IItemUnitRepository repoUnit = new ItemUnitRepository(Db);
+                        IItemInspectRepository repoInspect = new ItemInspectRepository(Db);
+                        itemresponse = repo.Insert(item);
+                        Db.SaveChanges();
+                        if (item.ItemUnitMapping != null)
+                        {
+                            foreach(var data in item.ItemUnitMapping)
+                            {
+                                data.ItemIDSys = itemresponse.ItemIDSys;
+                                repoUnit.Insert(data);
+                            }
+                        }
+                        if(item.ItemInspectMapping != null)
+                        {
+                            foreach (var data in item.ItemInspectMapping)
+                            {
+                                data.ItemIDSys = itemresponse.ItemIDSys;
+                                repoInspect.Insert(data);
+                            }
+                        }
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -94,13 +118,14 @@ namespace WMS.Service
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException )
+                catch (DbUpdateException e)
                 {
                     scope.Dispose();
+                    throw e;
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return item.ItemIDSys;
+                return itemresponse.ItemIDSys;
             }
         }
 
@@ -113,7 +138,30 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IItemRepository repo = new ItemRepository(Db);
+                        IItemInspectRepository repoInspect = new ItemInspectRepository(Db);
+                        IItemUnitRepository repoUnit = new ItemUnitRepository(Db);
                         repo.Update(item);
+                        var listiteminspect = repoInspect.GetMany(a => a.ItemIDSys == item.ItemIDSys);
+                        var listitemunit = repoUnit.GetMany(a => a.ItemIDSys == item.ItemIDSys);
+                        Db.ItemInspectMapping.RemoveRange(listiteminspect);
+                        Db.ItemUnitMapping.RemoveRange(listitemunit);
+                        if (item.ItemUnitMapping != null)
+                        {
+                            foreach (var data in item.ItemUnitMapping)
+                            {
+                                data.ItemIDSys = item.ItemIDSys;
+                                repoUnit.Insert(data);
+                            }
+                        }
+                        if (item.ItemInspectMapping != null)
+                        {
+                            foreach (var data in item.ItemInspectMapping)
+                            {
+                                data.ItemIDSys = item.ItemIDSys;
+                                repoInspect.Insert(data);
+                            }
+                        }
+
                         Db.SaveChanges();
                         scope.Complete();
                     }

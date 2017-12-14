@@ -94,8 +94,8 @@ namespace WMS.Service
                     category.CateID = Db.ProcGetNewID("CT");
                     try
                     {
-                        repo.Insert(category);
-                        Db.SaveChanges();
+                        Category_MT x = repo.Insert(category);
+                         Db.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)

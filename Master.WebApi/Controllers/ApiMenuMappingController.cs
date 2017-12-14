@@ -101,6 +101,25 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        // PUT: api/Categories/
+        [HttpPut]
+        [Route("")]
+        public HttpResponseMessage Put([FromBody]List<ApiMenuMappingDto> ApiMenuMapping)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = ApiMenuMappingService.UpdateApiInMenu(ApiMenuMapping);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // PUT: api/Categories/5
         [HttpPut]
         [Route("{id}")]

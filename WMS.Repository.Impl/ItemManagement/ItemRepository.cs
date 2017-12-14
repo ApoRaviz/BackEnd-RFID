@@ -21,5 +21,11 @@ namespace WMS.Repository.Impl
         {
             Db = context;
         }
+
+        public Item_MT GetManyWithUnit(int id)
+        {
+            var item = Db.Item_MT.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT)).Include(a => a.ItemInspectMapping.Select(x => x.Inspect_MT)).Where(c => c.ItemIDSys == id);
+            return item.SingleOrDefault();
+        }
     }
 }
