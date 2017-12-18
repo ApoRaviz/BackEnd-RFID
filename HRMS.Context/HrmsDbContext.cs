@@ -8,8 +8,8 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
+using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Entity.Status;
 
 namespace HRMS.Context
 {
@@ -21,6 +21,8 @@ namespace HRMS.Context
         public DbSet<LeaveHistory> LeaveHistory { get; set; }
         public DbSet<LeaveQuota> LeaveQuotas { get; set; }
         public DbSet<DayOff> DayOffs { get; set; }
+        public DbSet<Status_MT> Status_MT { get; set; }
+        public DbSet<Project_MT> Project_MT { get; set; }
 
 
         public HRMSDbContext() : base("name=HRMS")

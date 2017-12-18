@@ -16,6 +16,7 @@ using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Service;
 
 namespace WIM.Core.Service.Impl
 {

@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity;
 using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
@@ -34,7 +35,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Menu_MT> Menu_MT { get; set; }
         public virtual DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
         public virtual DbSet<Person_MT> Person_MT { get; set; }
-        public DbSet<Project_MT> Project_MT { get; set; }
+        public virtual DbSet<Project_MT> Project_MT { get; set; }
         public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
         public DbSet<Role> Role { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
@@ -44,8 +45,10 @@ namespace WIM.Core.Context
         public virtual DbSet<CurrencyUnit> CurrencyUnit { get; set; }
         public virtual DbSet<Country_MT> Country_MT { get; set; }
         public virtual DbSet<Status_MT> Status_MT { get; set; }
+        public virtual DbSet<SubModules> SubModule { get; set; }
         public virtual DbSet<Module_MT> Module_MT { get; set; }
         public virtual DbSet<LabelControl> LabelControl { get; set; }
+        public virtual DbSet<StatusSubModules> StatusSubModule { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {
@@ -101,5 +104,21 @@ namespace WIM.Core.Context
         }
 
 
+        public IEnumerable<SubModuleDto> AutoCompleteSM(string txtsearch)
+        {
+            var submodule = from i in SubModule
+                            join m in Module_MT on i.ModuleIDSys equals m.ModuleIDSys
+                            where i.SubModuleName.Contains(txtsearch) || m.ModuleName.Contains(txtsearch)
+                            select new SubModuleDto()
+                            {
+                                SubModuleIDSys = i.SubModuleIDSys,
+                                ModuleIDSys = i.ModuleIDSys,
+                                ModuleName = m.ModuleName,
+                                SubModuleName = i.SubModuleName,
+                                LabelSubModuleName = m.ModuleName + " : " + i.SubModuleName
+                        };
+            return submodule.ToList();
+        }
+        
     }
 }

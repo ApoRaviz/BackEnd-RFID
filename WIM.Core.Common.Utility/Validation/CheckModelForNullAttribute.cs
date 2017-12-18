@@ -47,32 +47,46 @@ namespace WIM.Core.Common.Utility.Validation
                         //var m = jobject.Value;
 
                         var a = (Dictionary<string, dynamic>)actionContext.ActionArguments;
-                        object value;
-                        a.TryGetValue("projectConfig", out value);
-                        if (value == null)
-                        {
-                            throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        }
+                        
+                        bool found = false;
                         foreach (var classname in a)
-                        {
-                            var z = classname.Value;
+                        { 
+                           
+                            if(classname.Value.GetType().Name == "Project_MT")
+                            {
+                                found = true;
+                                
+                                if (classname.Value == null)
+                                {
+                                    throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                                }
+                                var z = classname.Value;
                             var y = z.GetType();
                             var w = y.GetProperties();
                             foreach (var propname in w)
                             {
-                                if (jobject.ContainsKey(propname.Name))
-                                {
-                                    dynamic data;
-                                    jobject.TryGetValue(propname.Name, out data);
-                                    var x = data.GetType();
-                                    var send = propname.GetValue(z, null);
-                                    CheckNullProperties(data, send);
-                                }
-                                else
-                                {
-                                    throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                                    if (propname.Name == "ProjectConfig")
+                                    {
+                                        if (jobject.ContainsKey(propname.Name))
+                                        {
+                                            dynamic data;
+                                            jobject.TryGetValue(propname.Name, out data);
+                                            var x = data.GetType();
+                                            var send = propname.GetValue(z, null);
+                                            CheckNullProperties(data, send);
+                                        }
+                                        else
+                                        {
+                                            throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                                        }
+                                    }
+                                   
                                 }
                             }
+                        }
+                        if (!found)
+                        {
+                            throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                         }
                     }
                 }

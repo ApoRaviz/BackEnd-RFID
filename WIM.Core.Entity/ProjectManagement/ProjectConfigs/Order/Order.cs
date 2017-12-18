@@ -8,6 +8,6 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Order
 {
     public class Order
     {
-
+        public ReceivingDataType ReceivingDataType { get; set; }
     }
 }

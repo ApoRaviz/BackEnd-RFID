@@ -11,5 +11,9 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs
     {
         public Main.Main Main { get; set; }
         public Receiving.Receiving Receiving { get; set; }
+        public Inventory.Inventory Inventory { get; set; }
+        public Order.Order Order { get; set; }
+        public Inspection.Inspection Inspection { get; set; }
+        public Delivery.Delivery Delivery { get; set; }
     }
 }
