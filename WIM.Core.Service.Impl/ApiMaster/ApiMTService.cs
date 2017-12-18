@@ -53,6 +53,17 @@ namespace WIM.Core.Service.Impl
             return ApiMTDto;
         }
 
+        public IEnumerable<Api_MT> GetAPIs(int Moduleidsys)
+        {
+            IEnumerable<Api_MT> apis;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IApiMTRepository repo = new ApiMTRepository(Db);
+                apis = repo.GetMany(a => a.ModuleIDSys == Moduleidsys);
+            }
+            return apis;
+        }
+
         public string CreateApiMT(List<Api_MT> ApiMT)
         {
             using (var scope = new TransactionScope())

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Entity.SupplierManagement;
 using WMS.Entity.InspectionManagement;
 using WMS.Entity.ItemManagement;
 using WMS.Master;
@@ -47,10 +48,11 @@ namespace WMS.Common.ValueObject
         public byte TaxPerc { get; set; }
         public byte Active { get; set; }
         public string Remark { get; set; }
+        public int InspectTypeIDSys { get; set; }
 
         public int ProjectIDSys { get; set; }
         public ProjectDto Project_MT { get; set; }
-
+        public Supplier_MT Supplier_MT { get; set; }
         public ICollection<ItemUnitDto> ItemUnitMapping { get; set; }
         public ICollection<object> ItemInspectMapping { get; set; }
     }

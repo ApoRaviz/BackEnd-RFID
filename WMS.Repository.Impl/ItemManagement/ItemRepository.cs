@@ -24,7 +24,7 @@ namespace WMS.Repository.Impl
 
         public Item_MT GetManyWithUnit(int id)
         {
-            var item = Db.Item_MT.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT)).Include(a => a.ItemInspectMapping.Select(x => x.Inspect_MT)).Where(c => c.ItemIDSys == id);
+            var item = Db.Item_MT.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT)).Include(a => a.ItemInspectMapping.Select(x => x.Inspect_MT)).Include(b => b.Supplier_MT).Where(c => c.ItemIDSys == id);
             return item.SingleOrDefault();
         }
     }

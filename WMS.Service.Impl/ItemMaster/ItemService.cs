@@ -63,12 +63,7 @@ namespace WMS.Service
 
                 var inspect = query.ItemInspectMapping.Select(a => new Inspect_MT() {
                     InspectID = a.Inspect_MT.InspectID,
-                    InspectIDSys = a.Inspect_MT.InspectIDSys,
-                    InspectName = a.Inspect_MT.InspectName,
-                    CreateAt = a.Inspect_MT.CreateAt,
-                    CreateBy = a.Inspect_MT.CreateBy,
-                    UpdateAt = a.Inspect_MT.UpdateAt,
-                    UpdateBy = a.Inspect_MT.UpdateBy
+                    InspectIDSys = a.Inspect_MT.InspectIDSys
                 }).ToList();
                 var sending = Mapper.Map<Item_MT, ItemDto>(query);
                 sending.ItemInspectMapping.Clear();
@@ -145,6 +140,7 @@ namespace WMS.Service
                         var listitemunit = repoUnit.GetMany(a => a.ItemIDSys == item.ItemIDSys);
                         Db.ItemInspectMapping.RemoveRange(listiteminspect);
                         Db.ItemUnitMapping.RemoveRange(listitemunit);
+                        Db.SaveChanges();
                         if (item.ItemUnitMapping != null)
                         {
                             foreach (var data in item.ItemUnitMapping)
