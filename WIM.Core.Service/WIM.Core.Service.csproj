@@ -60,12 +60,14 @@
     <Compile Include="IService.cs" />
     <Compile Include="MenuMaster\IMenuService.cs" />
     <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
+    <Compile Include="ModuleMaster\ISubModuleService.cs" />
     <Compile Include="ModuleMaster\IModuleService.cs" />
     <Compile Include="PermissionMaster\IPermissionService.cs" />
     <Compile Include="PersonMaster\IPersonService.cs" />
     <Compile Include="ProjectMaster\IProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleMaster\IRoleService.cs" />
+    <Compile Include="StatusManagement\IStatusService.cs" />
     <Compile Include="UserMaster\IUserService.cs" />
     <Compile Include="UserRole\IUserRoleService.cs" />
   </ItemGroup>

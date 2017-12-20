@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.MenuManagement;
 //using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Entity.ProjectManagement
@@ -15,6 +16,7 @@ namespace WIM.Core.Entity.ProjectManagement
         public Module_MT()
         {
             this.Project_MT = new HashSet<Project_MT>();
+            this.Api_MT = new HashSet<Api_MT>();
         }
 
         [Key]
@@ -24,5 +26,6 @@ namespace WIM.Core.Entity.ProjectManagement
         public string FrontEndPath { get; set; }
 
         public virtual ICollection<Project_MT> Project_MT { get; set; }
+        public virtual ICollection<Api_MT> Api_MT { get; set; }
     }
 }

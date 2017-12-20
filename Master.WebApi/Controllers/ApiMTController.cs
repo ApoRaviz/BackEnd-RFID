@@ -64,6 +64,26 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        // GET: api/categories/1
+        [HttpGet]
+        [Route("module/{moduleidsys}")]
+        public HttpResponseMessage GetApiMTByModule([FromUri]int moduleidsys)
+        {
+            IResponseData<IEnumerable<IEnumerable<Api_MT>>> response = new ResponseData<IEnumerable<IEnumerable<Api_MT>>>();
+            try
+            {
+                IEnumerable<Api_MT> ApiMT = ApiMTService.GetAPIs(moduleidsys);
+                var group = ApiMT.OrderBy(b => b.Controller).GroupBy(a => a.Controller);
+                response.SetData(group);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Categories
         [HttpPost]
         [Route("")]

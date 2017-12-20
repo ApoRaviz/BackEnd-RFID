@@ -29,7 +29,6 @@ using WIM.Core.Entity.ProjectManagement;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
 using Newtonsoft.Json;
 using WIM.Core.Common.Utility.Http;
@@ -63,6 +62,7 @@ namespace HRMS.WebApi.Controllers
 
                 using (HRMSDbContext db = new HRMSDbContext())
                 {
+                    
 
                     ILeaveRepository headRepo = new LeaveRepository(db);
                     ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);

@@ -10,5 +10,6 @@ namespace WMS.Repository
 {
     public interface IItemRepository : IRepository<Item_MT>
     {
+        Item_MT GetManyWithUnit(int id);
     }
 }

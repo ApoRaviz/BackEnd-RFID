@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BarcodeLib">
-      <HintPath>..\WIM.Core.Common\DllLibrary\BarcodeLib.dll</HintPath>
+      <HintPath>..\Master.WebApi\DLL\BarcodeLib.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus">
-      <HintPath>..\WIM.Core.Common\DllLibrary\EPPlus.dll</HintPath>
+      <HintPath>..\Fuji.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WebDesign, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.340.80\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
@@ -50,10 +50,10 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OnBarcode.Barcode.ASPNET">
-      <HintPath>..\WIM.Core.Common\DllLibrary\OnBarcode.Barcode.ASPNET.dll</HintPath>
+      <HintPath>..\Fuji.WebApi\DLL\OnBarcode.Barcode.ASPNET.dll</HintPath>
     </Reference>
     <Reference Include="QRCoder">
-      <HintPath>..\WIM.Core.Common\DllLibrary\QRCoder.dll</HintPath>
+      <HintPath>..\Master.WebApi\DLL\QRCoder.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

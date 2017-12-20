@@ -7,6 +7,7 @@ using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 using WMS.Common.ValueObject;
+using System.Data.Entity;
 
 namespace WMS.Repository.Impl
 {
@@ -17,11 +18,6 @@ namespace WMS.Repository.Impl
         {
             Db = Context;
         }
-
-
-
-
-
 
         public ItemSetDto GetDtoByID(int id)
         {
@@ -42,15 +38,21 @@ namespace WMS.Repository.Impl
         {
             ItemSetDto ItemSets = (from itsm in Db.ItemSet_MT
                                    where itsm.ItemSetIDSys == id
-                                   select new ItemSetDto
+                                   select itsm).Include(a => a.ItemSetDetails.Select(c => c.Item_MT)).Select(s => new ItemSetDto
                                    {
-                                       ItemSetCode = itsm.ItemSetCode,
-                                       ItemSetDetail = GetDtoItemSetDetail(id).ToList(),
-                                       ItemSetIDSys = itsm.ItemSetIDSys,
-                                       ItemSetName = itsm.ItemSetName,
-                                       LineID = itsm.LineID,
-                                       ProjectIDSys = itsm.ProjectIDSys
-                                   }).FirstOrDefault();
+                                       ItemSetCode = s.ItemSetCode,
+                                       ItemSetDetails = s.ItemSetDetails.Select(b => new ItemSetDetailDto()
+                                       {
+                                           ItemIDSys = b.ItemIDSys,
+                                           ItemName = b.Item_MT.ItemName,
+                                           ItemCode = b.Item_MT.ItemCode,
+                                           Qty = b.Qty
+                                       }).ToList(),
+                                       ItemSetIDSys = s.ItemSetIDSys,
+                                       ItemSetName = s.ItemSetName,
+                                       LineID = s.LineID,
+                                       ProjectIDSys = s.ProjectIDSys
+                                   }).SingleOrDefault();
             return ItemSets;
         }
 
@@ -91,13 +93,5 @@ namespace WMS.Repository.Impl
                                                 }).ToList();
             return ItemSets;
         }
-
-        public ItemSet_MT CreateItemSet(ItemSet_MT ItemSet, IIdentity identity)
-        {
-            throw new NotImplementedException();
-        }
-        
-        
-
     }
 }

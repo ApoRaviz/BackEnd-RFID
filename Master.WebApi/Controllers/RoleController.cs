@@ -11,6 +11,7 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Service;
 
+
 namespace Master.WebApi.Controllers
 {
     //[Authorize]
@@ -40,6 +41,7 @@ namespace Master.WebApi.Controllers
                 }
                 else
                 {
+                    int x = User.Identity.GetProjectIDSys();
                     Role = RoleService.GetRoles(User.Identity.GetProjectIDSys());
                 }
                 
@@ -162,6 +164,10 @@ namespace Master.WebApi.Controllers
             try
             {
                 //Role.UserUpdate = User.Identity.Name;
+                if(Role.ProjectIDSys == 0)
+                {
+                    Role.ProjectIDSys = User.Identity.GetProjectIDSys();
+                }
                 string id = RoleService.CreateRole(Role);
                 response.SetData(id);
             }
@@ -184,6 +190,10 @@ namespace Master.WebApi.Controllers
 
             try
             {
+                if (Role.ProjectIDSys == 0)
+                {
+                    Role.ProjectIDSys = User.Identity.GetProjectIDSys();
+                }
                 bool isUpated = RoleService.UpdateRole( Role);
                 response.SetData(isUpated);
             }

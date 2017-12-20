@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WMS.Context;
 
 namespace WMS.WebApi.Controllers
 {
@@ -119,7 +120,8 @@ namespace WMS.WebApi.Controllers
 
             try
             {
-                string result = CommonService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
+                WMSDbContext db = new WMSDbContext();
+                string result = db.ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
                 response.SetData(result);
             }
             catch (ValidationException ex)

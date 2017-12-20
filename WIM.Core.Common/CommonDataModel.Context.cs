@@ -20,6 +20,7 @@ namespace WIM.Core.Common
     using WIM.Core.Entity.CustomerManagement;
     using WIM.Core.Context;
     using System.Collections.Generic;
+    using WMS.Context;
 
     public partial class CommonContext : DbContext
     {
@@ -52,7 +53,7 @@ namespace WIM.Core.Common
             var tableNameParameter = /*new ObjectParameter("@tableName", tableName);*/
             new SqlParameter("tableName", tableName);
 
-            using (WMS.Context.WMSDbContext Db = new WMS.Context.WMSDbContext())
+            using (WMSDbContext Db = new WMSDbContext())
             {
                 return Db.Database.SqlQuery<string>("ProcGetTableDescription @tableName",tableNameParameter).FirstOrDefault();
             }
@@ -100,6 +101,7 @@ namespace WIM.Core.Common
             using (CoreDbContext Db = new CoreDbContext())
             {
                 var y = Db.Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
+               
                 x = y.FirstOrDefault();
             }
             //var y = ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreQuery<string>

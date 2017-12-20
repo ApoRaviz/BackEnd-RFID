@@ -7,9 +7,11 @@ using System.Security.Claims;
 using System.Web.Http;
 using WIM.Core.Common;
 using System.Data.Entity;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Context;
 
 namespace Master.WebApi.Controllers
 {
@@ -121,7 +123,31 @@ namespace Master.WebApi.Controllers
 
             try
             {
-                string result = CommonService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
+                string result = new CoreDbContext().ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
+                response.SetData(result);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("SMautocomplete")]
+        public HttpResponseMessage GetSMAutoComplete(string txt)
+        {
+            IResponseData<IEnumerable<SubModuleDto>> response = new ResponseData<IEnumerable<SubModuleDto>>();
+            if (string.IsNullOrEmpty(txt))
+            {
+                response.SetData(null);
+                Request.ReturnHttpResponseMessage(response);
+            }
+
+            try
+            {
+                IEnumerable<SubModuleDto> result = CommonService.SMAutoComplete(txt);
                 response.SetData(result);
             }
             catch (ValidationException ex)
