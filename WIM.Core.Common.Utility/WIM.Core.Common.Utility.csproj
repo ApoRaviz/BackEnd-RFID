@@ -36,6 +36,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -71,11 +74,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\HashidsAttrbute.cs" />
     <Compile Include="Constant.cs\Constant.cs" />
     <Compile Include="Extentions\EnumerableExtensions.cs" />
     <Compile Include="Extentions\HttpRequestMessageExtensions.cs" />
     <Compile Include="Extentions\IdentityExtensions.cs" />
+    <Compile Include="Helpers\AttributeHelper.cs" />
     <Compile Include="Helpers\DownloadHelper.cs" />
+    <Compile Include="Helpers\HashidsHelper.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Http\HttpMessageHandler.cs" />

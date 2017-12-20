@@ -10,6 +10,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity;
 
@@ -106,7 +107,7 @@ namespace WIM.Core.Repository.Impl
         {
             Type typeEntityToUpdate = entityToUpdate.GetType();
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
-            List<string> namePropKey = GetPropertyNameOfKeyAttribute(properties);
+            List<string> namePropKey = AttributeHelper.GetPropertiesName<KeyAttribute>(entityToUpdate);
             object[] id = new object[namePropKey.Count];
             for (int i = 0; i < namePropKey.Count; i++)
             {
@@ -133,7 +134,7 @@ namespace WIM.Core.Repository.Impl
             return entityForUpdate;
         }
 
-        private List<string> GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
+        /*private List<string> GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
         {
             List<string> name = new List<string>();
             foreach (PropertyInfo prop in properties)
@@ -146,7 +147,7 @@ namespace WIM.Core.Repository.Impl
             }
             return name;
             throw new Exception("The Object Found KeyAttribute.");
-        }
+        }*/
 
         public void Delete(object id)
         {
@@ -157,8 +158,7 @@ namespace WIM.Core.Repository.Impl
         public void Delete(TEntity entityToDelete)
         {
             Type typeEntityToUpdate = entityToDelete.GetType();
-            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
-            List<string> namePropKey = GetPropertyNameOfKeyAttribute(properties);
+            List<string> namePropKey = AttributeHelper.GetPropertiesName<KeyAttribute>(entityToDelete);
             object[] id = new object[namePropKey.Count];
             for (int i = 0; i < namePropKey.Count; i++)
             {

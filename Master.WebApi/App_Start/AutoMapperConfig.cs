@@ -7,7 +7,9 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.ProjectManagement;
 using Master.Common.ValueObject;
-
+using WIM.Core.Entity.LabelManagement;
+using WIM.Core.Common.Utility.Helpers;
+using Newtonsoft.Json;
 
 namespace Master.WebApi
 {
@@ -15,7 +17,10 @@ namespace Master.WebApi
     {
         public static void Initialize()
         {
-            
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<HeadReportControl, HeadReportControlDto>();
+            });
         }
     }
 }

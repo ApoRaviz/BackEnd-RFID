@@ -16,7 +16,6 @@ namespace WIM.Core.Entity.LabelManagement
     {
         [Key]
         public int LabelIDSys { get; set; }
-        public int ModuleIDSys { get; set; }
         public int ProjectIDSys { get; set; }
         public string Lang { get; set; }
         public string Config { get; private set; }
@@ -37,5 +36,16 @@ namespace WIM.Core.Entity.LabelManagement
                 Config = StringHelper.Compress(JsonConvert.SerializeObject(value));
             }
         }
+    }
+
+    public class LabelControlDto
+    {
+        public int LabelIDSys { get; set; }
+        public int ModuleIDSys { get; set; }
+        public string ModuleName { get; set; }
+        public int ProjectIDSys { get; set; }
+        public string ProjectName { get; set; }
+        public string Lang { get; set; }
+        public List<LabelConfig> LabelConfig { get; set; }
     }
 }

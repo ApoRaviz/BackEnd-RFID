@@ -46,6 +46,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Status_MT> Status_MT { get; set; }
         public virtual DbSet<Module_MT> Module_MT { get; set; }
         public virtual DbSet<LabelControl> LabelControl { get; set; }
+        public virtual DbSet<HeadReportControl> HeadReportControl { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {
