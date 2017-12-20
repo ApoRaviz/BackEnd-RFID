@@ -48,11 +48,11 @@ namespace Master.WebApi.Controllers
             {
                 LabelControl label1 = db.LabelControl.SingleOrDefault(p => p.LabelIDSys == 1);
 
-                JsonSerializer serializer = new JsonSerializer();
+                /*JsonSerializer serializer = new JsonSerializer();
                 serializer.Converters.Add(new JavaScriptDateTimeConverter());
                 serializer.NullValueHandling = NullValueHandling.Ignore;
 
-                /*using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
+                using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
                 {
                     using (JsonWriter writer = new JsonTextWriter(sw))
                     {
