@@ -38,14 +38,4 @@ namespace WIM.Core.Entity.LabelManagement
         }
     }
 
-    public class LabelControlDto
-    {
-        public int LabelIDSys { get; set; }
-        public int ModuleIDSys { get; set; }
-        public string ModuleName { get; set; }
-        public int ProjectIDSys { get; set; }
-        public string ProjectName { get; set; }
-        public string Lang { get; set; }
-        public List<LabelConfig> LabelConfig { get; set; }
-    }
 }
