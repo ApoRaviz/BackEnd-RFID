@@ -60,6 +60,7 @@
     <Compile Include="EmployeeMaster\EmployeeService.cs" />
     <Compile Include="MenuMaster\MenuService.cs" />
     <Compile Include="MenuProjectMapping\MenuProjectMappingService.cs" />
+    <Compile Include="ModuleMaster\SubModuleService.cs" />
     <Compile Include="ModuleMaster\ModuleService.cs" />
     <Compile Include="PermissionMaster\PermissionService.cs" />
     <Compile Include="PersonMaster\PersonService.cs" />

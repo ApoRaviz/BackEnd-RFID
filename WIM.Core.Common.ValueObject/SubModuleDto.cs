@@ -11,7 +11,7 @@ namespace WIM.Core.Common.ValueObject
     {
         public int StatusIDSys { get; set; }
         public int SubModuleIDSys { get; set; }
-        public int ModuleIDSys { get; set; }
+        public Nullable<int> ModuleIDSys { get; set; }
         public string SubModuleName { get; set; }
         public string ModuleName { get; set; }
         public string LabelSubModuleName { get; set; }

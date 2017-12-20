@@ -60,6 +60,7 @@
     <Compile Include="IService.cs" />
     <Compile Include="MenuMaster\IMenuService.cs" />
     <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
+    <Compile Include="ModuleMaster\ISubModuleService.cs" />
     <Compile Include="ModuleMaster\IModuleService.cs" />
     <Compile Include="PermissionMaster\IPermissionService.cs" />
     <Compile Include="PersonMaster\IPersonService.cs" />

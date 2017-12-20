@@ -14,8 +14,8 @@ namespace WIM.Core.Entity.Status
     {
         [Key]
         public int SubModuleIDSys { get; set; }
-        public int ModuleIDSys { get; set; }
-        public int ParentID { get; set; }
+        public Nullable<int> ModuleIDSys { get; set; }
+        public Nullable<int> ParentID { get; set; }
         public string Acronym { get; set; }
         public string SubModuleName { get; set; }
 
