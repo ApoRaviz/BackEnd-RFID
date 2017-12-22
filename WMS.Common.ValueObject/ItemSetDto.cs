@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WMS.Entity.ItemManagement;
 using WMS.Master;
 
 
@@ -19,7 +20,7 @@ namespace WMS.Common.ValueObject
         public string UserUpdate { get; set; }
         public DateTime UpdateDate { get; set; }
 
-        public ICollection<ItemSetDetailDto> ItemSetDetail { get; set; }
+        public ICollection<ItemSetDetailDto> ItemSetDetails { get; set; }
 
        
     }

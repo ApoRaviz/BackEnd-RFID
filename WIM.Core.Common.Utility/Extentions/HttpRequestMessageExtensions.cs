@@ -12,6 +12,8 @@ using System.Web.Http.Routing;
 using System.Net.Http;
 using WIM.Core.Common.Utility.Http;
 using System.Linq;
+using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.Attributes;
 
 namespace WIM.Core.Common.Utility.Extensions
 {
@@ -19,6 +21,7 @@ namespace WIM.Core.Common.Utility.Extensions
     {
         public static HttpResponseMessage ReturnHttpResponseMessage<T>(this HttpRequestMessage request, IResponseData<T> response)
         {
+            AttributeHelper.SetHashids(response.GetData());
             return request.CreateResponse(response.GetStatus(), response);
         }
 

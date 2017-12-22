@@ -18,6 +18,8 @@ using WIM.Core.Common.ValueObject;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common;
+using WIM.Core.Entity.RoleAndPermission;
 
 namespace WIM.Core.Service.Impl
 {
@@ -141,6 +143,125 @@ namespace WIM.Core.Service.Impl
                     throw ex;
                 }
                 return "Success";
+            }
+        }
+
+        public bool UpdateApiInMenu(List<ApiMenuMappingDto> ApiMenuMapping)
+        {
+            using (var scope = new TransactionScope())
+            {
+
+                try
+                {
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        CoreDbContext db = new CoreDbContext();
+                        IApiMenuMappingRepository repo = new ApiMenuMappingRepository(Db);
+                        IPermissionRepository repoPermission = new PermissionRepository(Db);
+                        IRepository<RolePermissions> repoRole = new Repository<RolePermissions>(Db);
+                        var ispermission = repoPermission.GetPermissionHasCreated(ApiMenuMapping[0].MenuIDSys);
+                        string[] include = { "Role" };
+                        var isrole = repoRole.GetWithInclude(a => (ispermission.Select(c => c.PermissionID).Contains(a.PermissionID)), include)
+                            .Select(m => new Role()
+                            {
+                                RoleID = m.Role.RoleID,
+                                ProjectIDSys = m.Role.ProjectIDSys
+                            }
+                                   ).ToList();
+                        List<ApiMenuMapping> newapi = new List<ApiMenuMapping>();
+                        foreach (var c in ApiMenuMapping)
+                        {
+                            ApiMenuMapping api = new ApiMenuMapping();
+                            api = new CommonService().AutoMapper<ApiMenuMapping>(c);
+                            newapi.Add(repo.Insert(api));
+                        }
+                        Db.SaveChanges();
+                        if (ispermission != null)
+                        {
+                            List<Permission> permission = new List<Permission>();
+                            foreach (var c in newapi)
+                            {
+
+                                if (c.Type == "A")
+                                {
+                                    foreach (var i in ispermission)
+                                    {
+                                        Permission data = new Permission();
+                                        data.ApiIDSys = c.ApiIDSys;
+                                        data.MenuIDSys = c.MenuIDSys;
+                                        data.ProjectIDSys = i.ProjectIDSys;
+                                        if (c.GET)
+                                        {
+                                            data.PermissionID = Guid.NewGuid().ToString();
+                                            data.PermissionName = "GET " + i.PermissionName;
+                                            data.Method = "GET";
+                                            permission.Add(repoPermission.Insert(data));
+                                        }
+                                        if (c.POST)
+                                        {
+                                            data.PermissionID = Guid.NewGuid().ToString();
+                                            data.PermissionName = "POST " + i.PermissionName;
+                                            data.Method = "POST";
+                                            permission.Add(repoPermission.Insert(data));
+                                        }
+                                        if (c.PUT)
+                                        {
+                                            data.PermissionID = Guid.NewGuid().ToString();
+                                            data.PermissionName = "PUT " + i.PermissionName;
+                                            data.Method = "PUT";
+                                            permission.Add(repoPermission.Insert(data));
+                                        }
+                                        if (c.DEL)
+                                        {
+                                            data.PermissionID = Guid.NewGuid().ToString();
+                                            data.PermissionName = "DELETE " + i.PermissionName;
+                                            data.Method = "DELETE";
+                                            permission.Add(repoPermission.Insert(data));
+                                        }
+                                    }
+                                    Db.SaveChanges();
+                                    if (isrole != null)
+                                    {
+                                        var role = isrole.GroupBy(a => a.ProjectIDSys).Select(grp => grp.ToList()).ToList();
+                                        var permissions = permission.GroupBy(a => a.ProjectIDSys).Select(grp => grp.ToList()).ToList();
+                                        foreach(var permiss in permissions)
+                                        {
+                                            foreach(var ro in role)
+                                            {
+                                                if(ro[0].ProjectIDSys == permiss[0].ProjectIDSys)
+                                                {
+                                                    foreach(var i in permiss)
+                                                    {
+                                                        foreach(var r in ro)
+                                                        {
+                                                            RolePermissions a = new RolePermissions();
+                                                            a.PermissionID = i.PermissionID;
+                                                            a.RoleID = r.RoleID;
+                                                            repoRole.Insert(a);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        Db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                return true;
             }
         }
 

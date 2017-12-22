@@ -540,6 +540,7 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("ImportPickingWin")]
         public HttpResponseMessage PostFormWin([FromBody]FujiPickingFromWinRequest receive)

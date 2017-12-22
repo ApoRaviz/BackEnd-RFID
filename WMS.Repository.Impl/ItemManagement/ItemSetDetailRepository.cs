@@ -4,7 +4,7 @@ using WIM.Core.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using System.Collections.Generic;
-using WIM.Repository.ItemManagement;
+using WMS.Repository.ItemManagement;
 
 namespace WMS.Repository.Impl.ItemManagement 
 {

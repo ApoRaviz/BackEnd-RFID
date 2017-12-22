@@ -16,6 +16,7 @@ namespace WIM.Core.Service
         string CreateApiMenuMapping(ApiMenuMappingDto ApiMenuMapping);
         string CreateApiMenuMapping(List<ApiMenuMappingDto> ApiMenuMapping);
         bool UpdateApiMenuMapping(ApiMenuMapping ApiMenuMapping );
-        bool DeleteApiMenuMapping(string id);        
+        bool DeleteApiMenuMapping(string id);
+        bool UpdateApiInMenu(List<ApiMenuMappingDto> ApiMenuMapping);
     }
 }

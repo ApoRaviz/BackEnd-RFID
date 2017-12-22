@@ -37,14 +37,14 @@ namespace WMS.Entity.ItemManagement
         public string Spare3 { get; set; }
         public string Spare4 { get; set; }
         public string Spare5 { get; set; }
-        public Nullable<byte> SerialControl { get; set; }
-        public Nullable<byte> InspectControl { get; set; }
-        public Nullable<byte> ExpireControl { get; set; }
-        public Nullable<byte> DimensionControl { get; set; }
-        public Nullable<byte> BoxControl { get; set; }
-        public Nullable<byte> LotControl { get; set; }
-        public Nullable<byte> PalletControl { get; set; }
-        public Nullable<byte> ItemSetControl { get; set; }
+        public Nullable<bool> SerialControl { get; set; }
+        public Nullable<bool> InspectControl { get; set; }
+        public Nullable<bool> ExpireControl { get; set; }
+        public Nullable<bool> DimensionControl { get; set; }
+        public Nullable<bool> BoxControl { get; set; }
+        public Nullable<bool> LotControl { get; set; }
+        public Nullable<bool> PalletControl { get; set; }
+        public Nullable<bool> ItemSetControl { get; set; }
         public Nullable<int> MiniAlert { get; set; }
         public Nullable<short> AlertExp { get; set; }
         public string TaxCond { get; set; }

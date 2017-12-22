@@ -80,6 +80,10 @@
       <Project>{93a81e85-aca4-4809-88dc-c3d67548ef83}</Project>
       <Name>HRMS.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{c8c9f920-5e08-4a3a-af4f-fe3aa35421c8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>

@@ -11,6 +11,7 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Context;
 
 namespace Master.WebApi.Controllers
 {
@@ -122,7 +123,7 @@ namespace Master.WebApi.Controllers
 
             try
             {
-                string result = CommonService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
+                string result = new CoreDbContext().ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
                 response.SetData(result);
             }
             catch (ValidationException ex)

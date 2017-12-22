@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.RoleAndPermission;
 
 namespace WIM.Core.Entity.MenuManagement
@@ -25,8 +26,10 @@ namespace WIM.Core.Entity.MenuManagement
         public string Api { get; set; }
         public string Method { get; set; }
         public string Controller { get; set; }
+        public int ModuleIDSys { get; set; }
 
         public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
+        public virtual Module_MT Module_MT { get; set; }
     }
 }

@@ -52,5 +52,24 @@ namespace WIM.Core.Common.Utility.Helpers
             }
 
         }
+
+        public static string String2Hex(string InputText)
+        {
+            byte[] b = Encoding.Default.GetBytes(InputText);
+            var hexString = BitConverter.ToString(b);
+            return hexString.Replace("-", "");
+        }
+
+        public static string Hex2String(string InputText)
+        {
+
+            byte[] bb = Enumerable.Range(0, InputText.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(InputText.Substring(x, 2), 16))
+                             .ToArray();
+            return Encoding.ASCII.GetString(bb);
+        }
+
+        
     }
 }

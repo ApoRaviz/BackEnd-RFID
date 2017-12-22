@@ -52,9 +52,12 @@
     <Compile Include="Dimension\DimensionRepository.cs" />
     <Compile Include="ImportDefinition\ImportDefinitionRepository.cs" />
     <Compile Include="Inspect\InspectRepository.cs" />
+    <Compile Include="Inspect\InspectTypeRepository.cs" />
+    <Compile Include="ItemManagement\ItemInspectRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />
     <Compile Include="ItemManagement\ItemSetDetailRepository.cs" />
     <Compile Include="ItemManagement\ItemSetRepository.cs" />
+    <Compile Include="ItemManagement\ItemUnitRepository.cs" />
     <Compile Include="Label\LabelLayoutDetailRepository.cs" />
     <Compile Include="Label\LabelLayoutHeaderRepository.cs" />
     <Compile Include="Location\LocationRepository.cs" />

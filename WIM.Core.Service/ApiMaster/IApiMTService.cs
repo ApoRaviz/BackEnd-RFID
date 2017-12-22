@@ -12,6 +12,7 @@ namespace WIM.Core.Service
     public interface IApiMTService : IService
     {
         IEnumerable<Api_MT> GetAPIs();
+        IEnumerable<Api_MT> GetAPIs(int Moduleidsys);
         ApiMTDto GetApiMT(string id);
         string CreateApiMT(List<Api_MT> ApiMT);
         bool UpdateApiMT( Api_MT ApiMT);
