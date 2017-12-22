@@ -30,11 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\TMS.WebApi\bin\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -54,6 +60,7 @@
     <Compile Include="CustomerAndProject\CustomerRepository.cs" />
     <Compile Include="CustomerAndProject\ModuleRepository.cs" />
     <Compile Include="CustomerAndProject\ProjectRepository.cs" />
+    <Compile Include="LabelControl\LabelControlRepository.cs" />
     <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
     <Compile Include="MenuAndPermission\MenuRepository.cs" />
     <Compile Include="MenuAndPermission\PermissionRepository.cs" />
@@ -69,6 +76,10 @@
     <Compile Include="StatusManagement\SubModuleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>

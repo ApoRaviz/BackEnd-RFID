@@ -55,6 +55,7 @@
     <Compile Include="CustomerAndProject\IModuleRepository.cs" />
     <Compile Include="CustomerAndProject\IProjectRepository.cs" />
     <Compile Include="IGenericRepository.cs" />
+    <Compile Include="LabelControl\ILabelControlRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuProjectMappingRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuRepository.cs" />
     <Compile Include="MenuAndPermission\IPermissionRepository.cs" />

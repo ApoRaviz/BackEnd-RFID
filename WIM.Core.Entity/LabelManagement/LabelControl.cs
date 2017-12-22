@@ -16,7 +16,6 @@ namespace WIM.Core.Entity.LabelManagement
     {
         [Key]
         public int LabelIDSys { get; set; }
-        public int ModuleIDSys { get; set; }
         public int ProjectIDSys { get; set; }
         public string Lang { get; set; }
         public string Config { get; private set; }

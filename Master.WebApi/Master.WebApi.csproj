@@ -18,7 +18,7 @@
     <AssemblyName>Master.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort>443</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
@@ -47,6 +47,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ExcludeGeneratedDebugSymbol>false</ExcludeGeneratedDebugSymbol>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
@@ -321,6 +322,7 @@
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HelpersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LabelControlController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MenuProjectMappingController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
@@ -483,10 +485,6 @@
       <Project>{9a37166e-bd6c-4ba9-9091-985bc77c68d6}</Project>
       <Name>Master.Common.ValueObject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Master.Entity\Master.Entity.csproj">
-      <Project>{787996d9-933a-4580-9b87-c0f78d04d228}</Project>
-      <Name>Master.Entity</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Master.Service\Master.Service.csproj">
       <Project>{2cf56a5a-150b-4805-91d6-35127991297e}</Project>
       <Name>Master.Service</Name>
@@ -552,11 +550,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:9004</IISUrl>
+          <IISUrl>http://localhost/master</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
