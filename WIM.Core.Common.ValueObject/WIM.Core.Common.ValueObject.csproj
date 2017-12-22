@@ -45,6 +45,7 @@
     <Compile Include="CustomerAutoCompleteDto.cs" />
     <Compile Include="CustomerDto.cs" />
     <Compile Include="EmployeeDto.cs" />
+    <Compile Include="HeadReportControlDto.cs" />
     <Compile Include="LabelControlDto.cs" />
     <Compile Include="MenuDto.cs" />
     <Compile Include="MenuProjectMappingDto.cs" />
