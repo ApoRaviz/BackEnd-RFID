@@ -42,17 +42,19 @@ namespace Master.WebApi.Controllers
         {
             LabelControl labelResponse = new LabelControl();
             ResponseData<LabelControl> response = new ResponseData<LabelControl>();
+          
 
+            /*var res = projectConfig.ToDictionary(x => x.Key, x => x.Value);
+            response.SetData(res);
+            return Request.ReturnHttpResponseMessage(response);*/
 
             using (CoreDbContext db = new CoreDbContext())
             {
                 LabelControl label1 = db.LabelControl.SingleOrDefault(p => p.LabelIDSys == 1);
 
-                /*JsonSerializer serializer = new JsonSerializer();
-                serializer.Converters.Add(new JavaScriptDateTimeConverter());
-                serializer.NullValueHandling = NullValueHandling.Ignore;
+              
 
-                using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
+                /*using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
                 {
                     using (JsonWriter writer = new JsonTextWriter(sw))
                     {
@@ -60,6 +62,8 @@ namespace Master.WebApi.Controllers
 
                     }
                 }*/
+
+
 
                 label1.LabelConfig = projectConfig;
                 db.SaveChanges();
