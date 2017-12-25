@@ -58,6 +58,7 @@
     <Compile Include="CustomerMaster\ICustomerService.cs" />
     <Compile Include="EmployeeMaster\IEmployeeService.cs" />
     <Compile Include="IService.cs" />
+    <Compile Include="LabelControl\ILabelControlService.cs" />
     <Compile Include="MenuMaster\IMenuService.cs" />
     <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
     <Compile Include="ModuleMaster\ISubModuleService.cs" />

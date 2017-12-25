@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using HashidsNet;
+using Master.WebApi.Report;
 using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -132,7 +133,7 @@ namespace Master.WebApi.Controllers
         public HttpResponseMessage Func3([FromBody]List<string> Labels)
         {
             DataTable responseObj = new DataTable();
-            List<string> response2 = new List<string>();
+            List<string> newLabels = new List<string>();
             ResponseData<List<string>> response = new ResponseData<List<string>>();
 
             List<string> _label = new List<string>();
@@ -144,13 +145,15 @@ namespace Master.WebApi.Controllers
 
             string labelSelect = String.Join(", ", _label.ToArray());
 
+            System.Data.DataSet dataSet = new System.Data.DataSet();
+
             using (CoreDbContext db = new CoreDbContext())
             {
                 string sql = string.Format("select {0} from Employee_MT FOR JSON AUTO", labelSelect);                
                 string json = db.Database.SqlQuery<string>(sql).FirstOrDefault();
                 json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");    
 
-                System.Data.DataSet dataSet = JsonConvert.DeserializeObject<System.Data.DataSet>(json);
+                dataSet = JsonConvert.DeserializeObject<System.Data.DataSet>(json);
                 DataTable dataTable = dataSet.Tables["Employees"];
 
 
@@ -174,20 +177,24 @@ namespace Master.WebApi.Controllers
                     }
                 }
 
-                response2 = headReport.HeadReportLabels.Select(h => h.Value).ToList();               
-
-                Debug.WriteLine("===================== #SQLDEBUG =====================");
-                foreach (DataRow row in dataTable.Rows)
-                {                
-                    Debug.WriteLine(row["EmID"] + " - " + row["Position"]);
+                newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
+                if (newLabels.Count == dataTable.Columns.Count)
+                {
+                    for (int i = 0; i < newLabels.Count; i++)
+                    {
+                        dataTable.Columns[i].ColumnName = newLabels[i];
+                    }
+                    dataTable.AcceptChanges();
                 }
-                Debug.WriteLine("===================== #SQLDEBUG =====================");
 
             }
+            
 
-            response.SetData(response2);
+            return ReportUtil.createRDLCReport("Test", "Dynamic", dataSet);
 
-            return Request.ReturnHttpResponseMessage(response);
+            //response.SetData(response2);
+
+            //return Request.ReturnHttpResponseMessage(response);
         }
 
 
