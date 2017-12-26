@@ -12,6 +12,7 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.LabelManagement;
+using WIM.Core.Service;
 using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
@@ -23,7 +24,7 @@ namespace Master.WebApi.Controllers
         [Route("{lang}/{projectid}")]
         public HttpResponseMessage GetDto(string Lang,int ProjectID)
         {
-            LabelControlService  LabelService = new LabelControlService();
+            ILabelControlService  LabelService = new LabelControlService();
             LabelControlDto labelResponse = new LabelControlDto();
             ResponseData<LabelControlDto> response = new ResponseData<LabelControlDto>();
 

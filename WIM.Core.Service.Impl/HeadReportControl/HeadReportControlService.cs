@@ -1,107 +1,71 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-
-using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
-using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
-using System.Security.Principal;
-using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
-using WIM.Core.Service;
-using WIM.Core.Entity.Status;
-using WIM.Core.Repository.StatusManagement;
-using WIM.Core.Repository.Impl.StatusManagement;
 
 namespace WIM.Core.Service.Impl
 {
-    public class SubModuleService : Service, ISubModuleService
+    public class HeadReportControlService : Service, IHeadReportControlService
     {
-        public SubModuleService()
+        public HeadReportControlService()
         {
+
         }
 
-
-        public IEnumerable<SubModules> GetSubModules()
+        public IEnumerable<HeadReportControl> GetHeadReportControls()
         {
-            IEnumerable<SubModules> modules;
+            IEnumerable<HeadReportControl> report;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ISubModuleRepository repo = new SubModuleRepository(Db);
-                modules = repo.Get();
+                IHeadReportControlRepository repo = new HeadReportControlRepository(Db);
+                report = repo.Get();
             }
-            return modules;
+            return report;
         }
 
-        public SubModules GetSubModulesByID(int id)
+        public HeadReportControl GetHeadReportControlByID(int headreportidsys)
         {
-            SubModules modules;
+            HeadReportControl report;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ISubModuleRepository repo = new SubModuleRepository(Db);
-                modules = repo.GetByID(id);
+                IHeadReportControlRepository repo = new HeadReportControlRepository(Db);
+                report = repo.GetByID(headreportidsys);
             }
-            return modules;
+            return report;
         }
 
-        public IEnumerable<SubModules> GetSubModulesByModuleID(int id)
+        public IEnumerable<HeadReportControl> GetHeadReportControlsByModuleID(int SubModuleIDSys)
         {
-            IEnumerable<SubModules> modules;
+            IEnumerable<HeadReportControl> report;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                ISubModuleRepository repo = new SubModuleRepository(Db);
-                modules = repo.GetMany(a => a.ModuleIDSys == id);
+                IHeadReportControlRepository repo = new HeadReportControlRepository(Db);
+                report = repo.GetMany(a => a.SubModuleIDSys == SubModuleIDSys);
             }
-            return modules;
+            return report;
         }
 
-        public SubModules CreateModule(SubModules module)
+        public int CreateHeadReportControl(HeadReportControl headreport)
         {
             using (var scope = new TransactionScope())
             {
-                SubModules moduleNew = new SubModules();
+                HeadReportControl data = new HeadReportControl();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ISubModuleRepository repo = new SubModuleRepository(Db);
-                        moduleNew = repo.Insert(module);
-                        Db.SaveChanges();
-                        scope.Complete();
-                    }
-                }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException e)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw e;
-                }
-                return moduleNew;
-            }
-        }
-
-        public bool UpdateModule(SubModules module)
-        {
-            using (var scope = new TransactionScope())
-            {
-                try
-                {
-                    using (CoreDbContext Db = new CoreDbContext())
-                    {
-                        ISubModuleRepository repo = new SubModuleRepository(Db);
-                        repo.Update(module);
+                        IHeadReportControlRepository repo = new HeadReportControlRepository(Db);
+                        data = repo.Insert(headreport);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -116,11 +80,40 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return true;
+                return data.HeadReportIDSys;
             }
         }
 
-        public bool DeleteModule(int id)
+        public bool UpdateHeadReportControl(HeadReportControl headreport)
+        {
+            HeadReportControl data = new HeadReportControl();
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IHeadReportControlRepository repo = new HeadReportControlRepository(Db);
+                        data = repo.Update(headreport);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+            }
+            return true;
+        }
+
+        public bool DeleteHeadReportControl(int headreportidsys)
         {
             using (var scope = new TransactionScope())
             {
@@ -128,22 +121,25 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        ISubModuleRepository repo = new SubModuleRepository(Db);
-                        repo.Delete(id);
+                        IHeadReportControlRepository repo = new HeadReportControlRepository(Db);
+                        HeadReportControl data = repo.GetByID(headreportidsys);
+                        repo.Delete(data);
                         Db.SaveChanges();
                         scope.Complete();
                     }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-
-
-                return true;
             }
+            return true;
         }
 
         public void HandleValidationException(DbEntityValidationException ex)
@@ -156,6 +152,6 @@ namespace WIM.Core.Service.Impl
                 }
             }
         }
+
     }
 }
-
