@@ -143,7 +143,6 @@ namespace Master.WebApi.Controllers
                 _label.Add(l);
             }
 
-
             string labelSelect = String.Join(", ", _label.ToArray());
 
             System.Data.DataSet dataSet = new System.Data.DataSet();
@@ -184,6 +183,8 @@ namespace Master.WebApi.Controllers
                             where r.Key == HashidsHelper.DecodeHex(p.Key)
                             select r.Value).ToList();
 
+
+                newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
                 if (newLabels.Count == dataTable.Columns.Count)
                 {
                     for (int i = 0; i < newLabels.Count; i++)
