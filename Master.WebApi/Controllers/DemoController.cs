@@ -177,6 +177,7 @@ namespace Master.WebApi.Controllers
                     }
                 }
 
+
                 newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
                 if (newLabels.Count == dataTable.Columns.Count)
                 {
