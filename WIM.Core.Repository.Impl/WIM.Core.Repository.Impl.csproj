@@ -54,6 +54,7 @@
     <Compile Include="CustomerAndProject\CustomerRepository.cs" />
     <Compile Include="CustomerAndProject\ModuleRepository.cs" />
     <Compile Include="CustomerAndProject\ProjectRepository.cs" />
+    <Compile Include="HeadReportControl\HeadReportControlRepository.cs" />
     <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
     <Compile Include="MenuAndPermission\MenuRepository.cs" />
     <Compile Include="MenuAndPermission\PermissionRepository.cs" />

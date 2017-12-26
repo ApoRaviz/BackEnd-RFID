@@ -356,6 +356,7 @@
     <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\HeadReportControlController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\SubModuleController.cs" />
     <Compile Include="Controllers\UserController.cs" />

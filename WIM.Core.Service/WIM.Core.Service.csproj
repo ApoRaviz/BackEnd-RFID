@@ -57,6 +57,7 @@
     <Compile Include="CurrencyMaster\ICurrencyService.cs" />
     <Compile Include="CustomerMaster\ICustomerService.cs" />
     <Compile Include="EmployeeMaster\IEmployeeService.cs" />
+    <Compile Include="HeadReportControl\IHeadReportControlService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="MenuMaster\IMenuService.cs" />
     <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />

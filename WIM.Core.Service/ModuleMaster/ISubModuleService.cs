@@ -11,6 +11,7 @@ namespace WIM.Core.Service
     public interface ISubModuleService : IService
     {
         IEnumerable<SubModules> GetSubModules();
+        IEnumerable<SubModules> GetSubModulesByModuleID(int id);
         SubModules GetSubModulesByID(int id);
         SubModules CreateModule(SubModules module);
         bool UpdateModule(SubModules module);
