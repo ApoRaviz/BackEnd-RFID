@@ -11,22 +11,6 @@ namespace WIM.Core.Common.Utility.Helpers
 {
     public class AttributeHelper
     {
-        public static List<string> GetPropertiesName<TAttribute>(object data) where TAttribute : Attribute
-        {
-            Type t = data.GetType();
-            PropertyInfo[] properties = t.GetProperties();
-            List<string> propertiesName = new List<string>();
-            foreach (PropertyInfo prop in properties)
-            {
-                TAttribute attr = prop.GetCustomAttribute<TAttribute>();
-                if (attr != null)
-                {
-                    propertiesName.Add(prop.Name);
-                }
-            }
-            return propertiesName;
-            throw new Exception("The Object Found KeyAttribute.");
-        }
 
         public static void SetHashids(object data)
         {

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using HRMS.Service;
+﻿using HRMS.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -254,16 +253,4 @@ namespace HRMS.WebApi.Controllers
 
         }
     }*/
-
-    public class ValidateModelAttribute : ActionFilterAttribute
-    {
-        public override void OnActionExecuting(HttpActionContext actionContext)
-        {
-            if (actionContext.ModelState.IsValid == false)
-            {
-                actionContext.Response = actionContext.Request.CreateErrorResponse(
-                    HttpStatusCode.BadRequest, actionContext.ModelState);
-            }
-        }
-    }
 }

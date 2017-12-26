@@ -10,9 +10,12 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity;
+using WIM.Core.Common.Utility.Extentions;
+using WIM.Core.Entity.Logs;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -20,12 +23,13 @@ namespace WIM.Core.Repository.Impl
     {
         protected DbContext Context;
         internal DbSet<TEntity> DbSet;
+        internal DbSet<GeneralLog> GeneralLogDbSet;
 
         public Repository(DbContext context)
         {
             Context = context;
-            this.DbSet = Context.Set<TEntity>();
-
+            DbSet = Context.Set<TEntity>();
+            GeneralLogDbSet = Context.Set<GeneralLog>();
         }
 
         public IIdentity Identity
@@ -34,7 +38,7 @@ namespace WIM.Core.Repository.Impl
             {
                 return AuthHelper.GetIdentity();
             }
-        }       
+        }
 
         public IEnumerable<TEntity> Get()
         {
@@ -47,7 +51,7 @@ namespace WIM.Core.Repository.Impl
         }
 
         public IEnumerable<TEntity> GetAll()
-        {            
+        {
             return DbSet.ToList();
         }
 
@@ -64,25 +68,26 @@ namespace WIM.Core.Repository.Impl
         public bool Exists(object id)
         {
             return DbSet.Find(id) != null;
-        }       
+        }
 
         public TEntity Insert(TEntity entityToInsert)
         {
-            Type typeEntityToInsert = entityToInsert.GetType(); 
+            Type typeEntityToInsert = entityToInsert.GetType();
             PropertyInfo[] properties = typeEntityToInsert.GetProperties();
 
             TEntity entityForInsert = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { });
 
             Type typeEntityForInsert = entityForInsert.GetType();
             foreach (PropertyInfo prop in properties)
-            {                
-                var value = prop.GetValue(entityToInsert, null);                
+            {
+                var value = prop.GetValue(entityToInsert, null);
                 if (!prop.PropertyType.IsGenericType || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime))
                 {
-                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
-                }else if(prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);                    
+                }
+                else if (prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
-                    if(typeEntityForInsert.GetProperty(prop.Name).GetValue(entityToInsert) != null)
+                    if (typeEntityForInsert.GetProperty(prop.Name).GetValue(entityToInsert) != null)
                     {
                         typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
                     }
@@ -91,8 +96,13 @@ namespace WIM.Core.Repository.Impl
                         typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
                     }
                 }
+
+                if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
+                {
+                    GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForInsert, Identity.GetUserName()));
+                }
             }
-            
+
             entityForInsert.CreateBy = Identity.GetUserName();
             entityForInsert.CreateAt = DateTime.Now;
             entityForInsert.UpdateBy = Identity.GetUserName();
@@ -101,33 +111,37 @@ namespace WIM.Core.Repository.Impl
 
             DbSet.Add(entityForInsert);
             return entityForInsert;
-        }                
+        }
 
         public TEntity Update(object entityToUpdate)
         {
             Type typeEntityToUpdate = entityToUpdate.GetType();
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
-            List<string> namePropKey = AttributeHelper.GetPropertiesName<KeyAttribute>(entityToUpdate);
-            object[] id = new object[namePropKey.Count];
-            for (int i = 0; i < namePropKey.Count; i++)
+            List<string> namePropKeys = typeEntityToUpdate.GetPropertiesName<KeyAttribute>(entityToUpdate);
+            object[] id = new object[namePropKeys.Count];
+            for (int i = 0; i < namePropKeys.Count; i++)
             {
-                id[i] = typeEntityToUpdate.GetProperty(namePropKey[i]).GetValue(entityToUpdate, null);
+                id[i] = typeEntityToUpdate.GetProperty(namePropKeys[i]).GetValue(entityToUpdate, null);
             }
             TEntity entityForUpdate = GetByID(id);
             if (entityForUpdate == null)
             {
                 throw new Exception("Data Not Found.");
             }
+
             Type typeEntityForUpdate = entityForUpdate.GetType();
             foreach (PropertyInfo prop in properties)
             {
                 var value = prop.GetValue(entityToUpdate);
-                if (typeEntityForUpdate.GetProperty(prop.Name) != null 
+                if (typeEntityForUpdate.GetProperty(prop.Name) != null
                     && (!prop.PropertyType.IsGenericType || Nullable.GetUnderlyingType(prop.PropertyType) != null))
-                {
+                {                    
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
+                    if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
+                    {
+                        GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, Identity.GetUserName()));
+                    }
                 }
-
             }
             entityForUpdate.UpdateBy = Identity.GetUserName();
             entityForUpdate.UpdateAt = DateTime.Now;
@@ -158,11 +172,11 @@ namespace WIM.Core.Repository.Impl
         public void Delete(TEntity entityToDelete)
         {
             Type typeEntityToUpdate = entityToDelete.GetType();
-            List<string> namePropKey = AttributeHelper.GetPropertiesName<KeyAttribute>(entityToDelete);
-            object[] id = new object[namePropKey.Count];
-            for (int i = 0; i < namePropKey.Count; i++)
+            List<string> namePropKeys = typeEntityToUpdate.GetPropertiesName<KeyAttribute>(entityToDelete);
+            object[] id = new object[namePropKeys.Count];
+            for (int i = 0; i < namePropKeys.Count; i++)
             {
-                id[i] = typeEntityToUpdate.GetProperty(namePropKey[i]).GetValue(entityToDelete, null);
+                id[i] = typeEntityToUpdate.GetProperty(namePropKeys[i]).GetValue(entityToDelete, null);
             }
             TEntity entityForDelete = GetByID(id);
 
@@ -173,7 +187,7 @@ namespace WIM.Core.Repository.Impl
             DbSet.Remove(entityForDelete);
         }
 
-       
+
         // Other
         public IEnumerable<TEntity> GetMany(Func<TEntity, bool> where)
         {
@@ -184,7 +198,7 @@ namespace WIM.Core.Repository.Impl
         {
             return DbSet.Where(where).AsQueryable();
         }
-      
+
         public void Delete(Func<TEntity, Boolean> where)
         {
             IQueryable<TEntity> objects = DbSet.Where<TEntity>(where).AsQueryable();
@@ -214,7 +228,7 @@ namespace WIM.Core.Repository.Impl
         public TEntity GetFirst(Func<TEntity, bool> predicate)
         {
             return DbSet.First<TEntity>(predicate);
-        }      
+        }
 
     }
 }
