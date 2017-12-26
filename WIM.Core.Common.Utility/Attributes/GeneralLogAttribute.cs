@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Common.Utility.Attributes
 {
-    public class GeneralLogAttribute
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    public sealed class GeneralLogAttribute : Attribute
     {
+        public GeneralLogAttribute()
+        {
+
+        }
     }
 }
