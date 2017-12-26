@@ -102,6 +102,26 @@ namespace Fuji.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        [Route("importSerial/pickingGroupTop/{top}")]
+        public HttpResponseMessage GetPickingGroupsTopTen(int top)
+        {
+            ResponseData<IEnumerable<FujiPickingGroup>> response = new ResponseData<IEnumerable<FujiPickingGroup>>();
+            try
+            {
+                IEnumerable<FujiPickingGroup> items = ItemImportService.GetPickingGroup(top);
+                response.SetStatus(HttpStatusCode.OK);
+                response.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/clearPicking/{id}")]
@@ -704,5 +724,69 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(respones);
         }
 
+        //[Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("importSerial/GetBoxNumberAndAmount")]
+        public HttpResponseMessage GetBoxNumberAndAmount([FromBody]ParameterSearch parameterSearch)
+        {
+            ResponseData<IEnumerable<FujiBoxNumberAndAmountModel>> respones = new ResponseData<IEnumerable<FujiBoxNumberAndAmountModel>>();
+            IEnumerable<FujiBoxNumberAndAmountModel> boxes = new List<FujiBoxNumberAndAmountModel>();
+            boxes = ItemImportService.GetBoxNumberAndAmountList(parameterSearch);
+            respones.SetStatus(HttpStatusCode.OK);
+            respones.SetData(boxes);
+            return Request.ReturnHttpResponseMessage(respones);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("importSerial/GetItemsInBoxNumber/{boxNumber}")]
+        public HttpResponseMessage GetItemsInBoxNumber(string boxNumber)
+        {
+            ResponseData<IEnumerable<FujiSerialAndRFIDModel>> respones = new ResponseData<IEnumerable<FujiSerialAndRFIDModel>>();
+            IEnumerable<FujiSerialAndRFIDModel> items = new List<FujiSerialAndRFIDModel>();
+            items = ItemImportService.GetItemsInBoxNumber(boxNumber);
+            respones.SetStatus(HttpStatusCode.OK);
+            respones.SetData(items);
+            return Request.ReturnHttpResponseMessage(respones);
+        }
+
+        [HttpGet]
+        [Route("importSerial/GetLastestItemsBoxNumber")]
+        public HttpResponseMessage GetLastestItemsBoxNumber()
+        {
+            ResponseData<FujiCheckRegister> respones = new ResponseData<FujiCheckRegister>();
+            FujiCheckRegister items = new FujiCheckRegister();
+            items = ItemImportService.GetLastestBoxNumberItems();
+            respones.SetStatus(HttpStatusCode.OK);
+            respones.SetData(items);
+            return Request.ReturnHttpResponseMessage(respones);
+        }
+
+        [HttpPost]
+        [Route("importSerial/GetRFIDInfo")]
+        public HttpResponseMessage GetRFIDInformation([FromBody]ParameterSearch query)
+        {
+            ResponseData<string> respones = new ResponseData<string>();
+            string datas = ItemImportService.GetRFIDInfo(query);
+            respones.SetStatus(HttpStatusCode.OK);
+            respones.SetData(datas);
+            return Request.ReturnHttpResponseMessage(respones);
+
+        }
+
+        [HttpPost]
+        [Route("importSerial/GetHeadTop")]
+        public HttpResponseMessage GetHeadTop([FromBody]ParameterSearch query)
+        {
+            ResponseData<IEnumerable<ImportSerialHead>> respones = new ResponseData<IEnumerable<ImportSerialHead>>();
+            int totalRecord = 0;
+            IEnumerable<ImportSerialHead> items = ItemImportService.GetHeadDataTopten(query, out totalRecord);
+            respones.SetStatus(HttpStatusCode.OK);
+            respones.SetData(items);
+            return Request.ReturnHttpResponseMessage(respones);
+
+        }
     }
 }

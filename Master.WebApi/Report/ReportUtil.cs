@@ -48,6 +48,10 @@ namespace Master.WebApi.Report
 
                 reportBuilder.Page = new ReportPage();
 
+                #region ReportSettings
+                reportBuilder.TableDimension = new ReportDimensions() { Left = 5 };
+                #endregion
+
                 #region Footer
                 ReportSections reportFooter = new ReportSections();
                 ReportItems reportFooterItems = new ReportItems();
@@ -65,17 +69,19 @@ namespace Master.WebApi.Report
 
                 ReportItems reportHeaderItems = new ReportItems();
 
-                ReportTextBoxControl[] headerTxt = new ReportTextBoxControl[2];
-                headerTxt[0] = new ReportTextBoxControl() { Name = "txtReportTitle", ValueOrExpression = new string[] { "Report Name: " + ReportTitle } };
-                headerTxt[1] = new ReportTextBoxControl()
-                {
-                    Name = "txtTestTitle",
-                    ValueOrExpression = new string[] { "ทดสอบ: ฟหกดฟหกด" }
-                ,
-                    Position = new ReportDimensions() { Left = 3, Top = 0.7 }
-                ,
-                    Size = new ReportScale() { Height = -1, Width = -1 }
+                ReportTextBoxControl[] headerTxt = new ReportTextBoxControl[]{
+                    new ReportTextBoxControl() { Name = "txtReportTitle", ValueOrExpression = new string[] { "Report Name: " + ReportTitle } }
+                    //new ReportTextBoxControl()
+                    //{
+                    //    Name = "txttesttitle",
+                    //    ValueOrExpression = new string[] { "ทดสอบ: ฟหกดฟหกด" }
+                    //,
+                    //    Position = new ReportDimensions() { Left = 3, Top = 0.7 }
+                    //,
+                    //    Size = new ReportScale() { Height = -1, Width = -1 }
+                    //}
                 };
+
 
                 reportHeaderItems.TextBoxControls = headerTxt;
 

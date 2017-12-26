@@ -13,7 +13,6 @@ using System.Drawing;
 public static class ReportEngine
 {
 
-
     #region Initialize
     public static Stream GenerateReport(ReportBuilder reportBuilder)
     {
@@ -70,10 +69,14 @@ public static class ReportEngine
         {
             rdlcXML += @"<ReportItems>" + _tableData + @"</ReportItems>";
         }
-        rdlcXML += @"<Height>2.1162cm</Height> 
-                        <Style /> 
+        rdlcXML += @"<Height>20.8cm</Height> 
+                        <Style>
+                          <Border>
+                            <Style>None</Style>
+                          </Border>
+                        </Style>
                       </Body> 
-                      <Width>20.8cm</Width> 
+                      <Width>2.1162cm</Width> 
                       <Page> 
                         " + GetPageHeader(reportBuilder) + GetFooter(reportBuilder) + GetReportPageSettings() + @" 
                         <Style /> 
@@ -93,13 +96,12 @@ public static class ReportEngine
     #region Page Settings
     static string GetReportPageSettings()
     {
-        return @" <PageHeight>21cm</PageHeight> 
-    <PageWidth>29.7cm</PageWidth> 
-    <LeftMargin>0.1pt</LeftMargin> 
-    <RightMargin>0.1pt</RightMargin> 
-    <TopMargin>0.1pt</TopMargin> 
-    <BottomMargin>0.1pt</BottomMargin> 
-    <ColumnSpacing>1pt</ColumnSpacing>";
+        return @" <PageHeight>29.7cm</PageHeight> 
+    <PageWidth>21cm</PageWidth> 
+    <LeftMargin>0.5in</LeftMargin> 
+    <RightMargin>0.5in</RightMargin> 
+    <TopMargin>0.5in</TopMargin> 
+    <BottomMargin>0.5in</BottomMargin>";
     }
     private static string GetPageHeader(ReportBuilder reportBuilder)
     {
@@ -158,15 +160,15 @@ public static class ReportEngine
         {
             string dsName = "rpt" + new Random().Next(1,100);
             dataSetStr += @"<DataSources> 
-    <DataSource Name=""" + dsName + @"""> 
-      <ConnectionProperties> 
-        <DataProvider>System.Data.DataSet</DataProvider> 
-        <ConnectString>/* Local Connection */</ConnectString> 
-      </ConnectionProperties> 
-      <rd:DataSourceID>944b21fd-a128-4363-a5fc-312a032950a0</rd:DataSourceID> 
-    </DataSource> 
-  </DataSources> 
-  <DataSets>"
+            <DataSource Name=""" + dsName + @"""> 
+                <ConnectionProperties> 
+                <DataProvider>System.Data.DataSet</DataProvider> 
+                <ConnectString>/* Local Connection */</ConnectString> 
+                </ConnectionProperties> 
+                <rd:DataSourceID>944b21fd-a128-4363-a5fc-312a032950a0</rd:DataSourceID> 
+            </DataSource> 
+            </DataSources> 
+            <DataSets>"
                          + GetDataSetTables(reportBuilder.Body.ReportControlItems.ReportTable, dsName) +
               @"</DataSets>";
         }
@@ -178,12 +180,12 @@ public static class ReportEngine
         for (int i = 0; i < tables.Length; i++)
         {
             strTables += @"<DataSet Name=""" + tables[i].ReportName + @"""> 
-      <Query> 
-        <DataSourceName>" + DataSourceName + @"</DataSourceName> 
-        <CommandText>/* Local Query */</CommandText> 
-      </Query> 
-     " + GetDataSetFields(tables[i].ReportDataColumns) + @" 
-    </DataSet>";
+                <Query> 
+                <DataSourceName>" + DataSourceName + @"</DataSourceName> 
+                <CommandText>/* Local Query */</CommandText> 
+                </Query> 
+                " + GetDataSetFields(tables[i].ReportDataColumns) + @" 
+            </DataSet>";
         }
         return strTables;
     }
@@ -215,8 +217,8 @@ public static class ReportEngine
             {
                 table = reportBuilder.Body.ReportControlItems.ReportTable[i];
                 double top = 0.07056, left = 1, width = 7.5, height = 1.2;
-                if (table.position != null) { top = table.position.Top < 0 ? top : table.position.Top; left = table.position.Left < 0 ? left : table.position.Left; }
-                if (table.size != null) { width = table.size.Width < 0 ? width : table.size.Width; height = table.size.Height < 0 ? height : table.size.Height; }
+                if (reportBuilder.TableDimension != null) { top = reportBuilder.TableDimension.Top < 0 ? top : reportBuilder.TableDimension.Top; left = reportBuilder.TableDimension.Left < 0 ? left : reportBuilder.TableDimension.Left; }
+                if (reportBuilder.TableScale != null) { width = reportBuilder.TableScale.Width < 0 ? width : reportBuilder.TableScale.Width; height = reportBuilder.TableScale.Height < 0 ? height : reportBuilder.TableScale.Height; }
 
                 TableStr += @"<Tablix Name=""table_" + table.ReportName + @"""> 
                     <TablixBody> 
@@ -245,7 +247,7 @@ public static class ReportEngine
                     <ZIndex>1</ZIndex>
                     <Style> 
                       <Border> 
-                        <Style>None</Style> 
+                        <Style>Solid</Style> 
                       </Border> 
                     </Style> 
                   </Tablix>";
@@ -389,10 +391,21 @@ public static class ReportEngine
                       <rd:DefaultName>" + strControlIDPrefix + strName + @"</rd:DefaultName> 
                       <Style> 
                         <Border> 
-                          <Color>LightGrey</Color> 
                           <Style>Solid</Style> 
-                        </Border>" + GetDimensions(padding) + @"</Style> 
-                    </Textbox>";
+                        </Border>
+                        <TopBorder>
+                            <Style>Solid</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                            <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                            <Style>Solid</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                            <Style>Solid</Style>
+                        </RightBorder>" + GetDimensions(padding) + @"</Style> 
+                    </Textbox>";//LightGrey
         return strTextBox;
     }
     static string GenerateHeaderTableTextBox(string strControlIDPrefix, string strName, string strValueOrExpression = "", bool isFieldValue = true, ReportDimensions padding = null)
@@ -405,22 +418,37 @@ public static class ReportEngine
                         <Paragraph> 
                           <TextRuns> 
                             <TextRun>";
-        if (isFieldValue) strTextBox += @"<Value>=Fields!" + strName + @".Value</Value>";
-        else strTextBox += @"<Value>" + strValueOrExpression + "</Value>";
-        strTextBox += @"<Style /> 
+            if (isFieldValue) strTextBox += @"<Value>=Fields!" + strName + @".Value</Value>";
+            else strTextBox += @"<Value>" + strValueOrExpression + "</Value>";
+            strTextBox += @"<Style>
+                                <FontWeight>Bold</FontWeight>
+                            </Style> 
                             </TextRun> 
                           </TextRuns> 
-                          <Style /> 
+                          <Style> 
+                            <TextAlign>Center</TextAlign>
+                          </Style> 
                         </Paragraph> 
                       </Paragraphs> 
                       <rd:DefaultName>" + strControlIDPrefix + strName + @"</rd:DefaultName> 
                       <Style> 
-   <BackgroundColor>#DDDDDD</BackgroundColor>
-<FontWeight>Bold</FontWeight>
+                        <BackgroundColor>#ffffff</BackgroundColor>
+                        <FontWeight>Bold</FontWeight>
                         <Border> 
-                          <Color>LightGrey</Color> 
                           <Style>Solid</Style> 
-                        </Border>" + GetDimensions(padding) + @"</Style> 
+                        </Border>
+                        <TopBorder>
+                            <Style>Solid</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                            <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                            <Style>Solid</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                            <Style>Solid</Style>
+                        </RightBorder>" + GetDimensions(padding) + @"</Style> 
                     </Textbox>";
         return strTextBox;
     }
