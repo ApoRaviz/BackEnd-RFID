@@ -34,5 +34,10 @@ namespace Fuji.Service.ItemImport
         bool RegisterRFID_HANDY(RegisterRFIDRequest registerRequest);
         IEnumerable<ImportSerialDetail> FindImportSerialDetailByCriteria(ParameterSearch parameterSearch, out int totalRecord);
         StreamContent GetReportStream(ImportSerialHead item);
+        IEnumerable<FujiBoxNumberAndAmountModel> GetBoxNumberAndAmountList(ParameterSearch parameterSearch);
+        IEnumerable<FujiSerialAndRFIDModel> GetItemsInBoxNumber(string boxNumber);
+        FujiCheckRegister GetLastestBoxNumberItems();
+        IEnumerable<ImportSerialHead> GetHeadDataTopten(ParameterSearch parameterSearch, out int totalRecord);
+        string GetRFIDInfo(ParameterSearch parameter);
     }
 }

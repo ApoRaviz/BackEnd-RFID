@@ -162,18 +162,23 @@ namespace Master.WebApi.Controllers
 
                 var headReport = Mapper.Map<HeadReportControl, HeadReportControlDto>(_headReport);
 
-                foreach (var hrl in headReport.HeadReportLabels)
-                {
-                    foreach (var labelConfig in labelControl.LabelConfig)
-                    {
-                        if (HashidsHelper.DecodeHex(hrl.Key) == labelConfig.Key)
-                        {
-                            hrl.Value = labelConfig.Value;
-                        }
-                    }
-                }
+                //foreach (var hrl in headReport.HeadReportLabels)
+                //{
+                //    foreach (var labelConfig in labelControl.LabelConfig)
+                //    {
+                //        if (HashidsHelper.DecodeHex(hrl.Key) == labelConfig.Key)
+                //        {
+                //            hrl.Value = labelConfig.Value;
+                //        }
+                //    }
+                //}
 
-                newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
+                //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
+                newLabels = (from p in headReport.HeadReportLabels
+                            from r in labelControl.LabelConfig
+                            where r.Key == HashidsHelper.DecodeHex(p.Key)
+                            select r.Value).ToList();
+
                 if (newLabels.Count == dataTable.Columns.Count)
                 {
                     for (int i = 0; i < newLabels.Count; i++)
