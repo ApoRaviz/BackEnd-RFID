@@ -143,7 +143,6 @@ namespace Master.WebApi.Controllers
                 _label.Add(l);
             }
 
-
             string labelSelect = String.Join(", ", _label.ToArray());
 
             System.Data.DataSet dataSet = new System.Data.DataSet();
