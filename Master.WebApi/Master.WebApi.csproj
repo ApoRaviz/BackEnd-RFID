@@ -47,6 +47,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ExcludeGeneratedDebugSymbol>false</ExcludeGeneratedDebugSymbol>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
@@ -158,10 +159,6 @@
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WinForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.340.80\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -349,6 +346,7 @@
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HelpersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LabelControlController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MenuProjectMappingController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
@@ -358,7 +356,6 @@
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\HeadReportControlController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
-    <Compile Include="Controllers\SubModuleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="DataSet\MasterDataSet.Designer.cs">
@@ -372,8 +369,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Firebase\Firebase.cs" />
     <Compile Include="Providers\Firebase\FirebaseModel.cs" />
+    <Compile Include="Report\ReportEngine\ReportBuilder.cs" />
+    <Compile Include="Report\ReportEngine\ReportBuilderEngine.cs" />
+    <Compile Include="Report\ReportUtil.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
-    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="YUT_WMS_DEVDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -437,19 +436,6 @@
       <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-ui.js" />
-    <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="SqlServerTypes\x64\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -526,10 +512,6 @@
       <Project>{9a37166e-bd6c-4ba9-9091-985bc77c68d6}</Project>
       <Name>Master.Common.ValueObject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Master.Entity\Master.Entity.csproj">
-      <Project>{787996d9-933a-4580-9b87-c0f78d04d228}</Project>
-      <Name>Master.Entity</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Master.Service\Master.Service.csproj">
       <Project>{2cf56a5a-150b-4805-91d6-35127991297e}</Project>
       <Name>Master.Service</Name>
@@ -602,7 +584,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:9005/</IISUrl>
+          <IISUrl>http://localhost/master</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfirmPickingRequest.cs" />
+    <Compile Include="FujiBoxNumberAndAmountModel.cs" />
+    <Compile Include="FujiCheckRegister.cs" />
     <Compile Include="FujiDataImportSerialDetail.cs" />
     <Compile Include="FujiDataLabelBarcode.cs" />
     <Compile Include="FujiDataBarcode.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="FujiPickingFromWinRequest.cs" />
     <Compile Include="FujiPickingGroup.cs" />
     <Compile Include="FujiReportHelper.cs" />
+    <Compile Include="FujiSerialAndRFIDModel.cs" />
     <Compile Include="FujiStatus.cs" />
     <Compile Include="ItemImportDto.cs" />
     <Compile Include="ParameterBoxLabel.cs" />

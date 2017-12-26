@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private int ExToken = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]) ;
+        private int ExToken = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
 
         public AccountController()
         {
@@ -181,8 +181,8 @@ namespace Master.WebApi.Controllers
 
                 Dictionary<string, string> Json = new Dictionary<string, string>();
                 User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
-          
-                if (OTPClaimBinding.OTP.Equals(users.KeyOTP) &&  DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
+
+                if (OTPClaimBinding.OTP.Equals(users.KeyOTP) && DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
                 {
                     ApplicationUser user = await UserManager.FindByIdAsync(users.UserID);
                     ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager, "JWT");
@@ -205,13 +205,13 @@ namespace Master.WebApi.Controllers
                     Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                     Json.Add("status", "200");
                 }
-                else if(DateTime.Now.AddMinutes(-2) > users.KeyOTPDate)
+                else if (DateTime.Now.AddMinutes(-2) > users.KeyOTPDate)
                 {
 
                     Json.Add("message", "OTP Expires");
                     Json.Add("status", "4011");
                 }
-                else if(!OTPClaimBinding.OTP.Equals(users.KeyOTP))
+                else if (!OTPClaimBinding.OTP.Equals(users.KeyOTP))
                 {
 
                     Json.Add("message", "OTP Invalid");
@@ -237,28 +237,34 @@ namespace Master.WebApi.Controllers
             IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
             try
             {
-                string roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), User.Identity.GetProjectIDSys());
-                if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
-                {
-                    return null;
+                string roleID = "";
+                Boolean IsSysAdmin = User.IsSysAdmin();
+                if (!IsSysAdmin) {
+                    roleID = new RoleService().GetRoleByUserAndProject(User.Identity.GetUserId(), User.Identity.GetProjectIDSys());
+                    if (!ModelState.IsValid && string.IsNullOrEmpty(roleID))
+                    {
+                        return null;
+                    }
                 }
-
 
                 Dictionary<string, string> Json = new Dictionary<string, string>();
 
-            
-               
+
+
                 if (!string.IsNullOrEmpty(param.Time))
                 {
                     ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                    
+
                     ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager, "JWT");
                     foreach (var claim in oAuthIdentity.Claims)
                     {
                         UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
                     }
                     oAuthIdentity.AddClaim(new Claim("ProjectIDSys", User.Identity.GetProjectIDSys().ToString()));
-                    oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                    if (!IsSysAdmin)
+                    {
+                        oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                    }
                     oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
                     oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
                     AuthenticationProperties props = new AuthenticationProperties();
@@ -273,7 +279,7 @@ namespace Master.WebApi.Controllers
                     CustomJwtFormat auth = new CustomJwtFormat(System.Configuration.ConfigurationManager.AppSettings["as:baseUrl"]);
                     string token = auth.Protect(ticket);
                     Json.Add("access_token", token);
-                    Json.Add("expires_in",Convert.ToInt32(spEx.TotalSeconds).ToString());
+                    Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                     Json.Add("status", "200");
                 }
                 else
@@ -316,7 +322,7 @@ namespace Master.WebApi.Controllers
                 //{
                 //    UserManager.RemoveClaim(User.Identity.GetUserId(), claim);
                 //}
-                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True")); 
+                oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
                 oAuthIdentity.AddClaim(new Claim("ProjectIDSys", projectClaimBinding.ProjectIDSys.ToString()));
                 if (User.IsSysAdmin())
                 { oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user)); }
