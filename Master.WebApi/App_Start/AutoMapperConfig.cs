@@ -22,9 +22,6 @@ namespace Master.WebApi
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<HeadReportControl, HeadReportControlDto>();
-            });
-            Mapper.Initialize(cfg =>
-            {
                 cfg.CreateMap<LabelControl, LabelControlDto>();
             });
         }

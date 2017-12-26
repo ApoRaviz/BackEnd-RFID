@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using HashidsNet;
 using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
