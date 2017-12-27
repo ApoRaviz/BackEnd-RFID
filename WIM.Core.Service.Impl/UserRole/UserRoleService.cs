@@ -165,11 +165,11 @@ namespace WIM.Core.Service.Impl
                 RoleForPermissionQuery = repo.GetWithInclude((row => row.RoleID == roleid),include).Select(b => new UserRoleDto()
                 {
                     UserID = b.UserID,
-                    Name = b.User.Name,
-                    Email = b.User.Email,
+                    //Name = b.User.Name,
+                    //Email = b.User.Email,
                     //PhoneNumber = b.User.PhoneNumber,
                     PasswordHash = b.User.PasswordHash,
-                    Surname = b.User.Surname,
+                    //Surname = b.User.Surname,
 
                 }).ToList();
             }

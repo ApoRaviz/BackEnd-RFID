@@ -45,11 +45,9 @@ namespace WIM.Core.Repository.Impl
             UserRoleDto UserRole = Db.User.Where(a => a.UserID == id).Select(b => new UserRoleDto()
             {
                 UserID = b.UserID,
-                Name = b.Name,
-                Email = b.Email,
+                //Email = b.Email,
                 //PhoneNumber = b.PhoneNumber.ToString(),
-                PasswordHash = b.PasswordHash,
-                Surname = b.Surname
+                PasswordHash = b.PasswordHash
             }).SingleOrDefault();
             return UserRole;
         }
