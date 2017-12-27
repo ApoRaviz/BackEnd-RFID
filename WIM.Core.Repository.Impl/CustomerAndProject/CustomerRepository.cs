@@ -47,7 +47,6 @@ namespace WIM.Core.Repository.Impl
                         where ru.UserID == userid && pm.CusIDSys == cusIDSys
                         select new
                         {
-                            pm.ProjectID,
                             pm.ProjectIDSys,
                             pm.ProjectName,
                         };

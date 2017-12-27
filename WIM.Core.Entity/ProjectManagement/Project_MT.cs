@@ -29,7 +29,6 @@ namespace WIM.Core.Entity.ProjectManagement
 
         [Key]
         public int ProjectIDSys { get; set; }
-        public string ProjectID { get; set; }
         public string ProjectName { get; set; }
         public int CusIDSys { get; set; }
         public Nullable<int> ModuleIDSys { get; set; }

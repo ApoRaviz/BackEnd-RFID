@@ -39,5 +39,7 @@ namespace Fuji.Service.ItemImport
         FujiCheckRegister GetLastestBoxNumberItems();
         IEnumerable<ImportSerialHead> GetHeadDataTopten(ParameterSearch parameterSearch, out int totalRecord);
         string GetRFIDInfo(ParameterSearch parameter);
+        int SetSerial2Box(string boxNumberFrom, string boxNumberTo, ItemGroupRequest ItemGroup, string emID);
+        int SetBox2Location(string locationTo, ItemGroupRequest boxList, string emID);
     }
 }

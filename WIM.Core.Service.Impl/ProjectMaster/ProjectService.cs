@@ -113,7 +113,6 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IProjectRepository repo = new ProjectRepository(Db); 
-                        project.ProjectID = Db.ProcGetNewID("PJ");
                         project.ProjectStatus = "Active";
                         
                         projectnew = repo.Insert(project);

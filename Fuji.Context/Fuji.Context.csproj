@@ -66,6 +66,10 @@
       <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
       <Name>Fuji.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

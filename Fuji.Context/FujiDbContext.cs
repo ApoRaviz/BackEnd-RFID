@@ -12,6 +12,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Data;
 using Fuji.Common.SqlLog;
+using WIM.Core.Entity.Logs;
 
 namespace Fuji.Context
 {
@@ -22,7 +23,8 @@ namespace Fuji.Context
         public DbSet<ImportSerialDetailTemp> ImportSerialDetailTemp { get; set; }
         public DbSet<LabelRunning> LabelRunning { get; set; }
         public DbSet<ProgramVersionHistory> ProgramVersionHistory { get; set; }
-      
+        public DbSet<GeneralLog> GeneralLogs { get; set; }
+
 
         public FujiDbContext(string methodLog = "") : base("name=WIM_FUJI")
         {
@@ -117,6 +119,12 @@ namespace Fuji.Context
         {
             return this.Database.SqlQuery<string>("ProcGetNewID @Prefixes",new SqlParameter("@Prefixes",prefix)).FirstOrDefault();
         }
+        public string ProcGetRFIDInfo(string specialQuery)
+        {
+            return this.Database.SqlQuery<string>("ProcGetRFIDInfo @SpeacialQuery", new SqlParameter("@SpeacialQuery", specialQuery)).FirstOrDefault();
+        }
+
+
 
     }
 }
