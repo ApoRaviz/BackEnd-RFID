@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Receiving
 {
-    public class DateTimeToReceiveData
+    public class DateTimeToReceive
     {
         public ReceivingDurationTime Monday { get; set; }
         public ReceivingDurationTime Tuesday { get; set; }

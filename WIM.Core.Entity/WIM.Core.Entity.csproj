@@ -79,7 +79,7 @@
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\Receiving.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\ReceivingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Service.cs" />
-    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\DateTimeToReceiveData.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\DateTimeToReceive.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\SendingDataType.cs" />
     <Compile Include="ProjectManagement\Project_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
