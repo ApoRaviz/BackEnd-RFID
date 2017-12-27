@@ -156,7 +156,7 @@ namespace Fuji.WebApi.Controllers
                 }
 
                 Dictionary<string, string> Json = new Dictionary<string, string>();
-                User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
+                User users = new UserService().GetUserByUserID(User.Identity.GetUserId());                
 
                 if ( DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
                 {
