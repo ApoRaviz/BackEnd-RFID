@@ -76,6 +76,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
+                item.ProjectIDSys = User.Identity.GetProjectIDSys();
                 int id = ItemService.CreateItem(item);
                 response.SetData(id);
             }

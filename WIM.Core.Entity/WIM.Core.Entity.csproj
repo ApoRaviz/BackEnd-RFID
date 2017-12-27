@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -51,9 +54,11 @@
     <Compile Include="CustomerManagement\Customer_MT.cs" />
     <Compile Include="Dimension\DimensionLayout_MT.cs" />
     <Compile Include="Employee\Employee_MT.cs" />
-    <Compile Include="IsHeadAttribute.cs" />
+    <Compile Include="LabelManagement\HeadReportControl.cs" />
+    <Compile Include="LabelManagement\Label.cs" />
     <Compile Include="LabelManagement\LabelConfigs\LabelConfig.cs" />
     <Compile Include="LabelManagement\LabelControl.cs" />
+    <Compile Include="Logs\GeneralLog.cs" />
     <Compile Include="MenuManagement\ApiMenuMapping.cs" />
     <Compile Include="MenuManagement\Api_MT.cs" />
     <Compile Include="MenuManagement\MenuProjectMapping.cs" />

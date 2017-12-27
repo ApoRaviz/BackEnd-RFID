@@ -33,5 +33,16 @@ namespace WIM.Core.Repository.Impl
             return temp;
         }
 
+        public IEnumerable<Permission> GetPermissionHasCreated(int MenuIDSys)
+        {
+            var data = from i in Db.Permission
+                       where i.MenuIDSys == MenuIDSys &&
+                              (from j in Db.ApiMenuMapping
+                              where j.Type == "M" && j.GET == true && j.MenuIDSys == MenuIDSys
+                              select j.ApiIDSys).Contains(i.ApiIDSys)
+                       select i;
+            return data.ToList();
+        }
+
     }
 }

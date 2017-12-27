@@ -24,57 +24,18 @@ namespace WMS.WebApi.Controllers
             this.ItemSetService = ItemSetService;
         }
 
-        //// GET: api/ItemSets
-        ////[Authorize(Roles = "Admin")]
-        //[HttpGet]
-        //[Route("")]
-        //public HttpResponseMessage GetItemSets()
-        //{
-        //    ResponseData<IEnumerable<ItemSetDto>> response = new ResponseData<IEnumerable<ItemSetDto>>();
-        //    try
-        //    {
-        //        IEnumerable<ItemSetDto> ItemSets = ItemSetService.GetDto(50);
-        //        response.SetStatus(HttpStatusCode.OK);
-        //        response.SetData(ItemSets);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
-
-        // GET: api/ItemSets/1
-        //[HttpGet]
-        //[Route("{id}")]
-        //public HttpResponseMessage GetItemSet([FromUri]int id)
-        //{
-        //    IResponseData<ItemSetDto> response = new ResponseData<ItemSetDto>();
-        //    try
-        //    {
-        //        ItemSetDto ItemSet = ItemSetService.GetDtoByID(id);
-        //        response.SetData(ItemSet);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
-
-
-
-        // POST: api/ItemSets
-        [HttpPost]
+        // GET: api/ItemSets
+        //[Authorize(Roles = "Admin")]
+        [HttpGet]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]ItemSet_MT ItemSet)
+        public HttpResponseMessage GetItemSets()
         {
-            IResponseData<int> response = new ResponseData<int>();
+            ResponseData<IEnumerable<ItemSetDto>> response = new ResponseData<IEnumerable<ItemSetDto>>();
             try
             {
-                ItemSetService.CreateItemSet(ItemSet);
+                IEnumerable<ItemSetDto> ItemSets = ItemSetService.GetDto(50);
+                response.SetStatus(HttpStatusCode.OK);
+                response.SetData(ItemSets);
             }
             catch (ValidationException ex)
             {
@@ -84,62 +45,102 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        //[HttpPost]
-        //[Route("{ItemSetIDSys}")]
-        //public HttpResponseMessage UpdateItemSet(int ItemSetIDSys,[FromBody]ItemSetDto ItemSet)
-        //{
-        //    IResponseData<int> response = new ResponseData<int>();
-        //    try
-        //    {
+        //GET: api/ItemSets/1
+        [HttpGet]
+        [Route("{id}")]
+        public HttpResponseMessage GetItemSet([FromUri]int id)
+        {
+            IResponseData<ItemSetDto> response = new ResponseData<ItemSetDto>();
+            try
+            {
+                ItemSetDto ItemSet = ItemSetService.GetItemSet(id);
+                response.SetData(ItemSet);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
 
-        //        ItemSet.UserUpdate = User.Identity.name;
-        //        int idSet = ItemSetService.UpdateItemSet(ItemSetIDSys, ItemSet);
-        //        response.SetData(idSet);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
 
-        //// PUT: api/ItemSets/5
-        //[HttpPut]
-        //[Route("{id}")]
-        //public HttpResponseMessage Put(int id, [FromBody]ItemSetDto ItemSet)
-        //{
-        //    IResponseData<bool> response = new ResponseData<bool>();
-        //    try
-        //    {
-        //        bool isUpated = ItemSetService.UpdateItemSet(ItemSet);
-        //        response.SetData(isUpated);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
 
-        //// DELETE: api/ItemSets/5
-        //[HttpDelete]
-        //[Route("{id}")]
-        //public HttpResponseMessage Delete(int id)
-        //{
-        //    IResponseData<bool> response = new ResponseData<bool>();
-        //    try
-        //    {
-        //        bool isUpated = ItemSetService.DeleteItemSetDto(id);
-        //        response.SetData(isUpated);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
+        // POST: api/ItemSets
+        [HttpPost]
+        [Route("")]
+        public HttpResponseMessage Post([FromBody]ItemSet_MT ItemSet)
+        {
+            IResponseData<object> response = new ResponseData<object>();
+            try
+            {
+                object id = ItemSetService.CreateItemSet(ItemSet);
+                response.SetData(id);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("{ItemSetIDSys}")]
+        public HttpResponseMessage UpdateItemSet(int ItemSetIDSys, [FromBody]ItemSet_MT ItemSet)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+
+                
+                int idSet = ItemSetService.UpdateItemSet(ItemSet);
+                response.SetData(idSet);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        // PUT: api/ItemSets/5
+        [HttpPut]
+        [Route("{id}")]
+        public HttpResponseMessage Put(int id, [FromBody]ItemSet_MT ItemSet)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = ItemSetService.UpdateItemSet(id,ItemSet);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        // DELETE: api/ItemSets/5
+        [HttpDelete]
+        [Route("{id}")]
+        public HttpResponseMessage Delete(int id)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = ItemSetService.DeleteItemSetDto(id);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
     }
 }

@@ -8,7 +8,6 @@ using HRMS.Entity.LeaveManagement;
 using HRMS.Common.ValueObject.LeaveManagement;
 using System.Security.Principal;
 using System.Transactions;
-using WIM.Core.Common.Validation;
 using WIM.Core.Common.Helpers;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
@@ -18,6 +17,8 @@ using HRMS.Repository.Impl.LeaveManagement;
 using AutoMapper;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.Helpers;
 
 namespace HRMS.Service.Impl.LeaveManagement
 {
