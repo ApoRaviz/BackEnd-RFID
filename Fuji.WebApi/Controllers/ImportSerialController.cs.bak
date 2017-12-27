@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -762,54 +761,6 @@ namespace Fuji.WebApi.Controllers
             items = ItemImportService.GetLastestBoxNumberItems();
             respones.SetStatus(HttpStatusCode.OK);
             respones.SetData(items);
-            return Request.ReturnHttpResponseMessage(respones);
-        }
-
-        //[Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/Test")]
-        public HttpResponseMessage Test()
-        {
-            // Check if the request contains multipart/form-data.
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-            ResponseData<int> respones = new ResponseData<int>();
-            respones.SetStatus(HttpStatusCode.OK);
-            respones.SetData(1);
-            return Request.ReturnHttpResponseMessage(respones);
-        }
-
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/handy/SetSerial2Box/{boxNumberFrom}/{boxNumberTo}")]
-        public HttpResponseMessage SetSerial2Box(string boxNumberFrom, string boxNumberTo, [FromBody]ItemGroupRequest itemGroup)
-        {
-            string userName = User.Identity.GetUserName() ?? "SYSTEM";
-
-            ResponseData<int> respones = new ResponseData<int>();       
-            int flag = ItemImportService.SetSerial2Box(boxNumberFrom, boxNumberTo, itemGroup, userName);
-            respones.SetStatus(HttpStatusCode.OK);
-            respones.SetData(flag);
-            return Request.ReturnHttpResponseMessage(respones);
-        }
-
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/handy/SetBox2Location/{locationTo}")]
-        public HttpResponseMessage SetBox2Location(string locationTo, [FromBody]ItemGroupRequest itemGroup)
-        {
-            string userName = User.Identity.GetUserName() ?? "SYSTEM";
-
-            ResponseData<int> respones = new ResponseData<int>();
-            int flag = ItemImportService.SetBox2Location(locationTo, itemGroup, userName);
-       
-            respones.SetStatus(HttpStatusCode.OK);
-            respones.SetData(flag);
             return Request.ReturnHttpResponseMessage(respones);
         }
 
