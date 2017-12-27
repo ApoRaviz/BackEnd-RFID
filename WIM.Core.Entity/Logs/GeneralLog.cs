@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Utility.Extentions;
@@ -13,11 +14,6 @@ namespace WIM.Core.Entity.Logs
     public class GeneralLog : BaseEntity
     {
 
-        public GeneralLog(string empID)
-        {
-            CreateBy = UpdateBy = empID;
-            CreateAt = UpdateAt = DateTime.Now;
-        }
         public GeneralLog(string propName, object obj, string createAndUpdateBy, string remark = "")
         {
             Type typeObj = obj.GetType();

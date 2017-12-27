@@ -63,7 +63,7 @@ public static class RBAC_ExtendedMethods_4_Principal
                 var ci = _identity as ClaimsIdentity;
 
                 var exp = (from c in ci.Claims
-                           where c.Type == "ProjectIDSys" 
+                           where c.Type == "ProjectIDSys"
                            select c).SingleOrDefault();
 
                 if (exp != null)
@@ -168,8 +168,8 @@ public static class RBAC_ExtendedMethods_4_Principal
                           select c).ToList();
 
             // Sub String v1/customers/ => v1/customers  
-            
-            
+
+
 
             //url request
             string[] reqUrlSplit = reqUrl.Split('/');
@@ -195,11 +195,12 @@ public static class RBAC_ExtendedMethods_4_Principal
 
                             // urlVerify   /api/v1/customers/1
 
-                            bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out int reqUrlNum);
-                            bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out int permissUrlNum);
+                            //bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out int reqUrlNum);
+                            //bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out int permissUrlNum);
 
-                            if ((permissUrlSplit[i] == reqUrlSplit[i]) || (permissUrlSplit[i] == "@parameter_string") ||
-                                (isReqUrlNum && permissUrlSplit[i] == "1"))
+                            if ((permissUrlSplit[i] == reqUrlSplit[i])
+                                || (permissUrlSplit[i] == "@")
+                                || (/*isReqUrlNum && */permissUrlSplit[i] == "1"))
                             {
                                 urlVerify += (i == 0 ? "" : "/") + permissUrlSplit[i];
                             }
