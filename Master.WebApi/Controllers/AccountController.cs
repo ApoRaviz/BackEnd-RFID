@@ -419,28 +419,30 @@ namespace Master.WebApi.Controllers
 
         // POST api/Account/ChangePassword
         [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        public async Task<HttpResponseMessage> ChangePassword(ChangePasswordBindingModel model)
         {
-            if (!ModelState.IsValid)
+            ResponseData<IdentityResult> response = new ResponseData<IdentityResult>();
+            /*if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
+            }*/
             IdentityResult result = IdentityResult.Failed(new string[] { "Your Password Duplicate with your old password in this year" });
             if (ApplicationUserManager.IsPreviousPassword(User.Identity.GetUserId(), model.NewPassword))
             {
-                return GetErrorResult(result);
+                //return GetErrorResult(result);
+                response.SetData(result);
             }
             result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
 
-
-
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                //return GetErrorResult(result);
+                response.SetErrors(result);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
-
-            return Ok();
+            //return Ok();
+            return Request.ReturnHttpResponseMessage(response);
         }
 
         // POST api/Account/SetPassword
