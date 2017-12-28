@@ -184,7 +184,7 @@ namespace Master.WebApi.Controllers
                             select r.Value).ToList();
 
 
-                newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
+                //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
                 if (newLabels.Count == dataTable.Columns.Count)
                 {
                     for (int i = 0; i < newLabels.Count; i++)

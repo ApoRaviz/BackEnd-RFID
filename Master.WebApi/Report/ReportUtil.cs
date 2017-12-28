@@ -70,7 +70,9 @@ namespace Master.WebApi.Report
                 ReportItems reportHeaderItems = new ReportItems();
 
                 ReportTextBoxControl[] headerTxt = new ReportTextBoxControl[]{
-                    new ReportTextBoxControl() { Name = "txtReportTitle", ValueOrExpression = new string[] { "Report Name: " + ReportTitle } }
+                    new ReportTextBoxControl() { Name = "txtReportTitle"
+                    , ValueOrExpression = new string[] { "Report Name: " + ReportTitle }
+                    , Position = new ReportDimensions(){ Left = 2} }
                     //new ReportTextBoxControl()
                     //{
                     //    Name = "txttesttitle",
