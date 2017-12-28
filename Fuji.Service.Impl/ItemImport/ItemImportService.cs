@@ -28,6 +28,7 @@ using Fuji.Repository.ItemManagement;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
 using System.Runtime.Caching;
+using WIM.Core.Entity.Logs;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -705,6 +706,13 @@ namespace Fuji.Service.Impl.ItemImport
                                  select d
                          );
 
+                    if (query != null)
+                    {
+                        ObjectCache cache = MemoryCache.Default;
+                        cache.Set("Cache_SelectSQL_SetScanned", query.ToString(), DateTimeOffset.Now.AddHours(2));
+                        cache.Set("Cache_DateTimeStamp_SetScanned", DateTime.Now, DateTimeOffset.Now.AddHours(2));
+                    }
+
                     var resultGroup = (from p in query
                                        group p by p.ItemGroup into g
                                        select new { ItemGroup = g.Key, Items = g.ToList() }).ToList();
@@ -1337,15 +1345,16 @@ namespace Fuji.Service.Impl.ItemImport
 
             using (FujiDbContext Db = new FujiDbContext())
             {
-                return Db.Database.SqlQuery<string>("ProcGetRFIDInfo @SpeacialQuery", new SqlParameter("@SpeacialQuery", specialQuery)).FirstOrDefault();
+                return Db.ProcGetRFIDInfo(specialQuery);
             }
         }
 
         public IEnumerable<FujiBoxNumberAndAmountModel> GetBoxNumberAndAmountList(ParameterSearch parameterSearch)
         {
             IEnumerable<FujiBoxNumberAndAmountModel> boxes = new List<FujiBoxNumberAndAmountModel>();
-            using (FujiDbContext db = new FujiDbContext())
+            using (FujiDbContext Db = new FujiDbContext())
             {
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                 string sql = @" select BoxNumber, count(*) AS 'Amount'
                 from dbo.ImportSerialDetail
                 where status = 'NEW' 
@@ -1357,7 +1366,7 @@ namespace Fuji.Service.Impl.ItemImport
                 }
 
                 sql += " order by BoxNumber ";
-                boxes = db.Database.SqlQuery<FujiBoxNumberAndAmountModel>(sql).ToList();
+                boxes = SerialDetailRepo.SqlQuery<FujiBoxNumberAndAmountModel>(sql).ToList();
 
 
             }
@@ -1372,12 +1381,13 @@ namespace Fuji.Service.Impl.ItemImport
             }
 
             IEnumerable<FujiSerialAndRFIDModel> items = new List<FujiSerialAndRFIDModel>();
-            using (FujiDbContext db = new FujiDbContext())
+            using (FujiDbContext Db = new FujiDbContext())
             {
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                 string sql = @" select SerialNumber, ItemGroup AS 'RFIDTag' 
                                 from dbo.ImportSerialDetail 
                                 where BoxNumber = @BoxNumber";
-                items = db.Database.SqlQuery<FujiSerialAndRFIDModel>(sql, new SqlParameter("@BoxNumber", boxNumber)).ToList();
+                items = SerialDetailRepo.SqlQuery<FujiSerialAndRFIDModel>(sql, new SqlParameter("@BoxNumber", boxNumber)).ToList();
             }
 
             items = (from p in items
@@ -1414,11 +1424,12 @@ namespace Fuji.Service.Impl.ItemImport
                 return null;
 
             IEnumerable<FujiBoxNumberAndAmountModel> items = new List<FujiBoxNumberAndAmountModel>();
-            using (FujiDbContext db = new FujiDbContext())
+            using (FujiDbContext Db = new FujiDbContext())
             {
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                 string sql = cacheContent;
                 sql = sql.Remove(sql.IndexOf("AND"));
-                var scannedItems = db.Database.SqlQuery<ImportSerialDetail>(sql).ToList();
+                var scannedItems = SerialDetailRepo.SqlQuery<ImportSerialDetail>(sql).ToList();
                 if (scannedItems != null)
                 {
                     model.TotalRecord = scannedItems.Count;
@@ -1460,6 +1471,7 @@ namespace Fuji.Service.Impl.ItemImport
 
             using (FujiDbContext Db = new FujiDbContext())
             {
+                ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
                 items = Db.Database.SqlQuery<ImportSerialHead>(sql).ToList();
                 totalRecord = items.Count();
             }
@@ -1469,5 +1481,70 @@ namespace Fuji.Service.Impl.ItemImport
 
         }
 
+        public int SetSerial2Box(string boxNumberFrom, string boxNumberTo, ItemGroupRequest ItemGroup, string emID)
+        {
+            using (FujiDbContext Db = new FujiDbContext())
+            {
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
+
+                var query = SerialDetailRepo.GetMany(p => p.BoxNumber == boxNumberFrom);
+
+                foreach (ImportSerialDetail detail in query)
+                {
+                    foreach (string scan in ItemGroup.ItemGroups)
+                    {
+                        if (detail.ItemGroup.EndsWith(scan))
+                        {
+                            //GeneralLog log = new GeneralLog(emID)
+                            //{
+                            //    TableName = "ImportSerialDetail",
+                            //    ColumnName = "BoxNumber",
+                            //    RefID = detail.DetailID,
+                            //    Value = boxNumberTo,
+                            //    Remark = "SetSerial2Box"
+                            //};
+                            //Db.GeneralLogs.Add(log);
+                            detail.BoxNumber = boxNumberTo;
+                            SerialDetailRepo.Update(detail);
+                            Db.SaveChanges();
+                        }
+                    }
+                }
+
+                
+            }
+
+            return 1;
+        }
+
+        public int SetBox2Location(string locationTo, ItemGroupRequest boxList, string emID)
+        {
+            using (FujiDbContext Db = new FujiDbContext())
+            {
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
+
+                var query = SerialDetailRepo.GetMany(i => boxList.ItemGroups.Contains(i.BoxNumber));
+
+                foreach (ImportSerialDetail detail in query)
+                {
+                    //GeneralLog log = new GeneralLog(emID)
+                    //{
+                    //    TableName = "ImportSerialDetail",
+                    //    ColumnName = "Location",
+                    //    RefID = detail.DetailID,
+                    //    Value = locationTo,
+                    //    Remark = "SetBox2Location"
+                    //};
+                    //db.GeneralLogs.Add(log);
+
+                    detail.Location = locationTo;
+                    SerialDetailRepo.Update(detail);
+                    Db.SaveChanges();
+                }
+
+                
+            }
+            return 1;
+        }
     }
 }

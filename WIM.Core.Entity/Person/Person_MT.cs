@@ -13,7 +13,6 @@ namespace WIM.Core.Entity.Person
     {      
         [Key]
         public int PersonIDSys { get; set; }
-        public string PersonID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Gender { get; set; }

@@ -163,11 +163,9 @@ namespace WIM.Core.Service.Impl
                             }
                             User.UserRoles = null;
                         }
-                        User.Email = User.Email;
+                        //User.Email = User.Email;
                         User.UserName = User.UserName;
                         User.PasswordHash = User.PasswordHash;
-                        User.Name = User.Name;
-                        User.Surname = User.Surname;
                         //User.PhoneNumber = User.PhoneNumber;
                         repo.Update(User );
                         Db.SaveChanges();

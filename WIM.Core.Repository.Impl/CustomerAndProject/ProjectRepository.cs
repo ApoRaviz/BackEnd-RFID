@@ -30,7 +30,6 @@ namespace WIM.Core.Repository.Impl
                         where pm.ProjectIDSys == projectIDSys
                         select new
                         {
-                            pm.ProjectID,
                             pm.ProjectIDSys,
                             pm.ProjectName,
                             mo.FrontEndPath

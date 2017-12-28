@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Master.Common
+namespace Fuji.Common.ValueObject
 {
-    public class Class1
+    public class ItemGroupRequest
     {
+        public List<string> ItemGroups { get; set; }
     }
 }

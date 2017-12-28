@@ -62,7 +62,6 @@ namespace WIM.Core.Service.Impl
                 Person = new PersonDto()
                 {
                     PersonIDSys = data.PersonIDSys,
-                    PersonID = data.PersonID,
                     BirthDate = data.BirthDate,
                     Email = data.Email,
                     Name = data.Name,
