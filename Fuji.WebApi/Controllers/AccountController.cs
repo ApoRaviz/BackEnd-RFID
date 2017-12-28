@@ -381,28 +381,25 @@ namespace Fuji.WebApi.Controllers
 
         // POST api/Account/ChangePassword
         [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        public async Task<HttpResponseMessage> ChangePassword(ChangePasswordBindingModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            IdentityResult result = IdentityResult.Failed(new string[] { "Your Password Duplicate with your old password in this year" });
+            ResponseData<IdentityResult> response = new ResponseData<IdentityResult>();
+            IdentityResult result = new IdentityResult();
             if (ApplicationUserManager.IsPreviousPassword(User.Identity.GetUserId(), model.NewPassword))
             {
-                return GetErrorResult(result);
+                result = IdentityResult.Failed(new string[] { "Your Password Duplicate with your old password in this year" });
+                response.SetErrors(result);
             }
             result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
-            
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                response.SetErrors(result);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
-
-            return Ok();
+            response.SetData(result);
+            return Request.ReturnHttpResponseMessage(response);
         }
 
         // POST api/Account/SetPassword
