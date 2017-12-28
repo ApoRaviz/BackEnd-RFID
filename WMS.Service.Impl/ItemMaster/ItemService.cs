@@ -34,14 +34,26 @@ namespace WMS.Service
         public IEnumerable<ItemDto> GetItems()
         {
             IEnumerable<ItemDto> itemDtos;
-            using(WMSDbContext Db = new WMSDbContext())
+            using (WMSDbContext Db = new WMSDbContext())
             {
                 IItemRepository repo = new ItemRepository(Db);
                 IEnumerable<Item_MT> items = repo.Get();
                 itemDtos = Mapper.Map<IEnumerable<Item_MT>, IEnumerable<ItemDto>>(items);
-                
+
             }
             return itemDtos;
+        }
+
+        public IEnumerable<AutocompleteItemDto> AutocompleteItem(string term)
+        {
+            IEnumerable<AutocompleteItemDto> autocompleteItemDto;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                IItemRepository repo = new ItemRepository(Db);
+                autocompleteItemDto = repo.AutocompleteItem(term);
+               
+            }
+            return autocompleteItemDto;
         }
 
         public ItemDto GetItem(int id, string[] tableNames)
@@ -55,27 +67,28 @@ namespace WMS.Service
                             .SingleOrDefault();*/
 
             //return Mapper.Map<Item_MT, ItemDto>(item);
-            
+
             using (WMSDbContext Db = new WMSDbContext())
             {
                 IItemRepository repo = new ItemRepository(Db);
                 var query = repo.GetManyWithUnit(id);
 
-                var inspect = query.ItemInspectMapping.Select(a => new Inspect_MT() {
+                var inspect = query.ItemInspectMapping.Select(a => new Inspect_MT()
+                {
                     InspectID = a.Inspect_MT.InspectID,
                     InspectIDSys = a.Inspect_MT.InspectIDSys
                 }).ToList();
                 var sending = Mapper.Map<Item_MT, ItemDto>(query);
                 sending.ItemInspectMapping.Clear();
-                foreach(var data in inspect)
+                foreach (var data in inspect)
                 {
                     sending.ItemInspectMapping.Add(data);
                 }
                 return sending;
             }
-        }        
+        }
 
-        public int CreateItem(Item_MT item )
+        public int CreateItem(Item_MT item)
         {
             using (var scope = new TransactionScope())
             {
@@ -91,13 +104,13 @@ namespace WMS.Service
                         Db.SaveChanges();
                         if (item.ItemUnitMapping != null)
                         {
-                            foreach(var data in item.ItemUnitMapping)
+                            foreach (var data in item.ItemUnitMapping)
                             {
                                 data.ItemIDSys = itemresponse.ItemIDSys;
                                 repoUnit.Insert(data);
                             }
                         }
-                        if(item.ItemInspectMapping != null)
+                        if (item.ItemInspectMapping != null)
                         {
                             foreach (var data in item.ItemInspectMapping)
                             {
@@ -180,7 +193,7 @@ namespace WMS.Service
         {
             using (var scope = new TransactionScope())
             {
-                
+
                 try
                 {
                     using (WMSDbContext Db = new WMSDbContext())

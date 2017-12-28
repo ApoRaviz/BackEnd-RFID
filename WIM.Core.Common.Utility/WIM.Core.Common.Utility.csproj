@@ -92,6 +92,7 @@
     <Compile Include="Http\ResponseData.cs" />
     <Compile Include="IResourceItem.cs" />
     <Compile Include="Mail\EmailService.cs" />
+    <Compile Include="UserLog.cs" />
     <Compile Include="Validation\CheckModelForNullAttribute.cs" />
     <Compile Include="Validation\MoreThanOne.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
