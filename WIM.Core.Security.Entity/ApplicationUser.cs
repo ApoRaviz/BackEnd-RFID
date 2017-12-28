@@ -18,15 +18,11 @@ namespace WIM.Core.Security.Entity
   
     public class ApplicationUser : IdentityUser<string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
         public DateTime LastLogin { get; set; }
         public bool IsSysAdmin { get; set; }
         public Nullable<int> KeyOTP { get; set; }
         public Nullable<System.DateTime> KeyOTPDate { get; set; }
         public string TokenMobile { get; set; }
-        //public int ProjectIDSys { get; set; }
-
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, string> manager, string authenticationType)
         {
@@ -59,36 +55,8 @@ namespace WIM.Core.Security.Entity
             return _retVal;
         }
 
-        //public bool IsSysAdmin()
-        //{
-        //    bool _retVal = false;
-        //    try
-        //    {
-        //        foreach (ApplicationUserRole _role in this.Roles)
-        //        {
-        //            if (_role.IsSysAdmin)
-        //            {
-        //                _retVal = true;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-        //    return _retVal;
-        //}
-
     }
 
-    [Table("PasswordHistory")]
-    public class PasswordHistory
-    {
-        [Key]
-        public int ID { get; set; }
-        public string UserID { get; set; }
-        public string PasswordHash { get; set; }
-        public DateTime CreatedDate { get; set; }
-    }
+    
 
 }

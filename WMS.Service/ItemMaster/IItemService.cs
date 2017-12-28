@@ -15,6 +15,7 @@ namespace WMS.Service
         ItemDto GetItem(int id, string[] tableNames);        
         int CreateItem(Item_MT Item );
         bool UpdateItem(Item_MT Item );
-        bool DeleteItem(int id);        
+        bool DeleteItem(int id);
+        IEnumerable<AutocompleteItemDto> AutocompleteItem(string term);
     }
 }

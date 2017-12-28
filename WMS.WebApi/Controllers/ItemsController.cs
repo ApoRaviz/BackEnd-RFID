@@ -67,7 +67,30 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
-        
+
+        // GET: api/items/1
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompleteItem(string term = "")
+        {
+            IResponseData<IEnumerable<AutocompleteItemDto>> response = new ResponseData<IEnumerable<AutocompleteItemDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteItemDto> item = ItemService.AutocompleteItem(term);
+                response.SetData(item);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Items
         [HttpPost]
         [Route("")]
@@ -87,6 +110,8 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+
 
         // PUT: api/Items/5
         [HttpPut]

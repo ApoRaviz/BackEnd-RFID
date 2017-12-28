@@ -6,27 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
+using WIM.Core.Entity.Person;
 using WIM.Core.Security.Entity.RoleAndPermission;
 
 namespace WIM.Core.Security.Entity.UserManagement
 {
-    /*[Table("Users")]
-    public class User : Person_MT
-    {
-        public User()
-        {
-            this.Roles = new HashSet<Role>();
-        }
-
-        [Key]
-        public string UserID { get; set; }
-
-        public string Name { get; set; }
-
-        public ICollection<Role> Roles { get; set; }
-    }*/
-
-    //[Table("Users")]
     public class User : BaseEntity
     {
         public User()
@@ -58,6 +42,6 @@ namespace WIM.Core.Security.Entity.UserManagement
 
         public virtual ICollection<UserProjectMapping> UserProjectMappings { get; set; }
 
-        //public virtual Person_MT Person_MT { get; set; }
+        public int PersonIDSys { get; set; }
     }
 }
