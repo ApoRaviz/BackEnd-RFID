@@ -356,6 +356,7 @@
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\HeadReportControlController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
+    <Compile Include="Controllers\SubModuleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="DataSet\MasterDataSet.Designer.cs">
@@ -585,7 +586,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/master/</IISUrl>
+          <IISUrl>http://localhost:9005</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
