@@ -15,7 +15,7 @@ namespace WIM.Core.Entity
         [Key]
         public string EmID { get; set; }
         public string Area { get; set; }
-        public int DepIDSys { get; set; }
+        public Nullable<int> DepIDSys { get; set; }
         public string TelOffice { get; set; }
         public string TelEx { get; set; }
         public Nullable<System.DateTime> HiredDate { get; set; }

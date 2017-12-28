@@ -129,7 +129,8 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/Persons",
                     "GET/api/v1/helpers/tableColumnsDescription",
                     "GET/api/v1/Projects/select",
-                    "POST/api/v1/account/Logout"
+                    "POST/api/v1/account/Logout",
+                    "POST/api/v1/Account/ChangePassword"
 
                 };
             string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
