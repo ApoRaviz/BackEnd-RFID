@@ -26,7 +26,7 @@ namespace WIM.Core.Entity.Logs
             }
 
             TableName = typeObj.GetAttributeValue((TableAttribute dna) => dna.Name);
-            ColumnName = propName;            
+            ColumnName = propName;
             RefID = string.Join(",", keys);
             Value = typeObj.GetProperty(propName).GetValue(obj, null) + "";
             Remark = remark;

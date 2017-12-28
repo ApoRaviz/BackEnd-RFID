@@ -24,6 +24,9 @@ using System.Data;
         public DataSet DataSource { get; set; }
         public ReportImage Logo { get; set; }
 
+        public ReportDimensions TableDimension { get; set; }
+        public ReportScale TableScale { get; set; }
+
         private bool autoGenerateReport = true;
         public bool AutoGenerateReport
         {

@@ -27,6 +27,7 @@ using System.Security.Principal;
 using Fuji.Repository.ItemManagement;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using System.Runtime.Caching;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -423,11 +424,15 @@ namespace Fuji.Service.Impl.ItemImport
             {
                 ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
 
-                var itemGroups = (from p in SerialDetailRepo.GetAll()
-                                  orderby p.CreateAt descending
+                var selectedData = (from p in SerialDetailRepo.GetAll() where p.Status == FujiStatus.IMP_PICKING.ToString() select new { OrderNo = p.OrderNo, UpdateAt = p.UpdateAt }).ToList();
+
+
+                var itemGroups = (from p in selectedData
+                                  orderby p.UpdateAt descending
                                   group p
                                   by p.OrderNo into g
                                   select new { GroupID = g.Key, GroupList = g.ToList() }).Take(max).ToList();
+
 
                 itemGroups.ForEach(f =>
                 {
@@ -1322,5 +1327,147 @@ namespace Fuji.Service.Impl.ItemImport
 
 
         #endregion =============== // FUJI phase 3 Register RFID ================
+
+        public string GetRFIDInfo(ParameterSearch parameter)
+        {
+            string specialQuery = "";
+            if (parameter != null)
+                if (!string.IsNullOrEmpty(parameter.SpeacialQuery))
+                    specialQuery = parameter.SpeacialQuery;
+
+            using (FujiDbContext Db = new FujiDbContext())
+            {
+                return Db.Database.SqlQuery<string>("ProcGetRFIDInfo @SpeacialQuery", new SqlParameter("@SpeacialQuery", specialQuery)).FirstOrDefault();
+            }
+        }
+
+        public IEnumerable<FujiBoxNumberAndAmountModel> GetBoxNumberAndAmountList(ParameterSearch parameterSearch)
+        {
+            IEnumerable<FujiBoxNumberAndAmountModel> boxes = new List<FujiBoxNumberAndAmountModel>();
+            using (FujiDbContext db = new FujiDbContext())
+            {
+                string sql = @" select BoxNumber, count(*) AS 'Amount'
+                from dbo.ImportSerialDetail
+                where status = 'NEW' 
+                group by BoxNumber ";
+
+                if (parameterSearch != null && !string.IsNullOrEmpty(parameterSearch.SpeacialQuery))
+                {
+                    sql += " having count(*) " + parameterSearch.SpeacialQuery;
+                }
+
+                sql += " order by BoxNumber ";
+                boxes = db.Database.SqlQuery<FujiBoxNumberAndAmountModel>(sql).ToList();
+
+
+            }
+            return boxes;
+        }
+
+        public IEnumerable<FujiSerialAndRFIDModel> GetItemsInBoxNumber(string boxNumber)
+        {
+            if (string.IsNullOrEmpty(boxNumber))
+            {
+                return null;
+            }
+
+            IEnumerable<FujiSerialAndRFIDModel> items = new List<FujiSerialAndRFIDModel>();
+            using (FujiDbContext db = new FujiDbContext())
+            {
+                string sql = @" select SerialNumber, ItemGroup AS 'RFIDTag' 
+                                from dbo.ImportSerialDetail 
+                                where BoxNumber = @BoxNumber";
+                items = db.Database.SqlQuery<FujiSerialAndRFIDModel>(sql, new SqlParameter("@BoxNumber", boxNumber)).ToList();
+            }
+
+            items = (from p in items
+                     orderby p.SerialNumber
+                     select new FujiSerialAndRFIDModel()
+                     {
+                         SerialNumber = p.SerialNumber
+                         ,
+                         IsValid = (p.RFIDTag.Length > 4)
+                         ,
+                         RFIDTag = (p.RFIDTag.Length > 4
+                         ? Convert.ToInt32(p.RFIDTag.Substring(p.RFIDTag.Length - 4, 4), 16)
+                         : Convert.ToInt32(p.RFIDTag, 16)).ToString()
+                     }).ToList();
+
+
+            return items;
+        }
+
+        public FujiCheckRegister GetLastestBoxNumberItems()
+        {
+            FujiCheckRegister model = new FujiCheckRegister();
+            DateTime lastestDate = new DateTime(1900, 1, 1);
+            ObjectCache cache = MemoryCache.Default;
+
+
+            string cacheDateTime = cache["Cache_DateTimeStamp_SetScanned"] + "";
+            if (string.IsNullOrEmpty(cacheDateTime))
+                return null;
+            if (!DateTime.TryParse(cache["Cache_DateTimeStamp_SetScanned"].ToString(), out lastestDate))
+                return null;
+            string cacheContent = cache["Cache_SelectSQL_SetScanned"] + "";
+            if (string.IsNullOrEmpty(cacheContent))
+                return null;
+
+            IEnumerable<FujiBoxNumberAndAmountModel> items = new List<FujiBoxNumberAndAmountModel>();
+            using (FujiDbContext db = new FujiDbContext())
+            {
+                string sql = cacheContent;
+                sql = sql.Remove(sql.IndexOf("AND"));
+                var scannedItems = db.Database.SqlQuery<ImportSerialDetail>(sql).ToList();
+                if (scannedItems != null)
+                {
+                    model.TotalRecord = scannedItems.Count;
+                    int ix = 1;
+                    items = (from p in scannedItems
+                             orderby p.BoxNumber
+                             group p by p.BoxNumber
+                            into g
+                             select new FujiBoxNumberAndAmountModel
+                             {
+                                 ItemIndex = ix++
+                  ,
+                                 BoxNumber = g.Key
+                  ,
+                                 Amount = g.ToList().Count
+                             }).ToList();
+
+                }
+            }
+            model.BoxAndAmount = items;
+            model.LastestDate = lastestDate;
+
+
+            return model;
+        }
+
+        public IEnumerable<ImportSerialHead> GetHeadDataTopten(ParameterSearch parameterSearch, out int totalRecord)
+        {
+            totalRecord = 0;
+            int top = parameterSearch.PageSize > 0 ? parameterSearch.PageSize : 10;
+            string sql = string.Format("SELECT TOP({0}) * FROM [dbo].[ImportSerialHead] WHERE Status = '{1}' ORDER BY CreateAt DESC", top, FujiStatus.RECEIVED.ToString());
+
+            IEnumerable<ImportSerialHead> items = new List<ImportSerialHead>();
+
+            int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
+
+            if (cnt > 0)
+                sql += parameterSearch.SpeacialQuery;
+
+            using (FujiDbContext Db = new FujiDbContext())
+            {
+                items = Db.Database.SqlQuery<ImportSerialHead>(sql).ToList();
+                totalRecord = items.Count();
+            }
+
+
+            return items;
+
+        }
+
     }
 }

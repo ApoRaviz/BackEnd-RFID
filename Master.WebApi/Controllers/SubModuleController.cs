@@ -50,13 +50,32 @@ namespace Master.WebApi.Controllers
 
         // GET: api/Projects/5
         [HttpGet]
-        [Route("{moduleIDSys}")]
-        public HttpResponseMessage Get(int moduleIDSys)
+        [Route("{submoduleIDSys}")]
+        public HttpResponseMessage GetSubModule(int submoduleIDSys)
         {
             IResponseData<SubModules> response = new ResponseData<SubModules>();
             try
             {
-                SubModules module = ModuleService.GetSubModulesByID(moduleIDSys);
+                SubModules module = ModuleService.GetSubModulesByID(submoduleIDSys);
+                response.SetData(module);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+
+        }
+
+        [HttpGet]
+        [Route("module/{moduleIDSys}")]
+        public HttpResponseMessage GetModule(int moduleIDSys)
+        {
+            IResponseData<IEnumerable<SubModules>> response = new ResponseData<IEnumerable<SubModules>>();
+            try
+            {
+                IEnumerable<SubModules> module = ModuleService.GetSubModulesByModuleID(moduleIDSys);
                 response.SetData(module);
             }
             catch (ValidationException ex)
@@ -108,7 +127,7 @@ namespace Master.WebApi.Controllers
 
         // DELETE: api/Projects/5
         [HttpDelete]
-        [Route("{projectIDSys}")]
+        [Route("{moduleIDSys}")]
         public HttpResponseMessage Delete(int moduleIDSys)
         {
             IResponseData<bool> response = new ResponseData<bool>();
