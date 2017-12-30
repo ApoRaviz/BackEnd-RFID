@@ -13,7 +13,6 @@ using System.Data;
 using Fuji.Service.ItemImport;
 using Fuji.Common.ValueObject;
 using Fuji.Entity.ItemManagement;
-using Microsoft.AspNet.Identity;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;

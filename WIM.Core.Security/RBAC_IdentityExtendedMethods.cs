@@ -243,7 +243,7 @@ public static class RBAC_ExtendedMethods_4_Principal
     }
 
 
-    public static bool TimeOutToken(this IPrincipal _principal)
+    public static bool IsTimeOutToken(this IPrincipal _principal)
     {
 
         bool _retVal = false;

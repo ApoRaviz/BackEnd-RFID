@@ -29,10 +29,10 @@ namespace WIM.WebApi.Auth
             //}
 
             //string url = actionContext.Request.RequestUri.PathAndQuery;
-            //string method = actionContext.Request.Method.ToString();                  
+            //string method = actionContext.Request.Method.ToString();    
 
             //if (!principal.HasPermission(method + url))
-            if (!principal.TimeOutToken())
+            if (!principal.IsTimeOutToken())
             {
                 //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
                 ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E401));

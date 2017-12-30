@@ -113,11 +113,13 @@ namespace WIM.Core.Security
         //    return _retVal;
         //}
 
-        public static void PasswordHistoryOverYear(string _userId)
+
+        // #JobComment
+        /*public static void RemovePasswordHistoryOverYear(string _userId)
         {
             using (SecurityDbContext db = new SecurityDbContext())
             {
-                var phTop = db.PasswordHistory.Where(u => u.UserID == _userId).Take(1).FirstOrDefault();
+                var phTop = db.PasswordHistory.FirstOrDefault(u => u.UserID == _userId);
                 if (phTop != null && (DateTime.Now - phTop.CreatedDate).TotalDays >= 365)
                 {
                     var phBottom = db.PasswordHistory.Where(u => u.UserID == _userId).OrderByDescending(o => o.ID)
@@ -126,6 +128,17 @@ namespace WIM.Core.Security
                     db.PasswordHistory.RemoveRange(phOldList);
                     db.SaveChanges();
                 }
+            }
+        }*/
+
+        public static Task RemovePasswordHistory(string _userId)
+        {
+            using (SecurityDbContext db = new SecurityDbContext())
+            {
+                var passHis = db.PasswordHistory.Where(u => u.UserID == _userId).ToList();
+                db.PasswordHistory.RemoveRange(passHis);
+                db.SaveChanges();
+                return Task.FromResult(0);
             }
         }
 
@@ -144,32 +157,30 @@ namespace WIM.Core.Security
 
         public static bool IsPreviousPassword(string _userId, string password)
         {
-
             List<PasswordHistory> pass = new List<PasswordHistory>();
             PasswordHasher ph = new PasswordHasher();
-            try
+            using (SecurityDbContext db = new SecurityDbContext())
             {
-                using (SecurityDbContext db = new SecurityDbContext())
+                pass = (
+                    from p in db.PasswordHistory
+                    where p.UserID == _userId                    
+                    select p).ToList();
+                if (pass != null)
                 {
-                    pass = (from p in db.PasswordHistory where p.UserID == _userId select p).ToList();
-                }
-                PasswordVerificationResult pvResult;
-                foreach (var proc in pass)
-                {
-                    pvResult = ph.VerifyHashedPassword(proc.PasswordHash, password);
-                    if (pvResult == PasswordVerificationResult.Success)
-                        return true;
+                    pass = pass.Where(p => (DateTime.Now - p.CreatedDate).TotalDays <= 365).ToList();
                 }
             }
-            catch (Exception)
+            PasswordVerificationResult pvResult;
+            foreach (var proc in pass)
             {
-
+                pvResult = ph.VerifyHashedPassword(proc.PasswordHash, password);
+                if (pvResult == PasswordVerificationResult.Success)
+                    return true;
             }
-            InsertPasswordHistory(_userId, password);
             return false;
         }
 
-        private static Task InsertPasswordHistory(string _userId, string password)
+        public static Task InsertPasswordHistory(string _userId, string password)
         {
             try
             {
@@ -274,7 +285,7 @@ namespace WIM.Core.Security
             {
                 try
                 {
-                   var u = (from us in Db.Users where us.Id == userid select us).SingleOrDefault();
+                    var u = (from us in Db.Users where us.Id == userid select us).SingleOrDefault();
                     if (keyOtp > 99999)
                     {
                         u.KeyOTP = keyOtp;
@@ -294,8 +305,19 @@ namespace WIM.Core.Security
             }
         }
 
-
+        public override async Task<IdentityResult> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
+        {
+            if (IsPreviousPassword(userId, newPassword))
+            {
+                return await Task.FromResult(IdentityResult.Failed("Your Password Duplicate with your old password in this year"));
+            }
+            var result = await base.ChangePasswordAsync(userId, currentPassword, newPassword);
+            if (result.Succeeded)
+            {
+                await InsertPasswordHistory(userId, newPassword);
+            }
+            return result;
+        }
     }
-
 
 }

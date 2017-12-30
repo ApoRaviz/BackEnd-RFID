@@ -47,9 +47,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WIM.Core.Entity">
-      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="WIM.Core.Repository">
       <HintPath>..\WIM.Core.Repository\bin\Debug\WIM.Core.Repository.dll</HintPath>
     </Reference>
@@ -71,6 +68,10 @@
     <ProjectReference Include="..\Isuzu.Entity\Isuzu.Entity.csproj">
       <Project>{0d9037c9-aa89-4342-80eb-b7e394ad40fd}</Project>
       <Name>Isuzu.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

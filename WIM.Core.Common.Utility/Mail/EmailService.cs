@@ -13,10 +13,10 @@ namespace WIM.Core.Common.Utility.Mail
     {
         public Task SendAsync(IdentityMessage message)
         {
-            return configSendGridasync(message);
+            return PerformSendAsync(message);
         }
 
-        private Task configSendGridasync(IdentityMessage message)
+        private Task PerformSendAsync(IdentityMessage message)
         {
             #region formatter
             string html = "Please confirm your account by clicking this link: <a href=\"" + message.Body + "\">link</a><br/>";
@@ -25,13 +25,13 @@ namespace WIM.Core.Common.Utility.Mail
             #endregion
 
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
-            msg.From = new System.Net.Mail.MailAddress("siwarakk@yamatothai.com", "Siwarak Kongsra");
-            msg.To.Add(new System.Net.Mail.MailAddress("siwarakk@yamatothai.com"));
+            msg.From = new System.Net.Mail.MailAddress("kanawutp@yamatothai.com", "Kanawut Panbut");
+            msg.To.Add(new System.Net.Mail.MailAddress("kanawutp@yamatothai.com"));
             msg.Subject = message.Subject;
             msg.AlternateViews.Add(System.Net.Mail.AlternateView.CreateAlternateViewFromString(html, null, System.Net.Mime.MediaTypeNames.Text.Html));
 
-            System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient("mail1.yamatothai.com", Convert.ToInt32(26));
-            NetworkCredential credentials = new NetworkCredential("siwarakk@yamatothai.com", "ytcsiwarak1617");
+            System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient("mail.yamatothai.com", 25);
+            NetworkCredential credentials = new NetworkCredential("kanawutp@yamatothai.com", "ytckanawut1617");
             smtpClient.Credentials = credentials;
             smtpClient.EnableSsl = false;
             return smtpClient.SendMailAsync(msg);

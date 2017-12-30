@@ -29,7 +29,7 @@ using WIM.Core.Common.Utility.Validation;
 
 namespace Master.WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/v1/account")]
     public class AccountController : BaseApiController
     {
@@ -423,18 +423,15 @@ namespace Master.WebApi.Controllers
         {
             ResponseData<IdentityResult> response = new ResponseData<IdentityResult>();
             IdentityResult result = new IdentityResult();
-            if (ApplicationUserManager.IsPreviousPassword(User.Identity.GetUserId(), model.NewPassword))
-            {
-                result = IdentityResult.Failed(new string[] { "Your Password Duplicate with your old password in this year" });
-                response.SetErrors(result);
-            }
+
             result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
 
             if (!result.Succeeded)
             {
-                response.SetErrors(result);
+                response.SetErrors(result.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
+                return Request.ReturnHttpResponseMessage(response);
             }
             response.SetData(result);
             return Request.ReturnHttpResponseMessage(response);
@@ -521,8 +518,7 @@ namespace Master.WebApi.Controllers
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
-            }
-
+            }        
             return Ok();
         }
 

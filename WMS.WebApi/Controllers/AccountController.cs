@@ -411,18 +411,15 @@ namespace WMS.WebApi.Controllers
         {
             ResponseData<IdentityResult> response = new ResponseData<IdentityResult>();
             IdentityResult result = new IdentityResult();
-            if (ApplicationUserManager.IsPreviousPassword(User.Identity.GetUserId(), model.NewPassword))
-            {
-                result = IdentityResult.Failed(new string[] { "Your Password Duplicate with your old password in this year" });
-                response.SetErrors(result);
-            }
+
             result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
 
             if (!result.Succeeded)
             {
-                response.SetErrors(result);
+                response.SetErrors(result.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
+                return Request.ReturnHttpResponseMessage(response);
             }
             response.SetData(result);
             return Request.ReturnHttpResponseMessage(response);
@@ -710,7 +707,7 @@ namespace WMS.WebApi.Controllers
                 ModelState.AddModelError("", "User Id and Code are required");
                 return BadRequest(ModelState);
             }
-
+            
             IdentityResult result = await this.AppUserManager.ConfirmEmailAsync(userId, code);
 
             if (result.Succeeded)
