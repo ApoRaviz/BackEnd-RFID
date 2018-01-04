@@ -53,9 +53,9 @@ namespace WIM.Core.Service.Impl
                         {
                             labelData.Lang = lang;
                             labelControl = repo.Insert(labelData);
-                            db.SaveChanges();
                             CreateFileJsonI18n(labelControl.LabelConfig, labelControl.ProjectIDSys + "_" + labelControl.Lang);
                         }
+                        db.SaveChanges();
                         scope.Complete();
                         return AutoMapper.Mapper.Map<LabelControl, LabelControlDto>(labelControl);
                     }
@@ -65,11 +65,11 @@ namespace WIM.Core.Service.Impl
                         ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                         throw ex;
                     }
-                    catch (DbUpdateException)
+                    catch (DbUpdateException x)
                     {
                         scope.Dispose();
                         ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
+                        throw x;
                     }
                 }
             }
@@ -93,17 +93,18 @@ namespace WIM.Core.Service.Impl
 
                         return AutoMapper.Mapper.Map<LabelControl, LabelControlDto>(labelControl);
                     }
+
                     catch (DbEntityValidationException)
                     {
                         scope.Dispose();
                         ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                         throw ex;
                     }
-                    catch (DbUpdateException)
+                    catch (DbUpdateException x)
                     {
                         scope.Dispose();
                         ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
+                        throw x;
                     }
                 }
             }
