@@ -143,8 +143,9 @@ namespace WIM.Core.Repository.Impl
                     }
                 }
             }
+
             entityForUpdate.UpdateBy = Identity.GetUserName();
-            entityForUpdate.UpdateAt = DateTime.Now;
+            entityForUpdate.UpdateAt = DateTime.Now.Date;
             return entityForUpdate;
         }
 
