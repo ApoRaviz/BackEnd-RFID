@@ -45,7 +45,7 @@ namespace WMS.WebApi.Controllers
         }
 
         // GET: api/Suppliers/1
-        [HttpGet]
+        [HttpGet] 
         [Route("{supIDSys}")]
         public HttpResponseMessage Get(int supIDSys)
         {
