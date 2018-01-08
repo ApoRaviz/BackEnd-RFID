@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.CustomerManagement;
 
 namespace WIM.Core.Repository
@@ -11,5 +8,6 @@ namespace WIM.Core.Repository
     {
         object GetByUserID(string userid);
         object GetProjectByUserIDCusID(string userid, int cusIDSys);
+        IEnumerable<AutocompleteCustomerDto> AutocompleteItem(string term);
     }
 }

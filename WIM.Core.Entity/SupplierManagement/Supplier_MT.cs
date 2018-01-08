@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Entity.ProjectManagement;
 
 namespace WIM.Core.Entity.SupplierManagement
@@ -33,10 +29,6 @@ namespace WIM.Core.Entity.SupplierManagement
         public string TelOffice { get; set; }
         public string TelExt { get; set; }
         public string Mobile { get; set; }
-        //public byte Active { get; set; }
-        //public System.DateTime CreatedDate { get; set; }
-        //public System.DateTime UpdateDate { get; set; }
-        //public string UserUpdate { get; set; }
 
         public virtual Project_MT Project_MT { get; set; }
 

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Entity.ProjectManagement;
 //using WIM.Core.Security.Entity.RoleAndPermission;
 
-namespace WIM.Core.Entity.ProjectManagement
+namespace WIM.Core.Entity.Module
 {
     [Table("Module_MT")]
     public class Module_MT : BaseEntity

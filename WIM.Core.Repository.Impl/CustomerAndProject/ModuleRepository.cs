@@ -8,9 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity.CustomerManagement;
-using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Entity.ProjectManagement;
-using WIM.Core.Repository;
+using WIM.Core.Entity.Module;
 
 namespace WIM.Core.Repository.Impl
 {

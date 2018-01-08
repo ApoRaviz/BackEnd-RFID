@@ -344,7 +344,6 @@
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
-    <Compile Include="Controllers\SuppliersController.cs" />
     <Compile Include="Controllers\UnitsController.cs" />
     <Compile Include="Controllers\UploadFileApiController.cs" />
     <Compile Include="Controllers\WarehouseController.cs" />
