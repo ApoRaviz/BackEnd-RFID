@@ -9,6 +9,7 @@ using WIM.Core.Common.Utility.Extensions;
 using System.Net.Http;
 using WIM.Core.Common.Utility.Helpers;
 using System.Data.Entity.Infrastructure;
+using Microsoft.AspNet.Identity;
 
 namespace WIM.Core.Common.Utility.Http
 {
@@ -37,8 +38,19 @@ namespace WIM.Core.Common.Utility.Http
 
         public void SetErrors(DbUpdateException error)
         {
-            ValidationError x = new ValidationError("500", error.Message);
-            this.Errors.Add(x);
+            ValidationError e = new ValidationError("500", error.Message);
+            this.Errors.Add(e);
+        }
+
+        public void SetErrors(IEnumerable<string> errors)
+        {
+            if (errors != null)
+            {
+                foreach (string error in errors)
+                {
+                    this.Errors.Add(new ValidationError("400", error));
+                }
+            }
         }
 
         public void SetData(DataType data)

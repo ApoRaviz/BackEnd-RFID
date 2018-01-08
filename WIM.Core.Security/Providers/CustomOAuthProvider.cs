@@ -54,7 +54,6 @@ namespace WIM.Core.Security.Providers
                 var uri = new Uri(ConfigurationManager.AppSettings["as:baseUrl"] + string.Format("/api/v1/account/ConfirmEmail?userId={0}&code={1}", user.Id, codeUrlEncode));
                 await userManager.SendEmailAsync(user.Id,"Confirm your account", uri.ToString());
             }
-            ApplicationUserManager.PasswordHistoryOverYear(user.Id);
         }
     }
 }

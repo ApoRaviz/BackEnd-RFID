@@ -33,9 +33,6 @@
     <Reference Include="Isuzu.Entity">
       <HintPath>..\Isuzu.Entity\bin\Debug\Isuzu.Entity.dll</HintPath>
     </Reference>
-    <Reference Include="Isuzu.Repository">
-      <HintPath>..\Isuzu.Repository\bin\Debug\Isuzu.Repository.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +54,10 @@
     <ProjectReference Include="..\Isuzu.Context\Isuzu.Context.csproj">
       <Project>{82d2b22a-90bc-440a-ba19-83914d0018ac}</Project>
       <Name>Isuzu.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Isuzu.Repository\Isuzu.Repository.csproj">
+      <Project>{13dd01f7-c348-4566-ad0e-db5f790ed5f2}</Project>
+      <Name>Isuzu.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

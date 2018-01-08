@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Entity.ProjectManagement;
+using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
-using WIM.Core.Entity.Module;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
 {
@@ -29,10 +33,8 @@ namespace Master.WebApi.Controllers
             try
             {
                 IEnumerable<Module_MT> modules =  new List<Module_MT>();
-                if (User.IsSysAdmin())
-                {
                     modules = ModuleService.GetModules();
-                }
+
                 
                 response.SetData(modules);
             }

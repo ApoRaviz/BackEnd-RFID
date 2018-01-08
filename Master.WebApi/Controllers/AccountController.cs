@@ -29,7 +29,7 @@ using WIM.Core.Common.Utility.Validation;
 
 namespace Master.WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/v1/account")]
     public class AccountController : BaseApiController
     {
@@ -419,28 +419,22 @@ namespace Master.WebApi.Controllers
 
         // POST api/Account/ChangePassword
         [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        public async Task<HttpResponseMessage> ChangePassword(ChangePasswordBindingModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            IdentityResult result = IdentityResult.Failed(new string[] { "Your Password Duplicate with your old password in this year" });
-            if (ApplicationUserManager.IsPreviousPassword(User.Identity.GetUserId(), model.NewPassword))
-            {
-                return GetErrorResult(result);
-            }
+            ResponseData<IdentityResult> response = new ResponseData<IdentityResult>();
+            IdentityResult result = new IdentityResult();
+
             result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
 
-
-
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                response.SetErrors(result.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+                return Request.ReturnHttpResponseMessage(response);
             }
-
-            return Ok();
+            response.SetData(result);
+            return Request.ReturnHttpResponseMessage(response);
         }
 
         // POST api/Account/SetPassword
@@ -524,8 +518,7 @@ namespace Master.WebApi.Controllers
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
-            }
-
+            }        
             return Ok();
         }
 

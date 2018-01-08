@@ -21,7 +21,6 @@ namespace WIM.Core.Common.Utility.Validation
         {
             //try
             //{
-                bool flag = false;
                 object instance = validationContext.ObjectInstance;
                 Type type = instance.GetType();
                 IEnumerable<PropertyInfo> properties = type.GetProperties();
@@ -57,7 +56,6 @@ namespace WIM.Core.Common.Utility.Validation
             //    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
             //    throw ex;
             //}
-            return null;
         }
     }
 }

@@ -6,8 +6,6 @@ using WIM.Core.Entity;
 
 namespace Isuzu.Entity
 {
-   
-
     [Table("LabelRunning")]
     public partial class LabelRunning: BaseEntity
     {
