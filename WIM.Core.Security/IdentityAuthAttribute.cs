@@ -31,17 +31,23 @@ namespace WIM.WebApi.Auth
             //string url = actionContext.Request.RequestUri.PathAndQuery;
             //string method = actionContext.Request.Method.ToString();    
 
+            if (principal.IsUrlIgnored(actionContext.Request))
+            {
+                return Task.FromResult<object>(null);
+            }
+
             //if (!principal.HasPermission(method + url))
+            //#JobComment
             if (!principal.IsTimeOutToken())
             {
                 //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
                 ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E401));
-                if(actionContext.Request.Method.Equals(HttpMethod.Post).Equals(HttpMethod.Put))
+                if (actionContext.Request.Method.Equals(HttpMethod.Post).Equals(HttpMethod.Put))
                     ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E402));
                 IResponseData<int> response = new ResponseData<int>();
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);
-                actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Unauthorized,response);
+                actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Unauthorized, response);
                 return Task.FromResult<object>(null);
             }
 

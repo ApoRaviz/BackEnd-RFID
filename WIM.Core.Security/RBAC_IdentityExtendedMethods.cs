@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 
@@ -113,7 +114,9 @@ public static class RBAC_ExtendedMethods_4_Principal
             string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
           .Select(c => c.Value).SingleOrDefault();
 
-            string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
+            string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
+
+            /*string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
             fullUrl = fullUrl.Replace("wimapi/", "");
             string[] fullUrlplit = fullUrl.Split('?');
             string reqUrl = fullUrlplit[0];
@@ -157,7 +160,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             if (urlIgnore.Contains(reqUrl) || reqUrl.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrl)))
             {
                 return true;
-            }
+            }*/
 
             if (OTPCONFIRM != "True")
             {
@@ -312,6 +315,29 @@ public static class RBAC_ExtendedMethods_4_Principal
             throw;
         }
         return _retVal;
+    }
+
+    public static bool IsUrlIgnored(this IPrincipal _principal, HttpRequestMessage _request)
+    {
+        string[] urlIgnore = {
+                    "GET/api/v1/account/users/mobile/otp",
+                    "POST/api/v1/account/users/mobile/otp",
+                    "POST/api/v1/account/renewtoken",
+                    "GET/api/v1/MenuProjectMappings/parent/1",
+                    "GET/api/v1/Users/customers",
+                    "GET/api/v1/customers/projects",
+                    "POST/api/v1/account/assignProject",
+                    "GET/api/v1/Persons",
+                    "GET/api/v1/helpers/tableColumnsDescription",
+                    "GET/api/v1/Projects/select",
+                    "POST/api/v1/account/Logout",
+                    "POST/api/v1/Account/ChangePassword",
+                    //Menu Side Url
+                    "GET/api/v1/MenuProjectMappings/menu/",
+                    //Url Ignore ChkOTP
+                    "POST/api/v1/account/assignProject"
+                };
+        return urlIgnore.Contains(_request.RequestUri.PathAndQuery);
     }
 
 
