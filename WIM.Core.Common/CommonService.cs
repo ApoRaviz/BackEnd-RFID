@@ -106,4 +106,26 @@ namespace WIM.Core.Common
 
         }
     }
+
+    public static class EntityExtensions
+    {
+
+        public static T Clone<T>(this T data)
+        {
+            Type typeEntityToUpdate = data.GetType();
+            PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
+            T resp = Activator.CreateInstance<T>();
+            Type respType = resp.GetType();
+            foreach (PropertyInfo prop in properties)
+            {
+                var value = prop.GetValue(data);
+                if (respType.GetProperty(prop.Name) != null)
+                    respType.GetProperty(prop.Name).SetValue(resp, value, null);
+            }
+
+            return resp;
+        }
+
+
+    }
 }

@@ -32,7 +32,7 @@ namespace Fuji.WebApi.Services
             msg.Subject = message.Subject;
             msg.AlternateViews.Add(System.Net.Mail.AlternateView.CreateAlternateViewFromString(html, null, System.Net.Mime.MediaTypeNames.Text.Html));
 
-            System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient("mail1.yamatothai.com", Convert.ToInt32(26));
+            System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient("mail1.yamatothai.com", 25);
             NetworkCredential credentials = new NetworkCredential("kanawutp@yamatothai.com", "ytckanawut1617");
             smtpClient.Credentials = credentials;
             smtpClient.EnableSsl = false;
