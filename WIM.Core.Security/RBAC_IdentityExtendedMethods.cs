@@ -204,7 +204,7 @@ public static class RBAC_ExtendedMethods_4_Principal
                             string permiss = permissUrlSplit[i].ToUpper();
                             string req = reqUrlSplit[i].ToUpper();
 
-                            if ((permissUrlSplit[i] == reqUrlSplit[i])
+                            if ((/*permissUrlSplit[i] == reqUrlSplit[i]*/ permiss == req)
                                 || (permissUrlSplit[i] == "@")
                                 || (/*isReqUrlNum && */permissUrlSplit[i] == "1"))
                             {
