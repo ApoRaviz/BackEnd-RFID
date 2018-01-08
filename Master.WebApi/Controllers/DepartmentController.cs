@@ -3,40 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Entity.ProjectManagement;
-using WIM.Core.Entity.UserManagement;
-using WIM.Core.Service;
-using WIM.Core.Service.Impl;
+using WIM.Core.Entity.Employee;
+using WIM.Core.Service.EmployeeMaster;
 
 namespace Master.WebApi.Controllers
 {
-    [Authorize]
-    [RoutePrefix("api/v1/modules")]
-    public class ModulesController : ApiController
+    [RoutePrefix("api/v1/Department")]
+    public class DepartmentController : ApiController
     {
-        private IModuleService ModuleService;
-        public ModulesController(IModuleService moduleService)
+        private IDepartmentService DepartmentService;
+
+        public DepartmentController(IDepartmentService departmentservice)
         {
-            this.ModuleService = moduleService;
+            this.DepartmentService = departmentservice;
         }
 
-        // GET: api/projects
+        // GET: api/Employees
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<Module_MT>> response = new ResponseData<IEnumerable<Module_MT>>();
+            ResponseData<IEnumerable<Departments>> response = new ResponseData<IEnumerable<Departments>>();
             try
             {
-                IEnumerable<Module_MT> modules =  new List<Module_MT>();
-                    modules = ModuleService.GetModules();
-
-                
-                response.SetData(modules);
+                IEnumerable<Departments> Employees = DepartmentService.GetDepartments();
+                response.SetData(Employees);
             }
             catch (ValidationException ex)
             {
@@ -46,17 +42,16 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-
-        // GET: api/Projects/5
+        // GET: api/Employees/1
         [HttpGet]
-        [Route("{moduleIDSys}")]
-        public HttpResponseMessage Get(int moduleIDSys)
+        [Route("{DepIDSys}")]
+        public HttpResponseMessage Get(int DepIDSys)
         {
-            IResponseData<Module_MT> response = new ResponseData<Module_MT>();
+            IResponseData<Departments> response = new ResponseData<Departments>();
             try
             {
-                Module_MT module = ModuleService.GetProjectByModuleIDSys(moduleIDSys);
-                response.SetData(module);
+                Departments Employee = DepartmentService.GetDepartmentByDepIDSys(DepIDSys);
+                response.SetData(Employee);
             }
             catch (ValidationException ex)
             {
@@ -64,19 +59,19 @@ namespace Master.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
-
         }
 
-        // POST: api/Projects
+        // POST: api/Employees
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]Module_MT module)
+        public HttpResponseMessage Post([FromBody]Departments Department)
         {
-            IResponseData<Module_MT> response = new ResponseData<Module_MT>();
+            IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Module_MT newModule = ModuleService.CreateModule(module);
-                response.SetData(newModule);
+                Department.UpdateBy = User.Identity.Name;
+                int id = DepartmentService.CreateDepartment(Department);
+                response.SetData(id);
             }
             catch (ValidationException ex)
             {
@@ -86,15 +81,18 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // PUT: api/Projects
+        // PUT: api/Employees/5
+
         [HttpPut]
-        [Route("{moduleIDSys}")]
-        public HttpResponseMessage Put(int moduleIDSys, [FromBody]Module_MT module)
+        [Route("")]
+        public HttpResponseMessage Put([FromBody]Departments Department)
         {
+
             IResponseData<bool> response = new ResponseData<bool>();
+
             try
             {
-                bool isUpated = ModuleService.UpdateModule(module);
+                bool isUpated = DepartmentService.UpdateDepartment(Department);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -102,18 +100,19 @@ namespace Master.WebApi.Controllers
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
+
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // DELETE: api/Projects/5
+        // DELETE: api/Employees/5
         [HttpDelete]
-        [Route("{projectIDSys}")]
-        public HttpResponseMessage Delete(int moduleIDSys)
+        [Route("{DepID}")]
+        public HttpResponseMessage Delete(int DepID)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ModuleService.DeleteModule(moduleIDSys);
+                bool isUpated = DepartmentService.DeleteDepartment(DepID);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -124,9 +123,5 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        public class HttpRequestParameter
-        {
-            public List<string> Includes { get; set; }
-        }
     }
 }

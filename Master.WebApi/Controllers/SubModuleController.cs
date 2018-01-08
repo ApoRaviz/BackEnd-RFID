@@ -32,10 +32,7 @@ namespace Master.WebApi.Controllers
             try
             {
                 IEnumerable<SubModules> modules = new List<SubModules>();
-                if (User.IsSysAdmin())
-                {
                     modules = ModuleService.GetSubModules();
-                }
 
                 response.SetData(modules);
             }

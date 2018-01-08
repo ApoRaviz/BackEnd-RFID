@@ -61,7 +61,9 @@
     <Compile Include="CountryMaster\CountryService.cs" />
     <Compile Include="CurrencyMaster\CurrencyService.cs" />
     <Compile Include="CustomerMaster\CustomerService.cs" />
+    <Compile Include="EmployeeMaster\DepartmentService.cs" />
     <Compile Include="EmployeeMaster\EmployeeService.cs" />
+    <Compile Include="EmployeeMaster\PositionService.cs" />
     <Compile Include="HeadReportControl\HeadReportControlService.cs" />
     <Compile Include="LabelControl\LabelControlService.cs" />
     <Compile Include="MenuMaster\MenuService.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="RoleMaster\RoleService.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="StatusManagement\StatusService.cs" />
+    <Compile Include="SupplierMaster\SupplierService.cs" />
     <Compile Include="UserMaster\UserService.cs" />
     <Compile Include="UserRole\UserRoleService.cs" />
   </ItemGroup>

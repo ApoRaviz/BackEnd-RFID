@@ -1,56 +1,60 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.Transactions;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Context;
-using WIM.Core.Repository;
-using WIM.Core.Repository.Impl;
-using WIM.Core.Common.Utility.Validation;
+using System.Data.Entity.Validation;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Transactions;
 using WIM.Core.Common.Utility.Helpers;
-using WIM.Core.Entity.Module;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Context;
+using WIM.Core.Entity.Employee;
+using WIM.Core.Repository.Impl.Personalize;
+using WIM.Core.Repository.Personalize;
+using WIM.Core.Service.EmployeeMaster;
 
-namespace WIM.Core.Service.Impl
+namespace WIM.Core.Service.Impl.EmployeeMaster
 {
-    public class ModuleService : Service, IModuleService
+    public class PositionService : Service, IPositionService
     {
-        public ModuleService()
+        public PositionService()
         {
         }
 
-
-        public IEnumerable<Module_MT> GetModules()
+        public IEnumerable<Positions> GetPositions()
         {
-            IEnumerable<Module_MT> modules;
+            IEnumerable<Positions> position;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IModuleRepository repo = new ModuleRepository(Db);
-                modules = repo.Get();
+                IPositionRepository repo = new PositionRepository(Db);
+                position = repo.Get();
             }
-            return modules;
+            return position;
         }
 
-        public Module_MT GetProjectByModuleIDSys(int id)
+        public Positions GetPositionByPositionIDSys(int id)
         {
-            Module_MT modules;
+            Positions position;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IModuleRepository repo = new ModuleRepository(Db);
-                modules = repo.GetByID(id);
+                IPositionRepository repo = new PositionRepository(Db);
+                position = repo.GetByID(id);
             }
-            return modules;
+            return position;
         }
 
-        public Module_MT CreateModule(Module_MT module)
+        public int CreatePosition(Positions position)
         {
             using (var scope = new TransactionScope())
             {
-                Module_MT moduleNew = new Module_MT();
+                Positions Positionnew = new Positions();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IModuleRepository repo = new ModuleRepository(Db);
-                        moduleNew = repo.Insert(module);
+                        IPositionRepository repo = new PositionRepository(Db);
+                        Positionnew = repo.Insert(position);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -59,17 +63,17 @@ namespace WIM.Core.Service.Impl
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw e;
+                    throw ex;
                 }
-                return moduleNew;
+                return Positionnew.PositionIDSys;
             }
         }
 
-        public bool UpdateModule(Module_MT module)
+        public bool UpdatePosition(Positions position)
         {
             using (var scope = new TransactionScope())
             {
@@ -77,8 +81,8 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IModuleRepository repo = new ModuleRepository(Db);
-                        repo.Update(module);
+                        IPositionRepository repo = new PositionRepository(Db);
+                        repo.Update(position);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -97,7 +101,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool DeleteModule(int id)
+        public bool DeletePosition(int id)
         {
             using (var scope = new TransactionScope())
             {
@@ -105,10 +109,12 @@ namespace WIM.Core.Service.Impl
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IModuleRepository repo = new ModuleRepository(Db);
-                        repo.Delete(id);
-                        Db.SaveChanges();
+                        IPositionRepository repo = new PositionRepository(Db);
+                        var existedPosition = repo.GetByID(id);
+                        existedPosition.IsActive = false;
+                        repo.Update(existedPosition);
                         scope.Complete();
+                        Db.SaveChanges();
                     }
                 }
                 catch (DbUpdateConcurrencyException)
@@ -117,8 +123,6 @@ namespace WIM.Core.Service.Impl
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     throw ex;
                 }
-
-
                 return true;
             }
         }
@@ -135,4 +139,3 @@ namespace WIM.Core.Service.Impl
         }
     }
 }
-

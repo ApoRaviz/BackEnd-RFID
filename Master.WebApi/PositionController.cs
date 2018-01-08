@@ -3,38 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
-using WIM.Core.Common;
-using System.Web.Http.Cors;
-using WMS.Service;
-using WIM.Core.Entity.SupplierManagement;
+using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Entity.Employee;
+using WIM.Core.Service.EmployeeMaster;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi
 {
-    //[Authorize]
-    [RoutePrefix("api/v1/Suppliers")]
-    public class SuppliersController : ApiController
+    [RoutePrefix("api/v1/Position")]
+    public class PositionController : ApiController
     {
-        private ISupplierService SupplierService;
+        private IPositionService PositionService;
 
-        public SuppliersController(ISupplierService SupplierService)
+        public PositionController(IPositionService Positionservice)
         {
-            this.SupplierService = SupplierService;
+            this.PositionService = Positionservice;
         }
 
-        // GET: api/Suppliers
+        // GET: api/Employees
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<Supplier_MT>> response = new ResponseData<IEnumerable<Supplier_MT>>();
+            ResponseData<IEnumerable<Positions>> response = new ResponseData<IEnumerable<Positions>>();
             try
             {
-                IEnumerable<Supplier_MT> Suppliers = SupplierService.GetSuppliersByProjectID(User.Identity.GetProjectIDSys());
-                response.SetData(Suppliers);
+                IEnumerable<Positions> Employees = PositionService.GetPositions();
+                response.SetData(Employees);
             }
             catch (ValidationException ex)
             {
@@ -44,16 +42,16 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // GET: api/Suppliers/1
-        [HttpGet] 
-        [Route("{supIDSys}")]
-        public HttpResponseMessage Get(int supIDSys)
+        // GET: api/Employees/1
+        [HttpGet]
+        [Route("{DepIDSys}")]
+        public HttpResponseMessage Get(int DepIDSys)
         {
-            IResponseData<Supplier_MT> response = new ResponseData<Supplier_MT>();
+            IResponseData<Positions> response = new ResponseData<Positions>();
             try
             {
-                Supplier_MT Supplier = SupplierService.GetSupplierBySupIDSys(supIDSys);
-                response.SetData(Supplier);
+                Positions Employee = PositionService.GetPositionByPositionIDSys(DepIDSys);
+                response.SetData(Employee);
             }
             catch (ValidationException ex)
             {
@@ -61,18 +59,18 @@ namespace WMS.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
-        }        
+        }
 
-        // POST: api/Suppliers
+        // POST: api/Employees
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]Supplier_MT Supplier)
+        public HttpResponseMessage Post([FromBody]Positions Position)
         {
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Supplier.UpdateBy = User.Identity.Name;
-                int id = SupplierService.CreateSupplier(Supplier);
+                Position.UpdateBy = User.Identity.Name;
+                int id = PositionService.CreatePosition(Position);
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -83,18 +81,18 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // PUT: api/Suppliers/5
+        // PUT: api/Employees/5
 
         [HttpPut]
-        [Route("{supIDSys}")]
-        public HttpResponseMessage Put(int supIDSys, [FromBody]Supplier_MT Supplier)
+        [Route("")]
+        public HttpResponseMessage Put([FromBody]Positions Position)
         {
 
             IResponseData<bool> response = new ResponseData<bool>();
 
             try
             {
-                bool isUpated = SupplierService.UpdateSupplier(Supplier);
+                bool isUpated = PositionService.UpdatePosition(Position);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -106,15 +104,15 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // DELETE: api/Suppliers/5
+        // DELETE: api/Employees/5
         [HttpDelete]
-        [Route("{supIDSys}")]
-        public HttpResponseMessage Delete(int supIDSys)
+        [Route("{DepID}")]
+        public HttpResponseMessage Delete(int DepID)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = SupplierService.DeleteSupplier(supIDSys);
+                bool isUpated = PositionService.DeletePosition(DepID);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -123,7 +121,7 @@ namespace WMS.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
-        }        
+        }
 
-    }   
+    }
 }

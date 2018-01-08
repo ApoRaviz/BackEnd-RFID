@@ -15,6 +15,7 @@ using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.ValueObject;
 
 namespace WIM.Core.Service.Impl
 {
@@ -226,6 +227,8 @@ namespace WIM.Core.Service.Impl
             }
             return project;
         }
+
+
 
         //public bool CreateUserProject(string UserID, int ProjectIDSys)
         //{

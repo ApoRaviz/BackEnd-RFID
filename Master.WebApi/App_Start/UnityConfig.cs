@@ -9,7 +9,8 @@ using WIM.Core.Service;
 using WIM.Core.Service.Impl;
 using WIM.Core.Service.StatusManagement;
 using WIM.Core.Service.Impl.StatusManagement;
-
+using WIM.Core.Service.EmployeeMaster;
+using WIM.Core.Service.Impl.EmployeeMaster;
 
 namespace Master.WebApi
 {
@@ -44,11 +45,15 @@ namespace Master.WebApi
             container.RegisterType<IUserRoleService, UserRoleService>();
             container.RegisterType<IEmployeeService, EmployeeService>();
             container.RegisterType<IPersonService, PersonService>();
+            container.RegisterType<IPositionService, PositionService>();
+            container.RegisterType<IDepartmentService, DepartmentService>();
+            container.RegisterType<ISubModuleService, SubModuleService>();
             container.RegisterType<IStatusService, StatusService>();
             container.RegisterType<IStatusService, StatusService>();
             container.RegisterType<IModuleService, ModuleService>();
             container.RegisterType<ISubModuleService, SubModuleService>();
-            container.RegisterType<IHeadReportControlService, HeadReportControlService>();
+            container.RegisterType<IHeadReportControlService, HeadReportControlService>(); 
+            container.RegisterType<ISupplierService, SupplierService>(); 
         }
     }
 }
