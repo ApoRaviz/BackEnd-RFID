@@ -13,6 +13,7 @@ using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.Dimension;
+using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
 using WIM.Core.Entity.Logs;
@@ -52,6 +53,8 @@ namespace WIM.Core.Context
         public virtual DbSet<LabelControl> LabelControl { get; set; }
         public virtual DbSet<StatusSubModules> StatusSubModule { get; set; }
         public virtual DbSet<HeadReportControl> HeadReportControl { get; set; }
+        public virtual DbSet<Positions> Positions { get; set; }
+        public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
 
         public CoreDbContext() : base("name=CORE")

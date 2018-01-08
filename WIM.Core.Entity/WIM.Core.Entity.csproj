@@ -53,7 +53,9 @@
     <Compile Include="Currency\CurrencyUnit.cs" />
     <Compile Include="CustomerManagement\Customer_MT.cs" />
     <Compile Include="Dimension\DimensionLayout_MT.cs" />
+    <Compile Include="Employee\Departments.cs" />
     <Compile Include="Employee\Employee_MT.cs" />
+    <Compile Include="Employee\Positions.cs" />
     <Compile Include="LabelManagement\HeadReportControl.cs" />
     <Compile Include="LabelManagement\Label.cs" />
     <Compile Include="LabelManagement\LabelConfigs\LabelConfig.cs" />
