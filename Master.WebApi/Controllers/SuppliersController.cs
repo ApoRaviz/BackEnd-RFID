@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common;
-using System.Web.Http.Cors;
-using WMS.Service;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.ValueObject;
+using WIM.Core.Service;
 
-namespace WMS.WebApi.Controllers
+namespace Master.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/Suppliers")]
@@ -123,7 +121,31 @@ namespace WMS.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
-        }        
+        }
 
-    }   
+        // GET: api/items/1
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompleteSupplier(string term = "")
+        {
+            IResponseData<IEnumerable<AutocompleteSupplierDto>> response = new ResponseData<IEnumerable<AutocompleteSupplierDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteSupplierDto> sub = SupplierService.AutocompleteSupplier(term);
+                response.SetData(sub);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+
+    }
 }

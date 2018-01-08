@@ -7,6 +7,8 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.ValueObject;
+using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
 using WMS.Service;
 
@@ -63,6 +65,28 @@ namespace WMS.WebApi.Controllers
 
         }
 
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompleteUnit(string term)
+        {
+            IResponseData<IEnumerable<AutocompleteUnitDto>> response = new ResponseData<IEnumerable<AutocompleteUnitDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteUnitDto> unit = UnitService.AutocompleteUnit(term);
+                response.SetData(unit);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Units
         [HttpPost]
         [Route("")]
@@ -103,6 +127,8 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+
 
         // DELETE: api/Units/5
         [HttpDelete]

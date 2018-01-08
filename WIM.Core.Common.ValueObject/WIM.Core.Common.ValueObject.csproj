@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="ApiMenuMappingDto.cs" />
     <Compile Include="ApiMTDto.cs" />
+    <Compile Include="AutocompleteCustomerDto.cs" />
+    <Compile Include="AutocompleteSupplier.cs" />
     <Compile Include="CustomerAutoCompleteDto.cs" />
     <Compile Include="CustomerDto.cs" />
     <Compile Include="EmployeeDto.cs" />

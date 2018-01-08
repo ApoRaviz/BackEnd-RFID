@@ -48,7 +48,8 @@ namespace Master.WebApi
             container.RegisterType<IStatusService, StatusService>();
             container.RegisterType<IModuleService, ModuleService>();
             container.RegisterType<ISubModuleService, SubModuleService>();
-            container.RegisterType<IHeadReportControlService, HeadReportControlService>();
+            container.RegisterType<IHeadReportControlService, HeadReportControlService>(); 
+            container.RegisterType<ISupplierService, SupplierService>(); 
         }
     }
 }

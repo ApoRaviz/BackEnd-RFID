@@ -64,7 +64,7 @@
     <Compile Include="MenuManagement\MenuProjectMapping.cs" />
     <Compile Include="MenuManagement\Menu_MT.cs" />
     <Compile Include="Person\Person_MT.cs" />
-    <Compile Include="ProjectManagement\Module_MT.cs" />
+    <Compile Include="Module\Module_MT.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Delivery\DeliveryCompany.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Delivery\Service.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Inspection\ReceivingDataType.cs" />

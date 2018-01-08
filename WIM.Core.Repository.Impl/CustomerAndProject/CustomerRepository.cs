@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.CustomerManagement;
-using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Repository;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -51,6 +44,22 @@ namespace WIM.Core.Repository.Impl
                             pm.ProjectName,
                         };
             return query.ToList();
+        }
+
+
+        public IEnumerable<AutocompleteCustomerDto> AutocompleteItem(string term)
+        {
+            var qr = (from cm in Db.Customer_MT
+                      where cm.CusID.Contains(term)
+                      || cm.CusName.Contains(term)
+                      select new AutocompleteCustomerDto
+                      {
+                          CusIDSys = cm.CusIDSys,
+                          CusName = cm.CusName,
+                          CusID = cm.CusID
+                      }
+                     ).ToList();
+            return qr;
         }
 
     }

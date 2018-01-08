@@ -16,6 +16,7 @@ using System.Security.Principal;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using WMS.Common.ValueObject;
 
 namespace WMS.Service
 {
@@ -130,6 +131,19 @@ namespace WMS.Service
                 }
                 return true;
             }
+        }
+
+
+        public IEnumerable<AutocompleteUnitDto> AutocompleteUnit(string term)
+        {
+            IEnumerable<AutocompleteUnitDto> autocompleteUnitDto;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                UnitRepository repo = new UnitRepository(Db);
+                autocompleteUnitDto = repo.AutocompleteUnit(term);
+
+            }
+            return autocompleteUnitDto;
         }
 
         public void HandleValidationException(DbEntityValidationException ex)

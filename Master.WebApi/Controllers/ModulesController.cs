@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Entity.ProjectManagement;
-using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
-using WIM.Core.Service.Impl;
-using WIM.Core.Service;
+using WIM.Core.Entity.Module;
 
 namespace Master.WebApi.Controllers
 {

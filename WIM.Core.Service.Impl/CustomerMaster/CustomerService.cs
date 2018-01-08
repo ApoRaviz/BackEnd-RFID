@@ -221,6 +221,19 @@ namespace WIM.Core.Service.Impl
                 return true;
             }
         }
+        
+
+        public IEnumerable<AutocompleteCustomerDto> AutocompleteCustomer(string term)
+        {
+            IEnumerable<AutocompleteCustomerDto> autocompleteItemDto;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                CustomerRepository repo = new CustomerRepository(Db);
+                autocompleteItemDto = repo.AutocompleteItem(term);
+
+            }
+            return autocompleteItemDto;
+        }
 
         public void HandleValidationException(DbEntityValidationException ex)
         {

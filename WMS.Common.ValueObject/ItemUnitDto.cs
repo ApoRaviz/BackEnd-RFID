@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,9 @@ namespace WMS.Common.ValueObject
         public bool MainUnit { get; set; }
         public byte Sequence { get; set; }
         public short QtyInParent { get; set; }
+
+        [NotMapped]
+        public short UID { get; set; }
         public Nullable<decimal> Cost { get; set; }
         public Nullable<decimal> Price { get; set; }
         public Nullable<int> CurrencyIDSys { get; set; }
