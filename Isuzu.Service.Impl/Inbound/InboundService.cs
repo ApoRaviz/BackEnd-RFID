@@ -20,6 +20,7 @@ using System.Security.Principal;
 using Isuzu.Repository.ItemManagement;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using System.Web.Script.Serialization;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -910,6 +911,66 @@ namespace Isuzu.Service.Impl.Inbound
 
 
             return ret;
+        }
+        public string GetRFIDInfo(ParameterSearch parameter)
+        {
+            using (var Db = new IsuzuDataContext())
+            {
+                return Db.Database.SqlQuery<string>("ProcGetRFIDInfo").FirstOrDefault();
+            }
+        }
+        public IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch, out int totalRecord)
+        {
+            string[] ms = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" };
+            string[] ml = new string[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            List<IsuzuTagReport> items = new List<IsuzuTagReport>();
+            string result = "", startDate = "", endDate = "";
+            totalRecord = 0;
+            int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
+            if (cnt != 2)
+                return null;
+
+            for (int i = 0; i < cnt; i++)
+            {
+                if (parameterSearch.Columns[i] == "startDate")
+                    startDate = parameterSearch.Keywords[i];
+                if (parameterSearch.Columns[i] == "endDate")
+                    endDate = parameterSearch.Keywords[i];
+            }
+
+            using (IsuzuDataContext db = new IsuzuDataContext())
+            {
+                result = db.Database.SqlQuery<string>("ProcGetRFIDInfoByCreateAt @StartDate,@EndDate"
+                    , new SqlParameter("@StartDate", startDate)
+                    , new SqlParameter("@EndDate", endDate)).SingleOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(result))
+            {
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                items = json_serializer.Deserialize<List<IsuzuTagReport>>(result);
+                if (items != null)
+                {
+                    items.ForEach(f =>
+                    {
+                        f.MonthName = ml[f.MonthNumber - 1];
+                    });
+                    //var q = (from p in items group p by p.YearNumber into g select new FujiTagReport(){
+                    //   YearNumber = g.Key
+                    //   , MonthName = "Total Tags"
+                    //   , MonthNumber =  0
+                    //   , ReceivedNumber = g.Sum(s => s.ReceivedNumber)
+                    //   , ShippedNumber = g.Sum(s => s.ShippedNumber)
+                    //   , TotalNumber = g.Sum(s => s.TotalNumber)
+                    //}).ToList();
+
+                    //items.AddRange(q);
+
+                }
+
+            }
+            return items;
         }
         #endregion
 

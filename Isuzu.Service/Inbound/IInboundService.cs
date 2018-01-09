@@ -40,5 +40,7 @@ namespace Isuzu.Service
         bool UpdateDeleteReason(IsuzuDeleteReason reason);
         bool UpdateQtyInboundHead(string invNo,string userUpdate);
         IsuzuDataImport OpenReadExcel(string localFileName);
+        string GetRFIDInfo(ParameterSearch parameter);
+        IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch, out int totalRecord);
     }
 }
