@@ -47,7 +47,8 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ICurrencyRepository repo = new CurrencyRepository(Db);
-                Currency = repo.GetByID(id);
+                string[] include = { "Country_MT" };
+                Currency = repo.GetWithInclude(a => a.CurrencyIDSys == id, include).First();
             }
             return Currency;
         }
