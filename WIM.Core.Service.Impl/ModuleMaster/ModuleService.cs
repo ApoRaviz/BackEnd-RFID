@@ -1,22 +1,13 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
-
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
-using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
-using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
-using WIM.Core.Service;
+using WIM.Core.Entity.Module;
 
 namespace WIM.Core.Service.Impl
 {

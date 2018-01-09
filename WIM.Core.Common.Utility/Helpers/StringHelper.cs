@@ -62,7 +62,6 @@ namespace WIM.Core.Common.Utility.Helpers
 
         public static string Hex2String(string InputText)
         {
-
             byte[] bb = Enumerable.Range(0, InputText.Length)
                              .Where(x => x % 2 == 0)
                              .Select(x => Convert.ToByte(InputText.Substring(x, 2), 16))
@@ -70,6 +69,30 @@ namespace WIM.Core.Common.Utility.Helpers
             return Encoding.ASCII.GetString(bb);
         }
 
-        
+        public static string GetRequestUrl(string fullUrl)
+        {
+            fullUrl = fullUrl.Replace("wimapi/", "");
+            string[] fullUrlSplit = fullUrl.Split('?');
+            string reqUrl = fullUrlSplit[0];          
+
+            if (reqUrl.Last() == '/')
+            {
+                reqUrl = reqUrl.Substring(0, reqUrl.Length - 1);
+
+            }
+
+            int indexFirstslash = reqUrl.IndexOf('/');
+            int indexapiv1 = reqUrl.IndexOf("/api/v1");
+            if (indexFirstslash != -1 && indexapiv1 != -1)
+            {
+                string first = reqUrl.Substring(0, indexFirstslash);
+                string second = reqUrl.Substring(indexapiv1);
+                //reqUrl = reqUrl.Substring(indexFirstslash, indexapiv1 - indexFirstslash);
+                reqUrl = first + second;
+            }
+            return reqUrl;
+        }
+
+
     }
 }

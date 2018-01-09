@@ -7,11 +7,11 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Entity.Module;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
-using WIM.Core.Service;
 
 namespace Master.WebApi.Controllers
 {
@@ -34,10 +34,8 @@ namespace Master.WebApi.Controllers
             try
             {
                 IEnumerable<Module_MT> modules =  new List<Module_MT>();
-                if (User.IsSysAdmin())
-                {
                     modules = ModuleService.GetModules();
-                }
+
                 
                 response.SetData(modules);
             }

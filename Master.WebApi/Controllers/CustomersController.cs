@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common;
-using System.Web.Http.Cors;
-using System.Threading.Tasks;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Service;
 using WIM.Core.Common.ValueObject;
@@ -234,7 +230,33 @@ namespace WMS.WebApi.Controllers
             ////return ReportUtils.ViewReport("D:\\Projects\\CustomerReport.rdlc", list.ToList<ProcGetCustomers_Result>());
             return null;
         }
+
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompleteCustomer(string term)
+        {
+            IResponseData<IEnumerable<AutocompleteCustomerDto>> response = new ResponseData<IEnumerable<AutocompleteCustomerDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteCustomerDto> customer = CustomerService.AutocompleteCustomer(term);
+                response.SetData(customer);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+
     }
+
+
 
     public class UriCustomersModel
     {

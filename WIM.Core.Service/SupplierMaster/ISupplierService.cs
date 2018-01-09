@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Service;
 
-namespace WMS.Service
+namespace WIM.Core.Service
 {
     public interface ISupplierService : IService
     {
@@ -15,6 +12,7 @@ namespace WMS.Service
         Supplier_MT GetSupplierBySupIDSys(int id);
         int CreateSupplier(Supplier_MT Supplier);
         bool UpdateSupplier(Supplier_MT Supplier);
-        bool DeleteSupplier(int id);        
+        bool DeleteSupplier(int id);
+        IEnumerable<AutocompleteSupplierDto> AutocompleteSupplier(string term);
     }
 }

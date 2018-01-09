@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity;
 using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.Dimension;
+using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.LabelManagement;
-using WIM.Core.Entity.LabelManagement.LabelConfigs;
 using WIM.Core.Entity.Logs;
 using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Entity.Module;
 using WIM.Core.Entity.Person;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.RoleAndPermission;
@@ -52,6 +48,8 @@ namespace WIM.Core.Context
         public virtual DbSet<LabelControl> LabelControl { get; set; }
         public virtual DbSet<StatusSubModules> StatusSubModule { get; set; }
         public virtual DbSet<HeadReportControl> HeadReportControl { get; set; }
+        public virtual DbSet<Positions> Positions { get; set; }
+        public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
 
         public CoreDbContext() : base("name=CORE")

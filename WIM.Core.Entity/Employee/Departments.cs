@@ -6,14 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIM.Core.Entity.Status
+namespace WIM.Core.Entity.Employee
 {
-    [Table("Module_MT")]
-    public class Module_MT : BaseEntity
+    [Table("Departments")]
+    public class Departments : BaseEntity
     {
         [Key]
-        public int ModuleIDSys { get; set; }
+        public int DepIDSys { get; set; }
+        public string DepID { get; set; }
         public string Acronym { get; set; }
-        public string ModuleName { get; set; }
+        public string DepName { get; set; }
+        public Nullable<int> ParentIDSys { get; set; }
     }
 }

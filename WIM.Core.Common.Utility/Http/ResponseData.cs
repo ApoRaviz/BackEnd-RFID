@@ -42,16 +42,13 @@ namespace WIM.Core.Common.Utility.Http
             this.Errors.Add(e);
         }
 
-        public void SetErrors(IdentityResult result)
-        {            
-            if (!result.Succeeded)
+        public void SetErrors(IEnumerable<string> errors)
+        {
+            if (errors != null)
             {
-                if (result.Errors != null)
+                foreach (string error in errors)
                 {
-                    foreach (string error in result.Errors)
-                    {
-                        this.Errors.Add(new ValidationError("400", error));
-                    }
+                    this.Errors.Add(new ValidationError("400", error));
                 }
             }
         }
