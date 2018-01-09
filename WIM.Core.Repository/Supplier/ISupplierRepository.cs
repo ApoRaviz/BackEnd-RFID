@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.SupplierManagement;
-using WIM.Core.Repository;
 
-namespace WMS.Repository
+namespace WIM.Core.Repository.Supplier
 {
     public interface ISupplierRepository : IRepository<Supplier_MT>
     {
+        IEnumerable<AutocompleteSupplierDto> AutocompleteSupplier(string term);
     }
 }

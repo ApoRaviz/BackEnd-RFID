@@ -116,12 +116,12 @@ public static class RBAC_ExtendedMethods_4_Principal
 
             string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
 
-            /*string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
+            string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
             fullUrl = fullUrl.Replace("wimapi/", "");
             string[] fullUrlplit = fullUrl.Split('?');
-            string reqUrl = fullUrlplit[0];
+            reqUrl = fullUrlplit[0];
 
-            string[] urlIgnore = {
+            /*string[] urlIgnore = {
                     "GET/api/v1/account/users/mobile/otp",
                     "POST/api/v1/account/users/mobile/otp",
                     "POST/api/v1/account/renewtoken",
@@ -201,8 +201,10 @@ public static class RBAC_ExtendedMethods_4_Principal
 
                             //bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out int reqUrlNum);
                             //bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out int permissUrlNum);
+                            string permiss = permissUrlSplit[i].ToUpper();
+                            string req = reqUrlSplit[i].ToUpper();
 
-                            if ((permissUrlSplit[i] == reqUrlSplit[i])
+                            if ((/*permissUrlSplit[i] == reqUrlSplit[i]*/ permiss == req)
                                 || (permissUrlSplit[i] == "@")
                                 || (/*isReqUrlNum && */permissUrlSplit[i] == "1"))
                             {
@@ -337,7 +339,19 @@ public static class RBAC_ExtendedMethods_4_Principal
                     //Url Ignore ChkOTP
                     "POST/api/v1/account/assignProject"
                 };
-        return urlIgnore.Contains(_request.RequestUri.PathAndQuery);
+        string reqUrlnew = _request.Method + StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
+        if (_request.RequestUri.PathAndQuery.Last() == '/')
+        {
+            reqUrlnew = _request.RequestUri.PathAndQuery.Substring(0, _request.RequestUri.PathAndQuery.Length - 1);
+
+        }
+
+        string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
+        string urlIgnoreChkOTP = "POST/api/v1/account/assignProject";
+        var ci = _principal.Identity as ClaimsIdentity;
+        string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
+          .Select(c => c.Value).SingleOrDefault();
+        return urlIgnore.Contains(reqUrlnew) || reqUrlnew.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrlnew));
     }
 
 

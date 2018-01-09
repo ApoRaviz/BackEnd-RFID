@@ -56,7 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\IReportLayoutDetailRepository.cs" />
     <Compile Include="Report\IReportLayoutHeaderRepository.cs" />
-    <Compile Include="Supplier\ISupplierRepository.cs" />
     <Compile Include="UnitMaster\IUnitRepository.cs" />
     <Compile Include="UserManagement\IUserRepository.cs" />
     <Compile Include="Warehouse\IRackLayoutRepository.cs" />

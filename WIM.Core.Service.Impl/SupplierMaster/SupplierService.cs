@@ -1,25 +1,16 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Repository;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
 using WIM.Core.Entity.SupplierManagement;
-using WMS.Context;
-using System.Security.Principal;
-using WMS.Repository.Impl;
+using WIM.Core.Repository.Impl.Supplier;
+using WIM.Core.Repository.Supplier;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.ValueObject;
 
-namespace WMS.Service
+namespace WIM.Core.Service
 { 
     public class SupplierService : WIM.Core.Service.Impl.Service, ISupplierService
     {
@@ -152,6 +143,20 @@ namespace WMS.Service
                 }
             }
         }
+
+
+        public IEnumerable<AutocompleteSupplierDto> AutocompleteSupplier(string term)
+        {
+            IEnumerable<AutocompleteSupplierDto> autocompleteItemDto;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                ISupplierRepository repo = new SupplierRepository(Db);
+                autocompleteItemDto = repo.AutocompleteSupplier(term);
+
+            }
+            return autocompleteItemDto;
+        }
+
 
     }
 }

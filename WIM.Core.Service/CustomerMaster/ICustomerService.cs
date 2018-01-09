@@ -19,5 +19,6 @@ namespace WIM.Core.Service
         int CreateCustomer(Customer_MT customer);
         bool UpdateCustomer(Customer_MT customer);
         bool DeleteCustomer(int id);
+        IEnumerable<AutocompleteCustomerDto> AutocompleteCustomer(string term);
     }
 }

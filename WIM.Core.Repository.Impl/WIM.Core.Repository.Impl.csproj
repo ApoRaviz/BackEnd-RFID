@@ -76,6 +76,7 @@
     <Compile Include="StatusManagement\StatusRepository.cs" />
     <Compile Include="StatusManagement\StatusSubModuleRepository.cs" />
     <Compile Include="StatusManagement\SubModuleRepository.cs" />
+    <Compile Include="Supplier\SupplierRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">

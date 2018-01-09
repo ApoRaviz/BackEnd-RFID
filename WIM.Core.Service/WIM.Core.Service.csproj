@@ -73,6 +73,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleMaster\IRoleService.cs" />
     <Compile Include="StatusManagement\IStatusService.cs" />
+    <Compile Include="SupplierMaster\ISupplierService.cs" />
     <Compile Include="UserMaster\IUserService.cs" />
     <Compile Include="UserRole\IUserRoleService.cs" />
   </ItemGroup>
