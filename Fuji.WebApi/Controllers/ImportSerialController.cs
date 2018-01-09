@@ -836,5 +836,20 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(respones);
 
         }
+
+        [HttpPost]
+        [Route("importSerial/GetRFIDInfoByDate")]
+        public HttpResponseMessage GetRFIDInfoByDate([FromBody]ParameterSearch query)
+        {
+            ResponseData<IEnumerable<FujiTagReport>> respones = new ResponseData<IEnumerable<FujiTagReport>>();
+            int totalRecord = 0;
+            IEnumerable<FujiTagReport> items = ItemImportService.GetReportByYearRang(query, out totalRecord);
+            respones.SetStatus(HttpStatusCode.OK);
+            respones.SetData(items);
+            return Request.ReturnHttpResponseMessage(respones);
+
+        }
+
+
     }
 }
