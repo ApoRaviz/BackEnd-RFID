@@ -205,18 +205,19 @@ namespace Master.WebApi.Controllers
                     Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                     Json.Add("status", "200");
                 }
-                else if (DateTime.Now.AddMinutes(-2) > users.KeyOTPDate)
-                {
-
-                    Json.Add("message", "OTP Expires");
-                    Json.Add("status", "4011");
-                }
                 else if (!OTPClaimBinding.OTP.Equals(users.KeyOTP))
                 {
 
                     Json.Add("message", "OTP Invalid");
                     Json.Add("status", "4012");
                 }
+                else if (DateTime.Now.AddMinutes(-2) > users.KeyOTPDate)
+                {
+
+                    Json.Add("message", "OTP Expires");
+                    Json.Add("status", "4011");
+                }
+                
 
                 response.SetData(Json);
             }
@@ -229,7 +230,7 @@ namespace Master.WebApi.Controllers
         }
 
 
-
+        [Authorize]
         [HttpPost]
         [Route("renewtoken")]
         public async Task<HttpResponseMessage> ReTokenAsy([FromBody]ParamReToken param)

@@ -34,6 +34,7 @@ namespace WIM.Core.Entity.ProjectManagement
         public Nullable<int> ModuleIDSys { get; set; }
         public string ProjectStatus { get; set; }
         public string Config { get; private set; }
+        public bool IsOTP { get; set; }
 
         [NotMapped]
         public ProjectConfig ProjectConfig
