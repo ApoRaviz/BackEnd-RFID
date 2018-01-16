@@ -116,12 +116,12 @@ public static class RBAC_ExtendedMethods_4_Principal
 
             string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
 
-            /*string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
+            string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
             fullUrl = fullUrl.Replace("wimapi/", "");
             string[] fullUrlplit = fullUrl.Split('?');
-            string reqUrl = fullUrlplit[0];
-
-            string[] urlIgnore = {
+            reqUrl = fullUrlplit[0];
+            string UpperReqUrl = reqUrl.ToUpper();
+            /*string[] urlIgnore = {
                     "GET/api/v1/account/users/mobile/otp",
                     "POST/api/v1/account/users/mobile/otp",
                     "POST/api/v1/account/renewtoken",
@@ -177,17 +177,18 @@ public static class RBAC_ExtendedMethods_4_Principal
 
             //url request
             string[] reqUrlSplit = reqUrl.Split('/');
-            if (reqUrlSplit.Length >= 4)
+            string[] upperReqUrlSplit = UpperReqUrl.Split('/');
+            if (upperReqUrlSplit.Length >= 4)
             {
                 foreach (var c in claims)
                 {
                     //url from base
                     string[] permissions = c.Value.Split('/');
-                    string permission = permissions[0] + ApiHashTableHelper.apiTable[permissions[1]];
+                    string permission = permissions[0] + ApiHashTableHelper.apiTable[permissions[1]].ToString().ToUpper();
                     string[] permissUrlSplit = permission.Split('/');
 
                     string urlVerify = "";
-                    if ((permissUrlSplit[0] == reqUrlSplit[0] && permissUrlSplit[3] == reqUrlSplit[3] && permissUrlSplit.Length == reqUrlSplit.Length))
+                    if ((permissUrlSplit[0] == upperReqUrlSplit[0] && permissUrlSplit[3] == upperReqUrlSplit[3] && permissUrlSplit.Length == upperReqUrlSplit.Length))
                     //|| (reqUrlSplit[0]=="POST" && permissUrlSplit[3] == reqUrlSplit[3]))
                     {
                         bool isUrlNotEqual = false;
@@ -202,7 +203,7 @@ public static class RBAC_ExtendedMethods_4_Principal
                             //bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out int reqUrlNum);
                             //bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out int permissUrlNum);
 
-                            if ((permissUrlSplit[i] == reqUrlSplit[i])
+                            if ((permissUrlSplit[i] == upperReqUrlSplit[i])
                                 || (permissUrlSplit[i] == "@")
                                 || (/*isReqUrlNum && */permissUrlSplit[i] == "1"))
                             {
@@ -337,7 +338,19 @@ public static class RBAC_ExtendedMethods_4_Principal
                     //Url Ignore ChkOTP
                     "POST/api/v1/account/assignProject"
                 };
-        return urlIgnore.Contains(_request.RequestUri.PathAndQuery);
+        string reqUrlnew = _request.Method + StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
+        if (_request.RequestUri.PathAndQuery.Last() == '/')
+        {
+            reqUrlnew = _request.RequestUri.PathAndQuery.Substring(0, _request.RequestUri.PathAndQuery.Length - 1);
+
+        }
+
+        string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
+        string urlIgnoreChkOTP = "POST/api/v1/account/assignProject";
+        var ci = _principal.Identity as ClaimsIdentity;
+        string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
+          .Select(c => c.Value).SingleOrDefault();
+        return urlIgnore.Contains(reqUrlnew) || reqUrlnew.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrlnew));
     }
 
 

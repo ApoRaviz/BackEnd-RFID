@@ -41,5 +41,6 @@ namespace Fuji.Service.ItemImport
         string GetRFIDInfo(ParameterSearch parameter);
         int SetSerial2Box(string boxNumberFrom, string boxNumberTo, ItemGroupRequest ItemGroup, string emID);
         int SetBox2Location(string locationTo, ItemGroupRequest boxList, string emID);
+        IEnumerable<FujiTagReport> GetReportByYearRang(ParameterSearch parameterSearch, out int totalRecord);
     }
 }

@@ -29,6 +29,7 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
 using System.Runtime.Caching;
 using WIM.Core.Entity.Logs;
+using System.Web.Script.Serialization;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -418,14 +419,12 @@ namespace Fuji.Service.Impl.ItemImport
 
 
 
-        public IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 200)
+        public IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 50)
         {
             List<FujiPickingGroup> items = new List<FujiPickingGroup>();
             using (FujiDbContext Db = new FujiDbContext())
             {
-                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
-
-                var selectedData = (from p in SerialDetailRepo.GetAll() where p.Status == FujiStatus.IMP_PICKING.ToString() select new { OrderNo = p.OrderNo, UpdateAt = p.UpdateAt }).ToList();
+                var selectedData = (from p in Db.ImportSerialDetail where p.Status == FujiStatus.IMP_PICKING.ToString() select new { OrderNo = p.OrderNo, UpdateAt = p.UpdateAt }).ToList();
 
 
                 var itemGroups = (from p in selectedData
@@ -1545,6 +1544,60 @@ namespace Fuji.Service.Impl.ItemImport
 
             }
             return 1;
+        }
+
+        public IEnumerable<FujiTagReport> GetReportByYearRang(ParameterSearch parameterSearch, out int totalRecord)
+        {
+            string[] ms = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" };
+            string[] ml = new string[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            List<FujiTagReport> items = new List<FujiTagReport>();
+            string result = "", startDate = "", endDate = "";
+            totalRecord = 0;
+            int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
+            if (cnt != 2)
+                return null;
+
+            for (int i = 0; i < cnt; i++)
+            {
+                if (parameterSearch.Columns[i] == "startDate")
+                    startDate = parameterSearch.Keywords[i];
+                if (parameterSearch.Columns[i] == "endDate")
+                    endDate = parameterSearch.Keywords[i];
+            }
+
+            using (FujiDbContext db = new FujiDbContext())
+            {
+                result = db.Database.SqlQuery<string>("ProcGetRFIDInfoByCreateAt @StartDate,@EndDate"
+                    , new SqlParameter("@StartDate", startDate)
+                    , new SqlParameter("@EndDate", endDate)).SingleOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(result))
+            {
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                items = json_serializer.Deserialize<List<FujiTagReport>>(result);
+                if (items != null)
+                {
+                    items.ForEach(f =>
+                    {
+                        f.MonthName = ml[f.MonthNumber - 1];
+                    });
+                    //var q = (from p in items group p by p.YearNumber into g select new FujiTagReport(){
+                    //   YearNumber = g.Key
+                    //   , MonthName = "Total Tags"
+                    //   , MonthNumber =  0
+                    //   , ReceivedNumber = g.Sum(s => s.ReceivedNumber)
+                    //   , ShippedNumber = g.Sum(s => s.ShippedNumber)
+                    //   , TotalNumber = g.Sum(s => s.TotalNumber)
+                    //}).ToList();
+
+                    //items.AddRange(q);
+
+                }
+
+            }
+            return items;
         }
     }
 }
