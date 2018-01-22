@@ -31,6 +31,7 @@ namespace WIM.Core.Entity.MenuManagement
 
         public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
+        [ForeignKey("ModuleIDSys")]
         public virtual Module_MT Module_MT { get; set; }
     }
 }

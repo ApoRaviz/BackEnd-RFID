@@ -21,6 +21,7 @@ namespace WIM.Core.Common
     using WIM.Core.Context;
     using System.Collections.Generic;
     using WMS.Context;
+    using WIM.Core.Entity;
 
     public partial class CommonContext : DbContext
     {
@@ -133,6 +134,21 @@ namespace WIM.Core.Common
                     }
 
                 }
+            if (x != null)
+            {
+                x.RemoveAll(a => a.Column_Name.Contains("IDSys"));
+                var exclude = (new BaseEntity()).GetType().GetProperties();
+                foreach(var prop in exclude)
+                {
+                    var index = x.FindIndex(a => a.Column_Name == prop.Name);
+                    if(index != -1)
+                    {
+                        x.RemoveAt(index);
+                    }
+                }
+
+            }
+            
             return x;
             
         }

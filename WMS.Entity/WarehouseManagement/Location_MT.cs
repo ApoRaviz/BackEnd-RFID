@@ -28,6 +28,7 @@ namespace WMS.Entity.WarehouseManagement
         public float Height { get; set; }
         public int CateIDSys { get; set; }
 
+        [ForeignKey("CateIDSys")]
         public virtual Category_MT Category_MT { get; set; }
     }
 }

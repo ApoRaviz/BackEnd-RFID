@@ -29,6 +29,7 @@ namespace WMS.Entity.WarehouseManagement
         public Nullable<int> Length { get; set; }
         public string Use { get; set; }
 
+        [ForeignKey("ZoneIDSys")]
         public virtual ZoneLayoutHeader_MT ZoneLayoutHeader_MT { get; set; }
     }
 }

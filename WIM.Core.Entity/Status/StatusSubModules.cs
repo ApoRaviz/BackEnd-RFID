@@ -18,7 +18,9 @@ namespace WIM.Core.Entity.Status
         [Column(Order = 2)]
         public int SubModuleIDSys { get; set; }
 
+        [ForeignKey("SubModuleIDSys")]
         public virtual SubModules SubModule { get; set; }
+        [ForeignKey("StatusIDSys")]
         public virtual Status_MT Status_MT { get; set; }
     }
 }

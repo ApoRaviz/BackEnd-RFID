@@ -31,13 +31,40 @@ namespace WMS.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetHeader/{ForTable}")]
+        [Route("GetHeader/{forTable}")]
         public HttpResponseMessage Get(string forTable)
         {
-            ResponseData<IEnumerable<ReportLayoutHeader_MT>> response = new ResponseData<IEnumerable<ReportLayoutHeader_MT>>();
+            ResponseData<IEnumerable<ReportLayout_MT>> response = new ResponseData<IEnumerable<ReportLayout_MT>>();
             try
             {
-                IEnumerable<ReportLayoutHeader_MT> header = ReportService.GetAllReportHeader(forTable);
+                IEnumerable<ReportLayout_MT> header;
+                if (User.IsSysAdmin())
+                {
+                    header = ReportService.GetAllReportHeader(0);
+                }
+                else
+                {
+                    header = ReportService.GetAllReportHeader(User.Identity.GetProjectIDSys());
+                }
+
+                header = header.Select(a => new ReportLayout_MT()
+                {
+                    ReportIDSys = a.ReportIDSys,
+                    FormatName = a.FormatName,
+                    ReportDetail = new ReportDetail()
+                    {
+                        FormatType = a.ReportDetail.FormatType,
+                        AddHeaderLayout = a.ReportDetail.AddHeaderLayout,
+                        Delimiter = a.ReportDetail.Delimiter,
+                        Encoding = a.ReportDetail.Encoding,
+                        FileExtention = a.ReportDetail.FileExtention,
+                        TextGualifier = a.ReportDetail.TextGualifier,
+                        StartExportRow = a.ReportDetail.StartExportRow,
+                        IncludeHeader = a.ReportDetail.IncludeHeader
+                        
+                    }
+                });
+
                 response.SetData(header);
             }
             catch (ValidationException ex)
@@ -53,11 +80,10 @@ namespace WMS.WebApi.Controllers
         [Route("{ReportIDSys}")]
         public HttpResponseMessage Get(int ReportIDSys)
         {
-            IResponseData<ReportLayoutHeader_MT> response = new ResponseData<ReportLayoutHeader_MT>();
+            IResponseData<ReportLayout_MT> response = new ResponseData<ReportLayout_MT>();
             try
             {
-                ReportLayoutHeader_MT report = ReportService.GetReportLayoutByReportIDSys(ReportIDSys, "ReportLayoutDetail_MT");
-                report.ReportLayoutDetail_MT = report.ReportLayoutDetail_MT.OrderBy(x => x.ColumnOrder).ToList();
+                ReportLayout_MT report = ReportService.GetReportLayoutByReportIDSys(ReportIDSys);
                 response.SetData(report);
             }
             catch (ValidationException ex)
@@ -70,13 +96,13 @@ namespace WMS.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]ReportLayoutHeader_MT data)
+        public HttpResponseMessage Post([FromBody]ReportLayout_MT data)
         {
             IResponseData<int> response = new ResponseData<int>();
             try
             {
                 data.UpdateBy = User.Identity.Name;               
-                int id = ReportService.CreateReportForItemMaster(data).Value;
+                int id = ReportService.CreateReportForItemMaster(data);
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -89,7 +115,7 @@ namespace WMS.WebApi.Controllers
 
         [HttpPut]
         [Route("{ReportIDSys}")]
-        public HttpResponseMessage Put(int ReportIDSys, [FromBody]ReportLayoutHeader_MT data)
+        public HttpResponseMessage Put(int ReportIDSys, [FromBody]ReportLayout_MT data)
         {
             IResponseData<bool> response = new ResponseData<bool>();
 
@@ -111,7 +137,7 @@ namespace WMS.WebApi.Controllers
         [Route("GetItemReport/{ReportIDSys}")]
         public HttpResponseMessage GetItemReport(int ReportIDSys)
         {
-            ReportLayoutHeader_MT report = ReportService.GetReportLayoutByReportIDSys(ReportIDSys, "ReportLayoutDetail_MT");
+            ReportLayout_MT report = ReportService.GetReportLayoutByReportIDSys(ReportIDSys);
             DataTable dt = this.ReportService.GetReportData(ReportIDSys);
 
             ReportUtils.GetExportReport("ItemMasterReport", report, dt);
@@ -124,7 +150,7 @@ namespace WMS.WebApi.Controllers
         [Route("GetSupplierReport/{ReportIDSys}")]
         public HttpResponseMessage GetSupplierReport(int ReportIDSys)
         {
-            ReportLayoutHeader_MT report = ReportService.GetReportLayoutByReportIDSys(ReportIDSys, "ReportLayoutDetail_MT");
+            ReportLayout_MT report = ReportService.GetReportLayoutByReportIDSys(ReportIDSys);
             DataTable dt = this.ReportService.GetReportData(ReportIDSys);
 
             ReportUtils.GetExportReport("SupplierMasterReport", report, dt);

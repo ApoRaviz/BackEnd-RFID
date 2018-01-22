@@ -36,6 +36,7 @@ namespace WMS.Context
         public DbSet<ItemInspectMapping> ItemInspectMapping { get; set; }
         public DbSet<ItemUnitMapping> ItemUnitMapping { get; set; }
         public DbSet<ReportLayoutHeader_MT> ReportLayoutHeader_MT { get; set; }
+        public DbSet<ReportLayout_MT> ReportLayout_MT { get; set; }
         public DbSet<Location_MT> Location_MT { get; set; }
         public DbSet<Supplier_MT> Supplier_MT { get; set; }
         public DbSet<ZoneLayoutHeader_MT> ZoneLayoutHeader_MT { get; set; }

@@ -21,6 +21,7 @@ namespace WIM.Core.Entity.RoleAndPermission
         public bool IsSysAdmin { get; set; }
         public int ProjectIDSys { get; set; }
 
+        [ForeignKey("ProjectIDSys")]
         public virtual Project_MT Project_MT { get; set; }
         public virtual ICollection<UserRoles> UserRoles { get; set; }
     }

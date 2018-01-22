@@ -104,6 +104,7 @@
     <Compile Include="Handlers\ApiLogHandler.cs" />
     <Compile Include="Helpers\ApiHashTableHelper.cs" />
     <Compile Include="Helpers\AuthHelper.cs" />
+    <Compile Include="Helpers\TableHashTableHelper.cs" />
     <Compile Include="ICommonService.cs" />
     <Compile Include="IResourceItem.cs" />
     <Compile Include="ProcGetTableColumnsDescription_Result.cs">

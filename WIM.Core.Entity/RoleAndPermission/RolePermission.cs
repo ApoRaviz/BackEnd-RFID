@@ -17,8 +17,9 @@ namespace WIM.Core.Entity.RoleAndPermission
         [Key]
         [Column(Order = 2)]
         public string PermissionID { get; set; }
-
+        [ForeignKey("PermissionID")]
         public virtual Permission Permission { get; set; }
+        [ForeignKey("RoleID")]
         public virtual Role Role { get; set; }
     }
 }

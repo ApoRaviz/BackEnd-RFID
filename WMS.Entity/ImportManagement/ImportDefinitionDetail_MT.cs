@@ -24,6 +24,7 @@ namespace WMS.Entity.ImportManagement
         public int Digits { get; set; }
         public string DataType { get; set; }
 
+        [ForeignKey("ImportIDSys")]
         public virtual ImportDefinitionHeader_MT ImportDefinitionHeader_MT { get; set; }
     }
 }

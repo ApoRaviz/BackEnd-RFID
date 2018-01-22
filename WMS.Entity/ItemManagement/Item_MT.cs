@@ -57,9 +57,12 @@ namespace WMS.Entity.ItemManagement
         public Nullable<byte> InspectTypeIDSys { get; set; }
 
         public virtual ICollection<ItemInspectMapping> ItemInspectMapping { get; set; }
+        [ForeignKey("ProjectIDSys")]
         public virtual Project_MT Project_MT { get; set; }
+        [ForeignKey("SupIDSys")]
         public virtual Supplier_MT Supplier_MT { get; set; }
         public virtual ICollection<ItemUnitMapping> ItemUnitMapping { get; set; }
+        [ForeignKey("ItemSetIDSys")]
         public virtual ICollection<ItemSetDetail> ItemSetDetails { get; set; }
     }
 }

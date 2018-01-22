@@ -18,7 +18,9 @@ namespace WMS.Entity.ItemManagement
         public int ItemIDSys { get; set; }
         public int Qty { get; set; }
 
+        [ForeignKey("ItemIDSys")]
         public virtual Item_MT Item_MT { get; set; }
+        [ForeignKey("ItemSetIDSys")]
         public virtual ItemSet_MT ItemSet_MT { get; set; }
     }
 }

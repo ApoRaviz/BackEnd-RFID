@@ -52,6 +52,7 @@
     <Compile Include="LocationDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierDto.cs" />
+    <Compile Include="TableColumnDetail.cs" />
     <Compile Include="UnitDto.cs" />
   </ItemGroup>
   <ItemGroup>
