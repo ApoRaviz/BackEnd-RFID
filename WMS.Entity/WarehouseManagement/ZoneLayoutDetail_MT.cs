@@ -28,6 +28,7 @@ namespace WMS.Entity.WarehouseManagement
         public Nullable<int> Width { get; set; }
         public Nullable<int> Length { get; set; }
         public string Use { get; set; }
+        public Nullable<int> Type { get; set; }
 
         public virtual ZoneLayoutHeader_MT ZoneLayoutHeader_MT { get; set; }
     }

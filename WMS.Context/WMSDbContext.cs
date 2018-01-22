@@ -671,7 +671,7 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RackLayout>("ProcGetRackLayoutByZoneIDSys", zoneIDSysParameter);
         }
 
-        public Nullable<int> ProcCreateZoneLayout(string zoneName, string warehouse, string area, Nullable<int> totalFloor, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        public Nullable<int> ProcCreateZoneLayout(string zoneName, string warehouse, string area, Nullable<int> totalFloor, string userUpdate, string xmlDetail)
         {
             var zoneNameParameter = zoneName != null ? new SqlParameter
             {
@@ -697,24 +697,17 @@ namespace WMS.Context
                 Value = totalFloor
             } : new SqlParameter("TotalFloor", 0);
 
-            var createdDateParameter = createdDate.HasValue ? new SqlParameter
+            var createByParameter = userUpdate != null ? new SqlParameter
             {
-                ParameterName = "CreatedDate",
-                Value = createdDate
-            } : new SqlParameter("CreatedDate", DateTime.Now);
-
-            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
-            {
-                ParameterName = "UpdatedDate",
-                Value = updatedDate
-            } : new SqlParameter("UpdatedDate", DateTime.Now);
-
-
-            var userUpdateParameter = userUpdate != null ? new SqlParameter
-            {
-                ParameterName = "UserUpdate",
+                ParameterName = "CreateBy",
                 Value = userUpdate
-            } : new SqlParameter("UserUpdate", DBNull.Value);
+            } : new SqlParameter("CreateBy", DBNull.Value);
+
+            var updateByParameter = userUpdate != null ? new SqlParameter
+            {
+                ParameterName = "UpdateBy",
+                Value = userUpdate
+            } : new SqlParameter("UpdateBy", DBNull.Value);
 
             var xmlDetailParameter = new SqlParameter
             {
@@ -722,12 +715,25 @@ namespace WMS.Context
                 Value = xmlDetail
             };
 
-            return Database.SqlQuery<Nullable<int>>("exec ProcCreateZoneLayout @ZoneName , @Warehouse ,@Area ," +
-                "@TotalFloor ,@CreatedDate , @UpdatedDate ,@UserUpdate ", zoneNameParameter, warehouseParameter, areaParameter, totalFloorParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+            var createAtParameter = new SqlParameter("CreateAt", DateTime.Now);
+            var updateAtParameter = new SqlParameter("UpdateAt", DateTime.Now);
+            var isActiveParameter = new SqlParameter("IsActive", true);
+
+            return Database.SqlQuery<Nullable<int>>("exec ProcCreateZoneLayout @ZoneName , @Warehouse ,@Area ,@TotalFloor ,@CreateAt, @CreateBy , @UpdateAt ,@UpdateBy ,@IsActive,@XmlDetail "
+                , zoneNameParameter
+                , warehouseParameter
+                , areaParameter
+                , totalFloorParameter
+                , createAtParameter
+                , createByParameter
+                , updateAtParameter
+                , updateByParameter
+                , isActiveParameter
+                , xmlDetailParameter).FirstOrDefault();
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateZoneLayout", zoneNameParameter, warehouseParameter, areaParameter, totalFloorParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public object ProcUpdateZoneLayout(Nullable<int> zoneIDSys, string zoneName, string warehouse, string area, Nullable<int> totalFloor, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        public object ProcUpdateZoneLayout(Nullable<int> zoneIDSys, string zoneName, string warehouse, string area, Nullable<int> totalFloor, string userUpdate, string xmlDetail)
         {
             var zoneIDSysParameter = zoneIDSys.HasValue ? new SqlParameter
             {
@@ -759,18 +765,11 @@ namespace WMS.Context
                 Value = totalFloor
             } : new SqlParameter("TotalFloor", 0);
 
-            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
+            var updateByParameter = userUpdate != null ? new SqlParameter
             {
-                ParameterName = "UpdatedDate",
-                Value = updatedDate
-            } : new SqlParameter("UpdatedDate", DateTime.Now);
-
-
-            var userUpdateParameter = userUpdate != null ? new SqlParameter
-            {
-                ParameterName = "UserUpdate",
+                ParameterName = "UpdateBy",
                 Value = userUpdate
-            } : new SqlParameter("UserUpdate", DBNull.Value);
+            } : new SqlParameter("UpdateBy", DBNull.Value);
 
             var xmlDetailParameter = new SqlParameter
             {
@@ -778,8 +777,19 @@ namespace WMS.Context
                 Value = xmlDetail
             };
 
-            return Database.SqlQuery<object>("exec ProcCreateZoneLayout @ZoneIDSys, @ZoneName , @Warehouse ,@Area ," +
-                "@TotalFloor , @UpdatedDate ,@UserUpdate , @XmlDetail ", zoneIDSysParameter, zoneNameParameter, warehouseParameter, areaParameter, totalFloorParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+            var updateAtParameter = new SqlParameter("UpdateAt", DateTime.Now);
+            var isActiveParamerter = new SqlParameter("IsActive", true);
+
+            return Database.SqlQuery<object>("exec ProcUpdateZoneLayout @ZoneIDSys, @ZoneName , @Warehouse ,@Area ,@TotalFloor , @UpdateAt ,@UpdateBy,@IsActive , @XmlDetail "
+                , zoneIDSysParameter
+                , zoneNameParameter
+                , warehouseParameter
+                , areaParameter
+                , totalFloorParameter
+                , updateAtParameter
+                , updateByParameter
+                , isActiveParamerter
+                , xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateZoneLayout", zoneIDSysParameter, zoneNameParameter, warehouseParameter, areaParameter, totalFloorParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }

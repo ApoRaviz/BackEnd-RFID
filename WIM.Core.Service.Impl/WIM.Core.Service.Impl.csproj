@@ -78,6 +78,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="StatusManagement\StatusService.cs" />
     <Compile Include="SupplierMaster\SupplierService.cs" />
+    <Compile Include="Common\CommonService.cs" />
     <Compile Include="UserMaster\UserService.cs" />
     <Compile Include="UserRole\UserRoleService.cs" />
   </ItemGroup>
@@ -126,5 +127,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,6 +10,7 @@ using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.LabelManagement;
+using WIM.Core.Entity.Common;
 using WIM.Core.Entity.Logs;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.Module;
@@ -51,6 +52,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Positions> Positions { get; set; }
         public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
+        public virtual DbSet<UserLog> UserLogs { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {

@@ -73,6 +73,7 @@
     <Compile Include="StatusManagement\IStatusSubModuleRepositoy.cs" />
     <Compile Include="StatusManagement\ISubModuleRepository.cs" />
     <Compile Include="Supplier\ISupplierRepository.cs" />
+    <Compile Include="Common\ICommonRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

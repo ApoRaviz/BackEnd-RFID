@@ -11,6 +11,8 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace Fuji.WebApi
 {
@@ -45,7 +47,7 @@ namespace Fuji.WebApi
             //container.RegisterType<ICustomerService, CustomerService>();
             //container.RegisterType<IProjectService, ProjectService>();
             //container.RegisterType<IUserService, UserService>();
-            //container.RegisterType<ICommonService, CommonService>();
+            container.RegisterType<ICommonService, CommonService>();
         }
     }
 }
