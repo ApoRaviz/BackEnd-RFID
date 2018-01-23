@@ -9,8 +9,8 @@ using System.Web.Http.Cors;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using WIM.Core.Common.Handlers;
 using WIM.WebApi.Auth;
+using Master.WebApi.Controllers;
 
 namespace Master.WebApi
 {

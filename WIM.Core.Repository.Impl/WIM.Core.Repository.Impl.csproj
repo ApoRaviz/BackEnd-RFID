@@ -77,6 +77,7 @@
     <Compile Include="StatusManagement\StatusSubModuleRepository.cs" />
     <Compile Include="StatusManagement\SubModuleRepository.cs" />
     <Compile Include="Supplier\SupplierRepository.cs" />
+    <Compile Include="Common\CommonRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
@@ -112,5 +113,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

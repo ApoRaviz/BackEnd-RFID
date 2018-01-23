@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 //using Fuji.WebApi.Controllers;
 using WIM.WebApi.Auth;
-using WIM.Core.Common.Handlers;
+using Fuji.WebApi.Controllers;
 
 namespace Fuji.WebApi
 {

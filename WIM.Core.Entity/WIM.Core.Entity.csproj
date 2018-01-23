@@ -61,6 +61,7 @@
     <Compile Include="LabelManagement\LabelConfigs\LabelConfig.cs" />
     <Compile Include="LabelManagement\LabelControl.cs" />
     <Compile Include="Logs\GeneralLog.cs" />
+    <Compile Include="Common\UserLogs.cs" />
     <Compile Include="MenuManagement\ApiMenuMapping.cs" />
     <Compile Include="MenuManagement\Api_MT.cs" />
     <Compile Include="MenuManagement\MenuProjectMapping.cs" />

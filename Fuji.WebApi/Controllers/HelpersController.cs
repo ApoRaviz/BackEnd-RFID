@@ -10,6 +10,8 @@ using System.Data.Entity;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Service;
+using WIM.Core.Common.ValueObject;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -52,10 +54,10 @@ namespace Fuji.WebApi.Controllers
         [Route("tableColumnsDescription/{tableName}")]
         public HttpResponseMessage TableColumnsDescription(string tableName)
         {
-            IResponseData<IEnumerable<ProcGetTableColumnsDescription_Result>> response = new ResponseData<IEnumerable<ProcGetTableColumnsDescription_Result>>();
+            IResponseData<IEnumerable<TableColumnsDescription>> response = new ResponseData<IEnumerable<TableColumnsDescription>>();
             try
             {
-                IList<ProcGetTableColumnsDescription_Result> tableColsDescription = CommonService.GetTableColumnsDescription(tableName);
+                IEnumerable<TableColumnsDescription> tableColsDescription = CommonService.GetTableColumnsDescription(tableName);
                 response.SetData(tableColsDescription);
             }
             catch (ValidationException ex)

@@ -1,21 +1,29 @@
-﻿using Newtonsoft.Json;
+﻿using Master.WebApi.Models.DeligateHandle;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Routing;
+using System.Web.SessionState;
 using WIM.Core.Common;
+using WIM.Core.Entity.Common;
+using WIM.Core.Entity.Logs;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
 {
     public class ApiLogHandler : DelegatingHandler
     {
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+
             var userLogEntry = CreateUserLogEntryWithRequestData(request);
             if (request.Content != null)
             {
@@ -94,5 +102,7 @@ namespace Master.WebApi.Controllers
 
             return JsonConvert.SerializeObject(dict, Formatting.Indented);
         }
+
+
     }    
 }

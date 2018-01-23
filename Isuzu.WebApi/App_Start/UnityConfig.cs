@@ -33,7 +33,7 @@ namespace Isuzu.WebApi
             container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
 
             //Register Service
-            //container.RegisterType<ICommonService, CommonService>();
+            container.RegisterType<ICommonService, CommonService>();
             //container.RegisterType<ICustomerService, CustomerService>();
             //container.RegisterType<IProjectService, ProjectService>();
             //container.RegisterType<ICategoryService, CategoryService>();

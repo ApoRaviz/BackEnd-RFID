@@ -419,14 +419,12 @@ namespace Fuji.Service.Impl.ItemImport
 
 
 
-        public IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 200)
+        public IEnumerable<FujiPickingGroup> GetPickingGroup(int max = 50)
         {
             List<FujiPickingGroup> items = new List<FujiPickingGroup>();
             using (FujiDbContext Db = new FujiDbContext())
             {
-                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
-
-                var selectedData = (from p in SerialDetailRepo.GetAll() where p.Status == FujiStatus.IMP_PICKING.ToString() select new { OrderNo = p.OrderNo, UpdateAt = p.UpdateAt }).ToList();
+                var selectedData = (from p in Db.ImportSerialDetail where p.Status == FujiStatus.IMP_PICKING.ToString() select new { OrderNo = p.OrderNo, UpdateAt = p.UpdateAt }).ToList();
 
 
                 var itemGroups = (from p in selectedData
