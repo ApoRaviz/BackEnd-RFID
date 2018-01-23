@@ -31,7 +31,7 @@ namespace WIM.Core.Entity.MenuManagement
         public byte[] MenuPic { get; set; }
         public int MenuIDSysParent { get; set; }
 
-        [ForeignKey("MenuIDSysParent")]
+        [ForeignKey("MenuIDSys")]
         public virtual Menu_MT Menu_MT { get; set; }
         [ForeignKey("ProjectIDSys")]
         public virtual Project_MT Project_MT { get; set; }

@@ -374,6 +374,7 @@ namespace WIM.Core.Service.Impl
         {
             IEnumerable<MenuProjectMappingDto> MenuProjectMappingdto;
             IMenuProjectMappingRepository repo = new MenuProjectMappingRepository(x);
+            var something = repo.GetMenuProject(id).ToList();
             MenuProjectMappingdto = repo.GetMenuProject(id)
            .Select(b => new MenuProjectMappingDto()
            {
