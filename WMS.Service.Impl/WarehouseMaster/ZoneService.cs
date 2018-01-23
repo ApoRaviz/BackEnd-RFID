@@ -77,8 +77,6 @@ namespace WMS.Service.Impl.WarehouseMaster
             foreach (ZoneLayoutDetail_MT d in data.detail)
             {
                 d.IsActive = true;
-                d.CreateAt = DateTime.Now;
-                d.UpdateAt = DateTime.Now;
                 d.UpdateBy = Identity.Name;
                 sb.AppendFormat(pXmlDetail
                     , d.ZoneID.ToString()
