@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WIM.Core.Common;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.Common;
 

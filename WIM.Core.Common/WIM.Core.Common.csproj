@@ -83,65 +83,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonContext.cs" />
-    <Compile Include="CommonDataModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CommonDataModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CommonDataModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CommonDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CommonDataModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CommonDataModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="CommonService.cs" />
     <Compile Include="HandheldErrorLog.cs" />
-    <Compile Include="Handlers\ApiLogHandler.cs" />
     <Compile Include="Helpers\ApiHashTableHelper.cs" />
     <Compile Include="Helpers\AuthHelper.cs" />
     <Compile Include="Helpers\TableHashTableHelper.cs" />
-    <Compile Include="ICommonService.cs" />
     <Compile Include="IResourceItem.cs" />
-    <Compile Include="ProcGetTableColumnsDescription_Result.cs">
-      <DependentUpon>CommonDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProcGetUserLog_Result.cs">
-      <DependentUpon>CommonDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserLog.cs">
-      <DependentUpon>CommonDataModel.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="CommonDataModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CommonDataModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="CommonDataModel.edmx.diagram">
-      <DependentUpon>CommonDataModel.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CommonDataModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CommonDataModel.Context.cs</LastGenOutput>
-      <DependentUpon>CommonDataModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="CommonDataModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CommonDataModel.edmx</DependentUpon>
-      <LastGenOutput>CommonDataModel.cs</LastGenOutput>
-    </Content>
     <Content Include="DllLibrary\BarcodeLib.dll" />
     <Content Include="DllLibrary\EPPlus.dll" />
     <Content Include="DllLibrary\OnBarcode.Barcode.ASPNET.dll" />
