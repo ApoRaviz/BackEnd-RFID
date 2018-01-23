@@ -59,7 +59,9 @@ namespace WIM.Core.Entity.ProjectManagement
 
         public virtual ICollection<Role> Roles { get; set; }
 
+        [ForeignKey("CusIDSys")]
         public virtual Customer_MT Customer_MT { get; set; }
+
 
     }       
 }

@@ -24,6 +24,7 @@ namespace WMS.Entity.ItemManagement
         public string UnitID { get; set; }
         public string UnitName { get; set; }
 
+        [ForeignKey("ProjectIDSys")]
         public virtual Project_MT Project_MT { get; set; }
         public virtual ICollection<ItemUnitMapping> ItemUnitMapping { get; set; }
     }

@@ -36,6 +36,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -61,8 +64,14 @@
     <Compile Include="LayoutManagement\LabelLayoutDetail_MT.cs" />
     <Compile Include="LayoutManagement\LabelLayoutHeader_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\ReportDetail\ColumnDetail.cs" />
+    <Compile Include="Report\ReportDetail\FilterDetail.cs" />
+    <Compile Include="Report\ReportDetail\OperationDetail.cs" />
+    <Compile Include="Report\ReportDetail\TableDetail.cs" />
+    <Compile Include="Report\ReportDetail\ReportDetail.cs" />
     <Compile Include="Report\ReportLayoutDetail_MT.cs" />
     <Compile Include="Report\ReportLayoutHeader_MT.cs" />
+    <Compile Include="Report\ReportLayout_MT.cs" />
     <Compile Include="WarehouseManagement\Location_MT.cs" />
     <Compile Include="WarehouseManagement\RackLayout.cs" />
     <Compile Include="WarehouseManagement\RackLayout_MT.cs" />
@@ -76,6 +85,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>

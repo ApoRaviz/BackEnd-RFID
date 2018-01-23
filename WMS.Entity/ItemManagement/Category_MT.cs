@@ -26,6 +26,7 @@ namespace WMS.Entity.ItemManagement
         public string CateID { get; set; }
         public string CateName { get; set; }
 
+        [ForeignKey("ProjectIDSys")]
         public virtual Project_MT Project_MT { get; set; }
         
         //public virtual ICollection<Location_MT> Location_MT { get; set; }

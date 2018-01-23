@@ -56,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\IReportLayoutDetailRepository.cs" />
     <Compile Include="Report\IReportLayoutHeaderRepository.cs" />
+    <Compile Include="Report\IReportLayoutRepository.cs" />
     <Compile Include="UnitMaster\IUnitRepository.cs" />
     <Compile Include="UserManagement\IUserRepository.cs" />
     <Compile Include="Warehouse\IRackLayoutRepository.cs" />
@@ -83,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="CategoryMaster\packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
