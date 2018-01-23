@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Routing;
+using WIM.Core.Entity.Common;
 
 namespace WIM.Core.Common.Handlers
 {
