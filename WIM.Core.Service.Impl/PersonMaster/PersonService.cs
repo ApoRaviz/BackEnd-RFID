@@ -18,6 +18,7 @@ using WIM.Core.Repository;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Entity.View;
 
 namespace WIM.Core.Service.Impl
 { 
@@ -29,13 +30,13 @@ namespace WIM.Core.Service.Impl
 
         }        
 
-        public IEnumerable<Person_MT> GetPersons()
+        public IEnumerable<VPersons> GetPersons()
         {
-            IEnumerable<Person_MT> Person;
+            IEnumerable<VPersons> Person;
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPersonRepository repo = new PersonRepository(Db);
-                Person = repo.Get();
+                Person = repo.GetList();
             }
             return Person;
         }
@@ -65,6 +66,8 @@ namespace WIM.Core.Service.Impl
                     BirthDate = data.BirthDate,
                     Email = data.Email,
                     Name = data.Name,
+                    NameEn = data.NameEn,
+                    SurnameEn = data.SurnameEn,
                     Surname = data.Surname,
                     Religion = data.Religion,
                     Nationality = data.Nationality,

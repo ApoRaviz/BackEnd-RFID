@@ -20,7 +20,7 @@ using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.Status;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
-
+using WIM.Core.Entity.View;
 
 namespace WIM.Core.Context
 {
@@ -52,6 +52,12 @@ namespace WIM.Core.Context
         public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
+
+        /// <summary>
+        /// View
+        /// </summary>
+        /// 
+        public virtual DbSet<VPersons> VPersons { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {

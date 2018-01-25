@@ -5,6 +5,7 @@ using System.Linq;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.Common;
+using WMS.Context;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -74,7 +75,9 @@ namespace WIM.Core.Repository.Impl
             {
                 var tableNameParameter2 = /*new ObjectParameter("@tableName", tableName);*/
                     new SqlParameter("tableName", tableName);
-                x = this.Context.Database.SqlQuery<TableColumnsDescription>("ProcGetTableColumnsDescription @tableName", tableNameParameter2).ToList();
+                //#OilComment
+                WMSDbContext wms = new WMSDbContext();
+                x = wms.Database.SqlQuery<TableColumnsDescription>("ProcGetTableColumnsDescription @tableName", tableNameParameter2).ToList();
             }
             return x;
         }

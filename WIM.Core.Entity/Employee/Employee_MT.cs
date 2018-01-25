@@ -15,13 +15,14 @@ namespace WIM.Core.Entity
     {
         [Key]
         public string EmID { get; set; }
+        public int PersonIDSys { get; set; }
         public string Area { get; set; }
         public Nullable<int> DepIDSys { get; set; }
         public string TelOffice { get; set; }
         public string TelEx { get; set; }
         public Nullable<System.DateTime> HiredDate { get; set; }
         public Nullable<int> PositionIDSys { get; set; }
-        public int PersonIDSys { get; set; }
+        
 
         [ForeignKey("PersonIDSys")]
         public virtual Person_MT Person_MT { get; set; }

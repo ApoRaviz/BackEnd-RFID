@@ -13,6 +13,7 @@ using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Entity.View;
 
 namespace Master.WebApi.Controllers
 {
@@ -54,10 +55,10 @@ namespace Master.WebApi.Controllers
         [Route("list")]
         public HttpResponseMessage GetList()
         {
-            ResponseData<IEnumerable<Person_MT>> response = new ResponseData<IEnumerable<Person_MT>>();
+            ResponseData<IEnumerable<VPersons>> response = new ResponseData<IEnumerable<VPersons>>();
             try
             {
-                IEnumerable<Person_MT> Persons = PersonService.GetPersons();
+                IEnumerable<VPersons> Persons = PersonService.GetPersons();
                 response.SetData(Persons);
             }
             catch (ValidationException ex)

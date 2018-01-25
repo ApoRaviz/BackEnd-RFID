@@ -14,6 +14,8 @@ namespace WIM.Core.Common.ValueObject
         public string PersonID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string NameEn { get; set; }
+        public string SurnameEn { get; set; }
         public int Age { get; set; }
         public string Gender { get; set; }
         public Nullable<System.DateTime> BirthDate { get; set; }
