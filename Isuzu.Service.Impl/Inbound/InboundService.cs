@@ -20,6 +20,7 @@ using System.Security.Principal;
 using Isuzu.Repository.ItemManagement;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using System.Web.Script.Serialization;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -132,7 +133,8 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 var inboundItem = (
                        from i in Db.InboundItems
-                       where i.RFIDTag == rfid
+                       where rfid.EndsWith(i.RFIDTag)
+                       && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
                        select i
                    ).SingleOrDefault();
                 if (inboundItem == null)
@@ -156,7 +158,8 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 item = (
                         from i in Db.InboundItems
-                        where i.RFIDTag == rfid
+                        where rfid.EndsWith(i.RFIDTag)
+                        && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
                         select new InboundItemHandyDto
                         {
                             ID = i.ID,
@@ -178,7 +181,8 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 item = (
                         from i in Db.InboundItems
-                        where i.RFIDTag == rfid
+                        where rfid.EndsWith(i.RFIDTag)
+                        && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
                         select new InboundItemCartonHandyDto
                         {
                             InvNo = i.InvNo,
@@ -224,14 +228,20 @@ namespace Isuzu.Service.Impl.Inbound
                     var queryForHolding = (
                         from i in Db.InboundItems
                         where i.InvNo == inboundItemHolding.InvNo
-                        && inboundItemHolding.RFIDTags.Contains(i.RFIDTag)
+                        //&& inboundItemHolding.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
                     foreach (InboundItems item in queryForHolding)
                     {
-                        item.Status = "HOLD";
-                        DetailRepo.Update(item);
+                        foreach (string scan in inboundItemHolding.RFIDTags)
+                        {
+                            if (scan.EndsWith(item.RFIDTag))
+                            {
+                                item.Status = IsuzuStatus.HOLD.ToString();
+                                DetailRepo.Update(item);
+                            }
+                        }
                     }
                     Db.SaveChanges();
                     scope.Complete();
@@ -251,14 +261,20 @@ namespace Isuzu.Service.Impl.Inbound
                     var queryForShipping = (
                         from i in Db.InboundItems
                         where i.InvNo == inboundItemShipping.InvNo
-                        && inboundItemShipping.RFIDTags.Contains(i.RFIDTag)
+                        //&& inboundItemShipping.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
                     foreach (InboundItems item in queryForShipping)
                     {
-                        item.Status = "SHIPPED";
-                        DetailRepo.Update(item);
+                        foreach (string scan in inboundItemShipping.RFIDTags)
+                        {
+                            if (scan.EndsWith(item.RFIDTag))
+                            {
+                                item.Status = IsuzuStatus.SHIPPED.ToString();
+                                DetailRepo.Update(item);
+                            }
+                        }
                     }
                     Db.SaveChanges();
                     scope.Complete();
@@ -277,7 +293,11 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     var queryForPacking = (
                         from i in Db.InboundItems
-                        where i.RFIDTag == inboundItemCartonPacking.RFIDTag
+                        where i.RFIDTag.EndsWith(inboundItemCartonPacking.RFIDTag)
+                        && new List<string> {
+                                    IsuzuStatus.RECEIVE.ToString(),
+                                    IsuzuStatus.HOLD.ToString()
+                                }.Contains(i.Status)
                         select i
                     );
 
@@ -318,15 +338,26 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     var queryForPacking = (
                         from i in Db.InboundItems
-                        where inboundItemCasePacking.RFIDTags.Contains(i.RFIDTag)
+                        where new List<string> {
+                                    IsuzuStatus.RECEIVE.ToString(),
+                                    IsuzuStatus.HOLD.ToString()
+                                }.Contains(i.Status)
+                        //where inboundItemCasePacking.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
                     foreach (InboundItems item in queryForPacking)
                     {
-                        item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
-                        DetailRepo.Update(item);
+                        foreach (string scan in inboundItemCasePacking.RFIDTags)
+                        {
+                            if (scan.EndsWith(item.RFIDTag))
+                            {
+                                item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
+                                DetailRepo.Update(item);
+                            }
+                        }
                     }
+
                     Db.SaveChanges();
                     scope.Complete();
                 }
@@ -335,16 +366,31 @@ namespace Isuzu.Service.Impl.Inbound
 
         public IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids)
         {
-            IEnumerable<InboundItems> items;
+            List<InboundItems> inboundItems = new List<InboundItems>();
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-                items = (
+                var query = (
                    from i in Db.InboundItems
-                   where rfids.RFIDTags.Contains(i.RFIDTag)
+                   where new List<string> {
+                                    "RECEIVED",
+                                    "HOLD"
+                                }.Contains(i.Status)
+                   //where rfids.RFIDTags.Contains(i.RFIDTag)
                    select i
-               ).ToList();
+               );
+
+                foreach (InboundItems item in query)
+                {
+                    foreach (string scan in rfids.RFIDTags)
+                    {
+                        if (scan.EndsWith(item.RFIDTag))
+                        {
+                            inboundItems.Add(item);
+                        }
+                    }
+                }
             }
-            return items;
+            return inboundItems;
 
         }
         #endregion
@@ -910,6 +956,66 @@ namespace Isuzu.Service.Impl.Inbound
 
 
             return ret;
+        }
+        public string GetRFIDInfo(ParameterSearch parameter)
+        {
+            using (var Db = new IsuzuDataContext())
+            {
+                return Db.Database.SqlQuery<string>("ProcGetRFIDInfo").FirstOrDefault();
+            }
+        }
+        public IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch, out int totalRecord)
+        {
+            string[] ms = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" };
+            string[] ml = new string[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            List<IsuzuTagReport> items = new List<IsuzuTagReport>();
+            string result = "", startDate = "", endDate = "";
+            totalRecord = 0;
+            int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
+            if (cnt != 2)
+                return null;
+
+            for (int i = 0; i < cnt; i++)
+            {
+                if (parameterSearch.Columns[i] == "startDate")
+                    startDate = parameterSearch.Keywords[i];
+                if (parameterSearch.Columns[i] == "endDate")
+                    endDate = parameterSearch.Keywords[i];
+            }
+
+            using (IsuzuDataContext db = new IsuzuDataContext())
+            {
+                result = db.Database.SqlQuery<string>("ProcGetRFIDInfoByCreateAt @StartDate,@EndDate"
+                    , new SqlParameter("@StartDate", startDate)
+                    , new SqlParameter("@EndDate", endDate)).SingleOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(result))
+            {
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                items = json_serializer.Deserialize<List<IsuzuTagReport>>(result);
+                if (items != null)
+                {
+                    items.ForEach(f =>
+                    {
+                        f.MonthName = ml[f.MonthNumber - 1];
+                    });
+                    //var q = (from p in items group p by p.YearNumber into g select new FujiTagReport(){
+                    //   YearNumber = g.Key
+                    //   , MonthName = "Total Tags"
+                    //   , MonthNumber =  0
+                    //   , ReceivedNumber = g.Sum(s => s.ReceivedNumber)
+                    //   , ShippedNumber = g.Sum(s => s.ShippedNumber)
+                    //   , TotalNumber = g.Sum(s => s.TotalNumber)
+                    //}).ToList();
+
+                    //items.AddRange(q);
+
+                }
+
+            }
+            return items;
         }
         #endregion
 

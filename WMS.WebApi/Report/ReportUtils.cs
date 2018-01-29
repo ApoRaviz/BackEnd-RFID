@@ -710,6 +710,62 @@ namespace WMS.WebApi.Report
             DownloadHelper.DownloadFile(filePath, fileName);            
         }
 
+        public static void GetExportReport(string ReportName, ReportLayout_MT report, DataTable dt)
+        {
+            string filePath = Path.GetTempFileName();
+            string fileName = "{0}_{1}.{2}";
+            bool includeHeader = report.ReportDetail.IncludeHeader != null && report.ReportDetail.IncludeHeader.Value == true;
+            string delimiter = ";";
+            string gualifier = "";
+            Encoding encoding = Encoding.Default;
+
+            switch (report.ReportDetail.Delimiter)
+            {
+                case "Tab": delimiter = "\t"; break;
+                case "Semicolon (;)": delimiter = ";"; break;
+                case "Colon (:)": delimiter = ":"; break;
+                case "Comma (,)": delimiter = ","; break;
+            }
+
+            switch (report.ReportDetail.TextGualifier)
+            {
+                case "Double quote (\")": gualifier = "\""; break;
+                case "Single quote (')": gualifier = "'"; break;
+                default: gualifier = ""; break;
+            }
+
+            switch (report.ReportDetail.Encoding)
+            {
+                case "Unicode": encoding = Encoding.Unicode; break;
+                case "Unicode big endian": encoding = Encoding.BigEndianUnicode; break;
+                case "UTF-8": encoding = Encoding.UTF8; break;
+                default: encoding = Encoding.Default; break;
+            }
+
+            if (report.ReportDetail.FormatType == "XLSX")
+            {
+                filePath = Path.GetTempFileName().Replace(".tmp", ".xlsx");
+                WriteReportExcel(dt, filePath, report.ReportDetail.StartExportRow.Value, includeHeader);
+                fileName = String.Format(fileName, ReportName, DateTime.Now.ToString("ddMMyyyy"), "xlsx");
+            }
+            else
+            {
+                string fileType = "";
+
+                if (report.ReportDetail.FormatType == "CSV")
+                    fileType = "csv";
+                else if (report.ReportDetail.FormatType == "TXT")
+                    fileType = "txt";
+                else if (report.ReportDetail.FormatType == "Other")
+                    fileType = report.ReportDetail.FileExtention.Replace(".", "");
+
+                WriteReportFile(dt, filePath, report.ReportDetail.StartExportRow.Value, includeHeader, delimiter, gualifier, encoding);
+                fileName = String.Format(fileName, ReportName, DateTime.Now.ToString("ddMMyyyy"), fileType);
+            }
+
+            DownloadHelper.DownloadFile(filePath, fileName);
+        }
+
         public static void WriteReportFile<T>(IEnumerable<T> items, string path, bool includeHeader = false, string delimeter = ",")
         {
             Type itemType = typeof(T);

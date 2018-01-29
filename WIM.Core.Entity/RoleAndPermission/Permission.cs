@@ -23,6 +23,7 @@ namespace WIM.Core.Entity.RoleAndPermission
 
         public virtual ICollection<RolePermissions> RolePermissions { get; set; }
         public virtual MenuProjectMapping MenuProjectMapping { get; set; }
+        [ForeignKey("ApiIDSys")]
         public virtual Api_MT Api_MT { get; set; }
         public ApiMenuMapping Api { get; set; }
     }

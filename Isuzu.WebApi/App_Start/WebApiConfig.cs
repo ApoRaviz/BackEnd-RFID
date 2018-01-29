@@ -33,7 +33,7 @@ namespace Isuzu.WebApi
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            //config.MessageHandlers.Add(new ApiLogHandler());
+            config.MessageHandlers.Add(new ApiLogHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

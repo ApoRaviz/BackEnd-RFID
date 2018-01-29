@@ -15,6 +15,7 @@ namespace WIM.Core.Entity.Employee
         public int PositionIDSys { get; set; }
         public string Acronym { get; set; }
         public string PositionName { get; set; }
+        public string PositionNameEn { get; set; }
         public string PositionDescription { get; set; }
         public Nullable<int> ParentIDSys { get; set; }
     }

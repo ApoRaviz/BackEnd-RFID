@@ -19,7 +19,9 @@ namespace WIM.Core.Entity.UserManagement
         [Column(Order = 2)]
         public string RoleID { get; set; }
 
+        [ForeignKey("UserID")]
         public virtual User User { get; set; }
+        [ForeignKey("RoleID")]
         public virtual Role Role { get; set; }
     }
 }

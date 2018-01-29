@@ -10,6 +10,7 @@ using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.LabelManagement;
+using WIM.Core.Entity.Common;
 using WIM.Core.Entity.Logs;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.Module;
@@ -19,7 +20,7 @@ using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Entity.Status;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
-
+using WIM.Core.Entity.View;
 
 namespace WIM.Core.Context
 {
@@ -28,7 +29,6 @@ namespace WIM.Core.Context
         public virtual DbSet<Api_MT> Api_MT { get; set; }
         public virtual DbSet<ApiMenuMapping> ApiMenuMapping { get; set; }
         public virtual DbSet<Customer_MT> Customer_MT { get; set; }
-        public virtual DbSet<DimensionLayout_MT> DimensionLayout_MT { get; set; }
         public virtual DbSet<Employee_MT> Employee_MT { get; set; }
         public virtual DbSet<Menu_MT> Menu_MT { get; set; }
         public virtual DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
@@ -51,6 +51,13 @@ namespace WIM.Core.Context
         public virtual DbSet<Positions> Positions { get; set; }
         public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
+        public virtual DbSet<UserLog> UserLogs { get; set; }
+
+        /// <summary>
+        /// View
+        /// </summary>
+        /// 
+        public virtual DbSet<VPersons> VPersons { get; set; }
 
         public CoreDbContext() : base("name=CORE")
         {

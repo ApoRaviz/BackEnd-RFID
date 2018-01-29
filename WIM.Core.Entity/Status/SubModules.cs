@@ -15,6 +15,7 @@ namespace WIM.Core.Entity.Status
         public string Acronym { get; set; }
         public string SubModuleName { get; set; }
 
+        [ForeignKey("ModuleIDSys")]
         public Module_MT Module_MT { get; set; }
 
     }

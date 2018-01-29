@@ -5,6 +5,8 @@ using System.Web.Http;
 using TMS.WebApi.Controllers;
 using Unity.WebApi;
 using System.Security.Principal;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace TMS.WebApi
 {
@@ -24,6 +26,7 @@ namespace TMS.WebApi
             //Register OWin Authen
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
+            container.RegisterType<ICommonService, CommonService>();
             
            
         }

@@ -701,5 +701,46 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpPost]
+        [Route("GetRFIDInfo")]
+        public HttpResponseMessage GetRFIDInformation([FromBody]ParameterSearch query)
+        {
+            IResponseData<string> response = new ResponseData<string>();
+
+            try
+            {
+                string datas = InboundService.GetRFIDInfo(query);
+                response.SetStatus(HttpStatusCode.OK);
+                response.SetData(datas);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("GetRFIDInfoByDate")]
+        public HttpResponseMessage GetRFIDInfoByDate([FromBody]ParameterSearch query)
+        {
+            ResponseData<IEnumerable<IsuzuTagReport>> respones = new ResponseData<IEnumerable<IsuzuTagReport>>();
+            int totalRecord = 0;
+            try
+            {
+                IEnumerable<IsuzuTagReport> items = InboundService.GetReportByYearRang(query, out totalRecord);
+                respones.SetStatus(HttpStatusCode.OK);
+                respones.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+                respones.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+
+        }
+
     }
 }

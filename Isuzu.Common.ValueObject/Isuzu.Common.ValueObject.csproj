@@ -57,6 +57,7 @@
     <Compile Include="IsuzuInboundGroup.cs" />
     <Compile Include="IsuzuReportHelper.cs" />
     <Compile Include="IsuzuStatus.cs" />
+    <Compile Include="IsuzuTagReport.cs" />
     <Compile Include="ParameterSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

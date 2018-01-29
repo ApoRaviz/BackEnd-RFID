@@ -29,7 +29,9 @@ namespace WMS.Entity.ItemManagement
         public Nullable<decimal> Price { get; set; }
         public Nullable<int> CurrencyIDSys { get; set; }
 
+        [ForeignKey("ItemIDSys")]
         public virtual Item_MT Item_MT { get; set; }
+        [ForeignKey("UnitIDSys")]
         public virtual Unit_MT Unit_MT { get; set; }
     }
 }

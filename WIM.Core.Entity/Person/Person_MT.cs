@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Entity.Person
@@ -13,8 +14,11 @@ namespace WIM.Core.Entity.Person
     {      
         [Key]
         public int PersonIDSys { get; set; }
+        public Nullable<int> CusIDSys { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string NameEn { get; set; }
+        public string SurnameEn { get; set; }
         public string Gender { get; set; }
         public Nullable<System.DateTime> BirthDate { get; set; }
         public string Religion { get; set; }
@@ -22,6 +26,8 @@ namespace WIM.Core.Entity.Person
         public string Mobile { get; set; }
         public string Email { get; set; }
 
+        [ForeignKey("CusIDSys")]
+        public virtual Customer_MT Customer_MT { get; set; }
     }
    
 }
