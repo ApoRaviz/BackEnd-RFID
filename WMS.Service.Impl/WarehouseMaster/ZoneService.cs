@@ -221,5 +221,109 @@ namespace WMS.Service.Impl.WarehouseMaster
                 }
             }
         }
+
+        // ZoneType
+
+        public List<ZoneType> GetAllZoneType()
+        {
+            List<ZoneType> zoneTypeList = new List<ZoneType>();
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                   IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                   zoneTypeList = repo.GetAll().ToList();
+                }
+            }
+            return zoneTypeList;
+        }
+
+        public ZoneType GetZoneTypeByID(int ZoneTypeID)
+        {
+            ZoneType item = new ZoneType();
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                    item = repo.GetByID(ZoneTypeID);
+                }
+            }
+            return item;
+        }
+
+        public int? CreateZoneType(ZoneType data)
+        {
+            int? ZoneTypeIDSys = 0;
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    try
+                    {
+                        IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                        var item = repo.Insert(data);
+                        if(item != null)
+                            ZoneTypeIDSys = item.ZoneTypeIDSys ;
+
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
+                    return ZoneTypeIDSys;
+                }
+            }
+        }
+
+        public bool UpdateZoneType(int ZoneTypeIDSys, ZoneType data)
+        {
+            bool isUpdate = false;
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    try
+                    {
+                        IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                        var item = repo.Update(data);
+                        if (item != null)
+                                isUpdate = true ;
+
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
+                    return isUpdate;
+                }
+            }
+        }
+
+        public void RemoveZoneTypeByID(int ZoneTypeID)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    try
+                    {
+                        IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                        repo.Delete(ZoneTypeID);
+
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                    scope.Complete();
+                }
+            }
+        }
     }
 }

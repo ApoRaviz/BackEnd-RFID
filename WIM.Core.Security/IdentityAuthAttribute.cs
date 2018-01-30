@@ -51,16 +51,16 @@ namespace WIM.WebApi.Auth
                 return Task.FromResult<object>(null);
             }
 
-            if (!principal.HasPermission(actionContext.Request) && !principal.IsSysAdmin())
-            {
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
-                ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E403));
-                IResponseData<int> response = new ResponseData<int>();
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.Unauthorized);
-                actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Forbidden, response);
-                return Task.FromResult<object>(null);
-            }
+            //if (!principal.HasPermission(actionContext.Request) && !principal.IsSysAdmin())
+            //{
+            //    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
+            //    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E403));
+            //    IResponseData<int> response = new ResponseData<int>();
+            //    response.SetErrors(ex.Errors);
+            //    response.SetStatus(HttpStatusCode.Unauthorized);
+            //    actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Forbidden, response);
+            //    return Task.FromResult<object>(null);
+            //}
 
             //User is Authorized, complete execution
             return Task.FromResult<object>(null);

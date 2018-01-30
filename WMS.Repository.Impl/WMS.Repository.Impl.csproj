@@ -69,6 +69,7 @@
     <Compile Include="Warehouse\RackLayoutRepository.cs" />
     <Compile Include="Warehouse\WarehouseRepository.cs" />
     <Compile Include="Warehouse\ZoneLayoutDetailRepository.cs" />
+    <Compile Include="Warehouse\ZoneTypeRepository.cs" />
     <Compile Include="Warehouse\ZoneLayoutHeaderRepository.cs" />
   </ItemGroup>
   <ItemGroup>

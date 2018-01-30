@@ -477,7 +477,8 @@ namespace Fuji.Service.Impl.ItemImport
             using (FujiDbContext Db = new FujiDbContext())
             {
                 ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
-                var itemGroups = (from p in SerialDetailRepo.GetItemsBy(p => p.OrderNo.Contains(orderNo))
+                var itemGroups = (from p in SerialDetailRepo
+                                  .GetItemsBy(p => p.OrderNo != null && p.OrderNo.Contains(orderNo))
                                   orderby p.CreateAt descending
                                   group p
                                   by p.OrderNo into g

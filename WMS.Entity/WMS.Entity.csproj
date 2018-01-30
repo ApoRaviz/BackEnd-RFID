@@ -76,6 +76,7 @@
     <Compile Include="WarehouseManagement\RackLayout.cs" />
     <Compile Include="WarehouseManagement\RackLayout_MT.cs" />
     <Compile Include="WarehouseManagement\Warehouse_MT.cs" />
+    <Compile Include="WarehouseManagement\ZoneType.cs" />
     <Compile Include="WarehouseManagement\ZoneLayoutDetail_MT.cs" />
     <Compile Include="WarehouseManagement\ZoneLayoutHeader_MT.cs" />
   </ItemGroup>

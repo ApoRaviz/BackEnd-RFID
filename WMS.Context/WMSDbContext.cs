@@ -42,6 +42,7 @@ namespace WMS.Context
         public DbSet<ZoneLayoutHeader_MT> ZoneLayoutHeader_MT { get; set; }
         public DbSet<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
+        public DbSet<ZoneType> ZoneType { get; set; }
 
 
         public WMSDbContext() : base("name=DefaultConnection")

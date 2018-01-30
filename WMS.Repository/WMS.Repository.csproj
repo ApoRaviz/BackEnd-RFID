@@ -62,6 +62,7 @@
     <Compile Include="Warehouse\IRackLayoutRepository.cs" />
     <Compile Include="Warehouse\IWarehouseRepository.cs" />
     <Compile Include="Warehouse\IZoneLayoutDetailRepository.cs" />
+    <Compile Include="Warehouse\IZoneTypeRepository.cs" />
     <Compile Include="Warehouse\IZoneLayoutHeaderRepository.cs" />
   </ItemGroup>
   <ItemGroup>
