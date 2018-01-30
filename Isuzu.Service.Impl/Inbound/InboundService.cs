@@ -239,6 +239,7 @@ namespace Isuzu.Service.Impl.Inbound
                             if (scan.EndsWith(item.RFIDTag))
                             {
                                 item.Status = IsuzuStatus.HOLD.ToString();
+                                item.HoldDate = DateTime.Now;
                                 DetailRepo.Update(item);
                             }
                         }
@@ -272,15 +273,14 @@ namespace Isuzu.Service.Impl.Inbound
                             if (scan.EndsWith(item.RFIDTag))
                             {
                                 item.Status = IsuzuStatus.SHIPPED.ToString();
+                                item.ShippingDate = DateTime.Now;
                                 DetailRepo.Update(item);
                             }
                         }
                     }
                     Db.SaveChanges();
                     scope.Complete();
-                }
-
-                
+                } 
             }
         }
 
@@ -354,6 +354,7 @@ namespace Isuzu.Service.Impl.Inbound
                             if (scan.EndsWith(item.RFIDTag))
                             {
                                 item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
+                                item.PackCaseDate = DateTime.Now;
                                 DetailRepo.Update(item);
                             }
                         }
