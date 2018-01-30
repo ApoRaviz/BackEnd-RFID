@@ -23,6 +23,7 @@ namespace WMS.Entity.WarehouseManagement
         public string Warehouse { get; set; }
         public string Area { get; set; }
         public Nullable<int> TotalFloor { get; set; }
+       
 
         public virtual ICollection<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public List<ZoneLayoutDetail_MT> detail;

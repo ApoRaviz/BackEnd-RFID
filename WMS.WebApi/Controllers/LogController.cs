@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Entity.Common;
+using WIM.Core.Service;
 using WMS.Service;
 
 namespace WMS.WebApi.Controllers
@@ -26,10 +27,10 @@ namespace WMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Get(DateTime? dateFrom, DateTime? dateTo)
         {
-            ResponseData<IEnumerable<ProcGetUserLog_Result>> response = new ResponseData<IEnumerable<ProcGetUserLog_Result>>();
+            ResponseData<IEnumerable<UserLog>> response = new ResponseData<IEnumerable<UserLog>>();
             try
             {
-                IEnumerable<ProcGetUserLog_Result> logData = commonService.GetUserLogData(null, dateFrom, dateTo);
+                IEnumerable<UserLog> logData = commonService.GetUserLogData(null, dateFrom, dateTo);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(logData);
             }
@@ -45,10 +46,10 @@ namespace WMS.WebApi.Controllers
         [Route("{id}")]
         public HttpResponseMessage Get(int id)
         {
-            IResponseData<ProcGetUserLog_Result> response = new ResponseData<ProcGetUserLog_Result>();
+            IResponseData<UserLog> response = new ResponseData<UserLog>();
             try
             {
-                ProcGetUserLog_Result log = commonService.GetUserLogData(id, null, null).FirstOrDefault();
+                UserLog log = commonService.GetUserLogData(id, null, null).FirstOrDefault();
                 response.SetData(log);
             }
             catch (ValidationException ex)
@@ -64,10 +65,10 @@ namespace WMS.WebApi.Controllers
         [Route("Search")]
         public HttpResponseMessage Search(string method, string url, DateTime? dateFrom, DateTime? dateTo)
         {
-            ResponseData<IEnumerable<ProcGetUserLog_Result>> response = new ResponseData<IEnumerable<ProcGetUserLog_Result>>();
+            ResponseData<IEnumerable<UserLog>> response = new ResponseData<IEnumerable<UserLog>>();
             try
             {
-                IEnumerable<ProcGetUserLog_Result> logData = commonService.GetUserLogData(method, url, dateFrom, dateTo);
+                IEnumerable<UserLog> logData = commonService.GetUserLogData(method, url, dateFrom, dateTo);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(logData);
             }

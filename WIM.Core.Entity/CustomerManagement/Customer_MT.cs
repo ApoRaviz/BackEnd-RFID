@@ -22,10 +22,16 @@ namespace WIM.Core.Entity.CustomerManagement
         [Key]
         public int CusIDSys { get; set; }
         public string CusID { get; set; }
+        public Nullable<int> CusParentIDSys { get; set; }
         public string CusName { get; set; }
+        public string CusNameEn { get; set; }
         public string TaxID { get; set; }
         public string CompName { get; set; }
+        public string CompNameEn { get; set; }
+        public string Address { get; set; }
+        public string AddressEn { get; set; }
         public string AddressBill { get; set; }
+        public string AddressBillEn { get; set; }
         public string SubCity { get; set; }
         public string City { get; set; }
         public string Province { get; set; }
@@ -39,6 +45,8 @@ namespace WIM.Core.Entity.CustomerManagement
         public string Mobile3 { get; set; }
 
         public virtual ICollection<Project_MT> Project_MT { get; set; }
+        [ForeignKey("CusParentIDSys")]
+        public virtual Customer_MT CusParent { get; set; }
 
         //public virtual ICollection<UserCustomerMapping> UserCustomerMappings { get; set; }
     }

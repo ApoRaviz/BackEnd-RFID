@@ -116,31 +116,12 @@ public static class RBAC_ExtendedMethods_4_Principal
 
             string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
 
-            string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
+            string fullUrl = _request.Method + reqUrl;
             fullUrl = fullUrl.Replace("wimapi/", "");
             string[] fullUrlplit = fullUrl.Split('?');
             reqUrl = fullUrlplit[0];
             string UpperReqUrl = reqUrl.ToUpper();
-            /*string[] urlIgnore = {
-                    "GET/api/v1/account/users/mobile/otp",
-                    "POST/api/v1/account/users/mobile/otp",
-                    "POST/api/v1/account/renewtoken",
-                    "GET/api/v1/MenuProjectMappings/parent/1",
-                    "GET/api/v1/Users/customers",
-                    "GET/api/v1/customers/projects",
-                    "POST/api/v1/account/assignProject",
-                    "GET/api/v1/Persons",
-                    "GET/api/v1/helpers/tableColumnsDescription",
-                    "GET/api/v1/Projects/select",
-                    "POST/api/v1/account/Logout",
-                    "POST/api/v1/Account/ChangePassword"
-
-                };
-            string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
-
-            string[] urlIgnoreChkOTP = {
-                    "POST/api/v1/account/assignProject"
-                };
+           
 
             if (reqUrl.Last() == '/')
             {
@@ -157,10 +138,7 @@ public static class RBAC_ExtendedMethods_4_Principal
                 //reqUrl = reqUrl.Substring(indexFirstslash, indexapiv1 - indexFirstslash);
                 reqUrl = first + second;
             }
-            if (urlIgnore.Contains(reqUrl) || reqUrl.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrl)))
-            {
-                return true;
-            }*/
+
 
             if (OTPCONFIRM != "True")
             {
@@ -344,13 +322,13 @@ public static class RBAC_ExtendedMethods_4_Principal
             reqUrlnew = _request.RequestUri.PathAndQuery.Substring(0, _request.RequestUri.PathAndQuery.Length - 1);
 
         }
-
+        string project = "GET/api/v1/Projects";
         string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
         string urlIgnoreChkOTP = "POST/api/v1/account/assignProject";
         var ci = _principal.Identity as ClaimsIdentity;
         string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
           .Select(c => c.Value).SingleOrDefault();
-        return urlIgnore.Contains(reqUrlnew) || reqUrlnew.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrlnew));
+        return urlIgnore.Contains(reqUrlnew) || reqUrlnew.Contains(menuSideUrl) || reqUrlnew.Contains(project) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrlnew));
     }
 
 

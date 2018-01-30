@@ -24,6 +24,7 @@ namespace WMS.WebApi
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.Initialize();
             ApiHashTableHelper.Initialize();
+            TableHashTableHelper.Initialize();
 
         }
     }

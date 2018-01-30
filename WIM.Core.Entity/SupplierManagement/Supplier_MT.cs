@@ -8,11 +8,6 @@ namespace WIM.Core.Entity.SupplierManagement
     [Table("Supplier_MT")]
     public class Supplier_MT : BaseEntity
     {
-        public Supplier_MT()
-        {
-            
-        }
-
         [Key]
         public int SupIDSys { get; set; }
         public string SupID { get; set; }
@@ -30,6 +25,7 @@ namespace WIM.Core.Entity.SupplierManagement
         public string TelExt { get; set; }
         public string Mobile { get; set; }
 
+        [ForeignKey("ProjectIDSys")]
         public virtual Project_MT Project_MT { get; set; }
 
         

@@ -155,7 +155,7 @@ namespace Master.WebApi.Controllers
 
             using (CoreDbContext db = new CoreDbContext())
             {
-                string sql = string.Format("select {0} from Employee_MT FOR JSON AUTO", labelSelect);
+                string sql = string.Format("select TOP(10) {0} from Employee_MT FOR JSON AUTO", labelSelect);                
                 string json = db.Database.SqlQuery<string>(sql).FirstOrDefault();
                 json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");
 
@@ -202,8 +202,7 @@ namespace Master.WebApi.Controllers
 
             }
 
-
-            return ReportUtil.createRDLCReport("Test", "Dynamic", dataSet);
+            return ReportUtil.CreateRDLCReportByEXCEL("Test", "Dynamic", dataSet);
 
             //response.SetData(response2);
 

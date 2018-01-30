@@ -78,6 +78,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="StatusManagement\StatusService.cs" />
     <Compile Include="SupplierMaster\SupplierService.cs" />
+    <Compile Include="Common\CommonService.cs" />
     <Compile Include="UserMaster\UserService.cs" />
     <Compile Include="UserRole\UserRoleService.cs" />
   </ItemGroup>
@@ -91,7 +92,7 @@
       <Name>WIM.Core.Common.ValueObject</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
-      <Project>{52D8BFB8-8342-4323-BB58-B867D7D01E8A}</Project>
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
@@ -126,5 +127,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

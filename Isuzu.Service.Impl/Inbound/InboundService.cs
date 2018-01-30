@@ -133,7 +133,8 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 var inboundItem = (
                        from i in Db.InboundItems
-                       where i.RFIDTag == rfid
+                       where rfid.EndsWith(i.RFIDTag)
+                       && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
                        select i
                    ).SingleOrDefault();
                 if (inboundItem == null)
@@ -157,7 +158,8 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 item = (
                         from i in Db.InboundItems
-                        where i.RFIDTag == rfid
+                        where rfid.EndsWith(i.RFIDTag)
+                        && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
                         select new InboundItemHandyDto
                         {
                             ID = i.ID,
@@ -179,7 +181,8 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 item = (
                         from i in Db.InboundItems
-                        where i.RFIDTag == rfid
+                        where rfid.EndsWith(i.RFIDTag)
+                        && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
                         select new InboundItemCartonHandyDto
                         {
                             InvNo = i.InvNo,
@@ -225,14 +228,20 @@ namespace Isuzu.Service.Impl.Inbound
                     var queryForHolding = (
                         from i in Db.InboundItems
                         where i.InvNo == inboundItemHolding.InvNo
-                        && inboundItemHolding.RFIDTags.Contains(i.RFIDTag)
+                        //&& inboundItemHolding.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
                     foreach (InboundItems item in queryForHolding)
                     {
-                        item.Status = "HOLD";
-                        DetailRepo.Update(item);
+                        foreach (string scan in inboundItemHolding.RFIDTags)
+                        {
+                            if (scan.EndsWith(item.RFIDTag))
+                            {
+                                item.Status = IsuzuStatus.HOLD.ToString();
+                                DetailRepo.Update(item);
+                            }
+                        }
                     }
                     Db.SaveChanges();
                     scope.Complete();
@@ -252,14 +261,20 @@ namespace Isuzu.Service.Impl.Inbound
                     var queryForShipping = (
                         from i in Db.InboundItems
                         where i.InvNo == inboundItemShipping.InvNo
-                        && inboundItemShipping.RFIDTags.Contains(i.RFIDTag)
+                        //&& inboundItemShipping.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
                     foreach (InboundItems item in queryForShipping)
                     {
-                        item.Status = "SHIPPED";
-                        DetailRepo.Update(item);
+                        foreach (string scan in inboundItemShipping.RFIDTags)
+                        {
+                            if (scan.EndsWith(item.RFIDTag))
+                            {
+                                item.Status = IsuzuStatus.SHIPPED.ToString();
+                                DetailRepo.Update(item);
+                            }
+                        }
                     }
                     Db.SaveChanges();
                     scope.Complete();
@@ -278,7 +293,11 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     var queryForPacking = (
                         from i in Db.InboundItems
-                        where i.RFIDTag == inboundItemCartonPacking.RFIDTag
+                        where i.RFIDTag.EndsWith(inboundItemCartonPacking.RFIDTag)
+                        && new List<string> {
+                                    IsuzuStatus.RECEIVE.ToString(),
+                                    IsuzuStatus.HOLD.ToString()
+                                }.Contains(i.Status)
                         select i
                     );
 
@@ -320,16 +339,26 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     var queryForPacking = (
                         from i in Db.InboundItems
-                        where inboundItemCasePacking.RFIDTags.Contains(i.RFIDTag)
+                        where new List<string> {
+                                    IsuzuStatus.RECEIVE.ToString(),
+                                    IsuzuStatus.HOLD.ToString()
+                                }.Contains(i.Status)
+                        //where inboundItemCasePacking.RFIDTags.Contains(i.RFIDTag)
                         select i
                     );
 
                     foreach (InboundItems item in queryForPacking)
                     {
-                        item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
-                        item.PackCaseDate = DateTime.Now;
-                        DetailRepo.Update(item);
+                        foreach (string scan in inboundItemCasePacking.RFIDTags)
+                        {
+                            if (scan.EndsWith(item.RFIDTag))
+                            {
+                                item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
+                                DetailRepo.Update(item);
+                            }
+                        }
                     }
+
                     Db.SaveChanges();
                     scope.Complete();
                 }
@@ -338,16 +367,31 @@ namespace Isuzu.Service.Impl.Inbound
 
         public IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids)
         {
-            IEnumerable<InboundItems> items;
+            List<InboundItems> inboundItems = new List<InboundItems>();
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-                items = (
+                var query = (
                    from i in Db.InboundItems
-                   where rfids.RFIDTags.Contains(i.RFIDTag)
+                   where new List<string> {
+                                    "RECEIVED",
+                                    "HOLD"
+                                }.Contains(i.Status)
+                   //where rfids.RFIDTags.Contains(i.RFIDTag)
                    select i
-               ).ToList();
+               );
+
+                foreach (InboundItems item in query)
+                {
+                    foreach (string scan in rfids.RFIDTags)
+                    {
+                        if (scan.EndsWith(item.RFIDTag))
+                        {
+                            inboundItems.Add(item);
+                        }
+                    }
+                }
             }
-            return items;
+            return inboundItems;
 
         }
         #endregion

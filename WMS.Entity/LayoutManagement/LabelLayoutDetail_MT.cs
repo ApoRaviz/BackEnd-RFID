@@ -31,6 +31,7 @@ namespace WMS.Entity.LayoutManagement
         public string Label_Text { get; set; }
         public Nullable<int> PxPerInch_Ratio { get; set; }
 
+        [ForeignKey("LabelIDSys")]
         public virtual LabelLayoutHeader_MT LabelLayoutHeader_MT { get; set; }
     }
 }

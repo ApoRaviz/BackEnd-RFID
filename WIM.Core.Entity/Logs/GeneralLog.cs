@@ -35,6 +35,11 @@ namespace WIM.Core.Entity.Logs
             IsActive = true;
         }
 
+        public GeneralLog()
+        {
+
+        }
+
         [Key]
         public int LogIDSys { get; set; }
         public string TableName { get; set; }

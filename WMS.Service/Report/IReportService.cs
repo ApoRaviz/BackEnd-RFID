@@ -11,10 +11,10 @@ namespace WMS.Service.Report
 {
     public interface IReportService : IService
     {
-        List<ReportLayoutHeader_MT> GetAllReportHeader(string forTable);
-        ReportLayoutHeader_MT GetReportLayoutByReportIDSys(int id, string include);
-        int? CreateReportForItemMaster(ReportLayoutHeader_MT data);
-        bool UpdateReportForItemMaster(int ReportIDSys, ReportLayoutHeader_MT data);
+        List<ReportLayout_MT> GetAllReportHeader(int ProjectIDSys);
+        ReportLayout_MT GetReportLayoutByReportIDSys(int id);
+        int CreateReportForItemMaster(ReportLayout_MT data);
+        bool UpdateReportForItemMaster(int ReportIDSys, ReportLayout_MT data);
         DataTable GetReportData(int ReportIDSys);
     }
 }

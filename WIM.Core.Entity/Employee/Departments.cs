@@ -16,6 +16,10 @@ namespace WIM.Core.Entity.Employee
         public string DepID { get; set; }
         public string Acronym { get; set; }
         public string DepName { get; set; }
+        public string DepNameEn { get; set; }
         public Nullable<int> ParentIDSys { get; set; }
+
+        [ForeignKey("ParentIDSys")]
+        public virtual Departments Parent { get; set; }
     }
 }
