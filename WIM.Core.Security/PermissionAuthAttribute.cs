@@ -32,7 +32,6 @@ namespace WIM.Core.Security
                 return Task.FromResult<object>(null);
             }
 
-            //User is Authorized, complete execution
             return Task.FromResult<object>(null);
 
         }
