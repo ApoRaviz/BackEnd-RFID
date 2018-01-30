@@ -27,10 +27,12 @@ namespace Isuzu.Service.Impl
     public class InboundsController : ApiController
     {
         private IInboundService InboundService;
+        private string Username { get; set; }
 
         public InboundsController(IInboundService inboundService)
         {
             this.InboundService = inboundService;
+            Username = User.Identity.GetUserName() ?? "SYSTEM";
         }
 
         #region ======================== HANDY =============================
@@ -69,7 +71,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.RegisterInboundItem_HANDY(inboundItem, "SYSTEM");
+                InboundService.RegisterInboundItem_HANDY(inboundItem, Username);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -145,7 +147,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformHolding_HANDY(inboundItemHolding, "SYSTEM");
+                InboundService.PerformHolding_HANDY(inboundItemHolding, Username);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -164,7 +166,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformShipping_HANDY(inboundItemShipping, "SYSTEM");
+                InboundService.PerformShipping_HANDY(inboundItemShipping, Username);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -183,7 +185,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCarton_HANDY(itemReq, "SYSTEM");
+                InboundService.PerformPackingCarton_HANDY(itemReq, Username);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -202,7 +204,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCase_HANDY(itemReq, "SYSTEM");
+                InboundService.PerformPackingCase_HANDY(itemReq, Username);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)

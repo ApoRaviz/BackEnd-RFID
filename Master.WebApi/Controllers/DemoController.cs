@@ -7,7 +7,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -15,8 +18,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Web.Http;
 using System.Xml.Linq;
+using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Common.Utility.Http;
@@ -43,7 +49,7 @@ namespace Master.WebApi.Controllers
         {
             LabelControl labelResponse = new LabelControl();
             ResponseData<LabelControl> response = new ResponseData<LabelControl>();
-          
+
 
             /*var res = projectConfig.ToDictionary(x => x.Key, x => x.Value);
             response.SetData(res);
@@ -53,7 +59,7 @@ namespace Master.WebApi.Controllers
             {
                 LabelControl label1 = db.LabelControl.SingleOrDefault(p => p.LabelIDSys == 1);
 
-              
+
 
                 /*using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
                 {
@@ -149,9 +155,9 @@ namespace Master.WebApi.Controllers
 
             using (CoreDbContext db = new CoreDbContext())
             {
-                string sql = string.Format("select {0} from Employee_MT FOR JSON AUTO", labelSelect);                
+                string sql = string.Format("select {0} from Employee_MT FOR JSON AUTO", labelSelect);
                 string json = db.Database.SqlQuery<string>(sql).FirstOrDefault();
-                json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");    
+                json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");
 
                 dataSet = JsonConvert.DeserializeObject<System.Data.DataSet>(json);
                 DataTable dataTable = dataSet.Tables["Employees"];
@@ -179,9 +185,9 @@ namespace Master.WebApi.Controllers
 
                 //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
                 newLabels = (from p in headReport.HeadReportLabels
-                            from r in labelControl.LabelConfig
-                            where r.Key == HashidsHelper.DecodeHex(p.Key)
-                            select r.Value).ToList();
+                             from r in labelControl.LabelConfig
+                             where r.Key == HashidsHelper.DecodeHex(p.Key)
+                             select r.Value).ToList();
 
 
                 //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
@@ -259,6 +265,71 @@ namespace Master.WebApi.Controllers
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             return result;
 
+        }
+
+        [HttpGet]
+        [Route("func5")]
+        public HttpResponseMessage Func5()
+        {
+            ResponseData<Hashtable> response = new ResponseData<Hashtable>();
+            List<Type> tEntities = new List<Type>
+            {
+                typeof(Customer_MT),
+                typeof(LabelControl)
+            };
+
+
+
+            response.Data = ApiHashTableHelper.apiTable;
+            //response.Data = DemoHelper.GetAttributeEntities(tEntities);
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("func6")]
+        public HttpResponseMessage Func6()
+        {
+            ResponseData<List<string>> response = new ResponseData<List<string>>();
+            List<Type> tEntities = new List<Type>
+            {
+                typeof(Customer_MT),
+                typeof(LabelControl)
+            };
+
+            response.Data = DemoHelper.GetAttributeEntities(tEntities);
+            return Request.ReturnHttpResponseMessage(response);
+        }
+    }
+
+    public class DemoHelper
+    {
+        public static List<string> GetAttributeEntities(List<Type> tEntities)
+        {
+            List<string> columns = new List<string>();
+            foreach (Type tEntity in tEntities)
+            {
+                TableAttribute tableAttribute = (TableAttribute)Attribute.GetCustomAttribute(tEntity, typeof(TableAttribute));
+                columns.Add("TableName ==== " + tableAttribute.Name + "====");
+
+                PropertyInfo[] properties = tEntity.GetProperties();
+                foreach (PropertyInfo prop in properties)
+                {
+                    if (prop.GetCustomAttribute<KeyAttribute>() != null)
+                    {
+                        columns.Add("PrimaryKey ==== " + prop.Name + "====");
+                    }
+                    else if (prop.GetCustomAttribute<ForeignKeyCustomAttribute>() != null)
+                    {
+                        ForeignKeyCustomAttribute fkAttribute = (ForeignKeyCustomAttribute)Attribute.GetCustomAttribute(prop, typeof(ForeignKeyCustomAttribute));
+                        columns.Add("ForeignKey ==== " + fkAttribute.TableName + "." + prop.Name + "====");
+                    }
+                    else
+                    {
+                        columns.Add(prop.Name);
+                    }                    
+                }
+            }
+            return columns;
         }
     }
 }
