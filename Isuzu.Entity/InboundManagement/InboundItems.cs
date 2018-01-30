@@ -42,26 +42,20 @@ namespace Isuzu.Entity
         [StringLength(50)]
         public string Destination { get; set; }
 
-        [StringLength(20)]
-        public string Status { get; set; }
+        [StringLength(50)]
+        public string CartonNo { get; set; }
 
         [StringLength(50)]
         public string CaseNo { get; set; }
 
-        [StringLength(50)]
-        public string CartonNo { get; set; }
+        [StringLength(20)]
+        public string Status { get; set; }
 
-        //[StringLength(25)]
-        //public string CreateBy { get; set; }
-
-        //[Column(TypeName = "smalldatetime")]
-        //public DateTime? CreateAt { get; set; }
-
-        //[StringLength(25)]
-        //public string UpdateBy { get; set; }
-
-        //[Column(TypeName = "smalldatetime")]
-        //public DateTime? UpdateAt { get; set; }
+        public DateTime RegisterDate { get; set; }
+        public DateTime PackCaseDate { get; set; }
+        public DateTime PackCartonDate { get; set; }
+        public DateTime HoldDate { get; set; }
+        public DateTime ShippingDate { get; set; }
 
         [StringLength(50)]
         public string DeleteReason { get; set; }

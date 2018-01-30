@@ -108,11 +108,11 @@ namespace Isuzu.Service.Impl.Inbound
                             ValidationException ve = new ValidationException();
                             ve.Add(new ValidationError(((int)ErrorCode.RFIDNotEmpty).ToString(), ErrorCode.RFIDNotEmpty.GetDescription()));
                             throw ve;
-
                         }*/
 
                         inboundItemExist.RFIDTag = inboundItem.RFIDTag;
-                        inboundItemExist.Status = "RECEIVED";
+                        inboundItemExist.Status = inboundItem.Status;
+                        inboundItemExist.RegisterDate = DateTime.Now;
                         DetailRepo.Update(inboundItemExist);
                         Db.SaveChanges();
                         scope.Complete();
@@ -239,6 +239,7 @@ namespace Isuzu.Service.Impl.Inbound
                             if (scan.EndsWith(item.RFIDTag))
                             {
                                 item.Status = IsuzuStatus.HOLD.ToString();
+                                item.HoldDate = DateTime.Now;
                                 DetailRepo.Update(item);
                             }
                         }
@@ -272,15 +273,14 @@ namespace Isuzu.Service.Impl.Inbound
                             if (scan.EndsWith(item.RFIDTag))
                             {
                                 item.Status = IsuzuStatus.SHIPPED.ToString();
+                                item.ShippingDate = DateTime.Now;
                                 DetailRepo.Update(item);
                             }
                         }
                     }
                     Db.SaveChanges();
                     scope.Complete();
-                }
-
-                
+                } 
             }
         }
 
@@ -305,6 +305,7 @@ namespace Isuzu.Service.Impl.Inbound
                     foreach (InboundItems item in queryForPacking)
                     {
                         item.CartonNo = inboundItemCartonPacking.CartonNo;
+                        item.PackCartonDate = DateTime.Now;
                         DetailRepo.Update(item);
                     }
 
@@ -353,6 +354,7 @@ namespace Isuzu.Service.Impl.Inbound
                             if (scan.EndsWith(item.RFIDTag))
                             {
                                 item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
+                                item.PackCaseDate = DateTime.Now;
                                 DetailRepo.Update(item);
                             }
                         }

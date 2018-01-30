@@ -17,6 +17,7 @@ namespace WIM.Core.Entity.LabelManagement
     {
         [Key]
         public int LabelIDSys { get; set; }
+        [ForeignKeyCustom("Project_MT")]
         public int ProjectIDSys { get; set; }        
         public string Lang { get; set; }
         [GeneralLog]
