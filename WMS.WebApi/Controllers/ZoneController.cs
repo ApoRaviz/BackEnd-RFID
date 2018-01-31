@@ -65,10 +65,12 @@ namespace WMS.WebApi.Controllers
         [Route("{ZoneIDSys}")]
         public HttpResponseMessage Get(int ZoneIDSys)
         {
-            IResponseData<ZoneLayoutHeader_MT> response = new ResponseData<ZoneLayoutHeader_MT>();
+            IResponseData<object> response = new ResponseData<object>();
             try
             {
                 ZoneLayoutHeader_MT zone = ZoneService.GetZoneLayoutByZoneIDSys(ZoneIDSys, "ZoneLayoutDetail_MT");
+              
+
                 response.SetData(zone);
             }
             catch (ValidationException ex)

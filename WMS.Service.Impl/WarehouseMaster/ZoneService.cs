@@ -69,6 +69,7 @@ namespace WMS.Service.Impl.WarehouseMaster
             }
         }
 
+
         public int? CreateZoneLayout(ZoneLayoutHeader_MT data)
         {
             System.Text.StringBuilder sb = new StringBuilder();
