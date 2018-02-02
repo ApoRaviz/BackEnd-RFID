@@ -120,6 +120,8 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        #region Rack
+
         [HttpPost]
         [Route("CreateRack")]
         public HttpResponseMessage CreateRack([FromBody]List<RackLayout_MT> data)
@@ -174,6 +176,9 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        #endregion
+
+        #region ZoneType
         [HttpGet]
         [Route("GetAllZoneType")]
         public HttpResponseMessage GetAllZonType()
@@ -266,7 +271,7 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
-
+        #endregion
 
     }
 }
