@@ -801,9 +801,6 @@ namespace Isuzu.Service.Impl.Inbound
         {
             using (var scope = new TransactionScope())
             {
-                //InboundItems queryUpdate = (from p in Db.InboundItems
-                //                            where p.ISZJOrder.Equals(reason.ISZJOrder)
-                //                            select p).FirstOrDefault();
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
@@ -824,13 +821,6 @@ namespace Isuzu.Service.Impl.Inbound
                             });
                             queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
                             HeadRepo.Update(queryUpdate);
-
-                            //    queryUpdate.Status = IsuzuStatus.DELETED.ToString();
-                            //    queryUpdate.DeleteReason = reason.Reason;
-                            //    queryUpdate.PathDeleteReason = reason.Paths;
-                            //    queryUpdate.UpdateAt = DateTime.Now;
-                            //    queryUpdate.UpdateBy = reason.UserName;
-                            //    DetailRepo.UpdateItem(queryUpdate,reason.UserName);
                         }
                         Db.SaveChanges();
                         scope.Complete();
@@ -842,6 +832,45 @@ namespace Isuzu.Service.Impl.Inbound
                 }
                 
                
+            }
+            return true;
+        }
+        public bool UpdateDeleteReasonByInvoice(string InvNo, IsuzuDeleteReason reason)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    var queryUpdate = HeadRepo.GetItemFirstBy(f => f.InvNo == InvNo, true);
+
+                    try
+                    {
+                        if (queryUpdate != null)
+                        {
+                            queryUpdate.InboundItems.ToList().ForEach(f =>
+                            {
+                                if (f.Status != IsuzuStatus.DELETED.ToString())
+                                {
+                                    f.Status = IsuzuStatus.DELETED.ToString();
+                                    f.DeleteReason = reason.Reason;
+                                    f.PathDeleteReason = reason.Paths;
+                                }
+                            });
+                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
+                            queryUpdate.Status = IsuzuStatus.DELETED.ToString();
+                            HeadRepo.Update(queryUpdate);
+                        }
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+                }
+
+
             }
             return true;
         }

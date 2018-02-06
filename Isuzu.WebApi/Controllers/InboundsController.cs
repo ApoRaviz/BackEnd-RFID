@@ -256,7 +256,7 @@ namespace Isuzu.Service.Impl
 
         #region =============================== DEFAULT =================================
 
-        #endregion
+       
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -623,7 +623,7 @@ namespace Isuzu.Service.Impl
 
         [Authorize]
         [HttpPost]
-        [Route("deleteResonPath")]
+        [Route("deleteReasonPath")]
         public async Task<HttpResponseMessage> PostDeleteReason()
         {
             // Check if the request contains multipart/form-data.
@@ -676,7 +676,7 @@ namespace Isuzu.Service.Impl
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
-        [Route("deleteReson")]
+        [Route("deleteReason")]
         public HttpResponseMessage DeleteReason([FromBody]IsuzuDeleteReason item)
         {
 
@@ -690,6 +690,33 @@ namespace Isuzu.Service.Impl
                    
                     bool result = InboundService.UpdateDeleteReason(item);
                     //result = InboundService.UpdateQtyInboundHead(item.InvNo, item.UserName);
+                    response.SetData(result);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
+
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("DeleteReasonByInvoice/{invNo}")]
+        public HttpResponseMessage DeleteReasonByInvoice(string invNo, [FromBody]IsuzuDeleteReason item)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+
+                if (item != null)
+                {
+
+                    bool result = InboundService.UpdateDeleteReasonByInvoice(invNo, item);
                     response.SetData(result);
                     response.SetStatus(HttpStatusCode.OK);
                 }
@@ -744,5 +771,6 @@ namespace Isuzu.Service.Impl
 
         }
 
+        #endregion
     }
 }

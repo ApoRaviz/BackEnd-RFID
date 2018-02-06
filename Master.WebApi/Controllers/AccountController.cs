@@ -73,6 +73,7 @@ namespace Master.WebApi.Controllers
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
+                IsAdmin = User.IsSysAdmin(),
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
         }
