@@ -13,7 +13,7 @@ using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 
-namespace WIM.WebApi.Auth
+namespace WIM.Core.Security
 {
     public class IdentityAuthAttribute : AuthorizationFilterAttribute
     {
@@ -48,17 +48,6 @@ namespace WIM.WebApi.Auth
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);
                 actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Unauthorized, response);
-                return Task.FromResult<object>(null);
-            }
-
-            if (!principal.HasPermission(actionContext.Request) && !principal.IsSysAdmin())
-            {
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
-                ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E403));
-                IResponseData<int> response = new ResponseData<int>();
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.Unauthorized);
-                actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Forbidden, response);
                 return Task.FromResult<object>(null);
             }
 

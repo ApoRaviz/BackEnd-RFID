@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ForeignKeyCustomAttribute.cs" />
     <Compile Include="Attributes\GeneralLogAttribute.cs" />
     <Compile Include="Attributes\HashidsAttrbute.cs" />
     <Compile Include="Constant.cs\Constant.cs" />
