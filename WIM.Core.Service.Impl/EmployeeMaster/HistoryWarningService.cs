@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -10,53 +11,62 @@ using WIM.Core.Common.Utility.Helpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Employee;
-using WIM.Core.Repository;
-using WIM.Core.Repository.Impl;
 using WIM.Core.Repository.Impl.Personalize;
 using WIM.Core.Repository.Personalize;
 using WIM.Core.Service.EmployeeMaster;
 
 namespace WIM.Core.Service.Impl.EmployeeMaster
 {
-    public class PositionService : Service, IPositionService
+    public class HistoryWarningService : Service, IHistoryWarningService
     {
-        public PositionService()
+        public HistoryWarningService()
         {
+
         }
 
-        public IEnumerable<Positions> GetPositions()
+        public IEnumerable<HistoryWarning> GetHistories()
         {
-            IEnumerable<Positions> position;
+            IEnumerable<HistoryWarning> history;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPositionRepository repo = new PositionRepository(Db);
-                position = repo.Get();
+                IHistoryWarningRepository repo = new HistoryWarningRepository(Db);
+                history = repo.Get();
             }
-            return position;
+            return history;
         }
 
-        public Positions GetPositionByPositionIDSys(int id)
+        public IEnumerable<HistoryWarning >GetHistoryByEmID(string id)
         {
-            Positions position;
+            IEnumerable<HistoryWarning> history;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                IPositionRepository repo = new PositionRepository(Db);
-                position = repo.GetByID(id);
+                CoreDbContext db = new CoreDbContext();
+                IHistoryWarningRepository repo = new HistoryWarningRepository(Db);
+                history = repo.GetMany(a => a.EmID == id).Select(s => new HistoryWarning() {
+                    EmID = s.EmID,
+                    Description = s.Description,
+                    FileUID = s.FileUID,
+                    StatusIDSys = s.StatusIDSys,
+                    WarnIDSys = s.WarnIDSys,
+                    WarningDate = s.WarningDate,
+                    File_MT = db.File_MT.Where(d => d.FileUID == s.FileUID).SingleOrDefault()
+                    
+                }).ToList();
             }
-            return position;
+            return history;
         }
 
-        public int CreatePosition(Positions position)
+        public int CreateHistory(HistoryWarning warning)
         {
             using (var scope = new TransactionScope())
             {
-                Positions Positionnew = new Positions();
+                HistoryWarning history = new HistoryWarning();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPositionRepository repo = new PositionRepository(Db);
-                        Positionnew = repo.Insert(position);
+                        IHistoryWarningRepository repo = new HistoryWarningRepository(Db);
+                        history = repo.Insert(warning);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -71,11 +81,11 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                     ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     throw ex;
                 }
-                return Positionnew.PositionIDSys;
+                return history.WarnIDSys;
             }
         }
 
-        public bool UpdatePosition(Positions position)
+        public bool UpdateHistory(HistoryWarning warning)
         {
             using (var scope = new TransactionScope())
             {
@@ -83,8 +93,8 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IPositionRepository repo = new PositionRepository(Db);
-                        repo.Update(position);
+                        IHistoryWarningRepository repo = new HistoryWarningRepository(Db);
+                        repo.Update(warning);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -103,36 +113,9 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
             }
         }
 
-        public bool DeletePosition(int id)
+        public bool DeleteHistory(int id)
         {
-            using (var scope = new TransactionScope())
-            {
-                try
-                {
-                    using (CoreDbContext Db = new CoreDbContext())
-                    {
-                        IPositionRepository repo = new PositionRepository(Db);
-                        IEmployeeRepository repoem = new EmployeeRepository(Db);
-                        var employee = repoem.GetMany(a => a.PositionIDSys == id && a.IsActive == true).ToList();
-                        if(employee.Count > 0)
-                        {
-                            return false;
-                        }
-                        var existedPosition = repo.GetByID(id);
-                        existedPosition.IsActive = false;
-                        repo.Update(existedPosition);
-                        scope.Complete();
-                        Db.SaveChanges();
-                    }
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
-                    throw ex;
-                }
-                return true;
-            }
+            throw new NotImplementedException();
         }
 
         public void HandleValidationException(DbEntityValidationException ex)

@@ -9,5 +9,6 @@ namespace WIM.Core.Repository
 {
     public interface IEmployeeRepository : IRepository<Employee_MT>
     {
+        int GetMaxEMID(int? DepIDSys);
     }
 }

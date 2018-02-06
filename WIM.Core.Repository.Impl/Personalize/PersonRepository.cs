@@ -17,14 +17,6 @@ namespace WIM.Core.Repository.Impl
             Db = context;
         }
 
-        // JobComment
-        /*public IEnumerable<Person_MT> Get()
-        {
-            var person = from c in Db.Person_MT
-                         select c;
-            return person.ToList();
-        }*/
-
         public Person_MT GetByUserID(string id)
         {
             var person = (from i in Db.Person_MT

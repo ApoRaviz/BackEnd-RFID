@@ -59,6 +59,7 @@
     <Compile Include="CustomerAndProject\CustomerRepository.cs" />
     <Compile Include="CustomerAndProject\ModuleRepository.cs" />
     <Compile Include="CustomerAndProject\ProjectRepository.cs" />
+    <Compile Include="FileManagement\FileRepository.cs" />
     <Compile Include="HeadReportControl\HeadReportControlRepository.cs" />
     <Compile Include="LabelControl\LabelControlRepository.cs" />
     <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
@@ -66,8 +67,10 @@
     <Compile Include="MenuAndPermission\PermissionRepository.cs" />
     <Compile Include="Personalize\DepartmentRepository.cs" />
     <Compile Include="Personalize\EmployeeRepository.cs" />
+    <Compile Include="Personalize\HistoryWarningRepository.cs" />
     <Compile Include="Personalize\PersonRepository.cs" />
     <Compile Include="Personalize\PositionRepository.cs" />
+    <Compile Include="Personalize\ResignRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="RoleAndUser\RoleRepository.cs" />

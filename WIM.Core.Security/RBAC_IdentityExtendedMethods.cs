@@ -311,6 +311,7 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/Projects/select",
                     "POST/api/v1/account/Logout",
                     "POST/api/v1/Account/ChangePassword",
+                    "GET/api/v1/Roles/user",
                     //Menu Side Url
                     "GET/api/v1/MenuProjectMappings/menu/",
                     //Url Ignore ChkOTP
