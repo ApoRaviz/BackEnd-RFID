@@ -72,6 +72,10 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IEmployeeRepository repo = new EmployeeRepository(Db);
+                        if(Employee.EmID == null)
+                        {
+                            Employee.EmID = (repo.GetMaxEMID(Employee.DepIDSys) + 1).ToString();
+                        }
                         Employeenew = repo.Insert(Employee);
                         Db.SaveChanges();
                         scope.Complete();

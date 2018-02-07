@@ -214,6 +214,31 @@ namespace WMS.Service
             }
         }
 
+        public bool DeleteItemUnit(ItemUnitMapping item)
+        {
+            using (var scope = new TransactionScope())
+            {
+
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IItemUnitRepository repo = new ItemUnitRepository(Db);
+                        repo.Delete(item);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    throw ex;
+                }
+                return true;
+            }
+        }
+
         public void HandleValidationException(DbEntityValidationException ex)
         {
             foreach (var eve in ex.EntityValidationErrors)

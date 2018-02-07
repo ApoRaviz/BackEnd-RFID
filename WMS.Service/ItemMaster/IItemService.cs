@@ -16,6 +16,7 @@ namespace WMS.Service
         int CreateItem(Item_MT Item );
         bool UpdateItem(Item_MT Item );
         bool DeleteItem(int id);
+        bool DeleteItemUnit(ItemUnitMapping item);
         IEnumerable<AutocompleteItemDto> AutocompleteItem(string term);
     }
 }

@@ -19,7 +19,8 @@ namespace WIM.Core.Common.Utility.Helpers
             respone.ClearContent();
             respone.Clear();
             respone.AppendHeader("content-disposition", "attachment; filename=" + fileName);
-            respone.ContentType = "text/plain";
+            //respone.ContentType = "text/plain";
+            respone.ContentType = "Application/msword";
             respone.WriteFile(path);
             respone.Flush();
             respone.Close();

@@ -344,6 +344,9 @@
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DemoController.cs" />
+    <Compile Include="Controllers\ResignController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\WarningController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HelpersController.cs" />

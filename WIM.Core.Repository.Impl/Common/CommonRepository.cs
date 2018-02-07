@@ -30,7 +30,8 @@ namespace WIM.Core.Repository.Impl
 
         public string ProcGetTableDescriptionWms(string tableName)
         {
-            return this.Context.Database.SqlQuery<string>("ProcGetTableDescription @tableName"
+            WMSDbContext wms = new WMSDbContext();
+            return wms.Database.SqlQuery<string>("ProcGetTableDescription @tableName"
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
         }
 

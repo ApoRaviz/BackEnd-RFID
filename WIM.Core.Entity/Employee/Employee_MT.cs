@@ -30,5 +30,8 @@ namespace WIM.Core.Entity
         public virtual Departments Departments { get; set; }
         [ForeignKey("PositionIDSys")]
         public virtual Positions Positions { get; set; }
+        [NotMapped]
+        public virtual Resign Resign { get; set; }
+        public virtual ICollection<HistoryWarning> HistoryWarnings { get; set; }
     }
 }

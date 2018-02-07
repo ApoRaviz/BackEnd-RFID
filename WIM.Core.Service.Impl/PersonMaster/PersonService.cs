@@ -72,7 +72,12 @@ namespace WIM.Core.Service.Impl
                     Religion = data.Religion,
                     Nationality = data.Nationality,
                     Gender = data.Gender,
-                    Mobile = data.Mobile
+                    Mobile = data.Mobile,
+                    PrefixIDSys = data.PrefixIDSys,
+                    Address = data.Address,
+                    IdentificationNo = data.IdentificationNo,
+                    PassportNo = data.PassportNo,
+                    TaxNo = data.TaxNo
                 };
             }
             return Person;

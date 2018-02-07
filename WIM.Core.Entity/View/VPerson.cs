@@ -14,6 +14,8 @@ namespace WIM.Core.Entity.View
         [Key]
         public int PersonIDSys { get; set; }
         public string EmID { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public string NameEn { get; set; }
         public string SurnameEn { get; set; }
         public string CompNameEn { get; set; }
@@ -26,6 +28,7 @@ namespace WIM.Core.Entity.View
         public string TelOffice { get; set; }
         public string TelExt { get; set; }
         public string UserName { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

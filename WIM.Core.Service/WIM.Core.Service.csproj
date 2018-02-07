@@ -59,7 +59,10 @@
     <Compile Include="CustomerMaster\ICustomerService.cs" />
     <Compile Include="EmployeeMaster\IDepartmentService.cs" />
     <Compile Include="EmployeeMaster\IEmployeeService.cs" />
+    <Compile Include="EmployeeMaster\IHistoryWarningService.cs" />
     <Compile Include="EmployeeMaster\IPositionService.cs" />
+    <Compile Include="EmployeeMaster\IResignService.cs" />
+    <Compile Include="FileManagement\IFileService.cs" />
     <Compile Include="HeadReportControl\IHeadReportControlService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="LabelControl\ILabelControlService.cs" />
