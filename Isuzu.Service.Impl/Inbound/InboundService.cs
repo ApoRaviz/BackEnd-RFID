@@ -812,7 +812,7 @@ namespace Isuzu.Service.Impl.Inbound
                         {
                             queryUpdate.InboundItems.ToList().ForEach(f =>
                             {
-                                if (f.ISZJOrder == reason.ISZJOrder)
+                                if (reason.ISZJOrder.Contains(f.ISZJOrder))
                                 {
                                     f.Status = IsuzuStatus.DELETED.ToString();
                                     f.DeleteReason = reason.Reason;

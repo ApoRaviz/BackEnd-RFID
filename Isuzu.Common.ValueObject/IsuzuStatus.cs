@@ -14,5 +14,7 @@ namespace Isuzu.Common.ValueObject
       HOLD = 4,
       SHIPPED = 5,
       DELETED =6,
+      RECEIVED_YUT = 7,
+      RECEIVED_ITA = 8
     }
 }
