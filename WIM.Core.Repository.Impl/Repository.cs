@@ -44,6 +44,10 @@ namespace WIM.Core.Repository.Impl
         {
             return DbSet.Take(2000).ToList();
         }
+        public async Task<IEnumerable<TEntity>> GetAsync()
+        {
+            return await DbSet.Take(2000).ToListAsync();
+        }
 
         public TEntity Get(Func<TEntity, Boolean> where)
         {
@@ -54,15 +58,27 @@ namespace WIM.Core.Repository.Impl
         {
             return DbSet.ToList();
         }
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await DbSet.ToListAsync();
+        }
 
         public TEntity GetByID(params object[] id)
         {
             return DbSet.Find(id);
         }
+        public async Task<TEntity> GetByIDAsync(params object[] id)
+        {
+            return await DbSet.FindAsync(id);
+        }
 
         public TEntity GetByID(object id)
         {
             return DbSet.Find(id);
+        }
+        public async Task<TEntity> GetByIDAsync(object id)
+        {
+            return await DbSet.FindAsync(id);
         }
 
         public bool Exists(object id)
@@ -130,19 +146,29 @@ namespace WIM.Core.Repository.Impl
             }
 
             Type typeEntityForUpdate = entityForUpdate.GetType();
-            foreach (PropertyInfo prop in properties)
-            {
+
+            List<Task> tasks = new List<Task>();
+            foreach (var prop in properties)
+            { 
                 var value = prop.GetValue(entityToUpdate);
                 if (typeEntityForUpdate.GetProperty(prop.Name) != null
                     && (!prop.PropertyType.IsGenericType || Nullable.GetUnderlyingType(prop.PropertyType) != null))
-                {                    
+                {
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
                     if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
                     {
-                        GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, Identity.GetUserName()));
+                        var identName = Identity.GetUserName();
+                        tasks.Add(Task.Factory.StartNew(() =>
+                        {
+                            GeneralLogDbSet = Context.Set<GeneralLog>();
+                            GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, identName));
+                            Context.SaveChanges();
+                        }));
+
                     }
                 }
             }
+            Task.WaitAll(tasks.ToArray());
 
             entityForUpdate.UpdateBy = Identity.GetUserName();
             entityForUpdate.UpdateAt = DateTime.Now.Date;

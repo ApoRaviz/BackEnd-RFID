@@ -21,6 +21,7 @@ using Isuzu.Repository.ItemManagement;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
 using System.Web.Script.Serialization;
+using System.Data.Entity;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -403,8 +404,7 @@ namespace Isuzu.Service.Impl.Inbound
             InboundItems item;
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-                item = (
-                           from i in Db.InboundItems
+                item =  (from i in Db.InboundItems
                            where i.ISZJOrder == iszjOrder
                            select i).SingleOrDefault();
             }
@@ -461,22 +461,20 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItems> GetInboundItemByQty(int qty, bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
-            string sql = "SELECT * FROM [dbo].[InboundItems] WHERE Qty=@Qty ORDER BY SeqNo";
-            if (isShipped)
-                sql = "SELECT * FROM [dbo].[InboundItems] WHERE Qty=@Qty AND Status=@Status ORDER BY SeqNo";
-
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
-                        items = (isShipped) ? DetailRepo.SqlQuery<InboundItems>(sql
-                            , new SqlParameter("@Qty", qty)
-                            , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
-                            : DetailRepo.SqlQuery<InboundItems>(sql
-                            , new SqlParameter("@Qty", qty)).ToList();
+                        items = (from p in Db.InboundItems
+                         where p.Qty == qty
+                         orderby p.SeqNo
+                         select p).ToList();
+
+                        if(isShipped)
+                            items = items.Where(x => x.Status == IsuzuStatus.SHIPPED.ToString()).ToList();
+
                     }
                     catch (Exception)
                     {
@@ -493,22 +491,19 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo, bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
-            string sql = "SELECT * FROM [dbo].[InboundItems] WHERE InvNo=@InvNo ORDER BY SeqNo";
-            if (isShipped)
-                sql = "SELECT * FROM [dbo].[InboundItems] WHERE InvNo=@InvNo AND Status=@Status ORDER BY SeqNo";
 
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
                     try
                     {
-                        items = (isShipped) ? DetailRepo.SqlQuery<InboundItems>(sql
-                           , new SqlParameter("@InvNo", invNo)
-                           , new SqlParameter("@Status", IsuzuStatus.SHIPPED.ToString())).ToList()
-                           : DetailRepo.SqlQuery<InboundItems>(sql
-                           , new SqlParameter("@Qty", invNo)).ToList();
+                        items = (from p in Db.InboundItems
+                                 where p.InvNo == invNo
+                                 orderby p.SeqNo
+                                 select p).ToList();
+                        if (isShipped)
+                            items = items.Where(w => w.Status == IsuzuStatus.SHIPPED.ToString()).ToList();
                     }
                     catch (Exception)
                     {
@@ -703,6 +698,7 @@ namespace Isuzu.Service.Impl.Inbound
 
             return item;
         }
+       
         public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord)
         {
             DataSet dset = new DataSet();
@@ -995,13 +991,12 @@ namespace Isuzu.Service.Impl.Inbound
                 return Db.Database.SqlQuery<string>("ProcGetRFIDInfo").FirstOrDefault();
             }
         }
-        public IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch, out int totalRecord)
+        public IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch)
         {
             string[] ms = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" };
             string[] ml = new string[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             List<IsuzuTagReport> items = new List<IsuzuTagReport>();
             string result = "", startDate = "", endDate = "";
-            totalRecord = 0;
             int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
             if (cnt != 2)
                 return null;
@@ -1028,26 +1023,19 @@ namespace Isuzu.Service.Impl.Inbound
                 items = json_serializer.Deserialize<List<IsuzuTagReport>>(result);
                 if (items != null)
                 {
-                    items.ForEach(f =>
-                    {
+                    foreach (var f in items) {
                         f.MonthName = ml[f.MonthNumber - 1];
-                    });
-                    //var q = (from p in items group p by p.YearNumber into g select new FujiTagReport(){
-                    //   YearNumber = g.Key
-                    //   , MonthName = "Total Tags"
-                    //   , MonthNumber =  0
-                    //   , ReceivedNumber = g.Sum(s => s.ReceivedNumber)
-                    //   , ShippedNumber = g.Sum(s => s.ShippedNumber)
-                    //   , TotalNumber = g.Sum(s => s.TotalNumber)
-                    //}).ToList();
-
-                    //items.AddRange(q);
-
+                    }
                 }
 
             }
             return items;
         }
+
+        #region AsyncMethod 
+
+        #endregion
+
         #endregion
 
         public void HandleValidationException(DbEntityValidationException ex)
@@ -1060,146 +1048,6 @@ namespace Isuzu.Service.Impl.Inbound
                 }
             }
         }
-
-        #region TranslateDataSet
-        private IsuzuInboundGroup translateIsuzuInboundGroup(DataRow data)
-        {
-            IsuzuInboundGroup newItem = new IsuzuInboundGroup(null, 0, false);
-            if (data != null)
-            {
-                newItem.InvNo = data["InvNo"].ToString();
-                newItem.Qty = Convert.ToInt32(data["Qty"]);
-                newItem.IsExport = Convert.ToBoolean(data["IsExport"]);
-            }
-
-            return newItem;
-        }
-        private List<IsuzuInboundGroup> translateIsuzuInboundGroupList(DataSet data)
-        {
-            List<IsuzuInboundGroup> ret = new List<IsuzuInboundGroup>();
-            if (data.Tables["DataSet1"] != null)
-            {
-                var collection = data.Tables["DataSet1"].Rows;
-                if (collection.Count > 0)
-                {
-                    foreach (DataRow item in collection)
-                    {
-                        var result = translateIsuzuInboundGroup(item);
-                        if (result != null)
-                            ret.Add(result);
-                    }
-                }
-            }
-
-            return ret;
-
-        }
-
-        private IsuzuInboundGroup translateIsuzuInboundGroup(SqlDataReader reader)
-        {
-            IsuzuInboundGroup newItem = new IsuzuInboundGroup(null, 0, false);
-            if (reader != null)
-            {
-                newItem.InvNo = reader["InvNo"].ToString();
-                newItem.Qty = Convert.ToInt32(reader["Qty"]);
-                newItem.IsExport = Convert.ToBoolean(reader["IsExport"]);
-            }
-
-            return newItem;
-        }
-        private List<IsuzuInboundGroup> translateIsuzuInboundGroupList(SqlDataReader reader)
-        {
-            List<IsuzuInboundGroup> ret = new List<IsuzuInboundGroup>();
-            while (reader.Read())
-            {
-                var item = translateIsuzuInboundGroup(reader);
-                if (item != null)
-                    ret.Add(item);
-            }
-
-            return ret;
-
-        }
-
-
-        private InboundItemsHead translateIsuzuInboundHead(SqlDataReader reader)
-        {
-            InboundItemsHead newItem = new InboundItemsHead();
-            if (reader != null)
-            {
-                newItem.InvNo = reader["InvNo"].ToString();
-                newItem.Qty = Convert.ToInt32(reader["Qty"]);
-                newItem.IsExport = Convert.ToBoolean(reader["IsExport"]);
-                newItem.Status = reader["Status"].ToString();
-                newItem.Remark = reader["Remark"].ToString();
-                newItem.CreateAt = reader["CreateAt"] is DBNull ? new DateTime(1900, 1, 1) : Convert.ToDateTime(reader["CreateAt"]);
-                newItem.CreateBy = reader["CreateBy"].ToString();
-                newItem.UpdateAt = reader["UpdateAt"] is DBNull ? new DateTime(1900, 1, 1) : Convert.ToDateTime(reader["UpdateAt"]);
-                newItem.UpdateBy = reader["UpdateBy"].ToString();
-                newItem.IsActive = Convert.ToBoolean(reader["IsActive"]);
-            }
-
-            return newItem;
-        }
-        private List<InboundItemsHead> translateIsuzuInboundHeadList(SqlDataReader reader)
-        {
-            List<InboundItemsHead> ret = new List<InboundItemsHead>();
-            while (reader.Read())
-            {
-                var item = translateIsuzuInboundHead(reader);
-                if (item != null)
-                    ret.Add(item);
-            }
-
-            return ret;
-
-        }
-
-        private InboundItems translateIsuzuInboundItems(SqlDataReader reader)
-        {
-            InboundItems newItem = new InboundItems();
-            if (reader != null)
-            {
-                newItem.ID = reader["ID"].ToString();
-                newItem.InvNo = reader["InvNo"].ToString();
-                newItem.SeqNo = Convert.ToInt32(reader["SeqNo"]);
-                newItem.ITAOrder = reader["ITAOrder"].ToString();
-                newItem.RFIDTag = reader["RFIDTag"].ToString();
-                newItem.ISZJOrder = reader["ISZJOrder"].ToString();
-                newItem.PartNo = reader["PartNo"].ToString();
-                newItem.ParrtName = reader["ParrtName"].ToString();
-                newItem.Qty = Convert.ToInt32(reader["Qty"]);
-                newItem.Vendor = reader["Vendor"].ToString();
-                newItem.Shelf = reader["Shelf"].ToString();
-                newItem.Destination = reader["Destination"].ToString();
-                newItem.Status = reader["Status"].ToString();
-                newItem.CreateBy = reader["CreateBy"].ToString();
-                newItem.CreateAt = reader["CreateAt"] is DBNull ? new DateTime(1900, 1, 1) : Convert.ToDateTime(reader["CreateAt"]);
-                newItem.UpdateBy = reader["UpdateBy"].ToString();
-                newItem.UpdateAt = reader["UpdateAt"] is DBNull ? new DateTime(1900, 1, 1) : Convert.ToDateTime(reader["UpdateAt"]);
-                newItem.CaseNo = reader["CaseNo"].ToString();
-                newItem.CartonNo = reader["CartonNo"].ToString();
-                newItem.IsActive = Convert.ToBoolean(reader["IsActive"]);
-                //newItem.IsExport = Convert.ToBoolean(reader["IsExport"]);
-            }
-
-            return newItem;
-        }
-        private List<InboundItems> translateIsuzuInboundItemsList(SqlDataReader reader)
-        {
-            List<InboundItems> ret = new List<InboundItems>();
-            while (reader.Read())
-            {
-                var item = translateIsuzuInboundItems(reader);
-                if (item != null)
-                    ret.Add(item);
-            }
-
-            return ret;
-
-        }
-
-        #endregion 
 
     }
 }
