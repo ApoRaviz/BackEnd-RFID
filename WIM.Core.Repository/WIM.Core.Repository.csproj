@@ -66,6 +66,7 @@
     <Compile Include="Personalize\IHistoryWarningRepository.cs" />
     <Compile Include="Personalize\IPersonRepository.cs" />
     <Compile Include="Personalize\IPositionRepository.cs" />
+    <Compile Include="Personalize\IProbationRepository.cs" />
     <Compile Include="Personalize\IResignRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IRepository.cs" />
