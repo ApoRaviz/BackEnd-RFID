@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 

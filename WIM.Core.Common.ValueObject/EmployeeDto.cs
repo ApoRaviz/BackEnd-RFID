@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Entity.Person;
 
 namespace WIM.Core.Common.ValueObject
 {
@@ -21,6 +20,6 @@ namespace WIM.Core.Common.ValueObject
         public System.DateTime UpdateDate { get; set; }
         public string UserUpdate { get; set; }
 
-        public Person_MT Person_MT { get; set; }
+        public PersonDto Person_MT { get; set; }
     }
 }

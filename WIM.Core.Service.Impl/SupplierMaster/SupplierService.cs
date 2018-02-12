@@ -7,7 +7,7 @@ using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Repository.Impl.Supplier;
 using WIM.Core.Repository.Supplier;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.ValueObject;
 
 namespace WIM.Core.Service
@@ -73,7 +73,7 @@ namespace WIM.Core.Service
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 return Supplier.SupIDSys;
@@ -102,7 +102,7 @@ namespace WIM.Core.Service
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 return true;
@@ -126,7 +126,7 @@ namespace WIM.Core.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
                     throw ex;
                 }
                 return true;

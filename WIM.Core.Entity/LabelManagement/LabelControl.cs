@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Utility.Attributes;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
 
 namespace WIM.Core.Entity.LabelManagement

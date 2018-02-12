@@ -1,20 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.Utility.Attributes;
 
 namespace Isuzu.Common.ValueObject
 {
     public enum IsuzuStatus
     {
-      NEW = 1,
-      RECEIVE = 2,
-      IMPORTED = 3,
-      HOLD = 4,
-      SHIPPED = 5,
-      DELETED =6,
-      RECEIVED_YUT = 7,
-      RECEIVED_ITA = 8
+        [ValueEnum("IMPORTED")]
+        Imported,
+        [ValueEnum("NEW")]
+        New,
+        [ValueEnum("REGISTERED_YUT")]
+        RegisteredAtYUT,
+        [ValueEnum("REGISTERED_ITA")]
+        RegisteredAtITA,
+        [ValueEnum("RECEIVED")]
+        Received,        
+        [ValueEnum("HOLD")]
+        Hold,
+        [ValueEnum("SHIPPED")]
+        Shipped,
+        [ValueEnum("DELETED")]
+        Deleted,
+        [ValueEnum("RECEIVED_YUT")]
+        ReceivedAtYUT,
+        [ValueEnum("RECEIVED_ITA")]
+        ReceivedAtITA
     }
 }

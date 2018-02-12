@@ -19,7 +19,7 @@ using Isuzu.Repository.Impl;
 using System.Security.Principal;
 using Isuzu.Repository.ItemManagement;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using System.Web.Script.Serialization;
 using System.Data.Entity;
 
@@ -27,13 +27,9 @@ namespace Isuzu.Service.Impl.Inbound
 {
     public class InboundService : IInboundService
     {
-        #region stringConnection
-        private string connectionString = ConfigurationManager.ConnectionStrings["WIM_ISUZU"].ConnectionString;
-        #endregion 
-        
         public InboundService()
         {
-           
+
         }
 
         #region =========================== HANDY ===========================
@@ -42,17 +38,18 @@ namespace Isuzu.Service.Impl.Inbound
             InboundItemHandyDto item;
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-               item  = (
-                        from i in Db.InboundItems
-                        select new InboundItemHandyDto
-                        {
-                            ID = i.ID,
-                            InvNo = i.InvNo,
-                            ITAOrder = i.ITAOrder,
-                            RFIDTag = i.RFIDTag,
-                            ISZJOrder = i.ISZJOrder
-                        }
-                    ).SingleOrDefault();
+                item = (
+                         from i in Db.InboundItems
+                         where i.ISZJOrder == iszjOrder
+                         select new InboundItemHandyDto
+                         {
+                             ID = i.ID,
+                             InvNo = i.InvNo,
+                             ITAOrder = i.ITAOrder,
+                             RFIDTag = i.RFIDTag,
+                             ISZJOrder = i.ISZJOrder
+                         }
+                     ).SingleOrDefault();
             }
             return item;
         }
@@ -66,65 +63,77 @@ namespace Isuzu.Service.Impl.Inbound
                                from i in Db.InboundItems
                                where i.ISZJOrder == inboundItem.ISZJOrder
                                && !string.IsNullOrEmpty(i.RFIDTag)
+                               && i.Status != IsuzuStatus.Deleted.GetValueEnum()
                                select i
                            ).Any();
             }
             return isRFIDNeedRepeat;
         }
 
-        public void RegisterInboundItem_HANDY(InboundItemHandyDto inboundItem, string username)
+        public void RegisterInboundItem_HANDY(InboundItemHandyDto item)
         {
             using (var scope = new TransactionScope())
             {
-                using (IsuzuDataContext Db = new IsuzuDataContext())
+                using (IsuzuDataContext db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    IInboundHeadRepository headRepo = new InboundHeadRepository(db);
+                    IInboundRepository detailRepo = new InboundRepository(db);
+
                     try
                     {
-                        InboundItems itemRFIDIsDuplicatedAnother = (
-                                    from i in Db.InboundItems
-                                    where i.RFIDTag == inboundItem.RFIDTag
-                                    && i.ISZJOrder != inboundItem.ISZJOrder
-                                    select i
-                                ).SingleOrDefault();
+                        bool isDupAnother = detailRepo.Exists(i =>
+                            i.RFIDTag == item.RFIDTag
+                            && i.ISZJOrder != item.ISZJOrder
+                            && !new List<string> {
+                                    IsuzuStatus.Shipped.GetValueEnum(),
+                                    IsuzuStatus.Deleted.GetValueEnum()
+                                }.Contains(i.Status)
+                        );
 
-                        if (itemRFIDIsDuplicatedAnother != null)
+                        if (isDupAnother)
                         {
-                            ValidationException ve = new ValidationException();
-                            ve.Add(new ValidationError(((int)ErrorCode.RFIDIsDuplicatedAnother).ToString(), string.Format("RFID {0} ถูก Register โดย Order {1} ไปแล้ว ", inboundItem.RFIDTag, itemRFIDIsDuplicatedAnother.ISZJOrder)));
-                            throw ve;
+                            throw new ValidationException(ErrorEnum.RFIDIsDuplicatedAnother);
                         }
 
-                        var inboundItemExist = (
-                                    from i in Db.InboundItems
-                                    where i.ID == inboundItem.ID
-                                        && i.ISZJOrder == inboundItem.ISZJOrder
-                                        && i.InvNo == inboundItem.InvNo
-                                    select i
-                                ).SingleOrDefault();
+                        InboundItems itemExist = detailRepo.GetByID(item.ID);
 
+                        itemExist.RFIDTag = item.RFIDTag;
+                        itemExist.Status = item.Status;
+                        itemExist.RegisterDate = DateTime.Now;
+                        detailRepo.Update(itemExist);
 
-                        /*if (!string.IsNullOrEmpty(inboundItemExist.RFIDTag))
-                        {
-                            ValidationException ve = new ValidationException();
-                            ve.Add(new ValidationError(((int)ErrorCode.RFIDNotEmpty).ToString(), ErrorCode.RFIDNotEmpty.GetDescription()));
-                            throw ve;
-                        }*/
+                        // #Update Head
+                        InboundItemsHead itemHeadExist = headRepo.GetByID(item.InvNo);
 
-                        inboundItemExist.RFIDTag = inboundItem.RFIDTag;
-                        inboundItemExist.Status = inboundItem.Status;
-                        inboundItemExist.RegisterDate = DateTime.Now;
-                        DetailRepo.Update(inboundItemExist);
-                        Db.SaveChanges();
+                        itemHeadExist.Status = item.Status;
+                        headRepo.Update(itemHeadExist);
+
+                        db.SaveChanges();
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
-                
             }
+        }
+
+        public int GetAmountRegistered_HANDY()
+        {
+            int cnt = 0;
+            using (var Db = new IsuzuDataContext())
+            {
+                cnt = (
+                       from i in Db.InboundItems
+                       where new List<string> {
+                           IsuzuStatus.RegisteredAtYUT.GetValueEnum(),
+                           IsuzuStatus.RegisteredAtITA.GetValueEnum()
+                       }.Contains(i.Status)
+                       select i
+                   ).Count();
+            }
+            return cnt;
         }
 
         public int GetAmountInboundItemInInvoiceByRFID_HANDY(string rfid)
@@ -135,7 +144,11 @@ namespace Isuzu.Service.Impl.Inbound
                 var inboundItem = (
                        from i in Db.InboundItems
                        where rfid.EndsWith(i.RFIDTag)
-                       && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
+                       && !new List<string> {
+                      IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
+                       }.Contains(i.Status)
                        select i
                    ).SingleOrDefault();
                 if (inboundItem == null)
@@ -143,11 +156,11 @@ namespace Isuzu.Service.Impl.Inbound
                     return 0;
                 }
 
-                 cnt = (
-                           from i in Db.InboundItems
-                           where i.InvNo == inboundItem.InvNo
-                           select i
-                       ).Count();
+                cnt = (
+                          from i in Db.InboundItems
+                          where i.InvNo == inboundItem.InvNo
+                          select i
+                      ).Count();
             }
             return cnt;
         }
@@ -160,7 +173,11 @@ namespace Isuzu.Service.Impl.Inbound
                 item = (
                         from i in Db.InboundItems
                         where rfid.EndsWith(i.RFIDTag)
-                        && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
+                        && !new List<string> {
+                           IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
+                       }.Contains(i.Status)
                         select new InboundItemHandyDto
                         {
                             ID = i.ID,
@@ -183,7 +200,11 @@ namespace Isuzu.Service.Impl.Inbound
                 item = (
                         from i in Db.InboundItems
                         where rfid.EndsWith(i.RFIDTag)
-                        && !new List<string> { "SHIPPED", "DELETED" }.Contains(i.Status)
+                        && !new List<string> {
+                           IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
+                       }.Contains(i.Status)
                         select new InboundItemCartonHandyDto
                         {
                             InvNo = i.InvNo,
@@ -200,88 +221,116 @@ namespace Isuzu.Service.Impl.Inbound
             IEnumerable<InboundItemHandyDto> items;
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-                 items = (
-                    from i in Db.InboundItems
-                    where i.InvNo == invNo
-                    && new List<string> { "RECEIVED", "HOLD" }.Contains(i.Status)
-                    select new InboundItemHandyDto
-                    {
-                        ID = i.ID,
-                        InvNo = i.InvNo,
-                        ITAOrder = i.ITAOrder,
-                        RFIDTag = i.RFIDTag,
-                        ISZJOrder = i.ISZJOrder
-                    }
-                ).ToList();
+                items = (
+                   from i in Db.InboundItems
+                   where i.InvNo == invNo
+                   && !new List<string> {
+                           "NEW",
+                           "SHIPPED",
+                           "DELETED"
+                       }.Contains(i.Status)
+                   select new InboundItemHandyDto
+                   {
+                       ID = i.ID,
+                       InvNo = i.InvNo,
+                       ITAOrder = i.ITAOrder,
+                       RFIDTag = i.RFIDTag,
+                       ISZJOrder = i.ISZJOrder
+                   }
+               ).ToList();
             }
             return items;
 
         }
 
-        public void PerformHolding_HANDY(InboundItemHoldingHandyRequest inboundItemHolding, string username)
+        public void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding)
         {
             using (var scope = new TransactionScope())
             {
-                using (IsuzuDataContext Db = new IsuzuDataContext())
+                using (IsuzuDataContext db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    IInboundHeadRepository headRepo = new InboundHeadRepository(db);
+                    IInboundRepository detailRepo = new InboundRepository(db);
 
-                    var queryForHolding = (
-                        from i in Db.InboundItems
-                        where i.InvNo == inboundItemHolding.InvNo
-                        //&& inboundItemHolding.RFIDTags.Contains(i.RFIDTag)
-                        select i
+                    IEnumerable<InboundItems> items = detailRepo.GetMany(i =>
+                        new List<string> {
+                            "REGISTERED_YUT",
+                            "REGISTERED_ITA"
+                        }.Contains(i.Status)
                     );
 
-                    foreach (InboundItems item in queryForHolding)
+                    List<string> invNoList = new List<string>(); // #For Update Head
+                    foreach (InboundItems item in items)
                     {
-                        foreach (string scan in inboundItemHolding.RFIDTags)
+                        foreach (string scan in itemsHolding.RFIDTags)
                         {
                             if (scan.EndsWith(item.RFIDTag))
                             {
-                                item.Status = IsuzuStatus.HOLD.ToString();
+                                item.Status = IsuzuStatus.ReceivedAtYUT.GetValueEnum();
                                 item.HoldDate = DateTime.Now;
-                                DetailRepo.Update(item);
+                                detailRepo.Update(item);
+                                invNoList.Add(item.InvNo); // #For Update Head
                             }
                         }
                     }
-                    Db.SaveChanges();
+
+                    // #Update Head
+                    invNoList = invNoList.Distinct().ToList();
+                    foreach (var invNo in invNoList)
+                    {
+                        InboundItemsHead itemHeadExist = headRepo.Get(i =>
+                            i.InvNo == invNo
+                        );
+                        itemHeadExist.Status = IsuzuStatus.ReceivedAtYUT.ToString();
+                        headRepo.Update(itemHeadExist);
+                    }
+
+                    db.SaveChanges();
                     scope.Complete();
                 }
-
-                
             }
         }
 
-        public void PerformShipping_HANDY(InboundItemShippingHandyRequest inboundItemShipping, string username)
+        public void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping)
         {
             using (var scope = new TransactionScope())
             {
-                using (IsuzuDataContext Db = new IsuzuDataContext())
+                using (IsuzuDataContext db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
-                    var queryForShipping = (
-                        from i in Db.InboundItems
-                        where i.InvNo == inboundItemShipping.InvNo
-                        //&& inboundItemShipping.RFIDTags.Contains(i.RFIDTag)
-                        select i
-                    );
+                    IInboundHeadRepository headRepo = new InboundHeadRepository(db);
+                    IInboundRepository detailRepo = new InboundRepository(db);
 
-                    foreach (InboundItems item in queryForShipping)
+                    IEnumerable<InboundItems> items = detailRepo.GetMany(i =>
+                        i.InvNo == itemsShipping.InvNo
+                        && !new List<string> {
+                           IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
+                       }.Contains(i.Status)
+                    );
+                    foreach (InboundItems item in items)
                     {
-                        foreach (string scan in inboundItemShipping.RFIDTags)
+                        foreach (string scan in itemsShipping.RFIDTags)
                         {
                             if (scan.EndsWith(item.RFIDTag))
                             {
-                                item.Status = IsuzuStatus.SHIPPED.ToString();
+                                item.Status = IsuzuStatus.Shipped.GetValueEnum();
                                 item.ShippingDate = DateTime.Now;
-                                DetailRepo.Update(item);
+                                detailRepo.Update(item);
                             }
                         }
                     }
-                    Db.SaveChanges();
+
+                    // #Update Head
+                    InboundItemsHead itemHeadExist = headRepo.Get(i =>
+                            i.InvNo == itemsShipping.InvNo
+                        );
+                    itemHeadExist.Status = IsuzuStatus.Shipped.GetValueEnum();
+                    headRepo.Update(itemHeadExist);
+
+                    db.SaveChanges();
                     scope.Complete();
-                } 
+                }
             }
         }
 
@@ -294,14 +343,14 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository DetailRepo = new InboundRepository(Db);
                     var queryForPacking = (
                         from i in Db.InboundItems
-                        where i.RFIDTag.EndsWith(inboundItemCartonPacking.RFIDTag)
-                        && new List<string> {
-                                    IsuzuStatus.RECEIVE.ToString(),
-                                    IsuzuStatus.HOLD.ToString()
-                                }.Contains(i.Status)
+                        where (inboundItemCartonPacking.RFIDTag == i.ISZJOrder || i.RFIDTag.EndsWith(inboundItemCartonPacking.RFIDTag))
+                        && !new List<string> {
+                           IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
+                       }.Contains(i.Status)
                         select i
                     );
-
 
                     foreach (InboundItems item in queryForPacking)
                     {
@@ -318,33 +367,18 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking, string username)
         {
-
-            //var item1Invoice = (
-            //        from i in Db.InboundItems
-            //        where i.CaseNo == inboundItemCasePacking.CaseNo
-            //        && i.InvNo != inboundItemCasePacking.InvNo
-            //        select i
-            //    ).FirstOrDefault();
-
-            //if (item1Invoice != null)
-            //{
-            //    ValidationException ve = new ValidationException();
-            //    ve.Add(new ValidationError(((int)ErrorCode.RFIDIsDuplicatedAnother).ToString(), string.Format("Case No. {0} ถูก ใช้กับ Invoice {1} ไปแล้ว ", inboundItemCasePacking.CaseNo, item1Invoice.InvNo)));
-            //    throw ve;
-            //}
-
             using (var scope = new TransactionScope())
             {
-                using (IsuzuDataContext Db = new IsuzuDataContext())
+                using (IsuzuDataContext db = new IsuzuDataContext())
                 {
-                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    IInboundRepository DetailRepo = new InboundRepository(db);
                     var queryForPacking = (
-                        from i in Db.InboundItems
-                        where new List<string> {
-                                    IsuzuStatus.RECEIVE.ToString(),
-                                    IsuzuStatus.HOLD.ToString()
-                                }.Contains(i.Status)
-                        //where inboundItemCasePacking.RFIDTags.Contains(i.RFIDTag)
+                        from i in db.InboundItems
+                        where !new List<string> {
+                        IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
+                    }.Contains(i.Status)
                         select i
                     );
 
@@ -361,7 +395,7 @@ namespace Isuzu.Service.Impl.Inbound
                         }
                     }
 
-                    Db.SaveChanges();
+                    db.SaveChanges();
                     scope.Complete();
                 }
             }
@@ -374,11 +408,11 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 var query = (
                    from i in Db.InboundItems
-                   where new List<string> {
-                                    "RECEIVED",
-                                    "HOLD"
-                                }.Contains(i.Status)
-                   //where rfids.RFIDTags.Contains(i.RFIDTag)
+                   where !new List<string> {
+                        IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
+                    }.Contains(i.Status)
                    select i
                );
 
@@ -404,9 +438,9 @@ namespace Isuzu.Service.Impl.Inbound
             InboundItems item;
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-                item =  (from i in Db.InboundItems
-                           where i.ISZJOrder == iszjOrder
-                           select i).SingleOrDefault();
+                item = (from i in Db.InboundItems
+                        where i.ISZJOrder == iszjOrder
+                        select i).SingleOrDefault();
             }
             return item;
         }
@@ -453,7 +487,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                 }
 
-                
+
                 return items;
             }
 
@@ -468,12 +502,12 @@ namespace Isuzu.Service.Impl.Inbound
                     try
                     {
                         items = (from p in Db.InboundItems
-                         where p.Qty == qty
-                         orderby p.SeqNo
-                         select p).ToList();
+                                 where p.Qty == qty
+                                 orderby p.SeqNo
+                                 select p).ToList();
 
-                        if(isShipped)
-                            items = items.Where(x => x.Status == IsuzuStatus.SHIPPED.ToString()).ToList();
+                        if (isShipped)
+                            items = items.Where(x => x.Status == IsuzuStatus.Shipped.ToString()).ToList();
 
                     }
                     catch (Exception)
@@ -483,7 +517,7 @@ namespace Isuzu.Service.Impl.Inbound
                 }
 
                 scope.Complete();
-                
+
             }
             return items;
 
@@ -503,7 +537,7 @@ namespace Isuzu.Service.Impl.Inbound
                                  orderby p.SeqNo
                                  select p).ToList();
                         if (isShipped)
-                            items = items.Where(w => w.Status == IsuzuStatus.SHIPPED.ToString()).ToList();
+                            items = items.Where(w => w.Status == IsuzuStatus.Shipped.ToString()).ToList();
                     }
                     catch (Exception)
                     {
@@ -542,10 +576,10 @@ namespace Isuzu.Service.Impl.Inbound
                         itemGroups.ForEach(i =>
                         {
 
-                        //if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
-                        if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
+                            //if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
+                            if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
                             {
-                                
+
                                 //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
                                 var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
                                 if (item != null)
@@ -553,10 +587,10 @@ namespace Isuzu.Service.Impl.Inbound
                                     i.GroupList.ForEach(x =>
                                     {
                                         x.ID = Guid.NewGuid().ToString();
-                                        x.Status = IsuzuStatus.NEW.ToString();
+                                        x.Status = IsuzuStatus.New.ToString();
                                         item.InboundItems.Add(x);
                                     });
-                                    
+
                                     item.Qty = item.InboundItems.Count;
                                     HeadRepo.Update(item);
                                     Db.SaveChanges();
@@ -567,15 +601,15 @@ namespace Isuzu.Service.Impl.Inbound
                             {
                                 InboundItemsHead item = new InboundItemsHead();
                                 item.InvNo = i.InvNo;
-                                item.Status = IsuzuStatus.NEW.ToString();
+                                item.Status = IsuzuStatus.New.ToString();
                                 HeadRepo.Insert(item);
                                 Db.SaveChanges();
 
-                                item = HeadRepo.GetItemFirstBy(b => b.InvNo == i.InvNo,true);
+                                item = HeadRepo.GetItemFirstBy(b => b.InvNo == i.InvNo, true);
                                 i.GroupList.ForEach(x =>
                                 {
                                     x.ID = Guid.NewGuid().ToString();
-                                    x.Status = IsuzuStatus.NEW.ToString();
+                                    x.Status = IsuzuStatus.New.ToString();
                                     item.InboundItems.Add(x);
                                 });
                                 item.Qty = i.GroupList.Count;
@@ -585,14 +619,14 @@ namespace Isuzu.Service.Impl.Inbound
                             }
                         });
 
-                        
+
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
                     {
                         HandleValidationException(e);
                     }
-                    
+
                 }
             }
 
@@ -616,7 +650,7 @@ namespace Isuzu.Service.Impl.Inbound
                 sql += " AND [Status] <> 'DELETED'";
             }
 
-          
+
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -632,7 +666,7 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItems>() { };
                     }
                 }
-  
+
             }
             return items;
 
@@ -666,15 +700,15 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
 
-                 item = (from p in Db.InboundItemsHead
-                                         where p.InvNo.Equals(invNo)
-                                         select p).FirstOrDefault();
+                item = (from p in Db.InboundItemsHead
+                        where p.InvNo.Equals(invNo)
+                        select p).FirstOrDefault();
                 if (item != null)
                 {
                     if (isAddItems)
                     {
                         Db.Entry(item).Collection(c => c.InboundItems).Load();
-                        item.InboundItems = (from p in item.InboundItems where p.Status != IsuzuStatus.DELETED.ToString() select p).ToList();
+                        item.InboundItems = (from p in item.InboundItems where p.Status != IsuzuStatus.Deleted.ToString() select p).ToList();
                     }
                 }
             }
@@ -698,7 +732,7 @@ namespace Isuzu.Service.Impl.Inbound
 
             return item;
         }
-       
+
         public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord)
         {
             DataSet dset = new DataSet();
@@ -721,8 +755,8 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                 }
 
-               
-               
+
+
             }
             return items;
 
@@ -754,7 +788,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
 
                 }
-                
+
                 return items;
             }
 
@@ -768,7 +802,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     InboundItemsHead queryUpdateHead = (from p in Db.InboundItemsHead
                                                         where p.InvNo.Equals(item.InvNo)
-                                                        && p.Status == IsuzuStatus.SHIPPED.ToString()
+                                                        && p.Status == IsuzuStatus.Shipped.ToString()
                                                         select p).FirstOrDefault();
 
                     try
@@ -781,15 +815,15 @@ namespace Isuzu.Service.Impl.Inbound
                         }
                         Db.SaveChanges();
                         scope.Complete();
-                        
+
                     }
                     catch (DbEntityValidationException e)
                     {
                         HandleValidationException(e);
                     }
                 }
-                
-               
+
+
             }
             return true;
         }
@@ -810,12 +844,12 @@ namespace Isuzu.Service.Impl.Inbound
                             {
                                 if (reason.ISZJOrder.Contains(f.ISZJOrder))
                                 {
-                                    f.Status = IsuzuStatus.DELETED.ToString();
+                                    f.Status = IsuzuStatus.Deleted.ToString();
                                     f.DeleteReason = reason.Reason;
                                     f.PathDeleteReason = reason.Paths;
                                 }
                             });
-                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
+                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.Deleted.ToString()).ToList().Count;
                             HeadRepo.Update(queryUpdate);
                         }
                         Db.SaveChanges();
@@ -826,8 +860,8 @@ namespace Isuzu.Service.Impl.Inbound
                         HandleValidationException(e);
                     }
                 }
-                
-               
+
+
             }
             return true;
         }
@@ -846,15 +880,15 @@ namespace Isuzu.Service.Impl.Inbound
                         {
                             queryUpdate.InboundItems.ToList().ForEach(f =>
                             {
-                                if (f.Status != IsuzuStatus.DELETED.ToString())
+                                if (f.Status != IsuzuStatus.Deleted.ToString())
                                 {
-                                    f.Status = IsuzuStatus.DELETED.ToString();
+                                    f.Status = IsuzuStatus.Deleted.ToString();
                                     f.DeleteReason = reason.Reason;
                                     f.PathDeleteReason = reason.Paths;
                                 }
                             });
-                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
-                            queryUpdate.Status = IsuzuStatus.DELETED.ToString();
+                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.Deleted.ToString()).ToList().Count;
+                            queryUpdate.Status = IsuzuStatus.Deleted.ToString();
                             HeadRepo.Update(queryUpdate);
                         }
                         Db.SaveChanges();
@@ -870,7 +904,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
             return true;
         }
-        public bool UpdateQtyInboundHead(string invNo,string userUpdate)
+        public bool UpdateQtyInboundHead(string invNo, string userUpdate)
         {
             using (var scope = new TransactionScope())
             {
@@ -885,7 +919,7 @@ namespace Isuzu.Service.Impl.Inbound
                     {
                         if (queryUpdate != null)
                         {
-                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.DELETED.ToString()).ToList().Count;
+                            queryUpdate.Qty = queryUpdate.InboundItems.Where(w => w.Status != IsuzuStatus.Deleted.ToString()).ToList().Count;
                             HeadRepo.Update(queryUpdate);
                         }
                         Db.SaveChanges();
@@ -896,8 +930,8 @@ namespace Isuzu.Service.Impl.Inbound
                         HandleValidationException(e);
                     }
                 }
-                
-               
+
+
             }
             return true;
         }
@@ -1023,7 +1057,8 @@ namespace Isuzu.Service.Impl.Inbound
                 items = json_serializer.Deserialize<List<IsuzuTagReport>>(result);
                 if (items != null)
                 {
-                    foreach (var f in items) {
+                    foreach (var f in items)
+                    {
                         f.MonthName = ml[f.MonthNumber - 1];
                     }
                 }

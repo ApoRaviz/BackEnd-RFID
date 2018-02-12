@@ -17,7 +17,7 @@ using WMS.Entity.WarehouseManagement;
 using WMS.Repository.Impl;
 using WMS.Service.LocationMaster;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WMS.Service.Impl.LocationMaster
 {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Utility.Extensions;
 using System.Net.Http;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using System.Data.Entity.Infrastructure;
 using Microsoft.AspNet.Identity;
 

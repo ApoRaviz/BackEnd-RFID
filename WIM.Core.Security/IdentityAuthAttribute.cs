@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 
@@ -31,6 +31,10 @@ namespace WIM.Core.Security
             //string url = actionContext.Request.RequestUri.PathAndQuery;
             //string method = actionContext.Request.Method.ToString();    
 
+
+            
+
+
             if (principal.IsUrlIgnored(actionContext.Request))
             {
                 return Task.FromResult<object>(null);
@@ -41,15 +45,17 @@ namespace WIM.Core.Security
             if (!principal.IsTimeOutToken())
             {
                 //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
-                ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E401));
+                ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E401));
                 if (actionContext.Request.Method.Equals(HttpMethod.Post).Equals(HttpMethod.Put))
-                    ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E402));
+                    ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E402));
                 IResponseData<int> response = new ResponseData<int>();
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);
                 actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Unauthorized, response);
                 return Task.FromResult<object>(null);
             }
+
+          
 
             //User is Authorized, complete execution
             return Task.FromResult<object>(null);

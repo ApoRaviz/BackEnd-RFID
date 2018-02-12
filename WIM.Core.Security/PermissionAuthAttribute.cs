@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 
@@ -24,12 +24,11 @@ namespace WIM.Core.Security
             if (!principal.HasPermission(actionContext.Request) && !principal.IsSysAdmin())
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
-                ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E403));
+                ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E403));
                 IResponseData<int> response = new ResponseData<int>();
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);
                 actionContext.Response = actionContext.Request.CreateResponse<IResponseData<int>>(HttpStatusCode.Forbidden, response);
-                return Task.FromResult<object>(null);
             }
 
             return Task.FromResult<object>(null);

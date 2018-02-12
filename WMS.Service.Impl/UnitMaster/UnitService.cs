@@ -15,7 +15,7 @@ using WMS.Entity.ItemManagement;
 using System.Security.Principal;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Common.ValueObject;
 
 namespace WMS.Service
