@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using HashidsNet;
 using WIM.Core.Common.Utility.Attributes;
 
-namespace WIM.Core.Common.Utility.Helpers
+namespace WIM.Core.Common.Utility.UtilityHelpers
 {
     public class AttributeHelper
     {

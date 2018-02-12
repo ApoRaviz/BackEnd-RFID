@@ -30,12 +30,12 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
             }
@@ -53,12 +53,12 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
             }
@@ -84,12 +84,12 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                         throw ex;
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                         throw ex;
                     }
                 }
@@ -127,12 +127,12 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                         throw ex;
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                         throw ex;
                     }
                 }
@@ -177,13 +177,13 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                         throw ex;
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                         throw ex;
                     }
                 }

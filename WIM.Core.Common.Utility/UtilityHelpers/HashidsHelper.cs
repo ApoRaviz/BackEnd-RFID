@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WIM.Core.Common.Utility.Helpers
+namespace WIM.Core.Common.Utility.UtilityHelpers
 {
     public class HashidsHelper
     {

@@ -26,7 +26,7 @@ using Fuji.Repository.Impl.ItemManagement;
 using System.Security.Principal;
 using Fuji.Repository.ItemManagement;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using System.Runtime.Caching;
 using WIM.Core.Entity.Logs;
 using System.Web.Script.Serialization;
@@ -152,7 +152,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 if (itemHead == null)
                 {
-                    throw new ValidationException(new ValidationError(((int)ErrorCode.DataNotFound).ToString(), ErrorCode.DataNotFound.GetDescription()));
+                    throw new ValidationException(ErrorEnum.DataNotFound);
                 }
             }
             return itemHead;
@@ -275,7 +275,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                     if (importHead == null)
                     {
-                        throw new ValidationException(new ValidationError(((int)ErrorCode.DataNotFound).ToString(), ErrorCode.DataNotFound.GetDescription()));
+                        throw new ValidationException(ErrorEnum.DataNotFound);
                     }
 
                     if (resultGroup.Count() != importHead.Qty)
@@ -387,7 +387,7 @@ namespace Fuji.Service.Impl.ItemImport
                         ValidationException ve = new ValidationException();
                         foreach (SerialsRemainInStock item in serialsRemainInStock)
                         {
-                            ve.Add(new ValidationError(((int)ErrorCode.ReceiveSerialRemainInStock).ToString(), string.Format("Serial {0}, ItemCode {1} already exists! ", item.SerialNumber, item.ItemCode)));
+                            throw new ValidationException(ErrorEnum.ReceiveSerialRemainInStock);
                         }
                         throw ve;
                     }
@@ -481,7 +481,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 if (!itemGroups.Any())
                 {
-                    throw new ValidationException(new ValidationError(((int)ErrorCode.DataNotFound).ToString(), ErrorCode.DataNotFound.GetDescription()));
+                    throw new ValidationException(ErrorEnum.DataNotFound);
                 }
             }
 
@@ -954,7 +954,7 @@ namespace Fuji.Service.Impl.ItemImport
                 var item = itemGroups.SingleOrDefault();
                 if (item == null)
                 {
-                    throw new ValidationException(new ValidationError(((int)ErrorCode.DataNotFound).ToString(), ErrorCode.DataNotFound.GetDescription()));
+                    throw new ValidationException(ErrorEnum.DataNotFound);
                 }
                 if (isAddItem)
                     retItem = new FujiPickingGroup(item.GroupID, item.GroupList.Count(), item.GroupList);

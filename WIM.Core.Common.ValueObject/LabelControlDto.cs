@@ -1,6 +1,6 @@
 ﻿
 using System.Collections.Generic;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
 
 namespace WIM.Core.Common.ValueObject

@@ -16,7 +16,7 @@ using WMS.Context;
 using System.Security.Principal;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WMS.Master
 {

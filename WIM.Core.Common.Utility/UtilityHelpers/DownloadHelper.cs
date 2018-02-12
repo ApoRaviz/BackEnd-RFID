@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace WIM.Core.Common.Utility.Helpers
+namespace WIM.Core.Common.Utility.UtilityHelpers
 {
     public class DownloadHelper
     {

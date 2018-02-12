@@ -11,7 +11,7 @@ using WMS.Entity.ItemManagement;
 using WMS.Common.ValueObject;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Repository;
 using WMS.Repository.ItemManagement;
 using WMS.Repository.Impl.ItemManagement;

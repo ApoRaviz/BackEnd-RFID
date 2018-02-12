@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.Attributes;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Context;
 using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Extentions;
@@ -83,7 +83,12 @@ namespace WIM.Core.Repository.Impl
 
         public bool Exists(object id)
         {
-            return DbSet.Find(id) != null;
+            return DbSet.Any();
+        }
+
+        public bool Exists(Func<TEntity, Boolean> where)
+        {
+            return DbSet.Any(where);
         }
 
         public TEntity Insert(TEntity entityToInsert)
