@@ -590,18 +590,18 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>55644</DevelopmentServerPort>
+          <DevelopmentServerPort>5555</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/wms/</IISUrl>
+          <IISUrl>http://localhost/wms</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/wms/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/wms</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
           <servers defaultServer="">
-            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost:55645" workingDir="" />
+            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost:5555" workingDir="" />
           </servers>
         </WebProjectProperties>
       </FlavorProperties>

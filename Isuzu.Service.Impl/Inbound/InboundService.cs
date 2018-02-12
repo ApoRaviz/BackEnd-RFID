@@ -624,7 +624,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -819,7 +819,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -857,7 +857,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -896,7 +896,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -927,7 +927,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -1072,17 +1072,6 @@ namespace Isuzu.Service.Impl.Inbound
         #endregion
 
         #endregion
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
 
     }
 }

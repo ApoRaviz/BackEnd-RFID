@@ -12,6 +12,7 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Service;
+using Microsoft.AspNet.Identity;
 
 namespace Isuzu.WebApi.Controllers
 {

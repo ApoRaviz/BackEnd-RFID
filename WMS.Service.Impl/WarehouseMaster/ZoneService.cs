@@ -105,7 +105,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return ZoneSysID;
@@ -150,7 +150,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return true;
@@ -186,7 +186,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return RackSysID;
@@ -209,17 +209,6 @@ namespace WMS.Service.Impl.WarehouseMaster
             {
                 List<RackLayout> rack = Db.ProcGetRackLayoutByZoneIDSys(ZoneIDSys);
                 return rack;
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
             }
         }
 
@@ -271,7 +260,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return ZoneTypeIDSys;
@@ -297,7 +286,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return isUpdate;
@@ -320,7 +309,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                 }

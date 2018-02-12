@@ -11,6 +11,7 @@ using WMS.Entity.ItemManagement;
 using WMS.Common.ValueObject;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WMS.Service
 {
@@ -98,12 +99,12 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                 }
@@ -128,12 +129,12 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                 }
@@ -159,7 +160,7 @@ namespace WMS.Service
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4017);
                         throw ex;
                     }
 
@@ -167,17 +168,5 @@ namespace WMS.Service
                 return true;
             }
         }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
-
     }
 }

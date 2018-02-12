@@ -120,7 +120,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
             }
@@ -226,7 +226,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
             }
@@ -305,7 +305,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -412,7 +412,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     catch (Exception ex)
                     {
@@ -434,7 +434,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     catch (Exception ex)
                     {
@@ -515,7 +515,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -576,7 +576,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
                 return false;
@@ -705,7 +705,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -788,7 +788,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -821,7 +821,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -881,7 +881,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
 
@@ -902,7 +902,7 @@ namespace Fuji.Service.Impl.ItemImport
                         }
                         catch (DbEntityValidationException e)
                         {
-                            HandleValidationException(e);
+                            throw new ValidationException(e);
                         }
                     }*/
 
@@ -988,7 +988,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                         return false;
                     }
 
@@ -1349,15 +1349,5 @@ namespace Fuji.Service.Impl.ItemImport
 
         #endregion
 
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
     }
 }
