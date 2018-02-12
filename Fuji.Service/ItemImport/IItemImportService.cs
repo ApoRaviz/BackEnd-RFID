@@ -32,6 +32,7 @@ namespace Fuji.Service.ItemImport
         string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);
         ImportSerialHead CreateItem(ImportSerialHead Item);
         bool UpdateItem(string id, ImportSerialHead Item);
+        Task<bool> UpdateItemAsync(string id, ImportSerialHead item);
         IEnumerable<ImportSerialDetail> UpdateStatus(List<PickingRequest> pickingList);
         bool UpdateStausExport(ImportSerialHead item);
         bool ClearPickingGroup(string orderID);

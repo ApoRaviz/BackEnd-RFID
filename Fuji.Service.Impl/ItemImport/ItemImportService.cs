@@ -1344,8 +1344,86 @@ namespace Fuji.Service.Impl.ItemImport
         #endregion
 
         #region Async
+        public async Task<bool> UpdateItemAsync(string id, ImportSerialHead item)
+        {
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                using (FujiDbContext Db = new FujiDbContext())
+                {
+                    ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
+                    try
+                    {
+                        var queryUpdateHead = SerialHeadRepo.GetItemsBy(p => new List<string>() { "IS1802090000002", "IS1802090000001" }.Contains(p.HeadID)).ToList();
+                        queryUpdateHead.ForEach(f =>
+                        {
+                            f.ItemCode = "T2T";//item.ItemCode;
+                            f.WHID = item.WHID;
+                            f.LotNumber = item.LotNumber;
+                            f.InvoiceNumber = item.InvoiceNumber;
+                            f.ReceivingDate = item.ReceivingDate;
+                            f.DeliveryNote = item.DeliveryNote;
+                            f.Remark = item.Remark;
+                            //existedItem.UpdateDate = DateTime.Now;
+                            f.Qty = item.Qty;
+                            f.Spare1 = item.Spare1;
+                            f.Spare2 = item.Spare2;
+                            //existedItem.Spare3 = item.Spare3;
+                            f.Spare4 = item.Spare4;
+                            f.Spare5 = item.Spare5;
+                            f.Spare6 = item.Spare6;
+                            f.Spare7 = item.Spare7;
+                            f.Spare8 = item.Spare8;
+                            f.Spare9 = item.Spare9;
+                            f.Spare10 = item.Spare10;
+                            //Repo.Update(existedItem);
+                            SerialHeadRepo.Update(f);
+                        });
+                        await Db.SaveChangesAsync();
 
-      
+                        var updatedItem = SerialHeadRepo.GetItemBy(f => f.HeadID == item.HeadID, true);
+                        if (updatedItem != null)
+                        {
+                            if (updatedItem.ImportSerialDetail.Any())
+                            {
+                                //IGenericRepository<ImportSerialDetail> detailRepo = new GenericRepository<ImportSerialDetail>(Db);
+                                //Db.ProcDeleteImportSerialDetail(item.HeadID);
+
+                                //IEnumerable<ImportSerialDetail> _existDetails = (from d in Db.ImportSerialDetail
+                                //         where d.HeadID == item.HeadID
+                                //         select d
+                                //         ).ToList();
+
+                                SerialDetailRepo.DeleteItems(d => d.HeadID == item.HeadID);
+
+                                //Db.ImportSerialDetail.RemoveRange(_existDetails);
+
+                                foreach (var detail in updatedItem.ImportSerialDetail)
+                                {
+                                    detail.HeadID = updatedItem.HeadID;
+                                    detail.ItemCode = updatedItem.ItemCode;
+                                    detail.DetailID = Guid.NewGuid().ToString();
+                                    //Db.ImportSerialDetail.Add(detail);
+                                    SerialDetailRepo.Insert(detail);
+                                    await Db.SaveChangesAsync().ConfigureAwait(false);
+                                }
+                            }
+                        }
+
+
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        HandleValidationException(e);
+                    }
+
+                }
+
+            }
+            return true;
+        }
+
 
         #endregion
 

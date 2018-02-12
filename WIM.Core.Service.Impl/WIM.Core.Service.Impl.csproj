@@ -80,6 +80,7 @@
     <Compile Include="RoleMaster\RoleService.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="StatusManagement\StatusService.cs" />
+    <Compile Include="StatusManagement\StatusServiceStatic.cs" />
     <Compile Include="SupplierMaster\SupplierService.cs" />
     <Compile Include="Common\CommonService.cs" />
     <Compile Include="UserMaster\UserService.cs" />

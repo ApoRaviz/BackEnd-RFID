@@ -592,9 +592,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/wms/</IISUrl>
+          <IISUrl>http://localhost:55644/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/wms/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:55644/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

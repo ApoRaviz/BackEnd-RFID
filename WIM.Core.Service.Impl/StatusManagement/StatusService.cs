@@ -12,6 +12,7 @@ using WIM.Core.Repository.Impl.StatusManagement;
 using WIM.Core.Repository.StatusManagement;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using System;
 
 namespace WIM.Core.Service.Impl.StatusManagement
 {
@@ -189,6 +190,101 @@ namespace WIM.Core.Service.Impl.StatusManagement
             }
         }
 
+        public IEnumerable<string> GetStatusBySubmoduleName(string submoduleName)
+        {
+            using (CoreDbContext db = new CoreDbContext())
+            {
+                try
+                {
+                    var data = (from a in db.Status_MT
+                                join b in db.StatusSubModule
+                                on a.StatusIDSys equals b.StatusIDSys
+                                join c in db.SubModule
+                                on b.SubModuleIDSys equals c.SubModuleIDSys
+                                where c.SubModuleName == submoduleName
+                                select a.Title);
+
+                    return data;
+                }
+                catch (DbEntityValidationException)
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                catch (DbUpdateException)
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+
+            }
+                        
+        }
+
+        public string GetStatusBySubmoduleNameAndStatusTitle<T>(string submoduleName, T item)
+        {
+            using (CoreDbContext db = new CoreDbContext())
+            {
+                try
+                {
+                    string title = item.ToString();
+                    var data = (from a in db.Status_MT
+                                join b in db.StatusSubModule
+                                on a.StatusIDSys equals b.StatusIDSys
+                                join c in db.SubModule
+                                on b.SubModuleIDSys equals c.SubModuleIDSys
+                                where c.SubModuleName == submoduleName
+                                && a.Title == title
+                                select a.Title).FirstOrDefault();
+
+                    return data;
+                }
+                catch (DbEntityValidationException)
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                catch (DbUpdateException)
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+
+            }
+        }
+
+        public string GetStatusBySubmoduleIDSysAndStatusTitle<T>(int submoduleIDSys, T item)
+        {
+            using (CoreDbContext db = new CoreDbContext())
+            {
+                try
+                {
+                    string title = item.ToString();
+                    var data = (from a in db.Status_MT
+                                join b in db.StatusSubModule
+                                on a.StatusIDSys equals b.StatusIDSys
+                                join c in db.SubModule
+                                on b.SubModuleIDSys equals c.SubModuleIDSys
+                                where c.SubModuleIDSys == submoduleIDSys
+                                && a.Title == title
+                                select a.Title).FirstOrDefault();
+
+                    return data;
+                }
+                catch (DbEntityValidationException)
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+                catch (DbUpdateException)
+                {
+                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    throw ex;
+                }
+
+            }
+        }
+
         public void HandleValidationException(DbEntityValidationException ex)
         {
             foreach (var eve in ex.EntityValidationErrors)
@@ -200,5 +296,6 @@ namespace WIM.Core.Service.Impl.StatusManagement
             }
         }
 
+     
     }
 }

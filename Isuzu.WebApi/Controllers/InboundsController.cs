@@ -329,30 +329,6 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(respones);
         }
 
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpGet]
-        [Route("itemsInvNoAsync/{invNo}")]
-        public async Task<HttpResponseMessage> GetByInvNoAnyc([FromUri]string invNo)
-        {
-            IResponseData<InboundItemsHead> respones = new ResponseData<InboundItemsHead>();
-            try
-            {
-                InboundItemsHead item = await InboundService.GetInboundGroupByInvoiceNumberAsync(invNo, true);
-                if (item != null)
-                {
-                    respones.SetData(item);
-                    respones.SetStatus(HttpStatusCode.OK);
-                }
-
-            }
-            catch (ValidationException ex)
-            {
-                respones.SetErrors(ex.Errors);
-            }
-            return Request.ReturnHttpResponseMessage(respones);
-        }
-
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
