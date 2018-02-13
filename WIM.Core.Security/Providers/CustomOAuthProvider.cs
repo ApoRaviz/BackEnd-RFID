@@ -20,6 +20,8 @@ namespace WIM.Core.Security.Providers
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
+            string x = context.Parameters["AuthType"];
+            context.OwinContext.Set("AuthType", x);
             context.Validated();
             return Task.FromResult<object>(null);
         }
@@ -35,8 +37,8 @@ namespace WIM.Core.Security.Providers
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
-            var typeAuth = HttpContext.Current.Request["AuthType"]+"";
-           
+            var typeAuth = context.OwinContext.Get<string>("AuthType");
+
 
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
             oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
