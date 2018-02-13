@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Entity;
 
 namespace Fuji.Entity.ItemManagement
@@ -19,6 +20,7 @@ namespace Fuji.Entity.ItemManagement
 
         [Key]
         public string HeadID { get; set; }
+        [GeneralLog]
         public string ItemCode { get; set; }
         public string WHID { get; set; }
         public string LotNumber { get; set; }

@@ -12,7 +12,7 @@ using System.Web.Http.Routing;
 using System.Net.Http;
 using WIM.Core.Common.Utility.Http;
 using System.Linq;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Attributes;
 
 namespace WIM.Core.Common.Utility.Extensions

@@ -31,6 +31,11 @@ namespace WIM.Core.Security
         {
         }
 
+        public void Test()
+        {
+
+        }
+
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var appDbContext = context.Get<SecurityDbContext>();

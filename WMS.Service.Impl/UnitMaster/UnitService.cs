@@ -15,7 +15,7 @@ using WMS.Entity.ItemManagement;
 using System.Security.Principal;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Common.ValueObject;
 
 namespace WMS.Service
@@ -82,7 +82,7 @@ namespace WMS.Service
                 catch (DbUpdateException )
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 return unit.UnitIDSys;
@@ -110,7 +110,7 @@ namespace WMS.Service
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 

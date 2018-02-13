@@ -71,7 +71,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.RegisterInboundItem_HANDY(inboundItem, Username);
+                InboundService.RegisterInboundItem_HANDY(inboundItem);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -147,7 +147,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformHolding_HANDY(inboundItemHolding, Username);
+                InboundService.PerformHolding_HANDY(inboundItemHolding);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -166,7 +166,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformShipping_HANDY(inboundItemShipping, Username);
+                InboundService.PerformShipping_HANDY(inboundItemShipping);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -267,6 +267,7 @@ namespace Isuzu.Service.Impl
             IResponseData<IEnumerable<InboundItemsHead>> respones = new ResponseData<IEnumerable<InboundItemsHead>>();
             try
             {
+                var x = InboundService.GetInboundItemByQty(10, true);
                 IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroup();
                 respones.SetData(items);
                 respones.SetStatus(HttpStatusCode.OK);
@@ -328,6 +329,30 @@ namespace Isuzu.Service.Impl
             }
             return Request.ReturnHttpResponseMessage(respones);
         }
+
+        /*[Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("itemsInvNoAsync/{invNo}")]
+        public async Task<HttpResponseMessage> GetByInvNoAnyc([FromUri]string invNo)
+        {
+            IResponseData<InboundItemsHead> respones = new ResponseData<InboundItemsHead>();
+            try
+            {
+                InboundItemsHead item = await InboundService.GetInboundGroupByInvoiceNumberAsync(invNo, true);
+                if (item != null)
+                {
+                    respones.SetData(item);
+                    respones.SetStatus(HttpStatusCode.OK);
+                }
+
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+        }*/
 
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -755,10 +780,9 @@ namespace Isuzu.Service.Impl
         public HttpResponseMessage GetRFIDInfoByDate([FromBody]ParameterSearch query)
         {
             ResponseData<IEnumerable<IsuzuTagReport>> respones = new ResponseData<IEnumerable<IsuzuTagReport>>();
-            int totalRecord = 0;
             try
             {
-                IEnumerable<IsuzuTagReport> items = InboundService.GetReportByYearRang(query, out totalRecord);
+                IEnumerable<IsuzuTagReport> items = InboundService.GetReportByYearRang(query);
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(items);
             }

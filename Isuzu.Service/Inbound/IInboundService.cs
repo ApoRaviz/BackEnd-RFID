@@ -12,13 +12,14 @@ namespace Isuzu.Service
     {
         //Handy
         InboundItemHandyDto GetInboundItemByISZJOrder_HANDY(string iszjOrder);
-        bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem);
-        void RegisterInboundItem_HANDY(InboundItemHandyDto inboundItem, string username);
+        int GetAmountRegistered_HANDY();
         int GetAmountInboundItemInInvoiceByRFID_HANDY(string rfid);
         InboundItemHandyDto GetInboundItemByRFID_HANDY(string rfid);
         IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string rfid);
-        void PerformHolding_HANDY(InboundItemHoldingHandyRequest inboundItemHold, string username);
-        void PerformShipping_HANDY(InboundItemShippingHandyRequest inboundItemShipping, string username);
+        bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem);
+        void RegisterInboundItem_HANDY(InboundItemHandyDto item);
+        void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding);
+        void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping);
         void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking, string username);
         void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking, string username);
         InboundItemCartonHandyDto GetInboundItemCartonByRFID_HANDY(string rfid);
@@ -42,6 +43,9 @@ namespace Isuzu.Service
         bool UpdateQtyInboundHead(string invNo,string userUpdate);
         IsuzuDataImport OpenReadExcel(string localFileName);
         string GetRFIDInfo(ParameterSearch parameter);
-        IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch, out int totalRecord);
+        IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch);
+
+        //Async
+     
     }
 }

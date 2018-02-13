@@ -10,7 +10,7 @@ using Master.Common.ValueObject;
 using WIM.Core.Entity.LabelManagement;
 
 using WIM.Core.Entity.LabelManagement;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using Newtonsoft.Json;
 
 namespace Master.WebApi

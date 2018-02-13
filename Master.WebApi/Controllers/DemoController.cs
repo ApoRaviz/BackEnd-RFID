@@ -24,7 +24,7 @@ using System.Xml.Linq;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Common.Utility.Extensions;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;

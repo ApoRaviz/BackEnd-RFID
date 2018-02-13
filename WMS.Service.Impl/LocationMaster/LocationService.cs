@@ -17,7 +17,7 @@ using WMS.Entity.WarehouseManagement;
 using WMS.Repository.Impl;
 using WMS.Service.LocationMaster;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WMS.Service.Impl.LocationMaster
 {
@@ -62,7 +62,7 @@ namespace WMS.Service.Impl.LocationMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 return Location.LocIDSys;
@@ -85,7 +85,7 @@ namespace WMS.Service.Impl.LocationMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                     throw ex;
                 }
                 
@@ -105,7 +105,7 @@ namespace WMS.Service.Impl.LocationMaster
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
                     throw ex;
                 }
 
