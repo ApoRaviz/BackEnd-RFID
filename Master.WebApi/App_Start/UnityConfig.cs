@@ -57,7 +57,8 @@ namespace Master.WebApi
             container.RegisterType<IProbationService, ProbationService>();
             container.RegisterType<IResignService, ResignService>();
             container.RegisterType<IHeadReportControlService, HeadReportControlService>(); 
-            container.RegisterType<ISupplierService, SupplierService>(); 
+            container.RegisterType<ISupplierService, SupplierService>();
+            container.RegisterType<IProbationService, ProbationService>();
         }
     }
 }

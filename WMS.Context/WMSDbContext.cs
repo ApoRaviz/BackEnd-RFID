@@ -839,7 +839,7 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcCreateRackLayout", zoneIDSysParameter, zoneIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public Nullable<int> ProcCreateDimensionLayout(string formatName, string unit, Nullable<int> width, Nullable<int> length, Nullable<int> height, Nullable<int> weight, string type, string color, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate)
+        public Nullable<int> ProcCreateDimensionLayout(string formatName, string unit, Nullable<double> width, Nullable<double> length, Nullable<double> height, Nullable<double> weight, string type, string color, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate)
         {
             var formatNameParameter = formatName != null ? new SqlParameter
             {
@@ -916,7 +916,7 @@ namespace WMS.Context
             //    formatNameParameter, unitParameter, widthParameter, lengthParameter, heightParameter, weightParameter, typeParameter, colorParameter, createdDateParameter, updatedDateParameter, userUpdateParameter);
         }
 
-        public Nullable<int> ProcUpdateDimensionLayout(Nullable<int> dimensionIDSys, string formatName, string unit, Nullable<int> width, Nullable<int> length, Nullable<int> height, Nullable<int> weight, string type, string color, Nullable<System.DateTime> updatedDate, string userUpdate)
+        public Nullable<int> ProcUpdateDimensionLayout(Nullable<int> dimensionIDSys, string formatName, string unit, Nullable<double> width, Nullable<double> length, Nullable<double> height, Nullable<double> weight, string type, string color, Nullable<System.DateTime> updatedDate, string userUpdate)
         {
             var dimensionIDSysParameter = dimensionIDSys.HasValue ? new SqlParameter
             {
