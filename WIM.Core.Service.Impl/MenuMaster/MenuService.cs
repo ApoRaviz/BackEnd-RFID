@@ -51,6 +51,18 @@ namespace WIM.Core.Service.Impl
             return Menu;
         }
 
+        public IEnumerable<AutocompleteMenuDto> AutocompleteMenu(string term){
+
+            IEnumerable<AutocompleteMenuDto> autocompleteItemDto;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IMenuRepository repo = new MenuRepository(Db);
+                autocompleteItemDto = repo.AutocompleteMenu(term);
+
+            }
+            return autocompleteItemDto;
+        }
+
         public int CreateMenu(Menu_MT Menu)
         {
             using (var scope = new TransactionScope())

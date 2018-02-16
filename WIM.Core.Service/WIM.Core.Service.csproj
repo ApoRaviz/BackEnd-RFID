@@ -61,6 +61,7 @@
     <Compile Include="EmployeeMaster\IEmployeeService.cs" />
     <Compile Include="EmployeeMaster\IHistoryWarningService.cs" />
     <Compile Include="EmployeeMaster\IPositionService.cs" />
+    <Compile Include="EmployeeMaster\IProbationService.cs" />
     <Compile Include="EmployeeMaster\IResignService.cs" />
     <Compile Include="FileManagement\IFileService.cs" />
     <Compile Include="HeadReportControl\IHeadReportControlService.cs" />
