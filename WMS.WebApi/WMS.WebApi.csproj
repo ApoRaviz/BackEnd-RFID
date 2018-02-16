@@ -348,6 +348,7 @@
     <Compile Include="Controllers\UnitsController.cs" />
     <Compile Include="Controllers\UploadFileApiController.cs" />
     <Compile Include="Controllers\WarehouseController.cs" />
+    <Compile Include="Controllers\LocationGroupController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="DataSet\MasterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>

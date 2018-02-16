@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\ReportService.cs" />
     <Compile Include="UnitMaster\UnitService.cs" />
+    <Compile Include="WarehouseMaster\LocationGroupService.cs" />
     <Compile Include="WarehouseMaster\WarehouseService.cs" />
     <Compile Include="WarehouseMaster\ZoneService.cs" />
   </ItemGroup>
