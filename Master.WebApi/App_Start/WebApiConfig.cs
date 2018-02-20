@@ -34,7 +34,7 @@ namespace Master.WebApi
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-           config.MessageHandlers.Add(new ApiLogHandler());
+           //config.MessageHandlers.Add(new ApiLogHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
@@ -43,7 +43,7 @@ namespace Master.WebApi
             );
 
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
-            config.Filters.Add(new IdentityAuthAttribute());
+            //config.Filters.Add(new IdentityAuthAttribute());
             //config.Filters.Add(new PermissionAuthAttribute());
         }       
     }
