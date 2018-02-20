@@ -153,6 +153,8 @@ namespace WIM.Core.Repository.Impl
             Type typeEntityForUpdate = entityForUpdate.GetType();
 
             List<Task> tasks = new List<Task>();
+            var identName = Identity.GetUserName();
+            
             foreach (var prop in properties)
             { 
                 var value = prop.GetValue(entityToUpdate);
@@ -162,18 +164,10 @@ namespace WIM.Core.Repository.Impl
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
                     if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
                     {
-                        var identName = Identity.GetUserName();
-                        tasks.Add(Task.Factory.StartNew(() =>
-                        {
-                            GeneralLogDbSet = Context.Set<GeneralLog>();
-                            GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, identName));
-                            Context.SaveChanges();
-                        }));
-
+                        GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, identName));
                     }
                 }
-            }
-            Task.WaitAll(tasks.ToArray());
+            } 
 
             entityForUpdate.UpdateBy = Identity.GetUserName();
             entityForUpdate.UpdateAt = DateTime.Now.Date;
