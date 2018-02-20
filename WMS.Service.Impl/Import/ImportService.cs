@@ -167,7 +167,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                     return result;
@@ -195,7 +195,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                 }
@@ -220,7 +220,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        throw new ValidationException(ErrorEnum.E4017);
                     }
 
                     scope.Complete();

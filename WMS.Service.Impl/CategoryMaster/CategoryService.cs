@@ -159,7 +159,7 @@ namespace WMS.Service
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                        throw new ValidationException(ErrorEnum.E4017);
                     }
 
                 }

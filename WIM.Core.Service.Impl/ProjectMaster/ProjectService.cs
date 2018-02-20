@@ -218,61 +218,7 @@ namespace WIM.Core.Service.Impl
 
 
 
-        //public bool CreateUserProject(string UserID, int ProjectIDSys)
-        //{
-        //    using (var scope = new TransactionScope())
-        //    {
-        //        UserProjectMapping project = new UserProjectMapping();
-        //        project.UserID = UserID;
-        //        project.ProjectIDSys = ProjectIDSys;
-
-        //    SecuDb.UserProjectMapping.Add(project);
-        //        try
-        //        {
-        //        SecuDb.SaveChanges();
-        //            scope.Complete();
-        //        }
-        //        catch (DbEntityValidationException e)
-        //        {
-        //            throw new ValidationException(e);
-        //        }
-        //        catch (DbUpdateException)
-        //        {
-        //            scope.Dispose();
-        //            ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorEnum.E4012));
-        //            throw ex;
-        //        }
-
-
-        //        return true;
-        //    }
-        //}
-
-        //public List<UserProjectMapping> GetUserProject(int CusIDSys, string UserID)
-        //{
-
-        //    var userproject = (from row in SecuDb.UserProjectMapping
-        //                       where row.UserID == UserID && (from o in CoreDb.Project_MT
-        //                                                      where o.CusIDSys == CusIDSys
-        //                                                      select o.ProjectIDSys).Contains(row.ProjectIDSys)
-        //                       select row).ToList();
-        //    return userproject;
-        //}
-
-        //public bool DeleteUserProject(int projectID, string UserID)
-        //{
-        //    using (var scope = new TransactionScope())
-        //    {
-        //        UserProjectMapping project = new UserProjectMapping();
-        //        project.ProjectIDSys = projectID;
-        //        project.UserID = UserID;
-        //        // #JobComment
-        //        //Repo2.Delete(project);
-        //        CoreDb.SaveChanges();
-        //        scope.Complete();
-        //        return true;
-        //    }
-        //}
+       
     }
 }
 
