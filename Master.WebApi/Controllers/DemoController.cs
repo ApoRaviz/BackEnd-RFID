@@ -315,7 +315,7 @@ namespace Master.WebApi.Controllers
             foreach (IGrouping<HttpControllerDescriptor, ApiDescription> group in apiGroups)
             {
                 foreach (ApiDescription api in group)
-                {
+                {                   
                     Dictionary<string, string> paramDic = new Dictionary<string, string>();
                     foreach (ApiParameterDescription parameter in api.ParameterDescriptions)
                     {
@@ -323,45 +323,46 @@ namespace Master.WebApi.Controllers
                         {
                             continue;
                         }
-                        
+
                         Type type = parameter.ParameterDescriptor.ParameterType;
-                        if (type == typeof(Int32) || type == typeof(Int64))
+                        if (type == typeof(Int32) || type == typeof(Int64) || type == typeof(Boolean))
                         {
                             paramDic.Add(parameter.Name, "1");
                         }
-                        else
+                        else if (type == typeof(String) || type == typeof(DateTime))
                         {
                             paramDic.Add(parameter.Name, "@");
-                        }                        
+                        }
                     }
 
                     string path = "";
-                    string[]pathSplit =  api.RelativePath.Split('/');
+                    string[] pathSplit = api.RelativePath.Split('?')[0].Split('/');
                     for (int i = 0; i < pathSplit.Length; i++)
-                    {
-                        foreach (KeyValuePair<string, string> paramKeyVal in paramDic)
+                    {                        
+                        if (i > 2 && pathSplit[i][0] == '{' && pathSplit[i][pathSplit[i].Length - 1] == '}')
                         {
-                            if (pathSplit[i].Equals("{" + paramKeyVal.Key + "}"))
+                            foreach (KeyValuePair<string, string> paramKeyVal in paramDic)
                             {
-                                path += "/" + paramKeyVal.Value;
+                                if (pathSplit[i].Equals("{" + paramKeyVal.Key + "{"))
+                                {
+                                    path += "/" + paramKeyVal.Value;
+                                    continue;
+                                }                               
                             }
-                            else
-                            {
-                                path += "/" + pathSplit[i];
-                            }                            
-                        }                       
+                            continue;
+                        }
+                        path += "/" + pathSplit[i];
                     }
 
                     apiDescList.Add(new ApiDesc
                     {
+                        ID = api.ID,
                         ControllerName = group.Key.ControllerName,
                         RelativePath = path,
                         Method = api.HttpMethod.Method
                     });
                 }                                
             }
-
-
 
             response.Data = apiDescList;
             return Request.ReturnHttpResponseMessage(response);
@@ -371,6 +372,7 @@ namespace Master.WebApi.Controllers
 
     public class ApiDesc
     {
+        public string ID { get; set; }
         public string ControllerName { get; set; }
         public string RelativePath { get; set; }
         public string Method { get; set; }
