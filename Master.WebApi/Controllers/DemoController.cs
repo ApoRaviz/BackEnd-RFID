@@ -343,7 +343,9 @@ namespace Master.WebApi.Controllers
                         {
                             foreach (KeyValuePair<string, string> paramKeyVal in paramDic)
                             {
-                                if (pathSplit[i].Equals("{" + paramKeyVal.Key + "{"))
+                                string x = pathSplit[i].Substring(1, pathSplit[i].Length - 2);
+                                
+                                if (x.Equals(paramKeyVal.Key, StringComparison.CurrentCultureIgnoreCase))
                                 {
                                     path += "/" + paramKeyVal.Value;
                                     continue;
