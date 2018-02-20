@@ -99,9 +99,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        // #JobComment
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorCode.E4012);
                     }
                     scope.Complete();
                     return ReportSysID;
@@ -141,8 +139,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorCode.E4012);
                     }
                     scope.Complete();
                     return true;
@@ -170,8 +167,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     }
                     scope.Complete();
                     return result;
@@ -199,8 +195,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
                     }
                     scope.Complete();
                 }
@@ -225,8 +220,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(ErrorEnum.E4017);
-                        throw ex;
+                        throw new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
                     }
 
                     scope.Complete();

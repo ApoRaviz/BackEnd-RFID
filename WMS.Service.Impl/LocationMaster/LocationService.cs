@@ -62,8 +62,7 @@ namespace WMS.Service.Impl.LocationMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorCode.E4012);
                 }
                 return Location.LocIDSys;
             }
@@ -85,8 +84,7 @@ namespace WMS.Service.Impl.LocationMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorCode.E4012);
                 }
                 
                 return true;
@@ -105,8 +103,7 @@ namespace WMS.Service.Impl.LocationMaster
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
-                    throw ex;
+                    throw new ValidationException(ErrorCode.E4017);
                 }
 
                 

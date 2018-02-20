@@ -267,6 +267,7 @@ namespace Isuzu.Service.Impl
             IResponseData<IEnumerable<InboundItemsHead>> respones = new ResponseData<IEnumerable<InboundItemsHead>>();
             try
             {
+                var x = InboundService.GetInboundItemByQty(10, true);
                 IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroup();
                 respones.SetData(items);
                 respones.SetStatus(HttpStatusCode.OK);

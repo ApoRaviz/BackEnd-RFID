@@ -237,6 +237,19 @@ namespace WIM.Core.Security
             }
             return roles;
         }
+
+        public static string GetRoleID(string projectIDSys , ApplicationUser user)
+        {
+            string roleId;
+            using (SecurityDbContext Db = new SecurityDbContext())
+            {
+                int pro = int.Parse(projectIDSys);
+                List<string> role = Db.Roles.Where(a => a.ProjectIDSys == pro).Select(b => b.Id).ToList();
+                roleId = user.Roles.Where(a => role.Contains(a.RoleId)).Select(x => x.RoleId).SingleOrDefault();
+            }
+
+            return roleId;
+        }
         private static bool ByteArraysEqual(byte[] a, byte[] b)
         {
             if (object.ReferenceEquals(a, b))

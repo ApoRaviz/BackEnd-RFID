@@ -13,7 +13,8 @@ namespace WIM.Core.Security.Entity
         }
 
         public bool IsSysAdmin { get; set; }
-
+        public int ProjectIDSys { get; set; }
+        //public string RoleID { get; set; }
         public ICollection<Permission> Permissions { get; set; }
 
         public bool IsPermissionInRole(string _permission)

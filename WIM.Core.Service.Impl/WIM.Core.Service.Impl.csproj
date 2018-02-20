@@ -65,6 +65,7 @@
     <Compile Include="EmployeeMaster\EmployeeService.cs" />
     <Compile Include="EmployeeMaster\HistoryWarningService.cs" />
     <Compile Include="EmployeeMaster\PositionService.cs" />
+    <Compile Include="EmployeeMaster\ProbationService.cs" />
     <Compile Include="EmployeeMaster\ResignService.cs" />
     <Compile Include="FileManagement\FileService.cs" />
     <Compile Include="HeadReportControl\HeadReportControlService.cs" />

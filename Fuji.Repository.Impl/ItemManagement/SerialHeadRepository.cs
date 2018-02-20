@@ -18,8 +18,8 @@ namespace Fuji.Repository.Impl.ItemManagement
     public class SerialHeadRepository : Repository<ImportSerialHead>,ISerialHeadRepository
     {
         private FujiDbContext Db { get; set; }
-      private DbSet<ImportSerialHead> DbSet { get; set; }
-
+        private DbSet<ImportSerialHead> DbSet { get; set; }
+  
         public SerialHeadRepository(FujiDbContext context):base(context)
         {
             DbSet = context.Set<ImportSerialHead>();
@@ -134,7 +134,7 @@ namespace Fuji.Repository.Impl.ItemManagement
 
         public IEnumerable<ImportSerialHead> GetItemAll(int max = 0)
         {
-            var items = DbSet.Where(w => !w.Equals('0') && !w.Equals(FujiStatus.DELETED.ToString()));
+            var items = DbSet.Where(w => !w.Equals('0'));
             if (max > 0)
                 items.Take(max);
             return items;
