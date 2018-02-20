@@ -99,7 +99,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorCode.E4012);
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                     return ReportSysID;
@@ -139,7 +139,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorCode.E4012);
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                     return true;

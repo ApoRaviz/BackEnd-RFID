@@ -78,7 +78,7 @@ namespace WMS.Service.Impl.Report
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorCode.E4012);
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                     return newData.ReportIDSys;
@@ -110,7 +110,7 @@ namespace WMS.Service.Impl.Report
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorCode.E4012);
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                     return true;

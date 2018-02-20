@@ -129,8 +129,7 @@ namespace WMS.Service
                 catch (DbUpdateException e)
                 {
                     scope.Dispose();
-                    throw e;
-                    throw new ValidationException(ErrorCode.E4012);
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return itemresponse.ItemIDSys;
             }
@@ -181,7 +180,7 @@ namespace WMS.Service
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4012);
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return true;
             }
@@ -205,7 +204,7 @@ namespace WMS.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4017);
+                    throw new ValidationException(ErrorEnum.E4017);
                 }
                 return true;
             }
@@ -229,7 +228,7 @@ namespace WMS.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4017);
+                    throw new ValidationException(ErrorEnum.E4017);
                 }
                 return true;
             }

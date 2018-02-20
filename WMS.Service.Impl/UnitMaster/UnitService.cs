@@ -82,7 +82,7 @@ namespace WMS.Service
                 catch (DbUpdateException )
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4012);
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return unit.UnitIDSys;
             }
@@ -109,7 +109,7 @@ namespace WMS.Service
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4012);
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 
                 return true;

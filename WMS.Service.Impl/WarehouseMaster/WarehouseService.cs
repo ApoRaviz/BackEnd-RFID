@@ -71,7 +71,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4012);
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 
                 return Warehouse.WHIDSys;
@@ -100,7 +100,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4012);
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 
                 return true;
@@ -124,7 +124,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorCode.E4017);
+                    throw new ValidationException(ErrorEnum.E4017);
                 }
 
 
