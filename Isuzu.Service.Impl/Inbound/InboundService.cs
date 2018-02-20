@@ -225,9 +225,9 @@ namespace Isuzu.Service.Impl.Inbound
                    from i in Db.InboundItems
                    where i.InvNo == invNo
                    && !new List<string> {
-                           "NEW",
-                           "SHIPPED",
-                           "DELETED"
+                           IsuzuStatus.New.GetValueEnum(),
+                           IsuzuStatus.Shipped.GetValueEnum(),
+                           IsuzuStatus.Deleted.GetValueEnum()
                        }.Contains(i.Status)
                    select new InboundItemHandyDto
                    {
@@ -254,8 +254,8 @@ namespace Isuzu.Service.Impl.Inbound
 
                     IEnumerable<InboundItems> items = detailRepo.GetMany(i =>
                         new List<string> {
-                            "REGISTERED_YUT",
-                            "REGISTERED_ITA"
+                            IsuzuStatus.ReceivedAtYUT.GetValueEnum(),
+                            IsuzuStatus.ReceivedAtITA.GetValueEnum()
                         }.Contains(i.Status)
                     );
 

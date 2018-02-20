@@ -11,7 +11,7 @@ using WIM.Core.Service.StatusManagement;
 using WIM.Core.Repository.Impl.StatusManagement;
 using WIM.Core.Repository.StatusManagement;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using System;
 
 namespace WIM.Core.Service.Impl.StatusManagement
@@ -30,13 +30,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
             }
 
@@ -53,13 +51,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
             }
         }
@@ -75,7 +71,6 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     {
                         IStatusRepository headRepo = new StatusRepository(db);
 
-
                         Status_MT st = headRepo.Insert(status);
 
                         db.SaveChanges();
@@ -84,13 +79,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                 }
             }
@@ -107,8 +100,7 @@ namespace WIM.Core.Service.Impl.StatusManagement
                         List<SubModuleDto> list = submodule.ToList();
                         IStatusRepository headRepo = new StatusRepository(db);
 
-                        Status_MT st = headRepo.Insert(status);
-                        db.SaveChanges();
+                        Status_MT st = headRepo.Insert(status);                        
 
                         if(submodule != null)
                         {
@@ -119,21 +111,19 @@ namespace WIM.Core.Service.Impl.StatusManagement
                                 statusSM.StatusIDSys = st.StatusIDSys;
                                 statusSM.SubModuleIDSys = list[i].SubModuleIDSys;
                                 db.StatusSubModule.Add(statusSM);
-                            }
-                            db.SaveChanges();
+                            }                            
                         }
+                        db.SaveChanges();
                         scope.Complete();
                         return st;
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                 }
             }
@@ -177,14 +167,12 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                 }
             }
@@ -208,13 +196,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
 
             }
@@ -241,13 +227,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
 
             }
@@ -273,29 +257,14 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
             }
         }
-
      
     }
 }

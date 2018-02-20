@@ -1409,17 +1409,13 @@ namespace Fuji.Service.Impl.ItemImport
                                 }
                             }
                         }
-
-
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
-
                 }
-
             }
             return true;
         }
