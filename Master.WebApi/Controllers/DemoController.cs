@@ -358,7 +358,8 @@ namespace Master.WebApi.Controllers
                     {
                         ID = api.ID,
                         ControllerName = group.Key.ControllerName,
-                        RelativePath = path,
+                        RelativePath = api.RelativePath,
+                        ApiPath = path,
                         Method = api.HttpMethod.Method
                     });
                 }                                
@@ -375,6 +376,7 @@ namespace Master.WebApi.Controllers
         public string ID { get; set; }
         public string ControllerName { get; set; }
         public string RelativePath { get; set; }
+        public string ApiPath { get; set; }
         public string Method { get; set; }
         
     }
