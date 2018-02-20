@@ -19,6 +19,7 @@ namespace WMS.Master
 
         int CreateLocationGroup(GroupLocation locationGroup);
         bool UpdateLocationGroup(int locationGroupIDSys, GroupLocation locationGroup);
+        bool UpdateAllLocationGroup(List<GroupLocation> locationGroups);
         bool DeleteLocationGroup(int id);
 
         IEnumerable<Location> GetLocation();

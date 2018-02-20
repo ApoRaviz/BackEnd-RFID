@@ -95,7 +95,9 @@ namespace WMS.Master
             {
                 ILocationGroupRepository repo = new LocationGroupRepository(Db);
                 string[] include = { "LocationType", "Location" };
-                groupLocation = repo.GetWithInclude(i => i.ZoneIDSys == zoneIDSys
+                groupLocation = repo.GetWithInclude(i => i.ZoneIDSys == zoneIDSys 
+                || i.ZoneIDSys == null 
+                || i.ZoneIDSys == 0
                 , include).ToList();
 
             }
@@ -162,6 +164,42 @@ namespace WMS.Master
                     throw ex;
                 }
                 
+                return true;
+            }
+        }
+
+        public bool UpdateAllLocationGroup(List<GroupLocation> locationGroups)
+        {
+            using (var scope = new TransactionScope())
+            {
+
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+
+                        ILocationGroupRepository repo = new LocationGroupRepository(Db);
+                        locationGroups.ForEach(f =>
+                        {
+                            if (f != null)
+                               repo.Update(f);
+                        });
+
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    HandleValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    throw ex;
+                }
+
                 return true;
             }
         }

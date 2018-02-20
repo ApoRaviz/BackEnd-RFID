@@ -158,6 +158,31 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+        [HttpPut]
+        [Route("UpdateLocationGroup")]
+        public HttpResponseMessage UpdateAllLocationGroup([FromBody] List<GroupLocation> items)
+        {
+            ResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                if (items != null)
+                {
+                    bool updated = LocGroupService.UpdateAllLocationGroup(items);
+                    response.SetData(updated);
+                }
+                else
+                {
+                    response.SetData(false);
+                }
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
         #endregion
 
     }
