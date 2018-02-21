@@ -38,7 +38,7 @@ namespace Fuji.Service.Impl.ItemImport
     {
         #region connection Settings
 
-        private string connectionString = ConfigurationManager.ConnectionStrings["WIM_FUJI"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["YUT_FUJI"].ConnectionString;
         #endregion
 
         private const int _SUBMODULE_ID = 10;

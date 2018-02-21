@@ -48,7 +48,7 @@ namespace WMS.Context
         public DbSet<LocationType> LocationType { get; set; }
 
 
-        public WMSDbContext() : base("name=DefaultConnection")
+        public WMSDbContext() : base("name=YUT_WMS")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
