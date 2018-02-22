@@ -92,7 +92,7 @@ namespace Isuzu.Service.Impl.Inbound
                 {
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-
+                    db.InboundItems.AsParallel();
                     try
                     {
                         bool isDupAnother = detailRepo.Exists(i =>
@@ -109,7 +109,7 @@ namespace Isuzu.Service.Impl.Inbound
                             throw new ValidationException(ErrorEnum.RFIDIsDuplicatedAnother);
                         }
 
-                        InboundItems itemExist = detailRepo.GetByID(item.ID);
+                        InboundItems itemExist = detailRepo.GetItemSingleBy(i => i.ISZJOrder == item.ISZJOrder);
 
                         itemExist.RFIDTag = item.RFIDTag;
                         itemExist.Status = item.Status;
