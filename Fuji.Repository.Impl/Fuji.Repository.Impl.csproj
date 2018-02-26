@@ -81,6 +81,10 @@
       <Project>{a2112d9c-2217-49a3-8fee-b749ded27c8e}</Project>
       <Name>Fuji.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
       <Project>{E365F321-091B-4D42-8934-6E919C7FF6B1}</Project>
       <Name>WIM.Core.Repository.Impl</Name>
@@ -88,6 +92,10 @@
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{EA0CB63C-87C2-470E-9651-3CCD1D8C8BE4}</Project>
       <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
+      <Project>{1CD73CE9-A580-479F-B049-288215CD5E04}</Project>
+      <Name>WIM.Core.Service.Impl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
