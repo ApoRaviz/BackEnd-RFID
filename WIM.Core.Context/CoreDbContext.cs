@@ -67,7 +67,7 @@ namespace WIM.Core.Context
         /// 
         public virtual DbSet<VPersons> VPersons { get; set; }
 
-        public CoreDbContext() : base("name=CORE")
+        public CoreDbContext() : base("name=YUT_CORE")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

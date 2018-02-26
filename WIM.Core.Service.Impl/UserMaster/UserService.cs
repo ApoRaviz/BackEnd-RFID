@@ -161,13 +161,15 @@ namespace WIM.Core.Service.Impl
                                 repoRole.Insert(c );
                             }
                             User.UserRoles = null;
+                            Db.SaveChanges();
                         }
                         //User.Email = User.Email;
-                        User.UserName = User.UserName;
-                        User.PasswordHash = User.PasswordHash;
+                        //User.UserName = User.UserName;
+                        //User.PasswordHash = User.PasswordHash;
+                        //User.LastLogin = DateTime.Now;
                         //User.PhoneNumber = User.PhoneNumber;
-                        repo.Update(User );
-                        Db.SaveChanges();
+                        //repo.Update(User );
+                        //Db.SaveChanges();
                         scope.Complete();
                     }
                 }
@@ -175,7 +177,7 @@ namespace WIM.Core.Service.Impl
                 {
                     throw new ValidationException(e);
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException e)
                 {
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.E4012);

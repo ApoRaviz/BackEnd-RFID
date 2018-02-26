@@ -488,6 +488,17 @@ namespace WIM.Core.Service.Impl
         //    }
         //}
 
+        public void HandleValidationException(DbEntityValidationException ex)
+        {
+            foreach (var eve in ex.EntityValidationErrors)
+            {
+                foreach (var ve in eve.ValidationErrors)
+                {
+                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                }
+            }
+        }
+
     }
 }
 
