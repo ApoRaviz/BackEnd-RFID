@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Collections.Generic;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Utility.Helpers;
+
 
 namespace TMS.WebApi.Controllers
 {
@@ -72,7 +72,7 @@ namespace TMS.WebApi.Controllers
                     else
                     {
                         List<ValidationError> ex = new List<ValidationError>();
-                        ex.Add(new ValidationError(ErrorCode.E500.ToString(), (string)json.Message));
+                        ex.Add(new ValidationError(ErrorEnum.E500.ToString(), (string)json.Message));
                         response.SetErrors(ex);
                         response.SetStatus(HttpStatusCode.InternalServerError);
                     }

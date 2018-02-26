@@ -18,6 +18,7 @@ using WIM.Core.Common.ValueObject;
 using System.Security.Principal;
 using WIM.Core.Common;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Entity.ProjectManagement;
 
 namespace WIM.Core.Service.Impl
 {
@@ -58,16 +59,20 @@ namespace WIM.Core.Service.Impl
         public CustomerDto GetCustomerByCusIDSysIncludeProjects(int id)
         {
             Customer_MT customer;
-            using(CoreDbContext Db = new CoreDbContext())
+            IEnumerable<Project_MT> project;
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 ICustomerRepository repo = new CustomerRepository(Db);
+                IProjectRepository repo2 = new ProjectRepository(Db);
                 string[] include = {"Project_MT" };
                 customer = repo.GetWithInclude((c => c.IsActive == true && c.CusIDSys == id),include).SingleOrDefault();
+                project = repo2.GetMany(c => c.CusIDSys == id).ToList();
             }
             if (customer != null)
             {
                 CustomerDto customerDto = new CommonService().AutoMapper<CustomerDto>(customer);
-
+                if(project != null)
+                    customerDto.Project_MT = project.Select(a => new CommonService().AutoMapper<ProjectDto>(a)).ToList();
                 return customerDto;
             }
             return null;
@@ -113,11 +118,13 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ICustomerRepository repo = new CustomerRepository(Db);
+                IProjectRepository repo2 = new ProjectRepository(Db);
                 customer = repo.Get(c => c.CusIDSys == id && c.IsActive == true);
                 if (customer != null)
                 {
                     string[] include = { "Project_MT" };
-                    query = repo.GetWithInclude((c => c.IsActive == true && c.CusIDSys == id), include).SingleOrDefault();
+                    query = repo.Get((c => c.IsActive == true && c.CusIDSys == id));
+                    var project = repo2.GetMany(c => c.CusIDSys == id).ToList();
                     if (tableNames != null)
                     {
                         foreach (string tableName in tableNames)
@@ -131,7 +138,9 @@ namespace WIM.Core.Service.Impl
                             }
                         }
                     }
-                    CustomerDto customerDto = new CommonService().AutoMapper<CustomerDto>(query)/* Mapper.Map<Customer_MT, CustomerDto>(query)*/; 
+                    CustomerDto customerDto = new CommonService().AutoMapper<CustomerDto>(query)/* Mapper.Map<Customer_MT, CustomerDto>(query)*/;
+                    if(project != null)
+                    customerDto.Project_MT =  project.Select(a => new CommonService().AutoMapper<ProjectDto>(a)).ToList();
                     return customerDto;
                 }
             }

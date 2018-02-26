@@ -56,6 +56,8 @@ namespace WIM.Core.Context
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<File_MT> File_MT { get; set; }
+        public virtual DbSet<PermissionGroup> PermissionGroup { get; set; }
+        public virtual DbSet<PermissionGroupApi> PermissionGroupApi { get; set; }
 
         /// <summary>
         /// View

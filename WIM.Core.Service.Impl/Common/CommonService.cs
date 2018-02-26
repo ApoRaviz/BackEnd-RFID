@@ -34,7 +34,17 @@ namespace WIM.Core.Service.Impl
             {
                 var value = prop.GetValue(data);
                 if (respType.GetProperty(prop.Name) != null)
-                    respType.GetProperty(prop.Name).SetValue(resp, value, null);
+                {
+                    try
+                    {
+                        respType.GetProperty(prop.Name).SetValue(resp, value, null);
+                    }
+                    catch(Exception e)
+                    {
+                    }
+                    
+                }
+                    
             }
 
             return resp;

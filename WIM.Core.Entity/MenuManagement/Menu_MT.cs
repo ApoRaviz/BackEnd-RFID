@@ -35,5 +35,7 @@ namespace WIM.Core.Entity.MenuManagement
         public virtual ICollection<MenuProjectMapping> MenuProjectMappings { get; set; }
 
         public virtual ICollection<ApiMenuMapping> ApiMenuMappings { get; set; }
+
+        public virtual ICollection<PermissionGroup> PermissionGroup { get; set; }
     }
 }

@@ -45,11 +45,11 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 history = repo.GetMany(a => a.EmID == id).Select(s => new HistoryWarning() {
                     EmID = s.EmID,
                     Description = s.Description,
-                    FileUID = s.FileUID,
+                    FileRefID = s.FileRefID,
                     StatusIDSys = s.StatusIDSys,
                     WarnIDSys = s.WarnIDSys,
                     WarningDate = s.WarningDate,
-                    File_MT = db.File_MT.Where(d => d.FileUID == s.FileUID).SingleOrDefault()
+                    File_MT = db.File_MT.Where(d => d.FileUID == s.FileRefID).SingleOrDefault()
                     
                 }).ToList();
             }

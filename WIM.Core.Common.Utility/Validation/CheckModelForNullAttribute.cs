@@ -121,7 +121,11 @@ namespace WIM.Core.Common.Utility.Validation
                     var send = propname.GetValue(motherclass, null);
                     if (propname.PropertyType.IsGenericType)
                     {
-                        CheckNullProperties(data, send);
+                        if(propname.PropertyType.GetGenericTypeDefinition() != typeof(IEnumerable<>))
+                        {
+                            CheckNullProperties(data, send);
+                        }
+                        
                     }
 
                 }

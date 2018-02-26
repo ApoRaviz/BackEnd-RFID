@@ -74,6 +74,8 @@
     <Compile Include="MenuProjectMapping\MenuProjectMappingService.cs" />
     <Compile Include="ModuleMaster\SubModuleService.cs" />
     <Compile Include="ModuleMaster\ModuleService.cs" />
+    <Compile Include="PermissionGroups\PermissionGroupApiService.cs" />
+    <Compile Include="PermissionGroups\PermissionGroupService.cs" />
     <Compile Include="PermissionMaster\PermissionService.cs" />
     <Compile Include="PersonMaster\PersonService.cs" />
     <Compile Include="ProjectMaster\ProjectService.cs" />

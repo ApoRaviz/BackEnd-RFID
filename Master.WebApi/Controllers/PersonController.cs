@@ -17,6 +17,7 @@ using WIM.Core.Entity.View;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Service.Impl.EmployeeMaster;
 using WIM.Core.Service.EmployeeMaster;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
 {
@@ -93,8 +94,8 @@ namespace Master.WebApi.Controllers
                     Employee.HistoryWarnings = Warning.ToList();
                     Employee.Resign = resign;
                 }
-                Person.User = user;
-                Person.Employee = Employee;
+                Person.User = new CommonService().AutoMapper<UserDto>(user);
+                Person.Employee = new CommonService().AutoMapper<EmployeeDto>(Employee);
                 response.SetData(Person);
             }
             catch (ValidationException ex)
