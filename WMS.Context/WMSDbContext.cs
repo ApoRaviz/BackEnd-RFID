@@ -13,6 +13,7 @@ using WMS.Entity.ImportManagement;
 using WMS.Entity.InspectionManagement;
 using WMS.Entity.ItemManagement;
 using WMS.Entity.LayoutManagement;
+using WMS.Entity.Receiving;
 using WMS.Entity.Report;
 using WMS.Entity.WarehouseManagement;
 
@@ -38,6 +39,7 @@ namespace WMS.Context
         public DbSet<ReportLayoutHeader_MT> ReportLayoutHeader_MT { get; set; }
         public DbSet<ReportLayout_MT> ReportLayout_MT { get; set; }
         public DbSet<Location_MT> Location_MT { get; set; }
+        public DbSet<Receive> Receive { get; set; }
         public DbSet<Supplier_MT> Supplier_MT { get; set; }
         public DbSet<ZoneLayoutHeader_MT> ZoneLayoutHeader_MT { get; set; }
         public DbSet<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
@@ -48,7 +50,7 @@ namespace WMS.Context
         public DbSet<LocationType> LocationType { get; set; }
 
 
-        public WMSDbContext() : base("name=DefaultConnection")
+        public WMSDbContext() : base("name=YUT_WMS")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

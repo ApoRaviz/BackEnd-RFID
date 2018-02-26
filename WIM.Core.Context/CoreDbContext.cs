@@ -56,6 +56,9 @@ namespace WIM.Core.Context
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<File_MT> File_MT { get; set; }
+        public virtual DbSet<PermissionGroup> PermissionGroup { get; set; }
+        public virtual DbSet<PermissionGroupApi> PermissionGroupApi { get; set; }
+
         public virtual DbSet<Probation_MT> Probation_MT { get; set; }
         
         /// <summary>
@@ -64,7 +67,7 @@ namespace WIM.Core.Context
         /// 
         public virtual DbSet<VPersons> VPersons { get; set; }
 
-        public CoreDbContext() : base("name=CORE")
+        public CoreDbContext() : base("name=YUT_CORE")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

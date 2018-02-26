@@ -11,5 +11,6 @@ namespace WIM.Core.Repository
     public interface IMenuRepository : IRepository<Menu_MT>
     {
         IEnumerable<AutocompleteMenuDto> AutocompleteMenu(string term);
+        
     }
 }

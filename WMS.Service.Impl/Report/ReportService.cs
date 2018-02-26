@@ -73,13 +73,12 @@ namespace WMS.Service.Impl.Report
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                     return newData.ReportIDSys;
@@ -106,13 +105,12 @@ namespace WMS.Service.Impl.Report
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     scope.Complete();
                     return true;
@@ -301,15 +299,5 @@ namespace WMS.Service.Impl.Report
         //    }
         //}
 
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
     }
 }

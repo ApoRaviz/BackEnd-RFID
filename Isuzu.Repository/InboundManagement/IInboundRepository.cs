@@ -10,22 +10,6 @@ namespace Isuzu.Repository.ItemManagement
 {
     public interface IInboundRepository : IRepository<InboundItems>
     {
-        //IEnumerable<InboundItems> Get();
-        //InboundItems GetByID(object id);
-        //void Insert(InboundItems entity);
-        //void Delete(object id);
-        //void Delete(InboundItems entityToDelete);
-        //void Update(InboundItems entityToUpdate);
-        //IEnumerable<InboundItems> GetMany(Func<InboundItems, bool> where);
-        //IQueryable<InboundItems> GetManyQueryable(Func<InboundItems, bool> where);
-        //InboundItems Get(Func<InboundItems, Boolean> where);
-        //void Delete(Func<InboundItems, Boolean> where);
-        //IEnumerable<InboundItems> GetAll();
-        //IQueryable<InboundItems> GetWithInclude(System.Linq.Expressions.Expression<Func<InboundItems, bool>> predicate, params string[] include);
-        //bool Exists(object primaryKey);
-        //InboundItems GetSingle(Func<InboundItems, bool> predicate);
-        //InboundItems GetFirst(Func<InboundItems, bool> predicate);
-
 
         //Custom 
         InboundItems GetItemBy(Func<InboundItems, bool> where);

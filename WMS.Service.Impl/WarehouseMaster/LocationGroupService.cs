@@ -126,8 +126,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 
                 return locationGroup.GroupLocIDSys;
@@ -160,8 +159,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 
                 return true;
@@ -196,8 +194,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
 
                 return true;
@@ -221,8 +218,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4017);
                 }
 
 
@@ -277,8 +273,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
 
                 return Location.LocIDSys;
@@ -307,8 +302,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
 
                 return true;
@@ -332,8 +326,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4017);
                 }
 
 

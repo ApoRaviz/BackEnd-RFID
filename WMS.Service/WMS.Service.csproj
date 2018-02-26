@@ -50,6 +50,7 @@
     <Compile Include="Label\ILabelService.cs" />
     <Compile Include="LocationMaster\ILocationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receive\IReceiveService.cs" />
     <Compile Include="Report\IReportService.cs" />
     <Compile Include="UnitMaster\IUnitService.cs" />
     <Compile Include="WarehouseMaster\ILocationGroupService.cs" />

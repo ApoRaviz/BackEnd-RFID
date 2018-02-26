@@ -131,13 +131,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4009));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4009);
                 }
 
                 return User.UserID;
@@ -162,25 +161,26 @@ namespace WIM.Core.Service.Impl
                                 repoRole.Insert(c );
                             }
                             User.UserRoles = null;
+                            Db.SaveChanges();
                         }
                         //User.Email = User.Email;
-                        User.UserName = User.UserName;
-                        User.PasswordHash = User.PasswordHash;
+                        //User.UserName = User.UserName;
+                        //User.PasswordHash = User.PasswordHash;
+                        //User.LastLogin = DateTime.Now;
                         //User.PhoneNumber = User.PhoneNumber;
-                        repo.Update(User );
-                        Db.SaveChanges();
+                        //repo.Update(User );
+                        //Db.SaveChanges();
                         scope.Complete();
                     }
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException e)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 ;
                 return true;
@@ -203,13 +203,13 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
+
                 }
 
                 return true;
@@ -270,20 +270,9 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 return true;
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
             }
         }
 
@@ -299,59 +288,6 @@ namespace WIM.Core.Service.Impl
             return user.ToList();
         }
 
-        //public string CreateUserAndPerson(User User, Person_MT Person)
-        //{
-        //    using (var scope = new TransactionScope())
-        //    {
-        //        try
-        //        {
-        //            Person.CreateDate = DateTime.Now;
-        //            Person.UpdateDate = DateTime.Now;
-        //            Person.UserUpdate = "1";
-        //            repoPerson.Insert(Person);
-
-        //            CoreDb.User.Add(new User()
-        //                {
-        //                    UserID = Guid.NewGuid().ToString(),
-        //                    UserName = User.UserName,
-        //                    Email = User.Email,
-        //                    Name = User.Name,
-        //                    Surname = User.Surname,
-        //                    //PhoneNumber = User.PhoneNumber,
-        //                    PasswordHash = User.PasswordHash,
-        //                    EmailConfirmed = false,
-        //                    PhoneNumberConfirmed = false,
-        //                    TwoFactorEnabled = false,
-        //                    CreateDate = DateTime.Now,
-        //                    UpdateDate = DateTime.Now,
-        //                    AccessFailedCount = 0,
-        //                    LockoutEnabled = true,
-        //                    LastLogin = DateTime.Now.Date,
-        //                    PersonIDSys = Person.PersonIDSys,
-        //                    LockoutEndDateUtc = DateTime.Now.Date,
-        //                    UserUpdate = "1",
-        //                    Active = 1
-        //                });
-        //           SecuDb.SaveChanges();
-        //           scope.Complete();
-        //        }
-        //            //repo.Insert(User);
-        //            catch (DbEntityValidationException e)
-        //            {
-        //                HandleValidationException(e);
-        //            }
-        //            catch (DbUpdateException)
-        //            {
-        //                scope.Dispose();
-        //                ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorEnum.E4009));
-        //                throw ex;
-        //            }
-
-
-        //        }
-
-        //        return User.UserID;
-        //}
 
         public User GetUserByPersonIDSys(int personIDSys)
         {
@@ -386,7 +322,7 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 return true;
             }

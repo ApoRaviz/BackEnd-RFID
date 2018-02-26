@@ -92,7 +92,7 @@ namespace Isuzu.Service.Impl.Inbound
                 {
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-
+                    db.InboundItems.AsParallel();
                     try
                     {
                         bool isDupAnother = detailRepo.Exists(i =>
@@ -109,7 +109,7 @@ namespace Isuzu.Service.Impl.Inbound
                             throw new ValidationException(ErrorEnum.RFIDIsDuplicatedAnother);
                         }
 
-                        InboundItems itemExist = detailRepo.GetByID(item.ID);
+                        InboundItems itemExist = detailRepo.GetItemSingleBy(i => i.ISZJOrder == item.ISZJOrder);
 
                         itemExist.RFIDTag = item.RFIDTag;
                         itemExist.Status = item.Status;
@@ -651,7 +651,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -847,7 +847,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -885,7 +885,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -924,7 +924,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -955,7 +955,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -1100,17 +1100,6 @@ namespace Isuzu.Service.Impl.Inbound
         #endregion
 
         #endregion
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
 
     }
 }

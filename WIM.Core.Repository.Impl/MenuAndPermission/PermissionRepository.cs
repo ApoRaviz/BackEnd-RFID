@@ -44,5 +44,14 @@ namespace WIM.Core.Repository.Impl
             return data.ToList();
         }
 
+        public IEnumerable<Permission> GetPermissionByGroupMenu(string GroupIDSys,MenuProjectMapping menu)
+        {
+            CoreDbContext Db2 = new CoreDbContext();
+            var permiss = from i in Db.Permission
+                          where i.MenuIDSys == menu.MenuIDSys && i.ProjectIDSys == menu.ProjectIDSys &&
+                        Db.PermissionGroupApi.Where(b => b.GroupIDSys == GroupIDSys).Select(b => b.ApiIDSys).Contains(i.ApiIDSys)
+                          select i;
+            return permiss.ToList();
+        }
     }
 }

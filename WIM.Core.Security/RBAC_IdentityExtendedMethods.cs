@@ -316,7 +316,8 @@ public static class RBAC_ExtendedMethods_4_Principal
                     //Menu Side Url
                     "GET/api/v1/MenuProjectMappings/menu/",
                     //Url Ignore ChkOTP
-                    "POST/api/v1/account/assignProject"
+                    "POST/api/v1/account/assignProject",
+                    "GET/api/v1/demo/func7"
                 };
         string reqUrlnew = _request.Method + StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
         if (_request.RequestUri.PathAndQuery.Last() == '/')

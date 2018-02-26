@@ -62,6 +62,7 @@
     <Compile Include="Label\LabelLayoutHeaderRepository.cs" />
     <Compile Include="Location\LocationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receive\ReceiveRepository.cs" />
     <Compile Include="Report\ReportLayoutDetailRepository.cs" />
     <Compile Include="Report\ReportLayoutHeaderRepository.cs" />
     <Compile Include="Report\ReportLayoutRepository.cs" />

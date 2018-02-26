@@ -60,12 +60,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                 }
@@ -83,12 +83,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
             }
@@ -105,12 +105,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
             }
@@ -128,12 +128,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
             }
@@ -167,26 +167,15 @@ namespace HRMS.Service.Impl.LeaveManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
-                }
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
                 }
             }
         }

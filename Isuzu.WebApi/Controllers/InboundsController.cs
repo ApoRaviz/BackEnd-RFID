@@ -252,11 +252,30 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(responseHandy);
         }
 
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/items/amountRegistered")]
+        public HttpResponseMessage GetAmountRegistered()
+        {
+            ResponseData<int> responseHandy = new ResponseData<int>();
+            try
+            {
+                int amount = InboundService.GetAmountRegistered_HANDY();
+                responseHandy.SetData(amount);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
         #endregion
 
         #region =============================== DEFAULT =================================
 
-       
+
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]

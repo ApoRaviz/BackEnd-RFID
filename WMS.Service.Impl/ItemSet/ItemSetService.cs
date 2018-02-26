@@ -75,13 +75,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
 
                 }
@@ -107,13 +105,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     return true;
                 }
@@ -144,13 +140,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     return ItemSet.ItemSetIDSys;
                 }
@@ -194,13 +188,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     return item.ItemSetIDSys;
                 }
@@ -229,13 +221,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     return item.ItemIDSys;
                 }
@@ -298,13 +288,11 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
             }
         }

@@ -9,6 +9,7 @@ namespace Isuzu.Entity
     [Table("InboundItems")]
     public partial class InboundItems : BaseEntity 
     {
+        [Key]
         public string ID { get; set; }
 
         [StringLength(50)]

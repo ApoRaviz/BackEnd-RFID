@@ -68,12 +68,12 @@ namespace WIM.Core.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return Supplier.SupIDSys;
@@ -97,12 +97,12 @@ namespace WIM.Core.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return true;
@@ -126,24 +126,12 @@ namespace WIM.Core.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
                     throw ex;
                 }
                 return true;
             }
         }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
-
 
         public IEnumerable<AutocompleteSupplierDto> AutocompleteSupplier(string term)
         {

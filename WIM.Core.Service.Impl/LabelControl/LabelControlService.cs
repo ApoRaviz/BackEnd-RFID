@@ -62,13 +62,13 @@ namespace WIM.Core.Service.Impl
                     catch (DbEntityValidationException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                     catch (DbUpdateException x)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw x;
                     }
                 }
@@ -97,13 +97,13 @@ namespace WIM.Core.Service.Impl
                     catch (DbEntityValidationException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                     catch (DbUpdateException x)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw x;
                     }
                 }

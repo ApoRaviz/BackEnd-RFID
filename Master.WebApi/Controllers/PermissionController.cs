@@ -8,6 +8,7 @@ using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Service;
 
@@ -233,8 +234,29 @@ namespace Master.WebApi.Controllers
             //Permission.UserUpdate = User.Identity.Name;
             return Request.ReturnHttpResponseMessage(response);
         }
-        // PUT: api/Suppliers/5
 
+
+        [HttpPost]
+        [Route("group/{GroupIDSys}")]
+        public HttpResponseMessage PostPermission(string GroupIDSys, MenuProjectMapping menu)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool success = PermissionService.CreatePermissionByGroup(GroupIDSys, menu);
+                response.SetData(success);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            //Permission.UserUpdate = User.Identity.Name;
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+
+        // PUT: api/Suppliers/5
         [HttpPut]
         [Route("{Id}")]
         public HttpResponseMessage Put(string Id, [FromBody]Permission Permission)
@@ -287,6 +309,25 @@ namespace Master.WebApi.Controllers
                 isUpated = PermissionService.DeleteAllInRole(PermissionID);
                 if(isUpated)
                 isUpated = PermissionService.DeletePermission(PermissionID);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpDelete]
+        [Route("group/{GroupIDSys}")]
+        public HttpResponseMessage Deletegroup(string GroupIDSys,MenuProjectMapping menu)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = false;
+                isUpated = PermissionService.DeletePermissionByGroup(GroupIDSys, menu);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

@@ -26,20 +26,7 @@ namespace Isuzu.Entity
         public bool? IsExport { get; set; }
 
         [StringLength(50)]
-        public string Remark { get; set; }
-
-        //[Column(TypeName = "smalldatetime")]
-        //public DateTime? CreateAt { get; set; }
-
-        //[StringLength(50)]
-        //public string CreateBy { get; set; }
-
-        //[Column(TypeName = "smalldatetime")]
-        //public DateTime? UpdateAt { get; set; }
-
-        //[StringLength(50)]
-        //public string UpdateBy { get; set; }
-
+        public string Remark { get; set; }       
 
         public virtual ICollection<InboundItems> InboundItems { get; set; }
     }
