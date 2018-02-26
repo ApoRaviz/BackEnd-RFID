@@ -584,6 +584,10 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     duplicateList = (from p in Db.InboundItems
                                      where isuzuOrders.Contains(p.ISZJOrder)
+                                     && !new List<string> {
+                                          statusShipped,
+                                          statusDeleted
+                                        }.Contains(p.Status)
                                      select p).ToList();
 
                     if (duplicateList.Count > 0)
