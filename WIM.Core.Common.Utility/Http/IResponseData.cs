@@ -12,7 +12,7 @@ namespace WIM.Core.Common.Utility.Http
 {
     public interface IResponseData<DataType>
     {
-        void SetStatus(System.Net.HttpStatusCode httpStatusCode);
+        void SetStatus(HttpStatusCode httpStatusCode);
         void SetErrors(IList<ValidationError> errors);
         void SetErrors(DbUpdateException error);
         void SetData(DataType data);

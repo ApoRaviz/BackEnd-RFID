@@ -53,8 +53,7 @@ namespace WIM.Core.Common.Utility.Validation
             //}
             //catch (ValidationException)
             //{
-            //    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorEnum.E4012));
-            //    throw ex;
+            //    throw new ValidationException(ErrorEnum.E4012);
             //}
         }
     }

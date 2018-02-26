@@ -59,6 +59,8 @@ namespace WIM.Core.Context
         public virtual DbSet<PermissionGroup> PermissionGroup { get; set; }
         public virtual DbSet<PermissionGroupApi> PermissionGroupApi { get; set; }
 
+        public virtual DbSet<Probation_MT> Probation_MT { get; set; }
+        
         /// <summary>
         /// View
         /// </summary>

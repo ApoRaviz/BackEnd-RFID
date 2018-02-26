@@ -1,4 +1,5 @@
-﻿using Fuji.Context;
+﻿using Fuji.Common.ValueObject;
+using Fuji.Context;
 using Fuji.Entity.ItemManagement;
 using Fuji.Repository.ItemManagement;
 using System;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using WIM.Core.Service.Impl.StatusManagement;
 
 namespace Fuji.Repository.Impl.ItemManagement
 {
@@ -141,47 +143,49 @@ namespace Fuji.Repository.Impl.ItemManagement
             return DbSet.Where(where);
         }
 
-        public IEnumerable<T> SqlQuery<T>(string sql,params object[] parameters)
+        public IEnumerable<T> SqlQuery<T>(string sql, params object[] parameters)
         {
             return this.Context.Database.SqlQuery<T>(sql, parameters);
         }
 
         public void ExceuteSql(string sql)
         {
-          this.Context.Database.ExecuteSqlCommand(sql);
+            this.Context.Database.ExecuteSqlCommand(sql);
         }
 
         public bool IsAnyItemBy(Func<ImportSerialDetail, bool> where)
         {
             return DbSet.Any(where);
-        }
-        public void InsertItem(ImportSerialDetail item,string userName)
+        }       
+
+        public bool IsSerialsRemainInStock(List<string> itemGroups)
         {
-            item.CreateBy = userName;
-            item.CreateAt = DateTime.Now;
-            item.UpdateBy = userName;
-            item.UpdateAt = DateTime.Now;
+            int _SUBMODULE_ID = 10;
+            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle(_SUBMODULE_ID, FujiStatus.Deleted.GetValueEnum());
+            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle(_SUBMODULE_ID, FujiStatus.Shipped.GetValueEnum());
 
-            DbSet.Add(item);
-            Db.SaveChanges();
-        }
-
-        public void UpdateItem(ImportSerialDetail item, string userName)
-        {
-            item.UpdateBy = userName;
-            item.UpdateAt = DateTime.Now;
-
-            DbSet.Attach(item);
-            Context.Entry(item).State = EntityState.Modified;
-            Db.SaveChanges();
-        }
-
-        public void DeleteItems(Func<ImportSerialDetail, bool> predicate)
-        {
-           var items = DbSet.Where(predicate);
-            if(items != null)
-                DbSet.RemoveRange(items);
-            Db.SaveChanges();
+            return (from a in Db.ImportSerialDetail
+                    where Db.ImportSerialDetail.Any(b =>
+                                               itemGroups.Contains(b.ItemGroup)
+                                               && b.HeadID != "0"
+                                               && b.ItemCode == a.ItemCode
+                                               && b.SerialNumber == a.SerialNumber
+                                               && b.ItemType == a.ItemType
+                                               && a.Status != statusShipped
+                                               && a.Status != statusDeleted
+                                           )
+                                        group a by new
+                                        {
+                                            a.ItemCode,
+                                            a.SerialNumber
+                                        } into g
+                                        where g.Count() > 1
+                                        select new SerialsRemainInStock
+                                        {
+                                            ItemCode = g.Key.ItemCode,
+                                            SerialNumber = g.Key.SerialNumber
+                                        }
+                          ).Any();
         }
 
     }

@@ -8,6 +8,7 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Entity;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Service.EmployeeMaster;
 
@@ -18,12 +19,12 @@ namespace Master.WebApi
     {
         private IProbationService ProbationService;
 
-        public ProbationController(IProbationService ProbationService)
+        public ProbationController(IProbationService Probationservice)
         {
-            this.ProbationService = ProbationService;
+            this.ProbationService = Probationservice;
         }
 
-        // GET: api/Employees
+        // GET: api/Probation
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Get()
@@ -31,8 +32,8 @@ namespace Master.WebApi
             ResponseData<IEnumerable<Probation_MT>> response = new ResponseData<IEnumerable<Probation_MT>>();
             try
             {
-                IEnumerable<Probation_MT> Employees = ProbationService.GetProbation();
-                response.SetData(Employees);
+                IEnumerable<Probation_MT> probation = ProbationService.GetProbation();
+                response.SetData(probation);
             }
             catch (ValidationException ex)
             {
@@ -44,13 +45,13 @@ namespace Master.WebApi
 
         // GET: api/Employees/1
         [HttpGet]
-        [Route("{EmID}")]
-        public HttpResponseMessage Get(int EmID)
+        [Route("{ProbationIDSys}")]
+        public HttpResponseMessage Get(int ProbationIDSys)
         {
             IResponseData<Probation_MT> response = new ResponseData<Probation_MT>();
             try
             {
-                Probation_MT Employee = ProbationService.GetProbationByEmID(EmID);
+                Probation_MT Employee = ProbationService.GetProbationByProbationIDSys(ProbationIDSys);
                 response.SetData(Employee);
             }
             catch (ValidationException ex)
@@ -105,23 +106,23 @@ namespace Master.WebApi
         }
 
         // DELETE: api/Employees/5
-        //[HttpDelete]
-        //[Route("{DepID}")]
-        //public HttpResponseMessage Delete(int DepID)
-        //{
-        //    IResponseData<bool> response = new ResponseData<bool>();
-        //    try
-        //    {
-        //        bool isUpated = ProbationService.DeleteProbation(DepID);
-        //        response.SetData(isUpated);
-        //    }
-        //    catch (ValidationException ex)
-        //    {
-        //        response.SetErrors(ex.Errors);
-        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
-        //    }
-        //    return Request.ReturnHttpResponseMessage(response);
-        //}
+        [HttpDelete]
+        [Route("{DepID}")]
+        public HttpResponseMessage Delete(int DepID)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = ProbationService.DeleteProbation(DepID);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
 
     }
 }

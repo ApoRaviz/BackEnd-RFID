@@ -124,14 +124,12 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException e)
                 {
                     scope.Dispose();
-                    throw e;
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return itemresponse.ItemIDSys;
             }
@@ -177,13 +175,12 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return true;
             }
@@ -207,8 +204,7 @@ namespace WMS.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4017);
                 }
                 return true;
             }
@@ -232,21 +228,9 @@ namespace WMS.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4017));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4017);
                 }
                 return true;
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
             }
         }
 

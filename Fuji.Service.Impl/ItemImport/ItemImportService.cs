@@ -30,6 +30,7 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using System.Runtime.Caching;
 using WIM.Core.Entity.Logs;
 using System.Web.Script.Serialization;
+using WIM.Core.Service.Impl.StatusManagement;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -37,9 +38,18 @@ namespace Fuji.Service.Impl.ItemImport
     {
         #region connection Settings
 
-        private string connectionString = ConfigurationManager.ConnectionStrings["WIM_FUJI"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["YUT_FUJI"].ConnectionString;
         #endregion
 
+        private const int _SUBMODULE_ID = 10;
+
+        private string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.New.GetValueEnum());
+        private string statusReceived = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Received.GetValueEnum());
+        private string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Deleted.GetValueEnum());
+        private string statusImpPicking = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.ImpPicking.GetValueEnum());
+        private string statusScanned = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Scanned.GetValueEnum());
+        private string statusExported = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Exported.GetValueEnum());
+        private string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Shipped.GetValueEnum());
         //private FujiDbContext Db { get; set; }
 
         //private SerialRepository SerialDetailRepo;
@@ -58,9 +68,9 @@ namespace Fuji.Service.Impl.ItemImport
             using (FujiDbContext Db = new FujiDbContext())
             {
                 items = (from h in Db.ImportSerialHead
-                         where !h.HeadID.Equals("0") && !h.Status.Equals(FujiStatus.DELETED.ToString())
+                         where !h.HeadID.Equals("0") && !h.Status.Equals(statusDeleted)
                          orderby h.CreateAt descending
-                         select h).Take(50);
+                         select h).Take(50).ToList();
             }
             return items;
         }
@@ -111,7 +121,7 @@ namespace Fuji.Service.Impl.ItemImport
                     {
                         if (importSerialHead != null)
                         {
-                            importSerialHead.Status = "DELETED";
+                            importSerialHead.Status = statusDeleted;
                             SerialHeadRepo.Update(importSerialHead);
                             Db.SaveChanges();
                         }
@@ -120,7 +130,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
             }
@@ -195,6 +205,7 @@ namespace Fuji.Service.Impl.ItemImport
         }
         public void ReGenerateRFID(List<string> itemGroupsFromScan)
         {
+ 
             using (var scope = new TransactionScope())
             {
                 using (var Db = new FujiDbContext())
@@ -202,8 +213,8 @@ namespace Fuji.Service.Impl.ItemImport
                     var query = (from d in Db.ImportSerialDetail
                                  where d.HeadID == "0"
                                     && new List<string> {
-                                    FujiStatus.NEW.ToString(),
-                                    FujiStatus.SCANNED.ToString()
+                                    statusNew,
+                                    statusScanned
                                     }.Contains(d.Status)
                                  select d
                         );
@@ -226,7 +237,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
             }
@@ -250,8 +261,8 @@ namespace Fuji.Service.Impl.ItemImport
                                     && d.HeadID == "0"
                                     //&& d.Status == FujiStatus.NEW.ToString()
                                     && new List<string> {
-                                    FujiStatus.NEW.ToString(),
-                                    FujiStatus.SCANNED.ToString()
+                                    statusNew,
+                                    statusScanned
                                     }.Contains(d.Status)
                                  select d
                          );
@@ -283,7 +294,7 @@ namespace Fuji.Service.Impl.ItemImport
                         throw new ValidationException(new ValidationError("48888", "Head ไม่เท่ากับที่ Scan รับ"));
                     }
 
-                    importHead.Status = FujiStatus.SCANNED.ToString();
+                    importHead.Status = statusScanned;
 
 
                     try
@@ -294,7 +305,7 @@ namespace Fuji.Service.Impl.ItemImport
                         {
                             detail.HeadID = receive.HeadID;
                             detail.ItemCode = receive.ItemCode;
-                            detail.Status = FujiStatus.SCANNED.ToString();
+                            detail.Status = statusScanned;
                             SerialDetailRepo.Update(detail);
                         }
 
@@ -305,52 +316,13 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
-
-
             }
-
-            return false;
         }
         public bool Receive(ReceiveRequest receive)
         {
-
-            /*                
-                select a.ItemCode, a.SerialNumber
-                from ImportSerialDetail a
-                where exists 
-                (
-	                select b.*
-	                from ImportSerialDetail b
-	                where b.ItemGroup in ('A120170809000001', 'A120170809000002', 'A120170809000003', 'A120170809000004', 'A120170809000005')
-	                and b.ItemCode = a.ItemCode
-	                and b.SerialNumber = a.SerialNumber
-	                and a.Status != 'SHIPPED'
-                )
-                group by a.SerialNumber, a.ItemCode
-                having count(*) > 1
-             */
-
-            // Test ValidationError
-            //ValidationError ve = new ValidationError("1001", "Item Code 1111, Serials 2222 was exists!");
-            //throw new ValidationException(ve);
-
-            /*ValidationException ve = new ValidationException();
-            for (int i = 0; i < 3; i++)
-            {
-                ve.Add(new ValidationError(i.ToString(), i.ToString()));
-            }
-
-            throw ve;*/
-
-
-
-            // Test ValidationError
-            //ValidationError ve = new ValidationError("1001", "Item Code 1111, Serials 2222 was exists!");
-            //throw new ValidationException(ve);
-
             using (var scope = new TransactionScope())
             {
                 using (FujiDbContext Db = new FujiDbContext("Receive(ReceiveRequest)"))
@@ -359,15 +331,15 @@ namespace Fuji.Service.Impl.ItemImport
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
                     ISerialDetailTempRepository SerialDetailTempRepo = new SerialDetailTempRepository(Db);
 
-                    var serialsRemainInStock = (from a in SerialDetailRepo.GetAll()
-                                                where SerialDetailRepo.IsAnyItemBy(b =>
+                    var serialsRemainInStock = (from a in Db.ImportSerialDetail
+                                                where Db.ImportSerialDetail.Any(b =>
                                                        receive.ItemGroups.Contains(b.ItemGroup)
                                                        && b.HeadID != "0"
                                                        && b.ItemCode == a.ItemCode
                                                        && b.SerialNumber == a.SerialNumber
                                                        && b.ItemType == a.ItemType
-                                                       && a.Status != FujiStatus.SHIPPED.ToString()
-                                                       && a.Status != FujiStatus.DELETED.ToString()
+                                                       && a.Status != statusShipped
+                                                       && a.Status != statusDeleted
                                                    )
                                                 group a by new
                                                 {
@@ -384,18 +356,13 @@ namespace Fuji.Service.Impl.ItemImport
 
                     if (serialsRemainInStock.Any())
                     {
-                        ValidationException ve = new ValidationException();
-                        foreach (SerialsRemainInStock item in serialsRemainInStock)
-                        {
-                            throw new ValidationException(ErrorEnum.ReceiveSerialRemainInStock);
-                        }
-                        throw ve;
-                    }
+                        throw new ValidationException(ErrorEnum.ReceiveSerialRemainInStock);
+                    }                   
 
                     var query = (from d in Db.ImportSerialDetail
                                  where receive.ItemGroups.Contains(d.ItemGroup)
                                  && d.HeadID == receive.HeadID
-                                 && d.Status == FujiStatus.SCANNED.ToString()
+                                 && d.Status == statusScanned
                                  select d
                             ).ToList();
 
@@ -412,18 +379,18 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new ValidationException(new ValidationError("5000", "เกิดข้อผิดพลาด ติดต่อ IT\n\n\n" + ex.Message));
+                        throw new ValidationException(ErrorEnum.E5000);
                     }
 
                     foreach (ImportSerialDetail detail in query)
                     {
                         detail.HeadID = receive.HeadID;
                         detail.ItemCode = receive.ItemCode;
-                        detail.Status = FujiStatus.RECEIVED.ToString();
+                        detail.Status = statusReceived;
                         detail.Location = receive.LocationID;
                         SerialDetailRepo.Update(detail);
                     }
@@ -434,20 +401,19 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new ValidationException(new ValidationError("5001", "เกิดข้อผิดพลาด ติดต่อ IT\n\n\n" + ex.Message));
+                        throw new ValidationException(ErrorEnum.E5000);
                     }
-
 
                     ImportSerialHead importHead = (from h in Db.ImportSerialHead
                                                    where h.HeadID == receive.HeadID
                                                    select h
                                 ).SingleOrDefault();
 
-                    importHead.Status = FujiStatus.RECEIVED.ToString();
+                    importHead.Status = statusReceived;
                     importHead.Location = receive.LocationID;
                     SerialHeadRepo.Update(importHead);
 
@@ -457,13 +423,11 @@ namespace Fuji.Service.Impl.ItemImport
                         scope.Complete();
                         return true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new ValidationException(new ValidationError("5002", "เกิดข้อผิดพลาด ติดต่อ IT\n\n\n" + ex.Message));
+                        throw new ValidationException(ErrorEnum.E5000);
                     }
                 }
-
-
             }
         }
         public List<string> GetItemGroupByOrderNo_Handy(string orderNo)
@@ -472,7 +436,10 @@ namespace Fuji.Service.Impl.ItemImport
             using (FujiDbContext Db = new FujiDbContext())
             {
                 ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
-                var items = SerialDetailRepo.GetItemsBy(d => d.OrderNo == orderNo && d.Status == FujiStatus.IMP_PICKING.ToString());
+                var items = SerialDetailRepo.GetMany(d => 
+                    d.OrderNo == orderNo 
+                    && d.Status == statusImpPicking
+                );
 
                 itemGroups = (from d in items
                               group d by d.ItemGroup into g
@@ -498,14 +465,14 @@ namespace Fuji.Service.Impl.ItemImport
                     IQueryable queryDetailsList = (from d in Db.ImportSerialDetail
                                                    where confirmRequest.ItemGroups.Contains(d.ItemGroup)
                                                    && d.OrderNo == confirmRequest.OrderNumber
-                                                   && d.Status == FujiStatus.IMP_PICKING.ToString()
+                                                   && d.Status == statusImpPicking
                                                    select d);
 
                     try
                     {
                         foreach (ImportSerialDetail item in queryDetailsList)
                         {
-                            item.Status = FujiStatus.SHIPPED.ToString();
+                            item.Status = statusShipped;
                             SerialDetailRepo.Update(item);
                         }
 
@@ -515,12 +482,11 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
             }
-            return false;
         }
 
         private ImportSerialDetailTemp TranslateDetailTemp(ImportSerialDetail detail)
@@ -542,7 +508,6 @@ namespace Fuji.Service.Impl.ItemImport
                 item.Status = detail.Status;
                 item.UpdateAt = detail.UpdateAt;
                 item.UpdateBy = detail.UpdateBy;
-
             }
             return item;
         }
@@ -565,7 +530,7 @@ namespace Fuji.Service.Impl.ItemImport
                             item.BoxNumber = registerRequest.BoxNumber;
                             item.ItemGroup = registerRequest.RFIDTag;
                             item.ItemType = (++itemType).ToString();
-                            item.Status = FujiStatus.NEW.ToString();
+                            item.Status = statusNew;
                             //Db.ImportSerialDetail.Add(item);
                             SerialDetailRepo.Insert(item);
                         }
@@ -576,10 +541,9 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
-                return false;
             }
         }
         public int SetSerial2Box(string boxNumberFrom, string boxNumberTo, ItemGroupRequest ItemGroup, string emID)
@@ -595,24 +559,13 @@ namespace Fuji.Service.Impl.ItemImport
                     foreach (string scan in ItemGroup.ItemGroups)
                     {
                         if (detail.ItemGroup.EndsWith(scan))
-                        {
-                            //GeneralLog log = new GeneralLog(emID)
-                            //{
-                            //    TableName = "ImportSerialDetail",
-                            //    ColumnName = "BoxNumber",
-                            //    RefID = detail.DetailID,
-                            //    Value = boxNumberTo,
-                            //    Remark = "SetSerial2Box"
-                            //};
-                            //Db.GeneralLogs.Add(log);
+                        {                           
                             detail.BoxNumber = boxNumberTo;
                             SerialDetailRepo.Update(detail);
                             Db.SaveChanges();
                         }
                     }
                 }
-
-
             }
 
             return 1;
@@ -627,23 +580,11 @@ namespace Fuji.Service.Impl.ItemImport
                 var query = SerialDetailRepo.GetMany(i => boxList.ItemGroups.Contains(i.BoxNumber));
 
                 foreach (ImportSerialDetail detail in query)
-                {
-                    //GeneralLog log = new GeneralLog(emID)
-                    //{
-                    //    TableName = "ImportSerialDetail",
-                    //    ColumnName = "Location",
-                    //    RefID = detail.DetailID,
-                    //    Value = locationTo,
-                    //    Remark = "SetBox2Location"
-                    //};
-                    //db.GeneralLogs.Add(log);
-
+                {                    
                     detail.Location = locationTo;
                     SerialDetailRepo.Update(detail);
                     Db.SaveChanges();
                 }
-
-
             }
             return 1;
         }
@@ -678,7 +619,7 @@ namespace Fuji.Service.Impl.ItemImport
                     {
                         //item.HeadID = Db.ProcGetNewID("IS").FirstOrDefault();
                         item.HeadID = Db.ProcGetNewID("IS");
-                        item.Status = FujiStatus.NEW.ToString();
+                        item.Status = statusNew;
                         item.IsExport = false;
                         item.Location = "";
                         item.ReceivingDate = item.ReceivingDate;
@@ -705,7 +646,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -767,7 +708,7 @@ namespace Fuji.Service.Impl.ItemImport
                                 //         select d
                                 //         ).ToList();
 
-                                SerialDetailRepo.DeleteItems(d => d.HeadID == item.HeadID);
+                                SerialDetailRepo.Delete(item.HeadID);
 
                                 //Db.ImportSerialDetail.RemoveRange(_existDetails);
 
@@ -788,7 +729,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -821,7 +762,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -865,13 +806,13 @@ namespace Fuji.Service.Impl.ItemImport
 
                     //update importDetail
                     var updateSerialDetailStatus = Db.ImportSerialDetail.Where(x => itemGroupsList.Contains(x.ItemGroup)
-                    && x.Status == FujiStatus.RECEIVED.ToString()).ToList();
+                    && x.Status == statusReceived).ToList();
 
                     try
                     {
                         updateSerialDetailStatus.ForEach(a =>
                         {
-                            a.Status = FujiStatus.IMP_PICKING.ToString();
+                            a.Status = statusImpPicking;
                             a.OrderNo = pickingList.First().OrderNumber;
                             SerialDetailRepo.Update(a);
                         });
@@ -881,7 +822,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
 
@@ -902,7 +843,7 @@ namespace Fuji.Service.Impl.ItemImport
                         }
                         catch (DbEntityValidationException e)
                         {
-                            HandleValidationException(e);
+                            throw new ValidationException(e);
                         }
                     }*/
 
@@ -917,7 +858,7 @@ namespace Fuji.Service.Impl.ItemImport
             List<FujiPickingGroup> items = new List<FujiPickingGroup>();
             using (FujiDbContext Db = new FujiDbContext())
             {
-                var selectedData = (from p in Db.ImportSerialDetail where p.Status == FujiStatus.IMP_PICKING.ToString() select new { OrderNo = p.OrderNo, UpdateAt = p.UpdateAt }).ToList();
+                var selectedData = (from p in Db.ImportSerialDetail where p.Status == statusImpPicking select new { OrderNo = p.OrderNo, UpdateAt = p.UpdateAt }).ToList();
 
 
                 var itemGroups = (from p in selectedData
@@ -979,7 +920,7 @@ namespace Fuji.Service.Impl.ItemImport
                         itemGroups.ForEach(f =>
                         {
                             f.OrderNo = null;
-                            f.Status = FujiStatus.RECEIVED.ToString();
+                            f.Status = statusReceived;
                             SerialDetailRepo.Update(f);
                         });
 
@@ -988,7 +929,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                         return false;
                     }
 
@@ -1280,7 +1221,7 @@ namespace Fuji.Service.Impl.ItemImport
         public IEnumerable<ImportSerialHead> GetHeadDataTopten(ParameterSearch parameterSearch)
         {
             int top = parameterSearch.PageSize > 0 ? parameterSearch.PageSize : 10;
-            string sql = string.Format("SELECT TOP({0}) * FROM [dbo].[ImportSerialHead] WHERE Status = '{1}' ORDER BY CreateAt DESC", top, FujiStatus.RECEIVED.ToString());
+            string sql = string.Format("SELECT TOP({0}) * FROM [dbo].[ImportSerialHead] WHERE Status = '{1}' ORDER BY CreateAt DESC", top, statusReceived);
 
             IEnumerable<ImportSerialHead> items = new List<ImportSerialHead>();
 
@@ -1394,7 +1335,7 @@ namespace Fuji.Service.Impl.ItemImport
                                 //         select d
                                 //         ).ToList();
 
-                                SerialDetailRepo.DeleteItems(d => d.HeadID == item.HeadID);
+                                SerialDetailRepo.Delete(item.HeadID);
 
                                 //Db.ImportSerialDetail.RemoveRange(_existDetails);
 
@@ -1409,17 +1350,13 @@ namespace Fuji.Service.Impl.ItemImport
                                 }
                             }
                         }
-
-
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
-
                 }
-
             }
             return true;
         }
@@ -1427,15 +1364,5 @@ namespace Fuji.Service.Impl.ItemImport
 
         #endregion
 
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
     }
 }

@@ -184,7 +184,7 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
 
                 return customernew.CusIDSys;
@@ -207,7 +207,7 @@ namespace WIM.Core.Service.Impl
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
                 return true;
@@ -243,18 +243,5 @@ namespace WIM.Core.Service.Impl
             }
             return autocompleteItemDto;
         }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
-
-
     }
 }

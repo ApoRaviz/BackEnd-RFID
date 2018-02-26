@@ -34,6 +34,16 @@ namespace Isuzu.Service.Impl.Inbound
 
         private const int _SUBMODULE_ID = 11;
 
+        string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
+        string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
+        string statusHold = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Hold.GetValueEnum());
+        string statusImported = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Imported.GetValueEnum());
+        string statusReceived = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Received.GetValueEnum());
+        string statusReceivedAtITA = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.ReceivedAtITA.GetValueEnum());
+        string statusReceivedAtYUT = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.ReceivedAtYUT.GetValueEnum());
+        string statusRegisteredAtITA = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RegisteredAtITA.GetValueEnum());
+        string statusRegisteredAtYUT = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RegisteredAtYUT.GetValueEnum());
+        string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
         #region =========================== HANDY ===========================
         public InboundItemHandyDto GetInboundItemByISZJOrder_HANDY(string iszjOrder)
         {
@@ -59,7 +69,7 @@ namespace Isuzu.Service.Impl.Inbound
         public bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem)
         {
             bool isRFIDNeedRepeat;
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
+          
 
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
@@ -76,16 +86,13 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void RegisterInboundItem_HANDY(InboundItemHandyDto item)
         {
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
-
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
                 {
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-
+                    db.InboundItems.AsParallel();
                     try
                     {
                         bool isDupAnother = detailRepo.Exists(i =>
@@ -102,7 +109,7 @@ namespace Isuzu.Service.Impl.Inbound
                             throw new ValidationException(ErrorEnum.RFIDIsDuplicatedAnother);
                         }
 
-                        InboundItems itemExist = detailRepo.GetByID(item.ID);
+                        InboundItems itemExist = detailRepo.GetItemSingleBy(i => i.ISZJOrder == item.ISZJOrder);
 
                         itemExist.RFIDTag = item.RFIDTag;
                         itemExist.Status = item.Status;
@@ -129,16 +136,14 @@ namespace Isuzu.Service.Impl.Inbound
         public int GetAmountRegistered_HANDY()
         {
             int cnt = 0;
-            string statusRegisterdAtYut = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RegisteredAtYUT.GetValueEnum());
-            string statusRegisterdAtIta = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RegisteredAtITA.GetValueEnum());
 
             using (var Db = new IsuzuDataContext())
             {
                 cnt = (
                        from i in Db.InboundItems
                        where new List<string> {
-                           statusRegisterdAtYut,
-                           statusRegisterdAtIta
+                           statusRegisteredAtYUT,
+                           statusRegisteredAtITA
                        }.Contains(i.Status)
                        select i
                    ).Count();
@@ -149,8 +154,6 @@ namespace Isuzu.Service.Impl.Inbound
         public int GetAmountInboundItemInInvoiceByRFID_HANDY(string rfid)
         {
             int cnt;
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
 
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
@@ -158,7 +161,7 @@ namespace Isuzu.Service.Impl.Inbound
                        from i in Db.InboundItems
                        where rfid.EndsWith(i.RFIDTag)
                        && !new List<string> {
-                      IsuzuStatus.New.GetValueEnum(),
+                           statusNew,
                            statusShipped,
                            statusDeleted
                        }.Contains(i.Status)
@@ -181,9 +184,6 @@ namespace Isuzu.Service.Impl.Inbound
         public InboundItemHandyDto GetInboundItemByRFID_HANDY(string rfid)
         {
             InboundItemHandyDto item;
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 item = (
@@ -211,9 +211,7 @@ namespace Isuzu.Service.Impl.Inbound
         public InboundItemCartonHandyDto GetInboundItemCartonByRFID_HANDY(string rfid)
         {
             InboundItemCartonHandyDto item;
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
+          
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 item = (
@@ -238,9 +236,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string invNo)
         {
             IEnumerable<InboundItemHandyDto> items;
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
+           
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 items = (
@@ -267,10 +263,7 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding)
         {
-            string statusRegisterdAtYut = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RegisteredAtYUT.GetValueEnum());
-            string statusRegisterdAtIta = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RegisteredAtITA.GetValueEnum());
-            string statusReceivedAtYut = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.ReceivedAtYUT.GetValueEnum());
-
+         
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -280,8 +273,8 @@ namespace Isuzu.Service.Impl.Inbound
 
                     IEnumerable<InboundItems> items = detailRepo.GetMany(i =>
                         new List<string> {
-                           statusRegisterdAtYut,
-                           statusRegisterdAtIta
+                           statusRegisteredAtITA,
+                           statusRegisteredAtYUT
                         }.Contains(i.Status)
                     );
 
@@ -292,7 +285,7 @@ namespace Isuzu.Service.Impl.Inbound
                         {
                             if (scan.EndsWith(item.RFIDTag))
                             {
-                                item.Status = statusReceivedAtYut;
+                                item.Status = statusReceivedAtYUT;
                                 item.HoldDate = DateTime.Now;
                                 detailRepo.Update(item);
                                 invNoList.Add(item.InvNo); // #For Update Head
@@ -307,7 +300,7 @@ namespace Isuzu.Service.Impl.Inbound
                         InboundItemsHead itemHeadExist = headRepo.Get(i =>
                             i.InvNo == invNo
                         );
-                        itemHeadExist.Status = statusReceivedAtYut;
+                        itemHeadExist.Status = statusReceivedAtYUT;
                         headRepo.Update(itemHeadExist);
                     }
 
@@ -319,10 +312,6 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping)
         {
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
-
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -366,10 +355,6 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking, string username)
         {
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
-
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -401,9 +386,7 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking, string username)
         {
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
+
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -441,9 +424,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids)
         {
             List<InboundItems> inboundItems = new List<InboundItems>();
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
+         
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 var query = (
@@ -535,7 +516,6 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItems> GetInboundItemByQty(int qty, bool isShipped = false)
          {
             List<InboundItems> items = new List<InboundItems>() { };
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
 
             using (var scope = new TransactionScope())
             {
@@ -567,7 +547,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo, bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
+           
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -595,7 +575,7 @@ namespace Isuzu.Service.Impl.Inbound
         {
             List<InboundItems> duplicateList = new List<InboundItems>();
             List<string> isuzuOrders = itemList.Select(x => x.ISZJOrder).ToList();
-            string statusNew = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.New.GetValueEnum());
+            
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -667,7 +647,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
 
                 }
@@ -739,7 +719,7 @@ namespace Isuzu.Service.Impl.Inbound
         public InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo, bool isAddItems = false)
         {
             InboundItemsHead item;
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
+          
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
@@ -839,7 +819,6 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public bool UpdateStausExport(InboundItemsHead item)
         {
-            string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Shipped.GetValueEnum());
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -864,7 +843,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -874,7 +853,6 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public bool UpdateDeleteReason(IsuzuDeleteReason reason)
         {
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -903,7 +881,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -913,7 +891,6 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public bool UpdateDeleteReasonByInvoice(string InvNo, IsuzuDeleteReason reason)
         {
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -943,7 +920,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -953,7 +930,6 @@ namespace Isuzu.Service.Impl.Inbound
         }
         public bool UpdateQtyInboundHead(string invNo, string userUpdate)
         {
-            string statusDeleted = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Deleted.GetValueEnum());
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -975,7 +951,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -1120,17 +1096,6 @@ namespace Isuzu.Service.Impl.Inbound
         #endregion
 
         #endregion
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
 
     }
 }

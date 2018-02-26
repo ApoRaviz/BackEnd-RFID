@@ -2,58 +2,58 @@
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
-using WIM.Core.Entity.Employee;
-using WIM.Core.Repository;
-using WIM.Core.Repository.Impl;
+using WIM.Core.Entity;
 using WIM.Core.Repository.Impl.Personalize;
 using WIM.Core.Repository.Personalize;
 using WIM.Core.Service.EmployeeMaster;
 
 namespace WIM.Core.Service.Impl.EmployeeMaster
 {
-    public class ProbationService : Service, IProbationService
+    public class ProbationService: Service, IProbationService
     {
+        public ProbationService()
+        {
+        }
+
         public IEnumerable<Probation_MT> GetProbation()
         {
-            IEnumerable<Probation_MT> probation;
+            IEnumerable<Probation_MT> Probation;
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IProbationRepository repo = new ProbationRepository(Db);
-                probation = repo.Get();
+                Probation = repo.Get();
             }
-            return probation;
+            return Probation;
         }
 
-        public Probation_MT GetProbationByEmID(int id)
+        public Probation_MT GetProbationByProbationIDSys(int id)
         {
-            Probation_MT position;
+            Probation_MT Probation;
             using (CoreDbContext Db = new CoreDbContext())
             {
-                    IEmployeeRepository repo = new EmployeeRepository(Db);
-                string[] include = { "Probation_MT" };
-                position = repo.GetWithInclude(a => a.ProbationIDSys == id,include).Select(s => s.Probation_MT).SingleOrDefault();
+                IProbationRepository repo = new ProbationRepository(Db);
+                Probation = repo.GetByID(id);
             }
-            return position;
+            return Probation;
         }
 
-        public int CreateProbation(Probation_MT probation)
+        public int CreateProbation(Probation_MT Probation)
         {
             using (var scope = new TransactionScope())
             {
-                Probation_MT probationNew = new Probation_MT();
+                Probation_MT Probationnew = new Probation_MT();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IProbationRepository repo = new ProbationRepository(Db);
-                        probationNew = repo.Insert(probation);
+                        Probationnew = repo.Insert(Probation);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -65,15 +65,13 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
-                return probationNew.ProbationIDSys;
+                return Probationnew.ProbationIDSys;
             }
         }
 
-
-        public bool UpdateProbation(Probation_MT probation)
+        public bool UpdateProbation(Probation_MT Probation)
         {
             using (var scope = new TransactionScope())
             {
@@ -82,7 +80,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IProbationRepository repo = new ProbationRepository(Db);
-                        repo.Update(probation);
+                        repo.Update(Probation);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -94,14 +92,13 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return true;
             }
         }
 
-        public bool Delete(Probation_MT id)
+        public bool DeleteProbation(int id)
         {
             throw new NotImplementedException();
         }
@@ -116,6 +113,5 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 }
             }
         }
-
     }
 }

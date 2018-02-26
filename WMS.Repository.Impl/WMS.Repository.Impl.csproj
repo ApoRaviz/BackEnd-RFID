@@ -67,6 +67,8 @@
     <Compile Include="Report\ReportLayoutHeaderRepository.cs" />
     <Compile Include="Report\ReportLayoutRepository.cs" />
     <Compile Include="UnitMaster\UnitRepository.cs" />
+    <Compile Include="Warehouse\LocationGroupRepository.cs" />
+    <Compile Include="Warehouse\LocationZoneRepository.cs" />
     <Compile Include="Warehouse\RackLayoutRepository.cs" />
     <Compile Include="Warehouse\WarehouseRepository.cs" />
     <Compile Include="Warehouse\ZoneLayoutDetailRepository.cs" />

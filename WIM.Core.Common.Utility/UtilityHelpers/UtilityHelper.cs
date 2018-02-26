@@ -12,10 +12,5 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
 
             return string.Format("Error #{0}: {1}", errorEnum.GetValue(), internalMessage ?? errorEnum.GetDescription());
         }
-
-        public static ValidationError GetHandleErrorMessageException(ErrorEnum errorEnum)
-        {
-            return new ValidationError(errorEnum);
-        }
     }
 }
