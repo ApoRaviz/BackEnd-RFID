@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Master.Common.ValueObject.Autocomplete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,6 @@ namespace WIM.Core.Service
         int CreateCountry(Country_MT Country);
         bool UpdateCountry(Country_MT Country);
         bool DeleteCountry(int id);
+        IEnumerable<AutocompleteCountryDto> AutocompleteCountry(string term);
     }
 }

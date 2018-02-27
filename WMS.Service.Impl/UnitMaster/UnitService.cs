@@ -1,18 +1,11 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
 using WMS.Repository;
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
-using System.Security.Principal;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
@@ -43,7 +36,7 @@ namespace WMS.Service
             {
                 IUnitRepository repo = new UnitRepository(Db);
                 string[] include = { "Project_MT" };
-                unit = repo.GetWithInclude(u => u.UnitIDSys == id, include).SingleOrDefault();
+                unit = repo.GetWithInclude(u => u.UnitIDSys == id && u.ProjectIDSys == Identity.GetProjectIDSys(), include).SingleOrDefault();
             }
                 return unit;
         }
@@ -125,7 +118,7 @@ namespace WMS.Service
                 using (WMSDbContext Db = new WMSDbContext())
                 {
                     IUnitRepository repo = new UnitRepository(Db);
-                    repo.Delete(id);
+                    repo.Delete(x => x.UnitIDSys == id && x.ProjectIDSys == Identity.GetProjectIDSys());
                     Db.SaveChanges();
                     scope.Complete();
                 }

@@ -106,6 +106,10 @@
       <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
       <Name>WIM.Core.Security.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
+      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
+      <Name>WIM.Core.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
       <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
       <Name>WIM.Core.Service.Impl</Name>

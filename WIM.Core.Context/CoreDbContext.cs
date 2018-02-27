@@ -7,7 +7,7 @@ using WIM.Core.Entity;
 using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Entity.CustomerManagement;
-using WIM.Core.Entity.Dimension;
+//using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.Logs;
@@ -28,7 +28,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Api_MT> Api_MT { get; set; }
         public virtual DbSet<ApiMenuMapping> ApiMenuMapping { get; set; }
         public virtual DbSet<Customer_MT> Customer_MT { get; set; }
-        public virtual DbSet<DimensionLayout_MT> DimensionLayout_MT { get; set; }
+        //public virtual DbSet<DimensionLayout_MT> DimensionLayout_MT { get; set; }
         public virtual DbSet<Employee_MT> Employee_MT { get; set; }
         public virtual DbSet<Menu_MT> Menu_MT { get; set; }
         public virtual DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }

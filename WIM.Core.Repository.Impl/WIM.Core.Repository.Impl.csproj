@@ -79,6 +79,10 @@
     <Compile Include="Supplier\SupplierRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
+      <Project>{9A37166E-BD6C-4BA9-9091-985BC77C68D6}</Project>
+      <Name>Master.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
       <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
       <Name>WIM.Core.Common.Utility</Name>

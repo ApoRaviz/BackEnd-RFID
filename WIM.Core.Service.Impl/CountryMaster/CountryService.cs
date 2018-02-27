@@ -17,6 +17,7 @@ using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Helpers;
+using Master.Common.ValueObject.Autocomplete;
 
 namespace WIM.Core.Service.Impl
 {
@@ -133,6 +134,18 @@ namespace WIM.Core.Service.Impl
 
                 return true;
             }
+        }
+
+        public IEnumerable<AutocompleteCountryDto> AutocompleteCountry(string term)
+        {
+            IEnumerable<AutocompleteCountryDto> autocompleteCountryDto;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                ICountryRepository repo = new CountryRepository(Db);
+                autocompleteCountryDto = repo.AutocompleteCountry(term);
+
+            }
+            return autocompleteCountryDto;
         }
 
         public void HandleValidationException(DbEntityValidationException ex)

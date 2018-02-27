@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Entity.Dimension;
 using WMS.Entity.ImportManagement;
 using WMS.Entity.InspectionManagement;
 using WMS.Entity.ItemManagement;
@@ -37,11 +33,14 @@ namespace WMS.Context
         public DbSet<ItemUnitMapping> ItemUnitMapping { get; set; }
         public DbSet<ReportLayoutHeader_MT> ReportLayoutHeader_MT { get; set; }
         public DbSet<Location_MT> Location_MT { get; set; }
+        public DbSet<GroupLocation> GroupLocations { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<LocationType> LocationTypes { get; set; }
         public DbSet<Supplier_MT> Supplier_MT { get; set; }
         public DbSet<ZoneLayoutHeader_MT> ZoneLayoutHeader_MT { get; set; }
         public DbSet<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
-
+        
 
         public WMSDbContext() : base("name=DefaultConnection")
         {
@@ -827,7 +826,7 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcCreateRackLayout", zoneIDSysParameter, zoneIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public Nullable<int> ProcCreateDimensionLayout(string formatName, string unit, Nullable<int> width, Nullable<int> length, Nullable<int> height, Nullable<int> weight, string type, string color, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate)
+        public Nullable<int> ProcCreateDimensionLayout(string formatName, string unit, Nullable<decimal> width, Nullable<decimal> length, Nullable<decimal> height, Nullable<decimal> weight, string type, string color, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate)
         {
             var formatNameParameter = formatName != null ? new SqlParameter
             {
@@ -904,7 +903,7 @@ namespace WMS.Context
             //    formatNameParameter, unitParameter, widthParameter, lengthParameter, heightParameter, weightParameter, typeParameter, colorParameter, createdDateParameter, updatedDateParameter, userUpdateParameter);
         }
 
-        public Nullable<int> ProcUpdateDimensionLayout(Nullable<int> dimensionIDSys, string formatName, string unit, Nullable<int> width, Nullable<int> length, Nullable<int> height, Nullable<int> weight, string type, string color, Nullable<System.DateTime> updatedDate, string userUpdate)
+        public Nullable<int> ProcUpdateDimensionLayout(Nullable<int> dimensionIDSys, string formatName, string unit, Nullable<decimal> width, Nullable<decimal> length, Nullable<decimal> height, Nullable<decimal> weight, string type, string color, Nullable<System.DateTime> updatedDate, string userUpdate)
         {
             var dimensionIDSysParameter = dimensionIDSys.HasValue ? new SqlParameter
             {

@@ -26,9 +26,11 @@ namespace WIM.Core.Security.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            
             var allowedOrigin = "*";
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
+           
             ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
             if (user == null)
             {

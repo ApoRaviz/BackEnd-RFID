@@ -1,28 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+using Master.Common.ValueObject.Autocomplete;
 using WIM.Core.Context;
 using WIM.Core.Entity.Country;
-using WIM.Core.Entity.Currency;
-using WIM.Core.Repository;
 
 namespace WIM.Core.Repository.Impl
 {
-    public class CountryRepository : Repository<Country_MT> ,ICountryRepository 
+    public class CountryRepository : Repository<Country_MT> ,ICountryRepository
     {
-        private CoreDbContext Db;
-
+        private CoreDbContext Db { get; set; }
         public CountryRepository(CoreDbContext context) : base(context)
         {
             Db = context;
         }
 
-       
+        public IEnumerable<AutocompleteCountryDto> AutocompleteCountry(string term)
+        {
+            var qr = (from ctm in Db.Country_MT
+                      where ctm.CountryName.Contains(term)
+                      || ctm.CountryCode.Contains(term)
+                      select new AutocompleteCountryDto
+                      {
+                          CountryCode = ctm.CountryCode,
+                          CountryIDSys = ctm.CountryIDSys,
+                          CountryName = ctm.CountryName,
+                      }
+            ).ToList();
+            return  qr;
+            
+        }
     }
 }
 

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WIM.Core.Entity;
 
-namespace WIM.Core.Entity.Dimension
+namespace WMS.Entity.Dimension
 {
     [Table("DimensionLayout_MT")]
     public class DimensionLayout_MT : BaseEntity
@@ -21,8 +18,5 @@ namespace WIM.Core.Entity.Dimension
         public Nullable<decimal> Weight { get; set; }
         public string Type { get; set; }
         public string Color { get; set; }
-        //public Nullable<System.DateTime> CreatedDate { get; set; }
-        //public Nullable<System.DateTime> UpdatedDate { get; set; }
-        //public string UserUpdate { get; set; }//1232312312312
     }
 }
