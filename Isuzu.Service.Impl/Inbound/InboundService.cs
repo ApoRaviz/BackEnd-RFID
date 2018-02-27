@@ -357,7 +357,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
         }
 
-        public void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking, string username)
+        public void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking)
         {
             using (var scope = new TransactionScope())
             {
@@ -388,7 +388,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
         }
 
-        public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking, string username)
+        public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking)
         {
 
             using (var scope = new TransactionScope())

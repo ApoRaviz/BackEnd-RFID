@@ -185,7 +185,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCarton_HANDY(itemReq, Username);
+                InboundService.PerformPackingCarton_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -204,7 +204,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCase_HANDY(itemReq, Username);
+                InboundService.PerformPackingCase_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)

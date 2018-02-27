@@ -20,8 +20,8 @@ namespace Isuzu.Service
         void RegisterInboundItem_HANDY(InboundItemHandyDto item);
         void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding);
         void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping);
-        void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking, string username);
-        void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking, string username);
+        void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking);
+        void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking);
         InboundItemCartonHandyDto GetInboundItemCartonByRFID_HANDY(string rfid);
         IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids);
 
