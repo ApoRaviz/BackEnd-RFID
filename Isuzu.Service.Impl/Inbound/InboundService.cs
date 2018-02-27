@@ -53,6 +53,10 @@ namespace Isuzu.Service.Impl.Inbound
                 item = (
                          from i in Db.InboundItems
                          where i.ISZJOrder == iszjOrder
+                         && !new List<string> {
+                                    statusShipped,
+                                    statusDeleted
+                                }.Contains(i.Status)
                          select new InboundItemHandyDto
                          {
                              ID = i.ID,
@@ -353,7 +357,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
         }
 
-        public void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking, string username)
+        public void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking)
         {
             using (var scope = new TransactionScope())
             {
@@ -384,7 +388,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
         }
 
-        public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking, string username)
+        public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking)
         {
 
             using (var scope = new TransactionScope())
@@ -461,6 +465,10 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 item = (from i in Db.InboundItems
                         where i.ISZJOrder == iszjOrder
+                        && !new List<string> {
+                                    //statusShipped,
+                                    statusDeleted
+                                }.Contains(i.Status)
                         select i).SingleOrDefault();
             }
             return item;
