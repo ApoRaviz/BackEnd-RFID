@@ -65,8 +65,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return Probationnew.ProbationIDSys;
             }
@@ -93,8 +92,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return true;
             }

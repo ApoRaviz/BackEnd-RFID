@@ -85,6 +85,7 @@
     <Compile Include="Extentions\HttpRequestMessageExtensions.cs" />
     <Compile Include="Extentions\IdentityExtensions.cs" />
     <Compile Include="Extentions\AttributeExtensions.cs" />
+    <Compile Include="Extentions\QueryableExtensions.cs" />
     <Compile Include="UtilityHelpers\AttributeHelper.cs" />
     <Compile Include="UtilityHelpers\DownloadHelper.cs" />
     <Compile Include="UtilityHelpers\HashidsHelper.cs" />

@@ -11,7 +11,7 @@ namespace WIM.Core.Common.ValueObject
     {
         public CustomerDto()
         {
-            this.Project_MT = new HashSet<Project_MT>();
+            this.Project_MT = new HashSet<ProjectDto>();
         }
 
         public int CusIDSys { get; set; }
@@ -33,7 +33,7 @@ namespace WIM.Core.Common.ValueObject
         public string Mobile3 { get; set; }
         public byte Active { get; set; }
 
-        public virtual ICollection<Project_MT> Project_MT { get; set; }
+        public virtual ICollection<ProjectDto> Project_MT { get; set; }
 
     }
 }

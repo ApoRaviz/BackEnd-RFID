@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="ApiMaster\IApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\IApiMTRepository.cs" />
+    <Compile Include="ApiMaster\IPermissionGroupRepository.cs" />
     <Compile Include="Country\ICountryRepository.cs" />
     <Compile Include="Currency\ICurrencyRepository.cs" />
     <Compile Include="CustomerAndProject\ICustomerRepository.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="LabelControl\ILabelControlRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuProjectMappingRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuRepository.cs" />
+    <Compile Include="MenuAndPermission\IPermissionGroupApiRepository.cs" />
     <Compile Include="MenuAndPermission\IPermissionRepository.cs" />
     <Compile Include="Personalize\IDepartmentRepository.cs" />
     <Compile Include="Personalize\IEmployeeRepository.cs" />

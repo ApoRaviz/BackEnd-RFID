@@ -28,9 +28,6 @@ namespace WIM.Core.Entity.MenuManagement
         public virtual Menu_MT Menu_MT { get; set; }
         [ForeignKey("ApiIDSys")]
         public virtual Api_MT Api_MT { get; set; }
-        //[NotMapped]
-        //public bool IsActive { get { return GetActiveBool; } set { SetActiveBool = MenuIDSys; } }
-
     }
 
 }

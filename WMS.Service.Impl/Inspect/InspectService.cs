@@ -72,7 +72,7 @@ namespace WMS.Service.Impl.Inspect
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 
                 return Inspect.InspectIDSys;
@@ -96,7 +96,7 @@ namespace WMS.Service.Impl.Inspect
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 
                 return true;
@@ -115,17 +115,6 @@ namespace WMS.Service.Impl.Inspect
                     scope.Complete();
                 }
                 return true;
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
             }
         }
 

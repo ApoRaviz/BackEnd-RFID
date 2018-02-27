@@ -16,7 +16,7 @@ namespace WIM.Core.Common.ValueObject
         public string SubModuleIDSys { get; set; }
         public string ReportName { get; set; }
 
-        public List<Entity.LabelManagement.Label> HeadReportLabels { get; set; }   
+        public List<Label> HeadReportLabels { get; set; }   
         
     }
 }

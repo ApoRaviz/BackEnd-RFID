@@ -11,14 +11,14 @@ namespace WIM.Core.Common.ValueObject
     {
         public RoleUserDto()
         {
-            Project_MT = new Project_MT();
+            Project_MT = new ProjectDto();
         }
 
         public string RoleID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsSysAdmin { get; set; }
-        public Project_MT Project_MT { get; set; }
+        public ProjectDto Project_MT { get; set; }
         public List<UserRoleDto> Users { get; set; }
     }
 }

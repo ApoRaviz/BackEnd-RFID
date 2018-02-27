@@ -22,6 +22,6 @@ namespace WIM.Core.Common.ValueObject
         public string PhoneNumber { get; set; }
 
         public virtual ICollection<CustomerDto> Customer_MT { get; set; }
-        public virtual Person_MT Person_MT { get; set; }
+        public virtual PersonDto Person_MT { get; set; }
     }
 }

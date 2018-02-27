@@ -58,7 +58,7 @@ namespace WIM.Core.Common.Utility.Validation
                                 
                                 if (classname.Value == null)
                                 {
-                                    throw new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                                    throw new ValidationException(ErrorEnum.E4012);
                                 }
                                 var z = classname.Value;
                             var y = z.GetType();
@@ -77,7 +77,7 @@ namespace WIM.Core.Common.Utility.Validation
                                         }
                                         else
                                         {
-                                            throw new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                                            throw new ValidationException(ErrorEnum.E4012);
                                         }
                                     }
                                    
@@ -86,7 +86,7 @@ namespace WIM.Core.Common.Utility.Validation
                         }
                         if (!found)
                         {
-                            throw new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                            throw new ValidationException(ErrorEnum.E4012);
                         }
                     }
                 }
@@ -121,13 +121,17 @@ namespace WIM.Core.Common.Utility.Validation
                     var send = propname.GetValue(motherclass, null);
                     if (propname.PropertyType.IsGenericType)
                     {
-                        CheckNullProperties(data, send);
+                        if(propname.PropertyType.GetGenericTypeDefinition() != typeof(IEnumerable<>))
+                        {
+                            CheckNullProperties(data, send);
+                        }
+                        
                     }
 
                 }
                 else
                 {
-                    throw new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
             }
 

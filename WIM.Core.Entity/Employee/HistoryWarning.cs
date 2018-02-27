@@ -19,7 +19,7 @@ namespace WIM.Core.Entity.Employee
         public int StatusIDSys { get; set; }
         public Nullable<DateTime> WarningDate { get; set; }
         public string Description { get; set; }
-        public string FileUID { get; set; }
+        public string FileRefID { get; set; }
 
         [ForeignKey("EmID")]
         public virtual Employee_MT Employee_MT { get; set; }

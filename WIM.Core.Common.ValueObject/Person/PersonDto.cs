@@ -29,7 +29,7 @@ namespace WIM.Core.Common.ValueObject
         public string Mobile { get; set; }
         public string Email { get; set; }
 
-        public User User { get; set; }
-        public Employee_MT Employee { get; set; }
+        public UserDto User { get; set; }
+        public EmployeeDto Employee { get; set; }
     }
 }
