@@ -1,39 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
-using WMS.Common.ValueObject;
-using WMS.Entity.ItemManagement;
+using WMS.Entity.SpareField;
 using WMS.Service;
 
 namespace WMS.WebApi.Controller
 {
-    //[Authorize]
-    [RoutePrefix("api/v1/categories")]
-    public class CategoriesController : ApiController
+    [RoutePrefix("api/v1/SpareField")]
+    public class SpareFieldController : ApiController
     {
-        private ICategoryService CategoryService;
-        public CategoriesController(ICategoryService categoryService)
+        private ISpareFieldService SpareFieldService;
+
+        public SpareFieldController(ISpareFieldService SpareFieldservice)
         {
-            this.CategoryService = categoryService;
+            this.SpareFieldService = SpareFieldservice;
         }
 
-        // GET: api/Categories
+        // GET: api/SpareField
         [HttpGet]
         [Route("")]
-        public HttpResponseMessage GetCategories()
+        public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<CategoryDto>> response = new ResponseData<IEnumerable<CategoryDto>>();
+            ResponseData<IEnumerable<SpareField>> response = new ResponseData<IEnumerable<SpareField>>();
             try
             {
-                IEnumerable<CategoryDto> categories = CategoryService.GetCategoriesByProjectID(User.Identity.GetProjectIDSys());
-                response.SetStatus(HttpStatusCode.OK);
-                response.SetData(categories);
+                IEnumerable<SpareField> SpareField = SpareFieldService.GetSpareField();
+                response.SetData(SpareField);
             }
             catch (ValidationException ex)
             {
@@ -43,16 +39,16 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // GET: api/categories/1
+        // GET: api/Employees/1
         [HttpGet]
-        [Route("{id}")]
-        public HttpResponseMessage GetCategory([FromUri]int id)
+        [Route("{SpfIDSys}")]
+        public HttpResponseMessage Get(int SpfIDSys)
         {
-            IResponseData<CategoryDto> response = new ResponseData<CategoryDto>();
+            IResponseData<SpareField> response = new ResponseData<SpareField>();
             try
             {
-                CategoryDto category = CategoryService.GetCategory(id);
-                response.SetData(category);
+                SpareField SpareField = SpareFieldService.GetSpareFieldBySpfIDSys(SpfIDSys);
+                response.SetData(SpareField);
             }
             catch (ValidationException ex)
             {
@@ -62,15 +58,15 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // POST: api/Categories
+        // POST: api/Employees
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]Category_MT category)
+        public HttpResponseMessage Post([FromBody]IEnumerable<SpareField> SpareField)
         {
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                int id = CategoryService.CreateCategory(category);
+                int id = SpareFieldService.CreateSpareField(SpareField);
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -81,15 +77,38 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // PUT: api/Categories/5
+        // PUT: api/Employees/5
+
         [HttpPut]
-        [Route("{id}")]
-        public HttpResponseMessage Put(int id, [FromBody]Category_MT category)
+        [Route("")]
+        public HttpResponseMessage Put([FromBody]SpareField SpareField)
+        {
+
+            IResponseData<bool> response = new ResponseData<bool>();
+
+            try
+            {
+                bool isUpated = SpareFieldService.UpdateSpareField(SpareField);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        // DELETE: api/Employees/5
+        [HttpDelete]
+        [Route("{SpfID}")]
+        public HttpResponseMessage Delete(int SpfID)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = CategoryService.UpdateCategory(category);
+                bool isUpated = SpareFieldService.DeleteSpareField(SpfID);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -100,23 +119,6 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // DELETE: api/Categories/5
-        [HttpDelete]
-        [Route("{id}")]
-        public HttpResponseMessage Delete(int id)
-        {
-            IResponseData<bool> response = new ResponseData<bool>();
-            try
-            {
-                bool isUpated = CategoryService.DeleteCategory(id);
-                response.SetData(isUpated);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
     }
+
 }

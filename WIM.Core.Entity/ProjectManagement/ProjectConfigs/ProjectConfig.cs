@@ -15,5 +15,6 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs
         public Order.Order Order { get; set; }
         public Inspection.Inspection Inspection { get; set; }
         public Delivery.Delivery Delivery { get; set; }
+        public IEnumerable<SpareField.SpareField> SpareField { get; set; }
     }
 }

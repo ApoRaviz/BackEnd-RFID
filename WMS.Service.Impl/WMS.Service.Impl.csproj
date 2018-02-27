@@ -69,6 +69,7 @@
     <Compile Include="LocationMaster\LocationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\ReportService.cs" />
+    <Compile Include="SpareField\SpareFieldService.cs" />
     <Compile Include="UnitMaster\UnitService.cs" />
     <Compile Include="WarehouseMaster\WarehouseService.cs" />
     <Compile Include="WarehouseMaster\ZoneService.cs" />

@@ -58,6 +58,7 @@ namespace WIM.Core.Context
         public virtual DbSet<File_MT> File_MT { get; set; }
         public virtual DbSet<Probation_MT> Probation_MT { get; set; }
         
+
         /// <summary>
         /// View
         /// </summary>

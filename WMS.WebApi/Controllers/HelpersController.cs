@@ -17,7 +17,7 @@ using WMS.Context;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Service;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     [Authorize]
     [RoutePrefix("api/v1/helpers")]

@@ -9,5 +9,6 @@ namespace WIM.Core.Repository.Personalize
 {
     public interface IProbationRepository : IRepository<Probation_MT>
     {
+       
     }
 }

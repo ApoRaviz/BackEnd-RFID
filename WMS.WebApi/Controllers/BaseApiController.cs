@@ -8,7 +8,7 @@ using System.Web.Http;
 using WIM.Core.Security;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     public class BaseApiController : ApiController

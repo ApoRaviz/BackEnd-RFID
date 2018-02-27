@@ -11,7 +11,7 @@ using WMS.Entity.WarehouseManagement;
 using WMS.Service;
 using WMS.Service.LocationMaster;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     [RoutePrefix("api/v1/Locations")]

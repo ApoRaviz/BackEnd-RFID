@@ -13,7 +13,7 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     [RoutePrefix("api/v1/Inspects")]

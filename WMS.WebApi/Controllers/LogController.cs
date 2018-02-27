@@ -11,7 +11,7 @@ using WIM.Core.Entity.Common;
 using WIM.Core.Service;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     [RoutePrefix("api/v1/log")]

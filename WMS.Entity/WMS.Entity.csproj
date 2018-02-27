@@ -72,6 +72,7 @@
     <Compile Include="Report\ReportLayoutDetail_MT.cs" />
     <Compile Include="Report\ReportLayoutHeader_MT.cs" />
     <Compile Include="Report\ReportLayout_MT.cs" />
+    <Compile Include="SpareField\SpareField.cs" />
     <Compile Include="WarehouseManagement\Location_MT.cs" />
     <Compile Include="WarehouseManagement\RackLayout.cs" />
     <Compile Include="WarehouseManagement\RackLayout_MT.cs" />

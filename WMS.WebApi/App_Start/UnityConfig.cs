@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
 using WIM.Core.Common;
-using WMS.WebApi.Controllers;
+using WMS.WebApi.Controller;
 using WMS.Service;
 using WMS.Service.Inspect;
 using WMS.Service.Impl.Inspect;

@@ -93,6 +93,7 @@
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Service.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\DateTimeToReceiveData.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\SendingDataType.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\SpareField\SpareField.cs" />
     <Compile Include="ProjectManagement\Project_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleAndPermission\Permission.cs" />
