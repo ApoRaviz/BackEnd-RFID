@@ -11,6 +11,7 @@ using WIM.Core.Service.StatusManagement;
 using WIM.Core.Service.Impl.StatusManagement;
 using WIM.Core.Service.EmployeeMaster;
 using WIM.Core.Service.Impl.EmployeeMaster;
+using WIM.Core.Service.Address;
 
 namespace Master.WebApi
 {
@@ -53,7 +54,8 @@ namespace Master.WebApi
             container.RegisterType<IModuleService, ModuleService>();
             container.RegisterType<ISubModuleService, SubModuleService>();
             container.RegisterType<IHeadReportControlService, HeadReportControlService>(); 
-            container.RegisterType<ISupplierService, SupplierService>(); 
+            container.RegisterType<ISupplierService, SupplierService>();
+            container.RegisterType<IAddressService, AddressService>();
         }
     }
 }

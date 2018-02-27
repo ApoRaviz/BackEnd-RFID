@@ -44,6 +44,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\CityRepository.cs" />
+    <Compile Include="Address\ProvinceRepository.cs" />
+    <Compile Include="Address\SubCityRepository.cs" />
     <Compile Include="ApiMaster\ApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\ApiMTRepository.cs" />
     <Compile Include="Country\CountryRepository.cs" />

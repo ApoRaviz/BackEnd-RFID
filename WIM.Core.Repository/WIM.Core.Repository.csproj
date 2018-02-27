@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\ICityRepository.cs" />
+    <Compile Include="Address\IProvinceRepository.cs" />
+    <Compile Include="Address\ISubCityRepository.cs" />
     <Compile Include="ApiMaster\IApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\IApiMTRepository.cs" />
     <Compile Include="Country\ICountryRepository.cs" />

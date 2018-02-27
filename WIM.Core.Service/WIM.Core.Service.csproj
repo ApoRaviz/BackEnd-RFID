@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\IAddressService.cs" />
     <Compile Include="ApiMaster\IApiMTService.cs" />
     <Compile Include="ApiMenuMapping\IApiMenuMappingService.cs" />
     <Compile Include="CountryMaster\ICountryService.cs" />
