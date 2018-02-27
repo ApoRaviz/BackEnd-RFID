@@ -60,7 +60,11 @@
     <Compile Include="CustomerMaster\ICustomerService.cs" />
     <Compile Include="EmployeeMaster\IDepartmentService.cs" />
     <Compile Include="EmployeeMaster\IEmployeeService.cs" />
+    <Compile Include="EmployeeMaster\IHistoryWarningService.cs" />
     <Compile Include="EmployeeMaster\IPositionService.cs" />
+    <Compile Include="EmployeeMaster\IProbationService.cs" />
+    <Compile Include="EmployeeMaster\IResignService.cs" />
+    <Compile Include="FileManagement\IFileService.cs" />
     <Compile Include="HeadReportControl\IHeadReportControlService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="LabelControl\ILabelControlService.cs" />
@@ -68,6 +72,8 @@
     <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
     <Compile Include="ModuleMaster\ISubModuleService.cs" />
     <Compile Include="ModuleMaster\IModuleService.cs" />
+    <Compile Include="PermissionGroups\IPermissionGroupApiService.cs" />
+    <Compile Include="PermissionGroups\IPermissionGroupService.cs" />
     <Compile Include="PermissionMaster\IPermissionService.cs" />
     <Compile Include="PersonMaster\IPersonService.cs" />
     <Compile Include="ProjectMaster\IProjectService.cs" />

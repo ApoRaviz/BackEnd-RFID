@@ -150,5 +150,23 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+        [HttpDelete]
+        [Route("unit")]
+        public HttpResponseMessage DeleteUnit(ItemUnitMapping item)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = ItemService.DeleteItemUnit(item);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
     }
 }

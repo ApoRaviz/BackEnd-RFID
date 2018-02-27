@@ -49,6 +49,7 @@
     <Compile Include="ItemSetDetailDto.cs" />
     <Compile Include="ItemSetDto.cs" />
     <Compile Include="ItemUnitDto.cs" />
+    <Compile Include="LocationGroupDto.cs" />
     <Compile Include="LocationDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierDto.cs" />

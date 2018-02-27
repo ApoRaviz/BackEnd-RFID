@@ -16,7 +16,7 @@ namespace Isuzu.Context
         public virtual DbSet<InboundItemsHead> InboundItemsHead { get; set; }
         public virtual DbSet<LabelRunning> LabelRunning { get; set; }
 
-        public IsuzuDataContext() : base("name=WIM_ISUZU"){
+        public IsuzuDataContext() : base("name=YUT_ISUZU"){
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
         }

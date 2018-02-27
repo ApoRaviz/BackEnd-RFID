@@ -13,10 +13,16 @@ namespace WIM.Core.Repository
         IIdentity Identity { get; }
 
         IEnumerable<TEntity> Get();
+        Task<IEnumerable<TEntity>> GetAsync();
         TEntity Get(Func<TEntity, Boolean> where);
         IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAllAsync();
         TEntity GetByID(object id);
-        bool Exists(object id);        
+        TEntity GetByID(params object[] id);
+        Task<TEntity> GetByIDAsync(params object[] id);
+        Task<TEntity> GetByIDAsync(object id);
+        bool Exists(object id);
+        bool Exists(Func<TEntity, Boolean> where);
         TEntity Insert(TEntity entity);
         TEntity Update(object entityToUpdate);
         void Delete(object id);

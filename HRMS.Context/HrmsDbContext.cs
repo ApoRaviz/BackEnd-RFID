@@ -25,7 +25,7 @@ namespace HRMS.Context
         public DbSet<Project_MT> Project_MT { get; set; }
 
 
-        public HRMSDbContext() : base("name=HRMS")
+        public HRMSDbContext() : base("name=YUT_HRMS")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

@@ -14,6 +14,10 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Entity.View;
+using WIM.Core.Entity.Employee;
+using WIM.Core.Service.Impl.EmployeeMaster;
+using WIM.Core.Service.EmployeeMaster;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
 {
@@ -75,13 +79,23 @@ namespace Master.WebApi.Controllers
         public HttpResponseMessage Get(int PersonIDSys)
         {
             IResponseData<PersonDto> response = new ResponseData<PersonDto>();
+            IResignService ResignService = new ResignService();
+            IHistoryWarningService WarningService = new HistoryWarningService();
             try
             {
+               
                 PersonDto Person = PersonService.GetPersonByPersonID(PersonIDSys);
                 User user = UserService.GetUserByPersonIDSys(PersonIDSys);
                 Employee_MT Employee = EmployeeService.GetEmployeeByPerson(PersonIDSys);
-                Person.User = user;
-                Person.Employee = Employee;
+                if (Employee != null)
+                {
+                    IEnumerable<HistoryWarning> Warning = WarningService.GetHistoryByEmID(Employee.EmID);
+                    Resign resign = ResignService.GetResignByEmID(Employee.EmID);
+                    Employee.HistoryWarnings = Warning.ToList();
+                    Employee.Resign = resign;
+                }
+                Person.User = new CommonService().AutoMapper<UserDto>(user);
+                Person.Employee = new CommonService().AutoMapper<EmployeeDto>(Employee);
                 response.SetData(Person);
             }
             catch (ValidationException ex)

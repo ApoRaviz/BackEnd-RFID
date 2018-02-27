@@ -7,7 +7,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -15,16 +18,22 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Web.Http;
 using System.Xml.Linq;
+using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Common.Utility.Extensions;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
+using System.Collections.ObjectModel;
+using System.Web.Http.Description;
+using System.Web.Http.Controllers;
 
 namespace Master.WebApi.Controllers
 {
@@ -43,7 +52,7 @@ namespace Master.WebApi.Controllers
         {
             LabelControl labelResponse = new LabelControl();
             ResponseData<LabelControl> response = new ResponseData<LabelControl>();
-          
+
 
             /*var res = projectConfig.ToDictionary(x => x.Key, x => x.Value);
             response.SetData(res);
@@ -53,7 +62,7 @@ namespace Master.WebApi.Controllers
             {
                 LabelControl label1 = db.LabelControl.SingleOrDefault(p => p.LabelIDSys == 1);
 
-              
+
 
                 /*using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
                 {
@@ -151,7 +160,7 @@ namespace Master.WebApi.Controllers
             {
                 string sql = string.Format("select TOP(10) {0} from Employee_MT FOR JSON AUTO", labelSelect);                
                 string json = db.Database.SqlQuery<string>(sql).FirstOrDefault();
-                json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");    
+                json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");
 
                 dataSet = JsonConvert.DeserializeObject<System.Data.DataSet>(json);
                 DataTable dataTable = dataSet.Tables["Employees"];
@@ -179,9 +188,9 @@ namespace Master.WebApi.Controllers
 
                 //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
                 newLabels = (from p in headReport.HeadReportLabels
-                            from r in labelControl.LabelConfig
-                            where r.Key == HashidsHelper.DecodeHex(p.Key)
-                            select r.Value).ToList();
+                             from r in labelControl.LabelConfig
+                             where r.Key == HashidsHelper.DecodeHex(p.Key)
+                             select r.Value).ToList();
 
 
                 //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
@@ -258,6 +267,151 @@ namespace Master.WebApi.Controllers
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             return result;
 
+        }
+
+        [HttpGet]
+        [Route("func5")]
+        public HttpResponseMessage Func5()
+        {
+            ResponseData<Hashtable> response = new ResponseData<Hashtable>();
+            List<Type> tEntities = new List<Type>
+            {
+                typeof(Customer_MT),
+                typeof(LabelControl)
+            };
+
+
+
+            response.Data = ApiHashTableHelper.apiTable;
+            //response.Data = DemoHelper.GetAttributeEntities(tEntities);
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("func6")]
+        public HttpResponseMessage Func6()
+        {
+            ResponseData<List<string>> response = new ResponseData<List<string>>();
+            List<Type> tEntities = new List<Type>
+            {
+                typeof(Customer_MT),
+                typeof(LabelControl)
+            };
+
+            response.Data = DemoHelper.GetAttributeEntities(tEntities);
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("func7")]
+        public HttpResponseMessage Func7()
+        {
+            ResponseData<List<ApiDesc>> response = new ResponseData<List<ApiDesc>>();
+
+            Collection<ApiDescription> apis = Configuration.Services.GetApiExplorer().ApiDescriptions;
+            ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = apis.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
+
+            List<ApiDesc> apiDescList = new List<ApiDesc>();
+            foreach (IGrouping<HttpControllerDescriptor, ApiDescription> group in apiGroups)
+            {
+                foreach (ApiDescription api in group)
+                {                   
+                    Dictionary<string, string> paramDic = new Dictionary<string, string>();
+                    foreach (ApiParameterDescription parameter in api.ParameterDescriptions)
+                    {
+                        if (parameter.ParameterDescriptor == null)
+                        {
+                            continue;
+                        }
+
+                        Type type = parameter.ParameterDescriptor.ParameterType;
+                        if (type == typeof(Int32) || type == typeof(Int64) || type == typeof(Boolean))
+                        {
+                            paramDic.Add(parameter.Name, "1");
+                        }
+                        else if (type == typeof(String) || type == typeof(DateTime))
+                        {
+                            paramDic.Add(parameter.Name, "@");
+                        }
+                    }
+
+                    string path = "";
+                    string[] pathSplit = api.RelativePath.Split('?')[0].Split('/');
+                    for (int i = 0; i < pathSplit.Length; i++)
+                    {                        
+                        if (i > 2 && pathSplit[i][0] == '{' && pathSplit[i][pathSplit[i].Length - 1] == '}')
+                        {
+                            foreach (KeyValuePair<string, string> paramKeyVal in paramDic)
+                            {
+                                string x = pathSplit[i].Substring(1, pathSplit[i].Length - 2);
+                                
+                                if (x.Equals(paramKeyVal.Key, StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    path += "/" + paramKeyVal.Value;
+                                    continue;
+                                }                               
+                            }
+                            continue;
+                        }
+                        path += "/" + pathSplit[i];
+                    }
+
+                    apiDescList.Add(new ApiDesc
+                    {
+                        ID = api.ID,
+                        ControllerName = group.Key.ControllerName,
+                        RelativePath = api.RelativePath,
+                        ApiPath = path,
+                        Method = api.HttpMethod.Method
+                    });
+                }                                
+            }
+
+            response.Data = apiDescList;
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+    }
+
+    public class ApiDesc
+    {
+        public string ID { get; set; }
+        public string ControllerName { get; set; }
+        public string RelativePath { get; set; }
+        public string ApiPath { get; set; }
+        public string Method { get; set; }
+        
+    }
+
+    public class DemoHelper
+    {
+        public static List<string> GetAttributeEntities(List<Type> tEntities)
+        {
+            List<string> columns = new List<string>();
+            foreach (Type tEntity in tEntities)
+            {
+                TableAttribute tableAttribute = (TableAttribute)Attribute.GetCustomAttribute(tEntity, typeof(TableAttribute));
+                columns.Add("TableName ==== " + tableAttribute.Name + "====");
+
+                PropertyInfo[] properties = tEntity.GetProperties();
+                foreach (PropertyInfo prop in properties)
+                {
+                    if (prop.GetCustomAttribute<KeyAttribute>() != null)
+                    {
+                        columns.Add("PrimaryKey ==== " + prop.Name + "====");
+                    }
+                    else if (prop.GetCustomAttribute<ForeignKeyCustomAttribute>() != null)
+                    {
+                        ForeignKeyCustomAttribute fkAttribute = (ForeignKeyCustomAttribute)Attribute.GetCustomAttribute(prop, typeof(ForeignKeyCustomAttribute));
+                        columns.Add("ForeignKey ==== " + fkAttribute.TableName + "." + prop.Name + "====");
+                    }
+                    else
+                    {
+                        columns.Add(prop.Name);
+                    }                    
+                }
+            }
+            return columns;
         }
     }
 }

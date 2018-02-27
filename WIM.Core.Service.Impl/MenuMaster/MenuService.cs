@@ -18,7 +18,7 @@ using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WIM.Core.Service.Impl
 {
@@ -51,6 +51,18 @@ namespace WIM.Core.Service.Impl
             return Menu;
         }
 
+        public IEnumerable<AutocompleteMenuDto> AutocompleteMenu(string term){
+
+            IEnumerable<AutocompleteMenuDto> autocompleteItemDto;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IMenuRepository repo = new MenuRepository(Db);
+                autocompleteItemDto = repo.AutocompleteMenu(term);
+
+            }
+            return autocompleteItemDto;
+        }
+
         public int CreateMenu(Menu_MT Menu)
         {
             using (var scope = new TransactionScope())
@@ -68,12 +80,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return Menunew.MenuIDSys;
@@ -105,12 +117,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
 
@@ -135,12 +147,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return true;
@@ -172,12 +184,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
 
@@ -203,23 +215,12 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
                     throw ex;
                 }
 
 
                 return true;
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
             }
         }
 

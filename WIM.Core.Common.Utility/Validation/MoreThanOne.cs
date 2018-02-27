@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WIM.Core.Common.Utility.Validation
 {
@@ -53,8 +53,7 @@ namespace WIM.Core.Common.Utility.Validation
             //}
             //catch (ValidationException)
             //{
-            //    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-            //    throw ex;
+            //    throw new ValidationException(ErrorEnum.E4012);
             //}
         }
     }

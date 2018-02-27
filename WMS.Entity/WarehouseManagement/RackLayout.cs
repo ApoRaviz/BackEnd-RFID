@@ -17,11 +17,11 @@ namespace WMS.Entity.WarehouseManagement
         public int RackID { get; set; }
         public Nullable<int> BlockID { get; set; }
         public string Floor { get; set; }
-        public Nullable<int> Left { get; set; }
-        public Nullable<int> Top { get; set; }
+        public int Left { get; set; }
+        public int Top { get; set; }
         public string Color { get; set; }
-        public Nullable<int> Width { get; set; }
-        public Nullable<int> Height { get; set; }
+        //public int Width { get; set; }
+        //public int Height { get; set; }
 
     }
 }

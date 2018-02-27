@@ -19,9 +19,10 @@ namespace WMS.Repository.Impl
 
         public IEnumerable<AutocompleteUnitDto> AutocompleteUnit(string term)
         {
+            int projectIDSys = Identity.GetProjectIDSys();
             var qr = (from um in Db.Unit_MT
                       where (um.UnitID.Contains(term)
-                      || um.UnitName.Contains(term)) && um.ProjectIDSys == Identity.GetProjectIDSys()
+                      || um.UnitName.Contains(term)) /*&& um.ProjectIDSys == projectIDSys*/
 
                       select new AutocompleteUnitDto
                       {

@@ -26,7 +26,7 @@ namespace Fuji.Context
         public DbSet<GeneralLog> GeneralLogs { get; set; }
 
 
-        public FujiDbContext(string methodLog = "") : base("name=WIM_FUJI")
+        public FujiDbContext(string methodLog = "") : base("name=YUT_FUJI")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

@@ -46,7 +46,7 @@ namespace Fuji.WebApi.Controllers
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
-            UserManager = userManager;
+            UserManager = userManager;            
             AccessTokenFormat = accessTokenFormat;
         }
 

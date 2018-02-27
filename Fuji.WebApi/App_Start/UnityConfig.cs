@@ -13,6 +13,8 @@ using System.Web.Http;
 using Unity.WebApi;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
+using WIM.Core.Service.Impl.StatusManagement;
+using WIM.Core.Service.StatusManagement;
 
 namespace Fuji.WebApi
 {
@@ -48,6 +50,7 @@ namespace Fuji.WebApi
             //container.RegisterType<IProjectService, ProjectService>();
             //container.RegisterType<IUserService, UserService>();
             container.RegisterType<ICommonService, CommonService>();
+            container.RegisterType<IStatusService, StatusService>();
         }
     }
 }

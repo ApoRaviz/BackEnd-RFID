@@ -18,7 +18,7 @@ namespace WMS.Service.Impl.WarehouseMaster
     {
         string pXmlDetail = "<row><ZoneID>{0}</ZoneID><Name>{1}</Name><Left>{2}</Left><Top>{3}</Top>" +
                             "<Width>{4}</Width><Length>{5}</Length><Use>{6}</Use><Floor>{7}</Floor><ZoneParentID>{8}</ZoneParentID>"+
-                            "<UpdateAt>{9}</UpdateAt><UpdateBy>{10}</UpdateBy><IsActive>{11}</IsActive><Type>{12}</Type></row>";
+                            "<UpdateAt>{9}</UpdateAt><UpdateBy>{10}</UpdateBy><IsActive>{11}</IsActive><Type>{12}</Type><GroupName>{13}</GroupName></row>";
 
         string pXmlRack = "<row><ZoneIDSys>{0}</ZoneIDSys><ZoneID>{1}</ZoneID><RackID>{2}</RackID><BlockID>{3}</BlockID>" +
                             "<Floor>{4}</Floor><Left>{5}</Left><Top>{6}</Top></row>";
@@ -69,6 +69,7 @@ namespace WMS.Service.Impl.WarehouseMaster
             }
         }
 
+
         public int? CreateZoneLayout(ZoneLayoutHeader_MT data)
         {
             System.Text.StringBuilder sb = new StringBuilder();
@@ -91,7 +92,8 @@ namespace WMS.Service.Impl.WarehouseMaster
                     , DateTime.Now.ToString("yyyy-MM-dd HH:mm")
                     , d.UpdateBy
                     , "1"
-                    , d.Type);
+                    , d.Type
+                    , d.GroupName);
             }
             using (var scope = new TransactionScope())
             {
@@ -104,7 +106,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return ZoneSysID;
@@ -133,7 +135,8 @@ namespace WMS.Service.Impl.WarehouseMaster
                     , DateTime.Now.ToString("yyyy-MM-dd HH:mm")
                     , d.UpdateBy
                     , "1"
-                    , d.Type);
+                    , d.Type
+                    , d.GroupName);
             }
             using (var scope = new TransactionScope())
             {
@@ -149,7 +152,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return true;
@@ -185,7 +188,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return RackSysID;
@@ -211,13 +214,106 @@ namespace WMS.Service.Impl.WarehouseMaster
             }
         }
 
-        public void HandleValidationException(DbEntityValidationException ex)
+        // ZoneType
+
+        public List<ZoneType> GetAllZoneType()
         {
-            foreach (var eve in ex.EntityValidationErrors)
+            List<ZoneType> zoneTypeList = new List<ZoneType>();
+            using (var scope = new TransactionScope())
             {
-                foreach (var ve in eve.ValidationErrors)
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                   IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                   zoneTypeList = repo.GetAll().ToList();
+                }
+            }
+            return zoneTypeList;
+        }
+
+        public ZoneType GetZoneTypeByID(int ZoneTypeID)
+        {
+            ZoneType item = new ZoneType();
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                    item = repo.GetByID(ZoneTypeID);
+                }
+            }
+            return item;
+        }
+
+        public int? CreateZoneType(ZoneType data)
+        {
+            int? ZoneTypeIDSys = 0;
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    try
+                    {
+                        IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                        var item = repo.Insert(data);
+                        if(item != null)
+                            ZoneTypeIDSys = item.ZoneTypeIDSys ;
+
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        throw new ValidationException(e);
+                    }
+                    scope.Complete();
+                    return ZoneTypeIDSys;
+                }
+            }
+        }
+
+        public bool UpdateZoneType(int ZoneTypeIDSys, ZoneType data)
+        {
+            bool isUpdate = false;
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    try
+                    {
+                        IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                        var item = repo.Update(data);
+                        if (item != null)
+                                isUpdate = true ;
+
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        throw new ValidationException(e);
+                    }
+                    scope.Complete();
+                    return isUpdate;
+                }
+            }
+        }
+
+        public void RemoveZoneTypeByID(int ZoneTypeID)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    try
+                    {
+                        IZoneTypeRepository repo = new ZoneTypeRepository(Db);
+                        repo.Delete(ZoneTypeID);
+
+                        Db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        throw new ValidationException(e);
+                    }
+                    scope.Complete();
                 }
             }
         }

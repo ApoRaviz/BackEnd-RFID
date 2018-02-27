@@ -17,7 +17,7 @@ using WIM.Core.Repository.Impl;
 using WIM.Core.Repository;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Entity.View;
 
 namespace WIM.Core.Service.Impl
@@ -72,7 +72,12 @@ namespace WIM.Core.Service.Impl
                     Religion = data.Religion,
                     Nationality = data.Nationality,
                     Gender = data.Gender,
-                    Mobile = data.Mobile
+                    Mobile = data.Mobile,
+                    PrefixIDSys = data.PrefixIDSys,
+                    Address = data.Address,
+                    IdentificationNo = data.IdentificationNo,
+                    PassportNo = data.PassportNo,
+                    TaxNo = data.TaxNo
                 };
             }
             return Person;
@@ -95,12 +100,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return Personnew.PersonIDSys;
@@ -122,12 +127,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return true;
@@ -150,12 +155,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 
@@ -184,23 +189,11 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
                     throw ex;
                 }
                 return true;
             }
         }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
-
     }
 }

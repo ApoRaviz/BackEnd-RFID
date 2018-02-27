@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.RoleAndPermission;
 
 namespace WIM.Core.Repository
@@ -11,5 +12,6 @@ namespace WIM.Core.Repository
     {
         IEnumerable<Permission> GetPermissionByUserProject(int ProjectID, string UserID);
         IEnumerable<Permission> GetPermissionHasCreated(int MenuIDSys);
+        IEnumerable<Permission> GetPermissionByGroupMenu(string GroupIDSys, MenuProjectMapping menu);
     }
 }

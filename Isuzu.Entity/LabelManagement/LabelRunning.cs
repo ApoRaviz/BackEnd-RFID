@@ -9,6 +9,7 @@ namespace Isuzu.Entity
     [Table("LabelRunning")]
     public partial class LabelRunning: BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
         [Required]

@@ -22,7 +22,7 @@ using WIM.Core.Common.Helpers;
 using WMS.Entity.LayoutManagement;
 using WMS.Entity.Report;
 using WIM.Core.Common.Constants;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WMS.WebApi.Report
 {

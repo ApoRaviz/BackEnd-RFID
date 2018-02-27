@@ -22,7 +22,7 @@ namespace WIM.Core.Entity
         public string TelEx { get; set; }
         public Nullable<System.DateTime> HiredDate { get; set; }
         public Nullable<int> PositionIDSys { get; set; }
-        
+        public Nullable<int> ProbationIDSys { get; set; }
 
         [ForeignKey("PersonIDSys")]
         public virtual Person_MT Person_MT { get; set; }
@@ -30,5 +30,10 @@ namespace WIM.Core.Entity
         public virtual Departments Departments { get; set; }
         [ForeignKey("PositionIDSys")]
         public virtual Positions Positions { get; set; }
+        [ForeignKey("ProbationIDSys")]
+        public virtual Probation_MT Probation_MT { get; set; }
+        [NotMapped]
+        public virtual Resign Resign { get; set; }
+        public virtual ICollection<HistoryWarning> HistoryWarnings { get; set; }
     }
 }

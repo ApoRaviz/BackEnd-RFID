@@ -73,6 +73,7 @@ namespace Master.WebApi.Controllers
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
+                IsAdmin = User.IsSysAdmin(),
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
         }
@@ -181,6 +182,8 @@ namespace Master.WebApi.Controllers
 
                 Dictionary<string, string> Json = new Dictionary<string, string>();
                 User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
+
+
 
                 if (OTPClaimBinding.OTP.Equals(users.KeyOTP) && DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
                 {
@@ -457,6 +460,7 @@ namespace Master.WebApi.Controllers
             return Ok();
         }
 
+        //# Oil Comment
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)

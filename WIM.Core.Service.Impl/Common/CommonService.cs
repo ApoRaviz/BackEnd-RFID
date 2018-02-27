@@ -4,7 +4,7 @@ using System.Transactions;
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Context;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.ValueObject;
 using System;
 using System.Reflection;
@@ -34,7 +34,17 @@ namespace WIM.Core.Service.Impl
             {
                 var value = prop.GetValue(data);
                 if (respType.GetProperty(prop.Name) != null)
-                    respType.GetProperty(prop.Name).SetValue(resp, value, null);
+                {
+                    try
+                    {
+                        respType.GetProperty(prop.Name).SetValue(resp, value, null);
+                    }
+                    catch(Exception e)
+                    {
+                    }
+                    
+                }
+                    
             }
 
             return resp;
@@ -135,27 +145,16 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
             }
             return true;
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
         }
 
         public IEnumerable<TableColumnsDescription> GetTableColumnsDescription(string tableName)

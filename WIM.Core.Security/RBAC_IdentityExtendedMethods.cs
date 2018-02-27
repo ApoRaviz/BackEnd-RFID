@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 
@@ -114,6 +114,10 @@ public static class RBAC_ExtendedMethods_4_Principal
             string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
           .Select(c => c.Value).SingleOrDefault();
 
+            if (OTPCONFIRM != "True")
+            {
+                return false;
+            }
             string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
 
             string fullUrl = _request.Method + reqUrl;
@@ -140,10 +144,7 @@ public static class RBAC_ExtendedMethods_4_Principal
             }
 
 
-            if (OTPCONFIRM != "True")
-            {
-                return false;
-            }
+           
 
             var claims = (from c in ci.Claims
                           where c.Type == "UrlPermission"
@@ -311,10 +312,12 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/Projects/select",
                     "POST/api/v1/account/Logout",
                     "POST/api/v1/Account/ChangePassword",
+                    "GET/api/v1/Roles/user",
                     //Menu Side Url
                     "GET/api/v1/MenuProjectMappings/menu/",
                     //Url Ignore ChkOTP
-                    "POST/api/v1/account/assignProject"
+                    "POST/api/v1/account/assignProject",
+                    "GET/api/v1/demo/func7"
                 };
         string reqUrlnew = _request.Method + StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
         if (_request.RequestUri.PathAndQuery.Last() == '/')

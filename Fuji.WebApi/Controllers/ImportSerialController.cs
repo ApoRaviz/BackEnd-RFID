@@ -29,54 +29,7 @@ namespace Fuji.WebApi.Controllers
             this.ItemImportService = itemImportService;
         }
 
-        // GET: api/Items
-        //[Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpGet]
-        [Route("importSerial")]
-        public HttpResponseMessage Get()
-        {
-            ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>> response = new ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>>();
-            try
-            {
-                //string userName = User.Identity.GetUserName() ?? "SYSTEM";
-                IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> items = ItemImportService.GetItems();
-                response.SetStatus(HttpStatusCode.OK);
-                response.SetData(items);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpGet]
-        [Route("importSerial/paging/{pageIndex}/{pageSize}")]
-        public HttpResponseMessage GetPaging(int pageIndex, int pageSize)
-        {
-            ResponseData<FujiDataImportSerialHead> response = new ResponseData<FujiDataImportSerialHead>();
-            try
-            {
-                int totalRecord = 0;
-                IEnumerable<ImportSerialHead> items = ItemImportService.GetItems(pageIndex, pageSize, out totalRecord);
-                if (totalRecord > 0)
-                {
-                    FujiDataImportSerialHead ret = new FujiDataImportSerialHead(totalRecord, items);
-                    response.SetStatus(HttpStatusCode.OK);
-                    response.SetData(ret);
-                }
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
+       
 
         #region Picking
         [Authorize]
@@ -193,6 +146,184 @@ namespace Fuji.WebApi.Controllers
         }
 
         #endregion
+
+
+        #region Handy
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("importSerial/handy/setscanned")]
+        public HttpResponseMessage SetScanned([FromBody]SetScannedRequest receive)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+                bool flag = ItemImportService.SetScanned(receive);
+                response.SetData(flag ? 1 : 0);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.OK);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("importSerial/handy/receive")]
+        public HttpResponseMessage Receive([FromBody]ReceiveRequest receive)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+                bool flag = ItemImportService.Receive(receive);
+                response.SetData(flag ? 1 : 0);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.OK);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("importSerial/handy/itemGroups/{orderNo}")]
+        public HttpResponseMessage GetByOrder(string orderNo)
+        {
+            IResponseData<List<string>> response = new ResponseData<List<string>>();
+            try
+            {
+                List<string> itemGroups = ItemImportService.GetItemGroupByOrderNo_Handy(orderNo);
+                response.SetData(itemGroups);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("importSerial/handy/ConfirmPickingList")]
+        public HttpResponseMessage ConfirmPickingList([FromBody]ConfirmPickingRequest confirmRequest)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+                bool flag = ItemImportService.ConfirmPicking(confirmRequest);
+                response.SetData(flag ? 1 : 0);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        /*[Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("importSerial/handy/registerRFID")]
+        public HttpResponseMessage RegisterRFID([FromBody]RegisterRFIDRequest registerRequest)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+                string username = User.Identity.GetUserName() ?? "SYSTEM";
+                bool flag = ItemImportService.ConfirmPicking(registerRequest, username);
+                response.SetData(flag ? 1 : 0);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }*/
+
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("importSerial/handy/registerRFID")]
+        public HttpResponseMessage RegisterRFID_HANDY([FromBody]RegisterRFIDRequest registerRequest)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+                bool flag = ItemImportService.RegisterRFID_HANDY(registerRequest);
+                response.SetData(flag ? 1 : 0);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        #endregion
+
+
+        // GET: api/Items
+        //[Authorize]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("importSerial")]
+        public HttpResponseMessage Get()
+        {
+            ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>> response = new ResponseData<IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead>>();
+            try
+            {
+                //string userName = User.Identity.GetUserName() ?? "SYSTEM";
+                IEnumerable<Fuji.Entity.ItemManagement.ImportSerialHead> items = ItemImportService.GetItems();
+                response.SetStatus(HttpStatusCode.OK);
+                response.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("importSerial/paging/{pageIndex}/{pageSize}")]
+        public HttpResponseMessage GetPaging(int pageIndex, int pageSize)
+        {
+            ResponseData<FujiDataImportSerialHead> response = new ResponseData<FujiDataImportSerialHead>();
+            try
+            {
+                int totalRecord = 0;
+                IEnumerable<ImportSerialHead> items = ItemImportService.GetItems(pageIndex, pageSize, out totalRecord);
+                if (totalRecord > 0)
+                {
+                    FujiDataImportSerialHead ret = new FujiDataImportSerialHead(totalRecord, items);
+                    response.SetStatus(HttpStatusCode.OK);
+                    response.SetData(ret);
+                }
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
 
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Authorize]
@@ -577,127 +708,7 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/handy/setscanned")]
-        public HttpResponseMessage SetScanned([FromBody]SetScannedRequest receive)
-        {
-            IResponseData<int> response = new ResponseData<int>();
-            try
-            {
-                bool flag = ItemImportService.SetScanned(receive);
-                response.SetData(flag ? 1 : 0);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.OK);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/handy/receive")]
-        public HttpResponseMessage Receive([FromBody]ReceiveRequest receive)
-        {
-            IResponseData<int> response = new ResponseData<int>();
-            try
-            {
-                bool flag = ItemImportService.Receive(receive);
-                response.SetData(flag ? 1 : 0);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.OK);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
-        [Authorize]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpGet]
-        [Route("importSerial/handy/itemGroups/{orderNo}")]
-        public HttpResponseMessage GetByOrder(string orderNo)
-        {
-            IResponseData<List<string>> response = new ResponseData<List<string>>();
-            try
-            {
-                List<string> itemGroups = ItemImportService.GetItemGroupByOrderNo_Handy(orderNo);
-                response.SetData(itemGroups);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/handy/ConfirmPickingList")]
-        public HttpResponseMessage ConfirmPickingList([FromBody]ConfirmPickingRequest confirmRequest)
-        {
-            IResponseData<int> response = new ResponseData<int>();
-            try
-            {
-                bool flag = ItemImportService.ConfirmPicking(confirmRequest);
-                response.SetData(flag ? 1 : 0);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
-        /*[Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/handy/registerRFID")]
-        public HttpResponseMessage RegisterRFID([FromBody]RegisterRFIDRequest registerRequest)
-        {
-            IResponseData<int> response = new ResponseData<int>();
-            try
-            {
-                string username = User.Identity.GetUserName() ?? "SYSTEM";
-                bool flag = ItemImportService.ConfirmPicking(registerRequest, username);
-                response.SetData(flag ? 1 : 0);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }*/
-
-
-        [Authorize]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [HttpPost]
-        [Route("importSerial/handy/registerRFID")]
-        public HttpResponseMessage RegisterRFID_HANDY([FromBody]RegisterRFIDRequest registerRequest)
-        {
-            IResponseData<int> response = new ResponseData<int>();
-            try
-            {
-                bool flag = ItemImportService.RegisterRFID_HANDY(registerRequest);
-                response.SetData(flag ? 1 : 0);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
+       
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -829,8 +840,7 @@ namespace Fuji.WebApi.Controllers
         public HttpResponseMessage GetHeadTop([FromBody]ParameterSearch query)
         {
             ResponseData<IEnumerable<ImportSerialHead>> respones = new ResponseData<IEnumerable<ImportSerialHead>>();
-            int totalRecord = 0;
-            IEnumerable<ImportSerialHead> items = ItemImportService.GetHeadDataTopten(query, out totalRecord);
+            IEnumerable<ImportSerialHead> items = ItemImportService.GetHeadDataTopten(query);
             respones.SetStatus(HttpStatusCode.OK);
             respones.SetData(items);
             return Request.ReturnHttpResponseMessage(respones);
@@ -842,8 +852,7 @@ namespace Fuji.WebApi.Controllers
         public HttpResponseMessage GetRFIDInfoByDate([FromBody]ParameterSearch query)
         {
             ResponseData<IEnumerable<FujiTagReport>> respones = new ResponseData<IEnumerable<FujiTagReport>>();
-            int totalRecord = 0;
-            IEnumerable<FujiTagReport> items = ItemImportService.GetReportByYearRang(query, out totalRecord);
+            IEnumerable<FujiTagReport> items = ItemImportService.GetReportByYearRang(query);
             respones.SetStatus(HttpStatusCode.OK);
             respones.SetData(items);
             return Request.ReturnHttpResponseMessage(respones);

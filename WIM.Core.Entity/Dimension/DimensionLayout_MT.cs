@@ -15,10 +15,10 @@ namespace WIM.Core.Entity.Dimension
         public int DimensionIDSys { get; set; }
         public string FormatName { get; set; }
         public string Unit { get; set; }
-        public Nullable<int> Width { get; set; }
-        public Nullable<int> Length { get; set; }
-        public Nullable<int> Height { get; set; }
-        public Nullable<int> Weight { get; set; }
+        public double? Width { get; set; }
+        public double? Length { get; set; }
+        public double? Height { get; set; }
+        public double? Weight { get; set; }
         public string Type { get; set; }
         public string Color { get; set; }
         //public Nullable<System.DateTime> CreatedDate { get; set; }

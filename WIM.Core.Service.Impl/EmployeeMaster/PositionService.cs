@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Employee;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 using WIM.Core.Repository.Impl.Personalize;
 using WIM.Core.Repository.Personalize;
 using WIM.Core.Service.EmployeeMaster;
@@ -61,12 +63,12 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return Positionnew.PositionIDSys;
@@ -89,12 +91,12 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return true;
@@ -110,6 +112,12 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IPositionRepository repo = new PositionRepository(Db);
+                        IEmployeeRepository repoem = new EmployeeRepository(Db);
+                        var employee = repoem.GetMany(a => a.PositionIDSys == id && a.IsActive == true).ToList();
+                        if (employee.Count > 0)
+                        {
+                            return false;
+                        }
                         var existedPosition = repo.GetByID(id);
                         existedPosition.IsActive = false;
                         repo.Update(existedPosition);
@@ -120,21 +128,10 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
                     throw ex;
                 }
                 return true;
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
             }
         }
     }

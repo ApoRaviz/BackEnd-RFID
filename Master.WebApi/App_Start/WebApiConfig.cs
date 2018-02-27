@@ -9,7 +9,7 @@ using System.Web.Http.Cors;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using WIM.WebApi.Auth;
+using WIM.Core.Security;
 using Master.WebApi.Controllers;
 
 namespace Master.WebApi
@@ -34,7 +34,7 @@ namespace Master.WebApi
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-           config.MessageHandlers.Add(new ApiLogHandler());
+           //config.MessageHandlers.Add(new ApiLogHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
@@ -44,6 +44,7 @@ namespace Master.WebApi
 
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
             config.Filters.Add(new IdentityAuthAttribute());
+            //config.Filters.Add(new PermissionAuthAttribute());
         }       
     }
 }

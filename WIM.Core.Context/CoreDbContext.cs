@@ -22,6 +22,7 @@ using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.View;
 using WIM.Core.Entity.Address;
+using WIM.Core.Entity.FileManagement;
 
 namespace WIM.Core.Context
 {
@@ -30,13 +31,15 @@ namespace WIM.Core.Context
         public virtual DbSet<Api_MT> Api_MT { get; set; }
         public virtual DbSet<ApiMenuMapping> ApiMenuMapping { get; set; }
         public virtual DbSet<Customer_MT> Customer_MT { get; set; }
+        public virtual DbSet<Resign> Resign { get; set; }
+        public virtual DbSet<HistoryWarning> HistoryWarning { get; set; }
         public virtual DbSet<Employee_MT> Employee_MT { get; set; }
         public virtual DbSet<Menu_MT> Menu_MT { get; set; }
         public virtual DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
         public virtual DbSet<Person_MT> Person_MT { get; set; }
         public virtual DbSet<Project_MT> Project_MT { get; set; }
         public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
-        public DbSet<Role> Role { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<RolePermissions> RolePermissions { get; set; }
         public virtual DbSet<User> User { get; set; }
@@ -53,6 +56,12 @@ namespace WIM.Core.Context
         public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
+        public virtual DbSet<File_MT> File_MT { get; set; }
+        public virtual DbSet<PermissionGroup> PermissionGroup { get; set; }
+        public virtual DbSet<PermissionGroupApi> PermissionGroupApi { get; set; }
+
+        public virtual DbSet<Probation_MT> Probation_MT { get; set; }
+        
 
         public virtual DbSet<Province_MT> Province_MT { get; set; }
         public virtual DbSet<City_MT> City_MT { get; set; }
@@ -64,7 +73,7 @@ namespace WIM.Core.Context
         /// 
         public virtual DbSet<VPersons> VPersons { get; set; }
 
-        public CoreDbContext() : base("name=CORE")
+        public CoreDbContext() : base("name=YUT_CORE")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

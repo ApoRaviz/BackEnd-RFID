@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -30,7 +31,6 @@ namespace Master.WebApi.Controllers
         public HttpResponseMessage Get()
         {
             IResponseData<List<MenuDto>> response = new ResponseData<List<MenuDto>>();
-            //IResponseData<IEnumerable<List<MenuDto>>> response2 = new ResponseData<IEnumerable<List<MenuDto>>>();
             try
             {
                 List<MenuDto> Menu = MenuService.GetMenuDto().OrderBy(a => a.MenuName).ToList();
@@ -94,6 +94,27 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompleteCustomer(string term)
+        {
+            IResponseData<IEnumerable<AutocompleteMenuDto>> response = new ResponseData<IEnumerable<AutocompleteMenuDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteMenuDto> menu = MenuService.AutocompleteMenu(term);
+                response.SetData(menu);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
 
 
         [HttpGet]

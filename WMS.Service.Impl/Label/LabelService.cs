@@ -92,7 +92,7 @@ namespace WMS.Service.Impl.Label
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                     return ReportSysID;
@@ -122,7 +122,7 @@ namespace WMS.Service.Impl.Label
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     
                     return true;
@@ -130,15 +130,5 @@ namespace WMS.Service.Impl.Label
             }
         }
 
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
-        }
     }
 }

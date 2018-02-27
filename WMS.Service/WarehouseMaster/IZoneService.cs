@@ -18,5 +18,12 @@ namespace WMS.Service.WarehouseMaster
         int? CreateRackLayout(List<RackLayout_MT> data);
         List<RackLayout> GetAllRackDetail(int ZoneIDSys, int ZoneID);
         List<RackLayout> GetRackDetailByZoneIDSys(int ZoneIDSys);
+
+        //ZoneType
+        List<ZoneType> GetAllZoneType();
+        ZoneType GetZoneTypeByID(int ZoneTypeID);
+        int? CreateZoneType(ZoneType data);
+        bool UpdateZoneType(int ZoneTypeIDSys, ZoneType data);
+        void RemoveZoneTypeByID(int ZoneTypeID);
     }
 }
