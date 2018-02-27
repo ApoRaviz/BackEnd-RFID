@@ -1,20 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Transactions;
-using System.Data.Entity.Validation;
-using System.Data.Entity.Infrastructure;
-using WIM.Core.Context;
-using WIM.Core.Entity.Status;
-using WIM.Core.Common.ValueObject;
-using WIM.Core.Common;
-using WIM.Core.Repository.Impl.StatusManagement;
-using WIM.Core.Repository.StatusManagement;
-using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Helpers;
-using WIM.Core.Service.Address;
-using WIM.Core.Repository;
+﻿
 using System;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Context;
+using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
+using WIM.Core.Service.Address;
 
 namespace WIM.Core.Service.Impl.StatusManagement
 {
@@ -27,8 +19,8 @@ namespace WIM.Core.Service.Impl.StatusManagement
             {
                 try
                 {
-                    ISubCityRepository repoGetLeave = new SubCityRepository(db);
-                    return repoGetLeave.GetDto();
+                    ISubCityRepository repoGetAddress = new SubCityRepository(db);
+                    return repoGetAddress.GetDto();
                 }
 
                 catch (DbEntityValidationException)
