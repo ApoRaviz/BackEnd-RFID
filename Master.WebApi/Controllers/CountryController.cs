@@ -11,7 +11,7 @@ using WIM.Core.Service;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
-using Master.Common.ValueObject.Autocomplete;
+using WIM.Core.Common.ValueObject;
 
 namespace Master.WebApi.Controllers
 {

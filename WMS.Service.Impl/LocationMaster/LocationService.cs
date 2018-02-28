@@ -6,7 +6,6 @@ using WMS.Service.LocationMaster;
 using WIM.Core.Common.Utility.Validation;
 using System.Transactions;
 using WMS.Repository.Warehouse;
-using WIM.Core.Common.Utility.Helpers;
 using System.Data.Entity.Infrastructure;
 using WMS.Common.ValueObject;
 using WMS.Repository.Impl;
@@ -38,13 +37,11 @@ namespace WMS.Service.Impl.LocationMaster
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                 }
             }
@@ -74,13 +71,11 @@ namespace WMS.Service.Impl.LocationMaster
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                        throw ex;
+                        throw new ValidationException(ErrorEnum.E4012);
                     }
                 }
             }

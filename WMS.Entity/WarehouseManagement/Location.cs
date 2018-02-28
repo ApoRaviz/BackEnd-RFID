@@ -14,9 +14,8 @@ namespace WMS.Entity.WarehouseManagement
         public string LocNo { get; set; }
         public int GroupLocIDSys { get; set; }
         public int DimensionIDSys { get; set; }
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public virtual DimensionLayout_MT DimensionLayout_MT { get; set; }
+        public byte Row { get; set; }
+        public byte Column { get; set; }
 
     }
 }
