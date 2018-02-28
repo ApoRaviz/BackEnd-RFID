@@ -12,6 +12,10 @@ namespace WIM.Core.Entity.Country
     [Table("Country_MT")]
     public class Country_MT : BaseEntity
     {
+        public Country_MT()
+        {
+
+        }
         [Key]
         public int CountryIDSys { get; set; }
         public string CountryName { get; set; }

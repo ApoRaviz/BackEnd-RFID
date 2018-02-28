@@ -7,7 +7,7 @@ using WIM.Core.Entity;
 using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Entity.CustomerManagement;
-using WIM.Core.Entity.Dimension;
+//using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.Common;

@@ -11,16 +11,16 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.ValueObject;
 
 namespace WIM.Core.Service
-{ 
+{
     public class SupplierService : WIM.Core.Service.Impl.Service, ISupplierService
     {
         public SupplierService()
         {
-        }        
+        }
 
         public IEnumerable<Supplier_MT> GetSuppliers()
         {
-            IEnumerable<Supplier_MT> supplier; 
+            IEnumerable<Supplier_MT> supplier;
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ISupplierRepository repo = new SupplierRepository(Db);
@@ -35,7 +35,7 @@ namespace WIM.Core.Service
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ISupplierRepository repo = new SupplierRepository(Db);
-                supplier = repo.GetMany(c=>c.ProjectIDSys == projectID);
+                supplier = repo.GetMany(c => c.ProjectIDSys == projectID);
             }
             return supplier;
         }
@@ -48,8 +48,8 @@ namespace WIM.Core.Service
                 ISupplierRepository repo = new SupplierRepository(Db);
                 Supplier = repo.GetByID(id);
             }
-            return Supplier;            
-        }                      
+            return Supplier;
+        }
 
         public int CreateSupplier(Supplier_MT Supplier)
         {
@@ -61,10 +61,11 @@ namespace WIM.Core.Service
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
                         Supplier.SupID = Db.ProcGetNewID("SL").Substring(0, 13);
+                        Supplier.ProjectIDSys = Identity.GetProjectIDSys();
                         repo.Insert(Supplier);
                         Db.SaveChanges();
                         scope.Complete();
-                     }
+                    }
                 }
                 catch (DbEntityValidationException e)
                 {
@@ -81,15 +82,16 @@ namespace WIM.Core.Service
         }
 
         public bool UpdateSupplier(Supplier_MT supplier)
-        {           
+        {
             using (var scope = new TransactionScope())
             {
-          
+
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
+                        supplier.ProjectIDSys = Identity.GetProjectIDSys();
                         repo.Update(supplier);
                         Db.SaveChanges();
                         scope.Complete();
@@ -118,7 +120,7 @@ namespace WIM.Core.Service
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         ISupplierRepository repo = new SupplierRepository(Db);
-                        repo.Delete(id);
+                        repo.Delete(x => x.SupIDSys == id && x.ProjectIDSys == Identity.GetProjectIDSys());
                         Db.SaveChanges();
                         scope.Complete();
                     }

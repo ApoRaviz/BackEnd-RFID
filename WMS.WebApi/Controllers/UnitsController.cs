@@ -7,7 +7,6 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.ValueObject;
 using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
 using WMS.Service;
@@ -117,6 +116,7 @@ namespace WMS.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
+                unit.ProjectIDSys = User.Identity.GetProjectIDSys();
                 bool isUpated = UnitService.UpdateUnit(unit);
                 response.SetData(isUpated);
             }

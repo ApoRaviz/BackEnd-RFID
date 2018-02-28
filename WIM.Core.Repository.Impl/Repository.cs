@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using System.Dynamic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Claims;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Common.Utility.UtilityHelpers;
@@ -16,6 +12,7 @@ using WIM.Core.Context;
 using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Entity.Logs;
+using System.Threading.Tasks;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -195,6 +192,13 @@ namespace WIM.Core.Repository.Impl
             Delete(entityToDelete);
         }
 
+        public void Delete(Func<TEntity, Boolean> where)
+        {
+            IQueryable<TEntity> objects = DbSet.Where<TEntity>(where).AsQueryable();
+            foreach (TEntity obj in objects)
+                DbSet.Remove(obj);
+        }
+
         public void Delete(TEntity entityToDelete)
         {
             Type typeEntityToUpdate = entityToDelete.GetType();
@@ -223,13 +227,6 @@ namespace WIM.Core.Repository.Impl
         public IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where)
         {
             return DbSet.Where(where).AsQueryable();
-        }
-
-        public void Delete(Func<TEntity, Boolean> where)
-        {
-            IQueryable<TEntity> objects = DbSet.Where<TEntity>(where).AsQueryable();
-            foreach (TEntity obj in objects)
-                DbSet.Remove(obj);
         }
 
         public IQueryable<TEntity> GetWithInclude(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate, params string[] include)
