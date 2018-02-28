@@ -12,6 +12,5 @@ namespace Fuji.Common.ValueObject
         public string ItemCode { get; set; }
         public string LocationID { get; set; }
         public List<string> ItemGroups { get; set; }
-        public string UserUpdate { get; set; }
     }
 }

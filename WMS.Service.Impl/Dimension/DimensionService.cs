@@ -73,7 +73,7 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
 
@@ -99,23 +99,12 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException e)
                     {
-                        HandleValidationException(e);
+                        throw new ValidationException(e);
                     }
                     scope.Complete();
                 }
             }
             return updateFlag;
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
-            }
         }
 
         public List<DimensionLayout_MT> GetBlock()

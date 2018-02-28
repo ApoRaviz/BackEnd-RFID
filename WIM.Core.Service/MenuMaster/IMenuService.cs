@@ -15,6 +15,7 @@ namespace WIM.Core.Service
         IEnumerable<MenuDto> GetMenuDto();
         IEnumerable<MenuDto> GetMenuDto(int projectIDSys);
         IEnumerable<MenuDto> GetMenuDtoNotHave(int projectIDSys);
+        IEnumerable<AutocompleteMenuDto> AutocompleteMenu(string term);
         Menu_MT GetMenuByMenuIDSys(int id);
         IEnumerable<MenuDto> GetMenuByMenuParentID(int id);
         int CreateMenu(MenuDto Menu, int projectID,byte sort);

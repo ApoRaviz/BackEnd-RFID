@@ -73,6 +73,7 @@ namespace Master.WebApi.Controllers
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
+                IsAdmin = User.IsSysAdmin(),
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
         }
@@ -182,6 +183,8 @@ namespace Master.WebApi.Controllers
                 Dictionary<string, string> Json = new Dictionary<string, string>();
                 User users = new UserService().GetUserByUserID(User.Identity.GetUserId());
 
+
+
                 if (OTPClaimBinding.OTP.Equals(users.KeyOTP) && DateTime.Now.AddMinutes(-2) < users.KeyOTPDate)
                 {
                     ApplicationUser user = await UserManager.FindByIdAsync(users.UserID);
@@ -205,18 +208,19 @@ namespace Master.WebApi.Controllers
                     Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                     Json.Add("status", "200");
                 }
-                else if (DateTime.Now.AddMinutes(-2) > users.KeyOTPDate)
-                {
-
-                    Json.Add("message", "OTP Expires");
-                    Json.Add("status", "4011");
-                }
                 else if (!OTPClaimBinding.OTP.Equals(users.KeyOTP))
                 {
 
                     Json.Add("message", "OTP Invalid");
                     Json.Add("status", "4012");
                 }
+                else if (DateTime.Now.AddMinutes(-2) > users.KeyOTPDate)
+                {
+
+                    Json.Add("message", "OTP Expires");
+                    Json.Add("status", "4011");
+                }
+                
 
                 response.SetData(Json);
             }
@@ -229,7 +233,7 @@ namespace Master.WebApi.Controllers
         }
 
 
-
+        [Authorize]
         [HttpPost]
         [Route("renewtoken")]
         public async Task<HttpResponseMessage> ReTokenAsy([FromBody]ParamReToken param)
@@ -456,6 +460,7 @@ namespace Master.WebApi.Controllers
             return Ok();
         }
 
+        //# Oil Comment
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)

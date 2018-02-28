@@ -57,6 +57,7 @@
     <Compile Include="IsuzuInboundGroup.cs" />
     <Compile Include="IsuzuReportHelper.cs" />
     <Compile Include="IsuzuStatus.cs" />
+    <Compile Include="IsuzuTagReport.cs" />
     <Compile Include="ParameterSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\Isuzu.Entity\Isuzu.Entity.csproj">
       <Project>{0d9037c9-aa89-4342-80eb-b7e394ad40fd}</Project>
       <Name>Isuzu.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -59,7 +59,11 @@
     <Compile Include="CustomerMaster\ICustomerService.cs" />
     <Compile Include="EmployeeMaster\IDepartmentService.cs" />
     <Compile Include="EmployeeMaster\IEmployeeService.cs" />
+    <Compile Include="EmployeeMaster\IHistoryWarningService.cs" />
     <Compile Include="EmployeeMaster\IPositionService.cs" />
+    <Compile Include="EmployeeMaster\IProbationService.cs" />
+    <Compile Include="EmployeeMaster\IResignService.cs" />
+    <Compile Include="FileManagement\IFileService.cs" />
     <Compile Include="HeadReportControl\IHeadReportControlService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="LabelControl\ILabelControlService.cs" />
@@ -67,6 +71,8 @@
     <Compile Include="MenuProjectMapping\IMenuProjectMappingService.cs" />
     <Compile Include="ModuleMaster\ISubModuleService.cs" />
     <Compile Include="ModuleMaster\IModuleService.cs" />
+    <Compile Include="PermissionGroups\IPermissionGroupApiService.cs" />
+    <Compile Include="PermissionGroups\IPermissionGroupService.cs" />
     <Compile Include="PermissionMaster\IPermissionService.cs" />
     <Compile Include="PersonMaster\IPersonService.cs" />
     <Compile Include="ProjectMaster\IProjectService.cs" />
@@ -74,6 +80,7 @@
     <Compile Include="RoleMaster\IRoleService.cs" />
     <Compile Include="StatusManagement\IStatusService.cs" />
     <Compile Include="SupplierMaster\ISupplierService.cs" />
+    <Compile Include="Common\ICommonService.cs" />
     <Compile Include="UserMaster\IUserService.cs" />
     <Compile Include="UserRole\IUserRoleService.cs" />
   </ItemGroup>
@@ -85,6 +92,10 @@
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52D8BFB8-8342-4323-BB58-B867D7D01E8A}</Project>
+      <Name>WIM.Core.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
@@ -99,5 +110,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,6 +20,8 @@ namespace WIM.Core.Security.Providers
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
+            string x = context.Parameters["AuthType"];
+            context.OwinContext.Set("AuthType", x);
             context.Validated();
             return Task.FromResult<object>(null);
         }
@@ -37,15 +39,43 @@ namespace WIM.Core.Security.Providers
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
+            var typeAuth = context.OwinContext.Get<string>("AuthType");
+
+
+            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
+            oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
+            switch (typeAuth)
+            {
+                case "TypeA":
+
+                    break;
+                case "TypeB":
+                    var projectIDSys = HttpContext.Current.Request["ProjectIDSys"] + "";
+
+                    if (String.IsNullOrEmpty(projectIDSys))
+                    {
+                        context.SetError("invalid_grant", "The project id not access.");
+                        return;
+                    }
+                    string roleID = ApplicationUserManager.GetRoleID(projectIDSys, user);
+
+                    oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
+                    oAuthIdentity.AddClaim(new Claim("ProjectIDSys", projectIDSys.ToString()));
+                    oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user, roleID));
+                    
+                    break;
+                default:
+                    context.SetError("invalid_grant", "The AuthType not match.");
+                    return;
+            }
+            oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
             //if(ApplicationUserManager.PasswordHistoryOver3Month(user.Id))
             //{
             //    context.SetError("password_expire", "Your current password is over 3 month,Please change your password.");
             //    return;
             //}
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
-            oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
-            oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
-           
+
+
             var ticket = new AuthenticationTicket(oAuthIdentity, null);
             
             context.Validated(ticket);

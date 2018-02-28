@@ -20,5 +20,15 @@ namespace WIM.Core.Repository.Impl
             Db = context;
         }
 
+        public int GetMaxEMID(int? DepIDSys)
+        {
+            var maxWord = (from i in Db.Employee_MT
+                         where i.DepIDSys == DepIDSys
+                         select i.EmID).ToList();
+            var max = maxWord.Select(x => int.Parse(x)).Max();
+            return max;
+
+        }
+
     }
 }

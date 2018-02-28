@@ -27,10 +27,12 @@ namespace Isuzu.Service.Impl
     public class InboundsController : ApiController
     {
         private IInboundService InboundService;
+        private string Username { get; set; }
 
         public InboundsController(IInboundService inboundService)
         {
             this.InboundService = inboundService;
+            Username = User.Identity.GetUserName() ?? "SYSTEM";
         }
 
         #region ======================== HANDY =============================
@@ -69,7 +71,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.RegisterInboundItem_HANDY(inboundItem, "SYSTEM");
+                InboundService.RegisterInboundItem_HANDY(inboundItem);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -145,7 +147,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformHolding_HANDY(inboundItemHolding, "SYSTEM");
+                InboundService.PerformHolding_HANDY(inboundItemHolding);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -164,7 +166,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformShipping_HANDY(inboundItemShipping, "SYSTEM");
+                InboundService.PerformShipping_HANDY(inboundItemShipping);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -183,7 +185,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCarton_HANDY(itemReq, "SYSTEM");
+                InboundService.PerformPackingCarton_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -202,7 +204,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCase_HANDY(itemReq, "SYSTEM");
+                InboundService.PerformPackingCase_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -250,11 +252,30 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(responseHandy);
         }
 
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/items/amountRegistered")]
+        public HttpResponseMessage GetAmountRegistered()
+        {
+            ResponseData<int> responseHandy = new ResponseData<int>();
+            try
+            {
+                int amount = InboundService.GetAmountRegistered_HANDY();
+                responseHandy.SetData(amount);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
         #endregion
 
         #region =============================== DEFAULT =================================
 
-        #endregion
+
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -265,6 +286,7 @@ namespace Isuzu.Service.Impl
             IResponseData<IEnumerable<InboundItemsHead>> respones = new ResponseData<IEnumerable<InboundItemsHead>>();
             try
             {
+                var x = InboundService.GetInboundItemByQty(10, true);
                 IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroup();
                 respones.SetData(items);
                 respones.SetStatus(HttpStatusCode.OK);
@@ -326,6 +348,30 @@ namespace Isuzu.Service.Impl
             }
             return Request.ReturnHttpResponseMessage(respones);
         }
+
+        /*[Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("itemsInvNoAsync/{invNo}")]
+        public async Task<HttpResponseMessage> GetByInvNoAnyc([FromUri]string invNo)
+        {
+            IResponseData<InboundItemsHead> respones = new ResponseData<InboundItemsHead>();
+            try
+            {
+                InboundItemsHead item = await InboundService.GetInboundGroupByInvoiceNumberAsync(invNo, true);
+                if (item != null)
+                {
+                    respones.SetData(item);
+                    respones.SetStatus(HttpStatusCode.OK);
+                }
+
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+        }*/
 
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -621,7 +667,7 @@ namespace Isuzu.Service.Impl
 
         [Authorize]
         [HttpPost]
-        [Route("deleteResonPath")]
+        [Route("deleteReasonPath")]
         public async Task<HttpResponseMessage> PostDeleteReason()
         {
             // Check if the request contains multipart/form-data.
@@ -674,7 +720,7 @@ namespace Isuzu.Service.Impl
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
-        [Route("deleteReson")]
+        [Route("deleteReason")]
         public HttpResponseMessage DeleteReason([FromBody]IsuzuDeleteReason item)
         {
 
@@ -701,5 +747,73 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("DeleteReasonByInvoice/{invNo}")]
+        public HttpResponseMessage DeleteReasonByInvoice(string invNo, [FromBody]IsuzuDeleteReason item)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+
+                if (item != null)
+                {
+
+                    bool result = InboundService.UpdateDeleteReasonByInvoice(invNo, item);
+                    response.SetData(result);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
+
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("GetRFIDInfo")]
+        public HttpResponseMessage GetRFIDInformation([FromBody]ParameterSearch query)
+        {
+            IResponseData<string> response = new ResponseData<string>();
+
+            try
+            {
+                string datas = InboundService.GetRFIDInfo(query);
+                response.SetStatus(HttpStatusCode.OK);
+                response.SetData(datas);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("GetRFIDInfoByDate")]
+        public HttpResponseMessage GetRFIDInfoByDate([FromBody]ParameterSearch query)
+        {
+            ResponseData<IEnumerable<IsuzuTagReport>> respones = new ResponseData<IEnumerable<IsuzuTagReport>>();
+            try
+            {
+                IEnumerable<IsuzuTagReport> items = InboundService.GetReportByYearRang(query);
+                respones.SetStatus(HttpStatusCode.OK);
+                respones.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+                respones.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+
+        }
+
+        #endregion
     }
 }

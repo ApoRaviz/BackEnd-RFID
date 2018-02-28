@@ -54,16 +54,23 @@
     <Compile Include="CustomerManagement\Customer_MT.cs" />
     <Compile Include="Employee\Departments.cs" />
     <Compile Include="Employee\Employee_MT.cs" />
+    <Compile Include="Employee\HistoryWarning.cs" />
     <Compile Include="Employee\Positions.cs" />
+    <Compile Include="Employee\Probation_MT.cs" />
+    <Compile Include="Employee\Resigns.cs" />
+    <Compile Include="FileManagement\File_MT.cs" />
     <Compile Include="LabelManagement\HeadReportControl.cs" />
     <Compile Include="LabelManagement\Label.cs" />
     <Compile Include="LabelManagement\LabelConfigs\LabelConfig.cs" />
     <Compile Include="LabelManagement\LabelControl.cs" />
     <Compile Include="Logs\GeneralLog.cs" />
+    <Compile Include="Common\UserLogs.cs" />
     <Compile Include="MenuManagement\ApiMenuMapping.cs" />
     <Compile Include="MenuManagement\Api_MT.cs" />
     <Compile Include="MenuManagement\MenuProjectMapping.cs" />
     <Compile Include="MenuManagement\Menu_MT.cs" />
+    <Compile Include="MenuManagement\PermissionGroup.cs" />
+    <Compile Include="MenuManagement\PermissionGroupApi.cs" />
     <Compile Include="Person\Person_MT.cs" />
     <Compile Include="Module\Module_MT.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Delivery\DeliveryCompany.cs" />
@@ -98,6 +105,7 @@
     <Compile Include="SupplierManagement\Supplier_MT.cs" />
     <Compile Include="UserManagement\User.cs" />
     <Compile Include="UserManagement\UserRole.cs" />
+    <Compile Include="View\VPerson.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

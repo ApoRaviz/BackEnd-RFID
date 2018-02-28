@@ -22,6 +22,7 @@ namespace WIM.Core.Entity.Currency
         //public string UserUpdate { get; set; }
         public int CountryIDSys { get; set; }
 
+        [ForeignKey("CountryIDSys")]
         public virtual Country_MT Country_MT { get; set; }
     }
 }

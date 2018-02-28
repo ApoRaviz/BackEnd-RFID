@@ -61,7 +61,7 @@ namespace WIM.Core.Repository.Impl
             var menu = (from i in Db.MenuProjectMapping
                         where i.ProjectIDSys == id
                         orderby i.MenuIDSysParent, i.Sort
-                        select i).Include(y => y.Menu_MT);
+                        select i).Include("Menu_MT");
            return menu;
         }
 

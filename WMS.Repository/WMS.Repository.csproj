@@ -54,15 +54,20 @@
     <Compile Include="Label\ILabelLayoutDetailRepository.cs" />
     <Compile Include="Label\ILabelLayoutHeaderRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receive\IReceiveRepository.cs" />
     <Compile Include="Report\IReportLayoutDetailRepository.cs" />
     <Compile Include="Report\IReportLayoutHeaderRepository.cs" />
+    <Compile Include="Report\IReportLayoutRepository.cs" />
     <Compile Include="UnitMaster\IUnitRepository.cs" />
     <Compile Include="UserManagement\IUserRepository.cs" />
+    <Compile Include="Warehouse\ILocationZoneRepository.cs" />
+    <Compile Include="Warehouse\ILocationGroupRepository.cs" />
     <Compile Include="Warehouse\IGroupLocationRepository.cs" />
     <Compile Include="Warehouse\IRackLayoutRepository.cs" />
     <Compile Include="Warehouse\ILocationRepository.cs" />
     <Compile Include="Warehouse\IWarehouseRepository.cs" />
     <Compile Include="Warehouse\IZoneLayoutDetailRepository.cs" />
+    <Compile Include="Warehouse\IZoneTypeRepository.cs" />
     <Compile Include="Warehouse\IZoneLayoutHeaderRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="CategoryMaster\packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Security.Principal;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.Attributes;
+using WIM.Core.Common.Utility.UtilityHelpers;
+using WIM.Core.Context;
 using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Entity.Logs;
@@ -38,6 +40,10 @@ namespace WIM.Core.Repository.Impl
         {
             return DbSet.Take(2000).ToList();
         }
+        public async Task<IEnumerable<TEntity>> GetAsync()
+        {
+            return await DbSet.Take(2000).ToListAsync();
+        }
 
         public TEntity Get(Func<TEntity, Boolean> where)
         {
@@ -48,20 +54,37 @@ namespace WIM.Core.Repository.Impl
         {
             return DbSet.ToList();
         }
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await DbSet.ToListAsync();
+        }
 
         public TEntity GetByID(params object[] id)
         {
             return DbSet.Find(id);
+        }
+        public async Task<TEntity> GetByIDAsync(params object[] id)
+        {
+            return await DbSet.FindAsync(id);
         }
 
         public TEntity GetByID(object id)
         {
             return DbSet.Find(id);
         }
+        public async Task<TEntity> GetByIDAsync(object id)
+        {
+            return await DbSet.FindAsync(id);
+        }
 
         public bool Exists(object id)
         {
-            return DbSet.Find(id) != null;
+            return DbSet.Any();
+        }
+
+        public bool Exists(Func<TEntity, Boolean> where)
+        {
+            return DbSet.Any(where);
         }
 
         public TEntity Insert(TEntity entityToInsert)
@@ -124,19 +147,23 @@ namespace WIM.Core.Repository.Impl
             }
 
             Type typeEntityForUpdate = entityForUpdate.GetType();
-            foreach (PropertyInfo prop in properties)
-            {
+
+            List<Task> tasks = new List<Task>();
+            var identName = Identity.GetUserName();
+            
+            foreach (var prop in properties)
+            { 
                 var value = prop.GetValue(entityToUpdate);
                 if (typeEntityForUpdate.GetProperty(prop.Name) != null
                     && (!prop.PropertyType.IsGenericType || Nullable.GetUnderlyingType(prop.PropertyType) != null))
-                {                    
+                {
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
                     if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
                     {
-                        GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, Identity.GetUserName()));
+                        GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, identName));
                     }
                 }
-            }
+            } 
 
             entityForUpdate.UpdateBy = Identity.GetUserName();
             entityForUpdate.UpdateAt = DateTime.Now.Date;

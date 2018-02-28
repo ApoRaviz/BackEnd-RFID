@@ -8,7 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
@@ -34,6 +34,7 @@ namespace WIM.Core.Entity.ProjectManagement
         public Nullable<int> ModuleIDSys { get; set; }
         public string ProjectStatus { get; set; }
         public string Config { get; private set; }
+        public bool IsOTP { get; set; }
 
         [NotMapped]
         public ProjectConfig ProjectConfig
@@ -58,7 +59,9 @@ namespace WIM.Core.Entity.ProjectManagement
 
         public virtual ICollection<Role> Roles { get; set; }
 
+        [ForeignKey("CusIDSys")]
         public virtual Customer_MT Customer_MT { get; set; }
+
 
     }       
 }

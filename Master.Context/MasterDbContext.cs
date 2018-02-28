@@ -10,7 +10,7 @@ namespace Master.Context
     public class MasterDbContext : DbContext
     {
 
-        public MasterDbContext() : base("name=DefaultConnection")
+        public MasterDbContext() : base("name=YUT_CORE")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

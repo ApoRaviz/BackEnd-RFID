@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Security;
 using WIM.Core.Security.Entity;
 
@@ -114,33 +114,18 @@ public static class RBAC_ExtendedMethods_4_Principal
             string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
           .Select(c => c.Value).SingleOrDefault();
 
+            if (OTPCONFIRM != "True")
+            {
+                return false;
+            }
             string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
 
-            string fullUrl = _request.Method + _request.RequestUri.PathAndQuery;
+            string fullUrl = _request.Method + reqUrl;
             fullUrl = fullUrl.Replace("wimapi/", "");
             string[] fullUrlplit = fullUrl.Split('?');
             reqUrl = fullUrlplit[0];
-
-            /*string[] urlIgnore = {
-                    "GET/api/v1/account/users/mobile/otp",
-                    "POST/api/v1/account/users/mobile/otp",
-                    "POST/api/v1/account/renewtoken",
-                    "GET/api/v1/MenuProjectMappings/parent/1",
-                    "GET/api/v1/Users/customers",
-                    "GET/api/v1/customers/projects",
-                    "POST/api/v1/account/assignProject",
-                    "GET/api/v1/Persons",
-                    "GET/api/v1/helpers/tableColumnsDescription",
-                    "GET/api/v1/Projects/select",
-                    "POST/api/v1/account/Logout",
-                    "POST/api/v1/Account/ChangePassword"
-
-                };
-            string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
-
-            string[] urlIgnoreChkOTP = {
-                    "POST/api/v1/account/assignProject"
-                };
+            string UpperReqUrl = reqUrl.ToUpper();
+           
 
             if (reqUrl.Last() == '/')
             {
@@ -157,15 +142,9 @@ public static class RBAC_ExtendedMethods_4_Principal
                 //reqUrl = reqUrl.Substring(indexFirstslash, indexapiv1 - indexFirstslash);
                 reqUrl = first + second;
             }
-            if (urlIgnore.Contains(reqUrl) || reqUrl.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrl)))
-            {
-                return true;
-            }*/
 
-            if (OTPCONFIRM != "True")
-            {
-                return false;
-            }
+
+           
 
             var claims = (from c in ci.Claims
                           where c.Type == "UrlPermission"
@@ -177,17 +156,18 @@ public static class RBAC_ExtendedMethods_4_Principal
 
             //url request
             string[] reqUrlSplit = reqUrl.Split('/');
-            if (reqUrlSplit.Length >= 4)
+            string[] upperReqUrlSplit = UpperReqUrl.Split('/');
+            if (upperReqUrlSplit.Length >= 4)
             {
                 foreach (var c in claims)
                 {
                     //url from base
                     string[] permissions = c.Value.Split('/');
-                    string permission = permissions[0] + ApiHashTableHelper.apiTable[permissions[1]];
+                    string permission = permissions[0] + ApiHashTableHelper.apiTable[permissions[1]].ToString().ToUpper();
                     string[] permissUrlSplit = permission.Split('/');
 
                     string urlVerify = "";
-                    if ((permissUrlSplit[0] == reqUrlSplit[0] && permissUrlSplit[3] == reqUrlSplit[3] && permissUrlSplit.Length == reqUrlSplit.Length))
+                    if ((permissUrlSplit[0] == upperReqUrlSplit[0] && permissUrlSplit[3] == upperReqUrlSplit[3] && permissUrlSplit.Length == upperReqUrlSplit.Length))
                     //|| (reqUrlSplit[0]=="POST" && permissUrlSplit[3] == reqUrlSplit[3]))
                     {
                         bool isUrlNotEqual = false;
@@ -201,10 +181,8 @@ public static class RBAC_ExtendedMethods_4_Principal
 
                             //bool isReqUrlNum = int.TryParse(reqUrlSplit[i], out int reqUrlNum);
                             //bool isPermisUrlNum = int.TryParse(reqUrlSplit[i], out int permissUrlNum);
-                            string permiss = permissUrlSplit[i].ToUpper();
-                            string req = reqUrlSplit[i].ToUpper();
 
-                            if ((/*permissUrlSplit[i] == reqUrlSplit[i]*/ permiss == req)
+                            if ((permissUrlSplit[i] == upperReqUrlSplit[i])
                                 || (permissUrlSplit[i] == "@")
                                 || (/*isReqUrlNum && */permissUrlSplit[i] == "1"))
                             {
@@ -334,10 +312,12 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "GET/api/v1/Projects/select",
                     "POST/api/v1/account/Logout",
                     "POST/api/v1/Account/ChangePassword",
+                    "GET/api/v1/Roles/user",
                     //Menu Side Url
                     "GET/api/v1/MenuProjectMappings/menu/",
                     //Url Ignore ChkOTP
-                    "POST/api/v1/account/assignProject"
+                    "POST/api/v1/account/assignProject",
+                    "GET/api/v1/demo/func7"
                 };
         string reqUrlnew = _request.Method + StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
         if (_request.RequestUri.PathAndQuery.Last() == '/')
@@ -345,13 +325,13 @@ public static class RBAC_ExtendedMethods_4_Principal
             reqUrlnew = _request.RequestUri.PathAndQuery.Substring(0, _request.RequestUri.PathAndQuery.Length - 1);
 
         }
-
+        string project = "GET/api/v1/Projects";
         string menuSideUrl = "GET/api/v1/MenuProjectMappings/menu/";
         string urlIgnoreChkOTP = "POST/api/v1/account/assignProject";
         var ci = _principal.Identity as ClaimsIdentity;
         string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
           .Select(c => c.Value).SingleOrDefault();
-        return urlIgnore.Contains(reqUrlnew) || reqUrlnew.Contains(menuSideUrl) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrlnew));
+        return urlIgnore.Contains(reqUrlnew) || reqUrlnew.Contains(menuSideUrl) || reqUrlnew.Contains(project) || (OTPCONFIRM == "True" && urlIgnoreChkOTP.Contains(reqUrlnew));
     }
 
 

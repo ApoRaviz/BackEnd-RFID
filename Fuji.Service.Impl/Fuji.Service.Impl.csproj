@@ -128,9 +128,17 @@
       <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
       <Name>WIM.Core.Common.Utility</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
+      <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
+      <Name>WIM.Core.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
       <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
       <Name>WIM.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
+      <Project>{C883F41B-E3BF-4E82-B7B2-55351566C55E}</Project>
+      <Name>WIM.Core.Context</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
       <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>

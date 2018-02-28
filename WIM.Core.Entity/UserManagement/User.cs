@@ -31,6 +31,7 @@ namespace WIM.Core.Entity.UserManagement
         public int AccessFailedCount { get; set; }
         public bool IsSysAdmin { get; set; }
         public string KeyAccess { get; set; }
+        public int PersonIDSys { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public Nullable<System.DateTime> KeyAccessDate { get; set; }
@@ -44,6 +45,8 @@ namespace WIM.Core.Entity.UserManagement
 
         public virtual ICollection<UserRoles> UserRoles { get; set; }
 
-        public int PersonIDSys { get; set; }
+        [ForeignKey("PersonIDSys")]
+        public virtual Person_MT Person_MT { get; set; }
+        
     }
 }

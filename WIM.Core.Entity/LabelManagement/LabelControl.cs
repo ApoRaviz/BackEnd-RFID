@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.Utility.Attributes;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
 
 namespace WIM.Core.Entity.LabelManagement
@@ -17,6 +17,7 @@ namespace WIM.Core.Entity.LabelManagement
     {
         [Key]
         public int LabelIDSys { get; set; }
+        [ForeignKeyCustom("Project_MT")]
         public int ProjectIDSys { get; set; }        
         public string Lang { get; set; }
         [GeneralLog]

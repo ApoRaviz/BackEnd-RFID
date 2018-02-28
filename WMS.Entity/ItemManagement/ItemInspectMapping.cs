@@ -18,7 +18,6 @@ namespace WMS.Entity.ItemManagement
         public int ItemIDSys { get; set; }
         public int InspectIDSys { get; set; }
 
-
         public virtual Inspect_MT Inspect_MT { get; set; }
         public virtual Item_MT Item_MT { get; set; }
     }

@@ -9,7 +9,7 @@ namespace WIM.Core.Security.Context
     public class SecurityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
     {
         public SecurityDbContext()
-            : base("CORE")
+            : base("YUT_CORE")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.RoleAndPermission;
 
 namespace WIM.Core.Service
@@ -25,5 +26,7 @@ namespace WIM.Core.Service
         string CreateRolePermission(string RoleID , List<PermissionTree> tree);
         bool DeleteRolePermission(string PermissionId, string RoleId);
         List<PermissionTree> GetPermissionTree(int projectid);
+        bool CreatePermissionByGroup(string GroupIDSys, MenuProjectMapping menu);
+        bool DeletePermissionByGroup(string GroupIDSys, MenuProjectMapping menu);
     }
 }

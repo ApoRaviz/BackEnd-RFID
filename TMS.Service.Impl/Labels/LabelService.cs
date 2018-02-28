@@ -12,7 +12,8 @@ using System.Collections.Specialized;
 using System.Net;
 using Newtonsoft.Json;
 using System.Text;
-using WIM.Core.Common;
+using WIM.Core.Service.Impl;
+using WIM.Core.Service;
 using System;
 
 namespace TMS.Service.Impl.Labels

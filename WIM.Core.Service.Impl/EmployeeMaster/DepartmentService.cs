@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Employee;
@@ -61,12 +61,12 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return Departmentnew.DepIDSys;
@@ -89,12 +89,12 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return true;
@@ -117,12 +117,12 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 return true;
@@ -148,21 +148,10 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4017));
+                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
                     throw ex;
                 }
                 return true;
-            }
-        }
-
-        public void HandleValidationException(DbEntityValidationException ex)
-        {
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
-                }
             }
         }
     }

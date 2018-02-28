@@ -54,11 +54,14 @@
   <ItemGroup>
     <Compile Include="ApiMaster\ApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\ApiMTRepository.cs" />
+    <Compile Include="ApiMaster\PermissionGroupApiRepository.cs" />
+    <Compile Include="ApiMaster\PermissionGroupRepository.cs" />
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Currency\CurrencyRepository.cs" />
     <Compile Include="CustomerAndProject\CustomerRepository.cs" />
     <Compile Include="CustomerAndProject\ModuleRepository.cs" />
     <Compile Include="CustomerAndProject\ProjectRepository.cs" />
+    <Compile Include="FileManagement\FileRepository.cs" />
     <Compile Include="HeadReportControl\HeadReportControlRepository.cs" />
     <Compile Include="LabelControl\LabelControlRepository.cs" />
     <Compile Include="MenuAndPermission\MenuProjectMappingRepository.cs" />
@@ -66,8 +69,11 @@
     <Compile Include="MenuAndPermission\PermissionRepository.cs" />
     <Compile Include="Personalize\DepartmentRepository.cs" />
     <Compile Include="Personalize\EmployeeRepository.cs" />
+    <Compile Include="Personalize\HistoryWarningRepository.cs" />
     <Compile Include="Personalize\PersonRepository.cs" />
     <Compile Include="Personalize\PositionRepository.cs" />
+    <Compile Include="Personalize\ProbationRepository.cs" />
+    <Compile Include="Personalize\ResignRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="RoleAndUser\RoleRepository.cs" />
@@ -77,6 +83,7 @@
     <Compile Include="StatusManagement\StatusSubModuleRepository.cs" />
     <Compile Include="StatusManagement\SubModuleRepository.cs" />
     <Compile Include="Supplier\SupplierRepository.cs" />
+    <Compile Include="Common\CommonRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
@@ -111,10 +118,15 @@
       <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
       <Name>WIM.Core.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
+      <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
+      <Name>WMS.Context</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Routing;
 using WIM.Core.Common;
+using WIM.Core.Entity.Common;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace Isuzu.WebApi.Controllers
 {

@@ -7,6 +7,8 @@ using Unity.WebApi;
 using HRMS.Service.LeaveManagement;
 using HRMS.Service.Impl.LeaveManagement;
 using WIM.Core.Common;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace HRMS.WebApi
 {

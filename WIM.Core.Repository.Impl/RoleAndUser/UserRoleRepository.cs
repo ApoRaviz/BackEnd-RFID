@@ -34,8 +34,13 @@ namespace WIM.Core.Repository.Impl
                                               Name = b.Name,
                                               Description = b.Description,
                                               IsSysAdmin = b.IsSysAdmin,
-                                              Project_MT = b.Project_MT
-                                          });
+                                              Project_MT = new ProjectDto()
+                                              {
+                                                  CusIDSys = b.Project_MT.CusIDSys,
+                                                  ProjectIDSys = b.Project_MT.ProjectIDSys,
+                                                  ProjectName = b.Project_MT.ProjectName
+                                              }
+        });
             return RoleUser;
         }
         

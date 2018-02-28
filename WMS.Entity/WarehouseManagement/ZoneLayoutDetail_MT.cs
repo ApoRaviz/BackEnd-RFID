@@ -23,12 +23,15 @@ namespace WMS.Entity.WarehouseManagement
         public int ZoneID { get; set; }
         public Nullable<int> ZoneParentID { get; set; }
         public string Name { get; set; }
+        public string GroupName { get; set; }
         public Nullable<int> Left { get; set; }
         public Nullable<int> Top { get; set; }
         public Nullable<int> Width { get; set; }
         public Nullable<int> Length { get; set; }
         public string Use { get; set; }
+        public Nullable<int> Type { get; set; }
 
+        [ForeignKey("ZoneIDSys")]
         public virtual ZoneLayoutHeader_MT ZoneLayoutHeader_MT { get; set; }
     }
 }

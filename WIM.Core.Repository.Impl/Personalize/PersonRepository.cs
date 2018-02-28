@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using WIM.Core.Context;
 using WIM.Core.Entity.Person;
+using WIM.Core.Entity.View;
 using WIM.Core.Repository;
 
 namespace WIM.Core.Repository.Impl
@@ -16,14 +17,6 @@ namespace WIM.Core.Repository.Impl
             Db = context;
         }
 
-        // JobComment
-        /*public IEnumerable<Person_MT> Get()
-        {
-            var person = from c in Db.Person_MT
-                         select c;
-            return person.ToList();
-        }*/
-
         public Person_MT GetByUserID(string id)
         {
             var person = (from i in Db.Person_MT
@@ -33,6 +26,13 @@ namespace WIM.Core.Repository.Impl
                                .Contains(i.PersonIDSys)
                           select i).SingleOrDefault();
             return person;
+        }
+
+        public IEnumerable<VPersons> GetList()
+        {
+            var persons = from i in Db.VPersons
+                          select i;
+            return persons.ToList();
         }
 
     }

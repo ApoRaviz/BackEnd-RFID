@@ -65,10 +65,12 @@ namespace WMS.WebApi.Controllers
         [Route("{ZoneIDSys}")]
         public HttpResponseMessage Get(int ZoneIDSys)
         {
-            IResponseData<ZoneLayoutHeader_MT> response = new ResponseData<ZoneLayoutHeader_MT>();
+            IResponseData<object> response = new ResponseData<object>();
             try
             {
                 ZoneLayoutHeader_MT zone = ZoneService.GetZoneLayoutByZoneIDSys(ZoneIDSys, "ZoneLayoutDetail_MT");
+              
+
                 response.SetData(zone);
             }
             catch (ValidationException ex)
@@ -117,6 +119,8 @@ namespace WMS.WebApi.Controllers
 
             return Request.ReturnHttpResponseMessage(response);
         }
+
+        #region Rack
 
         [HttpPost]
         [Route("CreateRack")]
@@ -171,5 +175,105 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+        #endregion
+
+        #region ZoneType
+        [HttpGet]
+        [Route("GetAllZoneType")]
+        public HttpResponseMessage GetAllZonType()
+        {
+            ResponseData<IEnumerable<ZoneType>> response = new ResponseData<IEnumerable<ZoneType>>();
+            try
+            {
+                IEnumerable<ZoneType> detail = ZoneService.GetAllZoneType();
+                if (detail != null)
+                    detail = detail.OrderByDescending(d => d.Priority);
+                response.SetData(detail);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("GetZoneTypeByID/{ZoneTypeIDSys}")]
+        public HttpResponseMessage GetZonTypeByZoneTypeIDSys(int ZoneTypeIDSys)
+        {
+            ResponseData<ZoneType> response = new ResponseData<ZoneType>();
+            try
+            {
+                ZoneType detail = ZoneService.GetZoneTypeByID(ZoneTypeIDSys);
+                response.SetData(detail);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("CreateZoneType")]
+        public HttpResponseMessage CreateZoneType([FromBody]ZoneType data)
+        {
+            ResponseData<int?> response = new ResponseData<int?>();
+            try
+            {
+                int? retID = ZoneService.CreateZoneType(data);
+                response.SetData(retID);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPut]
+        [Route("UpdateZoneTypeByID/{ZoneTypeIDSys}")]
+        public HttpResponseMessage UpdateZoneTypeByID(int ZoneTypeIDSys, [FromBody] ZoneType data)
+        {
+            ResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpdate =  ZoneService.UpdateZoneType(ZoneTypeIDSys,data);
+                response.SetData(isUpdate);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+
+        [HttpDelete]
+        [Route("RemoveZoneTypeByID/{ZoneTypeIDSys}")]
+        public HttpResponseMessage RemoveZonTypeByZoneTypeIDSys(int ZoneTypeIDSys)
+        {
+            ResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                 ZoneService.RemoveZoneTypeByID(ZoneTypeIDSys);
+                response.SetData(true);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+        #endregion
+
+      
+
     }
 }

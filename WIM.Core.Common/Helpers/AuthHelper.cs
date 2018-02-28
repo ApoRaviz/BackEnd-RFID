@@ -12,6 +12,8 @@ namespace WIM.Core.Common.Helpers
     {
         public static IIdentity GetIdentity()
         {
+            if (HttpContext.Current == null)
+                return null;
             return HttpContext.Current.GetOwinContext().Authentication.User.Identity;
         }
     }

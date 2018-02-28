@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Transactions;
 using System.Web;
-using WIM.Core.Common.Utility.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
@@ -62,13 +62,13 @@ namespace WIM.Core.Service.Impl
                     catch (DbEntityValidationException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                     catch (DbUpdateException x)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw x;
                     }
                 }
@@ -97,13 +97,13 @@ namespace WIM.Core.Service.Impl
                     catch (DbEntityValidationException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw ex;
                     }
                     catch (DbUpdateException x)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
                         throw x;
                     }
                 }
