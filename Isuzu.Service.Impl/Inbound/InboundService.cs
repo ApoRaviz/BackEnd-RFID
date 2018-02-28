@@ -381,7 +381,6 @@ namespace Isuzu.Service.Impl.Inbound
                         item.PackCartonDate = DateTime.Now;
                         DetailRepo.Update(item);
                     }
-
                     Db.SaveChanges();
                     scope.Complete();
                 }
