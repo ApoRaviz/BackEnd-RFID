@@ -512,8 +512,6 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItems>() { };
                     }
                 }
-
-
                 return items;
             }
 
