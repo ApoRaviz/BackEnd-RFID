@@ -44,7 +44,6 @@ namespace WMS.Context
         public DbSet<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
         public DbSet<ZoneType> ZoneType { get; set; }
-        public DbSet<Location> Location { get; set; }
         public DbSet<GroupLocation> GroupLocation { get; set; }
         public DbSet<LocationType> LocationType { get; set; }
 

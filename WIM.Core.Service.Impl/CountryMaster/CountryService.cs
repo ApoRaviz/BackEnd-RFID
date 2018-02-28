@@ -16,8 +16,8 @@ using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
-using Master.Common.ValueObject.Autocomplete;
 using WIM.Core.Common.Utility.UtilityHelpers;
+using WIM.Core.Common.ValueObject;
 
 namespace WIM.Core.Service.Impl
 {

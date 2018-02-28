@@ -12,6 +12,7 @@ using WIM.Core.Context;
 using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Entity.Logs;
+using System.Threading.Tasks;
 
 namespace WIM.Core.Repository.Impl
 {

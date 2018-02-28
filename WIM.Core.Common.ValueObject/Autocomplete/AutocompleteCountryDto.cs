@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Master.Common.ValueObject.Autocomplete
+namespace WIM.Core.Common.ValueObject
 {
     public class AutocompleteCountryDto
     {

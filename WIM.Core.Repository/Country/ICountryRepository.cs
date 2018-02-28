@@ -1,5 +1,5 @@
-﻿using Master.Common.ValueObject.Autocomplete;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.Country;
 
 namespace WIM.Core.Repository
