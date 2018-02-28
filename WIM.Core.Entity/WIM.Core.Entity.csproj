@@ -48,11 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\City_MT.cs" />
+    <Compile Include="Address\Province_MT.cs" />
+    <Compile Include="Address\SubCity_MT.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Country\Country_MT.cs" />
     <Compile Include="Currency\CurrencyUnit.cs" />
     <Compile Include="CustomerManagement\Customer_MT.cs" />
-    <Compile Include="Dimension\DimensionLayout_MT.cs" />
     <Compile Include="Employee\Departments.cs" />
     <Compile Include="Employee\Employee_MT.cs" />
     <Compile Include="Employee\HistoryWarning.cs" />
@@ -93,7 +95,7 @@
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\Receiving.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\ReceivingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Service.cs" />
-    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\DateTimeToReceiveData.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Receiving\DateTimeToReceive.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\SendingDataType.cs" />
     <Compile Include="ProjectManagement\Project_MT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

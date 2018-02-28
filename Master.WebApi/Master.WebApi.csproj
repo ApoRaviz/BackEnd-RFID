@@ -19,10 +19,14 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
-    <IISExpressSSLPort>443</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -38,7 +42,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -340,14 +343,11 @@
     <Compile Include="Controllers\ApiMenuMappingController.cs" />
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\PermissionGroupController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\AddressController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
-    <Compile Include="Controllers\ProbationController.cs" />
-    <Compile Include="Controllers\ResignController.cs" />
-    <Compile Include="Controllers\FileController.cs" />
-    <Compile Include="Controllers\WarningController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HelpersController.cs" />
@@ -358,12 +358,12 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
+    <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\HeadReportControlController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\SubModuleController.cs" />
-    <Compile Include="Controllers\SuppliersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="DataSet\MasterDataSet.Designer.cs">
@@ -374,7 +374,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Firebase\Firebase.cs" />
     <Compile Include="Providers\Firebase\FirebaseModel.cs" />
@@ -448,9 +447,9 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Report\Report1.rdlc" />
-    <None Include="Properties\PublishProfiles\master-debug.pubxml" />
-    <None Include="Properties\PublishProfiles\master-release.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -546,6 +545,14 @@
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
+      <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
+      <Name>WIM.Core.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
       <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
       <Name>WIM.Core.Security.Context</Name>
@@ -591,20 +598,15 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
+          <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>80</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/master-backend</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/master-backend</IISAppRootUrl>
+          <IISUrl>http://localhost/master-backend/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-          <servers defaultServer="">
-            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost/master" workingDir="" />
-          </servers>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

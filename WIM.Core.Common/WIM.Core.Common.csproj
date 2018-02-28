@@ -117,7 +117,7 @@
       <Name>WIM.Core.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
-      <Project>{A23C70B6-A16E-4E68-8741-498ABC3F3538}</Project>
+      <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
       <Name>WMS.Context</Name>
     </ProjectReference>
   </ItemGroup>
