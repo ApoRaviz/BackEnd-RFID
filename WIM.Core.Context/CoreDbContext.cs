@@ -21,8 +21,8 @@ using WIM.Core.Entity.Status;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.View;
-using WIM.Core.Entity.Address;
 using WIM.Core.Entity.FileManagement;
+using WIM.Core.Entity.Address;
 
 namespace WIM.Core.Context
 {

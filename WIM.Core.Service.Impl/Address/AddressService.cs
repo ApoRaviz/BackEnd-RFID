@@ -17,23 +17,9 @@ namespace WIM.Core.Service.Impl.StatusManagement
         {
             using (CoreDbContext db = new CoreDbContext())
             {
-                try
-                {
-                    ISubCityRepository repoGetAddress = new SubCityRepository(db);
-                    return repoGetAddress.GetDto();
-                }
+                ISubCityRepository repoGetAddress = new SubCityRepository(db);
+                return repoGetAddress.GetDto();
 
-                catch (DbEntityValidationException)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
-
-                catch (DbUpdateException)
-                {
-                    ValidationException ex = new ValidationException(Helper.GetHandleErrorMessageException(ErrorCode.E4012));
-                    throw ex;
-                }
             }
 
         }

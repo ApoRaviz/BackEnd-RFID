@@ -124,10 +124,10 @@ namespace Master.WebApi.Controllers
                 {
                     foreach (var labelConfig in labelControl.LabelConfig)
                     {
-                        if (HashidsHelper.DecodeHex(hrl.Key) == labelConfig.Key)
-                        {
-                            hrl.Value = labelConfig.Value;
-                        }
+                        //if (HashidsHelper.DecodeHex(hrl.Key) == labelConfig.Key)
+                        //{
+                        //    hrl.Value = labelConfig.Value;
+                        //}
                     }
                 }
 
@@ -187,10 +187,10 @@ namespace Master.WebApi.Controllers
                 //}
 
                 //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
-                newLabels = (from p in headReport.HeadReportLabels
-                             from r in labelControl.LabelConfig
-                             where r.Key == HashidsHelper.DecodeHex(p.Key)
-                             select r.Value).ToList();
+                //newLabels = (from p in headReport.HeadReportLabels
+                //             from r in labelControl.LabelConfig
+                //             where r.Key == HashidsHelper.DecodeHex(p.Key)
+                //             select r.Value).ToList();
 
 
                 //newLabels = headReport.HeadReportLabels.Select(h => h.Value).ToList();
