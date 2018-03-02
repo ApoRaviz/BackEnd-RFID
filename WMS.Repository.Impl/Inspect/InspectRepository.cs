@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Context;
-using WIM.Core.Entity.Dimension;
-using WIM.Core.Repository;
-using WIM.Core.Repository.Impl;
-using WMS.Repository;
+﻿using WIM.Core.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.InspectionManagement;
-using System.Security.Principal;
 
 namespace WMS.Repository.Impl
 {

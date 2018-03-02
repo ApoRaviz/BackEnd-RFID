@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Context;
-using WIM.Core.Entity.Dimension;
 using WMS.Context;
+using WMS.Entity.Dimension;
 using WMS.Repository;
 using WMS.Repository.Impl;
 

@@ -9,6 +9,7 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Receiving
     public class Duration
     {
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime EndTime { get ; set; }
     }
+    
 }

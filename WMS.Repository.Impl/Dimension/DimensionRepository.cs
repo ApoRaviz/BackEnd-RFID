@@ -6,12 +6,12 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
-using WIM.Core.Entity.Dimension;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WMS.Repository;
 using WMS.Context;
 using System.Security.Principal;
+using WMS.Entity.Dimension;
 
 namespace WMS.Repository.Impl
 {

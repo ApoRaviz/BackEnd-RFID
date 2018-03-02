@@ -63,7 +63,9 @@
     <Compile Include="UserManagement\IUserRepository.cs" />
     <Compile Include="Warehouse\ILocationZoneRepository.cs" />
     <Compile Include="Warehouse\ILocationGroupRepository.cs" />
+    <Compile Include="Warehouse\IGroupLocationRepository.cs" />
     <Compile Include="Warehouse\IRackLayoutRepository.cs" />
+    <Compile Include="Warehouse\ILocationRepository.cs" />
     <Compile Include="Warehouse\IWarehouseRepository.cs" />
     <Compile Include="Warehouse\IZoneLayoutDetailRepository.cs" />
     <Compile Include="Warehouse\IZoneTypeRepository.cs" />

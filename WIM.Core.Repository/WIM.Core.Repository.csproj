@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\ICityRepository.cs" />
+    <Compile Include="Address\IProvinceRepository.cs" />
+    <Compile Include="Address\ISubCityRepository.cs" />
     <Compile Include="ApiMaster\IApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\IApiMTRepository.cs" />
     <Compile Include="ApiMaster\IPermissionGroupRepository.cs" />
@@ -85,6 +88,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
+      <Project>{9A37166E-BD6C-4BA9-9091-985BC77C68D6}</Project>
+      <Name>Master.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{c8c9f920-5e08-4a3a-af4f-fe3aa35421c8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>
