@@ -7,9 +7,10 @@ namespace WMS.Repository.Impl.Location
 {
 
 
-    public class LocationRepository : Repository<Entity.WarehouseManagement.Location>, ILocationRepository
-    {
-        private WMSDbContext Db;
+        public LocationRepository()
+        {
+            Db = new WMSDbContext();
+        }
 
         public LocationRepository(WMSDbContext contex) : base(contex)
         {
