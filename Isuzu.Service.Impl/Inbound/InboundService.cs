@@ -387,7 +387,6 @@ namespace Isuzu.Service.Impl.Inbound
                         item.PackCartonDate = DateTime.Now;
                         DetailRepo.Update(item);
                     }
-
                     Db.SaveChanges();
                     scope.Complete();
                 }
@@ -396,7 +395,6 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking)
         {
-
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -498,7 +496,6 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItems>() { };
                     }
                 }
-
             }
             return items;
 
@@ -521,8 +518,6 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItems>() { };
                     }
                 }
-
-
                 return items;
             }
 

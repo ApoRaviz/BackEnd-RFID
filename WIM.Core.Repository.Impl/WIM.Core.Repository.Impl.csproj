@@ -44,6 +44,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\CityRepository.cs" />
+    <Compile Include="Address\ProvinceRepository.cs" />
+    <Compile Include="Address\SubCityRepository.cs" />
     <Compile Include="ApiMaster\ApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\ApiMTRepository.cs" />
     <Compile Include="ApiMaster\PermissionGroupApiRepository.cs" />
@@ -86,6 +90,10 @@
     <Compile Include="Common\CommonRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
+      <Project>{9A37166E-BD6C-4BA9-9091-985BC77C68D6}</Project>
+      <Name>Master.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
       <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
       <Name>WIM.Core.Common.Utility</Name>

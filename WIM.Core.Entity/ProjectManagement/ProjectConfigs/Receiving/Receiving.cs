@@ -10,6 +10,7 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Receiving
     {
         public ReceivingDataType ReceivingDataType { get; set; }
         public SendingDataType SendingDataType { get; set; }
-        public DateTimeToReceiveData DateTimeToReceiveData { get; set; }
+        public DateTimeToReceive DateTimeToReceiveData { get; set; }
+        public DateTimeToReceive DateTimeToReceiveGoods { get; set; }
     }
 }

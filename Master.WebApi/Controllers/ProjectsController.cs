@@ -189,6 +189,7 @@ namespace Master.WebApi.Controllers
             {
                 project.CusIDSys = project.Customer_MT.CusIDSys;
                 project.Customer_MT = null;
+
                 Project_MT newProject = ProjectService.CreateProject(project);
                 response.SetData(newProject);
             }

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Entity.Dimension;
 using WMS.Entity.ImportManagement;
 using WMS.Entity.InspectionManagement;
 using WMS.Entity.ItemManagement;
@@ -39,13 +35,15 @@ namespace WMS.Context
         public DbSet<ReportLayoutHeader_MT> ReportLayoutHeader_MT { get; set; }
         public DbSet<ReportLayout_MT> ReportLayout_MT { get; set; }
         public DbSet<Location_MT> Location_MT { get; set; }
+        public DbSet<GroupLocation> GroupLocations { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<LocationType> LocationTypes { get; set; }
         public DbSet<Receive> Receive { get; set; }
         public DbSet<Supplier_MT> Supplier_MT { get; set; }
         public DbSet<ZoneLayoutHeader_MT> ZoneLayoutHeader_MT { get; set; }
         public DbSet<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
         public DbSet<ZoneType> ZoneType { get; set; }
-        public DbSet<Location> Location { get; set; }
         public DbSet<GroupLocation> GroupLocation { get; set; }
         public DbSet<LocationType> LocationType { get; set; }
 

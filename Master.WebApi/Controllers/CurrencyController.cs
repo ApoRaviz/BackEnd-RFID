@@ -73,6 +73,7 @@ namespace Master.WebApi.Controllers
             IResponseData<int> response = new ResponseData<int>();
             try
             {
+                Currency.Country_MT = null;
                 Currency.UpdateBy = User.Identity.Name;
                 int id = CurrencyService.CreateCurrency(Currency);
                 response.SetData(id);
@@ -96,6 +97,7 @@ namespace Master.WebApi.Controllers
 
             try
             {
+                Currency.Country_MT = null;
                 bool isUpated = CurrencyService.UpdateCurrency(Currency);
                 response.SetData(isUpated);
             }
