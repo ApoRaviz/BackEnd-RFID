@@ -5,7 +5,7 @@ using System.Data.Entity.Validation;
 using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Context;
+using WMS.Context;
 using WMS.Entity.SpareField;
 using WMS.Repository;
 using WMS.Repository.Impl;
@@ -21,7 +21,7 @@ namespace WMS.Service.Impl
         public IEnumerable<SpareField> GetSpareField()
         {
             IEnumerable<SpareField> SpareField;
-            using (CoreDbContext Db = new CoreDbContext())
+            using (WMSDbContext Db = new WMSDbContext())
             {
                 ISpareFieldRepository repo = new SpareFieldRepository(Db);
                 SpareField = repo.Get();
@@ -32,10 +32,21 @@ namespace WMS.Service.Impl
         public SpareField GetSpareFieldBySpfIDSys(int id)
         {
             SpareField SpareField;
-            using (CoreDbContext Db = new CoreDbContext())
+            using (WMSDbContext Db = new WMSDbContext())
             {
                 ISpareFieldRepository repo = new SpareFieldRepository(Db);
                 SpareField = repo.GetByID(id);
+            }
+            return SpareField;
+        }
+
+        public IEnumerable<SpareField> GetSpareFieldByProjectIDSys(int id)
+        {
+            IEnumerable<SpareField> SpareField;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ISpareFieldRepository repo = new SpareFieldRepository(Db);
+                SpareField = repo.GetMany(x => x.ProjectIDSys == id);
             }
             return SpareField;
         }
@@ -47,7 +58,7 @@ namespace WMS.Service.Impl
                 SpareField SpareFieldnew = new SpareField();
                 try
                 {
-                    using (CoreDbContext Db = new CoreDbContext())
+                    using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
                         foreach(var x in SpareField)
@@ -72,16 +83,19 @@ namespace WMS.Service.Impl
             }
         }
 
-        public bool UpdateSpareField(SpareField SpareField)
+        public bool UpdateSpareField(IEnumerable<SpareField> SpareField)
         {
             using (var scope = new TransactionScope())
             {
                 try
                 {
-                    using (CoreDbContext Db = new CoreDbContext())
+                    using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                        repo.Update(SpareField);
+                        foreach (var x in SpareField)
+                        {
+                        repo.Update(x);
+                        }
                         Db.SaveChanges();
                         scope.Complete();
                     }

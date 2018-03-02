@@ -22,6 +22,7 @@ using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.View;
 using WIM.Core.Entity.FileManagement;
+using WMS.Entity.SpareField;
 
 namespace WIM.Core.Context
 {
@@ -60,7 +61,7 @@ namespace WIM.Core.Context
         public virtual DbSet<PermissionGroupApi> PermissionGroupApi { get; set; }
 
         public virtual DbSet<Probation_MT> Probation_MT { get; set; }
-        
+        public virtual DbSet<SpareField> SpareField { get; set; }
 
         /// <summary>
         /// View

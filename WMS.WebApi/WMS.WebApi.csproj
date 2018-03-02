@@ -346,6 +346,7 @@
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReceiveController.cs" />
+    <Compile Include="Controllers\SpareFieldController.cs" />
     <Compile Include="Controllers\UnitsController.cs" />
     <Compile Include="Controllers\UploadFileApiController.cs" />
     <Compile Include="Controllers\WarehouseController.cs" />
@@ -593,9 +594,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/wms/</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/wms/</IISAppRootUrl>
+          <IISUrl>http://localhost/wms-backend</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

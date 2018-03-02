@@ -58,6 +58,26 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
+
+        // GET: api/SpareField
+        [HttpGet]
+        [Route("Project/{ProjectIDSys}")]
+        public HttpResponseMessage GetByProjectIDSys( int ProjectIDSys)
+        {
+            ResponseData<IEnumerable<SpareField>> response = new ResponseData<IEnumerable<SpareField>>();
+            try
+            {
+                IEnumerable<SpareField> SpareField = SpareFieldService.GetSpareFieldByProjectIDSys(ProjectIDSys);
+                response.SetData(SpareField);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Employees
         [HttpPost]
         [Route("")]
@@ -80,8 +100,8 @@ namespace WMS.WebApi.Controller
         // PUT: api/Employees/5
 
         [HttpPut]
-        [Route("")]
-        public HttpResponseMessage Put([FromBody]SpareField SpareField)
+        [Route("{ProjectIDSys}")]
+        public HttpResponseMessage Put(int ProjectIDSys, [FromBody]IEnumerable<SpareField> SpareField)
         {
 
             IResponseData<bool> response = new ResponseData<bool>();
@@ -102,13 +122,13 @@ namespace WMS.WebApi.Controller
 
         // DELETE: api/Employees/5
         [HttpDelete]
-        [Route("{SpfID}")]
-        public HttpResponseMessage Delete(int SpfID)
+        [Route("{SpfIDSys}")]
+        public HttpResponseMessage Delete(int SpfIDSys)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = SpareFieldService.DeleteSpareField(SpfID);
+                bool isUpated = SpareFieldService.DeleteSpareField(SpfIDSys);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)

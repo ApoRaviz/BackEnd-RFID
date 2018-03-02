@@ -18,7 +18,7 @@ namespace WMS.Repository.Impl
     public class DimensionRepository : Repository<DimensionLayout_MT>,IDimensionRepository
     {
         private WMSDbContext Db { get; set; }
-        public DimensionRepository(WMSDbContext context):base(context)
+        public DimensionRepository(Context.WMSDbContext context):base(context)
         {
             Db = context;
         }

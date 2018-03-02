@@ -8,8 +8,9 @@ namespace WMS.Service
     {
         IEnumerable<SpareField> GetSpareField();
         SpareField GetSpareFieldBySpfIDSys(int id);
+        IEnumerable<SpareField> GetSpareFieldByProjectIDSys(int id);
         int CreateSpareField(IEnumerable<SpareField> resign);
-        bool UpdateSpareField(SpareField resign);
+        bool UpdateSpareField(IEnumerable<SpareField> resign);
         bool DeleteSpareField(int id);
     }
 }

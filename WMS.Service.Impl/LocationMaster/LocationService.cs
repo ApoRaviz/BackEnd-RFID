@@ -23,7 +23,7 @@ namespace WMS.Service.Impl.LocationMaster
 {
     public class LocationService : WIM.Core.Service.Impl.Service, ILocationService
     {
-        private WMSDbContext proc = new WMSDbContext();
+        private Context.WMSDbContext proc = new Context.WMSDbContext();
         private LocationRepository repo;
 
         public LocationService()

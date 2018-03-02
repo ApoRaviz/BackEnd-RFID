@@ -15,6 +15,7 @@ using WMS.Entity.ItemManagement;
 using WMS.Entity.LayoutManagement;
 using WMS.Entity.Receiving;
 using WMS.Entity.Report;
+using WMS.Entity.SpareField;
 using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Context
@@ -48,7 +49,7 @@ namespace WMS.Context
         public DbSet<Location> Location { get; set; }
         public DbSet<GroupLocation> GroupLocation { get; set; }
         public DbSet<LocationType> LocationType { get; set; }
-        //public DbSet<SpareFields> SpareField { get; set; }
+        public DbSet<SpareField> SpareField { get; set; }
 
 
         public WMSDbContext() : base("name=YUT_WMS")

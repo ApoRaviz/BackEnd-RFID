@@ -20,7 +20,7 @@ namespace WMS.Repository.Impl
 
         public LocationRepository()
         {
-            Db = new WMSDbContext();
+            Db = new Context.WMSDbContext();
         }
 
         public IEnumerable<Location_MT> Get()

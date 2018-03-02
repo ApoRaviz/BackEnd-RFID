@@ -21,6 +21,7 @@ using WMS.Service.Report;
 using WMS.Service.Impl.Report;
 using WMS.Service.Import;
 using WMS.Service.Impl.Import;
+using WMS.Service.Impl;
 
 namespace WMS.WebApi
 {
@@ -59,7 +60,7 @@ namespace WMS.WebApi
             container.RegisterType<IWarehouseService, WarehouseService>();
             container.RegisterType<IZoneService, ZoneService>();
             container.RegisterType<ILocationGroupService, LocationGroupService>();
-
+            container.RegisterType<ISpareFieldService, SpareFieldService>();
         }
     }
 }
