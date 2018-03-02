@@ -93,8 +93,7 @@ namespace WIM.Core.Repository.Impl
                 }
                 data[i].Add(subdata);
             }
-
-
+            
             //for (var i = 0; i < province.Count; i++)
             //{
             //    int citycount = city.Where(element => element == province[i]).ToList().Count;

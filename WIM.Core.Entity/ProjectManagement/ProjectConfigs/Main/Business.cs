@@ -9,7 +9,7 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Main
 {
     public class Business
     {
-        public string Type { get; set; }
+        public object Type { get; set; }
         public bool IsB2B { get; set; }
         public bool IsB2C { get; set; }
         public bool IsC2C { get; set; }
