@@ -44,8 +44,9 @@ namespace Isuzu.Service
         IsuzuDataImport OpenReadExcel(string localFileName);
         string GetRFIDInfo(ParameterSearch parameter);
         IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch);
-
+        string CreateDeletedFileID(string pathName);
+        void GetDeletedFileID(string fileID);
         //Async
-     
+
     }
 }
