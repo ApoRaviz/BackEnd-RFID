@@ -340,6 +340,7 @@
     <Compile Include="Controllers\ApiMenuMappingController.cs" />
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\GeneralConfigsController.cs" />
     <Compile Include="Controllers\PermissionGroupController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />

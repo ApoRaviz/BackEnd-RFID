@@ -105,8 +105,6 @@ namespace WMS.Service.Impl.LocationMaster
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.E4017);
                 }
-
-                
                 return true;
             }
         }

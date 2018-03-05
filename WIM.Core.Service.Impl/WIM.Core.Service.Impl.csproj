@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -58,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ApiMaster\ApiMTService.cs" />
     <Compile Include="ApiMenuMapping\ApiMenuMappingService.cs" />
+    <Compile Include="Common\GeneralConfigsService.cs" />
     <Compile Include="CountryMaster\CountryService.cs" />
     <Compile Include="CurrencyMaster\CurrencyService.cs" />
     <Compile Include="CustomerMaster\CustomerService.cs" />

@@ -15,6 +15,8 @@ using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Service.FileManagement;
 using WIM.Core.Service.PermissionGroups;
 using WIM.Core.Service.Impl.PermissionGroups;
+using WIM.Core.Service.Common;
+using WIM.Core.Service.Impl.Common;
 
 namespace Master.WebApi
 {
@@ -60,6 +62,7 @@ namespace Master.WebApi
             container.RegisterType<IResignService, ResignService>();
             container.RegisterType<IHeadReportControlService, HeadReportControlService>(); 
             container.RegisterType<ISupplierService, SupplierService>();
+            container.RegisterType<IGeneralConfigsService, GeneralConfigsService>();
             container.RegisterType<IPermissionGroupService, PermissionGroupService>();
             container.RegisterType<IPermissionGroupApiService, PermissionGroupApiService>();
         }

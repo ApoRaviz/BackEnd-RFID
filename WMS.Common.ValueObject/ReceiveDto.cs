@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Entity;
-using WMS.Entity.InventoryManagement;
 
-namespace WMS.Entity.Receiving
+namespace WMS.Common.ValueObject
 {
-    [Table("Receives")]
-    public class Receive : BaseEntity
+    public class ReceiveDto
     {
-        [Key]
         public int ReceiveIDSys { get; set; }
         public string ReceiveNO { get; set; }
         public string InvoiceNO { get; set; }
@@ -24,6 +18,6 @@ namespace WMS.Entity.Receiving
         public int? StatusIDSys { get; set; }
         public DateTime ReceiveDate { get; set; }
 
-        public virtual ICollection<InventoryTransaction> InventoryTransaction { get; set; }
+        public virtual List<InventoryTransactionDto> InventoryTransactions { get; set; }
     }
 }

@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="Common\DetailConfig.cs" />
+    <Compile Include="Common\GeneralConfigs.cs" />
     <Compile Include="Country\Country_MT.cs" />
     <Compile Include="Currency\CurrencyUnit.cs" />
     <Compile Include="CustomerManagement\Customer_MT.cs" />

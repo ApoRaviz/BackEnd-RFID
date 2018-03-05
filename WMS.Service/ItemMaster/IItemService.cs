@@ -14,6 +14,7 @@ namespace WMS.Service
         IEnumerable<ItemDto> GetItems();
         ItemDto GetItem(int id, string[] tableNames);        
         int CreateItem(Item_MT Item );
+        int CreateItemGift(ItemGiftDto item);
         bool UpdateItem(Item_MT Item );
         bool DeleteItem(int id);
         bool DeleteItemUnit(ItemUnitMapping item);

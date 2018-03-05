@@ -13,5 +13,6 @@ namespace WIM.Core.Repository
         IEnumerable<UserLog> ProcGetUserLog(Nullable<int> logID, string requestMethod, string requestUrl, Nullable<System.DateTime> requestDateFrom, Nullable<System.DateTime> requestDateTo);
         IEnumerable<TableColumnsDescription> ProcGetTableColumnsDescription(string tableName);
         string ProcGetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);
+        
     }
 }
