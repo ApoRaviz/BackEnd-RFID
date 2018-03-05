@@ -22,7 +22,7 @@ namespace WMS.Repository.Impl.Warehouse
 
         public IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term)
         {
-            var qr = (from sp in Db.Location
+            var qr = (from sp in Db.Locations
                       where sp.LocNo.Contains(term)
                       select new AutocompleteLocationDto
                       {
