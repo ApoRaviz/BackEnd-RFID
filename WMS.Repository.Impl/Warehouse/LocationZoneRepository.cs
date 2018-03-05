@@ -11,7 +11,7 @@ using WMS.Repository.Warehouse;
 
 namespace WMS.Repository.Impl.Warehouse
 {
-    public class LocationZoneRepository : Repository<Location>, ILocationZoneRepository
+    public class LocationZoneRepository : Repository<Entity.WarehouseManagement.Location>, ILocationZoneRepository
     {
         private WMSDbContext Db;
 

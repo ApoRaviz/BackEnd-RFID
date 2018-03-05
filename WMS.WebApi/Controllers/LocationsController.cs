@@ -29,11 +29,11 @@ namespace WMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<Location_MT>> response = new ResponseData<IEnumerable<Location_MT>>();
+            ResponseData<IEnumerable<GroupLocation>> response = new ResponseData<IEnumerable<GroupLocation>>();
             try
             {
-                IEnumerable<Location_MT> Location = LocationService.GetLocations();
-                response.SetData(Location);
+                IEnumerable<GroupLocation> GeoupLocation = LocationService.GetList();
+                response.SetData(GeoupLocation);
             }
             catch (ValidationException ex)
             {
@@ -49,10 +49,10 @@ namespace WMS.WebApi.Controllers
         [Route("{LocIDSys}")]
         public HttpResponseMessage Get(int LocIDSys)
         {
-            IResponseData<Location_MT> response = new ResponseData<Location_MT>();
+            IResponseData<GroupLocation> response = new ResponseData<GroupLocation>();
             try
             {
-                Location_MT Location = LocationService.GetLocationByLocIDSys(LocIDSys);
+                GroupLocation Location = LocationService.GetLocationByLocIDSys(LocIDSys);
                 response.SetData(Location);
             }
             catch (ValidationException ex)
@@ -63,17 +63,57 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // POST: api/Suppliers
-        [HttpPost]
+        //[HttpPost]
+        //[Route("")]
+        //public HttpResponseMessage Post([FromBody]Location_MT Location)
+        //{
+        //    IResponseData<int> response = new ResponseData<int>();
+        //    try
+        //    {
+        //        Location.UpdateBy = User.Identity.Name;
+        //        int id = LocationService.CreateLocation(Location);
+        //        response.SetData(id);
+        //    }
+        //    catch (ValidationException ex)
+        //    {
+        //        response.SetErrors(ex.Errors);
+        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //    }
+        //    return Request.ReturnHttpResponseMessage(response);
+        //}
+
+
+
+
+        [HttpGet]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]Location_MT Location)
+        public HttpResponseMessage GetList([FromBody]GroupLocation Location)
         {
-            IResponseData<int> response = new ResponseData<int>();
+            IResponseData<IEnumerable<GroupLocation>> response = new ResponseData<IEnumerable<GroupLocation>>();
             try
             {
                 Location.UpdateBy = User.Identity.Name;
-                int id = LocationService.CreateLocation(Location);
-                response.SetData(id);
+               IEnumerable<GroupLocation> rs = LocationService.GetList();
+                response.SetData(rs);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("")]
+        public HttpResponseMessage Post([FromBody]GroupLocation Location)
+        {
+            IResponseData<GroupLocation> response = new ResponseData<GroupLocation>();
+            try
+            {
+                Location.UpdateBy = User.Identity.Name;
+                GroupLocation rs = LocationService.CreateLocation(Location);
+                response.SetData(Location);
             }
             catch (ValidationException ex)
             {
@@ -87,7 +127,7 @@ namespace WMS.WebApi.Controllers
 
         [HttpPut]
         [Route("{LocIDSys}")]
-        public HttpResponseMessage Put(int LocIDSys, [FromBody]Location_MT Location)
+        public HttpResponseMessage Put(int LocIDSys, [FromBody]GroupLocation Location)
         {
             IResponseData<bool> response = new ResponseData<bool>();
 

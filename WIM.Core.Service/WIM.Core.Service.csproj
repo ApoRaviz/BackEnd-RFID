@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\IAddressService.cs" />
     <Compile Include="ApiMaster\IApiMTService.cs" />
     <Compile Include="ApiMenuMapping\IApiMenuMappingService.cs" />
     <Compile Include="Common\IGeneralConfigsService.cs" />
@@ -86,6 +87,10 @@
     <Compile Include="UserRole\IUserRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
+      <Project>{9A37166E-BD6C-4BA9-9091-985BC77C68D6}</Project>
+      <Name>Master.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">
       <Project>{C8C9F920-5E08-4A3A-AF4F-FE3AA35421C8}</Project>
       <Name>WIM.Core.Common.ValueObject</Name>

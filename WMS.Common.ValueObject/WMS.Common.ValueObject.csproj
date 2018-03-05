@@ -46,7 +46,6 @@
     <Compile Include="AutocompleteItemDto.cs" />
     <Compile Include="AutocompleteUnitDto.cs" />
     <Compile Include="CategoryDto.cs" />
-    <Compile Include="InventoryTransactionDto.cs" />
     <Compile Include="ItemDto.cs" />
     <Compile Include="ItemGiftDto.cs" />
     <Compile Include="ItemSetDetailDto.cs" />

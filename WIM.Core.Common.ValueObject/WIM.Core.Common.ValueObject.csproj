@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressDto.cs" />
     <Compile Include="Api\ApiMenuMappingDto.cs" />
     <Compile Include="Api\ApiMTDto.cs" />
+    <Compile Include="Autocomplete\AutocompleteCountryDto.cs" />
     <Compile Include="Autocomplete\AutocompleteCustomerDto.cs" />
     <Compile Include="Autocomplete\AutocompleteMenuDto.cs" />
     <Compile Include="Autocomplete\AutocompleteSupplier.cs" />
@@ -50,21 +52,27 @@
     <Compile Include="Employee\EmployeeDto.cs" />
     <Compile Include="HeadReportControl\HeadReportControlDto.cs" />
     <Compile Include="LabelControl\LabelControlDto.cs" />
-    <Compile Include="Menu\MenuDto.cs" />
     <Compile Include="MenuProjectMapping\MenuProjectMappingDto.cs" />
+    <Compile Include="Menu\MenuDto.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="obj\Release\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Release\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Release\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Permission\PermissionRoleDto.cs" />
     <Compile Include="Permission\PermissionTree.cs" />
     <Compile Include="Person\PersonDto.cs" />
-    <Compile Include="SubModule\StatusSubModuleDto.cs" />
-    <Compile Include="SubModule\SubModuleDto.cs" />
-    <Compile Include="Status\StatusDto.cs" />
     <Compile Include="Project\ProjectDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role\RolePermissionDto.cs" />
     <Compile Include="Role\RoleUserDto.cs" />
+    <Compile Include="Status\StatusDto.cs" />
+    <Compile Include="SubModule\StatusSubModuleDto.cs" />
+    <Compile Include="SubModule\SubModuleDto.cs" />
     <Compile Include="TableColumn\TableColumnsDescription.cs" />
-    <Compile Include="User\UserDto.cs" />
     <Compile Include="UserReq\UserReq.cs" />
+    <Compile Include="User\UserDto.cs" />
     <Compile Include="User\UserRoleDto.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +85,46 @@
       <Name>WIM.Core.Entity</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="bin\Release\EntityFramework.dll" />
+    <Content Include="bin\Release\EntityFramework.xml" />
+    <Content Include="bin\Release\Hashids.net.dll" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Release\Newtonsoft.Json.dll" />
+    <Content Include="bin\Release\Newtonsoft.Json.xml" />
+    <Content Include="bin\Release\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\Release\System.Net.Http.Formatting.xml" />
+    <Content Include="bin\Release\System.Web.Http.dll" />
+    <Content Include="bin\Release\System.Web.Http.xml" />
+    <Content Include="bin\Release\WIM.Core.Common.Utility.dll" />
+    <Content Include="bin\Release\WIM.Core.Common.Utility.pdb" />
+    <Content Include="bin\Release\WIM.Core.Common.ValueObject.dll" />
+    <Content Include="bin\Release\WIM.Core.Common.ValueObject.pdb" />
+    <Content Include="bin\Release\WIM.Core.Entity.dll" />
+    <Content Include="bin\Release\WIM.Core.Entity.pdb" />
+    <Content Include="obj\Debug\WIM.Core.Common.ValueObject.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Release\WIM.Core.Common.ValueObject.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Release\WIM.Core.Common.ValueObject.dll" />
+    <Content Include="obj\Release\WIM.Core.Common.ValueObject.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\WIM.Core.Common.Utility.dll.config" />
+    <None Include="bin\Release\WIM.Core.Entity.dll.config" />
+    <None Include="obj\Debug\CoreCompileInputs.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\WIM.Core.Common.ValueObject.csproj.CopyComplete" />
+    <None Include="obj\Debug\WIM.Core.Common.ValueObject.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\WIM.Core.Common.ValueObject.csprojResolveAssemblyReference.cache" />
+    <None Include="obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Release\WIM.Core.Common.ValueObject.csproj.CopyComplete" />
+    <None Include="obj\Release\WIM.Core.Common.ValueObject.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Release\WIM.Core.Common.ValueObject.csprojResolveAssemblyReference.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="obj\Debug\TempPE\" />
+    <Folder Include="obj\Release\TempPE\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

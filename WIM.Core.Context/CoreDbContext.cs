@@ -7,7 +7,7 @@ using WIM.Core.Entity;
 using WIM.Core.Entity.Country;
 using WIM.Core.Entity.Currency;
 using WIM.Core.Entity.CustomerManagement;
-using WIM.Core.Entity.Dimension;
+//using WIM.Core.Entity.Dimension;
 using WIM.Core.Entity.Employee;
 using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.Common;
@@ -22,6 +22,7 @@ using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.View;
 using WIM.Core.Entity.FileManagement;
+using WIM.Core.Entity.Address;
 
 namespace WIM.Core.Context
 {
@@ -61,6 +62,11 @@ namespace WIM.Core.Context
         public virtual DbSet<GeneralConfigs> GeneralConfigs { get; set; }
         public virtual DbSet<Probation_MT> Probation_MT { get; set; }
         
+
+        public virtual DbSet<Province_MT> Province_MT { get; set; }
+        public virtual DbSet<City_MT> City_MT { get; set; }
+        public virtual DbSet<SubCity_MT> SubCity_MT { get; set; }
+
         /// <summary>
         /// View
         /// </summary>

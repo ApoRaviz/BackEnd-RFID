@@ -20,6 +20,9 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using System.Net.Http.Headers;
+using WIM.Core.Service.Impl.FileManagement;
+using WIM.Core.Service.FileManagement;
+using System.Web.Helpers;
 
 namespace Isuzu.Service.Impl
 {
@@ -185,7 +188,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCarton_HANDY(itemReq, Username);
+                InboundService.PerformPackingCarton_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -204,7 +207,7 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCase_HANDY(itemReq, Username);
+                InboundService.PerformPackingCase_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -701,7 +704,8 @@ namespace Isuzu.Service.Impl
                     System.IO.File.Delete(file.LocalFileName);
 
                     string path = newFileName + ".pdf";
-                    AllPath.Add(path);
+
+                    AllPath.Add(InboundService.CreateDeletedFileID(path));
                    
                 }
                 response.SetData(AllPath);
@@ -738,6 +742,26 @@ namespace Isuzu.Service.Impl
                     response.SetStatus(HttpStatusCode.OK);
                 }
 
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("getFileDeleteReason/{FileIDSys}")]
+        public HttpResponseMessage Get(string FileIDSys)
+        {
+            ResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                InboundService.GetDeletedFileID(FileIDSys);
+                response.SetData(true);
             }
             catch (ValidationException ex)
             {

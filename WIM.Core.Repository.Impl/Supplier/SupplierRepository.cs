@@ -18,8 +18,8 @@ namespace WIM.Core.Repository.Impl.Supplier
         public IEnumerable<AutocompleteSupplierDto> AutocompleteSupplier(string term)
         {
             var qr = (from sp in Db.Supplier_MT
-                      where sp.SupID.Contains(term)
-                      || sp.CompName.Contains(term)
+                      where (sp.SupID.Contains(term)
+                      || sp.CompName.Contains(term)) && sp.ProjectIDSys == Identity.GetProjectIDSys()
                       select new AutocompleteSupplierDto
                       {
                           SupIDSys = sp.SupIDSys,

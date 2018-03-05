@@ -11,6 +11,7 @@ using WIM.Core.Service;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.ValueObject;
 
 namespace Master.WebApi.Controllers
 {
@@ -129,6 +130,29 @@ namespace Master.WebApi.Controllers
         private ICountryService GetCountryService()
         {
             return CountryService;
+        }
+
+        // GET: api/items/1
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompleteCountry(string term = "")
+        {
+            IResponseData<IEnumerable<AutocompleteCountryDto>> response = new ResponseData<IEnumerable<AutocompleteCountryDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteCountryDto> sub = CountryService.AutocompleteCountry(term);
+                response.SetData(sub);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
         }
 
     }

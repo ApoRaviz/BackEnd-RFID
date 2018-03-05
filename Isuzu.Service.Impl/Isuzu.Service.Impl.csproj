@@ -112,6 +112,10 @@
       <Project>{1CD73CE9-A580-479F-B049-288215CD5E04}</Project>
       <Name>WIM.Core.Service.Impl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
+      <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
+      <Name>WIM.Core.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
