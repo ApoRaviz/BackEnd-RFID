@@ -16,6 +16,7 @@ using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Entity.LabelManagement;
 
 namespace WIM.Core.Service.Impl
 {
@@ -109,14 +110,26 @@ namespace WIM.Core.Service.Impl
             using (var scope = new TransactionScope())
             {
                 Project_MT projectnew = new Project_MT();
+                List<LabelControl> labelcontrol = new List<LabelControl>();
                 try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
-                        IProjectRepository repo = new ProjectRepository(Db); 
+                        IProjectRepository repo = new ProjectRepository(Db);
+                        ILabelControlRepository repoLB = new LabelControlRepository(Db);
                         project.ProjectStatus = "Active";
-                        
                         projectnew = repo.Insert(project);
+                        Db.SaveChanges();
+
+                        labelcontrol = repo.GetLabelToDuplicate(Convert.ToInt32(project.ModuleIDSys));
+                        LabelControl label = new LabelControl();
+                        foreach(LabelControl lb in labelcontrol)
+                        {
+                            label.Lang = lb.Lang;
+                            label.ProjectIDSys = projectnew.ProjectIDSys;
+                            label.LabelConfig = lb.LabelConfig;
+                            repoLB.Insert(label);
+                        };
                         Db.SaveChanges();
                         scope.Complete();
 

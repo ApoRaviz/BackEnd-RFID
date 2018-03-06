@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity.CustomerManagement;
+using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Repository;
@@ -35,6 +36,26 @@ namespace WIM.Core.Repository.Impl
                             mo.FrontEndPath
                         };
             return query.ToList();
+        }
+
+        public List<LabelControl> GetLabelToDuplicate(int moduleIDSys)
+        {
+            //var labelID = (from i in Db.Module_MT
+            //              where i.ModuleIDSys == moduleIDSys
+            //              select i.DefaultLang).ToString().Split('|');
+
+            string[] labelID = Db.Module_MT.Where(a => a.ModuleIDSys == moduleIDSys).Select(x => x.DefaultLang).First().Split('|');
+            
+            List < LabelControl > label = new List<LabelControl>();
+
+            foreach (var i in labelID)
+            {
+                int id = Convert.ToInt32(i);
+                var lb = Db.LabelControl.Where(a => a.LabelIDSys == id).Select(x => x).First();   
+                label.Add(lb);
+            }
+
+            return label;
         }
     }
 }
