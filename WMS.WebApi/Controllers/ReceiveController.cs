@@ -91,14 +91,14 @@ namespace WMS.WebApi.Controllers
         // POST: api/Units
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]Receive receive)
+        public HttpResponseMessage Post([FromBody]ReceiveDto receive)
         {
-            IResponseData<Receive> response = new ResponseData<Receive>();
+            IResponseData<int> response = new ResponseData<int>();
             try
             {
                 int id = ReceiveService.CreateReceive(receive);
                 receive.ReceiveIDSys = id;
-                response.SetData(receive);
+                response.SetData(id);
             }
             catch (ValidationException ex)
             {

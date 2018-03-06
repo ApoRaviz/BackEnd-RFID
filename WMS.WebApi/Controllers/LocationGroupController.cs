@@ -12,6 +12,7 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using WMS.Master;
 using WMS.Master.Common.ValueObject;
+using WMS.Common.ValueObject;
 
 namespace WMS.WebApi.Controllers
 {
@@ -175,6 +176,28 @@ namespace WMS.WebApi.Controllers
                 {
                     response.SetData(false);
                 }
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompleteLocation(string term)
+        {
+            IResponseData<IEnumerable<AutocompleteLocationDto>> response = new ResponseData<IEnumerable<AutocompleteLocationDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteLocationDto> customer = LocGroupService.AutocompleteLocation(term);
+                response.SetData(customer);
             }
             catch (ValidationException ex)
             {
