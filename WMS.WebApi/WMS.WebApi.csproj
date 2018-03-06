@@ -343,6 +343,7 @@
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\ItemSetController.cs" />
     <Compile Include="Controllers\LabelController.cs" />
+    <Compile Include="Controllers\LocationGroupController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\ReportController.cs" />

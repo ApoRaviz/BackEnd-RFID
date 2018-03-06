@@ -79,10 +79,6 @@
     <Compile Include="Warehouse\ZoneLayoutHeaderRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HRMS.Context\HRMS.Context.csproj">
-      <Project>{D78E68BA-486E-4577-8773-BF08F50721E1}</Project>
-      <Name>HRMS.Context</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
       <Name>WIM.Core.Context</Name>
