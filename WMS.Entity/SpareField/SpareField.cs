@@ -8,7 +8,7 @@ namespace WMS.Entity.SpareField
     public class SpareField : BaseEntity
     {
         [Key]
-        public int SpfIDSys { get; set; }
+        public  int SpfIDSys { get; set; }
         public int ProjectIDSys { get; set; }
         public string Text { get; set; }
         public string TableName { get; set; }

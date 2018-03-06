@@ -61,9 +61,13 @@ namespace WMS.Service.Impl
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                        foreach(var x in SpareField)
+                        int i = 1;
+                        char j = '0';
+                        foreach (var x in SpareField)
                         {
-                        SpareFieldnew = repo.Insert(x);
+                            x.Text = x.TableName + "sparefield"+ i.ToString().PadLeft(3, j);
+                            SpareFieldnew = repo.Insert(x);
+                            i++;
                         }
                         Db.SaveChanges();
                         scope.Complete();
@@ -87,14 +91,29 @@ namespace WMS.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
+                
                 try
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
+                            
+                            int i = 1;
+                        char j = '0';
                         foreach (var x in SpareField)
                         {
-                        repo.Update(x);
+                            if (x.SpfIDSys == 0)
+                            {
+                                x.Text = x.TableName + "sparefield" + i.ToString().PadLeft(3, j) ;
+                                repo.Insert(x);
+                                
+                            }
+                            else
+                            {
+                                x.Text = x.TableName + "sparefield" + i.ToString().PadLeft(3, j) ;
+                                repo.Update(x);
+                            }
+                            i++;
                         }
                         Db.SaveChanges();
                         scope.Complete();
@@ -116,7 +135,28 @@ namespace WMS.Service.Impl
 
         public bool DeleteSpareField(int id)
         {
-            throw new NotImplementedException();
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        
+                        ISpareFieldRepository repo = new SpareFieldRepository(Db);
+                        repo.Delete(id);
+                        Db.SaveChanges();
+                        scope.Complete();
+
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
+                    throw ex;
+                }
+                return true;
+            }
         }
 
         public void HandleValidationException(DbEntityValidationException ex)
