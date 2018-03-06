@@ -8,10 +8,15 @@ using System.Threading.Tasks;
 using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Service.Impl;
+using WMS.Common.ValueObject;
 using WMS.Context;
+using WMS.Entity.InventoryManagement;
 using WMS.Entity.Receiving;
 using WMS.Repository;
 using WMS.Repository.Impl;
+using WMS.Repository.Impl.InventoryManage;
+using WMS.Repository.InvenoryManagement;
 
 namespace WMS.Service.Impl
 {
@@ -39,7 +44,7 @@ namespace WMS.Service.Impl
             return unit;
         }
 
-        public int CreateReceive(Receive receive)
+        public int CreateReceive(ReceiveDto receives)
         {
             using (var scope = new TransactionScope())
             {
@@ -48,9 +53,30 @@ namespace WMS.Service.Impl
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
+                        Receive receive = new CommonService().AutoMapper<Receive>(receives);
                         IReceiveRepository repo = new ReceiveRepository(Db);
                         newReceive = repo.Insert(receive);
                         Db.SaveChanges();
+                        if(receive.InventoryTransaction != null)
+                        {
+                            IInventoryTransactionRepository repoTran = new InventoryTransactionRepository(Db);
+                            List<InventoryTransaction> inventran = new List<InventoryTransaction>();
+                            foreach(var tran in receives.InventoryTransactions)
+                            {
+                                InventoryTransaction temp = new InventoryTransaction();
+                                temp = new CommonService().AutoMapper<InventoryTransaction>(tran);
+                                temp.ReceiveIDSys = newReceive.ReceiveIDSys;
+                                temp.ConvertedQty = tran.Qty; //Oil Comment
+                                inventran.Add(repoTran.Insert(temp));
+                            }
+                            Db.SaveChanges();
+                            int i = 0;
+                            foreach(var tran in inventran)
+                            {
+                                receives.InventoryTransactions[i].InvenTranIDSys = tran.InvenTranIDSys;
+                            }
+                            
+                        }
                         scope.Complete();
                     }
                 }

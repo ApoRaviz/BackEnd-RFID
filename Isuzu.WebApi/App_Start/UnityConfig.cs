@@ -10,6 +10,8 @@ using Isuzu.Service.Impl.Inbound;
 using System.Security.Principal;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
+using WIM.Core.Service.FileManagement;
+using WIM.Core.Service.Impl.FileManagement;
 
 namespace Isuzu.WebApi
 {
@@ -34,6 +36,7 @@ namespace Isuzu.WebApi
 
             //Register Service
             container.RegisterType<ICommonService, CommonService>();
+            container.RegisterType<IFileService, FileService>();
             //container.RegisterType<ICustomerService, CustomerService>();
             //container.RegisterType<IProjectService, ProjectService>();
             //container.RegisterType<ICategoryService, CategoryService>();

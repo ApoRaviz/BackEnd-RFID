@@ -12,6 +12,12 @@ using WIM.Core.Service.Impl.StatusManagement;
 using WIM.Core.Service.EmployeeMaster;
 using WIM.Core.Service.Impl.EmployeeMaster;
 using WIM.Core.Service.Address;
+using WIM.Core.Service.Impl.FileManagement;
+using WIM.Core.Service.FileManagement;
+using WIM.Core.Service.PermissionGroups;
+using WIM.Core.Service.Impl.PermissionGroups;
+using WIM.Core.Service.Common;
+using WIM.Core.Service.Impl.Common;
 
 namespace Master.WebApi
 {
@@ -55,6 +61,9 @@ namespace Master.WebApi
             container.RegisterType<ISubModuleService, SubModuleService>();
             container.RegisterType<IHeadReportControlService, HeadReportControlService>(); 
             container.RegisterType<ISupplierService, SupplierService>();
+            container.RegisterType<IGeneralConfigsService, GeneralConfigsService>();
+            container.RegisterType<IPermissionGroupService, PermissionGroupService>();
+            container.RegisterType<IPermissionGroupApiService, PermissionGroupApiService>();
             container.RegisterType<IAddressService, AddressService>();
         }
     }

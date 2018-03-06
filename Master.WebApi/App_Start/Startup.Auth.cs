@@ -55,7 +55,7 @@ namespace Master.WebApi
 
             // OAuth 2.0 Bearer Access Token Generation
             app.UseOAuthAuthorizationServer(OAuthOptions);
-
+            
         }
 
         public void ConfigureOAuthTokenConsumption(IAppBuilder app)

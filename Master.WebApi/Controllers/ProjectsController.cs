@@ -83,6 +83,7 @@ namespace Master.WebApi.Controllers
             {
                 List<Project_MT> Projects = ProjectService.ProjectHaveMenu(CusIDSys);
                 response.SetData(Projects);
+                
             }
             catch (ValidationException ex)
             {
@@ -115,8 +116,7 @@ namespace Master.WebApi.Controllers
         [Route("select")]
         public HttpResponseMessage GetSelect()
         {
-            
-                IResponseData<IEnumerable<Project_MT>> response = new ResponseData<IEnumerable<Project_MT>>();
+            IResponseData<IEnumerable<Project_MT>> response = new ResponseData<IEnumerable<Project_MT>>();
             IEnumerable<Project_MT> Project;
                 try
                 {
