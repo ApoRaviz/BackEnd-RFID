@@ -14,7 +14,6 @@ using WMS.Service.Impl.WarehouseMaster;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
 using WMS.Service.LocationMaster;
-using WMS.Service.Impl.LocationMaster;
 using WMS.Service.Impl.Label;
 using WMS.Service.Label;
 using WMS.Service.Report;
@@ -51,7 +50,7 @@ namespace WMS.WebApi
             container.RegisterType<ILabelService, LabelService>();
             container.RegisterType<ISupplierService, SupplierService>(); 
             container.RegisterType<IInspectService, InspectService>();
-            container.RegisterType<ILocationService, LocationService>();
+            //container.RegisterType<ILocationService, LocationService>();
             container.RegisterType<IReportService, ReportService>();
             container.RegisterType<IImportService, ImportService>();
             container.RegisterType<ICategoryService, CategoryService>();

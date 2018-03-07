@@ -76,7 +76,9 @@ namespace WIM.Core.Common.Utility.Validation
         E404 = 404,
 
         [Description("Request timeout!, Please check network connecting or refresh page.")]
-        E408 = 408
+        E408 = 408,
 
+        [Description("Program has a problem.\nPlease contact IT!!!")]
+        E500 = 500
     }
 }

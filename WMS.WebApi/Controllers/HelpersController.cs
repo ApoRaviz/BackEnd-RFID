@@ -16,6 +16,8 @@ using WIM.Core.Common.Utility.Extensions;
 using WMS.Context;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Service;
+using WIM.Core.Context;
+using WIM.Core.Service.Impl;
 
 namespace WMS.WebApi.Controllers
 {
@@ -134,5 +136,29 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("generate/{keyword}")]
+        public HttpResponseMessage GetKeyGenerator(string keyword)
+        {
+            IResponseData<string> response = new ResponseData<string>();
+            if (string.IsNullOrEmpty(keyword))
+            {
+                response.SetData(null);
+                Request.ReturnHttpResponseMessage(response);
+            }
+
+            try
+            {
+                ICommonService common = new CommonService();
+                string result = common.GetValueGenerateCode(keyword);
+                response.SetData(result);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
     }
 }

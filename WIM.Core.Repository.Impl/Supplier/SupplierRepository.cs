@@ -29,5 +29,7 @@ namespace WIM.Core.Repository.Impl.Supplier
             ).ToList();
             return qr;
         }
+
+        
     }
 }
