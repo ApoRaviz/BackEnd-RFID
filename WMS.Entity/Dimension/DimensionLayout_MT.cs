@@ -12,10 +12,10 @@ namespace WMS.Entity.Dimension
         public int DimensionIDSys { get; set; }
         public string FormatName { get; set; }
         public string Unit { get; set; }
-        public Nullable<decimal> Width { get; set; }
-        public Nullable<decimal> Length { get; set; }
-        public Nullable<decimal> Height { get; set; }
-        public Nullable<decimal> Weight { get; set; }
+        public double? Width { get; set; }
+        public double? Length { get; set; }
+        public double? Height { get; set; }
+        public double? Weight { get; set; }
         public string Type { get; set; }
         public string Color { get; set; }
     }
