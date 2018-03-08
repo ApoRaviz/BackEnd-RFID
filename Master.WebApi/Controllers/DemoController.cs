@@ -45,6 +45,41 @@ namespace Master.WebApi.Controllers
         {
 
         }
+        public class From<A,B>
+        {
+            public A a  { get; set; }
+            public B b { get; set; }
+        }
+
+        public class A
+        {
+            public string test1 { get; set; }
+        }
+
+        public class B
+        {
+            public string test2 { get; set; }
+        }
+
+        [HttpPost]
+        [Route("birdfunc3")]
+        public HttpResponseMessage birdFunc3([FromBody]From<A, B> a)
+        {
+            ResponseData<string> response = new ResponseData<string>();
+            try
+            {
+                object xa = a;
+                //B xb = b;
+                response.SetData("");
+            }
+            catch (NullReferenceException)
+            {
+                response.SetData("");
+            }
+
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
 
         [HttpPost]
         [Route("func1")]
@@ -158,7 +193,7 @@ namespace Master.WebApi.Controllers
 
             using (CoreDbContext db = new CoreDbContext())
             {
-                string sql = string.Format("select TOP(10) {0} from Employee_MT FOR JSON AUTO", labelSelect);                
+                string sql = string.Format("select TOP(10) {0} from Employee_MT FOR JSON AUTO", labelSelect);
                 string json = db.Database.SqlQuery<string>(sql).FirstOrDefault();
                 json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");
 
@@ -315,7 +350,7 @@ namespace Master.WebApi.Controllers
             foreach (IGrouping<HttpControllerDescriptor, ApiDescription> group in apiGroups)
             {
                 foreach (ApiDescription api in group)
-                {                   
+                {
                     Dictionary<string, string> paramDic = new Dictionary<string, string>();
                     foreach (ApiParameterDescription parameter in api.ParameterDescriptions)
                     {
@@ -338,18 +373,18 @@ namespace Master.WebApi.Controllers
                     string path = "";
                     string[] pathSplit = api.RelativePath.Split('?')[0].Split('/');
                     for (int i = 0; i < pathSplit.Length; i++)
-                    {                        
+                    {
                         if (i > 2 && pathSplit[i][0] == '{' && pathSplit[i][pathSplit[i].Length - 1] == '}')
                         {
                             foreach (KeyValuePair<string, string> paramKeyVal in paramDic)
                             {
                                 string x = pathSplit[i].Substring(1, pathSplit[i].Length - 2);
-                                
+
                                 if (x.Equals(paramKeyVal.Key, StringComparison.CurrentCultureIgnoreCase))
                                 {
                                     path += "/" + paramKeyVal.Value;
                                     continue;
-                                }                               
+                                }
                             }
                             continue;
                         }
@@ -364,7 +399,7 @@ namespace Master.WebApi.Controllers
                         ApiPath = path,
                         Method = api.HttpMethod.Method
                     });
-                }                                
+                }
             }
 
             response.Data = apiDescList;
@@ -380,7 +415,7 @@ namespace Master.WebApi.Controllers
         public string RelativePath { get; set; }
         public string ApiPath { get; set; }
         public string Method { get; set; }
-        
+
     }
 
     public class DemoHelper
@@ -408,7 +443,7 @@ namespace Master.WebApi.Controllers
                     else
                     {
                         columns.Add(prop.Name);
-                    }                    
+                    }
                 }
             }
             return columns;
