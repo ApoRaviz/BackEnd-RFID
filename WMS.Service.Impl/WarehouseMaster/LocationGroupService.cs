@@ -20,6 +20,7 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Repository.Impl.Warehouse;
 using WMS.Repository.Warehouse;
 using WMS.Master.Common.ValueObject;
+using WMS.Common.ValueObject;
 
 namespace WMS.Master
 {
@@ -332,6 +333,18 @@ namespace WMS.Master
 
                 return true;
             }
+        }
+
+        public IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term)
+        {
+            IEnumerable<AutocompleteLocationDto> autocompleteItemDto;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ILocationGroupRepository repo = new LocationGroupRepository(Db);
+                autocompleteItemDto = repo.AutocompleteLocation(term);
+
+            }
+            return autocompleteItemDto;
         }
 
         public void HandleValidationException(DbEntityValidationException ex)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
+using WMS.Entity.InventoryManagement;
 
 namespace WMS.Entity.Receiving
 {
@@ -22,5 +23,7 @@ namespace WMS.Entity.Receiving
         public int? ReceivingType { get; set; }
         public int? StatusIDSys { get; set; }
         public DateTime ReceiveDate { get; set; }
+
+        public virtual ICollection<InventoryTransaction> InventoryTransaction { get; set; }
     }
 }

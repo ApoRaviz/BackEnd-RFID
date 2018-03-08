@@ -21,6 +21,7 @@ namespace WMS.Entity.InventoryManagement
         public int Qty { get; set; }
         public int UnitIDSys { get; set; }
         public int LocIDSys { get; set; }
+        public int ConvertedQty { get; set; }
         public int StatusIDSys { get; set; }
     }
 }

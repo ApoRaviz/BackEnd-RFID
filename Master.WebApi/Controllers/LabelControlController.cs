@@ -29,7 +29,6 @@ namespace Master.WebApi.Controllers
             LabelControlDto labelResponse = new LabelControlDto();
             ResponseData<LabelControlDto> response = new ResponseData<LabelControlDto>();
 
-
             try
             {
                 ProjectID = (User.IsSysAdmin()) ? ProjectID : User.Identity.GetProjectIDSys();

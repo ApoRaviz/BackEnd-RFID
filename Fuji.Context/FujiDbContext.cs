@@ -26,16 +26,17 @@ namespace Fuji.Context
         public DbSet<GeneralLog> GeneralLogs { get; set; }
 
 
-        public FujiDbContext(string methodLog = "") : base("name=YUT_FUJI")
+        public FujiDbContext(string message = "",[System.Runtime.CompilerServices.CallerMemberName] string methodName = "") : base("name=YUT_FUJI")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
-            if (!string.IsNullOrEmpty(methodLog))
+        
+            if (!string.IsNullOrEmpty(methodName))
             {
                 string projectName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location).Split('.').FirstOrDefault();
                 string className = new System.Diagnostics.StackFrame(1)?.GetMethod()?.ReflectedType.Name;
                 this.Database.Log = s => LogWriter.WritetoFile(projectName
-                   , className + "." + methodLog
+                   , className + "." + methodName
                    , s);
 
             }

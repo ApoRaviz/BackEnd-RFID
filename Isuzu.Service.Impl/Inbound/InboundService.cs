@@ -23,13 +23,19 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using System.Web.Script.Serialization;
 using System.Data.Entity;
 using WIM.Core.Service.Impl.StatusManagement;
+using WIM.Core.Service.FileManagement;
+using WIM.Core.Service.Impl.FileManagement;
+using WIM.Core.Entity.FileManagement;
 
 namespace Isuzu.Service.Impl.Inbound
 {
     public class InboundService : IInboundService
     {
+
+        private IFileService FileService;
         public InboundService()
         {
+            this.FileService = new FileService();
         }
 
         private const int _SUBMODULE_ID = 11;
@@ -381,7 +387,6 @@ namespace Isuzu.Service.Impl.Inbound
                         item.PackCartonDate = DateTime.Now;
                         DetailRepo.Update(item);
                     }
-
                     Db.SaveChanges();
                     scope.Complete();
                 }
@@ -390,7 +395,6 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking)
         {
-
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -492,7 +496,6 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItems>() { };
                     }
                 }
-
             }
             return items;
 
@@ -515,8 +518,6 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItems>() { };
                     }
                 }
-
-
                 return items;
             }
 
@@ -1101,6 +1102,31 @@ namespace Isuzu.Service.Impl.Inbound
 
             }
             return items;
+        }
+
+        public string CreateDeletedFileID(string pathName)
+        {
+            string fileID = "";
+            if(!string.IsNullOrEmpty(pathName))
+            {
+                File_MT fileMt = new File_MT();
+                fileMt.FileUID = Guid.NewGuid().ToString();
+                fileMt.FileName = pathName;
+                fileMt.LocalName = pathName;
+                fileMt.PathFile = Path.GetExtension(pathName);
+                fileID = FileService.CreateFile(fileMt);
+            }
+
+            return fileID;
+           //FileService(files);
+        }
+
+        public void GetDeletedFileID(string fileID)
+        {
+            if (!string.IsNullOrEmpty(fileID))
+            {
+               FileService.GetFile(fileID);
+            }
         }
 
         #region AsyncMethod 
