@@ -82,28 +82,6 @@ namespace WMS.WebApi.Controller
         //    return Request.ReturnHttpResponseMessage(response);
         //}
 
-
-
-
-        [HttpGet]
-        [Route("")]
-        public HttpResponseMessage GetList([FromBody]GroupLocation Location)
-        {
-            IResponseData<IEnumerable<GroupLocation>> response = new ResponseData<IEnumerable<GroupLocation>>();
-            try
-            {
-                Location.UpdateBy = User.Identity.Name;
-               IEnumerable<GroupLocation> rs = LocationService.GetList();
-                response.SetData(rs);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
         [HttpPost]
         [Route("")]
         public HttpResponseMessage Post([FromBody]GroupLocation Location)

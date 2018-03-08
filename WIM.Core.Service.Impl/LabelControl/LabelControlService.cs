@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Transactions;
 using System.Web;
-using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
@@ -21,6 +20,8 @@ namespace WIM.Core.Service.Impl
 {
     public class LabelControlService : Service, ILabelControlService
     {
+
+        string[] ListLang = { "en", "th", "jp" };
         public LabelControlDto GetDto(string Lang, int ProjectID)
         {
             LabelControlDto label = new LabelControlDto();
@@ -48,8 +49,7 @@ namespace WIM.Core.Service.Impl
                     {
                         LabelControl labelControl = new LabelControl();
                         ILabelControlRepository repo = new LabelControlRepository(db);
-                        string[] listLang = { "en", "th", "jp" };
-                        foreach (string lang in listLang)
+                        foreach (string lang in ListLang)
                         {
                             labelData.Lang = lang;
                             labelControl = repo.Insert(labelData);
@@ -128,6 +128,30 @@ namespace WIM.Core.Service.Impl
                 }
             }
 
+        }
+
+        public bool AddLabelConfig(int ProjectIDSys, List<LabelConfig> LabelConfig)
+        {
+            foreach (string lang in ListLang)
+            {
+
+                LabelControl labelControl = new LabelControl();
+                using (CoreDbContext Db = new CoreDbContext())
+                {
+                    ILabelControlRepository repo = new LabelControlRepository(Db);
+                    labelControl = repo.Get(x => x.ProjectIDSys == ProjectIDSys && x.Lang == lang);
+                    labelControl.LabelConfig.AddRange(LabelConfig);
+                    repo.Update(labelControl);
+
+                }
+                return true;
+            }
+            return true;
+        }
+
+        public LabelControlDto DelLabelConfig(int ProjectIDSys, string[] LabelConfig)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace WMS.WebApi
             container.RegisterType<IReportService, ReportService>();
             container.RegisterType<IImportService, ImportService>();
             container.RegisterType<ICategoryService, CategoryService>();
-            //container.RegisterType<IDimensionService, DimensionService>();
+            container.RegisterType<IDimensionService, DimensionService>();
             container.RegisterType<IWarehouseService, WarehouseService>();
             container.RegisterType<IZoneService, ZoneService>();
             container.RegisterType<ILocationGroupService, LocationGroupService>();
