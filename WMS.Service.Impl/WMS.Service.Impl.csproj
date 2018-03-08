@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\CategoryService.cs" />
+    <Compile Include="Dimension\DimensionService.cs" />
     <Compile Include="Import\ImportService.cs" />
     <Compile Include="Inspect\InspectService.cs" />
     <Compile Include="ItemMaster\ItemService.cs" />
@@ -148,8 +149,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dimension\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
