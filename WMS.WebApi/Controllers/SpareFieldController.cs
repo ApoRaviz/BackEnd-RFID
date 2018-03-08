@@ -5,6 +5,9 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.ValueObject;
+using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 using WMS.Entity.SpareField;
 using WMS.Service;
 
@@ -62,7 +65,7 @@ namespace WMS.WebApi.Controller
         // GET: api/SpareField
         [HttpGet]
         [Route("Project/{ProjectIDSys}")]
-        public HttpResponseMessage GetByProjectIDSys( int ProjectIDSys)
+        public HttpResponseMessage GetByProjectIDSys(int ProjectIDSys)
         {
             ResponseData<IEnumerable<SpareField>> response = new ResponseData<IEnumerable<SpareField>>();
             try
@@ -81,11 +84,14 @@ namespace WMS.WebApi.Controller
         // POST: api/Employees
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]IEnumerable<SpareField> SpareField)
+        public HttpResponseMessage Post([FromBody]List<SpareField> SpareField)
         {
             IResponseData<int> response = new ResponseData<int>();
             try
             {
+                ILabelControlService LabelService = new LabelControlService();
+                LabelControlDto labelResponse = new LabelControlDto();
+                labelResponse = LabelService.GetDto("th", SpareField[0].ProjectIDSys);
                 int id = SpareFieldService.CreateSpareField(SpareField);
                 response.SetData(id);
             }

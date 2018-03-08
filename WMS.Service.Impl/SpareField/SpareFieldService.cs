@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Entity.LabelManagement.LabelConfigs;
 using WMS.Context;
 using WMS.Entity.SpareField;
 using WMS.Repository;
@@ -56,18 +56,17 @@ namespace WMS.Service.Impl
             using (var scope = new TransactionScope())
             {
                 SpareField SpareFieldnew = new SpareField();
+                List<LabelConfig> labelConfig = new List<LabelConfig>();
                 try
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                        int i = 1;
-                        char j = '0';
+
                         foreach (var x in SpareField)
                         {
-                            x.Text = x.TableName + "sparefield"+ i.ToString().PadLeft(3, j);
                             SpareFieldnew = repo.Insert(x);
-                            i++;
+                            labelConfig.Add(new LabelConfig() { Key = x.Text, Value = x.Text, DefaultValue = x.Text });
                         }
                         Db.SaveChanges();
                         scope.Complete();
@@ -97,23 +96,19 @@ namespace WMS.Service.Impl
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                            
-                            int i = 1;
-                        char j = '0';
+                        List<LabelConfig> labelConfig = new List<LabelConfig>();
                         foreach (var x in SpareField)
                         {
                             if (x.SpfIDSys == 0)
                             {
-                                x.Text = x.TableName + "sparefield" + i.ToString().PadLeft(3, j) ;
                                 repo.Insert(x);
-                                
+                                labelConfig.Add(new LabelConfig() { Key = x.Text, Value = x.Text, DefaultValue = x.Text });
+
                             }
                             else
                             {
-                                x.Text = x.TableName + "sparefield" + i.ToString().PadLeft(3, j) ;
                                 repo.Update(x);
                             }
-                            i++;
                         }
                         Db.SaveChanges();
                         scope.Complete();
