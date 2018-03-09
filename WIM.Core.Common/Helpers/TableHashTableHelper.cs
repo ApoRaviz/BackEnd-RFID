@@ -16,7 +16,7 @@ namespace WIM.Core.Common.Helpers
         public static void Initialize()
         {
             tableTable = new Hashtable();
-            using (CoreDbContext db = new CoreDbContext())
+            using (Context.CoreDbContext db = new Context.CoreDbContext())
             {
                 var table = db.GetType().GetProperties();
 
@@ -49,12 +49,12 @@ namespace WIM.Core.Common.Helpers
                                 }
                             }
                         }
-                        tableTable.Add(temp.TableName,temp);
+                        tableTable.Add(temp.TableName, temp);
                     }
                 }
             }
 
-            using (WMSDbContext db = new WMSDbContext())
+            using (WMS.Context.WMSDbContext db = new WMS.Context.WMSDbContext())
             {
 
                 var table = db.GetType().GetProperties();

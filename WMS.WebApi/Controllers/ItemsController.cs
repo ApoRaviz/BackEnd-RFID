@@ -11,7 +11,7 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
    // [Authorize]
     [RoutePrefix("api/v1/items")]
@@ -111,7 +111,24 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-
+        // POST: api/Items
+        [HttpPost]
+        [Route("gift")]
+        public HttpResponseMessage PostItemGift([FromBody]ItemGiftDto item)
+        {
+            IResponseData<int> response = new ResponseData<int>();
+            try
+            {
+                int id = ItemService.CreateItemGift(item);
+                response.SetData(id);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
 
         // PUT: api/Items/5
         [HttpPut]

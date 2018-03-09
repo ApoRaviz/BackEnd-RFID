@@ -19,7 +19,6 @@ namespace WIM.Core.Service.Impl.StatusManagement
             {
                 ISubCityRepository repoGetAddress = new SubCityRepository(db);
                 return repoGetAddress.GetDto();
-
             }
 
         }

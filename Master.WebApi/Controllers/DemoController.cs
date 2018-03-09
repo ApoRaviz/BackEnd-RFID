@@ -83,6 +83,41 @@ namespace Master.WebApi.Controllers
         {
 
         }
+        public class From<A,B>
+        {
+            public A a  { get; set; }
+            public B b { get; set; }
+        }
+
+        public class A
+        {
+            public string test1 { get; set; }
+        }
+
+        public class B
+        {
+            public string test2 { get; set; }
+        }
+
+        [HttpPost]
+        [Route("birdfunc3")]
+        public HttpResponseMessage birdFunc3([FromBody]From<A, B> a)
+        {
+            ResponseData<string> response = new ResponseData<string>();
+            try
+            {
+                object xa = a;
+                //B xb = b;
+                response.SetData("");
+            }
+            catch (NullReferenceException)
+            {
+                response.SetData("");
+            }
+
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
 
         [HttpPost]
         [Route("func1")]

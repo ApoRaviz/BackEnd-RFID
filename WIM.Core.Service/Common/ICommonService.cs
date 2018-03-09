@@ -20,5 +20,6 @@ namespace WIM.Core.Service
         IEnumerable<SubModuleDto> SMAutoComplete(string key);
         //void InsertLog(HandheldErrorLog errorLog);
         T AutoMapper<T>(object data);
+        string GetValueGenerateCode(string key);
     }
 }

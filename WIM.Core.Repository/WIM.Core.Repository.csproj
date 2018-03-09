@@ -53,6 +53,7 @@
     <Compile Include="ApiMaster\IApiMenuMappingRepository.cs" />
     <Compile Include="ApiMaster\IApiMTRepository.cs" />
     <Compile Include="ApiMaster\IPermissionGroupRepository.cs" />
+    <Compile Include="Common\IGeneralConfigsRepository.cs" />
     <Compile Include="Country\ICountryRepository.cs" />
     <Compile Include="Currency\ICurrencyRepository.cs" />
     <Compile Include="CustomerAndProject\ICustomerRepository.cs" />

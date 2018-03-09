@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Service;
+using WMS.Common.ValueObject;
 using WMS.Entity.WarehouseManagement;
 using WMS.Master.Common.ValueObject;
 
@@ -16,7 +17,7 @@ namespace WMS.Master
         GroupLocation GetLocationGroupByGroupLocIDSys(int id);
         IEnumerable<GroupLocation> GetLocationGroupByZoneInfo(GroupLocation item);
         IEnumerable<GroupLocation> GetLocationGroupByZoneID(int zoneIDSys);
-
+        IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term);
         int CreateLocationGroup(GroupLocation locationGroup);
         bool UpdateLocationGroup(int locationGroupIDSys, GroupLocation locationGroup);
         bool UpdateAllLocationGroup(List<GroupLocation> locationGroups);

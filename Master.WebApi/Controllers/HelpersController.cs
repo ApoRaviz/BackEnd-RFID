@@ -13,6 +13,7 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Context;
 using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
 {
@@ -149,6 +150,31 @@ namespace Master.WebApi.Controllers
             try
             {
                 IEnumerable<SubModuleDto> result = CommonService.SMAutoComplete(txt);
+                response.SetData(result);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("generate/{keyword}")]
+        public HttpResponseMessage GetKeyGenerator(string keyword)
+        {
+            IResponseData<string> response = new ResponseData<string>();
+            if (string.IsNullOrEmpty(keyword))
+            {
+                response.SetData(null);
+                Request.ReturnHttpResponseMessage(response);
+            }
+
+            try
+            {
+                ICommonService common = new CommonService();
+                string result = common.GetValueGenerateCode(keyword);
                 response.SetData(result);
             }
             catch (ValidationException ex)

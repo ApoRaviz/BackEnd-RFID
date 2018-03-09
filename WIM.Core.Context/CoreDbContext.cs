@@ -22,6 +22,7 @@ using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.View;
 using WIM.Core.Entity.FileManagement;
+using WMS.Entity.SpareField;
 using WIM.Core.Entity.Address;
 
 namespace WIM.Core.Context
@@ -59,7 +60,7 @@ namespace WIM.Core.Context
         public virtual DbSet<File_MT> File_MT { get; set; }
         public virtual DbSet<PermissionGroup> PermissionGroup { get; set; }
         public virtual DbSet<PermissionGroupApi> PermissionGroupApi { get; set; }
-
+        public virtual DbSet<GeneralConfigs> GeneralConfigs { get; set; }
         public virtual DbSet<Probation_MT> Probation_MT { get; set; }
         
 

@@ -12,6 +12,7 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.LabelManagement;
+using WIM.Core.Entity.LabelManagement.LabelConfigs;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
 
@@ -28,7 +29,6 @@ namespace Master.WebApi.Controllers
             LabelControlDto labelResponse = new LabelControlDto();
             ResponseData<LabelControlDto> response = new ResponseData<LabelControlDto>();
 
-
             try
             {
                 ProjectID = (User.IsSysAdmin()) ? ProjectID : User.Identity.GetProjectIDSys();
@@ -42,6 +42,8 @@ namespace Master.WebApi.Controllers
             
             return Request.ReturnHttpResponseMessage(response);
         }
+
+
 
         [HttpPost]
         [Route("")]
@@ -81,6 +83,29 @@ namespace Master.WebApi.Controllers
 
             }
             return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("addlabelconfig/{projectid}")]
+        public HttpResponseMessage PostAddLabelConfig([FromUri]int projectid)
+        {
+            LabelControlService LabelService = new LabelControlService();
+            LabelControlDto labelResponse = new LabelControlDto();
+            LabelService.AddLabelConfig(projectid, labelResponse.LabelConfig);
+            //LabelControlDto labelResponse = new LabelControlDto();
+            //ResponseData<LabelControlDto> response = new ResponseData<LabelControlDto>();
+            try
+            {
+                //LabelData.ProjectIDSys = (User.IsSysAdmin()) ? LabelData.ProjectIDSys : User.Identity.GetProjectIDSys();
+                //labelResponse = LabelService.CreateLabelControl(LabelData);
+                //response.SetData(labelResponse);
+            }
+            catch (NullReferenceException)
+            {
+
+            }
+            //return Request.ReturnHttpResponseMessage(null);
+            return null;
         }
 
     }

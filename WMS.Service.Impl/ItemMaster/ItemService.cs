@@ -22,6 +22,7 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Repository.ItemManagement;
 using WMS.Repository.Impl.ItemManagement;
 using WMS.Entity.InspectionManagement;
+using WIM.Core.Service.Impl;
 
 namespace WMS.Service
 {
@@ -127,6 +128,42 @@ namespace WMS.Service
                     throw new ValidationException(e);
                 }
                 catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.E4012);
+                }
+                return itemresponse.ItemIDSys;
+            }
+        }
+
+        public int CreateItemGift(ItemGiftDto item)
+        {
+            using (var scope = new TransactionScope())
+            {
+                Item_MT itemresponse = new Item_MT();
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        IItemRepository repo = new ItemRepository(Db);
+                        IItemUnitRepository repoUnit = new ItemUnitRepository(Db);
+                        Item_MT itemForInsert = new CommonService().AutoMapper<Item_MT>(item);
+                        itemresponse = repo.Insert(itemForInsert);
+                        Db.SaveChanges();
+                        ItemUnitMapping itemunitforinsert = new CommonService().AutoMapper<ItemUnitMapping>(item);
+                        itemunitforinsert.ItemIDSys = itemresponse.ItemIDSys;
+                        itemunitforinsert.Sequence = 0;
+                        itemunitforinsert.QtyInParent = 1;
+                        repoUnit.Insert(itemunitforinsert);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException e)
                 {
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.E4012);

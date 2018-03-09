@@ -9,7 +9,7 @@ using WIM.Core.Common.Utility.Validation;
 using WMS.Entity.Dimension;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     [RoutePrefix("api/v1/dimension")]

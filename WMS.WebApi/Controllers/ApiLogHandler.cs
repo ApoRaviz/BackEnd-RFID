@@ -11,7 +11,7 @@ using System.Web.Http.Routing;
 using WIM.Core.Entity.Common;
 using WIM.Core.Service.Impl;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     public class ApiLogHandler : DelegatingHandler
     {

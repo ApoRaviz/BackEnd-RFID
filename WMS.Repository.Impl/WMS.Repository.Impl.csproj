@@ -53,6 +53,7 @@
     <Compile Include="ImportDefinition\ImportDefinitionRepository.cs" />
     <Compile Include="Inspect\InspectRepository.cs" />
     <Compile Include="Inspect\InspectTypeRepository.cs" />
+    <Compile Include="InventoryManage\InventoryTransactionRepository.cs" />
     <Compile Include="ItemManagement\ItemInspectRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />
     <Compile Include="ItemManagement\ItemSetDetailRepository.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Report\ReportLayoutDetailRepository.cs" />
     <Compile Include="Report\ReportLayoutHeaderRepository.cs" />
     <Compile Include="Report\ReportLayoutRepository.cs" />
+    <Compile Include="SpareField\SpareFieldRepository.cs" />
     <Compile Include="UnitMaster\UnitRepository.cs" />
     <Compile Include="Warehouse\LocationGroupRepository.cs" />
     <Compile Include="Warehouse\LocationZoneRepository.cs" />
@@ -77,10 +79,6 @@
     <Compile Include="Warehouse\ZoneLayoutHeaderRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HRMS.Context\HRMS.Context.csproj">
-      <Project>{D78E68BA-486E-4577-8773-BF08F50721E1}</Project>
-      <Name>HRMS.Context</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
       <Name>WIM.Core.Context</Name>

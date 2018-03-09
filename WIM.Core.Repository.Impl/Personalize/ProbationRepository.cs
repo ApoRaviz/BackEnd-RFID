@@ -16,5 +16,8 @@ namespace WIM.Core.Repository.Impl.Personalize
         {
             Db = context;
         }
+
+
+       
     }
 }
