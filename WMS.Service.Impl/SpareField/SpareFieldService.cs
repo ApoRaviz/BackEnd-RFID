@@ -53,21 +53,26 @@ namespace WMS.Service.Impl
 
         public int CreateSpareField(IEnumerable<SpareField> SpareField)
         {
+                int proID = 0;
+                List<LabelConfig> labelConfig = new List<LabelConfig>();
             using (var scope = new TransactionScope())
             {
                 SpareField SpareFieldnew = new SpareField();
-                List<LabelConfig> labelConfig = new List<LabelConfig>();
                 try
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                        int proID = 0;
                         foreach (var x in SpareField)
                         {
                             proID = x.ProjectIDSys;
                             SpareFieldnew = repo.Insert(x);
                             labelConfig.Add(new LabelConfig() { Key = x.Text, Value = x.Text, DefaultValue = x.Text });
+                        }
+                        if (proID != 0)
+                        {
+                            WIM.Core.Service.Impl.LabelControlService labelControlService = new WIM.Core.Service.Impl.LabelControlService();
+                            labelControlService.AddLabelConfig(proID, labelConfig);
                         }
                         Db.SaveChanges();
                         scope.Complete();
@@ -94,7 +99,7 @@ namespace WMS.Service.Impl
             List<LabelConfig> labelConfig = new List<LabelConfig>();
             using (var scope = new TransactionScope())
             {
-                
+
                 try
                 {
                     //WMSDbContext Db = new WMSDbContext();
@@ -115,9 +120,6 @@ namespace WMS.Service.Impl
                                 //repo.Update(x);
                             }
                         }
-                       
-                        
-
                         if (proID != 0)
                         {
                             WIM.Core.Service.Impl.LabelControlService labelControlService = new WIM.Core.Service.Impl.LabelControlService();
@@ -125,7 +127,6 @@ namespace WMS.Service.Impl
                         }
                         Db.SaveChanges();
                         scope.Complete();
-  
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -140,9 +141,7 @@ namespace WMS.Service.Impl
                 }
                 //return true;
             }
-
             return true;
-
         }
 
         public bool DeleteSpareField(int id)
@@ -153,7 +152,7 @@ namespace WMS.Service.Impl
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        
+
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
                         var deactivatedspf = repo.GetByID(id); ;
                         deactivatedspf.IsActive = false;
