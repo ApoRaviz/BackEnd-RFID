@@ -19,7 +19,7 @@ namespace WMS.Repository.Impl
     {
         private WMSDbContext Db { get; set; }
 
-        public CategoryRepository(WMSDbContext context):base(context)
+        public CategoryRepository(Context.WMSDbContext context):base(context)
         {
             Db = context;
         }

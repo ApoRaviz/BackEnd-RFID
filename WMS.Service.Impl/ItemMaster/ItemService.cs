@@ -127,7 +127,7 @@ namespace WMS.Service
                 {
                     throw new ValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.E4012);
@@ -163,7 +163,7 @@ namespace WMS.Service
                 {
                     throw new ValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.E4012);

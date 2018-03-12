@@ -23,9 +23,6 @@ namespace WMS.Service.Impl.Report
 {
     public class ReportService : WIM.Core.Service.Impl.Service, IReportService
     {
-        string pXmlDetail = "<row><ColumnName>{0}</ColumnName><ColumnOrder>{1}</ColumnOrder></row>";
-
-
         public List<ReportLayout_MT> GetAllReportHeader(int ProjectIDSys)
         {
             List<ReportLayout_MT> report;

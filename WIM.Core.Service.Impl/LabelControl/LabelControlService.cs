@@ -51,6 +51,7 @@ namespace WIM.Core.Service.Impl
                         ILabelControlRepository repo = new LabelControlRepository(db);
                         foreach (string lang in ListLang)
                         {
+
                             labelData.Lang = lang;
                             labelControl = repo.Insert(labelData);
                             CreateFileJsonI18n(labelControl.LabelConfig, labelControl.ProjectIDSys + "_" + labelControl.Lang);
@@ -132,21 +133,56 @@ namespace WIM.Core.Service.Impl
 
         public bool AddLabelConfig(int ProjectIDSys, List<LabelConfig> LabelConfig)
         {
-            foreach (string lang in ListLang)
+            using (CoreDbContext db = new CoreDbContext())
             {
-
-                LabelControl labelControl = new LabelControl();
-                using (CoreDbContext Db = new CoreDbContext())
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew))
                 {
-                    ILabelControlRepository repo = new LabelControlRepository(Db);
-                    labelControl = repo.Get(x => x.ProjectIDSys == ProjectIDSys && x.Lang == lang);
-                    labelControl.LabelConfig.AddRange(LabelConfig);
-                    repo.Update(labelControl);
+                    try
+                    {
 
+                        LabelControl labelControl = new LabelControl();
+                        ILabelControlRepository repo = new LabelControlRepository(db);
+                        foreach (string lang in ListLang)
+                        {
+                            labelControl = repo.Get(x => x.ProjectIDSys == ProjectIDSys && x.Lang == lang);
+                            if (labelControl == null)
+                            {
+                                labelControl = new LabelControl
+                                {
+                                    ProjectIDSys = ProjectIDSys,
+                                    Lang = lang,
+                                    LabelConfig = LabelConfig
+                                };
+                                repo.Insert(labelControl);
+                            }
+                            else
+                            {
+                                List<LabelConfig> newLabelConfig = new List<LabelConfig>();
+                                newLabelConfig.AddRange(labelControl.LabelConfig);
+                                newLabelConfig.AddRange(LabelConfig);
+                                labelControl.LabelConfig = newLabelConfig;
+                                repo.Update(labelControl);
+                            }
+                        }
+                        db.SaveChanges();
+                        scope.Complete();
+                        return true;
+                    }
+                    catch (DbEntityValidationException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        throw ex;
+                    }
+                    catch (DbUpdateException x)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        throw x;
+                    }
                 }
-                return true;
+
             }
-            return true;
         }
 
         public LabelControlDto DelLabelConfig(int ProjectIDSys, string[] LabelConfig)

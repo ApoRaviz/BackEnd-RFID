@@ -930,7 +930,6 @@ namespace Fuji.Service.Impl.ItemImport
                     catch (DbEntityValidationException e)
                     {
                         throw new ValidationException(e);
-                        return false;
                     }
 
                 }

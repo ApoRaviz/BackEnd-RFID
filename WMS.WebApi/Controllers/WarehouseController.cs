@@ -10,7 +10,7 @@ using WIM.Core.Common.Utility.Validation;
 using WMS.Entity.WarehouseManagement;
 using WMS.Master;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     [RoutePrefix("api/v1/Warehouses")]

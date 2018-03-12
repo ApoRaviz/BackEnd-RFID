@@ -20,7 +20,7 @@ namespace WMS.Service
         public List<DimensionLayout_MT> GetAllDimension()
         {
             List<DimensionLayout_MT> dimension;
-            using (WMSDbContext Db = new WMSDbContext())
+            using (Context.WMSDbContext Db = new Context.WMSDbContext())
             {
                 IDimensionRepository repo = new DimensionRepository(Db);
                 dimension = repo.Get().ToList();
@@ -31,7 +31,7 @@ namespace WMS.Service
 
         public List<string> GetColorInSystem(int? id)
         {
-            using (WMSDbContext Db = new WMSDbContext())
+            using (Context.WMSDbContext Db = new Context.WMSDbContext())
             {
                 IDimensionRepository repo = new DimensionRepository(Db);
                 List<DimensionLayout_MT> dimension = repo.Get().ToList();
@@ -44,7 +44,7 @@ namespace WMS.Service
 
         public DimensionLayout_MT GetDimensionLayoutByDimensionIDSys(int id)
         { DimensionLayout_MT dimension;
-            using (WMSDbContext Db = new WMSDbContext())
+            using (Context.WMSDbContext Db = new Context.WMSDbContext())
             {
                 IDimensionRepository repo = new DimensionRepository(Db);
                 dimension = repo.GetByID(id);
@@ -61,7 +61,7 @@ namespace WMS.Service
                 data.CreateAt = DateTime.Now;
                 data.UpdateAt = DateTime.Now;
                 data.UpdateBy = Identity.Name;
-                using (WMSDbContext Db = new WMSDbContext())
+                using (Context.WMSDbContext Db = new Context.WMSDbContext())
                 {
                     IDimensionRepository repo = new DimensionRepository(Db);
                     try
@@ -86,7 +86,7 @@ namespace WMS.Service
             int? updateFlag = 0;
             using (var scope = new TransactionScope())
             {
-                using (WMSDbContext Db = new WMSDbContext())
+                using (Context.WMSDbContext Db = new Context.WMSDbContext())
                 {
                     IDimensionRepository repo = new DimensionRepository(Db);
                     
@@ -110,10 +110,10 @@ namespace WMS.Service
         public List<DimensionLayout_MT> GetBlock()
         {
             List<DimensionLayout_MT> dimension;
-            using (WMSDbContext Db = new WMSDbContext())
+            using (Context.WMSDbContext Db = new Context.WMSDbContext())
             {
                 IDimensionRepository repo = new DimensionRepository(Db);
-                dimension =repo.Get().ToList();
+                dimension = repo.Get().ToList();
             }
             return dimension;
         }
