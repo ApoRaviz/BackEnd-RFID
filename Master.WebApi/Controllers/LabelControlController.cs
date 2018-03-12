@@ -1,20 +1,14 @@
-﻿using Master.Common.ValueObject.LabelControl;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.ValueObject;
-using WIM.Core.Context;
 using WIM.Core.Entity.LabelManagement;
-using WIM.Core.Entity.LabelManagement.LabelConfigs;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
+
+
 
 namespace Master.WebApi.Controllers
 {
