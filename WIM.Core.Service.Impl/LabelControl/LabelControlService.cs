@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Transactions;
 using System.Web;
-using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
@@ -21,6 +20,8 @@ namespace WIM.Core.Service.Impl
 {
     public class LabelControlService : Service, ILabelControlService
     {
+
+        string[] ListLang = { "en", "th", "jp" };
         public LabelControlDto GetDto(string Lang, int ProjectID)
         {
             LabelControlDto label = new LabelControlDto();
@@ -48,9 +49,9 @@ namespace WIM.Core.Service.Impl
                     {
                         LabelControl labelControl = new LabelControl();
                         ILabelControlRepository repo = new LabelControlRepository(db);
-                        string[] listLang = { "en", "th", "jp" };
-                        foreach (string lang in listLang)
+                        foreach (string lang in ListLang)
                         {
+
                             labelData.Lang = lang;
                             labelControl = repo.Insert(labelData);
                             CreateFileJsonI18n(labelControl.LabelConfig, labelControl.ProjectIDSys + "_" + labelControl.Lang);
@@ -128,6 +129,65 @@ namespace WIM.Core.Service.Impl
                 }
             }
 
+        }
+
+        public bool AddLabelConfig(int ProjectIDSys, List<LabelConfig> LabelConfig)
+        {
+            using (CoreDbContext db = new CoreDbContext())
+            {
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew))
+                {
+                    try
+                    {
+
+                        LabelControl labelControl = new LabelControl();
+                        ILabelControlRepository repo = new LabelControlRepository(db);
+                        foreach (string lang in ListLang)
+                        {
+                            labelControl = repo.Get(x => x.ProjectIDSys == ProjectIDSys && x.Lang == lang);
+                            if (labelControl == null)
+                            {
+                                labelControl = new LabelControl
+                                {
+                                    ProjectIDSys = ProjectIDSys,
+                                    Lang = lang,
+                                    LabelConfig = LabelConfig
+                                };
+                                repo.Insert(labelControl);
+                            }
+                            else
+                            {
+                                List<LabelConfig> newLabelConfig = new List<LabelConfig>();
+                                newLabelConfig.AddRange(labelControl.LabelConfig);
+                                newLabelConfig.AddRange(LabelConfig);
+                                labelControl.LabelConfig = newLabelConfig;
+                                repo.Update(labelControl);
+                            }
+                        }
+                        db.SaveChanges();
+                        scope.Complete();
+                        return true;
+                    }
+                    catch (DbEntityValidationException)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        throw ex;
+                    }
+                    catch (DbUpdateException x)
+                    {
+                        scope.Dispose();
+                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        throw x;
+                    }
+                }
+
+            }
+        }
+
+        public LabelControlDto DelLabelConfig(int ProjectIDSys, string[] LabelConfig)
+        {
+            throw new NotImplementedException();
         }
     }
 }

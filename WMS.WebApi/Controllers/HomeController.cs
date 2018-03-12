@@ -5,10 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
-    public class HomeController : Controller
+    public class HomeController : System.Web.Mvc.Controller
     {
         public ActionResult Index()
         {

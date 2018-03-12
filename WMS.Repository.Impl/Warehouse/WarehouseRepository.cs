@@ -17,8 +17,8 @@ namespace WMS.Repository.Impl
 {
     public class WarehouseRepository : Repository<Warehouse_MT> , IWarehouseRepository
     {
-        private WMSDbContext Db;
-        public WarehouseRepository(WMSDbContext context):base(context)
+        private Context.WMSDbContext Db;
+        public WarehouseRepository(Context.WMSDbContext context):base(context)
         {
             Db = context;
         }

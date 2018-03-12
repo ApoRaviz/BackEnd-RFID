@@ -177,7 +177,7 @@ namespace WIM.Core.Service.Impl
                 {
                     throw new ValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.E4012);
