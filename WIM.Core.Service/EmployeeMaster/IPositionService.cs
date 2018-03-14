@@ -11,6 +11,7 @@ namespace WIM.Core.Service.EmployeeMaster
     {
         IEnumerable<Positions> GetPositions();
         Positions GetPositionByPositionIDSys(int id);
+        Positions SetPositionConfig(int id , List<PositionConfig<List<PositionConfig<string>>>> positionConfig);
         int CreatePosition(Positions position);
         bool UpdatePosition(Positions position);
         bool DeletePosition(int id);

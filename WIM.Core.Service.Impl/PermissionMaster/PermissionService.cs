@@ -24,6 +24,7 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Repository.MenuAndPermission;
 using WIM.Core.Repository.Impl.ApiMaster;
 using WIM.Core.Repository.ApiMaster;
+using WIM.Core.Entity.Employee;
 
 namespace WIM.Core.Service.Impl
 {
@@ -42,7 +43,7 @@ namespace WIM.Core.Service.Impl
                 IPermissionRepository repo = new PermissionRepository(Db);
                 permission = repo.Get();
             }
-                return permission;
+            return permission;
         }
 
         public Permission GetPermissionByLocIDSys(string id)
@@ -142,7 +143,7 @@ namespace WIM.Core.Service.Impl
                 }
                 return true;
             }
-        }      
+        }
 
         public string CreateRolePermission(string PermissionId, string RoleId)
         {
@@ -182,7 +183,7 @@ namespace WIM.Core.Service.Impl
         {
             using (var scope = new TransactionScope())
             {
-               try
+                try
                 {
                     using (CoreDbContext Db = new CoreDbContext())
                     {
@@ -259,7 +260,7 @@ namespace WIM.Core.Service.Impl
                 var x = repogroup.GetPermissionByGroupAndMenu(projectid).ToList();
                 return x;
             }
-            
+
         }
 
         public List<Permission> GetPermissionByProjectID(int ProjectID)
@@ -311,7 +312,7 @@ namespace WIM.Core.Service.Impl
             {
                 IPermissionRepository repo = new PermissionRepository(Db);
                 CoreDbContext Db2 = new CoreDbContext();
-                var temp = repo.GetManyQueryable(c => c.ProjectIDSys == ProjectIDSys && 
+                var temp = repo.GetManyQueryable(c => c.ProjectIDSys == ProjectIDSys &&
                 (Db2.RolePermissions.Where(a => a.RoleID == RoleID).Select(b => b.PermissionID).Contains(c.PermissionID)));
                 permission = temp.ToList();
             }
@@ -383,12 +384,12 @@ namespace WIM.Core.Service.Impl
                         foreach (var api in apies)
                         {
                             Permission data = new Permission();
-                            data.PermissionID = Guid.NewGuid().ToString(); 
+                            data.PermissionID = Guid.NewGuid().ToString();
                             data.PermissionName = api.Title;
                             if (api.GET) { data.Method = "GET"; }
                             else if (api.POST) { data.Method = "POST"; }
                             else if (api.PUT) { data.Method = "PUT"; }
-                            else if(api.DEL) { data.Method = "DEL"; }
+                            else if (api.DEL) { data.Method = "DEL"; }
                             data.ApiIDSys = api.ApiIDSys;
                             data.ProjectIDSys = menu.ProjectIDSys;
                             data.MenuIDSys = menu.MenuIDSys;
@@ -413,7 +414,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool DeletePermissionByGroup(string GroupIDSys , MenuProjectMapping menu)
+        public bool DeletePermissionByGroup(string GroupIDSys, MenuProjectMapping menu)
         {
             using (var scope = new TransactionScope())
             {
@@ -434,7 +435,7 @@ namespace WIM.Core.Service.Impl
                                 Db.SaveChanges();
                             }
                         }
-                        
+
                         foreach (var permission in mainpermission)
                         {
                             repo.Delete(permission);
@@ -458,34 +459,6 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        //var menu = repo.GetMany(c => c.ProjectIDSys == projectid && !(Db2.ApiMenuMapping.Where(a => a.Type =="A").Select(a => a.ApiIDSys+a.MenuIDSys).Contains(c.ApiIDSys+c.MenuIDSys)));
-        //var menutemp = repomenu.GetMany(c => (Db2.Permission.Where(a => a.ProjectIDSys == projectid).Select(b => b.MenuIDSys)).Contains(c.MenuIDSys));
-        //menutree = menutemp.Select(b => new PermissionTree()
-        //{
-        //    PermissionName = b.MenuName,
-        //    PermissionID = b.MenuIDSys.ToString()
-        //}).ToList();
-        //List<PermissionTree> permissionlist = menu.Select(b => new PermissionTree()
-        //{
-        //    PermissionID = b.PermissionID,
-        //    PermissionName = b.PermissionName,
-        //    MenuIDSys = b.MenuIDSys,
-        //    Method = b.Method
-        //}).ToList();
-        //List<List<PermissionTree>> listpermission = permissionlist.GroupBy(a => a.MenuIDSys).Select(grp => grp.ToList()).ToList();
-        //List<PermissionTree> temp;
-        //Console.Write("abc");
-        //for (int i = 0; i < menutree.Count; i++)
-        //{
-        //    for (int j = 0; j < listpermission.Count; j++)
-        //    {
-        //        temp = listpermission[j];
-        //        if (menutree[i].PermissionID == temp[0].MenuIDSys.ToString())
-        //        {
-        //            menutree[i].Group = temp;
-        //        }
-        //    }
-        //}
 
         public void HandleValidationException(DbEntityValidationException ex)
         {

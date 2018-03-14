@@ -134,5 +134,39 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 return true;
             }
         }
+
+
+        public Positions SetPositionConfig(int id, List<PositionConfig<List<PositionConfig<string>>>> positionConfig)
+        {
+            using (var scope = new TransactionScope())
+            {
+                Positions Positionnew = new Positions();
+                try
+                {
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPositionRepository repo = new PositionRepository(Db);
+                        Positions position = new Positions();
+                        position = repo.Get(x => x.PositionIDSys == id);
+                        position.PositionsConfig = new List<PositionConfig<List<PositionConfig<string>>>>();
+                        position.PositionsConfig = positionConfig;
+                        Positionnew = repo.Update(position);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    throw ex;
+                }
+                return Positionnew;
+            }
+        }
     }
 }
