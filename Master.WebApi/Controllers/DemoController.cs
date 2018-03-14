@@ -34,9 +34,47 @@ using WIM.Core.Entity.LabelManagement.LabelConfigs;
 using System.Collections.ObjectModel;
 using System.Web.Http.Description;
 using System.Web.Http.Controllers;
+using WIM.Core.Entity.ProjectManagement.ProjectConfigs;
+using WIM.Core.Entity.ProjectManagement;
 
 namespace Master.WebApi.Controllers
 {
+    public class ProjectGroup
+    {
+        public Project_MT Project_MT { get; set; }
+        public ProjectConfig ProjectConfig { get; set; }
+    }
+
+    public class EntityAndConfig<TEntity, TConfig>
+    {
+        public TEntity Entity { get; set; }
+        public TConfig Config { get; set; }
+
+    }
+
+    public class GeneralConfigTest<TEntity>
+    {
+        public string Key { get; set; }
+        public string Value { get; private set; }
+
+        [NotMapped]
+        public TEntity Config
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Value))
+                {
+                    return JsonConvert.DeserializeObject<TEntity>(StringHelper.Decompress(Value));
+                }
+                return default(TEntity);
+            }
+            set
+            {
+                Value = StringHelper.Compress(JsonConvert.SerializeObject(value));
+            }
+        }
+    }
+
     [RoutePrefix("api/v1/demo")]
     public class DemoController : ApiController
     {
@@ -45,55 +83,97 @@ namespace Master.WebApi.Controllers
         {
 
         }
+        public class From<A,B>
+        {
+            public A a  { get; set; }
+            public B b { get; set; }
+        }
+
+        public class A
+        {
+            public string test1 { get; set; }
+        }
+
+        public class B
+        {
+            public string test2 { get; set; }
+        }
+
+        [HttpPost]
+        [Route("birdfunc3")]
+        public HttpResponseMessage birdFunc3([FromBody]From<A, B> a)
+        {
+            ResponseData<string> response = new ResponseData<string>();
+            try
+            {
+                object xa = a;
+                //B xb = b;
+                response.SetData("");
+            }
+            catch (NullReferenceException)
+            {
+                response.SetData("");
+            }
+
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
 
         [HttpPost]
         [Route("func1")]
-        public HttpResponseMessage Func1([FromBody]List<LabelConfig> projectConfig)
+        public HttpResponseMessage Func1([FromBody]EntityAndConfig<Project_MT, List<LabelConfig>> ec)
         {
             LabelControl labelResponse = new LabelControl();
-            ResponseData<LabelControl> response = new ResponseData<LabelControl>();
+            ResponseData<List<LabelConfig>> response = new ResponseData<List<LabelConfig>>();
 
+            GeneralConfigTest<List<LabelConfig>> gc = new GeneralConfigTest<List<LabelConfig>>();
 
-            /*var res = projectConfig.ToDictionary(x => x.Key, x => x.Value);
-            response.SetData(res);
-            return Request.ReturnHttpResponseMessage(response);*/
-
-            using (CoreDbContext db = new CoreDbContext())
-            {
-                LabelControl label1 = db.LabelControl.SingleOrDefault(p => p.LabelIDSys == 1);
+            gc.Key = "LabelConfig";
+            gc.Config = ec.Config;
 
 
 
-                /*using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
-                {
-                    using (JsonWriter writer = new JsonTextWriter(sw))
-                    {
-                        serializer.Serialize(writer, projectConfig);
-
-                    }
-                }*/
 
 
-
-                label1.LabelConfig = projectConfig;
-                db.SaveChanges();
-
-                var labels = (
-                      from p in db.LabelControl
-                      select p
-                ).ToList();
-
-                try
-                {
-                    labelResponse = labels.FirstOrDefault(p => p.LabelConfig.FirstOrDefault().Key == "EmID");
-                    response.SetData(labelResponse);
-                }
-                catch (NullReferenceException)
-                {
-
-                }
-            }
+            response.SetData(gc.Config);
             return Request.ReturnHttpResponseMessage(response);
+
+            /* using (CoreDbContext db = new CoreDbContext())
+             {
+                 LabelControl label1 = db.LabelControl.SingleOrDefault(p => p.LabelIDSys == 1);
+
+
+
+                 using (StreamWriter sw = new StreamWriter(@"d:\Web\ftproot\lang\en.json"))
+                 {
+                     using (JsonWriter writer = new JsonTextWriter(sw))
+                     {
+                         serializer.Serialize(writer, labelConfig);
+
+                     }
+                 }
+
+
+
+                 label1.LabelConfig = labelConfig;
+                 db.SaveChanges();
+
+                 var labels = (
+                       from p in db.LabelControl
+                       select p
+                 ).ToList();
+
+                 try
+                 {
+                     labelResponse = labels.FirstOrDefault(p => p.LabelConfig.FirstOrDefault().Key == "EmID");
+                     response.SetData(labelResponse);
+                 }
+                 catch (NullReferenceException)
+                 {
+
+                 }
+             }
+             return Request.ReturnHttpResponseMessage(response);*/
         }
 
         [HttpPost]
@@ -158,7 +238,7 @@ namespace Master.WebApi.Controllers
 
             using (CoreDbContext db = new CoreDbContext())
             {
-                string sql = string.Format("select TOP(10) {0} from Employee_MT FOR JSON AUTO", labelSelect);                
+                string sql = string.Format("select TOP(10) {0} from Employee_MT FOR JSON AUTO", labelSelect);
                 string json = db.Database.SqlQuery<string>(sql).FirstOrDefault();
                 json = string.Format("{0} \"Employees\": {1} {2}", "{", json, "}");
 
@@ -315,7 +395,7 @@ namespace Master.WebApi.Controllers
             foreach (IGrouping<HttpControllerDescriptor, ApiDescription> group in apiGroups)
             {
                 foreach (ApiDescription api in group)
-                {                   
+                {
                     Dictionary<string, string> paramDic = new Dictionary<string, string>();
                     foreach (ApiParameterDescription parameter in api.ParameterDescriptions)
                     {
@@ -338,18 +418,18 @@ namespace Master.WebApi.Controllers
                     string path = "";
                     string[] pathSplit = api.RelativePath.Split('?')[0].Split('/');
                     for (int i = 0; i < pathSplit.Length; i++)
-                    {                        
+                    {
                         if (i > 2 && pathSplit[i][0] == '{' && pathSplit[i][pathSplit[i].Length - 1] == '}')
                         {
                             foreach (KeyValuePair<string, string> paramKeyVal in paramDic)
                             {
                                 string x = pathSplit[i].Substring(1, pathSplit[i].Length - 2);
-                                
+
                                 if (x.Equals(paramKeyVal.Key, StringComparison.CurrentCultureIgnoreCase))
                                 {
                                     path += "/" + paramKeyVal.Value;
                                     continue;
-                                }                               
+                                }
                             }
                             continue;
                         }
@@ -364,7 +444,7 @@ namespace Master.WebApi.Controllers
                         ApiPath = path,
                         Method = api.HttpMethod.Method
                     });
-                }                                
+                }
             }
 
             response.Data = apiDescList;
@@ -380,7 +460,7 @@ namespace Master.WebApi.Controllers
         public string RelativePath { get; set; }
         public string ApiPath { get; set; }
         public string Method { get; set; }
-        
+
     }
 
     public class DemoHelper
@@ -408,7 +488,7 @@ namespace Master.WebApi.Controllers
                     else
                     {
                         columns.Add(prop.Name);
-                    }                    
+                    }
                 }
             }
             return columns;

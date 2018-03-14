@@ -11,7 +11,7 @@ using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
 using WMS.Service;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     [RoutePrefix("api/v1/categories")]

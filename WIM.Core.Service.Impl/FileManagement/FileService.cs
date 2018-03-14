@@ -127,7 +127,7 @@ namespace WIM.Core.Service.Impl.FileManagement
                 {
                     throw new ValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
 

@@ -26,25 +26,20 @@ namespace Fuji.Context
         public DbSet<GeneralLog> GeneralLogs { get; set; }
 
 
-        public FujiDbContext(string methodLog = "") : base("name=YUT_FUJI")
+        public FujiDbContext(string message = "",[System.Runtime.CompilerServices.CallerMemberName] string methodName = "") : base("name=YUT_FUJI")
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
-            if (!string.IsNullOrEmpty(methodLog))
+        
+            if (!string.IsNullOrEmpty(methodName))
             {
                 string projectName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location).Split('.').FirstOrDefault();
                 string className = new System.Diagnostics.StackFrame(1)?.GetMethod()?.ReflectedType.Name;
                 this.Database.Log = s => LogWriter.WritetoFile(projectName
-                   , className + "." + methodLog
+                   , className + "." + methodName
                    , s);
 
             }
-        }
-
-        public static FujiDbContext Create()
-        {
-           
-            return new FujiDbContext();
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -52,14 +47,15 @@ namespace Fuji.Context
             base.OnModelCreating(modelBuilder);
         }
 
-
         public void ProcDeleteImportSerial()
         {
 
         }
+
         public void ProcDeleteImportSerialDetail()
         {
         }
+
         public string ProcGetDataAutoComplete(string columnNames,string tableName,string conditionColumnNames,string keyword)
         {
             return this.Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword"
@@ -68,17 +64,19 @@ namespace Fuji.Context
                 , new SqlParameter("@conditionColumnNames", conditionColumnNames)
                 , new SqlParameter("@keyword", keyword)).FirstOrDefault();
         }
+
         public void ProcGetImportSerialHead()
         {
         }
+
         public void ProcGetImportSerialHeadByHeadID()
         {
         }
+
         public IEnumerable<ImportSerialDetail> ProcPagingImportSerialDetail(int page, int size, out int totalRecord)
         {
             var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
             output.Direction = ParameterDirection.Output;
-
 
             var items = this.Database.SqlQuery<ImportSerialDetail>("ProcPagingImportSerialDetail @page,@size,@totalrow out"
                 , new SqlParameter("@page", page)
@@ -89,6 +87,7 @@ namespace Fuji.Context
 
             return items;
         }
+
         public IEnumerable<ImportSerialHead> ProcPagingImportSerialHead(int page, int size, out int totalRecord, string sort = "CreateAt", string sortDecending = "DESC")
         {
             totalRecord = 0;
@@ -106,25 +105,28 @@ namespace Fuji.Context
 
             return items;
         }
+
         public void ProcPagingImportSerialHeadSearch()
         {
         }
+
         public void ProcPagingPickingOrder()
         {
         }
+
         public void ProcRunDeleteImportSerial()
         {
         }
+
         public string ProcGetNewID(string prefix)
         {
             return this.Database.SqlQuery<string>("ProcGetNewID @Prefixes",new SqlParameter("@Prefixes",prefix)).FirstOrDefault();
         }
+
         public string ProcGetRFIDInfo(string specialQuery)
         {
             return this.Database.SqlQuery<string>("ProcGetRFIDInfo @SpeacialQuery", new SqlParameter("@SpeacialQuery", specialQuery)).FirstOrDefault();
         }
-
-
 
     }
 }

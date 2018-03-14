@@ -249,7 +249,6 @@ namespace WIM.Core.Service.Impl
 
         public List<PermissionTree> GetPermissionTree(int projectid)
         {
-            List<PermissionTree> menutree;
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPermissionRepository repo = new PermissionRepository(Db);

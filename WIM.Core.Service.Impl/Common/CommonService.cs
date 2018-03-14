@@ -41,7 +41,7 @@ namespace WIM.Core.Service.Impl
                     {
                         respType.GetProperty(prop.Name).SetValue(resp, value, null);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                     }
 

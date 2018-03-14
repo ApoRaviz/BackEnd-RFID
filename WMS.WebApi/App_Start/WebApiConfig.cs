@@ -9,7 +9,7 @@ using System.Web.Http.Cors;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using WMS.WebApi.Controllers;
+using WMS.WebApi.Controller;
 using WIM.Core.Security;
 
 namespace WMS.WebApi

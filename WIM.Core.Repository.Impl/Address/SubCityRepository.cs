@@ -47,8 +47,8 @@ namespace WIM.Core.Repository.Impl
             var provincetree = (from pv in Db.Province_MT
                                 select new locationObj
                                 {
-                                        name = pv.ProvinceName,
-                                        idsys = pv.ProvinceIDSys
+                                    name = pv.ProvinceName,
+                                    idsys = pv.ProvinceIDSys
                                 }
                                 ).ToList();
             var citytree = (from pv in Db.City_MT

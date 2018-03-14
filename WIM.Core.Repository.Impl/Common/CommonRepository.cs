@@ -5,14 +5,12 @@ using System.Linq;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.Common;
-using WMS.Context;
-
 namespace WIM.Core.Repository.Impl
 {
     public class CommonRepository : Repository<UserLog> , ICommonRepository
     {
         private CoreDbContext Db { get; set; }
-        public CommonRepository(CoreDbContext context):base(context)
+        public CommonRepository(Context.CoreDbContext context):base(context)
         {
             Db = context;
         }
@@ -30,7 +28,7 @@ namespace WIM.Core.Repository.Impl
 
         public string ProcGetTableDescriptionWms(string tableName)
         {
-            WMSDbContext wms = new WMSDbContext();
+            CoreDbContext wms = new CoreDbContext();
             return wms.Database.SqlQuery<string>("ProcGetTableDescription @tableName"
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
         }
@@ -77,7 +75,7 @@ namespace WIM.Core.Repository.Impl
                 var tableNameParameter2 = /*new ObjectParameter("@tableName", tableName);*/
                     new SqlParameter("tableName", tableName);
                 //#OilComment
-                WMSDbContext wms = new WMSDbContext();
+                CoreDbContext wms = new CoreDbContext();
                 x = wms.Database.SqlQuery<TableColumnsDescription>("ProcGetTableColumnsDescription @tableName", tableNameParameter2).ToList();
             }
             return x;

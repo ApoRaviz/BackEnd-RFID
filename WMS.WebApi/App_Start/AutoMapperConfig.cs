@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.CustomerManagement;
+using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.ProjectManagement;
 using WMS.Common.ValueObject;
 using WMS.Entity.ItemManagement;
@@ -36,6 +37,7 @@ namespace WMS.WebApi
                     .ForMember(d => d.Sequence, opt => opt.MapFrom(s => s.Sequence))
                     .ForMember(d => d.Cost, opt => opt.MapFrom(s => s.Cost))
                     .ForMember(d => d.Price, opt => opt.MapFrom(s => s.Price));
+                cfg.CreateMap<LabelControl, LabelControlDto>();
 
             });
         }

@@ -88,8 +88,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return Employeenew.EmID;
             }
@@ -116,8 +115,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return true;
             }
@@ -144,8 +142,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.E4012);
                 }
                 return true;
             }

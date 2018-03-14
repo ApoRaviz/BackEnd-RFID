@@ -18,6 +18,7 @@ using WMS.Repository.Impl;
 using WMS.Service.LocationMaster;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
+using WMS.Repository.Impl.Location;
 
 namespace WMS.Service.Impl.LocationMaster
 {
@@ -28,10 +29,10 @@ namespace WMS.Service.Impl.LocationMaster
 
         public LocationService()
         {
-            repo = new LocationRepository();
+            repo = new LocationRepository(proc);
         }        
 
-        public IEnumerable<Location_MT> GetLocations()
+        public IEnumerable<Location_MT> GetList()
         {           
             return repo.Get();
         }
@@ -41,32 +42,6 @@ namespace WMS.Service.Impl.LocationMaster
             Location_MT Location = repo.GetByID(id);                                  
             return Location;            
         }                      
-
-        public int CreateLocation(Location_MT Location)
-        {
-            using (var scope = new TransactionScope())
-            {
-               // Location.LocNo = proc.ProcGetNewID("LC").FirstOrDefault().Substring(0, 13);
-                //Location.CreatedDate = DateTime.Now;
-                //Location.UpdateDate = DateTime.Now;
-                //Location.UserUpdate = "1";
-                try
-                {
-                    repo.Insert(Location);
-                    scope.Complete();
-                }
-                catch (DbEntityValidationException e)
-                {
-                    throw new ValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
-                }
-                return Location.LocIDSys;
-            }
-        }
 
         public bool UpdateLocation(int id, Location_MT Location)
         {           
@@ -109,5 +84,30 @@ namespace WMS.Service.Impl.LocationMaster
             }
         }
 
+        Location_MT ILocationService.CreateLocation(Location_MT Location)
+        {
+            using (var scope = new TransactionScope())
+            {
+                // Location.LocNo = proc.ProcGetNewID("LC").FirstOrDefault().Substring(0, 13);
+                //Location.CreatedDate = DateTime.Now;
+                //Location.UpdateDate = DateTime.Now;
+                //Location.UserUpdate = "1";
+                try
+                {
+                    repo.Insert(Location);
+                    scope.Complete();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.E4012);
+                }
+                return Location;
+            }
+        }
     }
 }

@@ -48,6 +48,7 @@
     <Compile Include="Inspect\IInspectTypeRepository.cs" />
     <Compile Include="InvenoryManagement\IInventoryRepository.cs" />
     <Compile Include="InvenoryManagement\IInventoryTransactionRepository.cs" />
+    <Compile Include="SpareField\ISpareFieldRepository.cs" />
     <Compile Include="ItemManagement\IItemInspectRepository.cs" />
     <Compile Include="ItemManagement\IItemRepository.cs" />
     <Compile Include="ItemManagement\IItemSetDetailRepository.cs" />

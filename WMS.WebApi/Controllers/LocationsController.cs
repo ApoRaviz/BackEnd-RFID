@@ -11,7 +11,7 @@ using WMS.Entity.WarehouseManagement;
 using WMS.Service;
 using WMS.Service.LocationMaster;
 
-namespace WMS.WebApi.Controllers
+namespace WMS.WebApi.Controller
 {
     //[Authorize]
     [RoutePrefix("api/v1/Locations")]
@@ -29,10 +29,10 @@ namespace WMS.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Get()
         {
-            ResponseData<IEnumerable<GroupLocation>> response = new ResponseData<IEnumerable<GroupLocation>>();
+            ResponseData<IEnumerable<Location_MT>> response = new ResponseData<IEnumerable<Location_MT>>();
             try
             {
-                IEnumerable<GroupLocation> GeoupLocation = LocationService.GetList();
+                IEnumerable<Location_MT> GeoupLocation = LocationService.GetList();
                 response.SetData(GeoupLocation);
             }
             catch (ValidationException ex)
@@ -49,10 +49,10 @@ namespace WMS.WebApi.Controllers
         [Route("{LocIDSys}")]
         public HttpResponseMessage Get(int LocIDSys)
         {
-            IResponseData<GroupLocation> response = new ResponseData<GroupLocation>();
+            IResponseData<Location_MT> response = new ResponseData<Location_MT>();
             try
             {
-                GroupLocation Location = LocationService.GetLocationByLocIDSys(LocIDSys);
+                Location_MT Location = LocationService.GetLocationByLocIDSys(LocIDSys);
                 response.SetData(Location);
             }
             catch (ValidationException ex)
@@ -82,37 +82,15 @@ namespace WMS.WebApi.Controllers
         //    return Request.ReturnHttpResponseMessage(response);
         //}
 
-
-
-
-        [HttpGet]
-        [Route("")]
-        public HttpResponseMessage GetList([FromBody]GroupLocation Location)
-        {
-            IResponseData<IEnumerable<GroupLocation>> response = new ResponseData<IEnumerable<GroupLocation>>();
-            try
-            {
-                Location.UpdateBy = User.Identity.Name;
-               IEnumerable<GroupLocation> rs = LocationService.GetList();
-                response.SetData(rs);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]GroupLocation Location)
+        public HttpResponseMessage Post([FromBody]Location_MT Location)
         {
-            IResponseData<GroupLocation> response = new ResponseData<GroupLocation>();
+            IResponseData<Location_MT> response = new ResponseData<Location_MT>();
             try
             {
                 Location.UpdateBy = User.Identity.Name;
-                GroupLocation rs = LocationService.CreateLocation(Location);
+                Location_MT rs = LocationService.CreateLocation(Location);
                 response.SetData(Location);
             }
             catch (ValidationException ex)
@@ -127,7 +105,7 @@ namespace WMS.WebApi.Controllers
 
         [HttpPut]
         [Route("{LocIDSys}")]
-        public HttpResponseMessage Put(int LocIDSys, [FromBody]GroupLocation Location)
+        public HttpResponseMessage Put(int LocIDSys, [FromBody]Location_MT Location)
         {
             IResponseData<bool> response = new ResponseData<bool>();
 

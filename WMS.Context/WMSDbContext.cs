@@ -13,6 +13,7 @@ using WMS.Entity.ItemManagement;
 using WMS.Entity.LayoutManagement;
 using WMS.Entity.Receiving;
 using WMS.Entity.Report;
+using WMS.Entity.SpareField;
 using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Context
@@ -44,6 +45,8 @@ namespace WMS.Context
         public DbSet<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
         public DbSet<ZoneType> ZoneType { get; set; }
+        public DbSet<SpareField> SpareField { get; set; }
+
         public DbSet<GroupLocation> GroupLocation { get; set; }
         public DbSet<LocationType> LocationType { get; set; }
         public DbSet<InventoryTransaction> InventoryTransaction { get; set; }

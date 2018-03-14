@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
 using WIM.Core.Common;
-using WMS.WebApi.Controllers;
+using WMS.WebApi.Controller;
 using WMS.Service;
 using WMS.Service.Inspect;
 using WMS.Service.Impl.Inspect;
@@ -21,6 +21,7 @@ using WMS.Service.Impl.Report;
 using WMS.Service.Import;
 using WMS.Service.Impl.Import;
 using WMS.Service.Impl;
+using WMS.Service.Impl.LocationMaster;
 
 namespace WMS.WebApi
 {
@@ -51,16 +52,17 @@ namespace WMS.WebApi
             container.RegisterType<ILabelService, LabelService>();
             container.RegisterType<ISupplierService, SupplierService>(); 
             container.RegisterType<IInspectService, InspectService>();
-            //container.RegisterType<ILocationService, LocationService>();
+            container.RegisterType<ILocationService, LocationService>();
             container.RegisterType<IReportService, ReportService>();
             container.RegisterType<IImportService, ImportService>();
             container.RegisterType<ICategoryService, CategoryService>();
-            //container.RegisterType<IDimensionService, DimensionService>();
+            container.RegisterType<IDimensionService, DimensionService>();
             container.RegisterType<IWarehouseService, WarehouseService>();
             container.RegisterType<IZoneService, ZoneService>();
             container.RegisterType<ILocationGroupService, LocationGroupService>();
             container.RegisterType<IReceiveService, ReceiveService>();
 
+            container.RegisterType<ISpareFieldService, SpareFieldService>();
         }
     }
 }
