@@ -55,7 +55,7 @@ namespace WIM.Core.Service.Impl.FileManagement
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IFileRepository repo = new FileRepository(Db);
-                file = repo.GetSingle(a => a.FileUID == fileIDSys);
+                file = repo.GetSingle(a => a.FileRefID == fileIDSys);
             }
             string fileName = file.FileName;
             string[] temp = fileName.Split('.');
@@ -100,7 +100,7 @@ namespace WIM.Core.Service.Impl.FileManagement
                     ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
-                return newFile.FileUID;
+                return newFile.FileRefID;
             }
         }
 
@@ -115,7 +115,7 @@ namespace WIM.Core.Service.Impl.FileManagement
                     {
                         foreach (var file in files)
                         {
-                            file.FileUID = Guid.NewGuid().ToString();
+                            file.FileRefID = Guid.NewGuid().ToString();
                             IFileRepository repo = new FileRepository(Db);
                             newFile.Add(repo.Insert(file));
                         }

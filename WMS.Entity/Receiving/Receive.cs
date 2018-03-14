@@ -23,7 +23,7 @@ namespace WMS.Entity.Receiving
         public int? ReceivingType { get; set; }
         public int? StatusIDSys { get; set; }
         public DateTime ReceiveDate { get; set; }
-
+        public string FileRefID { get; set; }
         public virtual ICollection<InventoryTransaction> InventoryTransaction { get; set; }
     }
 }
