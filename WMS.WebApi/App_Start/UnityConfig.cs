@@ -21,6 +21,7 @@ using WMS.Service.Impl.Report;
 using WMS.Service.Import;
 using WMS.Service.Impl.Import;
 using WMS.Service.Impl;
+using WMS.Service.Impl.LocationMaster;
 
 namespace WMS.WebApi
 {
@@ -51,7 +52,7 @@ namespace WMS.WebApi
             container.RegisterType<ILabelService, LabelService>();
             container.RegisterType<ISupplierService, SupplierService>(); 
             container.RegisterType<IInspectService, InspectService>();
-            //container.RegisterType<ILocationService, LocationService>();
+            container.RegisterType<ILocationService, LocationService>();
             container.RegisterType<IReportService, ReportService>();
             container.RegisterType<IImportService, ImportService>();
             container.RegisterType<ICategoryService, CategoryService>();
