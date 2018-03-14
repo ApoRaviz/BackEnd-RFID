@@ -178,31 +178,31 @@ namespace WIM.Core.Service.Impl
                 IGeneralConfigsRepository repo = new GeneralConfigsRepository(Db);
                 var value = repo.GetByID(key);
                 DetailConfig temp = new DetailConfig();
-                temp.Format = value.DetailConfig.Format;
-                temp.IsReset = value.DetailConfig.IsReset;
                 temp.Value = value.DetailConfig.Value;
+                temp.IsReset = value.DetailConfig.IsReset;
+                temp.Key = value.DetailConfig.Key;
                 if (value != null)
                 {
                     if (value.DetailConfig.IsReset == "D")
                     {
                         if(value.UpdateAt.Value.ToString("d") != DateTime.Now.ToString("d"))
                         {
-                            temp.Value = 0;
+                            temp.Key = 0.ToString();
                         }
                     }else if (value.DetailConfig.IsReset == "M")
                     {
                         if (value.UpdateAt.Value.ToString("M") != DateTime.Now.ToString("M"))
                         {
-                            temp.Value = 0;
+                            temp.Key = 0.ToString();
                         }
                     }else if (value.DetailConfig.IsReset == "Y")
                     {
                         if (value.UpdateAt.Value.ToString("yyyy") != DateTime.Now.ToString("yyyy"))
                         {
-                            temp.Value = 0;
+                            temp.Key = 0.ToString();
                         }
                     }
-                    temp.Value++;
+                    temp.Key = (int.Parse(temp.Key) + 1).ToString();
                     var newCode = GenerateNewCode(temp);
                     value.DetailConfig = temp;
                     KeyValue = newCode;
@@ -216,8 +216,8 @@ namespace WIM.Core.Service.Impl
         private string GenerateNewCode(DetailConfig value)
         {
             List<string> Cases = new List<string>();
-            string alpha = value.Format.Substring(0, 1);
-            Cases = value.Format.Split('|').ToList();
+            string alpha = value.Value.Substring(0, 1);
+            Cases = value.Value.Split('|').ToList();
 
             string[] TimeFormat = { "yy", "yyyy", "mm", "dd", "d", "h", "hh", "HH", "H", "M", "MM", "s", "ss", "t", "tt" };
             string GenerateCode = "";
@@ -231,7 +231,7 @@ namespace WIM.Core.Service.Impl
                 }
                 else if (a.Contains("#"))
                 {
-                        var lastnumber = value.Value;
+                        var lastnumber = int.Parse(value.Key);
                         GenerateCode += lastnumber.ToString("D" + a.Length);
                 }
                 else

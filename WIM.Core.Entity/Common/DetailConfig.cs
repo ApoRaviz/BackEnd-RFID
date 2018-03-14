@@ -8,8 +8,8 @@ namespace WIM.Core.Entity.Common
 {
     public class DetailConfig
     {
-        public int Value { get; set; }
-        public string Format { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
         public string IsReset { get; set; }
     }
 }
