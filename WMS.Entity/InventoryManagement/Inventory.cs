@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
+using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Entity.InventoryManagement
 {
@@ -15,17 +16,20 @@ namespace WMS.Entity.InventoryManagement
         [Key]
         public int InvenIDSys { get; set; }
         public int ItemIDSys { get; set; }
-        public int QtyAvailable { get; set; }
+        public int AvailableQty { get; set; }
+        public int InboundQty { get; set; }
+        public int OutboundQty { get; set; }
         public int LocIDSys { get; set; }
         public int StatusIDSys { get; set; }
         public string Serial { get; set; }
         public string Inspect { get; set; }
-        public DateTime Expire { get; set; }
+        public Nullable<DateTime> Expire { get; set; }
         public string Dimension { get; set; }
         public string Box { get; set; }
         public string Lot { get; set; }
         public string Pallet { get; set; }
         public int? ItemSetIDSys { get; set; }
 
+        public virtual Location Location { get; set; }
     }
 }

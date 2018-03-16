@@ -60,6 +60,8 @@ namespace WMS.WebApi
             container.RegisterType<IWarehouseService, WarehouseService>();
             container.RegisterType<IZoneService, ZoneService>();
             container.RegisterType<ILocationGroupService, LocationGroupService>();
+            container.RegisterType<IReceiveService, ReceiveService>();
+
             container.RegisterType<ISpareFieldService, SpareFieldService>();
         }
     }

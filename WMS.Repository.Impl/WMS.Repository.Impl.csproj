@@ -53,6 +53,7 @@
     <Compile Include="ImportDefinition\ImportDefinitionRepository.cs" />
     <Compile Include="Inspect\InspectRepository.cs" />
     <Compile Include="Inspect\InspectTypeRepository.cs" />
+    <Compile Include="InventoryManage\InventoryRepository.cs" />
     <Compile Include="InventoryManage\InventoryTransactionRepository.cs" />
     <Compile Include="ItemManagement\ItemInspectRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />

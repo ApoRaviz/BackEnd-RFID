@@ -35,10 +35,10 @@ namespace Master.WebApi.Controllers
 
                 GeneralConfigs Config = new GeneralConfigs();
                 DetailConfig detail = new DetailConfig();
-                detail.Value = 0;
-                Config.Keyword = config.Keyword;
+                detail.Key = config.Key;
+                Config.Keyword = config.KeyWord;
                 detail.IsReset = config.IsReset;
-                detail.Format = config.Format;
+                detail.Value = config.Value;
                 Config.DetailConfig = detail;
                 GeneralConfigs data = GeneralConfigsService.CreateGeneralConfigs(Config);
                 response.SetData(data);
@@ -60,10 +60,9 @@ namespace Master.WebApi.Controllers
             try
             {
                 GeneralConfigs Config = new GeneralConfigs();
-                Config.DetailConfig.Value = 0;
-                Config.Keyword = config.Keyword;
+                Config.Keyword = config.KeyWord;
                 Config.DetailConfig.IsReset = config.IsReset;
-                Config.DetailConfig.Format = config.Format;
+                Config.DetailConfig.Key = config.Key;
                 bool isUpdated = GeneralConfigsService.UpdateGeneralConfigs(Config);
                 response.SetData(isUpdated);
             }
@@ -79,8 +78,9 @@ namespace Master.WebApi.Controllers
 
     public class GeneralConfigsTemplate
     {
-        public string Keyword { get; set; }
-        public string Format { get; set; }
+        public string KeyWord { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
         public string IsReset { get; set; }
     }
 }
