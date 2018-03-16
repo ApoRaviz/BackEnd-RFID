@@ -12,7 +12,9 @@ namespace Fuji.Common.SqlLog
         public static void WritetoFile(string project, string method, string data)
         {
             DateTime today = DateTime.Now;
-            string path = @"D:\SqlLogs\" + project.Trim() + "\\" + method.Trim() + "\\" + today.ToString("yyyy") + "\\" + today.ToString("MM");
+
+            string drive = !Directory.Exists("D:") ? "C:" : "D:";
+            string path = drive + @"\SqlLogs\" + project.Trim() + "\\" + method.Trim() + "\\" + today.ToString("yyyy") + "\\" + today.ToString("MM");
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             string pathFile = path + "\\FileLogs_d" + today.ToString("dd") + ".txt";
