@@ -49,7 +49,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                     StatusIDSys = s.StatusIDSys,
                     WarnIDSys = s.WarnIDSys,
                     WarningDate = s.WarningDate,
-                    File_MT = db.File_MT.Where(d => d.FileUID == s.FileRefID).SingleOrDefault()
+                    File_MT = db.File_MT.Where(d => d.FileRefID == s.FileRefID).SingleOrDefault()
                     
                 }).ToList();
             }

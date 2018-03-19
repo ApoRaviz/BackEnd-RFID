@@ -51,10 +51,10 @@ namespace WMS.WebApi.Controllers
         [Route("{receiveIDSys}")]
         public HttpResponseMessage Get(int receiveIDSys)
         {
-            IResponseData<Receive> response = new ResponseData<Receive>();
+            IResponseData<ReceiveDto> response = new ResponseData<ReceiveDto>();
             try
             {
-                Receive unit = ReceiveService.GetReceiveByReceiveIDSys(receiveIDSys);
+                ReceiveDto unit = ReceiveService.GetReceiveByReceiveIDSys(receiveIDSys);
                 response.SetData(unit);
             }
             catch (ValidationException ex)
@@ -111,7 +111,7 @@ namespace WMS.WebApi.Controllers
         // PUT: api/Units/5
         [HttpPut]
         [Route("{unitIDSys}")]
-        public HttpResponseMessage Put(int unitIDSys, [FromBody]Receive unit)
+        public HttpResponseMessage Put(int unitIDSys, [FromBody]ReceiveDto unit)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
@@ -127,6 +127,25 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+
+        // PUT: api/Units/5
+        [HttpPut]
+        [Route("")]
+        public HttpResponseMessage PutReceive([FromBody]ReceiveDto unit)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = ReceiveService.UpdateReceive(unit);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
 
 
         // DELETE: api/Units/5

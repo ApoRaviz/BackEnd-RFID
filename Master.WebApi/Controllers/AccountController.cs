@@ -274,7 +274,9 @@ namespace Master.WebApi.Controllers
                     AuthenticationProperties props = new AuthenticationProperties();
                     DateTime dateLatest = Convert.ToDateTime((param.Time));
                     DateTime dateCur = DateTime.Now;
-                    double timeAdd = ExToken - (dateCur - dateLatest).TotalMinutes;
+                    double timeAdd = ExToken;
+                    if(dateCur > dateLatest)
+                        timeAdd = ExToken - (dateCur - dateLatest).TotalMinutes;
                     timeAdd = (timeAdd > ExToken) ? ExToken : timeAdd;
                     TimeSpan spEx = TimeSpan.FromMinutes(timeAdd);
                     props.IssuedUtc = DateTime.Now;

@@ -66,6 +66,7 @@
     <Compile Include="ItemMaster\ItemService.cs" />
     <Compile Include="ItemSet\ItemSetService.cs" />
     <Compile Include="Label\LabelService.cs" />
+    <Compile Include="LocationMaster\LocationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receive\ReceiveService.cs" />
     <Compile Include="Report\ReportService.cs" />
