@@ -108,6 +108,7 @@
     <Compile Include="LeaveManagement\ILeaveDetailRepository.cs" />
     <Compile Include="LeaveManagement\ILeaveRepository.cs" />
     <Compile Include="LeaveManagement\ILeaveTypeRepository.cs" />
+    <Compile Include="Probation\IVEmployeeInfoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

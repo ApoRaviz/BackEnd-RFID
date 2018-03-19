@@ -1,13 +1,7 @@
 ﻿using HRMS.Entity.LeaveManagement;
-using System;
-using System.Collections.Generic;
+using HRMS.Entity.Probation;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 //using System.Data.Objects;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.Status;
 
@@ -23,6 +17,7 @@ namespace HRMS.Context
         public DbSet<DayOff> DayOffs { get; set; }
         public DbSet<Status_MT> Status_MT { get; set; }
         public DbSet<Project_MT> Project_MT { get; set; }
+        public DbSet<VEmployeeInfo> VEmployeeInfo { get; set; }
 
 
         public HRMSDbContext() : base("name=YUT_HRMS")

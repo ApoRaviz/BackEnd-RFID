@@ -53,6 +53,7 @@
     <Compile Include="LeaveManagement\LeaveQuota.cs" />
     <Compile Include="LeaveManagement\Leave.cs" />
     <Compile Include="LeaveManagement\LeaveType.cs" />
+    <Compile Include="Probation\VEmployeeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

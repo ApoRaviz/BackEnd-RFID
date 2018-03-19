@@ -9,6 +9,8 @@ using HRMS.Service.Impl.LeaveManagement;
 using WIM.Core.Common;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
+using HRMS.Service.Probation;
+using HRMS.Service.Impl;
 
 namespace HRMS.WebApi
 {
@@ -31,6 +33,7 @@ namespace HRMS.WebApi
 
             container.RegisterType<ILeaveService, LeaveService>();
             container.RegisterType<ICommonService, CommonService>();
+            container.RegisterType<IVEmployeeInfoService, VEmployeeInfoService>();
         }
     }
 }

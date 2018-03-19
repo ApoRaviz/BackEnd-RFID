@@ -1,23 +1,20 @@
+using Master.WebApi.Controllers;
 using Microsoft.Owin.Security;
 using Microsoft.Practices.Unity;
 using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
-using WIM.Core.Common;
-using Master.WebApi.Controllers;
 using WIM.Core.Service;
-using WIM.Core.Service.Impl;
-using WIM.Core.Service.StatusManagement;
-using WIM.Core.Service.Impl.StatusManagement;
-using WIM.Core.Service.EmployeeMaster;
-using WIM.Core.Service.Impl.EmployeeMaster;
 using WIM.Core.Service.Address;
-using WIM.Core.Service.Impl.FileManagement;
-using WIM.Core.Service.FileManagement;
-using WIM.Core.Service.PermissionGroups;
-using WIM.Core.Service.Impl.PermissionGroups;
 using WIM.Core.Service.Common;
+using WIM.Core.Service.EmployeeMaster;
+using WIM.Core.Service.Impl;
 using WIM.Core.Service.Impl.Common;
+using WIM.Core.Service.Impl.EmployeeMaster;
+using WIM.Core.Service.Impl.PermissionGroups;
+using WIM.Core.Service.Impl.StatusManagement;
+using WIM.Core.Service.PermissionGroups;
+using WIM.Core.Service.StatusManagement;
 
 namespace Master.WebApi
 {
@@ -65,6 +62,7 @@ namespace Master.WebApi
             container.RegisterType<IPermissionGroupService, PermissionGroupService>();
             container.RegisterType<IPermissionGroupApiService, PermissionGroupApiService>();
             container.RegisterType<IAddressService, AddressService>();
+            
         }
     }
 }

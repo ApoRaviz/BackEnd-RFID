@@ -519,6 +519,14 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
+      <Project>{B7EA8787-86EA-48FC-945F-6CAE2B397DA4}</Project>
+      <Name>HRMS.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
+      <Project>{93A81E85-ACA4-4809-88DC-C3D67548EF83}</Project>
+      <Name>HRMS.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
       <Project>{9a37166e-bd6c-4ba9-9091-985bc77c68d6}</Project>
       <Name>Master.Common.ValueObject</Name>

@@ -50,6 +50,7 @@
     <Compile Include="LeaveManagement\LeaveDetailRepository.cs" />
     <Compile Include="LeaveManagement\LeaveRepository.cs" />
     <Compile Include="LeaveManagement\LeaveTypeRepository.cs" />
+    <Compile Include="Probation\VEmployeeInfoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
