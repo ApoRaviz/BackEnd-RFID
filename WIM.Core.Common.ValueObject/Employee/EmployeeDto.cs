@@ -19,6 +19,7 @@ namespace WIM.Core.Common.ValueObject
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string UserUpdate { get; set; }
+        public Nullable<int> EmTypeIDSys { get; set; }
 
         public PersonDto Person_MT { get; set; }
     }
