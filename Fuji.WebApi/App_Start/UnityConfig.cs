@@ -51,6 +51,7 @@ namespace Fuji.WebApi
             //container.RegisterType<IUserService, UserService>();
             container.RegisterType<ICommonService, CommonService>();
             container.RegisterType<IStatusService, StatusService>();
+            container.RegisterType<ICheckStockService, CheckStockService>();
         }
     }
 }

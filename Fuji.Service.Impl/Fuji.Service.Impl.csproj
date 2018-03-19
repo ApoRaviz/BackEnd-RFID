@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckStock\CheckStockService.cs" />
     <Compile Include="ItemImport\ItemImportService.cs" />
     <Compile Include="PrintLabel\PrintLabelService.cs" />
     <Compile Include="ProgramVersion\ProgramVersionService.cs" />

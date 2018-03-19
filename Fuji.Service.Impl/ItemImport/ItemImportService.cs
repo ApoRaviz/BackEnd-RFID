@@ -50,16 +50,10 @@ namespace Fuji.Service.Impl.ItemImport
         private string statusScanned = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Scanned.GetValueEnum());
         private string statusExported = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Exported.GetValueEnum());
         private string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Shipped.GetValueEnum());
-        //private FujiDbContext Db { get; set; }
 
-        //private SerialRepository SerialDetailRepo;
-        //private SerialHeadRepository SerialHeadRepo;
 
         public ItemImportService()
         {
-            //Db = FujiDbContext.Create();
-            //SerialDetailRepo = new SerialRepository(new FujiDbContext());
-            //SerialHeadRepo = new SerialHeadRepository(new FujiDbContext());
         }
 
         public IEnumerable<ImportSerialHead> GetItems()
