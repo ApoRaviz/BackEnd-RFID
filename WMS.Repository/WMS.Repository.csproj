@@ -47,7 +47,6 @@
     <Compile Include="Inspect\IInspectRepository.cs" />
     <Compile Include="Inspect\IInspectTypeRepository.cs" />
     <Compile Include="InvenoryManagement\IInventoryTransactionRepository.cs" />
-    <Compile Include="SpareField\ISpareFieldRepository.cs" />
     <Compile Include="ItemManagement\IItemInspectRepository.cs" />
     <Compile Include="ItemManagement\IItemRepository.cs" />
     <Compile Include="ItemManagement\IItemSetDetailRepository.cs" />
@@ -60,6 +59,7 @@
     <Compile Include="Report\IReportLayoutDetailRepository.cs" />
     <Compile Include="Report\IReportLayoutHeaderRepository.cs" />
     <Compile Include="Report\IReportLayoutRepository.cs" />
+    <Compile Include="SpareField\ISpareFieldRepository.cs" />
     <Compile Include="UnitMaster\IUnitRepository.cs" />
     <Compile Include="UserManagement\IUserRepository.cs" />
     <Compile Include="Warehouse\ILocationZoneRepository.cs" />
