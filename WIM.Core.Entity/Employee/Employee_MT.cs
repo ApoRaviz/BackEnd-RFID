@@ -23,6 +23,7 @@ namespace WIM.Core.Entity
         public Nullable<System.DateTime> HiredDate { get; set; }
         public Nullable<int> PositionIDSys { get; set; }
         public Nullable<int> ProbationIDSys { get; set; }
+        public Nullable<int> EmTypeIDSys { get; set; }
 
         [ForeignKey("PersonIDSys")]
         public virtual Person_MT Person_MT { get; set; }
