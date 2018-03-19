@@ -22,8 +22,8 @@ namespace WMS.Repository.Impl
 
         public IEnumerable<GroupLocationDto> GetList()
         {
-            IEnumerable<GroupLocationDto> GroupLocation = (from gl in Db.GroupLocations
-                                                           join lt in Db.LocationTypes on gl.LocTypeIDSys equals lt.LocTypeIDSys
+            IEnumerable<GroupLocationDto> GroupLocation = (from gl in Db.GroupLocation
+                                                           join lt in Db.LocationType on gl.LocTypeIDSys equals lt.LocTypeIDSys
                                                            select new GroupLocationDto
                                                            {
                                                                Columns = gl.Columns,

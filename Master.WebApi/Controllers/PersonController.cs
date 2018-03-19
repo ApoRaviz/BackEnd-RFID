@@ -93,9 +93,14 @@ namespace Master.WebApi.Controllers
                     Resign resign = ResignService.GetResignByEmID(Employee.EmID);
                     Employee.HistoryWarnings = Warning.ToList();
                     Employee.Resign = resign;
+                    Person.Employee = new CommonService().AutoMapper<EmployeeDto>(Employee);
                 }
-                Person.User = new CommonService().AutoMapper<UserDto>(user);
-                Person.Employee = new CommonService().AutoMapper<EmployeeDto>(Employee);
+                if(user != null)
+                {
+                    Person.User = new CommonService().AutoMapper<UserDto>(user);
+                }
+                
+                
                 response.SetData(Person);
             }
             catch (ValidationException ex)

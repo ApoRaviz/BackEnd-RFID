@@ -10,10 +10,10 @@ namespace WMS.Service.LocationMaster
 {
     public interface ILocationService : IService
     {
-        IEnumerable<GroupLocation> GetList();
-        GroupLocation GetLocationByLocIDSys(int id);
-        GroupLocation CreateLocation(GroupLocation Location);
-        bool UpdateLocation(int id, GroupLocation Location);
+        IEnumerable<Location_MT> GetList();
+        Location_MT GetLocationByLocIDSys(int id);
+        Location_MT CreateLocation(Location_MT Location);
+        bool UpdateLocation(int id, Location_MT Location);
         bool DeleteLocation(int id);        
     }
 }

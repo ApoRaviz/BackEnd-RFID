@@ -16,6 +16,6 @@ namespace WIM.Core.Entity.FileManagement
         public string FileName { get; set; }
         public string LocalName { get; set; }
         public string PathFile { get; set; }
-        public string FileUID { get; set; }
+        public string FileRefID { get; set; }
     }
 }

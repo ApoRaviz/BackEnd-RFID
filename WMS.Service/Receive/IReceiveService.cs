@@ -12,9 +12,9 @@ namespace WMS.Service
     public interface IReceiveService : IService
     {
         IEnumerable<Receive> GetReceives();
-        Receive GetReceiveByReceiveIDSys(int id);
+        ReceiveDto GetReceiveByReceiveIDSys(int id);
         int CreateReceive(ReceiveDto receive);
-        bool UpdateReceive(Receive receive);
+        bool UpdateReceive(ReceiveDto receive);
         bool DeleteReceive(int id);
         //IEnumerable<AutocompleteUnitDto> AutocompleteUnit(string term);
     }
