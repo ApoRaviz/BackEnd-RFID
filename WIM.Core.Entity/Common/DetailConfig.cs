@@ -8,7 +8,7 @@ namespace WIM.Core.Entity.Common
 {
     public class DetailConfig
     {
-        public int Key { get; set; }
+        public string Key { get; set; }
         public string Value { get; set; }
         public string IsReset { get; set; }
     }
