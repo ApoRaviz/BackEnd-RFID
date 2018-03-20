@@ -45,7 +45,6 @@
     <Compile Include="Dimension\IDimensionService.cs" />
     <Compile Include="Import\IImportService.cs" />
     <Compile Include="Inspect\IInspectService.cs" />
-    <Compile Include="SpareField\ISpareFieldService.cs" />
     <Compile Include="ItemMaster\IItemService.cs" />
     <Compile Include="ItemSet\IItemSetService.cs" />
     <Compile Include="Label\ILabelService.cs" />
@@ -53,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receive\IReceiveService.cs" />
     <Compile Include="Report\IReportService.cs" />
+    <Compile Include="SpareField\ISpareFieldService.cs" />
     <Compile Include="UnitMaster\IUnitService.cs" />
     <Compile Include="WarehouseMaster\ILocationGroupService.cs" />
     <Compile Include="WarehouseMaster\IWarehouseService.cs" />
