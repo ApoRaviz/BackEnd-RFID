@@ -52,21 +52,23 @@ namespace WIM.Core.Repository.Impl.ApiMaster
         public IEnumerable<PermissionTree> GetPermissionByGroupAndMenu(int ProjectIDSys)
         {
             IEnumerable<MenuProjectMapping> group;
-            IEnumerable<PermissionTree> tree;
+            List<PermissionTree> tree;
+            IEnumerable<PermissionTree> sendto;
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPermissionGroupRepository repo = new PermissionGroupRepository(Db);
-                
-                group = Db.MenuProjectMapping.Include(a => a.Menu_MT).Include(a => a.Menu_MT.PermissionGroup.Select(b => b.PermissionGroupApi)).Include(a => a.Permissions).Where(a => a.ProjectIDSys == ProjectIDSys).ToList();
+                var query = Db.MenuProjectMapping.Include(a => a.Menu_MT).Include(a => a.Menu_MT.PermissionGroup.Select(b => b.PermissionGroupApi)).Include(a => a.Permissions).Where(a => a.ProjectIDSys == ProjectIDSys && (a.MenuIDSysParent == 0 || a.Permissions.Count > 0));
+                group = query.ToList();
                 tree = group.Select(c => new PermissionTree()
                 {
                     PermissionID = c.MenuIDSys.ToString(),
                     PermissionName = c.MenuName,
-                    Group = c.Menu_MT.PermissionGroup.Select(v => new PermissionTree()
+                    MenuIDSys = int.Parse(c.MenuIDSysParent.GetValue()),
+                    Group = c.Menu_MT.PermissionGroup.Where(o => o.PermissionGroupApi.Count > 0).Select(v => new PermissionTree()
                     {
                         PermissionID = v.GroupIDSys,
                         PermissionName = v.GroupName,
-                        Group = c.Permissions.Where(s => v.PermissionGroupApi.Select(q => q.ApiIDSys).Contains(s.ApiIDSys))
+                        Group = c.Permissions.Where(s => v.PermissionGroupApi.Select(q => q.ApiIDSys).Contains(s.ApiIDSys) && v.PermissionGroupApi.Select(o => o.Title).Contains(s.PermissionName))
                         .Select(w => new PermissionTree()
                         {
                             PermissionID = w.PermissionID,
@@ -75,9 +77,31 @@ namespace WIM.Core.Repository.Impl.ApiMaster
                         }).ToList()
                     }).ToList()
                 }).ToList();
-
+                sendto = SetTreeModel(tree);
             }
-            return tree;
+            return sendto;
+        }
+
+        public List<PermissionTree> SetTreeModel(List<PermissionTree> source)
+        {
+            List<PermissionTree> sending = new List<PermissionTree>();
+            for(int i = 0; i < source.Count; i++)
+            {
+                source[i].Group = source[i].Group.Where(a => a.Group.Count > 0).ToList();
+                int menid = int.Parse(source[i].PermissionID);
+                var child = source.Where(a => a.MenuIDSys == menid).ToList();
+                if(child.Count > 0)
+                {
+                    source[i].Group.AddRange(child);
+                }
+                if(source[i].MenuIDSys == 0)
+                {
+                    sending.Add(source[i]);
+                }
+            }
+            sending = sending.Where(a => a.Group.Count >0).ToList();
+            return sending;
+
         }
     }
 }

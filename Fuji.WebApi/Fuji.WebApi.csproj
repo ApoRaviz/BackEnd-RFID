@@ -405,6 +405,7 @@
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\CheckStockController.cs" />
     <Compile Include="Controllers\ImportSerialController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MenuProjectMappingController.cs" />

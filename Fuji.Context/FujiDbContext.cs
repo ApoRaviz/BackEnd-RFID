@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Fuji.Entity.ItemManagement;
 using Fuji.Entity.LabelManagement;
 using Fuji.Entity.ProgramVersion;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Data;
 using Fuji.Common.SqlLog;
 using WIM.Core.Entity.Logs;
+using Fuji.Entity.StockManagement;
 
 namespace Fuji.Context
 {
@@ -23,6 +20,7 @@ namespace Fuji.Context
         public DbSet<ImportSerialDetailTemp> ImportSerialDetailTemp { get; set; }
         public DbSet<LabelRunning> LabelRunning { get; set; }
         public DbSet<ProgramVersionHistory> ProgramVersionHistory { get; set; }
+        public DbSet<CheckStockHead> CheckStockHead { get; set; }
         public DbSet<GeneralLog> GeneralLogs { get; set; }
 
 

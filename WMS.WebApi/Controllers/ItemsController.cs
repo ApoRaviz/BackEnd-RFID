@@ -91,6 +91,24 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
+
+        [HttpGet]
+        [Route("auto")]
+        public HttpResponseMessage AutocompleteItemTest(DateTime? dateFrom)
+        {
+            IResponseData<string> response = new ResponseData<string>();
+            try
+            {
+                response.SetData("pass");
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Items
         [HttpPost]
         [Route("")]
