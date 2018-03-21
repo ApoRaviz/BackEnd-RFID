@@ -580,7 +580,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
             return items;
         }
-        public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList, string userName)
+        public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList)
         {
             List<InboundItems> duplicateList = new List<InboundItems>();
             List<string> isuzuOrders = itemList.Select(x => x.ISZJOrder).ToList();
@@ -611,22 +611,21 @@ namespace Isuzu.Service.Impl.Inbound
                     {
                         itemGroups.ForEach(i =>
                         {
-
-                            //if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
                             if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
                             {
 
-                                //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
-                                var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
+                                var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo);
                                 if (item != null)
                                 {
                                     i.GroupList.ForEach(x =>
                                     {
                                         x.ID = Guid.NewGuid().ToString();
                                         x.Status = statusNew;
-                                        item.InboundItems.Add(x);
+                                        DetailRepo.Insert(x);
                                     });
+                                    Db.SaveChanges();
 
+                                    item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo,true);
                                     item.Qty = item.InboundItems.Count;
                                     HeadRepo.Update(item);
                                     Db.SaveChanges();
@@ -1037,7 +1036,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
             else
             {
-                listDuplicateInbound = ImportInboundItemList(inboundList, "SYSTEM");
+                listDuplicateInbound = ImportInboundItemList(inboundList);
                 if (listDuplicateInbound.Count > 0)
                 {
                     ret.isDuplicated = true;

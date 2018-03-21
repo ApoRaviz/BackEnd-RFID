@@ -105,7 +105,8 @@ namespace Fuji.Service.Impl.ItemImport
                     stockHead = checkStockRepo.GetSingle(w => w.CheckStockID == checkStockID);
                     if (stockHead != null)
                     {
-                        stockHead = this.ReadFileFromHandheld(stockHead, false);
+                        if(stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
+                            stockHead = this.ReadFileFromHandheld(stockHead, false);
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -131,6 +132,7 @@ namespace Fuji.Service.Impl.ItemImport
                     stockHead = checkStockRepo.GetMany(w => w.Status == CheckStockStatus.InProgress.GetValueEnum()).OrderByDescending(d => d.CreateAt).FirstOrDefault();
                     if (stockHead != null)
                     {
+                        stockHead = SetComplete(stockHead);
                         stockHead = this.ReadFileFromHandheld(stockHead, false);
                     }
                 }
@@ -203,7 +205,7 @@ namespace Fuji.Service.Impl.ItemImport
                                 
                         }
                         if(isByDate)
-                            items = checkStockRepo.GetMany(f => (f.CheckStockDate.Date >= startDate.Date && f.CheckStockDate.Date <= endDate));
+                            items = checkStockRepo.GetMany(f => (f.CreateAt.Value.Date >= startDate.Date && f.CreateAt.Value.Date <= endDate));
                         else if(isByStatus)
                             items = checkStockRepo.GetMany(w => w.Status == CheckStockStatus.InProgress.GetValueEnum()).OrderByDescending(o => o.CreateAt);
 
@@ -298,7 +300,54 @@ namespace Fuji.Service.Impl.ItemImport
             return stockHead;
         }
 
-        
+        private CheckStockHead SetComplete(CheckStockHead stockHead)
+        {
+            if (stockHead == null)
+                return stockHead;
+
+            if (stockHead != null)
+                if (DateTime.Now.Date <= stockHead.CreateAt)
+                    return stockHead;
+
+            using (var scope = new TransactionScope())
+            {
+
+                using (FujiDbContext Db = new FujiDbContext())
+                {
+                    try
+                    {
+                        ISerialDetailRepository serialDetailRepo = new SerialDetailRepository(Db);
+                        ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
+
+                        List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => m.ItemType == "1" 
+                        && m.Status == statusReceived 
+                        && m.IsCheckedStock).ToList();
+                        itemStocks.ForEach(f =>
+                        {
+                            if (f != null)
+                            {
+                                f.IsCheckedStock = false;
+                            }
+                        });
+                        Db.SaveChanges();
+
+                        stockHead.Status = CheckStockStatus.Completed.GetValueEnum();
+                        checkStockRepo.Update(stockHead);
+                     
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        scope.Dispose();
+                        throw new ValidationException(e);
+                    }
+
+                }
+            }
+            return stockHead;
+        }
+
+
 
 
 
