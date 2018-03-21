@@ -1,30 +1,20 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
-
-using System.Data.Entity;
-using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
 using WIM.Core.Entity.RoleAndPermission;
 using WIM.Core.Context;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Entity.MenuManagement;
-using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Repository.MenuAndPermission;
 using WIM.Core.Repository.Impl.ApiMaster;
 using WIM.Core.Repository.ApiMaster;
-using WIM.Core.Entity.Employee;
 
 namespace WIM.Core.Service.Impl
 {

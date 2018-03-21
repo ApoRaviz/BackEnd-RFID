@@ -5,7 +5,7 @@ namespace WIM.Core.Entity.Employee
 {
     public class PositionConfig<T>
     {
-        public int Key { get; set; }
+        public string Key { get; set; }
         public T Value { get; set; }
         public string IsReset { get; set; }
     }

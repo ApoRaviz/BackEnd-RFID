@@ -7,6 +7,7 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WMS.Common.ValueObject;
 using WMS.Entity.WarehouseManagement;
 using WMS.Service;
 using WMS.Service.LocationMaster;
@@ -43,6 +44,29 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("search")]
+        public HttpResponseMessage Get([FromUri] FromUriParamsObject paramsObject)
+        {
+            //public HttpResponseMessage Get(int GroupLocIDSys)
+            //{
+            //public HttpResponseMessage Get(int IDSys)
+            //{
+            ResponseData<GroupLocation> response = new ResponseData<GroupLocation>();
+            try
+            {
+                GroupLocation GeoupLocation = LocationService.GetLocationByGroupLocIDSys(paramsObject.IDSys);
+                response.SetData(GeoupLocation);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+
         // get api/Locations/id
 
         [HttpGet]
@@ -62,6 +86,8 @@ namespace WMS.WebApi.Controller
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+
 
         //[HttpPost]
         //[Route("")]

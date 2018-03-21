@@ -147,7 +147,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                     {
                         IPositionRepository repo = new PositionRepository(Db);
                         Positions position = new Positions();
-                        position = repo.Get(x => x.PositionIDSys == id);
+                        position = repo.GetByID(id); ;
                         position.PositionsConfig = new List<PositionConfig<List<PositionConfig<string>>>>();
                         position.PositionsConfig = positionConfig;
                         Positionnew = repo.Update(position);

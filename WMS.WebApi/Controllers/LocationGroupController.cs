@@ -47,6 +47,24 @@ namespace WMS.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("LocationGroup")]
+        public HttpResponseMessage GetAllLocationGroupDto()
+        {
+            ResponseData<IEnumerable<GroupLocationDto>> response = new ResponseData<IEnumerable<GroupLocationDto>>();
+            try
+            {
+                IEnumerable<GroupLocationDto> detail = LocGroupService.GetListLocationGroupDto();
+                response.SetData(detail);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
         [Route("GetUnassignLocationGroup")]
         public HttpResponseMessage GetUnassignLocationGroup()
         {
