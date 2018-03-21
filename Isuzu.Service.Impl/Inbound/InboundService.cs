@@ -645,8 +645,9 @@ namespace Isuzu.Service.Impl.Inbound
                                 {
                                     x.ID = Guid.NewGuid().ToString();
                                     x.Status = statusNew;
-                                    item.InboundItems.Add(x);
+                                    DetailRepo.Insert(x);
                                 });
+ 
                                 item.Qty = i.GroupList.Count;
                                 item.IsExport = false;
                                 HeadRepo.Update(item);
