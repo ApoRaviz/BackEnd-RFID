@@ -19,6 +19,7 @@ using WMS.Service.LocationMaster;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Repository.Impl.Location;
+using WMS.Repository.Warehouse;
 
 namespace WMS.Service.Impl.LocationMaster
 {
@@ -30,21 +31,47 @@ namespace WMS.Service.Impl.LocationMaster
         public LocationService()
         {
             repo = new LocationRepository(proc);
-        }        
+        }
 
         public IEnumerable<Location_MT> GetList()
-        {           
+        {
             return repo.Get();
         }
 
         public Location_MT GetLocationByLocIDSys(int id)
-        {           
-            Location_MT Location = repo.GetByID(id);                                  
-            return Location;            
-        }                      
+        {
+            Location_MT Location = repo.GetByID(id);
+            return Location;
+        }
+
+        public GroupLocation GetLocationByGroupLocIDSys(int id)
+        {
+
+            try
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    ILocationRepository repo = new LocationRepository(Db);
+
+                    return repo.GetLocationByGroupLocIDSys(id);
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+            }
+            catch (DbUpdateException e)
+            {
+                ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                throw ex;
+            }
+
+            return null;
+        }
+
+
 
         public bool UpdateLocation(int id, Location_MT Location)
-        {           
+        {
             using (var scope = new TransactionScope())
             {
                 try
@@ -61,7 +88,7 @@ namespace WMS.Service.Impl.LocationMaster
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.E4012);
                 }
-                
+
                 return true;
             }
         }
@@ -84,7 +111,7 @@ namespace WMS.Service.Impl.LocationMaster
             }
         }
 
-        Location_MT ILocationService.CreateLocation(Location_MT Location)
+        public Location_MT CreateLocation(Location_MT Location)
         {
             using (var scope = new TransactionScope())
             {

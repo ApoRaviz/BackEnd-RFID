@@ -14,7 +14,7 @@ namespace WMS.Entity.ItemManagement
     {
         public ItemSet_MT()
         {
-            this.ItemSetDetails = new HashSet<ItemSetDetail>();
+            //this.ItemSetDetails = new HashSet<ItemSetDetail>();
         }
 
         [Key]
@@ -26,6 +26,9 @@ namespace WMS.Entity.ItemManagement
 
         //public virtual Project_MT Project_MT { get; set; }
         public virtual ICollection<ItemSetDetail> ItemSetDetails { get; set; }
+
+        //public virtual ItemSetDetail ItemSetDetail { get; set; }
+
         //public  ICollection<ItemSetDetail> ItemSetDetails { get; set; }
     }
 }

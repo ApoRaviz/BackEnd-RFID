@@ -12,5 +12,6 @@ namespace WMS.Repository.Warehouse
     public interface ILocationGroupRepository : IRepository<GroupLocation>
     {
         IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term);
+        IEnumerable<GroupLocationDto> GetListLocationGroupDto();
     }
 }

@@ -46,6 +46,7 @@
     <Compile Include="AutocompleteItemDto.cs" />
     <Compile Include="AutocompleteUnitDto.cs" />
     <Compile Include="CategoryDto.cs" />
+    <Compile Include="FromUriParamsObject.cs" />
     <Compile Include="GroupLocationDto.cs" />
     <Compile Include="InventoryTransactionDto.cs" />
     <Compile Include="ItemDto.cs" />
@@ -82,5 +83,6 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

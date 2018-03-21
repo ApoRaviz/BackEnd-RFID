@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Repository.Impl;
 using WMS.Common.ValueObject;
 using WMS.Context;
@@ -15,9 +12,26 @@ namespace WMS.Repository.Impl.Warehouse
     {
         private WMSDbContext Db;
 
-        public LocationGroupRepository(WMSDbContext context):base(context)
+        public LocationGroupRepository(WMSDbContext context) : base(context)
         {
             Db = context;
+        }
+
+        public IEnumerable<GroupLocationDto> GetListLocationGroupDto()
+        {
+            var qr = (from sp in Db.GroupLocation
+                      join lt in Db.LocationType on sp.LocTypeIDSys equals lt.LocTypeIDSys
+                      select new GroupLocationDto
+                      {
+                          Columns = sp.Columns,
+                          Description = sp.Description,
+                          GroupLocIDSys = sp.GroupLocIDSys,
+                          LocTypeIDSys = sp.LocTypeIDSys,
+                          LocTypeName = lt.Name,
+                          Name = sp.Name,
+                          Rows = sp.Rows
+                      }).ToList();
+            return qr;
         }
 
         public IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term)
@@ -32,5 +46,7 @@ namespace WMS.Repository.Impl.Warehouse
             ).ToList();
             return qr;
         }
+
+   
     }
 }
