@@ -25,6 +25,7 @@ namespace Fuji.Entity.ItemManagement
         public string ItemType { get; set; }
         public string Status { get; set; }
         public string OrderNo { get; set; }
+        public bool IsCheckedStock { get; set; }
         //public Nullable<System.DateTime> CreatedDate { get; set; }
         //public Nullable<System.DateTime> UpdateDate { get; set; }
         //public string UserUpdate { get; set; }

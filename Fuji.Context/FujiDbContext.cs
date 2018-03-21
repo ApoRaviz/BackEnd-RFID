@@ -104,6 +104,22 @@ namespace Fuji.Context
             return items;
         }
 
+        public IEnumerable<CheckStockHead> ProcPagingCheckStock(int page, int size, out int totalRecord)
+        {
+            totalRecord = 0;
+            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
+            output.Direction = ParameterDirection.Output;
+
+            var items = this.Database.SqlQuery<CheckStockHead>("ProcPagingCheckStock @page,@size,@totalrow out"
+                , new SqlParameter("@page", page)
+                , new SqlParameter("@size", size)
+                , output).ToList();
+
+            totalRecord = Convert.ToInt32(output.Value);
+
+            return items;
+        }
+
         public void ProcPagingImportSerialHeadSearch()
         {
         }

@@ -142,6 +142,10 @@ namespace Fuji.Repository.Impl.ItemManagement
         {
             return DbSet.Where(where);
         }
+        public int GetCountItems(Func<ImportSerialDetail, bool> where)
+        {
+            return DbSet.Where(where).ToList().Count;
+        }
 
         public IEnumerable<T> SqlQuery<T>(string sql, params object[] parameters)
         {
