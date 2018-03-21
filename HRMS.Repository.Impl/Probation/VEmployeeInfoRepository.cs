@@ -29,7 +29,7 @@ namespace HRMS.Repository.Impl
         public IEnumerable<VEmployeeInfo> GetList()
         {
             var probation = from i in Db.VEmployeeInfo
-                            //where i.EmTypeIDSys == 3
+                            where i.EmTypeIDSys == 3
                             select i;
             return probation.ToList();
         }
