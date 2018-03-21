@@ -102,7 +102,7 @@ namespace Isuzu.Service.Impl.Inbound
                 {
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-                    db.InboundItems.AsParallel();
+
                     try
                     {
                         bool isDupAnother = detailRepo.Exists(i =>
@@ -1110,7 +1110,7 @@ namespace Isuzu.Service.Impl.Inbound
             if(!string.IsNullOrEmpty(pathName))
             {
                 File_MT fileMt = new File_MT();
-                fileMt.FileUID = Guid.NewGuid().ToString();
+                //fileMt.FileUID = Guid.NewGuid().ToString();
                 fileMt.FileName = pathName;
                 fileMt.LocalName = pathName;
                 fileMt.PathFile = Path.GetExtension(pathName);

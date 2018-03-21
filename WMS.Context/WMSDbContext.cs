@@ -1001,7 +1001,6 @@ namespace WMS.Context
 
         public string GetTableDescriptionWms(string tableName)
         {
-            string tableDescriptionWms = "";
             WMSDbContext wms = new WMSDbContext();
             return wms.Database.SqlQuery<string>("ProcGetTableDescription @tableName"
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();

@@ -56,10 +56,10 @@ namespace WMS.Service.Impl.LocationMaster
                     return repo.GetLocationByGroupLocIDSys(id);
                 }
             }
-            catch (DbEntityValidationException e)
+            catch (DbEntityValidationException)
             {
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException)
             {
                 ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                 throw ex;
