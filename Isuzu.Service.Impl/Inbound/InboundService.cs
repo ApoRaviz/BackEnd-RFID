@@ -102,7 +102,7 @@ namespace Isuzu.Service.Impl.Inbound
                 {
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-                    db.InboundItems.AsParallel();
+
                     try
                     {
                         bool isDupAnother = detailRepo.Exists(i =>

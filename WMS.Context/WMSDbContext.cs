@@ -999,6 +999,12 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcUpdateDimensionLayout", dimensionIDSysParameter, formatNameParameter, unitParameter, widthParameter, lengthParameter, heightParameter, weightParameter, typeParameter, colorParameter, updatedDateParameter, userUpdateParameter);
         }
 
+        public string GetTableDescriptionWms(string tableName)
+        {
+            WMSDbContext wms = new WMSDbContext();
+            return wms.Database.SqlQuery<string>("ProcGetTableDescription @tableName"
+                , new SqlParameter("@tableName", tableName)).FirstOrDefault();
+        }
 
         public virtual string ProcGetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)
         {

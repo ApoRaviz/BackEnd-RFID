@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,6 @@ namespace WMS.Common.ValueObject
         public int Active { get; set; }
         public string UserUpdate { get; set; }
         public DateTime UpdateDate { get; set; }
-
         public ICollection<ItemSetDetailDto> ItemSetDetails { get; set; }
 
        

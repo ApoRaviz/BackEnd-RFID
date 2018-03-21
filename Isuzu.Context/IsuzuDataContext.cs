@@ -6,6 +6,7 @@ using Isuzu.Entity;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
+using WIM.Core.Entity.Logs;
 
 namespace Isuzu.Context
 {
@@ -15,6 +16,7 @@ namespace Isuzu.Context
         public virtual DbSet<InboundItems> InboundItems { get; set; }
         public virtual DbSet<InboundItemsHead> InboundItemsHead { get; set; }
         public virtual DbSet<LabelRunning> LabelRunning { get; set; }
+        public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
 
         public IsuzuDataContext() : base("name=YUT_ISUZU"){
             Configuration.ProxyCreationEnabled = false;
