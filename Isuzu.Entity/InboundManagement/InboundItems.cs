@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Entity;
 
 namespace Isuzu.Entity
@@ -49,6 +50,7 @@ namespace Isuzu.Entity
         [StringLength(50)]
         public string CaseNo { get; set; }
 
+        [GeneralLog]
         [StringLength(20)]
         public string Status { get; set; }
 
