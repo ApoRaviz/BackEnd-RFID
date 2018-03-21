@@ -5,5 +5,6 @@ namespace WMS.Repository.Warehouse
 {
     public interface ILocationRepository: IRepository<Location_MT>
     {
+        GroupLocation GetLocationByGroupLocIDSys(int G_LocIDSys);
     }
 }

@@ -36,12 +36,16 @@ namespace WMS.Repository.Impl
 
         public ItemSetDto GetItemSetAndDetail(int id)
         {
+
+            //a => a.ItemSetDetails.Select(c => c.Item_MT))
+
+            string[] include = { "ItemSetDetails", "ItemSetDetails.Item_MT" };
             ItemSetDto ItemSets = (from itsm in Db.ItemSet_MT
                                    where itsm.ItemSetIDSys == id
-                                   select itsm).Include(a => a.ItemSetDetails.Select(c => c.Item_MT)).Select(s => new ItemSetDto
+                                   select itsm).Include("ItemSetDetails").Include("ItemSetDetails.Item_MT").Select(s => new ItemSetDto
                                    {
                                        ItemSetCode = s.ItemSetCode,
-                                       ItemSetDetails = s.ItemSetDetails.Select(b => new ItemSetDetailDto()
+                                       ItemSetDetails = s.ItemSetDetails.Select(b => new ItemSetDetailDto
                                        {
                                            ItemIDSys = b.ItemIDSys,
                                            ItemName = b.Item_MT.ItemName,
@@ -53,7 +57,10 @@ namespace WMS.Repository.Impl
                                        LineID = s.LineID,
                                        ProjectIDSys = s.ProjectIDSys
                                    }).SingleOrDefault();
-            return ItemSets;
+
+            ItemSetDetail ItemSet = Db.ItemSetDetail.Include("Item_MT").FirstOrDefault(); //.Db.ItemSet_MT.Include("ItemSetDetail").Where(x=> x.ItemSetIDSys == id).FirstOrDefault();
+            return null;
+            //return ItemSets;
         }
 
         public IEnumerable<ItemSetDetailDto> GetDtoItemSetDetail(int itemSetIDSys)
@@ -63,7 +70,7 @@ namespace WMS.Repository.Impl
                                                            where itmsd.ItemSetIDSys == itemSetIDSys
                                                            select new ItemSetDetailDto
                                                            {
-                                                               IDSys = itmsd.ItemSetDetailIDSys,
+                                                               ItemSetDetailIDSys = itmsd.ItemSetDetailIDSys,
                                                                ItemCode = itm.ItemCode,
                                                                ItemIDSys = itmsd.ItemIDSys,
                                                                ItemName = itm.ItemName,
