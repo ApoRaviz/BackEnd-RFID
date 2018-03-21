@@ -19,12 +19,15 @@ namespace WIM.Core.Common.ValueObject
         public string CusName { get; set; }
         public string TaxID { get; set; }
         public string CompName { get; set; }
+        public string CompNameEn { get; set; }
+        public string CusNameEn { get; set; }
         public string AddressBill { get; set; }
         public string SubCity { get; set; }
         public string City { get; set; }
         public string Province { get; set; }
         public string Zipcode { get; set; }
         public string CountryCode { get; set; }
+        public string ContName { get; set; }
         public string Email { get; set; }
         public string TelOffice { get; set; }
         public string TelExt { get; set; }

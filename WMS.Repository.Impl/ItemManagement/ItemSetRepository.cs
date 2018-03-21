@@ -63,7 +63,7 @@ namespace WMS.Repository.Impl
                                                            where itmsd.ItemSetIDSys == itemSetIDSys
                                                            select new ItemSetDetailDto
                                                            {
-                                                               IDSys = itmsd.IDSys,
+                                                               IDSys = itmsd.ItemSetDetailIDSys,
                                                                ItemCode = itm.ItemCode,
                                                                ItemIDSys = itmsd.ItemIDSys,
                                                                ItemName = itm.ItemName,

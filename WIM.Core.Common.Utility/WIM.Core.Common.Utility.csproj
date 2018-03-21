@@ -88,6 +88,7 @@
     <Compile Include="Extentions\QueryableExtensions.cs" />
     <Compile Include="UtilityHelpers\AttributeHelper.cs" />
     <Compile Include="UtilityHelpers\DownloadHelper.cs" />
+    <Compile Include="UtilityHelpers\FileHelper.cs" />
     <Compile Include="UtilityHelpers\HashidsHelper.cs" />
     <Compile Include="UtilityHelpers\UtilityHelper.cs" />
     <Compile Include="UtilityHelpers\StringHelper.cs" />

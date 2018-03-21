@@ -45,7 +45,7 @@ namespace WMS.WebApi.Controller
             IResponseData<string> response = new ResponseData<string>();
             try
             {
-                string tableDescription = CommonService.GetTableDescriptionWms(tableName);
+                string tableDescription = new WMSDbContext().GetTableDescriptionWms(tableName);
                 response.SetData(tableDescription);
             }
             catch (ValidationException ex)

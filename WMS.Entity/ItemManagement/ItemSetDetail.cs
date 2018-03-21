@@ -13,7 +13,7 @@ namespace WMS.Entity.ItemManagement
     public class ItemSetDetail : BaseEntity
     {
         [Key]
-        public int IDSys { get; set; }
+        public int ItemSetDetailIDSys { get; set; }
         public int ItemSetIDSys { get; set; }
         public int ItemIDSys { get; set; }
         public int Qty { get; set; }

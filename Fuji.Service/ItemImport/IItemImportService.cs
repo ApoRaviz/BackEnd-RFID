@@ -47,7 +47,7 @@ namespace Fuji.Service.ItemImport
         StreamContent GetReportStream(ImportSerialHead item);
 
         //Async
-       
+
 
     }
 }

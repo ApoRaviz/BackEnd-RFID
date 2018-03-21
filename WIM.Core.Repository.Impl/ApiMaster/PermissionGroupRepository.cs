@@ -57,8 +57,8 @@ namespace WIM.Core.Repository.Impl.ApiMaster
             using (CoreDbContext Db = new CoreDbContext())
             {
                 IPermissionGroupRepository repo = new PermissionGroupRepository(Db);
-                
-                group = Db.MenuProjectMapping.Include(a => a.Menu_MT).Include(a => a.Menu_MT.PermissionGroup.Select(b => b.PermissionGroupApi)).Include(a => a.Permissions).Where(a => a.ProjectIDSys == ProjectIDSys && (a.MenuIDSysParent == 0 || a.Permissions.Count > 0)).ToList();
+                var query = Db.MenuProjectMapping.Include(a => a.Menu_MT).Include(a => a.Menu_MT.PermissionGroup.Select(b => b.PermissionGroupApi)).Include(a => a.Permissions).Where(a => a.ProjectIDSys == ProjectIDSys && (a.MenuIDSysParent == 0 || a.Permissions.Count > 0));
+                group = query.ToList();
                 tree = group.Select(c => new PermissionTree()
                 {
                     PermissionID = c.MenuIDSys.ToString(),
@@ -68,7 +68,7 @@ namespace WIM.Core.Repository.Impl.ApiMaster
                     {
                         PermissionID = v.GroupIDSys,
                         PermissionName = v.GroupName,
-                        Group = c.Permissions.Where(s => v.PermissionGroupApi.Select(q => q.ApiIDSys).Contains(s.ApiIDSys) )
+                        Group = c.Permissions.Where(s => v.PermissionGroupApi.Select(q => q.ApiIDSys).Contains(s.ApiIDSys) && v.PermissionGroupApi.Select(o => o.Title).Contains(s.PermissionName))
                         .Select(w => new PermissionTree()
                         {
                             PermissionID = w.PermissionID,

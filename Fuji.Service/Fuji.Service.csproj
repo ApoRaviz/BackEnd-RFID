@@ -43,6 +43,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckStock\ICheckStockService.cs" />
     <Compile Include="ItemImport\IItemImportService.cs" />
     <Compile Include="PrintLabel\IPrintLabelService.cs" />
     <Compile Include="ProgramVersion\IProgramVersionService.cs" />

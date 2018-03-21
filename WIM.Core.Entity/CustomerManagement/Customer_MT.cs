@@ -37,6 +37,7 @@ namespace WIM.Core.Entity.CustomerManagement
         public string Province { get; set; }
         public string Zipcode { get; set; }
         public string CountryCode { get; set; }
+        public string ContName { get; set; }
         public string Email { get; set; }
         public string TelOffice { get; set; }
         public string TelExt { get; set; }

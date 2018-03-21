@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.Common;
+
+
 namespace WIM.Core.Repository.Impl
 {
     public class CommonRepository : Repository<UserLog> , ICommonRepository
@@ -35,32 +38,60 @@ namespace WIM.Core.Repository.Impl
 
         public IEnumerable<UserLog> ProcGetUserLog(int? logID, string requestMethod, string requestUrl, DateTime? requestDateFrom, DateTime? requestDateTo)
         {
-            var logIDParameter = logID.HasValue ?
-               new SqlParameter("@LogID", logID) :
-               new SqlParameter("@LogID", typeof(int));
 
-            var requestMethodParameter = requestMethod != null ?
-                new SqlParameter("@RequestMethod", requestMethod) :
-                new SqlParameter("@RequestMethod", typeof(string));
+            var logIDParameter = logID.HasValue ? new SqlParameter
+            {
+                ParameterName = "@LogID",
+                Value = logID
+            } : new SqlParameter() {
+                ParameterName = "@LogID",
+                Value = DBNull.Value,
+                DbType = DbType.Int32
+            };
 
-            var requestUrlParameter = requestUrl != null ?
-                new SqlParameter("@RequestUrl", requestUrl) :
-                new SqlParameter("@RequestUrl", typeof(string));
+            var requestMethodParameter = !String.IsNullOrEmpty(requestMethod) ? new SqlParameter
+            {
+                ParameterName = "@RequestMethod",
+                Value = logID
+            } : new SqlParameter("@RequestMethod", DBNull.Value);
 
-            var requestDateFromParameter = requestDateFrom.HasValue ?
-                new SqlParameter("@RequestDateFrom", requestDateFrom) :
-                new SqlParameter("@RequestDateFrom", typeof(System.DateTime));
+            var requestUrlParameter = !String.IsNullOrEmpty(requestUrl) ? new SqlParameter
+            {
+                ParameterName = "@RequestUrl",
+                Value = requestUrl
+            } : new SqlParameter("@RequestUrl", DBNull.Value);
 
-            var requestDateToParameter = requestDateTo.HasValue ?
-                new SqlParameter("@RequestDateTo", requestDateTo) :
-                new SqlParameter("@RequestDateTo", typeof(System.DateTime));
+            var requestDateFromParameter = requestDateFrom.HasValue ? new SqlParameter
+            {
+                ParameterName = "@RequestDateFrom",
+                Value = requestDateFrom
+            } : new SqlParameter()
+            {
+                ParameterName = "@RequestDateFrom",
+                Value = DBNull.Value,
+                DbType = DbType.DateTime
+            };
 
-            return this.Context.Database.SqlQuery<UserLog>("ProcGetUserLog @LogID,@RequestMethod,@RequestUrl,@RequestDateFrom,@RequestDateTo"
-                 , logIDParameter
-                 , requestMethodParameter
-                 , requestUrlParameter
-                 , requestDateFromParameter
-                 , requestDateToParameter).ToList();
+            var requestDateToParameter = requestDateTo.HasValue ? new SqlParameter
+            {
+                ParameterName = "@RequestDateTo",
+                Value = requestDateFrom
+            } : new SqlParameter() {
+                ParameterName = "@RequestDateTo",
+                Value = DBNull.Value,
+                DbType = DbType.DateTime
+            };
+
+            var x = this.Context.Database.SqlQuery<UserLog>("exec ProcGetUserLog @LogID , @RequestMethod , @RequestUrl , @RequestDateFrom ," +
+            "@RequestDateTo", logIDParameter, requestMethodParameter, requestUrlParameter, requestDateFromParameter, requestDateToParameter).ToList();
+
+            //var z = this.Context.Database.SqlQuery<string>("exec ProcGetUserLog @LogID , @RequestMethod , @RequestUrl , @RequestDateFrom ," +
+            //"@RequestDateTo", logIDParameter, requestMethodParameter, requestUrlParameter, requestDateFromParameter, requestDateToParameter).ToList();
+
+            return x;
+
+
+
         }
 
         public IEnumerable<TableColumnsDescription> ProcGetTableColumnsDescription(string tableName)
