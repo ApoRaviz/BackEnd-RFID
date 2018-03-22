@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.SupplierManagement;
 using WMS.Entity.Dimension;
@@ -1030,6 +1031,20 @@ namespace WMS.Context
             //    ("exec ProcGetDataAutoComplete @columnNames,@tableName,@conditionColumnNames,@keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
             return x;
 
+        }
+
+        public IEnumerable<TableColumnsDescription> GetTableColumnsDescription(string tableName)
+        {
+            IEnumerable<TableColumnsDescription> tableColumnsDescription;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                var tableNameParameter = /*new ObjectParameter("@tableName", tableName);*/
+          new SqlParameter("tableName", tableName);
+
+                tableColumnsDescription = Db.Database.SqlQuery<TableColumnsDescription>("ProcGetTableColumnsDescription @tableName", tableNameParameter).ToList();
+
+            }
+            return tableColumnsDescription;
         }
     }
 }
