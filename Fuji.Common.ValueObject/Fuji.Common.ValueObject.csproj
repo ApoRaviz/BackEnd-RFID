@@ -64,6 +64,8 @@
     <Compile Include="FujiReportHelper.cs" />
     <Compile Include="FujiSerialAndRFIDModel.cs" />
     <Compile Include="FujiStatus.cs" />
+    <Compile Include="FujiCheckStockHandy.cs" />
+    <Compile Include="FujiStockReportHead.cs" />
     <Compile Include="FujiStockHead.cs" />
     <Compile Include="FujiTagReport.cs" />
     <Compile Include="ItemGroupRequest.cs" />

@@ -8,6 +8,7 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using Fuji.Entity.StockManagement;
+using Fuji.Entity.ItemManagement;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -107,7 +108,7 @@ namespace Fuji.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("{stockID}")]
+        [Route("Get/{stockID}")]
         public HttpResponseMessage GetStockByID(string stockID)
         {
             ResponseData<CheckStockHead> respones = new ResponseData<CheckStockHead>();
@@ -167,7 +168,87 @@ namespace Fuji.WebApi.Controllers
         }
 
 
+        #region Report
+        [HttpGet]
+        [Route("Report")]
+        public HttpResponseMessage GetReportStockGroup()
+        {
+            ResponseData<IEnumerable<FujiStockReportHead>> respones = new ResponseData<IEnumerable<FujiStockReportHead>>();
+            try
+            {
+                IEnumerable<FujiStockReportHead> items = CheckStockService.GetStockReportGroup();
+                respones.SetStatus(HttpStatusCode.OK);
+                respones.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+        }
 
+        [HttpGet]
+        [Route("Report/{Location}")]
+        public HttpResponseMessage GetReportStockList([FromUri]string location)
+        {
+            ResponseData<IEnumerable<ImportSerialDetail>> respones = new ResponseData<IEnumerable<ImportSerialDetail>>();
+            try
+            {
+                IEnumerable<ImportSerialDetail> items = CheckStockService.GetStockReportList(location);
+                respones.SetStatus(HttpStatusCode.OK);
+                respones.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+        }
+
+        #endregion
+
+
+        #region Handy
+
+        [HttpGet]
+        [Route("Handy")]
+        public HttpResponseMessage GetStatusByHandy()
+        {
+            ResponseData<int> respones = new ResponseData<int>();
+            try
+            {
+                int status = CheckStockService.HandyGetStatus();
+                respones.SetStatus(HttpStatusCode.OK);
+                respones.SetData(status);
+
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+
+        }
+
+        [HttpPost]
+        [Route("Handy")]
+        public HttpResponseMessage PostCheckStockByHandy([FromBody] FujiCheckStockHandy checkStock)
+        {
+            ResponseData<int> respones = new ResponseData<int>();
+            try
+            {
+                int status = CheckStockService.UpdateCheckStockByHandy(checkStock);
+                respones.SetStatus(HttpStatusCode.OK);
+                respones.SetData(status);
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
+        }
+
+        #endregion
 
 
 
