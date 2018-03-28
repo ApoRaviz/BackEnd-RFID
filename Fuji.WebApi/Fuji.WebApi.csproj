@@ -416,6 +416,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DataSet\CheckStockDataSet.cs">
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSet\CheckStockDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DataSet\GenerateHeaderDataSet.cs">
       <DependentUpon>GenerateHeaderDataSet.xsd</DependentUpon>
     </Compile>
@@ -490,6 +498,17 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="DataSet\CheckStockDataSet.xsc">
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSet\CheckStockDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CheckStockDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSet\CheckStockDataSet.xss">
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="DataSet\GenerateHeaderDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>GenerateHeaderDataSet.Designer.cs</LastGenOutput>
@@ -589,6 +608,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Report\CheckStockReport.rdlc" />
     <EmbeddedResource Include="Report\IsuzuRfidReport.rdlc" />
     <EmbeddedResource Include="Report\BoxLabelReport.rdlc" />
     <EmbeddedResource Include="Report\CustomerReport.rdlc">
@@ -656,9 +676,9 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/fuji-backend/</IISUrl>
+          <IISUrl>http://localhost/fuji-backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/fuji-backend/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/fuji-backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

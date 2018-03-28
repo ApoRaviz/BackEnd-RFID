@@ -680,7 +680,18 @@ namespace Isuzu.Service.Impl.Inbound
                 sql += " WHERE ";
                 for (int i = 0; i < cnt; i++)
                 {
-                    sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                    if(parameterSearch.Columns[i].ToUpper() == "RFIDTAG")
+                    {
+                        string dec = Convert.ToInt32(parameterSearch.Keywords[i]).ToString("X");
+                        sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], dec);
+                    }
+                    else
+                    {
+                        sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                    }
+                   
+
+                   
                 }
                 sql = sql.Substring(0, sql.Length - 4);
                 sql += " AND [Status] <> 'DELETED'";

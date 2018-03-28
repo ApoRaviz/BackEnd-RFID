@@ -63,6 +63,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fuji.Common.ValueObject\Fuji.Common.ValueObject.csproj">
+      <Project>{A97EA57C-9BBE-4650-8AAD-28FDBCA2677F}</Project>
+      <Name>Fuji.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fuji.Entity\Fuji.Entity.csproj">
       <Project>{e1e1315e-6d9a-4dd7-af98-7d82fd12ea4f}</Project>
       <Name>Fuji.Entity</Name>
