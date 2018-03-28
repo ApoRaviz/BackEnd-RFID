@@ -22,6 +22,7 @@ namespace Fuji.Service.ItemImport
         bool ConfirmPicking(ConfirmPickingRequest confirmRequest);
         bool SetScanned(SetScannedRequest receive);
         bool RegisterRFID_HANDY(RegisterRFIDRequest registerRequest);
+        List<ItemBox> CheckByLoc_Handy(string orderNo);
 
         //Default
         IEnumerable<ImportSerialHead> GetItems();

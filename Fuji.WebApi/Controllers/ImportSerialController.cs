@@ -398,6 +398,7 @@ namespace Fuji.WebApi.Controllers
         public HttpResponseMessage ExportToExcel(string id)
         {
 
+
             IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
@@ -859,8 +860,25 @@ namespace Fuji.WebApi.Controllers
 
         }
 
-
-
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("importserial/checkstock/{id}")]
+        public HttpResponseMessage GetItemByLocID(string id)
+        {
+            ResponseData<List<ItemBox>> response = new ResponseData<List<ItemBox>>();
+            try
+            {
+                List<ItemBox> result = ItemImportService.CheckByLoc_Handy(id);
+                response.SetData(result);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
 
     }
 }

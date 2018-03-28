@@ -67,6 +67,7 @@
     <Compile Include="FujiStockHead.cs" />
     <Compile Include="FujiTagReport.cs" />
     <Compile Include="ItemGroupRequest.cs" />
+    <Compile Include="ItemBox.cs" />
     <Compile Include="ItemImportDto.cs" />
     <Compile Include="ParameterBoxLabel.cs" />
     <Compile Include="ParameterSearch.cs" />
