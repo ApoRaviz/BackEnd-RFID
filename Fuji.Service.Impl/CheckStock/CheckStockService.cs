@@ -18,6 +18,9 @@ using Fuji.Entity.StockManagement;
 using Fuji.Repository.StockManagement;
 using Fuji.Repository.Impl.StockManagement;
 using System.Linq;
+using System.Net.Http;
+using Microsoft.Reporting.WebForms;
+using Fuji.Common.ValueObject.CheckStock;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -306,7 +309,7 @@ namespace Fuji.Service.Impl.ItemImport
                 return stockHead;
 
             if (stockHead != null)
-                if (DateTime.Now.Date <= stockHead.CreateAt)
+                if (DateTime.Now.Date <= stockHead.CreateAt.Value.Date)
                     return stockHead;
 
             using (var scope = new TransactionScope())
@@ -415,6 +418,91 @@ namespace Fuji.Service.Impl.ItemImport
             return items;
         }
 
+        public StreamContent GetReportStream(FujiStockReportHead stockReportHead)
+        {
+            byte[] bytes;
+            string[] streamids;
+            Warning[] warnings;
+            string mimeType, encoding, extension;
+            List<FujiStockReportDetail> details = new List<FujiStockReportDetail>();
+            //List<FujiDataBarcode> barcodeList = new List<FujiDataBarcode>();
+            //List<FujiDataBarcodeDetail> barcodeDetailList = new List<FujiDataBarcodeDetail>();
+            //Barcode bc = new Barcode();
+
+            //string barcodeInfo = item.HeadID;
+            //byte[] barcodeImage = bc.EncodeToByte(TYPE.CODE128A, barcodeInfo, Color.Black, Color.White, 400, 200);
+            //FujiDataBarcode barcode = new FujiDataBarcode(
+            //    barcodeImage,
+            //    barcodeInfo,
+            //    item.WHID,
+            //    item.ItemCode,
+            //    item.InvoiceNumber,
+            //    item.LotNumber,
+            //    item.ReceivingDate.ToString("yyyy/MM/dd", new System.Globalization.CultureInfo("en-US")),
+            //    item.Qty.ToString(),
+            //    item.Location);
+            //barcodeList.Add(barcode);
+
+            //foreach (var itemDetail in item.ImportSerialDetail)
+            //{
+            //    FujiDataBarcodeDetail detail = new FujiDataBarcodeDetail(itemDetail.ItemCode,
+            //        itemDetail.SerialNumber,
+            //        itemDetail.BoxNumber,
+            //        itemDetail.ItemGroup);
+            //    barcodeDetailList.Add(detail);
+            //}
+
+
+            if (stockReportHead != null)
+            {
+                using (FujiDbContext Db = new FujiDbContext())
+                {
+                    try
+                    {
+                        ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
+                        //stockReportHead = checkStockRepo.GetStockHeadByInprogress(stockReportHead);
+                        stockReportHead = checkStockRepo.GetStockDetailByLocation(stockReportHead);
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        throw new ValidationException(e);
+                    }
+                }
+                      
+            }
+
+
+               
+            using (var reportViewer = new ReportViewer())
+            {
+                List<FujiStockReportHead> stockReport = new List<FujiStockReportHead>();
+                stockReport.Add(stockReportHead);
+
+                reportViewer.ProcessingMode = ProcessingMode.Local;
+                reportViewer.LocalReport.ReportPath = "Report/CheckStockReport.rdlc";
+                
+                reportViewer.LocalReport.Refresh();
+                reportViewer.LocalReport.EnableExternalImages = true;
+
+                ReportDataSource rds1 = new ReportDataSource();
+                rds1.Name = "CheckStockHeadDataSet";
+                rds1.Value = stockReport;
+
+                ReportDataSource rds2 = new ReportDataSource();
+                rds2.Name = "CheckStockDataSet";
+                rds2.Value = stockReportHead.Details;
+
+
+                reportViewer.LocalReport.DataSources.Add(rds1);
+                reportViewer.LocalReport.DataSources.Add(rds2);
+                bytes = reportViewer.LocalReport.Render("Pdf", null, out mimeType, out encoding, out extension, out streamids, out warnings);
+
+            }
+
+            Stream stream = new MemoryStream(bytes);
+            return new StreamContent(stream);
+
+        }
 
         #endregion
 

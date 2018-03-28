@@ -9,6 +9,8 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using Fuji.Entity.StockManagement;
 using Fuji.Entity.ItemManagement;
+using Fuji.Common.ValueObject.CheckStock;
+using System.Net.Http.Headers;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -187,23 +189,24 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(respones);
         }
 
-        [HttpGet]
-        [Route("Report/{Location}")]
-        public HttpResponseMessage GetReportStockList([FromUri]string location)
+        [HttpPost]
+        [Route("Report")]
+        public HttpResponseMessage GetReportStockList([FromBody] FujiStockReportHead head)
         {
-            ResponseData<IEnumerable<ImportSerialDetail>> respones = new ResponseData<IEnumerable<ImportSerialDetail>>();
+            HttpResponseMessage result = new HttpResponseMessage();
             try
             {
-                IEnumerable<ImportSerialDetail> items = CheckStockService.GetStockReportList(location);
-                respones.SetStatus(HttpStatusCode.OK);
-                respones.SetData(items);
+                result.Content = CheckStockService.GetReportStream(head);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
             catch (ValidationException ex)
             {
-                respones.SetErrors(ex.Errors);
+                result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
             }
-            return Request.ReturnHttpResponseMessage(respones);
+            return result;
         }
+
+
 
         #endregion
 
