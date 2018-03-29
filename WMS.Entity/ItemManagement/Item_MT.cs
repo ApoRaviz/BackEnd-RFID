@@ -24,6 +24,7 @@ namespace WMS.Entity.ItemManagement
         [Key]
         public int ItemIDSys { get; set; }
         public int ProjectIDSys { get; set; }
+        public int? CateIDSys { get; set; }
         public string ItemCode { get; set; }
         public string JAN { get; set; }
         public string ScanCode { get; set; }
@@ -61,8 +62,11 @@ namespace WMS.Entity.ItemManagement
         public virtual Project_MT Project_MT { get; set; }
         [ForeignKey("SupIDSys")]
         public virtual Supplier_MT Supplier_MT { get; set; }
-        public virtual ICollection<ItemUnitMapping> ItemUnitMapping { get; set; }
         [ForeignKey("ItemSetIDSys")]
+        public virtual ItemSet_MT ItemSet_MT { get; set; }
+        [ForeignKey("CateIDSys")]
+        public virtual Category_MT Category_MT { get; set; }
+        public virtual ICollection<ItemUnitMapping> ItemUnitMapping { get; set; }
         public virtual ICollection<ItemSetDetail> ItemSetDetails { get; set; }
     }
 }

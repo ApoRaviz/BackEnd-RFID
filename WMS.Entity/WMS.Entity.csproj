@@ -50,6 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlMaster\ControlDetails.cs" />
+    <Compile Include="ControlMaster\ControlValue.cs" />
+    <Compile Include="ControlMaster\Control_MT.cs" />
+    <Compile Include="ControlMaster\InspectValue.cs" />
     <Compile Include="Dimension\DimensionLayout_MT.cs" />
     <Compile Include="ImportManagement\ImportDefinitionDetail_MT.cs" />
     <Compile Include="ImportManagement\ImportDefinitionHeader_MT.cs" />

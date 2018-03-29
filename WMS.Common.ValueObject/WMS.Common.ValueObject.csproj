@@ -42,10 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutocompleteCategoryDto.cs" />
     <Compile Include="AutocompleteLocationDto.cs" />
     <Compile Include="AutocompleteItemDto.cs" />
     <Compile Include="AutocompleteUnitDto.cs" />
     <Compile Include="CategoryDto.cs" />
+    <Compile Include="ControlValueDto.cs" />
     <Compile Include="FromUriParamsObject.cs" />
     <Compile Include="GroupLocationDto.cs" />
     <Compile Include="InventoryTransactionDto.cs" />
@@ -74,10 +76,6 @@
     <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
       <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
       <Name>WIM.Core.Security.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
-      <Project>{A0332865-E8ED-42D4-BD3A-11422E7524A9}</Project>
-      <Name>WMS.Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,7 @@ using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WIM.Core.Repository.Impl;
 using System.Security.Principal;
+using WMS.Common.ValueObject;
 
 namespace WMS.Repository.Impl
 {
@@ -23,6 +24,22 @@ namespace WMS.Repository.Impl
         {
             Db = context;
         }
+
+        public IEnumerable<AutocompleteCategoryDto> AutocompleteCategory(string term)
+        {
+            var qr = (from cm in Db.Category_MT
+                      where cm.CateID.Contains(term)
+                      || cm.CateName.Contains(term)
+                      select new AutocompleteCategoryDto
+                      {
+                          CateIDSys = cm.CateIDSys,
+                          CateName = cm.CateName,
+                          CateID = cm.CateID
+                      }
+                     ).ToList();
+            return qr;
+        }
+
     }
 
 }

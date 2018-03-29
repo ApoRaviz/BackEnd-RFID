@@ -6,6 +6,7 @@ using System.Linq;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Entity.ControlMaster;
 using WMS.Entity.Dimension;
 using WMS.Entity.ImportManagement;
 using WMS.Entity.InspectionManagement;
@@ -47,7 +48,7 @@ namespace WMS.Context
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
         public DbSet<ZoneType> ZoneType { get; set; }
         public DbSet<SpareField> SpareField { get; set; }
-
+        public DbSet<Control_MT> Control_MT { get; set; }
         public DbSet<GroupLocation> GroupLocation { get; set; }
         public DbSet<LocationType> LocationType { get; set; }
         public DbSet<InventoryTransaction> InventoryTransaction { get; set; }

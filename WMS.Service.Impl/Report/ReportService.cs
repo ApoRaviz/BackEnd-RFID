@@ -150,16 +150,16 @@ namespace WMS.Service.Impl.Report
                     {
                         Query += column.TableName + "." + column.ColumnName + " As '"+column.AliasName +"' ,";
                     }
-                    //if (data.ReportDetail.Operator != null)
-                    //{
-                    //    if (data.ReportDetail.Operator.Count > 0)
-                    //    {
-                    //        foreach (var oper in data.ReportDetail.Operator)
-                    //        {
-                    //            Query += oper.ColumnFirst.TableName+'.'+oper.ColumnFirst.ColumnName + ' ' + oper.Operator + ' ' + oper.ColumnFirst.TableName + '.' + oper.ColumnSecond.ColumnName + " As '" + oper.AliasName + "' ,";
-                    //        }
-                    //    }
-                    //}
+                    if (data.ReportDetail.Operator != null)
+                    {
+                        if (data.ReportDetail.Operator.Count > 0)
+                        {
+                            foreach (var oper in data.ReportDetail.Operator)
+                            {
+                                Query += oper.ColumnFirst.TableName + '.' + oper.ColumnFirst.ColumnName + ' ' + oper.Operator + ' ' + oper.ColumnFirst.TableName + '.' + oper.ColumnSecond.ColumnName + " As '" + oper.AliasName + "' ,";
+                            }
+                        }
+                    }
 
                     Query = Query.Substring(0,Query.Length-1) + " From " + JoiningTable(data.ReportDetail.Detail);
                     string[] likecondition = { "like", "not like" };

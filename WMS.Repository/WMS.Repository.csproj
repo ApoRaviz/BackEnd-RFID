@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\ICategoryRepository.cs" />
+    <Compile Include="ControlMaster\IControlRepository.cs" />
     <Compile Include="Dimension\IDimensionRepository.cs" />
     <Compile Include="ImportDefinition\IImportDefinitionRepository.cs" />
     <Compile Include="Inspect\IInspectRepository.cs" />
