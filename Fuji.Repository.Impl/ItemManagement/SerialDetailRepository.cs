@@ -6,10 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Service.Impl.StatusManagement;
 
