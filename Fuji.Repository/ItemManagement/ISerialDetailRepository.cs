@@ -16,7 +16,9 @@ namespace Fuji.Repository.ItemManagement
         ImportSerialDetail GetItemFirstBy(Func<ImportSerialDetail, bool> where);
         ImportSerialDetail GetItemSingleBy(Func<ImportSerialDetail, bool> where);
         IEnumerable<ImportSerialDetail> GetItemsBy(Func<ImportSerialDetail, bool> where);
+        int GetCountItems(Func<ImportSerialDetail, bool> where);
         IEnumerable<T> SqlQuery<T>(string sql, params object[] parameters);
+
         void ExceuteSql(string sql);
         bool IsAnyItemBy(Func<ImportSerialDetail, bool> where);
         bool IsSerialsRemainInStock(List<string> itemGroups);

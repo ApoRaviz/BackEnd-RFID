@@ -123,5 +123,23 @@ namespace Master.WebApi
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpPost]
+        [Route("positionconfig/{id}")]
+
+        public HttpResponseMessage setPositionConfig(int id,[FromBody]  List<PositionConfig<List<PositionConfig<string>>>> positionConfig)
+        {
+            IResponseData<Positions> response = new ResponseData<Positions>();
+            try
+            {
+                Positions rs = PositionService.SetPositionConfig(id,positionConfig);
+                response.SetData(rs);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
     }
 }

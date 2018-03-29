@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WIM.Core.Service;
 using WMS.Entity.WarehouseManagement;
 
@@ -12,6 +8,7 @@ namespace WMS.Service.LocationMaster
     {
         IEnumerable<Location_MT> GetList();
         Location_MT GetLocationByLocIDSys(int id);
+        GroupLocation GetLocationByGroupLocIDSys(int id);
         Location_MT CreateLocation(Location_MT Location);
         bool UpdateLocation(int id, Location_MT Location);
         bool DeleteLocation(int id);        

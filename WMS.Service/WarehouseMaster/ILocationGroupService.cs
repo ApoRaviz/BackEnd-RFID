@@ -13,6 +13,7 @@ namespace WMS.Master
     public interface ILocationGroupService : IService
     {
         IEnumerable<GroupLocation> GetLocationGroup();
+        IEnumerable<GroupLocationDto> GetListLocationGroupDto();
         IEnumerable<GroupLocation> GetUnassignLocationGroup();
         GroupLocation GetLocationGroupByGroupLocIDSys(int id);
         IEnumerable<GroupLocation> GetLocationGroupByZoneInfo(GroupLocation item);

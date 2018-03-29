@@ -17,7 +17,7 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
             if(File.Exists(path))
             {
                 string texts = File.ReadAllText(path);
-                ret = texts.Split(split).ToList();
+                ret = texts.Split(split).Distinct().ToList();
                 ret.RemoveAll(w => string.IsNullOrEmpty(w));
             }
 

@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckStockStatus.cs" />
     <Compile Include="ConfirmPickingRequest.cs" />
     <Compile Include="FujiBoxNumberAndAmountModel.cs" />
     <Compile Include="FujiCheckRegister.cs" />
