@@ -838,6 +838,32 @@ namespace Isuzu.Service.Impl
 
         }
 
+        [HttpPost]
+        [Route("adjustWeight")]
+        public HttpResponseMessage AdjustWeight([FromBody]AdjustWeight adjustWeight)
+        {
+            if (adjustWeight.IsRepeat == 0)
+            {
+                ResponseData<AdjustWeight> responseCheckRepeat = new ResponseData<AdjustWeight>();
+                AdjustWeight adjustWeightReturn = InboundService.GetBeforeAdjustWeight(adjustWeight);
+                responseCheckRepeat.SetData(adjustWeightReturn);
+                return Request.ReturnHttpResponseMessage(responseCheckRepeat);
+            }
+
+            ResponseData<AdjustWeight> responseHandy = new ResponseData<AdjustWeight>();
+            try
+            {
+                InboundService.AdjustWeight(adjustWeight);
+                responseHandy.SetData(adjustWeight);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+
+        }
+
         #endregion
     }
 }
