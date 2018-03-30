@@ -51,6 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckStock\CheckStockStatus.cs" />
+    <Compile Include="CheckStock\FujiCheckStockHandy.cs" />
+    <Compile Include="CheckStock\FujiStockHead.cs" />
+    <Compile Include="CheckStock\FujiStockReportDetail.cs" />
+    <Compile Include="CheckStock\FujiStockReportHead.cs" />
     <Compile Include="ConfirmPickingRequest.cs" />
     <Compile Include="FujiBoxNumberAndAmountModel.cs" />
     <Compile Include="FujiCheckRegister.cs" />
@@ -64,10 +68,6 @@
     <Compile Include="FujiReportHelper.cs" />
     <Compile Include="FujiSerialAndRFIDModel.cs" />
     <Compile Include="FujiStatus.cs" />
-    <Compile Include="CheckStock\FujiCheckStockHandy.cs" />
-    <Compile Include="CheckStock\FujiStockReportDetail.cs" />
-    <Compile Include="CheckStock\FujiStockReportHead.cs" />
-    <Compile Include="CheckStock\FujiStockHead.cs" />
     <Compile Include="FujiTagReport.cs" />
     <Compile Include="ItemGroupRequest.cs" />
     <Compile Include="ItemBox.cs" />

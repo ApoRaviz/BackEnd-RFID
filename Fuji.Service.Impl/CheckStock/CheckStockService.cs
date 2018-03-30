@@ -553,10 +553,10 @@ namespace Fuji.Service.Impl.ItemImport
                         ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
 
                         List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => checkStock.RFIDTags.Contains(m.ItemGroup)
-                                    && m.ItemType == "1" 
-                                    && m.Status == statusReceived 
+                                    && m.ItemType == "1"
+                                    && m.Status == statusReceived
                                     && !m.IsCheckedStock
-                                    && m.Location ==  checkStock.Location ).ToList();
+                                    && m.Location == checkStock.Location.ToUpper()).ToList();
                         itemStocks.ForEach(f =>
                         {
                             if (f != null)

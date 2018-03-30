@@ -52,7 +52,7 @@ namespace Fuji.WebApi.Controllers
             ResponseData<CheckStockHead> respones = new ResponseData<CheckStockHead>();
             try
             {
-               CheckStockHead items = CheckStockService.GetStockHeadByProgress();
+                CheckStockHead items = CheckStockService.GetStockHeadByProgress();
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(items);
             }
@@ -91,7 +91,7 @@ namespace Fuji.WebApi.Controllers
             try
             {
                 CheckStockHead stockHead = CheckStockService.GetStockHeadByID(checkStockHead.CheckStockID);
-                if(stockHead != null)
+                if (stockHead != null)
                 {
                     stockHead.Status = CheckStockStatus.Completed.GetValueEnum();
                     bool isUpdated = CheckStockService.UpdateCheckStockHead(stockHead);
@@ -223,7 +223,6 @@ namespace Fuji.WebApi.Controllers
                 int status = CheckStockService.HandyGetStatus();
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(status);
-
             }
             catch (ValidationException ex)
             {
