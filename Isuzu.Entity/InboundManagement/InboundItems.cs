@@ -50,6 +50,8 @@ namespace Isuzu.Entity
         [StringLength(50)]
         public string CaseNo { get; set; }
 
+        public decimal Weight { get; set; }
+
         [GeneralLog]
         [StringLength(20)]
         public string Status { get; set; }
