@@ -111,9 +111,10 @@ namespace Fuji.Service.Impl.ItemImport
                         if (stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
                         {
                             stockHead = SetComplete(stockHead);
-                            stockHead = this.ReadFileFromHandheld(stockHead, false);
+                            if (stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
+                                stockHead = this.ReadFileFromHandheld(stockHead, false);
                         }
-                            
+
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -141,7 +142,8 @@ namespace Fuji.Service.Impl.ItemImport
                     if (stockHead != null)
                     {
                         stockHead = SetComplete(stockHead);
-                        stockHead = this.ReadFileFromHandheld(stockHead, false);
+                        if(stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
+                            stockHead = this.ReadFileFromHandheld(stockHead, false);
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -227,78 +229,78 @@ namespace Fuji.Service.Impl.ItemImport
             return items;
         }
 
-        
+
 
         private CheckStockHead ReadFileFromHandheld(CheckStockHead stockHead, bool isCreate)
         {
-            
-                using (var scope = new TransactionScope())
+
+            using (var scope = new TransactionScope())
+            {
+
+                using (FujiDbContext Db = new FujiDbContext())
                 {
-
-                    using (FujiDbContext Db = new FujiDbContext())
+                    try
                     {
-                        try
+                        ISerialHeadRepository serialHeadRepo = new SerialHeadRepository(Db);
+                        ISerialDetailRepository serialDetailRepo = new SerialDetailRepository(Db);
+                        ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
+
+
+                        string[] files = Directory.GetFiles(STOCK_DIRECTORY);
+                        if (files.Length > 0)
                         {
-                            ISerialHeadRepository serialHeadRepo = new SerialHeadRepository(Db);
-                            ISerialDetailRepository serialDetailRepo = new SerialDetailRepository(Db);
-                            ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
-
-                           
-                            string[] files = Directory.GetFiles(STOCK_DIRECTORY);
-                            if (files.Length > 0)
+                            for (int i = 0; i < files.Length; i++)
                             {
-                                for (int i = 0; i < files.Length; i++)
-                                {
-                                    List<string> items = new List<string>();
-                                    items.AddRange(FileHelper.ReadTextFileBySplit(files[i]));
+                                List<string> items = new List<string>();
+                                items.AddRange(FileHelper.ReadTextFileBySplit(files[i]));
 
-                                    List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => items.Contains(m.ItemGroup)
-                                    && m.ItemType == "1" && m.Status == statusReceived && !m.IsCheckedStock).ToList();
-                                    itemStocks.ForEach(f =>
+                                List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => items.Contains(m.ItemGroup)
+                                && m.ItemType == "1" && m.Status == statusReceived && !m.IsCheckedStock).ToList();
+                                itemStocks.ForEach(f =>
+                                {
+                                    if (f != null)
                                     {
-                                        if (f != null)
-                                        {
-                                            if(f.Location == null)// Check if location equal null and assign it !
+                                        if (f.Location == null)// Check if location equal null and assign it !
                                             {
-                                                var headItem = serialHeadRepo.Get(w => w.HeadID == f.HeadID);
-                                                if (headItem != null)
-                                                    f.Location = headItem.Location;
-                                            }
-                                                
-                                            f.IsCheckedStock = true;
+                                            var headItem = serialHeadRepo.Get(w => w.HeadID == f.HeadID);
+                                            if (headItem != null)
+                                                f.Location = headItem.Location;
                                         }
-                                    });
-                                    Db.SaveChanges();
-                                }
+
+                                        f.IsCheckedStock = true;
+                                    }
+                                });
+                                Db.SaveChanges();
                             }
+                        }
 
                         int countCheckedStock = serialDetailRepo.GetCountItems(w => w.IsCheckedStock);
-                            stockHead.SystemQTY = countCheckedStock;
-                            stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived && w.ItemType == "1");
+                        stockHead.SystemQTY = countCheckedStock;
+                        stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived && w.ItemType == "1");
 
-                            if (isCreate)
-                            {
-                                stockHead.CheckStockID = Guid.NewGuid().ToString();
-                                stockHead.CheckStockBy = "";
-                                stockHead.CheckStockDate = DateTime.Now;
-                                stockHead.Status = CheckStockStatus.InProgress.GetValueEnum();
-                                checkStockRepo.Insert(stockHead);
-                            }
-                            else
-                            {
-                                checkStockRepo.Update(stockHead);
-                            }
-
-                            Db.SaveChanges();
-                            scope.Complete();
-                        }
-                        catch (DbEntityValidationException e)
+                        if (isCreate)
                         {
-                            scope.Dispose();
-                            throw new ValidationException(e);
+                            stockHead.CheckStockID = Guid.NewGuid().ToString();
+                            stockHead.CheckStockBy = "";
+                            stockHead.CheckStockDate = DateTime.Now;
+                            stockHead.Status = CheckStockStatus.InProgress.GetValueEnum();
+                            checkStockRepo.Insert(stockHead);
                         }
+                        else
+                        {
+                            checkStockRepo.Update(stockHead);
+                        }
+
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        scope.Dispose();
+                        throw new ValidationException(e);
                     }
                 }
+            }
 
             return stockHead;
         }
@@ -311,6 +313,16 @@ namespace Fuji.Service.Impl.ItemImport
             if (stockHead != null)
                 if (DateTime.Now.Date <= stockHead.CreateAt.Value.Date)
                     return stockHead;
+
+            string[] files = Directory.GetFiles(STOCK_DIRECTORY);
+            if (files.Length > 0)
+            {
+                foreach (var file in files)
+                {
+                    if (File.Exists(file))
+                        File.Delete(file);
+                }
+            }
 
             using (var scope = new TransactionScope())
             {
@@ -468,11 +480,11 @@ namespace Fuji.Service.Impl.ItemImport
                         throw new ValidationException(e);
                     }
                 }
-                      
+
             }
 
 
-               
+
             using (var reportViewer = new ReportViewer())
             {
                 List<FujiStockReportHead> stockReport = new List<FujiStockReportHead>();
@@ -480,7 +492,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 reportViewer.ProcessingMode = ProcessingMode.Local;
                 reportViewer.LocalReport.ReportPath = "Report/CheckStockReport.rdlc";
-                
+
                 reportViewer.LocalReport.Refresh();
                 reportViewer.LocalReport.EnableExternalImages = true;
 
@@ -552,31 +564,36 @@ namespace Fuji.Service.Impl.ItemImport
                         ISerialDetailRepository serialDetailRepo = new SerialDetailRepository(Db);
                         ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
 
-                        List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => checkStock.RFIDTags.Contains(m.ItemGroup)
-                                    && m.ItemType == "1" 
-                                    && m.Status == statusReceived 
-                                    && !m.IsCheckedStock
-                                    && m.Location ==  checkStock.Location ).ToList();
-                        itemStocks.ForEach(f =>
+                        var item = checkStockRepo.Get(w => w.Status == CheckStockStatus.InProgress.GetValueEnum());
+                        if (item != null)
                         {
-                            if (f != null)
-                            {
-                                f.IsCheckedStock = true;
-                            }
-                        });
-                        Db.SaveChanges();
 
-                        var stockHead = checkStockRepo.Get(g => g.Status == CheckStockStatus.InProgress.GetValueEnum());
-                        if(stockHead != null)
-                        {
-                            int countCheckedStock = serialDetailRepo.GetCountItems(w => w.IsCheckedStock);
-                            stockHead.SystemQTY = countCheckedStock;
-                            stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived && w.ItemType == "1");
+                            List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => checkStock.RFIDTags.Contains(m.ItemGroup)
+                                        && m.ItemType == "1"
+                                        && m.Status == statusReceived
+                                        && !m.IsCheckedStock
+                                        && m.Location.Equals(checkStock.Location, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                            itemStocks.ForEach(f =>
+                            {
+                                if (f != null)
+                                {
+                                    f.IsCheckedStock = true;
+                                }
+                            });
                             Db.SaveChanges();
-                            status = 1;
+
+                            var stockHead = checkStockRepo.Get(g => g.Status == CheckStockStatus.InProgress.GetValueEnum());
+                            if (stockHead != null)
+                            {
+                                int countCheckedStock = serialDetailRepo.GetCountItems(w => w.IsCheckedStock);
+                                stockHead.SystemQTY = countCheckedStock;
+                                stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived && w.ItemType == "1");
+                                Db.SaveChanges();
+                                status = 1;
+                            }
                         }
 
-                       
+
 
                     }
                     catch (DbEntityValidationException e)
@@ -592,6 +609,6 @@ namespace Fuji.Service.Impl.ItemImport
         }
 
 
-                #endregion
-        }
+        #endregion
+    }
 }
