@@ -572,7 +572,7 @@ namespace Fuji.Service.Impl.ItemImport
                                         && m.ItemType == "1"
                                         && m.Status == statusReceived
                                         && !m.IsCheckedStock
-                                        && m.Location == checkStock.Location).ToList();
+                                        && m.Location.Equals(checkStock.Location, StringComparison.InvariantCultureIgnoreCase)).ToList();
                             itemStocks.ForEach(f =>
                             {
                                 if (f != null)
