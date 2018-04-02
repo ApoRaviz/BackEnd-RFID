@@ -840,17 +840,17 @@ namespace Isuzu.Service.Impl
 
         [HttpPost]
         [Route("adjustWeight")]
-        public HttpResponseMessage AdjustWeight([FromBody]AdjustWeight adjustWeight)
+        public HttpResponseMessage AdjustWeight([FromBody]InboundItemHandyDto adjustWeight)
         {
             if (adjustWeight.IsRepeat == 0)
             {
-                ResponseData<AdjustWeight> responseCheckRepeat = new ResponseData<AdjustWeight>();
-                AdjustWeight adjustWeightReturn = InboundService.GetBeforeAdjustWeight(adjustWeight);
+                ResponseData<InboundItemHandyDto> responseCheckRepeat = new ResponseData<InboundItemHandyDto>();
+                InboundItemHandyDto adjustWeightReturn = InboundService.GetBeforeAdjustWeight(adjustWeight);
                 responseCheckRepeat.SetData(adjustWeightReturn);
                 return Request.ReturnHttpResponseMessage(responseCheckRepeat);
             }
 
-            ResponseData<AdjustWeight> responseHandy = new ResponseData<AdjustWeight>();
+            ResponseData<InboundItemHandyDto> responseHandy = new ResponseData<InboundItemHandyDto>();
             try
             {
                 InboundService.AdjustWeight(adjustWeight);

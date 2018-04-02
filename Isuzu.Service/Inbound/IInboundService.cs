@@ -46,8 +46,8 @@ namespace Isuzu.Service
         IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch);
         string CreateDeletedFileID(string pathName);
         void GetDeletedFileID(string fileID);
-        AdjustWeight GetBeforeAdjustWeight(AdjustWeight adjustWeight);
-        void AdjustWeight(AdjustWeight adjustWeight);
+        InboundItemHandyDto GetBeforeAdjustWeight(InboundItemHandyDto adjustWeight);
+        void AdjustWeight(InboundItemHandyDto adjustWeight);
         //Async
 
     }
