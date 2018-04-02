@@ -142,7 +142,7 @@ namespace Fuji.Service.Impl.ItemImport
                     if (stockHead != null)
                     {
                         stockHead = SetComplete(stockHead);
-                        if(stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
+                        if (stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
                             stockHead = this.ReadFileFromHandheld(stockHead, false);
                     }
                 }
@@ -261,7 +261,7 @@ namespace Fuji.Service.Impl.ItemImport
                                     if (f != null)
                                     {
                                         if (f.Location == null)// Check if location equal null and assign it !
-                                            {
+                                        {
                                             var headItem = serialHeadRepo.Get(w => w.HeadID == f.HeadID);
                                             if (headItem != null)
                                                 f.Location = headItem.Location;
@@ -589,7 +589,7 @@ namespace Fuji.Service.Impl.ItemImport
                                                                                         && w.IsCheckedStock
                                                                                         && w.ItemType == "1");
                                 stockHead.SystemQTY = countCheckedStock;
-                                stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived 
+                                stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived
                                                                                         && w.ItemType == "1");
                                 checkStockRepo.Update(stockHead);
                                 Db.SaveChanges();
