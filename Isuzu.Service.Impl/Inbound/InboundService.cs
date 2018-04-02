@@ -69,7 +69,11 @@ namespace Isuzu.Service.Impl.Inbound
                              InvNo = i.InvNo,
                              ITAOrder = i.ITAOrder,
                              RFIDTag = i.RFIDTag,
-                             ISZJOrder = i.ISZJOrder
+                             ISZJOrder = i.ISZJOrder,
+                             Weight = i.Weight,
+                             Qty = i.Qty,
+                             PartNo = i.PartNo,
+                             ParrtName = i.ParrtName
                          }
                      ).SingleOrDefault();
             }
@@ -210,7 +214,11 @@ namespace Isuzu.Service.Impl.Inbound
                             InvNo = i.InvNo,
                             ITAOrder = i.ITAOrder,
                             RFIDTag = i.RFIDTag,
-                            ISZJOrder = i.ISZJOrder
+                            ISZJOrder = i.ISZJOrder,
+                            Qty = i.Qty,
+                            Weight = i.Weight,
+                            PartNo = i.PartNo,
+                            ParrtName = i.ParrtName
                         }
                     ).SingleOrDefault();
             }
@@ -1140,9 +1148,9 @@ namespace Isuzu.Service.Impl.Inbound
             }
         }
 
-        public AdjustWeight GetBeforeAdjustWeight(AdjustWeight adjustWeight)
+        public InboundItemHandyDto GetBeforeAdjustWeight(InboundItemHandyDto adjustWeight)
         {
-            AdjustWeight adjustWeightReturn;
+            InboundItemHandyDto adjustWeightReturn;
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 adjustWeightReturn = (
@@ -1153,20 +1161,32 @@ namespace Isuzu.Service.Impl.Inbound
                                     statusDeleted,
                                     statusShipped
                                 }.Contains(i.Status)
-                               select new AdjustWeight
+                               select new InboundItemHandyDto
                                {
                                    ISZJOrder = i.ISZJOrder,
+                                   PartNo = i.PartNo,
+                                   ParrtName = i.ParrtName,
                                    Weight = i.Weight,
-                                   IsRepeat = Decimal.Compare(i.Weight, 0) == 0 ? 2 : 
+                                   Qty = i.Qty,
+                                   IsRepeat = Decimal.Compare(i.Weight, 0) == 0 ? 2 :
                                    Decimal.Compare(i.Weight, adjustWeight.Weight) == 0 ? 3 : 4
-
                                }
-                           ).Single();
+                           ).SingleOrDefault();
+
+                if (adjustWeightReturn == null)
+                {
+                    return new InboundItemHandyDto
+                    {
+                        ISZJOrder = adjustWeight.ISZJOrder,
+                        Weight = adjustWeight.Weight,
+                        IsRepeat = -1
+                    };
+                }
             }
             return adjustWeightReturn;
         }
 
-        public void AdjustWeight(AdjustWeight adjustWeight)
+        public void AdjustWeight(InboundItemHandyDto adjustWeight)
         {
             using (var scope = new TransactionScope())
             {

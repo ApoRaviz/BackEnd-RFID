@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdjustWeight.cs" />
     <Compile Include="InboundItemHandyDto.cs" />
     <Compile Include="IsuzuDataBarcode.cs" />
     <Compile Include="IsuzuDataImport.cs" />
