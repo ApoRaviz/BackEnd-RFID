@@ -585,12 +585,17 @@ namespace Fuji.Service.Impl.ItemImport
                             var stockHead = checkStockRepo.Get(g => g.Status == CheckStockStatus.InProgress.GetValueEnum());
                             if (stockHead != null)
                             {
-                                int countCheckedStock = serialDetailRepo.GetCountItems(w => w.IsCheckedStock);
+                                int countCheckedStock = serialDetailRepo.GetCountItems(w => w.Status == statusReceived
+                                                                                        && w.IsCheckedStock
+                                                                                        && w.ItemType == "1");
                                 stockHead.SystemQTY = countCheckedStock;
-                                stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived && w.ItemType == "1");
+                                stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived 
+                                                                                        && w.ItemType == "1");
+                                checkStockRepo.Update(stockHead);
                                 Db.SaveChanges();
                                 status = 1;
                             }
+                            scope.Complete();
                         }
 
 
