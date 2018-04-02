@@ -91,7 +91,10 @@ namespace Isuzu.Service.Impl.Inbound
                                from i in Db.InboundItems
                                where i.ISZJOrder == inboundItem.ISZJOrder
                                && !string.IsNullOrEmpty(i.RFIDTag)
-                               && i.Status != statusDeleted
+                               && !new List<string> {
+                                    statusShipped,
+                                    statusDeleted
+                                }.Contains(i.Status)
                                select i
                            ).Any();
             }
