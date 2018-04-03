@@ -28,6 +28,42 @@ namespace WMS.WebApi.Controllers
 
         #region LocationGroup
 
+        [HttpPost]
+        [Route("")]
+        public HttpResponseMessage CreateLocationGroup([FromBody] GroupLocation body)
+        {
+            ResponseData<GroupLocation> response = new ResponseData<GroupLocation>();
+            try
+            {
+                GroupLocation res = LocGroupService.CreateLocationGroup(body);
+                response.SetData(res);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPut]
+        [Route("")]
+        public HttpResponseMessage UpdateLocationGroup([FromBody] GroupLocation body )
+        {
+            ResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool res = LocGroupService.UpdateLocationGroup(body.GroupLocIDSys, body);
+                response.SetData(res);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         [HttpGet]
         [Route("GetLocationGroup")]
         public HttpResponseMessage GetAllLocationGroup()
@@ -63,6 +99,7 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
 
         [HttpGet]
         [Route("GetUnassignLocationGroup")]
@@ -100,6 +137,30 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        //[HttpPost]
+        //[Route("GroupLocation")]
+        //public HttpResponseMessage SaveGroupLocation([FromBody] GroupLocation item)
+        //{
+        //    ResponseData<int> response = new ResponseData<int>();
+        //    try
+        //    {
+        //        if (item != null)
+        //        {
+        //            int detail = LocGroupService.CreateLocationGroup(item);//LocGroupService.GetLocationGroupByZoneInfo(item);
+        //            response.SetData(detail);
+        //        }
+        //        else
+        //        {
+        //            response.SetData(0);
+        //        }
+        //    }
+        //    catch (ValidationException ex)
+        //    {
+        //        response.SetErrors(ex.Errors);
+        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //    }
+        //    return Request.ReturnHttpResponseMessage(response);
+        //}
 
         [HttpPost]
         [Route("GetLocationGroupBy")]

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Entity.Common;
 using WMS.Entity.Dimension;
 using WMS.Entity.ImportManagement;
 using WMS.Entity.InspectionManagement;
@@ -21,6 +22,8 @@ namespace WMS.Context
 
     public class WMSDbContext : DbContext
     {
+        
+        public DbSet<BaseGeneralConfig> BaseGeneralConfig { get; set; }
         public DbSet<InspectType> InspectType { get; set; }
         public DbSet<Inspect_MT> Inspect_MT { get; set; }
         public DbSet<Category_MT> Category_MT { get; set; }
@@ -67,7 +70,6 @@ namespace WMS.Context
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
         }
 
         public string ProcGetNewID(string prefixes)

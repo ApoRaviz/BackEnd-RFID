@@ -18,7 +18,7 @@ namespace WMS.Entity.ItemManagement
         {
             this.ItemInspectMapping = new HashSet<ItemInspectMapping>();
             this.ItemUnitMapping = new HashSet<ItemUnitMapping>();
-            this.ItemSetDetails = new HashSet<ItemSetDetail>();
+            this.ItemSet_MT = new HashSet<ItemSet_MT>();
         }
 
         [Key]
@@ -63,6 +63,6 @@ namespace WMS.Entity.ItemManagement
         public virtual Supplier_MT Supplier_MT { get; set; }
         public virtual ICollection<ItemUnitMapping> ItemUnitMapping { get; set; }
         [ForeignKey("ItemSetIDSys")]
-        public virtual ICollection<ItemSetDetail> ItemSetDetails { get; set; }
+        public virtual ICollection<ItemSet_MT> ItemSet_MT { get; set; }
     }
 }

@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\CategoryService.cs" />
+    <Compile Include="Common\GeneralConfigsService.cs" />
     <Compile Include="Dimension\DimensionService.cs" />
     <Compile Include="Import\ImportService.cs" />
     <Compile Include="Inspect\InspectService.cs" />

@@ -3,7 +3,7 @@ using WMS.Entity.WarehouseManagement;
 
 namespace WMS.Repository.Warehouse
 {
-    public interface ILocationRepository: IRepository<Location_MT>
+    public interface ILocationRepository: IRepository<Location>
     {
         GroupLocation GetLocationByGroupLocIDSys(int G_LocIDSys);
     }
