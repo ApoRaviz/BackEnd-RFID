@@ -202,6 +202,37 @@ namespace WMS.Service
             }
         }
 
+        public ItemUnitMapping CreateItemUnit(ItemUnitMapping itemunit)
+        {
+            using (var scope = new TransactionScope())
+            {
+                ItemUnitMapping itemresponse = new ItemUnitMapping();
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                       
+                        IItemUnitRepository repoUnit = new ItemUnitRepository(Db);
+                        itemunit.Sequence = 0;
+                        itemunit.QtyInParent = 1;
+                        itemresponse = repoUnit.Insert(itemunit);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.E4012);
+                }
+                return itemresponse;
+            }
+        }
+
         public bool UpdateItem(Item_MT item)
         {
             using (var scope = new TransactionScope())
