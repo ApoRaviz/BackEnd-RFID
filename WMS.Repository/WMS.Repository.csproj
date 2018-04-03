@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\Master.WebApi\DLL\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\ICategoryRepository.cs" />
+    <Compile Include="Common\IGeneralConfigsLocationFormatRepository.cs" />
+    <Compile Include="Common\IGeneralConfigsRepository.cs" />
     <Compile Include="ControlMaster\IControlRepository.cs" />
     <Compile Include="Dimension\IDimensionRepository.cs" />
     <Compile Include="ImportDefinition\IImportDefinitionRepository.cs" />
