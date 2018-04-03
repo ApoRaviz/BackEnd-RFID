@@ -29,7 +29,7 @@ namespace Isuzu.Service
         InboundItems GetInboundItemByISZJOrder(string iszjOrder);
         IEnumerable<InboundItems> GetInboundItemPaging(int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<InboundItems> GetInboundItemDeletedPaging(int pageIndex, int pageSize, out int totalRecord);
-        List<InboundItems> ImportInboundItemList(List<InboundItems> itemList,string userName);
+        List<InboundItems> ImportInboundItemList(List<InboundItems> itemList);
         IEnumerable<InboundItems> GetInboundItemByQty(int Qty, bool isShipped = false);
         IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false);
         IEnumerable<InboundItems> GetDataByColumn(ParameterSearch parameterSearch);
@@ -46,6 +46,8 @@ namespace Isuzu.Service
         IEnumerable<IsuzuTagReport> GetReportByYearRang(ParameterSearch parameterSearch);
         string CreateDeletedFileID(string pathName);
         void GetDeletedFileID(string fileID);
+        InboundItemHandyDto GetBeforeAdjustWeight(InboundItemHandyDto adjustWeight);
+        void AdjustWeight(InboundItemHandyDto adjustWeight);
         //Async
 
     }

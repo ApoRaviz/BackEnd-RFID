@@ -148,6 +148,24 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpPost]
+        [Route("itemunit")]
+        public HttpResponseMessage PostItemUnit([FromBody]ItemUnitMapping item)
+        {
+            IResponseData<ItemUnitMapping> response = new ResponseData<ItemUnitMapping>();
+            try
+            {
+                ItemUnitMapping id = ItemService.CreateItemUnit(item);
+                response.SetData(id);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // PUT: api/Items/5
         [HttpPut]
         [Route("{id}")]

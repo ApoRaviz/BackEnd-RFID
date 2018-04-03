@@ -54,6 +54,7 @@
     <Compile Include="CategoryMaster\CategoryRepository.cs" />
     <Compile Include="Common\GeneralConfigsLocationFormatRepository.cs" />
     <Compile Include="Common\GeneralConfigsRepository.cs" />
+    <Compile Include="ControlMaster\ControlRepository.cs" />
     <Compile Include="Dimension\DimensionRepository.cs" />
     <Compile Include="ImportDefinition\ImportDefinitionRepository.cs" />
     <Compile Include="Inspect\InspectRepository.cs" />

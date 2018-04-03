@@ -51,6 +51,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,7 @@
   <ItemGroup>
     <Compile Include="CategoryMaster\CategoryService.cs" />
     <Compile Include="Common\GeneralConfigsService.cs" />
+    <Compile Include="ControlMaster\ControlService.cs" />
     <Compile Include="Dimension\DimensionService.cs" />
     <Compile Include="Import\ImportService.cs" />
     <Compile Include="Inspect\InspectService.cs" />

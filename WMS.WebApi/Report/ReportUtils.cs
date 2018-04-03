@@ -762,8 +762,8 @@ namespace WMS.WebApi.Report
                 WriteReportFile(dt, filePath, report.ReportDetail.StartExportRow.Value, includeHeader, delimiter, gualifier, encoding);
                 fileName = String.Format(fileName, ReportName, DateTime.Now.ToString("ddMMyyyy"), fileType);
             }
-
-            DownloadHelper.DownloadFile(filePath, fileName);
+            
+            DownloadHelper.DownloadFile(filePath, fileName , report.ReportDetail.FormatType);
         }
 
         public static void WriteReportFile<T>(IEnumerable<T> items, string path, bool includeHeader = false, string delimeter = ",")

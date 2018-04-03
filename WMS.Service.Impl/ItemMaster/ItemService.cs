@@ -80,6 +80,36 @@ namespace WMS.Service
                     InspectIDSys = a.Inspect_MT.InspectIDSys
                 }).ToList();
                 var sending = Mapper.Map<Item_MT, ItemDto>(query);
+                if(query.ItemSet_MT != null)
+                sending.ItemSetName = query.ItemSet_MT.ItemSetName;
+                if(query.Category_MT != null)
+                {
+                    sending.CateName = query.Category_MT.CateName;
+                    if(query.Category_MT.Control_MT != null)
+                    {
+                        sending.ControlValue = query.Category_MT.Control_MT.ControlDetails.Select(a => new ControlValueDto()
+                        {
+                            Key = a.Key,
+                            Unit = a.Unit,
+                            Value = a.Value
+                        }).ToList();
+
+                        if(query.Category_MT.MainCategory != null)
+                        {
+                            if(query.Category_MT.MainCategory.Control_MT != null)
+                            {
+                                foreach(var control in query.Category_MT.MainCategory.Control_MT.ControlDetails)
+                                {
+                                    if(sending.ControlValue.Any(s => s.Key != control.Key))
+                                    {
+                                        //ControlValueDto value = new ControlValueDto() { }
+                                        //sending.ControlValue.Add();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 sending.ItemInspectMapping.Clear();
                 foreach (var data in inspect)
                 {
@@ -169,6 +199,37 @@ namespace WMS.Service
                     throw new ValidationException(ErrorEnum.E4012);
                 }
                 return itemresponse.ItemIDSys;
+            }
+        }
+
+        public ItemUnitMapping CreateItemUnit(ItemUnitMapping itemunit)
+        {
+            using (var scope = new TransactionScope())
+            {
+                ItemUnitMapping itemresponse = new ItemUnitMapping();
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                       
+                        IItemUnitRepository repoUnit = new ItemUnitRepository(Db);
+                        itemunit.Sequence = 0;
+                        itemunit.QtyInParent = 1;
+                        itemresponse = repoUnit.Insert(itemunit);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.E4012);
+                }
+                return itemresponse;
             }
         }
 
