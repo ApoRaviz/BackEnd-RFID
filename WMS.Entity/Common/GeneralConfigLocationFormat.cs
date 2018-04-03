@@ -10,8 +10,6 @@ namespace WMS.Entity.Common
     [NotMapped]
     public partial class GeneralConfigLocationFormat  : BaseGeneralConfig
     {
-
-        [NotMapped]
         public List<LocationFormat> DetailConfig
         {
             get

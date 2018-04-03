@@ -6,10 +6,10 @@ using WIM.Core.Entity;
 
 namespace WMS.Entity.Common
 {
-    [Table("GeneralConfigs")]
+    [NotMapped]
     public class GeneralConfig : BaseGeneralConfig
     {
-        [NotMapped]
+        
         public DetailConfig DetailConfig
         {
             get
