@@ -36,10 +36,6 @@ namespace WMS.Repository.Impl
 
         public ItemSetDto GetItemSetAndDetail(int id)
         {
-
-            //a => a.ItemSetDetails.Select(c => c.Item_MT))
-
-            string[] include = { "ItemSetDetails", "ItemSetDetails.Item_MT" };
             ItemSetDto ItemSets = (from itsm in Db.ItemSet_MT
                                    where itsm.ItemSetIDSys == id
                                    select itsm).Include("ItemSetDetails").Include("ItemSetDetails.Item_MT").Select(s => new ItemSetDto
@@ -47,6 +43,8 @@ namespace WMS.Repository.Impl
                                        ItemSetCode = s.ItemSetCode,
                                        ItemSetDetails = s.ItemSetDetails.Select(b => new ItemSetDetailDto
                                        {
+                                           ItemSetDetailIDSys = b.ItemSetDetailIDSys,
+                                           ItemSetIDSys = b.ItemSetIDSys,
                                            ItemIDSys = b.ItemIDSys,
                                            ItemName = b.Item_MT.ItemName,
                                            ItemCode = b.Item_MT.ItemCode,
@@ -56,11 +54,8 @@ namespace WMS.Repository.Impl
                                        ItemSetName = s.ItemSetName,
                                        LineID = s.LineID,
                                        ProjectIDSys = s.ProjectIDSys
-                                   }).SingleOrDefault();
-
-            ItemSetDetail ItemSet = Db.ItemSetDetail.Include("Item_MT").FirstOrDefault(); //.Db.ItemSet_MT.Include("ItemSetDetail").Where(x=> x.ItemSetIDSys == id).FirstOrDefault();
-            return null;
-            //return ItemSets;
+                                   }).FirstOrDefault();
+            return ItemSets;
         }
 
         public IEnumerable<ItemSetDetailDto> GetDtoItemSetDetail(int itemSetIDSys)

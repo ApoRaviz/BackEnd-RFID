@@ -5,9 +5,11 @@ using System.Data.Common;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using System.Web;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
@@ -148,14 +150,17 @@ namespace WMS.Service.Impl.Report
                     {
                         Query += column.TableName + "." + column.ColumnName + " As '"+column.AliasName +"' ,";
                     }
-
-                    if(data.ReportDetail.Operator.Count > 0)
+                    if (data.ReportDetail.Operator != null)
                     {
-                        foreach(var oper in data.ReportDetail.Operator)
+                        if (data.ReportDetail.Operator.Count > 0)
                         {
-                            Query += oper.ColumnFirst.ColumnName + ' ' + oper.Operator + ' ' + oper.ColumnSecond.ColumnName + " As '" + oper.AliasName + "' ,";
+                            foreach (var oper in data.ReportDetail.Operator)
+                            {
+                                Query += oper.ColumnFirst.TableName + '.' + oper.ColumnFirst.ColumnName + ' ' + oper.Operator + ' ' + oper.ColumnFirst.TableName + '.' + oper.ColumnSecond.ColumnName + " As '" + oper.AliasName + "' ,";
+                            }
                         }
                     }
+
                     Query = Query.Substring(0,Query.Length-1) + " From " + JoiningTable(data.ReportDetail.Detail);
                     string[] likecondition = { "like", "not like" };
                         if (data.ReportDetail.Filter != null)
@@ -185,7 +190,11 @@ namespace WMS.Service.Impl.Report
                             }
 
                             where = where.Substring(0, where.Length - 3);
-                            Query += where;
+                            if(data.ReportDetail.Filter.Count > 0)
+                                {
+                                     Query += where;
+                                }
+                            
                         
                     }
                     cmd.Connection = Db.Database.Connection;
@@ -199,6 +208,9 @@ namespace WMS.Service.Impl.Report
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
 
+                        
+
+                        
                         return dt;
                     }
                 }
@@ -207,6 +219,7 @@ namespace WMS.Service.Impl.Report
 
         public void WhereTable(List<TableDetail> tables , List<string> where)
         {
+            
             foreach(var table in tables)
             {
                 var main = (TableDescription)TableHashTableHelper.tableTable[table.TableName];
@@ -233,6 +246,9 @@ namespace WMS.Service.Impl.Report
         public string JoiningTable(List<TableDetail> tables)
         {
             string from = "";
+            if (tables.Count <= 1)
+                return tables[0].TableName;
+
             foreach (var table in tables)
             {
                 var main = (TableDescription)TableHashTableHelper.tableTable[table.TableName];
@@ -264,6 +280,8 @@ namespace WMS.Service.Impl.Report
 
             return from.Substring(0,from.Length-2);
         }
+
+        
 
         //public DataTable GetReportData(int ReportIDSys)
         //{

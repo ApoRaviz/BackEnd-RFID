@@ -283,7 +283,11 @@ namespace Isuzu.Service.Impl.Inbound
                        InvNo = i.InvNo,
                        ITAOrder = i.ITAOrder,
                        RFIDTag = i.RFIDTag,
-                       ISZJOrder = i.ISZJOrder
+                       ISZJOrder = i.ISZJOrder,
+                       ParrtName = i.ParrtName,
+                       PartNo = i.PartNo,
+                       Qty = i.Qty,
+                       Vendor = i.Vendor
                    }
                ).ToList();
             }

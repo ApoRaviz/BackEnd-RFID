@@ -19,14 +19,14 @@ namespace WMS.Master
         IEnumerable<GroupLocation> GetLocationGroupByZoneInfo(GroupLocation item);
         IEnumerable<GroupLocation> GetLocationGroupByZoneID(int zoneIDSys);
         IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term);
-        int CreateLocationGroup(GroupLocation locationGroup);
+        GroupLocation CreateLocationGroup(GroupLocation locationGroup);
         bool UpdateLocationGroup(int locationGroupIDSys, GroupLocation locationGroup);
         bool UpdateAllLocationGroup(List<GroupLocation> locationGroups);
         bool DeleteLocationGroup(int id);
 
         IEnumerable<Location> GetLocation();
         Location GetLocationByLocIDSys(int id);
-        int CreateLocation(Location Location);
+        //int CreateLocation(Location Location);
         bool UpdateLocation(Location Location);
         bool DeleteLocation(int id);
     }

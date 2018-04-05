@@ -50,6 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BaseGeneralConfig.cs" />
+    <Compile Include="Common\DetailConfig.cs" />
+    <Compile Include="Common\GeneralConfigLocationFormat.cs" />
+    <Compile Include="Common\GeneralConfig.cs" />
+    <Compile Include="Common\LocationFormat.cs" />
+    <Compile Include="ControlMaster\ControlDetails.cs" />
+    <Compile Include="ControlMaster\ControlValue.cs" />
+    <Compile Include="ControlMaster\Control_MT.cs" />
+    <Compile Include="ControlMaster\InspectValue.cs" />
     <Compile Include="Dimension\DimensionLayout_MT.cs" />
     <Compile Include="ImportManagement\ImportDefinitionDetail_MT.cs" />
     <Compile Include="ImportManagement\ImportDefinitionHeader_MT.cs" />

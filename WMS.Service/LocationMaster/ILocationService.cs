@@ -6,11 +6,11 @@ namespace WMS.Service.LocationMaster
 {
     public interface ILocationService : IService
     {
-        IEnumerable<Location_MT> GetList();
-        Location_MT GetLocationByLocIDSys(int id);
+        IEnumerable<Location> GetList();
+        Location GetLocationByLocIDSys(int id);
         GroupLocation GetLocationByGroupLocIDSys(int id);
-        Location_MT CreateLocation(Location_MT Location);
-        bool UpdateLocation(int id, Location_MT Location);
+        Location CreateLocation(Location Location);
+        bool UpdateLocation(int id, Location Location);
         bool DeleteLocation(int id);        
     }
 }

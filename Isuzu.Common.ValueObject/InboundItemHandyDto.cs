@@ -21,6 +21,7 @@ namespace Isuzu.Common.ValueObject
         public decimal Weight5 { get; set; }
         public string PartNo { get; set; }
         public string ParrtName { get; set; }
+        public string Vendor { get; set; }
         public int? Qty { get; set; }
 
         // ForHandheld

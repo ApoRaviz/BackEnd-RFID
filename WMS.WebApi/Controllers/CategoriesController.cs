@@ -8,8 +8,10 @@ using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WMS.Common.ValueObject;
+using WMS.Entity.ControlMaster;
 using WMS.Entity.ItemManagement;
 using WMS.Service;
+using WMS.Service.ControlMaster;
 
 namespace WMS.WebApi.Controller
 {
@@ -18,9 +20,11 @@ namespace WMS.WebApi.Controller
     public class CategoriesController : ApiController
     {
         private ICategoryService CategoryService;
-        public CategoriesController(ICategoryService categoryService)
+        private IControlService ControlService;
+        public CategoriesController(ICategoryService categoryService,IControlService controlservice)
         {
             this.CategoryService = categoryService;
+            this.ControlService = controlservice;
         }
 
         // GET: api/Categories
@@ -28,10 +32,10 @@ namespace WMS.WebApi.Controller
         [Route("")]
         public HttpResponseMessage GetCategories()
         {
-            ResponseData<IEnumerable<CategoryDto>> response = new ResponseData<IEnumerable<CategoryDto>>();
+            ResponseData<IEnumerable<Category_MT>> response = new ResponseData<IEnumerable<Category_MT>>();
             try
             {
-                IEnumerable<CategoryDto> categories = CategoryService.GetCategoriesByProjectID(User.Identity.GetProjectIDSys());
+                IEnumerable<Category_MT> categories = CategoryService.GetCategoriesByProjectID(User.Identity.GetProjectIDSys());
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(categories);
             }
@@ -48,10 +52,10 @@ namespace WMS.WebApi.Controller
         [Route("{id}")]
         public HttpResponseMessage GetCategory([FromUri]int id)
         {
-            IResponseData<CategoryDto> response = new ResponseData<CategoryDto>();
+            IResponseData<Category_MT> response = new ResponseData<Category_MT>();
             try
             {
-                CategoryDto category = CategoryService.GetCategory(id);
+                Category_MT category = CategoryService.GetCategory(id);
                 response.SetData(category);
             }
             catch (ValidationException ex)
@@ -89,6 +93,25 @@ namespace WMS.WebApi.Controller
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
+                if (category.Control_MT != null)
+                {
+
+                    if (category.ControlIDSys != null)
+                    {
+                        Control_MT control = category.Control_MT;
+                        ControlService.UpdateControl(control);
+                    }
+                    else
+                    {
+                        if (category.Control_MT.ControlDetails.Count > 0)
+                        {
+                            int control;
+                            control = ControlService.CreateControl(category.Control_MT);
+                            category.ControlIDSys = control;
+                        }
+                    }
+                }
+                category.Control_MT = null;
                 bool isUpated = CategoryService.UpdateCategory(category);
                 response.SetData(isUpated);
             }
@@ -110,6 +133,28 @@ namespace WMS.WebApi.Controller
             {
                 bool isUpated = CategoryService.DeleteCategory(id);
                 response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("autocomplete/{term}")]
+        public HttpResponseMessage AutocompletCategories(string term)
+        {
+            IResponseData<IEnumerable<AutocompleteCategoryDto>> response = new ResponseData<IEnumerable<AutocompleteCategoryDto>>();
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    throw new Exception("Missing term");
+                }
+                IEnumerable<AutocompleteCategoryDto> category = CategoryService.AutocompleteCategory(term);
+                response.SetData(category);
             }
             catch (ValidationException ex)
             {
