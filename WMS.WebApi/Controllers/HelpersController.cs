@@ -63,7 +63,7 @@ namespace WMS.WebApi.Controller
             IResponseData<IEnumerable<TableColumnsDescription>> response = new ResponseData<IEnumerable<TableColumnsDescription>>();
             try
             {
-                IEnumerable<TableColumnsDescription> tableColsDescription = CommonService.GetTableColumnsDescription(tableName);
+                IEnumerable<TableColumnsDescription> tableColsDescription = new WMSDbContext().GetTableColumnsDescription(tableName);
                 response.SetData(tableColsDescription);
             }
             catch (ValidationException ex)

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
 using WIM.Core.Entity.ProjectManagement;
-
+using WMS.Entity.ControlMaster;
 
 namespace WMS.Entity.ItemManagement
 {
@@ -23,11 +23,17 @@ namespace WMS.Entity.ItemManagement
         [Key]
         public int CateIDSys { get; set; }
         public int ProjectIDSys { get; set; }
+        public int? ControlIDSys { get; set; }
+        public int? ParentIDSys { get; set; }
         public string CateID { get; set; }
         public string CateName { get; set; }
 
         [ForeignKey("ProjectIDSys")]
         public virtual Project_MT Project_MT { get; set; }
+        [ForeignKey("ControlIDSys")]
+        public virtual Control_MT Control_MT { get; set; }
+        [ForeignKey("ParentIDSys")]
+        public virtual Category_MT MainCategory { get; set; }
         
         //public virtual ICollection<Location_MT> Location_MT { get; set; }
     }

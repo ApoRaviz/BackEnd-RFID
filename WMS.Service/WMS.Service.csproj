@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\ICategoryService.cs" />
+    <Compile Include="Common\IGeneralConfigsService.cs" />
+    <Compile Include="ControlMaster\IControlService.cs" />
     <Compile Include="Dimension\IDimensionService.cs" />
-    <Compile Include="Import\IImportService.cs" />
+    <Compile Include="Dimension\Import\IImportService.cs" />
     <Compile Include="Inspect\IInspectService.cs" />
     <Compile Include="ItemMaster\IItemService.cs" />
     <Compile Include="ItemSet\IItemSetService.cs" />

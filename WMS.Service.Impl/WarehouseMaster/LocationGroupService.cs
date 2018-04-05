@@ -1,25 +1,14 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Repository;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
 using WMS.Entity.WarehouseManagement;
 using WMS.Context;
-using System.Security.Principal;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Repository.Impl.Warehouse;
 using WMS.Repository.Warehouse;
-using WMS.Master.Common.ValueObject;
 using WMS.Common.ValueObject;
 
 namespace WMS.Master
@@ -105,7 +94,7 @@ namespace WMS.Master
             return groupLocation;
         }
 
-        public int CreateLocationGroup(GroupLocation locationGroup)
+        public GroupLocation CreateLocationGroup(GroupLocation locationGroup)
         {
             using (var scope = new TransactionScope())
             {
@@ -114,8 +103,15 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        ILocationGroupRepository repo = new LocationGroupRepository(Db);
-                        repo.Insert(locationGroup);
+                        ILocationGroupRepository repoLocG = new LocationGroupRepository(Db);
+                        ILocationRepository repoLoc = new LocationRepository(Db);
+                        GroupLocation res = repoLocG.Insert(locationGroup);
+                        foreach (Location loc in locationGroup.Location)
+                        {
+                            loc.GroupLocIDSys = res.GroupLocIDSys;
+                            repoLoc.Insert(loc);
+                        }
+                        locationGroup = repoLocG.GetByID(res.GroupLocIDSys);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -130,7 +126,7 @@ namespace WMS.Master
                     throw new ValidationException(ErrorEnum.E4012);
                 }
                 
-                return locationGroup.GroupLocIDSys;
+                return locationGroup;
             }
         }
 
@@ -145,9 +141,23 @@ namespace WMS.Master
                     {
                         
                         ILocationGroupRepository repo = new LocationGroupRepository(Db);
-                        GroupLocation item = repo.GetByID(locationGroupIDSys);
-                        if(item != null)
+                        ILocationRepository repoLoc = new LocationRepository(Db);
+                        if(locationGroup != null)
+                        {
                             repo.Update(locationGroup);
+                            foreach (Location loc in locationGroup.Location)
+                            {
+                                if (loc.LocIDSys != 0)
+                                {
+                                    repoLoc.Update(loc);
+                                }
+                                else
+                                {
+                                    loc.GroupLocIDSys = locationGroup.GroupLocIDSys;
+                                    repoLoc.Insert(loc);
+                                }
+                            }
+                        }
 
                         Db.SaveChanges();
                         scope.Complete();
@@ -252,34 +262,33 @@ namespace WMS.Master
             return location;
         }
 
-        public int CreateLocation(Location Location)
-        {
-            using (var scope = new TransactionScope())
-            {
+        //public int CreateLocation(Location Location)
+        //{
+        //    using (var scope = new TransactionScope())
+        //    {
+        //        try
+        //        {
+        //            using (WMSDbContext Db = new WMSDbContext())
+        //            {
+        //                ILocationZoneRepository repo = new LocationZoneRepository(Db);
+        //                repo.Insert(Location);
+        //                Db.SaveChanges();
+        //                scope.Complete();
+        //            }
+        //        }
+        //        catch (DbEntityValidationException e)
+        //        {
+        //            HandleValidationException(e);
+        //        }
+        //        catch (DbUpdateException)
+        //        {
+        //            scope.Dispose();
+        //            throw new ValidationException(ErrorEnum.E4012);
+        //        }
 
-                try
-                {
-                    using (WMSDbContext Db = new WMSDbContext())
-                    {
-                        ILocationZoneRepository repo = new LocationZoneRepository(Db);
-                        repo.Insert(Location);
-                        Db.SaveChanges();
-                        scope.Complete();
-                    }
-                }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
-                }
-
-                return Location.LocIDSys;
-            }
-        }
+        //        return Location.LocIDSys;
+        //    }
+        //}
 
         public bool UpdateLocation(Location Location)
         {
