@@ -22,6 +22,9 @@ using System.Net.Http;
 using Microsoft.Reporting.WebForms;
 using Fuji.Common.ValueObject.CheckStock;
 using WIM.Core.Service.Impl;
+using WIM.Core.Repository.Common;
+using WIM.Core.Repository.Impl.Common;
+using WIM.Core.Entity.Common;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -239,7 +242,7 @@ namespace Fuji.Service.Impl.ItemImport
 
         private CheckStockHead ReadFileFromHandheld(CheckStockHead stockHead, bool isCreate)
         {
-
+            string newID = new CommonService().GetValueGenerateCode("CheckStock");
             using (var scope = new TransactionScope())
             {
 
@@ -286,7 +289,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                         if (isCreate)
                         {
-                            stockHead.CheckStockID = Guid.NewGuid().ToString();
+                            stockHead.CheckStockID = newID;//Guid.NewGuid().ToString();
                             stockHead.CheckStockBy = "";
                             stockHead.CheckStockDate = DateTime.Now;
                             stockHead.Status = CheckStockStatus.InProgress.GetValueEnum();
