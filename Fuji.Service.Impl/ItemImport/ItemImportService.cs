@@ -245,7 +245,7 @@ namespace Fuji.Service.Impl.ItemImport
 
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext("SetScanned(SetScannedRequest)"))
+                using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -319,7 +319,7 @@ namespace Fuji.Service.Impl.ItemImport
         {
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext("Receive(ReceiveRequest)"))
+                using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -652,10 +652,7 @@ namespace Fuji.Service.Impl.ItemImport
         {
             using (var scope = new TransactionScope())
             {
-                //var existedItem = Repo.GetByID(id);
-                //IQueryable queryUpdateHead = (from p in Db.ImportSerialHead
-                //                              where p.HeadID.Equals(id)
-                //    
+                
                 using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -672,7 +669,6 @@ namespace Fuji.Service.Impl.ItemImport
                             f.ReceivingDate = item.ReceivingDate;
                             f.DeliveryNote = item.DeliveryNote;
                             f.Remark = item.Remark;
-                            //existedItem.UpdateDate = DateTime.Now;
                             f.Qty = item.Qty;
                             f.Spare1 = item.Spare1;
                             f.Spare2 = item.Spare2;
@@ -684,7 +680,6 @@ namespace Fuji.Service.Impl.ItemImport
                             f.Spare8 = item.Spare8;
                             f.Spare9 = item.Spare9;
                             f.Spare10 = item.Spare10;
-                            //Repo.Update(existedItem);
                             SerialHeadRepo.Update(f);
                             Db.SaveChanges();
                         });
@@ -697,21 +692,18 @@ namespace Fuji.Service.Impl.ItemImport
                                 //IGenericRepository<ImportSerialDetail> detailRepo = new GenericRepository<ImportSerialDetail>(Db);
                                 //Db.ProcDeleteImportSerialDetail(item.HeadID);
 
-                                //IEnumerable<ImportSerialDetail> _existDetails = (from d in Db.ImportSerialDetail
-                                //         where d.HeadID == item.HeadID
-                                //         select d
-                                //         ).ToList();
+                                IEnumerable<ImportSerialDetail> _existDetails = (from d in Db.ImportSerialDetail
+                                                                                 where d.HeadID == item.HeadID
+                                                                                 select d).ToList();
 
-                                SerialDetailRepo.Delete(item.HeadID);
+                                Db.ImportSerialDetail.RemoveRange(_existDetails);
 
-                                //Db.ImportSerialDetail.RemoveRange(_existDetails);
 
                                 foreach (var detail in updatedItem.ImportSerialDetail)
                                 {
                                     detail.HeadID = updatedItem.HeadID;
                                     detail.ItemCode = updatedItem.ItemCode;
                                     detail.DetailID = Guid.NewGuid().ToString();
-                                    //Db.ImportSerialDetail.Add(detail);
                                     SerialDetailRepo.Insert(detail);
                                     Db.SaveChanges();
                                 }
