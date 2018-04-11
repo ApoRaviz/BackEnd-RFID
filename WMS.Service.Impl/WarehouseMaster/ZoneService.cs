@@ -101,7 +101,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                 {
                     try
                     {
-                        ZoneSysID = Db.ProcCreateZoneLayout(data.ZoneName, data.Warehouse, data.Area, data.TotalFloor, Identity.Name, sb.ToString());
+                        ZoneSysID = Db.ProcCreateZoneLayout(data.ZoneName, data.Warehouse.ToString(), data.Area, data.TotalFloor, Identity.Name, sb.ToString());
                         Db.SaveChanges();
                     }
                     catch (DbEntityValidationException e)
@@ -146,7 +146,7 @@ namespace WMS.Service.Impl.WarehouseMaster
 
                     try
                     {
-                        Db.ProcUpdateZoneLayout(data.ZoneIDSys, data.ZoneName, data.Warehouse, data.Area, data.TotalFloor
+                        Db.ProcUpdateZoneLayout(data.ZoneIDSys, data.ZoneName, data.Warehouse.ToString(), data.Area, data.TotalFloor
                                                   , data.UpdateBy, sb.ToString());
                         Db.SaveChanges();
                     }

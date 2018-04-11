@@ -21,6 +21,10 @@ using System.Linq;
 using System.Net.Http;
 using Microsoft.Reporting.WebForms;
 using Fuji.Common.ValueObject.CheckStock;
+using WIM.Core.Service.Impl;
+using WIM.Core.Repository.Common;
+using WIM.Core.Repository.Impl.Common;
+using WIM.Core.Entity.Common;
 
 namespace Fuji.Service.Impl.ItemImport
 {
@@ -41,19 +45,23 @@ namespace Fuji.Service.Impl.ItemImport
         private string statusExported = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Exported.GetValueEnum());
         private string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Shipped.GetValueEnum());
 
-        private const string STOCK_DIRECTORY = @"D:\upload\TestCheckStock";
+        private const string STOCK_DIRECTORY = @"/Fuji/CheckStock";
 
         public CheckStockService()
         {
+            
         }
 
         #region CheckStock
 
         public CheckStockHead CreateCheckStockHead()
         {
+            string drive = !Directory.Exists("D:") ? "C:" : "D:";
+
             DateTime d = DateTime.Now;
-            if (!Directory.Exists(STOCK_DIRECTORY))
-                return null;
+            if (!Directory.Exists(drive + STOCK_DIRECTORY))
+                Directory.CreateDirectory(drive + STOCK_DIRECTORY);
+
             CheckStockHead stockHead = new CheckStockHead();
             return ReadFileFromHandheld(stockHead, true);
         }
@@ -95,9 +103,11 @@ namespace Fuji.Service.Impl.ItemImport
 
         public CheckStockHead GetStockHeadByID(string checkStockID)
         {
+            string drive = !Directory.Exists("D:") ? "C:" : "D:";
+
             DateTime d = DateTime.Now;
-            if (!Directory.Exists(STOCK_DIRECTORY))
-                return null;
+            if (!Directory.Exists(drive + STOCK_DIRECTORY))
+                Directory.CreateDirectory(drive + STOCK_DIRECTORY);
 
             CheckStockHead stockHead;
             using (FujiDbContext Db = new FujiDbContext())
@@ -110,9 +120,8 @@ namespace Fuji.Service.Impl.ItemImport
                     {
                         if (stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
                         {
+                            stockHead = this.ReadFileFromHandheld(stockHead, false);
                             stockHead = SetComplete(stockHead);
-                            if (stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
-                                stockHead = this.ReadFileFromHandheld(stockHead, false);
                         }
 
                     }
@@ -129,8 +138,9 @@ namespace Fuji.Service.Impl.ItemImport
 
         public CheckStockHead GetStockHeadByProgress()
         {
-            if (!Directory.Exists(STOCK_DIRECTORY))
-                return null;
+            string drive = !Directory.Exists("D:") ? "C:" : "D:";
+            if (!Directory.Exists(drive + STOCK_DIRECTORY))
+                Directory.CreateDirectory(drive + STOCK_DIRECTORY);
 
             CheckStockHead stockHead;
             using (FujiDbContext Db = new FujiDbContext())
@@ -141,9 +151,8 @@ namespace Fuji.Service.Impl.ItemImport
                     stockHead = checkStockRepo.GetMany(w => w.Status == CheckStockStatus.InProgress.GetValueEnum()).OrderByDescending(d => d.CreateAt).FirstOrDefault();
                     if (stockHead != null)
                     {
+                        stockHead = this.ReadFileFromHandheld(stockHead, false);
                         stockHead = SetComplete(stockHead);
-                        if(stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
-                            stockHead = this.ReadFileFromHandheld(stockHead, false);
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -233,7 +242,7 @@ namespace Fuji.Service.Impl.ItemImport
 
         private CheckStockHead ReadFileFromHandheld(CheckStockHead stockHead, bool isCreate)
         {
-
+            string newID = new CommonService().GetValueGenerateCode("CheckStock");
             using (var scope = new TransactionScope())
             {
 
@@ -245,8 +254,8 @@ namespace Fuji.Service.Impl.ItemImport
                         ISerialDetailRepository serialDetailRepo = new SerialDetailRepository(Db);
                         ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
 
-
-                        string[] files = Directory.GetFiles(STOCK_DIRECTORY);
+                        string drive = !Directory.Exists("D:") ? "C:" : "D:";
+                        string[] files = Directory.GetFiles(drive + STOCK_DIRECTORY);
                         if (files.Length > 0)
                         {
                             for (int i = 0; i < files.Length; i++)
@@ -261,7 +270,7 @@ namespace Fuji.Service.Impl.ItemImport
                                     if (f != null)
                                     {
                                         if (f.Location == null)// Check if location equal null and assign it !
-                                            {
+                                        {
                                             var headItem = serialHeadRepo.Get(w => w.HeadID == f.HeadID);
                                             if (headItem != null)
                                                 f.Location = headItem.Location;
@@ -275,12 +284,12 @@ namespace Fuji.Service.Impl.ItemImport
                         }
 
                         int countCheckedStock = serialDetailRepo.GetCountItems(w => w.IsCheckedStock);
-                        stockHead.SystemQTY = countCheckedStock;
-                        stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived && w.ItemType == "1");
+                        stockHead.ActualQTY = countCheckedStock;
+                        stockHead.SystemQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived && w.ItemType == "1");
 
                         if (isCreate)
                         {
-                            stockHead.CheckStockID = Guid.NewGuid().ToString();
+                            stockHead.CheckStockID = newID;//Guid.NewGuid().ToString();
                             stockHead.CheckStockBy = "";
                             stockHead.CheckStockDate = DateTime.Now;
                             stockHead.Status = CheckStockStatus.InProgress.GetValueEnum();
@@ -314,7 +323,8 @@ namespace Fuji.Service.Impl.ItemImport
                 if (DateTime.Now.Date <= stockHead.CreateAt.Value.Date)
                     return stockHead;
 
-            string[] files = Directory.GetFiles(STOCK_DIRECTORY);
+            string drive = !Directory.Exists("D:") ? "C:" : "D:";
+            string[] files = Directory.GetFiles(drive + STOCK_DIRECTORY);
             if (files.Length > 0)
             {
                 foreach (var file in files)
@@ -348,6 +358,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                         stockHead.Status = CheckStockStatus.Completed.GetValueEnum();
                         checkStockRepo.Update(stockHead);
+                        Db.SaveChanges();
 
                         scope.Complete();
                     }
@@ -359,7 +370,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 }
             }
-            return stockHead;
+            return null;
         }
 
 
@@ -585,11 +596,9 @@ namespace Fuji.Service.Impl.ItemImport
                             var stockHead = checkStockRepo.Get(g => g.Status == CheckStockStatus.InProgress.GetValueEnum());
                             if (stockHead != null)
                             {
-                                int countCheckedStock = serialDetailRepo.GetCountItems(w => w.Status == statusReceived
-                                                                                        && w.IsCheckedStock
-                                                                                        && w.ItemType == "1");
-                                stockHead.SystemQTY = countCheckedStock;
-                                stockHead.ActualQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived 
+                                int countCheckedStock = serialDetailRepo.GetCountItems(w =>w.IsCheckedStock);
+                                stockHead.ActualQTY = countCheckedStock;
+                                stockHead.SystemQTY = serialDetailRepo.GetCountItems(w => w.Status == statusReceived
                                                                                         && w.ItemType == "1");
                                 checkStockRepo.Update(stockHead);
                                 Db.SaveChanges();

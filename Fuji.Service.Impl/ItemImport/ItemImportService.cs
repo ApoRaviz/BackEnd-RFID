@@ -245,7 +245,7 @@ namespace Fuji.Service.Impl.ItemImport
 
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext("SetScanned(SetScannedRequest)"))
+                using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -319,7 +319,7 @@ namespace Fuji.Service.Impl.ItemImport
         {
             using (var scope = new TransactionScope())
             {
-                using (FujiDbContext Db = new FujiDbContext("Receive(ReceiveRequest)"))
+                using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -652,10 +652,7 @@ namespace Fuji.Service.Impl.ItemImport
         {
             using (var scope = new TransactionScope())
             {
-                //var existedItem = Repo.GetByID(id);
-                //IQueryable queryUpdateHead = (from p in Db.ImportSerialHead
-                //                              where p.HeadID.Equals(id)
-                //    
+                
                 using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -672,7 +669,6 @@ namespace Fuji.Service.Impl.ItemImport
                             f.ReceivingDate = item.ReceivingDate;
                             f.DeliveryNote = item.DeliveryNote;
                             f.Remark = item.Remark;
-                            //existedItem.UpdateDate = DateTime.Now;
                             f.Qty = item.Qty;
                             f.Spare1 = item.Spare1;
                             f.Spare2 = item.Spare2;
@@ -684,7 +680,6 @@ namespace Fuji.Service.Impl.ItemImport
                             f.Spare8 = item.Spare8;
                             f.Spare9 = item.Spare9;
                             f.Spare10 = item.Spare10;
-                            //Repo.Update(existedItem);
                             SerialHeadRepo.Update(f);
                             Db.SaveChanges();
                         });
@@ -697,21 +692,18 @@ namespace Fuji.Service.Impl.ItemImport
                                 //IGenericRepository<ImportSerialDetail> detailRepo = new GenericRepository<ImportSerialDetail>(Db);
                                 //Db.ProcDeleteImportSerialDetail(item.HeadID);
 
-                                //IEnumerable<ImportSerialDetail> _existDetails = (from d in Db.ImportSerialDetail
-                                //         where d.HeadID == item.HeadID
-                                //         select d
-                                //         ).ToList();
+                                IEnumerable<ImportSerialDetail> _existDetails = (from d in Db.ImportSerialDetail
+                                                                                 where d.HeadID == item.HeadID
+                                                                                 select d).ToList();
 
-                                SerialDetailRepo.Delete(item.HeadID);
+                                Db.ImportSerialDetail.RemoveRange(_existDetails);
 
-                                //Db.ImportSerialDetail.RemoveRange(_existDetails);
 
                                 foreach (var detail in updatedItem.ImportSerialDetail)
                                 {
                                     detail.HeadID = updatedItem.HeadID;
                                     detail.ItemCode = updatedItem.ItemCode;
                                     detail.DetailID = Guid.NewGuid().ToString();
-                                    //Db.ImportSerialDetail.Add(detail);
                                     SerialDetailRepo.Insert(detail);
                                     Db.SaveChanges();
                                 }
@@ -1144,24 +1136,33 @@ namespace Fuji.Service.Impl.ItemImport
             IEnumerable<FujiSerialAndRFIDModel> items = new List<FujiSerialAndRFIDModel>();
             using (FujiDbContext Db = new FujiDbContext())
             {
-                items = (from p in Db.ImportSerialDetail
-                         where p.BoxNumber == boxNumber
-                         orderby p.SerialNumber
-                        select new FujiSerialAndRFIDModel()
-                        {
-                            SerialNumber = p.SerialNumber
-                            ,
-                            IsValid = (p.ItemGroup.Length > 4)
-                            ,
-                            RFIDTag = (p.ItemGroup.Length > 4
-                            ? Convert.ToInt32(p.ItemGroup.Substring(p.ItemGroup.Length - 4, 4), 16)
-                            : Convert.ToInt32(p.ItemGroup, 16)).ToString()
-                        }).ToList();
+                try
+                {
+                    ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
 
-            }
+                    items = SerialDetailRepo.GetMany(g => g.BoxNumber == boxNumber)
+                        .OrderBy(o => o.SerialNumber)
+                        .Select(s => new FujiSerialAndRFIDModel() {
+                            SerialNumber = s.SerialNumber
+                            ,
+                            IsValid = (s.ItemGroup.Length > 4)
+                            ,
+                            RFIDTag = (s.ItemGroup.Length > 4
+                            ? Convert.ToInt32(s.ItemGroup.Substring(s.ItemGroup.Length - 4, 4), 16)
+                            : Convert.ToInt32(s.ItemGroup, 16)).ToString()
+                        }).ToList();
+                   
+
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+        }
 
             return items;
         }
+
         public FujiCheckRegister GetLastestBoxNumberItems()
         {
             FujiCheckRegister model = new FujiCheckRegister();
