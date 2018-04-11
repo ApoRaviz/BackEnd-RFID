@@ -1,6 +1,9 @@
 ﻿using Auth.API.Providers.Firebase;
 using Auth.API.Providers.Firebase.Model;
 using Auth.API.Result;
+using Auth.Security;
+using Auth.Security.Entity;
+using Auth.Security.Providers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -20,9 +23,6 @@ using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.UserManagement;
-using WIM.Core.Security;
-using WIM.Core.Security.Entity;
-using WIM.Core.Security.Providers;
 using WIM.Core.Service.Impl;
 
 namespace Auth.API.Controllers

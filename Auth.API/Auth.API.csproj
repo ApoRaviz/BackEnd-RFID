@@ -131,17 +131,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CoreLibary\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
     </Reference>
-    <Reference Include="WIM.Core.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CoreLibary\WIM.Core.Security\bin\Debug\WIM.Core.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Security.Context">
-      <HintPath>..\..\CoreLibary\WIM.Core.Security.Context\bin\Debug\WIM.Core.Security.Context.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Security.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CoreLibary\WIM.Core.Service.Impl\bin\Debug\WIM.Core.Security.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="WIM.Core.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CoreLibary\WIM.Core.Service\bin\Debug\WIM.Core.Service.dll</HintPath>
@@ -196,6 +185,20 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Auth.Security.Context\Auth.Security.Context.csproj">
+      <Project>{4F1E111D-02EB-4C25-BFE9-B4C20389DEAC}</Project>
+      <Name>Auth.Security.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
+      <Project>{F8B5CE45-9527-482E-BF27-9307D45CE503}</Project>
+      <Name>Auth.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
+      <Project>{BFEE452B-7031-4060-889D-913DAAA8B697}</Project>
+      <Name>Auth.Security</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -207,13 +210,13 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60856</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/auth-backend</IISUrl>
+          <IISUrl>http://localhost/auth_backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:60856/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/auth_backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
