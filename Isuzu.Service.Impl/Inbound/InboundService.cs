@@ -1204,12 +1204,14 @@ namespace Isuzu.Service.Impl.Inbound
                         Weight3 = adjustWeight.Weight3,
                         Weight4 = adjustWeight.Weight4,
                         Weight5 = adjustWeight.Weight5,
-                        IsRepeat = -1
+                        IsRepeat = -1,
+                        WeightCursor = adjustWeight.WeightCursor
                     };
                 }
                 else
                 {
-                    switch(adjustWeight.WeightCursor)
+                    adjustWeightReturn.WeightCursor = adjustWeight.WeightCursor;
+                    switch (adjustWeight.WeightCursor)
                     {
                         default:
                         case 1:
