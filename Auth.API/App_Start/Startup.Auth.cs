@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
-using WIM.Core.Security;
-using WIM.Core.Security.Context;
-using WIM.Core.Security.Providers;
 using Microsoft.Owin;
+using Auth.Security.Context;
+using Auth.Security;
+using Auth.Security.Providers;
 
 namespace Auth.API
 {
