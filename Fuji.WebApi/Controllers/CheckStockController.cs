@@ -250,6 +250,24 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(respones);
         }
 
+        [HttpGet]
+        [Route("HandyGetList/{id}")]
+        public HttpResponseMessage GetItemByLocID(string id)
+        {
+            ResponseData<List<ItemBox>> response = new ResponseData<List<ItemBox>>();
+            try
+            {
+                List<ItemBox> result = CheckStockService.CheckByLoc_Handy(id);
+                response.SetData(result);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         #endregion
 
 
