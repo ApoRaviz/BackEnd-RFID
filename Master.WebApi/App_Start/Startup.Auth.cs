@@ -43,7 +43,8 @@ namespace Master.WebApi
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/api/v1/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["as:ExToken"])),
+                //AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["as:ExToken"])),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(30),
                 //Provider = new ApplicationOAuthProvider(PublicClientId),
                 Provider = new CustomOAuthProvider(),
                 AccessTokenFormat = new CustomJwtFormat(ConfigurationManager.AppSettings["as:baseUrl"])
