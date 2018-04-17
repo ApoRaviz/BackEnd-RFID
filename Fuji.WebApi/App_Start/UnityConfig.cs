@@ -31,6 +31,9 @@ namespace Fuji.WebApi
             
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
 
+            // Api
+            container.RegisterType<IApiMTService, ApiMTService>();
+
             //Register OWin Authen
             //container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             //container.RegisterType<AccountController>(new InjectionConstructor());

@@ -39,12 +39,12 @@ namespace WMS.Entity.WarehouseManagement
         {
             get
             {
-                string s = "{'left':'" + 10 + "px"
-                    + "','top':'" + 10 + "px"
-                    + "','width':'" + 10 + "px"
-                    + "','length':'" + 10 + "px"
-                    + "','height':'" + 10 + "px"
-                    + "','rotate':'10deg'}";
+                string s = "{\"left\":\"" + (this.Left == null? 0 : this.Left) + "px"
+                    + "\",\"top\":\"" + (this.Top == null ? 0 : this.Top) + "px"
+                    + "\",\"width\":\"" + (this.Width == null ? 0 : this.Width) + "px"
+                    + "\",\"length\":\"" + (this.Length == null ? 0 : this.Length) + "px"
+                    + "\",\"height\":\"" + (this.Height == null ? 0 : this.Height) + "px"
+                    + "\",\"rotate\":\"10deg\"}";
                 return s;
             }
 
