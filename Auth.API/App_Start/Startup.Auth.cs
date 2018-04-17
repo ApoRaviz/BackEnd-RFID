@@ -33,7 +33,7 @@ namespace Auth.API
               
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/api/v1/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["as:ExToken"])),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["as:ExToken"])),
                
                 Provider = new CustomOAuthProvider(),
                 AccessTokenFormat = new CustomJwtFormat(ConfigurationManager.AppSettings["as:baseUrl"])

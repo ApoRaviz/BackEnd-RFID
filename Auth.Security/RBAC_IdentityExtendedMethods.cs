@@ -313,11 +313,13 @@ public static class RBAC_ExtendedMethods_4_Principal
                     "POST/api/v1/account/Logout",
                     "POST/api/v1/Account/ChangePassword",
                     "GET/api/v1/Roles/user",
-                    //Menu Side Url
+                    "GET/api/v1/external/programVersion/Fuji",
+                    // Menu Side Url
                     "GET/api/v1/MenuProjectMappings/menu/",
-                    //Url Ignore ChkOTP
+                    // Url Ignore ChkOTP
                     "POST/api/v1/account/assignProject",
-                    "GET/api/v1/demo/func7"
+                    // Demo
+                    "GET/api/v1/demo/func7",
                 };
         string reqUrlnew = _request.Method + StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
         if (_request.RequestUri.PathAndQuery.Last() == '/')

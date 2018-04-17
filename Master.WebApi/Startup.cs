@@ -6,7 +6,7 @@ using Owin;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-[assembly: OwinStartup(typeof(Master.WebApi.Startup))]
+[assembly: OwinStartup("Auth", typeof(Auth.API.Startup))]
 
 namespace Master.WebApi
 {
@@ -14,8 +14,8 @@ namespace Master.WebApi
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
-            ConfigureOAuthTokenConsumption(app);
+            //ConfigureAuth(app);
+            //ConfigureOAuthTokenConsumption(app);
             //CreateRolesandUsers();
         }
 
