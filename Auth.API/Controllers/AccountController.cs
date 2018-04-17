@@ -32,7 +32,7 @@ namespace Auth.API.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private int ExToken = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
+        private int ExToken = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
 
         public AccountController()
         {

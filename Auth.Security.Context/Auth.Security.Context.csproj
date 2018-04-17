@@ -61,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
-      <Project>{449748D1-BC3D-459A-96E1-813F9388E44E}</Project>
+      <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
       <Name>Auth.Security.Entity</Name>
     </ProjectReference>
   </ItemGroup>

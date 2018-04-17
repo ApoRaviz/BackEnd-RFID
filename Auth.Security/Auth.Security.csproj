@@ -96,14 +96,6 @@
     <Reference Include="Thinktecture.IdentityModel.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Thinktecture.IdentityModel.Core.1.4.0\lib\net45\Thinktecture.IdentityModel.Core.dll</HintPath>
     </Reference>
-    <Reference Include="WIM.Core.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Common\bin\Debug\WIM.Core.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Common.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Common.Utility\bin\Debug\WIM.Core.Common.Utility.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationRoleManager.cs" />
@@ -129,12 +121,20 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auth.Security.Context\Auth.Security.Context.csproj">
-      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
+      <Project>{4f1e111d-02eb-4c25-bfe9-b4c20389deac}</Project>
       <Name>Auth.Security.Context</Name>
     </ProjectReference>
     <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
-      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
+      <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
       <Name>Auth.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common\WIM.Core.Common.csproj">
+      <Project>{52d8bfb8-8342-4323-bb58-b867d7d01e8a}</Project>
+      <Name>WIM.Core.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,17 +15,17 @@ using Master.WebApi.Providers.Firebase.Model;
 using System.Net;
 using RestSharp;
 using System.Security.Principal;
-using WIM.Core.Security;
-using WIM.Core.Security.Entity;
 using Master.WebApi.Providers;
 using Master.WebApi.Results;
-using WIM.Core.Security.Providers;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service.Impl;
 using Microsoft.Owin.Security.Cookies;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Validation;
+using Auth.Security;
+using Auth.Security.Entity;
+using Auth.Security.Providers;
 
 namespace Master.WebApi.Controllers
 {
@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private int ExToken = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
+        private int ExToken = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
 
         public AccountController()
         {
@@ -615,7 +615,7 @@ namespace Master.WebApi.Controllers
                     {
                         provider = description.AuthenticationType,
                         response_type = "token",
-                        client_id = Startup.PublicClientId,
+                        client_id = Auth.API.Startup.PublicClientId,
                         redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
                         state = state
                     }),

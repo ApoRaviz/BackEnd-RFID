@@ -123,22 +123,6 @@
     <Reference Include="Thinktecture.IdentityModel.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Thinktecture.IdentityModel.Core.1.4.0\lib\net45\Thinktecture.IdentityModel.Core.dll</HintPath>
     </Reference>
-    <Reference Include="WIM.Core.Common.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Common.Utility\bin\Debug\WIM.Core.Common.Utility.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Service\bin\Debug\WIM.Core.Service.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Service.Impl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Service.Impl\bin\Debug\WIM.Core.Service.Impl.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Net.Http.Formatting">
@@ -175,6 +159,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\auth-release.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -198,6 +183,18 @@
       <Project>{BFEE452B-7031-4060-889D-913DAAA8B697}</Project>
       <Name>Auth.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
+      <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
+      <Name>WIM.Core.Service.Impl</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -214,7 +211,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60856</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/auth_backend</IISUrl>
+          <IISUrl>http://localhost/auth-backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost/auth_backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

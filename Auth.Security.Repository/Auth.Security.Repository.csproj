@@ -38,14 +38,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WIM.Core.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
-    </Reference>
-    <Reference Include="WIM.Core.Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WIM.Core.Repository\bin\Debug\WIM.Core.Repository.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IUserRepository.cs" />
@@ -56,12 +48,16 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
-      <Project>{449748D1-BC3D-459A-96E1-813F9388E44E}</Project>
+      <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
       <Name>Auth.Security.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
-      <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
-      <Name>WIM.Core.Repository.Impl</Name>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

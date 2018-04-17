@@ -91,6 +91,10 @@
     <Compile Include="Common\CommonRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
+      <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
+      <Name>Auth.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
       <Project>{9A37166E-BD6C-4BA9-9091-985BC77C68D6}</Project>
       <Name>Master.Common.ValueObject</Name>
@@ -118,10 +122,6 @@
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
       <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
