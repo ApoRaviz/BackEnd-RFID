@@ -1,11 +1,11 @@
-﻿using Microsoft.Owin.Security.OAuth;
+﻿using Auth.Security;
+using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using WIM.Core.Security;
 
 namespace Auth.API
 {
