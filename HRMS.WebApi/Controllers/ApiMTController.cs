@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Description;
-using WIM.Core.Common.Utility.Extensions;
-using WIM.Core.Common.Utility.Http;
-using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.ValueObject;
-using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Service;
 
-namespace WIM.WebApi.Controllers
+namespace HRMS.WebApi.Controllers
 {
-    //[Authorize]
     [RoutePrefix("api/v1/apimt")]
     public class ApiMTController : ApiController
     {
@@ -193,4 +183,5 @@ namespace WIM.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
     }
+}
 }

@@ -14,7 +14,7 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Service;
 
-namespace WIM.WebApi.Controllers
+namespace WMS.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/apimt")]
