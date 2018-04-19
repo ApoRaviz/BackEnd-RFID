@@ -31,7 +31,24 @@ namespace WMS.Entity.WarehouseManagement
         public string Use { get; set; }
         public string Type { get; set; }
 
-        [ForeignKey("ZoneIDSys")]
-        public virtual ZoneLayoutHeader_MT ZoneLayoutHeader_MT { get; set; }
+        //[ForeignKey("ZoneIDSys")]
+        //public virtual ZoneLayoutHeader_MT ZoneLayoutHeader_MT { get; set; }
+
+        [NotMapped]
+        public virtual List<string> Types {
+            get
+            {
+                if (!string.IsNullOrEmpty(Type))
+                {
+                    return Type.Split(',').ToList();
+                }
+                return null;
+            }
+            set
+            {
+                Types = value;
+            }
+
+        }
     }
 }

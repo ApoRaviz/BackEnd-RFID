@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
+using WIM.Core.Entity.SupplierManagement;
 using WMS.Entity.InventoryManagement;
 
 namespace WMS.Entity.Receiving
@@ -24,6 +25,10 @@ namespace WMS.Entity.Receiving
         public int? StatusIDSys { get; set; }
         public DateTime ReceiveDate { get; set; }
         public string FileRefID { get; set; }
-        public virtual ICollection<InventoryTransaction> InventoryTransaction { get; set; }
+
+        [NotMapped]
+        public virtual IEnumerable<InventoryTransaction> InventoryTransaction { get; set; }
+        [NotMapped]
+        public virtual Supplier_MT Supplier_MT { get; set; }
     }
 }

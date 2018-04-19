@@ -50,12 +50,14 @@
     <Compile Include="ControlValueDto.cs" />
     <Compile Include="FromUriParamsObject.cs" />
     <Compile Include="GroupLocationDto.cs" />
+    <Compile Include="InventoryTransactionDetailDto.cs" />
     <Compile Include="InventoryTransactionDto.cs" />
     <Compile Include="ItemDto.cs" />
     <Compile Include="ItemGiftDto.cs" />
     <Compile Include="ItemSetDetailDto.cs" />
     <Compile Include="ItemSetDto.cs" />
     <Compile Include="ItemUnitDto.cs" />
+    <Compile Include="LocationControlDto.cs" />
     <Compile Include="LocationGroupDto.cs" />
     <Compile Include="LocationDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="SupplierDto.cs" />
     <Compile Include="TableColumnDetail.cs" />
     <Compile Include="UnitDto.cs" />
+    <Compile Include="ZoneLocationDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">

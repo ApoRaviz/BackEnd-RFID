@@ -18,89 +18,84 @@ namespace WMS.Repository.Impl
         {
             ReceiveDto receive = new ReceiveDto();
             //Receive receives;
+            
             using (WMSDbContext Db = new WMSDbContext())
             {
-                //var receives = (from i in Db.Receive
-                //                join o in Db.InventoryTransaction on i.ReceiveIDSys equals o.ReceiveIDSys
-                //                join j in Db.Inventory on o.InvenIDSys equals j.InvenIDSys
-                //                join l in Db.Item_MT on o.ItemIDSys equals l.ItemIDSys
-                //                join m in Db.Locations on j.LocIDSys equals m.LocIDSys
-                //                where i.ReceiveIDSys == receiveIDSys
-                //                select new { i,o,j,l,m}).ToList();
-                //receive = receives.Select(new ReceiveDto()
-                //{
-                //    ReceiveIDSys = i.ReceiveIDSys,
-                //    ReceiveNO = i.ReceiveNO,
-                //    PONO = i.PONO,
-                //    InvoiceNO = i.InvoiceNO,
-                //    ReceiveDate = i.ReceiveDate,
-                //    ReceivingType = i.ReceivingType,
-                //    Remark = i.Remark,
-                //    StatusIDSys = i.StatusIDSys,
-                //    SupplierIDSys = i.SupplierIDSys,
-                //    InventoryTransactions = new List<InventoryTransactionDto>().Select(e => new InventoryTransactionDto()
-                //    {
-                //        InvenTranIDSys = o.InvenTranIDSys,
-                //        Box = j.Box,
-                //        Dimention = j.Dimension,
-                //        Expire = j.Expire,
-                //        Inspect = j.Inspect,
-                //        ItemCode = l.ItemCode,
-                //        ItemIDSys = o.ItemIDSys,
-                //        ItemName = l.ItemName,
-                //        LocIDSys = j.LocIDSys,
-                //        LocNo = m.LocNo,
-                //        Lot = j.Lot,
-                //        Pallet = j.Pallet,
-                //        Qty = o.Qty,
-                //        ReceivingDate = o.ReceivingDate,
-                //        Serial = j.Serial,
-                //        SerialNo = o.SerialNo,
-                //        StatusIDSys = o.StatusIDSys,
-                //        UnitIDSys = o.UnitIDSys
-                //    }).ToList()
-                //}).ToList();
-
-                var receives = Db.Receive.Include("InventoryTransaction").Include("InventoryTransaction.Item_MT").Include("InventoryTransaction.Inventory").Include("InventoryTransaction.Inventory.Location")
-                    .Join(Db.Supplier_MT, rece => rece.SupplierIDSys, sup => sup.SupIDSys, (rece, sup) => new { Receive = rece, Supplier = sup })
-                    .Where(a => a.Receive.ReceiveIDSys == receiveIDSys);
-                receive = receives.Select( a => new ReceiveDto()
+                var query = (from i in Db.Receive
+                             join o in Db.InventoryTransaction on i.ReceiveIDSys.ToString() equals o.RefNO into rece
+                             from receiv in rece.DefaultIfEmpty()
+                             join p in Db.Item_MT on receiv.ItemIDSys equals p.ItemIDSys into pi
+                             from leftItem in pi.DefaultIfEmpty()
+                             join j in Db.Inventory on receiv.InvenIDSys equals j.InvenIDSys into ji
+                             from leftInventory in ji.DefaultIfEmpty()
+                             join k in Db.Locations on leftInventory.LocIDSys equals k.LocIDSys into kl
+                             from leftLocation in kl.DefaultIfEmpty()
+                             join l in Db.InventoryTransactionDetail on receiv.InvenTranIDSys equals l.InvenTranIDSys into inven
+                             from leftTranDetail in inven.DefaultIfEmpty()
+                             join n in Db.Supplier_MT on i.SupplierIDSys equals n.SupIDSys into ns
+                             from leftSup in ns
+                             where i.ReceiveIDSys == receiveIDSys
+                             select new { i,receiv,leftItem,leftInventory,leftLocation,leftSup,leftTranDetail }).ToList();
+                if(query != null)
                 {
-                    ReceiveIDSys = a.Receive.ReceiveIDSys,
-                    ReceiveNO = a.Receive.ReceiveNO,
-                    FileRefID = a.Receive.FileRefID,
-                    PONO = a.Receive.PONO,
-                    InvoiceNO = a.Receive.InvoiceNO,
-                    ReceiveDate = a.Receive.ReceiveDate,
-                    ReceivingType = a.Receive.ReceivingType,
-                    Remark = a.Receive.Remark,
-                    StatusIDSys = a.Receive.StatusIDSys,
-                    SupplierIDSys = a.Receive.SupplierIDSys,
-                    CompName = a.Supplier.CompName,
-                    InventoryTransactions = a.Receive.InventoryTransaction.Select(e => new InventoryTransactionDto()
+                    receive = new ReceiveDto()
                     {
-                        InvenTranIDSys = e.InvenTranIDSys,
-                        Box = e.Inventory.Box,
-                        Dimention = e.Inventory.Dimension,
-                        Expire = e.Inventory.Expire,
-                        Inspect = e.Inventory.Inspect,
-                        ItemCode = e.Item_MT.ItemCode,
-                        ItemIDSys = e.ItemIDSys,
-                        ItemName = e.Item_MT.ItemName,
-                        LocIDSys = e.Inventory.LocIDSys,
-                        LocNo = e.Inventory.Location.LocNo,
-                        Lot = e.Inventory.Lot,
-                        Pallet = e.Inventory.Pallet,
-                        Qty = e.Qty,
-                        ReceivingDate = e.ReceivingDate,
-                        Serial = e.Inventory.Serial,
-                        SerialNo = e.SerialNo,
-                        StatusIDSys = e.StatusIDSys,
-                        UnitIDSys = e.UnitIDSys
-                    }).ToList()
-                }).Single();
+                        ReceiveIDSys = query[0].i.ReceiveIDSys,
+                        ReceiveNO = query[0].i.ReceiveNO,
+                        FileRefID = query[0].i.FileRefID,
+                        PONO = query[0].i.PONO,
+                        InvoiceNO = query[0].i.InvoiceNO,
+                        ReceiveDate = query[0].i.ReceiveDate,
+                        ReceivingType = query[0].i.ReceivingType,
+                        Remark = query[0].i.Remark,
+                        StatusIDSys = query[0].i.StatusIDSys,
+                        SupplierIDSys = query[0].i.SupplierIDSys,
+                        CompName = query[0].leftSup.CompName,
+                    };
 
-                if(receive.FileRefID != null)
+
+                }
+
+                receive.InventoryTransactions = query.GroupBy(a => a.receiv).Select(e => new { Tran = e.Key, Data = e.ToList() })
+                    .Select(e => new InventoryTransactionDto()
+                    {
+                        InvenTranIDSys = e.Tran.InvenTranIDSys,
+                        Box = e.Data[0].leftInventory.Box,
+                        Dimention = e.Data[0].leftInventory.Dimension,
+                        Expire = e.Data[0].leftInventory.Expire,
+                        Inspect = e.Data[0].leftInventory.Inspect,
+                        ItemCode = e.Data[0].leftItem.ItemCode,
+                        ItemIDSys = e.Tran.ItemIDSys,
+                        ItemName = e.Data[0].leftItem.ItemName,
+                        LocIDSys = e.Data[0].leftInventory.LocIDSys,
+                        LocNo = e.Data[0].leftInventory.Location.LocNo,
+                        Lot = e.Data[0].leftInventory.Lot,
+                        Pallet = e.Data[0].leftInventory.Pallet,
+                        Qty = e.Tran.Qty,
+                        ReceivingDate = e.Tran.ReceivingDate,
+                        StatusIDSys = e.Tran.StatusIDSys,
+                        Price = e.Tran.Price,
+                        Cost = e.Tran.Cost,
+                        UnitIDSys = e.Tran.UnitIDSys,
+                        InventoryTransactionDetail = e.Data.Where(a => e.Tran.InvenTranIDSys == (a.leftTranDetail != null ? a.leftTranDetail.InvenTranIDSys : 0)).Select(r => new InventoryTransactionDetailDto()
+                        {
+                            InvenTranDetailIDSys = r.leftTranDetail.InvenTranDetailIDSys,
+                            InvenTranIDSys = r.leftTranDetail.InvenTranIDSys,
+                            SerialNumber = r.leftTranDetail.SerialNumber,
+                            ItemCode = e.Data[0].leftItem.ItemCode,
+                            ItemName = e.Data[0].leftItem.ItemName,
+                            LocIDSys = e.Data[0].leftInventory.LocIDSys,
+                            LocNo = e.Data[0].leftInventory.Location.LocNo,
+                            UnitIDSys = e.Data[0].receiv.UnitIDSys,
+                            Box = e.Data[0].leftInventory.Box,
+                            Lot = e.Data[0].leftInventory.Lot,
+                            Pallet = e.Data[0].leftInventory.Pallet
+                        }).ToList()
+                    }).ToList();
+
+
+
+                if (receive.FileRefID != null)
                 {
                     receive.FileName = Db.File_MT.Where(a => a.FileRefID == receive.FileRefID).Select(b => b.FileName).SingleOrDefault();
                 }
