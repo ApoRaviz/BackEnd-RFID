@@ -7,6 +7,7 @@ namespace HRMS.Repository
     public interface IVEmployeeInfoRepository : IRepository<VEmployeeInfo>
     {
         IEnumerable<VEmployeeInfo> GetList();
+        IEnumerable<VEmployeeInfo> GetList2(); 
     }
 }
 

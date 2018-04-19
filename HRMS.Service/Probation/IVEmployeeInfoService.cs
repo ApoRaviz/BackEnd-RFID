@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity;
+using WIM.Core.Entity.PositionConfigManagement;
 using WIM.Core.Service;
 
 namespace HRMS.Service.Probation
@@ -11,7 +13,10 @@ namespace HRMS.Service.Probation
     public interface IVEmployeeInfoService : IService
     {
         IEnumerable<VEmployeeInfo> GetProbation();
-        //Person_MT GetPersonByPersonIDSys(string id);
+        IEnumerable<VEmployeeInfo> GetEmployeetoEvaluate();
+        VEmployeeInfo GetEmployeeByEmployeeIDSys(string id);
+        //Employee_MT SetPositionConfig2(int id, PositionConfig positionConfig);
+        bool UpdateEmployeeByID(VEmployeeInfo Employee);
         //PersonDto GetPersonByPersonID(int id);
         //int CreatePerson(Person_MT Person);
         //bool UpdatePerson(Person_MT Person);

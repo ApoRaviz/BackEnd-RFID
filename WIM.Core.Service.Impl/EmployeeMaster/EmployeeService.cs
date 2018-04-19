@@ -17,6 +17,7 @@ using WIM.Core.Repository.Impl;
 using System.Security.Principal;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
+using WIM.Core.Entity.PositionConfigManagement;
 
 namespace WIM.Core.Service.Impl
 {
@@ -45,7 +46,7 @@ namespace WIM.Core.Service.Impl
             {
                 IEmployeeRepository repo = new EmployeeRepository(Db);
                 string[] include = { "Person_MT" };
-                Employee = repo.GetWithInclude((c => c.EmID == id),include).SingleOrDefault();
+                Employee = repo.GetWithInclude((c => c.EmID == id), include).SingleOrDefault();
             }
             return Employee;
         }
@@ -72,7 +73,7 @@ namespace WIM.Core.Service.Impl
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IEmployeeRepository repo = new EmployeeRepository(Db);
-                        if(Employee.EmID == null)
+                        if (Employee.EmID == null)
                         {
                             Employee.EmID = (repo.GetMaxEMID(Employee.DepIDSys) + 1).ToString();
                         }
@@ -94,7 +95,7 @@ namespace WIM.Core.Service.Impl
             }
         }
 
-        public bool UpdateEmployee(Employee_MT Employee )
+        public bool UpdateEmployee(Employee_MT Employee)
         {
             using (var scope = new TransactionScope())
             {
@@ -174,6 +175,53 @@ namespace WIM.Core.Service.Impl
                     throw ex;
                 }
                 return true;
+            }
+        }
+
+        public Employee_MT SetPositionConfig2(string id, WelfareConfig positionConfig)
+        {
+            using (var scope = new TransactionScope())
+            {
+                Employee_MT employeeNew = new Employee_MT();
+                try
+                {
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IEmployeeRepository repo = new EmployeeRepository(Db);
+                        Employee_MT employee = new Employee_MT();
+                        employee = repo.GetByID(id);
+
+                        if (employee.EmpConfidentialConfigs != null)
+                        {
+                            employee.EmpConfidentialConfigs.PositionConfig.WelfareConfig = positionConfig;
+                        }
+                        else
+                        {
+                            employee.EmpConfidentialConfigs = new EmployeeConfidentialConfig
+                            {
+                                PositionConfig = new PositionConfig
+                                {
+                                    WelfareConfig = positionConfig
+                                }
+                            };
+                        }
+
+                        employeeNew = repo.Update(employee);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    throw ex;
+                }
+                return employeeNew;
             }
         }
     }

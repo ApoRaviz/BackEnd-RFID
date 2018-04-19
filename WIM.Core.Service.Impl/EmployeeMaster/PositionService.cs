@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
@@ -10,6 +11,7 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.Employee;
+using WIM.Core.Entity.PositionConfigManagement;
 using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Repository.Impl.Personalize;
@@ -136,7 +138,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
         }
 
 
-        public Positions SetPositionConfig(int id, List<PositionConfig<List<PositionConfig<string>>>> positionConfig)
+        public Positions SetPositionConfig(int id, List<PositionConfig<List<PositionConfig<List<PositionConfig<string>>>>>> positionConfig)
         {
             using (var scope = new TransactionScope())
             {
@@ -148,8 +150,39 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                         IPositionRepository repo = new PositionRepository(Db);
                         Positions position = new Positions();
                         position = repo.GetByID(id); ;
-                        position.PositionsConfig = new List<PositionConfig<List<PositionConfig<string>>>>();
+                        position.PositionsConfig = new List<PositionConfig<List<PositionConfig<List<PositionConfig<string>>>>>>();
                         position.PositionsConfig = positionConfig;
+                        Positionnew = repo.Update(position);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    throw ex;
+                }
+                return Positionnew;
+            }
+        }
+        public Positions SetPositionConfig2(int id, WelfareConfig positionConfig)
+        {
+            using (var scope = new TransactionScope())
+            {
+                Positions Positionnew = new Positions();
+                try
+                {
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IPositionRepository repo = new PositionRepository(Db);
+                        Positions position = new Positions();
+                        position = repo.GetByID(id); ;
+                        position.PositionsConfig2 = positionConfig;
                         Positionnew = repo.Update(position);
                         Db.SaveChanges();
                         scope.Complete();

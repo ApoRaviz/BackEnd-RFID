@@ -1,4 +1,6 @@
-﻿using HRMS.Entity.LeaveManagement;
+﻿using HRMS.Entity.Evaluate;
+using HRMS.Entity.Form;
+using HRMS.Entity.LeaveManagement;
 using HRMS.Entity.Probation;
 using System.Data.Entity;
 //using System.Data.Objects;
@@ -18,6 +20,15 @@ namespace HRMS.Context
         public DbSet<Status_MT> Status_MT { get; set; }
         public DbSet<Project_MT> Project_MT { get; set; }
         public DbSet<VEmployeeInfo> VEmployeeInfo { get; set; }
+        public DbSet<FormQuestion> FormQuestion { get; set; }
+        public DbSet<FormTopic> FormTopic { get; set; }
+        public DbSet<Evaluated> Evaluated { get; set; }
+        public DbSet<FormDetail> FormDetail { get; set; }
+
+        
+
+
+
 
 
         public HRMSDbContext() : base("name=YUT_HRMS")

@@ -4,6 +4,20 @@ using HRMS.Repository;
 using HRMS.Repository.Impl;
 using HRMS.Service.Probation;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Linq;
+using System.Net.Http;
+using System.Transactions;
+using System.Web.Http;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Context;
+using WIM.Core.Entity;
+using WIM.Core.Entity.Employee;
+using WIM.Core.Entity.PositionConfigManagement;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
 namespace HRMS.Service.Impl
 {
@@ -25,17 +39,89 @@ namespace HRMS.Service.Impl
             }
             return Probation;
         }
+        
+        public IEnumerable<VEmployeeInfo> GetEmployeetoEvaluate() 
+        {
+            IEnumerable<VEmployeeInfo> Probation;
+            using (HRMSDbContext Db = new HRMSDbContext())
+            {
+                IVEmployeeInfoRepository repo = new VEmployeeInfoRepository(Db);
+                Probation = repo.GetList2();
+            }
+            return Probation;
+        }
 
-        //public Person_MT GetPersonByPersonIDSys(string id)
+        public VEmployeeInfo GetEmployeeByEmployeeIDSys(string id)
+        {
+            VEmployeeInfo Employee;
+            using (HRMSDbContext Db = new HRMSDbContext())
+            {
+                IVEmployeeInfoRepository repo = new VEmployeeInfoRepository(Db);
+                
+                //string[] include = { "Person_MT" };
+                Employee = repo.Get(c => c.EmID == id);
+            }   
+            return Employee;
+        }
+
+        public bool UpdateEmployeeByID(VEmployeeInfo Employee)
+        {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    using (HRMSDbContext Db = new HRMSDbContext())
+                    {
+                        IVEmployeeInfoRepository repo = new VEmployeeInfoRepository(Db);
+                        repo.Update(Employee);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new ValidationException(e);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.E4012);
+                }
+                return true;
+            }
+        }
+
+        //public Employee_MT SetPositionConfig2(int id, PositionConfig positionConfig)
         //{
-        //    Person_MT Person;
-        //    using (CoreDbContext Db = new CoreDbContext())
+        //    using (var scope = new TransactionScope())
         //    {
-        //        IPersonRepository repo = new PersonRepository(Db);
-        //        CoreDbContext Db2 = new CoreDbContext();
-        //        Person = repo.GetSingle(b => (Db2.User.Where(a => a.UserID == id).Select(d => d.PersonIDSys).Contains(b.PersonIDSys)));
+        //        Employee_MT Empnew = new Employee_MT();
+        //        try
+        //        {
+        //            using (CoreDbContext Db = new CoreDbContext())
+        //            {
+        //                IEmployeeRepository empRepo = new EmployeeRepository(Db);
+        //                Employee_MT employee = new Employee_MT();
+        //                employee = empRepo.GetByID(id); ;
+        //                employee.EmpConfidentialConfigs.PositionConfig = positionConfig;
+        //                Empnew = empRepo.Update(employee);
+        //                Db.SaveChanges();
+        //                scope.Complete();
+        //            }
+                    
+        //        }
+        //        catch (DbEntityValidationException e)
+        //        {
+        //            throw new ValidationException(e);
+        //        }
+        //        catch (DbUpdateException)
+        //        {
+        //            scope.Dispose();
+        //            ValidationException ex = new ValidationException(ErrorEnum.E4012);
+        //            throw ex;
+        //        }
+        //        return Empnew;
         //    }
-        //    return Person;
         //}
 
         //public PersonDto GetPersonByPersonID(int id)

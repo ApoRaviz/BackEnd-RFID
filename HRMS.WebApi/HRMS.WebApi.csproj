@@ -334,6 +334,7 @@
     <Compile Include="Controllers\ApiLogHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\DemoController.cs" />
+    <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\HelpersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />

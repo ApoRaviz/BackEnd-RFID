@@ -57,6 +57,16 @@
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Common\DetailConfig.cs" />
     <Compile Include="Common\GeneralConfigs.cs" />
+    <Compile Include="PositionConfigManagement\PositionConfig.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Data.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Properties\Gasoline.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Properties\Personal_leave.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Properties\Provident_fund.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Properties\Sick_leave.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Properties\Properties.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Properties\Vacation_leave.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\Schema.cs" />
+    <Compile Include="PositionConfigManagement\WelfareConfig\WelfareConfig.cs" />
     <Compile Include="Country\Country_MT.cs" />
     <Compile Include="Currency\CurrencyUnit.cs" />
     <Compile Include="CustomerManagement\Customer_MT.cs" />

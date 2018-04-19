@@ -105,6 +105,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\IFormDetailRepository .cs" />
+    <Compile Include="Evaluate\IEvaluatedRepository.cs" />
+    <Compile Include="Form\IFormTopicRepository .cs" />
+    <Compile Include="Form\IFormQuestonRepository.cs" />
     <Compile Include="LeaveManagement\ILeaveDetailRepository.cs" />
     <Compile Include="LeaveManagement\ILeaveRepository.cs" />
     <Compile Include="LeaveManagement\ILeaveTypeRepository.cs" />
