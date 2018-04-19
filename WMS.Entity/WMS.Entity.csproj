@@ -50,6 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BaseGeneralConfig.cs" />
+    <Compile Include="Common\DetailConfig.cs" />
+    <Compile Include="Common\GeneralConfigLocationFormat.cs" />
+    <Compile Include="Common\GeneralConfig.cs" />
+    <Compile Include="Common\LocationFormat.cs" />
+    <Compile Include="ControlMaster\ControlDetails.cs" />
+    <Compile Include="ControlMaster\ControlValue.cs" />
+    <Compile Include="ControlMaster\Control_MT.cs" />
+    <Compile Include="ControlMaster\InspectValue.cs" />
     <Compile Include="Dimension\DimensionLayout_MT.cs" />
     <Compile Include="ImportManagement\ImportDefinitionDetail_MT.cs" />
     <Compile Include="ImportManagement\ImportDefinitionHeader_MT.cs" />
@@ -101,10 +110,6 @@
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
-      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
-      <Name>WIM.Core.Security.Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

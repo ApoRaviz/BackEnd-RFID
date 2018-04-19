@@ -13,8 +13,20 @@ namespace Isuzu.Common.ValueObject
         public string ITAOrder { get; set; }
         public string RFIDTag { get; set; }
         public string ISZJOrder { get; set; }
-        public int IsRepeat { get; set; }
         public string Status { get; set; }
+        public decimal Weight1 { get; set; }
+        public decimal Weight2 { get; set; }
+        public decimal Weight3 { get; set; }
+        public decimal Weight4 { get; set; }
+        public decimal Weight5 { get; set; }
+        public string PartNo { get; set; }
+        public string ParrtName { get; set; }
+        public string Vendor { get; set; }
+        public int? Qty { get; set; }
+
+        // ForHandheld
+        public int IsRepeat { get; set; }
+        public int? WeightCursor { get; set; }
     }
 
     public class InboundItemCartonHandyDto

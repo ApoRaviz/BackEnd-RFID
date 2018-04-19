@@ -6,10 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Repository;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Service.Impl.StatusManagement;
 
@@ -141,6 +137,10 @@ namespace Fuji.Repository.Impl.ItemManagement
         public IEnumerable<ImportSerialDetail> GetItemsBy(Func<ImportSerialDetail, bool> where)
         {
             return DbSet.Where(where);
+        }
+        public int GetCountItems(Func<ImportSerialDetail, bool> where)
+        {
+            return DbSet.Where(where).ToList().Count;
         }
 
         public IEnumerable<T> SqlQuery<T>(string sql, params object[] parameters)

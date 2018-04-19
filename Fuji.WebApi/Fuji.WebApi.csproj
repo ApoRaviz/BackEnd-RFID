@@ -367,9 +367,7 @@
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -416,6 +414,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DataSet\CheckStockDataSet.cs">
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSet\CheckStockDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DataSet\GenerateHeaderDataSet.cs">
       <DependentUpon>GenerateHeaderDataSet.xsd</DependentUpon>
     </Compile>
@@ -490,6 +496,17 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="DataSet\CheckStockDataSet.xsc">
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSet\CheckStockDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CheckStockDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSet\CheckStockDataSet.xss">
+      <DependentUpon>CheckStockDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="DataSet\GenerateHeaderDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>GenerateHeaderDataSet.Designer.cs</LastGenOutput>
@@ -589,6 +606,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Report\CheckStockReport.rdlc" />
     <EmbeddedResource Include="Report\IsuzuRfidReport.rdlc" />
     <EmbeddedResource Include="Report\BoxLabelReport.rdlc" />
     <EmbeddedResource Include="Report\CustomerReport.rdlc">
@@ -597,6 +615,22 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth.API\Auth.API.csproj">
+      <Project>{cde78836-0541-47fc-920e-732dd278f489}</Project>
+      <Name>Auth.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Context\Auth.Security.Context.csproj">
+      <Project>{4f1e111d-02eb-4c25-bfe9-b4c20389deac}</Project>
+      <Name>Auth.Security.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
+      <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
+      <Name>Auth.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
+      <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
+      <Name>Auth.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fuji.Common\Fuji.Common.csproj">
       <Project>{f614ae62-a53c-4952-880e-380ac277e8a7}</Project>
       <Name>Fuji.Common</Name>
@@ -625,18 +659,6 @@
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
-      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
-      <Name>WIM.Core.Security.Context</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
-      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
-      <Name>WIM.Core.Security.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -652,13 +674,13 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Fuji.WebApi</IISUrl>
+          <IISUrl>http://localhost/fuji-backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:9001</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/fuji-backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

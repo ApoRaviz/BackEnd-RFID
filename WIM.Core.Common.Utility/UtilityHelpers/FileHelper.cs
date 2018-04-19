@@ -10,16 +10,27 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
 {
     public static class FileHelper
     {
-        public static List<string> ReadTextFileBySplit(string path,char split = ',')
+        public static List<string> ReadTextFileBySplit(string path,bool isRemove = false,char split = ',',string backupPath = "")
         {
             List<string> ret = new List<string>();
 
             if(File.Exists(path))
             {
                 string texts = File.ReadAllText(path);
-                ret = texts.Split(split).ToList();
+                ret = texts.Split(split).Distinct().ToList();
                 ret.RemoveAll(w => string.IsNullOrEmpty(w));
+                if(!string.IsNullOrEmpty(backupPath))
+                {
+                    string fileName = Path.GetFileName(path);
+                    File.Move(Path.Combine(backupPath, fileName), path);
+                }
+                else
+                {
+                    File.Delete(path);
+                }
+              
             }
+            
 
             return ret;
         }

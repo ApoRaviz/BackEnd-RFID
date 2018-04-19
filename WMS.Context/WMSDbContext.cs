@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
+using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Entity.Common;
+using WMS.Entity.ControlMaster;
 using WMS.Entity.Dimension;
 using WMS.Entity.ImportManagement;
 using WMS.Entity.InspectionManagement;
@@ -21,6 +24,8 @@ namespace WMS.Context
 
     public class WMSDbContext : DbContext
     {
+        
+        public DbSet<BaseGeneralConfig> BaseGeneralConfig { get; set; }
         public DbSet<InspectType> InspectType { get; set; }
         public DbSet<Inspect_MT> Inspect_MT { get; set; }
         public DbSet<Category_MT> Category_MT { get; set; }
@@ -46,7 +51,7 @@ namespace WMS.Context
         public DbSet<Warehouse_MT> Warehouse_MT { get; set; }
         public DbSet<ZoneType> ZoneType { get; set; }
         public DbSet<SpareField> SpareField { get; set; }
-
+        public DbSet<Control_MT> Control_MT { get; set; }
         public DbSet<GroupLocation> GroupLocation { get; set; }
         public DbSet<LocationType> LocationType { get; set; }
         public DbSet<InventoryTransaction> InventoryTransaction { get; set; }
@@ -67,7 +72,6 @@ namespace WMS.Context
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
         }
 
         public string ProcGetNewID(string prefixes)
@@ -1001,7 +1005,6 @@ namespace WMS.Context
 
         public string GetTableDescriptionWms(string tableName)
         {
-            string tableDescriptionWms = "";
             WMSDbContext wms = new WMSDbContext();
             return wms.Database.SqlQuery<string>("ProcGetTableDescription @tableName"
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
@@ -1030,6 +1033,20 @@ namespace WMS.Context
             //    ("exec ProcGetDataAutoComplete @columnNames,@tableName,@conditionColumnNames,@keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
             return x;
 
+        }
+
+        public IEnumerable<TableColumnsDescription> GetTableColumnsDescription(string tableName)
+        {
+            IEnumerable<TableColumnsDescription> tableColumnsDescription;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                var tableNameParameter = /*new ObjectParameter("@tableName", tableName);*/
+          new SqlParameter("tableName", tableName);
+
+                tableColumnsDescription = Db.Database.SqlQuery<TableColumnsDescription>("ProcGetTableColumnsDescription @tableName", tableNameParameter).ToList();
+
+            }
+            return tableColumnsDescription;
         }
     }
 }

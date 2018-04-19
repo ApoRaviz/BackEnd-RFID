@@ -1,24 +1,14 @@
-﻿using AutoMapper;
-using System;
+﻿
 using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Validation;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
-using WMS.Repository;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using WIM.Core.Common.Helpers;
-using WIM.Core.Context;
 using WMS.Context;
 using WMS.Entity.WarehouseManagement;
 using WMS.Repository.Impl;
 using WMS.Service.LocationMaster;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
-using WMS.Repository.Impl.Location;
 using WMS.Repository.Warehouse;
 
 namespace WMS.Service.Impl.LocationMaster
@@ -33,14 +23,14 @@ namespace WMS.Service.Impl.LocationMaster
             repo = new LocationRepository(proc);
         }
 
-        public IEnumerable<Location_MT> GetList()
+        public IEnumerable<Location> GetList()
         {
             return repo.Get();
         }
 
-        public Location_MT GetLocationByLocIDSys(int id)
+        public Location GetLocationByLocIDSys(int id)
         {
-            Location_MT Location = repo.GetByID(id);
+            Location Location = repo.GetByID(id);
             return Location;
         }
 
@@ -56,10 +46,10 @@ namespace WMS.Service.Impl.LocationMaster
                     return repo.GetLocationByGroupLocIDSys(id);
                 }
             }
-            catch (DbEntityValidationException e)
+            catch (DbEntityValidationException)
             {
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException)
             {
                 ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
                 throw ex;
@@ -70,7 +60,7 @@ namespace WMS.Service.Impl.LocationMaster
 
 
 
-        public bool UpdateLocation(int id, Location_MT Location)
+        public bool UpdateLocation(int id, Location Location)
         {
             using (var scope = new TransactionScope())
             {
@@ -111,7 +101,7 @@ namespace WMS.Service.Impl.LocationMaster
             }
         }
 
-        public Location_MT CreateLocation(Location_MT Location)
+        public Location CreateLocation(Location Location)
         {
             using (var scope = new TransactionScope())
             {

@@ -20,7 +20,7 @@ namespace WMS.Entity.WarehouseManagement
         [Key]
         public int ZoneIDSys { get; set; }
         public string ZoneName { get; set; }
-        public string Warehouse { get; set; }
+        public int Warehouse { get; set; }
         public string Area { get; set; }
         public Nullable<int> TotalFloor { get; set; }
        

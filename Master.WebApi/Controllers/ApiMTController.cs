@@ -10,6 +10,9 @@ using WIM.Core.Service;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using System.Web.Http.Controllers;
+using System.Web.Http.Description;
+using System.Collections.ObjectModel;
 
 namespace Master.WebApi.Controllers
 {
@@ -140,5 +143,77 @@ namespace Master.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+       
+        [HttpGet]
+        [Route("description")]
+        public HttpResponseMessage GetApiDescription()
+        {
+            ResponseData<List<ApiDesc>> response = new ResponseData<List<ApiDesc>>();
+
+            Collection<ApiDescription> apis = Configuration.Services.GetApiExplorer().ApiDescriptions;
+            ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = apis.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
+
+            List<ApiDesc> apiDescList = new List<ApiDesc>();
+            foreach (IGrouping<HttpControllerDescriptor, ApiDescription> group in apiGroups)
+            {
+                foreach (ApiDescription api in group)
+                {
+                    Dictionary<string, string> paramDic = new Dictionary<string, string>();
+                    foreach (ApiParameterDescription parameter in api.ParameterDescriptions)
+                    {
+                        if (parameter.ParameterDescriptor == null)
+                        {
+                            continue;
+                        }
+
+                        Type type = parameter.ParameterDescriptor.ParameterType;
+                        if (type == typeof(Int32) || type == typeof(Int64) || type == typeof(Boolean))
+                        {
+                            paramDic.Add(parameter.Name, "1");
+                        }
+                        else if (type == typeof(String) || type == typeof(DateTime))
+                        {
+                            paramDic.Add(parameter.Name, "@");
+                        }
+                    }
+
+                    string path = "";
+                    string[] pathSplit = api.RelativePath.Split('?')[0].Split('/');
+                    for (int i = 0; i < pathSplit.Length; i++)
+                    {
+                        if (i > 2 && pathSplit[i][0] == '{' && pathSplit[i][pathSplit[i].Length - 1] == '}')
+                        {
+                            foreach (KeyValuePair<string, string> paramKeyVal in paramDic)
+                            {
+                                string x = pathSplit[i].Substring(1, pathSplit[i].Length - 2);
+
+                                if (x.Equals(paramKeyVal.Key, StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    path += "/" + paramKeyVal.Value;
+                                    continue;
+                                }
+                            }
+                            continue;
+                        }
+                        path += "/" + pathSplit[i];
+                    }
+
+                    apiDescList.Add(new ApiDesc
+                    {
+                        ID = api.ID,
+                        ControllerName = group.Key.ControllerName,
+                        RelativePath = api.RelativePath,
+                        ApiPath = path,
+                        Method = api.HttpMethod.Method
+                    });
+                }
+            }
+
+            response.Data = apiDescList;
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+   
     }
 }

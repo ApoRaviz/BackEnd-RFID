@@ -69,7 +69,15 @@ namespace Isuzu.Service.Impl.Inbound
                              InvNo = i.InvNo,
                              ITAOrder = i.ITAOrder,
                              RFIDTag = i.RFIDTag,
-                             ISZJOrder = i.ISZJOrder
+                             ISZJOrder = i.ISZJOrder,
+                             Weight1 = i.Weight1,
+                             Weight2 = i.Weight2,
+                             Weight3 = i.Weight3,
+                             Weight4 = i.Weight4,
+                             Weight5 = i.Weight5,
+                             Qty = i.Qty,
+                             PartNo = i.PartNo,
+                             ParrtName = i.ParrtName
                          }
                      ).SingleOrDefault();
             }
@@ -79,7 +87,7 @@ namespace Isuzu.Service.Impl.Inbound
         public bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem)
         {
             bool isRFIDNeedRepeat;
-          
+
 
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
@@ -87,7 +95,10 @@ namespace Isuzu.Service.Impl.Inbound
                                from i in Db.InboundItems
                                where i.ISZJOrder == inboundItem.ISZJOrder
                                && !string.IsNullOrEmpty(i.RFIDTag)
-                               && i.Status != statusDeleted
+                               && !new List<string> {
+                                    statusShipped,
+                                    statusDeleted
+                                }.Contains(i.Status)
                                select i
                            ).Any();
             }
@@ -102,7 +113,7 @@ namespace Isuzu.Service.Impl.Inbound
                 {
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-                    db.InboundItems.AsParallel();
+
                     try
                     {
                         bool isDupAnother = detailRepo.Exists(i =>
@@ -210,7 +221,15 @@ namespace Isuzu.Service.Impl.Inbound
                             InvNo = i.InvNo,
                             ITAOrder = i.ITAOrder,
                             RFIDTag = i.RFIDTag,
-                            ISZJOrder = i.ISZJOrder
+                            ISZJOrder = i.ISZJOrder,
+                            Qty = i.Qty,
+                            Weight1 = i.Weight1,
+                            Weight2 = i.Weight2,
+                            Weight3 = i.Weight3,
+                            Weight4 = i.Weight4,
+                            Weight5 = i.Weight5,
+                            PartNo = i.PartNo,
+                            ParrtName = i.ParrtName
                         }
                     ).SingleOrDefault();
             }
@@ -221,7 +240,7 @@ namespace Isuzu.Service.Impl.Inbound
         public InboundItemCartonHandyDto GetInboundItemCartonByRFID_HANDY(string rfid)
         {
             InboundItemCartonHandyDto item;
-          
+
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 item = (
@@ -246,7 +265,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string invNo)
         {
             IEnumerable<InboundItemHandyDto> items;
-           
+
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 items = (
@@ -257,13 +276,18 @@ namespace Isuzu.Service.Impl.Inbound
                            statusShipped,
                            statusDeleted
                        }.Contains(i.Status)
+
                    select new InboundItemHandyDto
                    {
                        ID = i.ID,
                        InvNo = i.InvNo,
                        ITAOrder = i.ITAOrder,
                        RFIDTag = i.RFIDTag,
-                       ISZJOrder = i.ISZJOrder
+                       ISZJOrder = i.ISZJOrder,
+                       ParrtName = i.ParrtName,
+                       PartNo = i.PartNo,
+                       Qty = i.Qty,
+                       Vendor = i.Vendor
                    }
                ).ToList();
             }
@@ -273,7 +297,7 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding)
         {
-         
+
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -432,7 +456,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids)
         {
             List<InboundItems> inboundItems = new List<InboundItems>();
-         
+
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 var query = (
@@ -523,7 +547,7 @@ namespace Isuzu.Service.Impl.Inbound
 
         }
         public IEnumerable<InboundItems> GetInboundItemByQty(int qty, bool isShipped = false)
-         {
+        {
             List<InboundItems> items = new List<InboundItems>() { };
 
             using (var scope = new TransactionScope())
@@ -556,7 +580,7 @@ namespace Isuzu.Service.Impl.Inbound
         public IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo, bool isShipped = false)
         {
             List<InboundItems> items = new List<InboundItems>() { };
-           
+
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -580,11 +604,11 @@ namespace Isuzu.Service.Impl.Inbound
             }
             return items;
         }
-        public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList, string userName)
+        public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList)
         {
             List<InboundItems> duplicateList = new List<InboundItems>();
             List<string> isuzuOrders = itemList.Select(x => x.ISZJOrder).ToList();
-            
+
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -611,22 +635,21 @@ namespace Isuzu.Service.Impl.Inbound
                     {
                         itemGroups.ForEach(i =>
                         {
-
-                            //if (Db.InboundItemsHead.Any(a => a.InvNo.Equals(i.InvNo)))
                             if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
                             {
 
-                                //var item = (from p in Db.InboundItemsHead where p.InvNo.Equals(i.InvNo) select p).FirstOrDefault();
-                                var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
+                                var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo);
                                 if (item != null)
                                 {
                                     i.GroupList.ForEach(x =>
                                     {
                                         x.ID = Guid.NewGuid().ToString();
                                         x.Status = statusNew;
-                                        item.InboundItems.Add(x);
+                                        DetailRepo.Insert(x);
                                     });
+                                    Db.SaveChanges();
 
+                                    item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo, true);
                                     item.Qty = item.InboundItems.Count;
                                     HeadRepo.Update(item);
                                     Db.SaveChanges();
@@ -646,8 +669,9 @@ namespace Isuzu.Service.Impl.Inbound
                                 {
                                     x.ID = Guid.NewGuid().ToString();
                                     x.Status = statusNew;
-                                    item.InboundItems.Add(x);
+                                    DetailRepo.Insert(x);
                                 });
+
                                 item.Qty = i.GroupList.Count;
                                 item.IsExport = false;
                                 HeadRepo.Update(item);
@@ -680,7 +704,18 @@ namespace Isuzu.Service.Impl.Inbound
                 sql += " WHERE ";
                 for (int i = 0; i < cnt; i++)
                 {
-                    sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                    if (parameterSearch.Columns[i].ToUpper() == "RFIDTAG")
+                    {
+                        string dec = Convert.ToInt32(parameterSearch.Keywords[i]).ToString("X");
+                        sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], dec);
+                    }
+                    else
+                    {
+                        sql += string.Format(" {0} LIKE '%{1}%' AND ", parameterSearch.Columns[i], parameterSearch.Keywords[i]);
+                    }
+
+
+
                 }
                 sql = sql.Substring(0, sql.Length - 4);
                 sql += " AND [Status] <> 'DELETED'";
@@ -732,7 +767,7 @@ namespace Isuzu.Service.Impl.Inbound
         public InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo, bool isAddItems = false)
         {
             InboundItemsHead item;
-          
+
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
@@ -1037,7 +1072,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
             else
             {
-                listDuplicateInbound = ImportInboundItemList(inboundList, "SYSTEM");
+                listDuplicateInbound = ImportInboundItemList(inboundList);
                 if (listDuplicateInbound.Count > 0)
                 {
                     ret.isDuplicated = true;
@@ -1107,10 +1142,10 @@ namespace Isuzu.Service.Impl.Inbound
         public string CreateDeletedFileID(string pathName)
         {
             string fileID = "";
-            if(!string.IsNullOrEmpty(pathName))
+            if (!string.IsNullOrEmpty(pathName))
             {
                 File_MT fileMt = new File_MT();
-                fileMt.FileUID = Guid.NewGuid().ToString();
+                //fileMt.FileUID = Guid.NewGuid().ToString();
                 fileMt.FileName = pathName;
                 fileMt.LocalName = pathName;
                 fileMt.PathFile = Path.GetExtension(pathName);
@@ -1118,14 +1153,131 @@ namespace Isuzu.Service.Impl.Inbound
             }
 
             return fileID;
-           //FileService(files);
+            //FileService(files);
         }
 
         public void GetDeletedFileID(string fileID)
         {
             if (!string.IsNullOrEmpty(fileID))
             {
-               FileService.GetFile(fileID);
+                FileService.GetFile(fileID);
+            }
+        }
+
+        public InboundItemHandyDto GetBeforeAdjustWeight(InboundItemHandyDto adjustWeight)
+        {
+            InboundItemHandyDto adjustWeightReturn;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                adjustWeightReturn = (
+                               from i in Db.InboundItems
+                               where i.ISZJOrder == adjustWeight.ISZJOrder
+                               //&& i.Weight.CompareTo((decimal)0) == 1
+                               && !new List<string> {
+                                    statusDeleted,
+                                    statusShipped
+                                }.Contains(i.Status)
+                               select new InboundItemHandyDto
+                               {
+                                   ISZJOrder = i.ISZJOrder,
+                                   PartNo = i.PartNo,
+                                   ParrtName = i.ParrtName,
+                                   Weight1 = i.Weight1,
+                                   Weight2 = i.Weight2,
+                                   Weight3 = i.Weight3,
+                                   Weight4 = i.Weight4,
+                                   Weight5 = i.Weight5,
+                                   Qty = i.Qty,
+                                   IsRepeat = 0
+                                   //IsRepeat = Decimal.Compare(i.Weight, 0) == 0 ? 2 :
+                                   //Decimal.Compare(i.Weight, adjustWeight.Weight) == 0 ? 3 : 4
+                               }
+                           ).SingleOrDefault();
+
+                if (adjustWeightReturn == null)
+                {
+                    return new InboundItemHandyDto
+                    {
+                        ISZJOrder = adjustWeight.ISZJOrder,
+                        Weight1 = adjustWeight.Weight1,
+                        Weight2 = adjustWeight.Weight2,
+                        Weight3 = adjustWeight.Weight3,
+                        Weight4 = adjustWeight.Weight4,
+                        Weight5 = adjustWeight.Weight5,
+                        IsRepeat = -1,
+                        WeightCursor = adjustWeight.WeightCursor
+                    };
+                }
+                else
+                {
+                    adjustWeightReturn.WeightCursor = adjustWeight.WeightCursor;
+                    switch (adjustWeight.WeightCursor)
+                    {
+                        default:
+                        case 1:
+                            adjustWeightReturn.IsRepeat = Decimal.Compare(adjustWeightReturn.Weight1, 0) == 0 ? 2 :
+                                   Decimal.Compare(adjustWeightReturn.Weight1, adjustWeight.Weight1) == 0 ? 3 : 4;
+                            break;
+                        case 2:
+                            adjustWeightReturn.IsRepeat = Decimal.Compare(adjustWeightReturn.Weight2, 0) == 0 ? 2 :
+                                   Decimal.Compare(adjustWeightReturn.Weight2, adjustWeight.Weight2) == 0 ? 3 : 4;
+                            break;
+                        case 3:
+                            adjustWeightReturn.IsRepeat = Decimal.Compare(adjustWeightReturn.Weight3, 0) == 0 ? 2 :
+                                   Decimal.Compare(adjustWeightReturn.Weight3, adjustWeight.Weight3) == 0 ? 3 : 4;
+                            break;
+                        case 4:
+                            adjustWeightReturn.IsRepeat = Decimal.Compare(adjustWeightReturn.Weight4, 0) == 0 ? 2 :
+                                   Decimal.Compare(adjustWeightReturn.Weight4, adjustWeight.Weight4) == 0 ? 3 : 4;
+                            break;
+                        case 5:
+                            adjustWeightReturn.IsRepeat = Decimal.Compare(adjustWeightReturn.Weight5, 0) == 0 ? 2 :
+                                   Decimal.Compare(adjustWeightReturn.Weight5, adjustWeight.Weight5) == 0 ? 3 : 4;
+                            break;
+                    }
+                }
+            }
+            return adjustWeightReturn;
+        }
+
+        public void AdjustWeight(InboundItemHandyDto adjustWeight)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundRepository DetailRepo = new InboundRepository(Db);
+                    InboundItems inboundItems = (
+                        from i in Db.InboundItems
+                        where (adjustWeight.ISZJOrder == i.ISZJOrder)
+                        && !new List<string> {
+                           statusDeleted
+                       }.Contains(i.Status)
+                        select i
+                    ).SingleOrDefault();
+
+                    switch (adjustWeight.WeightCursor)
+                    {
+                        default:
+                        case 1:
+                            inboundItems.Weight1 = adjustWeight.Weight1;
+                            break;
+                        case 2:inboundItems.Weight2 = adjustWeight.Weight2;
+                            break;
+                        case 3:inboundItems.Weight3 = adjustWeight.Weight3;
+                            break;
+                        case 4:inboundItems.Weight4 = adjustWeight.Weight4;
+                            break;
+                        case 5: inboundItems.Weight5 = adjustWeight.Weight5;
+                            break;
+                    }
+                    inboundItems.WeightDate = DateTime.Now;
+
+
+                    DetailRepo.Update(inboundItems);
+                    Db.SaveChanges();
+                    scope.Complete();
+                }
             }
         }
 

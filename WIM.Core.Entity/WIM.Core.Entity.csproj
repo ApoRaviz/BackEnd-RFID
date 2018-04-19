@@ -56,6 +56,7 @@
     <Compile Include="Address\SubCity_MT.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Common\DetailConfig.cs" />
+    <Compile Include="Common\ExtendedConfig.cs" />
     <Compile Include="Common\GeneralConfigs.cs" />
     <Compile Include="PositionConfigManagement\PositionConfig.cs" />
     <Compile Include="PositionConfigManagement\WelfareConfig\Data.cs" />

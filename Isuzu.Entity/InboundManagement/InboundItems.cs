@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WIM.Core.Common.Utility.Attributes;
 using WIM.Core.Entity;
 
 namespace Isuzu.Entity
@@ -49,14 +50,36 @@ namespace Isuzu.Entity
         [StringLength(50)]
         public string CaseNo { get; set; }
 
+        public decimal Weight1 { get; set; }
+        public decimal Weight2 { get; set; }
+        public decimal Weight3 { get; set; }
+        public decimal Weight4 { get; set; }
+        public decimal Weight5 { get; set; }
+
+        [NotMapped]
+        public int? WeightCursor {
+            get {
+                int ret = 1;
+                ret += this.Weight1 > 0 ? 1 : 0;
+                ret += this.Weight2 > 0 ? 1 : 0;
+                ret += this.Weight3 > 0 ? 1 : 0;
+                ret += this.Weight4 > 0 ? 1 : 0;
+                ret += this.Weight5 > 0 ? 1 : 0;
+                return ret;
+            }
+            set { }
+        }
+
+        [GeneralLog]
         [StringLength(20)]
         public string Status { get; set; }
 
-        public DateTime RegisterDate { get; set; }
-        public DateTime PackCaseDate { get; set; }
-        public DateTime PackCartonDate { get; set; }
-        public DateTime HoldDate { get; set; }
-        public DateTime ShippingDate { get; set; }
+        public DateTime? WeightDate { get; set; }
+        public DateTime? RegisterDate { get; set; }
+        public DateTime? PackCaseDate { get; set; }
+        public DateTime? PackCartonDate { get; set; }
+        public DateTime? HoldDate { get; set; }
+        public DateTime? ShippingDate { get; set; }
 
         [StringLength(50)]
         public string DeleteReason { get; set; }

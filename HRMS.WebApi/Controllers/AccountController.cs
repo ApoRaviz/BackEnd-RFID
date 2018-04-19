@@ -16,12 +16,12 @@ using Microsoft.Owin.Security.OAuth;
 using HRMS.WebApi.Results;
 using System.Linq;
 using Microsoft.VisualBasic;
-using WIM.Core.Security;
-using WIM.Core.Security.Entity;
-using WIM.Core.Security.Providers;
 using WIM.Core.Common.Utility.Http;
 using System.Net;
 using WIM.Core.Common.Utility.Extensions;
+using Auth.Security;
+using Auth.Security.Entity;
+using Auth.Security.Providers;
 
 namespace HRMS.WebApi.Controllers
 {
@@ -365,7 +365,7 @@ namespace HRMS.WebApi.Controllers
                     {
                         provider = description.AuthenticationType,
                         response_type = "token",
-                        client_id = Startup.PublicClientId,
+                        client_id = Auth.API.Startup.PublicClientId,
                         redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
                         state = state
                     }),

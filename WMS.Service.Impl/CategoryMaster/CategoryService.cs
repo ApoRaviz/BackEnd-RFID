@@ -12,6 +12,10 @@ using WMS.Common.ValueObject;
 using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
+using WMS.Repository.ControlMaster;
+using WMS.Repository.Impl.ControlMaster;
+using WMS.Entity.ControlMaster;
+using System;
 
 namespace WMS.Service
 {
@@ -23,61 +27,40 @@ namespace WMS.Service
             
         }
 
-        public IEnumerable<CategoryDto> GetCategories()
+        public IEnumerable<Category_MT> GetCategories()
         {
-            IEnumerable<CategoryDto> categoryDtos;
+            IEnumerable<Category_MT> categoryDtos;
             using (WMSDbContext Db = new WMSDbContext())
             {
 
             ICategoryRepository repo = new CategoryRepository(Db);
-            IEnumerable<Category_MT> categorys = repo.Get();
-
-            categoryDtos = categorys.Select(b => new CategoryDto()
-            {
-                CateIDSys = b.CateIDSys,
-                CateID = b.CateID,
-                CateName = b.CateName,
-                IsActive = b.IsActive,
-                ProjectIDSys = b.ProjectIDSys
-            });
+            categoryDtos = repo.Get();
             }
             return categoryDtos;
         }
 
-        public IEnumerable<CategoryDto> GetCategoriesByProjectID(int projectIDSys)
+        public IEnumerable<Category_MT> GetCategoriesByProjectID(int projectIDSys)
         {
-            IEnumerable<CategoryDto> categoryDtos;
+            IEnumerable<Category_MT> categoryDtos;
             using (WMSDbContext Db = new WMSDbContext())
             {
 
                 ICategoryRepository repo = new CategoryRepository(Db);
-                IEnumerable<Category_MT> categorys = repo.GetMany(c=>c.ProjectIDSys == projectIDSys && c.IsActive == true);
-                categoryDtos = categorys.Select(b => new CategoryDto()
-                {
-                    CateIDSys = b.CateIDSys,
-                    CateID = b.CateID,
-                    CateName = b.CateName,
-                    IsActive = b.IsActive,
-                    ProjectIDSys = b.ProjectIDSys
-                });
+                categoryDtos = repo.GetMany(c=>c.ProjectIDSys == projectIDSys && c.IsActive == true);
+                
             }
             return categoryDtos;
         }
 
-        public CategoryDto GetCategory(int id)
+        public Category_MT GetCategory(int id)
         {
-            CategoryDto categoryDto;
+            Category_MT categoryDto;
             using (WMSDbContext Db = new WMSDbContext())
             {
 
                 ICategoryRepository repo = new CategoryRepository(Db);
-                Category_MT category = repo.GetByID(id);
-                categoryDto = new CategoryDto();
-                categoryDto.CateIDSys = category.CateIDSys;
-                categoryDto.CateID = category.CateID;
-                categoryDto.CateName = category.CateName;
-                categoryDto.IsActive = category.IsActive;
-                categoryDto.ProjectIDSys = category.ProjectIDSys;
+                string[] include = { "Control_MT", "MainCategory" };
+                categoryDto = repo.GetWithInclude(a => a.CateIDSys == id,include).SingleOrDefault();
             }
             return categoryDto;
         }
@@ -88,11 +71,23 @@ namespace WMS.Service
 
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-
+                    IControlRepository controlrepo = new ControlRepository(Db);
                     ICategoryRepository repo = new CategoryRepository(Db);
                     category.CateID = Db.ProcGetNewID("CT");
                     try
                     {
+                        if( category.Control_MT != null)
+                        {
+                            if (category.Control_MT.ControlDetails.Count > 0)
+                            {
+                                Control_MT control = new Control_MT();
+                                control = controlrepo.Insert(category.Control_MT);
+                                Db.SaveChanges();
+                                category.ControlIDSys = control.ControlIDSys;
+                            }
+                        }
+                        category.Control_MT = null;
+                        category.MainCategory = null;
                         Category_MT x = repo.Insert(category);
                          Db.SaveChanges();
                         scope.Complete();
@@ -118,10 +113,10 @@ namespace WMS.Service
             {
                 using (WMSDbContext Db = new WMSDbContext())
                 {
-
                     ICategoryRepository repo = new CategoryRepository(Db);
                     try
                     {
+                        category.MainCategory = null;
                         repo.Update(category);
                         Db.SaveChanges();
                         scope.Complete();
@@ -165,6 +160,18 @@ namespace WMS.Service
                 }
                 return true;
             }
+        }
+
+        public IEnumerable<AutocompleteCategoryDto> AutocompleteCategory(string term)
+        {
+            IEnumerable<AutocompleteCategoryDto> autocompleteItemDto;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ICategoryRepository repo = new CategoryRepository(Db);
+                autocompleteItemDto = repo.AutocompleteCategory(term);
+
+            }
+            return autocompleteItemDto;
         }
     }
 }

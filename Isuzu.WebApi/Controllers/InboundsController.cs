@@ -64,12 +64,12 @@ namespace Isuzu.Service.Impl
         [Route("handy/items")]
         public HttpResponseMessage RegisterInboundItem_HANDY([FromBody]InboundItemHandyDto inboundItem)
         {
-            if (inboundItem.IsRepeat == 0 && InboundService.CheckScanRepeatRegisterInboundItem_HANDY(inboundItem))
+            /*if (inboundItem.IsRepeat == 0 && InboundService.CheckScanRepeatRegisterInboundItem_HANDY(inboundItem))
             {
                 ResponseData<int> responseCheckRepeat = new ResponseData<int>();
                 responseCheckRepeat.SetData(2);
                 return Request.ReturnHttpResponseMessage(responseCheckRepeat);
-            }
+            }*/
 
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
@@ -835,6 +835,32 @@ namespace Isuzu.Service.Impl
                 respones.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(respones);
+
+        }
+
+        [HttpPost]
+        [Route("adjustWeight")]
+        public HttpResponseMessage AdjustWeight([FromBody]InboundItemHandyDto adjustWeight)
+        {
+            if (adjustWeight.IsRepeat == 0)
+            {
+                ResponseData<InboundItemHandyDto> responseCheckRepeat = new ResponseData<InboundItemHandyDto>();
+                InboundItemHandyDto adjustWeightReturn = InboundService.GetBeforeAdjustWeight(adjustWeight);
+                responseCheckRepeat.SetData(adjustWeightReturn);
+                return Request.ReturnHttpResponseMessage(responseCheckRepeat);
+            }
+
+            ResponseData<InboundItemHandyDto> responseHandy = new ResponseData<InboundItemHandyDto>();
+            try
+            {
+                InboundService.AdjustWeight(adjustWeight);
+                responseHandy.SetData(adjustWeight);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
 
         }
 

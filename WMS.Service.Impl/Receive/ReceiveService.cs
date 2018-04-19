@@ -35,7 +35,6 @@ namespace WMS.Service.Impl
 
         public ReceiveDto GetReceiveByReceiveIDSys(int id)
         {
-            Receive unit;
             ReceiveDto receive;
             using (WMSDbContext Db = new WMSDbContext())
             {
@@ -160,7 +159,7 @@ namespace WMS.Service.Impl
                 {
                     HandleValidationException(e);
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException)
                 {
                     scope.Dispose();
                     ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));

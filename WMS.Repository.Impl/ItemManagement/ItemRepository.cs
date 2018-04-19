@@ -18,8 +18,8 @@ namespace WMS.Repository.Impl
 
         public Item_MT GetManyWithUnit(int id)
         {
-            //.Include(b => b.Supplier_MT)
-            var item = Db.Item_MT.Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT)).Include(a => a.ItemInspectMapping.Select(x => x.Inspect_MT)).Where(c => c.ItemIDSys == id);
+            var item = Db.Item_MT.Include("ItemSet_MT").Include("Category_MT").Include("Category_MT.Control_MT")
+                .Include("Category_MT.MainCategory").Include("Category_MT.MainCategory.Control_MT").Include(it => it.ItemUnitMapping.Select(s => s.Unit_MT)).Include(a => a.ItemInspectMapping.Select(x => x.Inspect_MT)).Where(c => c.ItemIDSys == id);
             var data = item.SingleOrDefault();
             return item.SingleOrDefault();
         }

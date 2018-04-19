@@ -12,11 +12,10 @@ namespace WMS.Common.ValueObject
     public class CategoryDto
     {
         public int CateIDSys { get; set; }
+        public int ControlIDSys { get; set; }
+        public int ParentIDSys { get; set; }
         public string CateID { get; set; }
         public string CateName { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public string UserUpdate { get; set; }
-       
         public int ProjectIDSys { get; set; }
         public ProjectDto Project_MT { get; set; }      
     }

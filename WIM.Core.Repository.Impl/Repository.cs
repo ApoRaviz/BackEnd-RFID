@@ -96,7 +96,8 @@ namespace WIM.Core.Repository.Impl
             TEntity entityForInsert = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { });
 
             Type typeEntityForInsert = entityForInsert.GetType();
-            foreach (PropertyInfo prop in properties)
+            PropertyInfo[] entityproperties = typeEntityForInsert.GetProperties();
+            foreach (PropertyInfo prop in entityproperties)
             {
                 var value = prop.GetValue(entityToInsert, null);
                 if (!prop.PropertyType.IsGenericType || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime))

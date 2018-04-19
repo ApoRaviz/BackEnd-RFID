@@ -31,11 +31,17 @@ namespace Fuji.Context
         
             if (!string.IsNullOrEmpty(methodName))
             {
-                string projectName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location).Split('.').FirstOrDefault();
-                string className = new System.Diagnostics.StackFrame(1)?.GetMethod()?.ReflectedType.Name;
-                this.Database.Log = s => LogWriter.WritetoFile(projectName
-                   , className + "." + methodName
-                   , s);
+                if(methodName.StartsWith("Update") 
+                    || methodName.StartsWith("Create")
+                    || methodName.StartsWith("Set")
+                    || methodName.StartsWith("Receive"))
+                { 
+                    string projectName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location).Split('.').FirstOrDefault();
+                    string className = new System.Diagnostics.StackFrame(1)?.GetMethod()?.ReflectedType.Name;
+                    this.Database.Log = s => LogWriter.WritetoFile(projectName
+                       , className + "." + methodName
+                       , s);
+                }
 
             }
         }
@@ -97,6 +103,22 @@ namespace Fuji.Context
                 , new SqlParameter("@size", size)
                 , new SqlParameter("@sort", sort)
                 , new SqlParameter("@sortdecending", sortDecending)
+                , output).ToList();
+
+            totalRecord = Convert.ToInt32(output.Value);
+
+            return items;
+        }
+
+        public IEnumerable<CheckStockHead> ProcPagingCheckStock(int page, int size, out int totalRecord)
+        {
+            totalRecord = 0;
+            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
+            output.Direction = ParameterDirection.Output;
+
+            var items = this.Database.SqlQuery<CheckStockHead>("ProcPagingCheckStock @page,@size,@totalrow out"
+                , new SqlParameter("@page", page)
+                , new SqlParameter("@size", size)
                 , output).ToList();
 
             totalRecord = Convert.ToInt32(output.Value);

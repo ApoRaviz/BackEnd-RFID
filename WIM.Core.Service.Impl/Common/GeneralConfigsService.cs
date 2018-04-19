@@ -27,7 +27,8 @@ namespace WIM.Core.Service.Impl.Common
                     using (CoreDbContext Db = new CoreDbContext())
                     {
                         IGeneralConfigsRepository repo = new GeneralConfigsRepository(Db);
-                        confignew = repo.Insert(config);
+                        ExtendedConfig ex = new CommonService().AutoMapper<ExtendedConfig>(config);
+                        confignew = repo.Insert(ex);
                         Db.SaveChanges();
                         scope.Complete();
                     }

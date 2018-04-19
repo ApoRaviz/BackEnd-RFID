@@ -31,10 +31,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\Master.WebApi\DLL\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -49,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\CategoryRepository.cs" />
+    <Compile Include="Common\GeneralConfigsLocationFormatRepository.cs" />
+    <Compile Include="Common\GeneralConfigsRepository.cs" />
+    <Compile Include="ControlMaster\ControlRepository.cs" />
     <Compile Include="Dimension\DimensionRepository.cs" />
     <Compile Include="ImportDefinition\ImportDefinitionRepository.cs" />
     <Compile Include="Inspect\InspectRepository.cs" />
@@ -80,6 +86,10 @@
     <Compile Include="Warehouse\ZoneLayoutHeaderRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
+      <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
+      <Name>Auth.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>
       <Name>WIM.Core.Context</Name>
@@ -95,10 +105,6 @@
     <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
       <Project>{30A80D17-B62F-4F7D-9430-B02425001E3B}</Project>

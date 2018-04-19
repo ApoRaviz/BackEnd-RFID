@@ -13,10 +13,12 @@ namespace Fuji.Entity.StockManagement
     public class CheckStockHead : BaseEntity
     {
         [Key]
-        public int CheckStockID { get; set; }
+        public string CheckStockID { get; set; }
         public DateTime CheckStockDate { get; set; }
+        public string CheckStockBy { get; set; }
         public int SystemQTY { get; set; }
         public int ActualQTY { get; set; }
+        public string Status { get; set; }
 
         [NotMapped]
         public int VarianceQTY
@@ -25,14 +27,16 @@ namespace Fuji.Entity.StockManagement
             {
                 return Math.Abs(this.SystemQTY - this.ActualQTY);
             }
+            set { }
         }
-
+        [NotMapped]
         public string YearNumber
         {
             get
             {
                 return this.CheckStockDate.ToString("yyyy");
             }
+            set { }
         }
     }
 }
