@@ -64,12 +64,12 @@ namespace Isuzu.Service.Impl
         [Route("handy/items")]
         public HttpResponseMessage RegisterInboundItem_HANDY([FromBody]InboundItemHandyDto inboundItem)
         {
-            if (inboundItem.IsRepeat == 0 && InboundService.CheckScanRepeatRegisterInboundItem_HANDY(inboundItem))
+            /*if (inboundItem.IsRepeat == 0 && InboundService.CheckScanRepeatRegisterInboundItem_HANDY(inboundItem))
             {
                 ResponseData<int> responseCheckRepeat = new ResponseData<int>();
                 responseCheckRepeat.SetData(2);
                 return Request.ReturnHttpResponseMessage(responseCheckRepeat);
-            }
+            }*/
 
             ResponseData<int> responseHandy = new ResponseData<int>();
             try

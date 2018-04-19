@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Common.ValueObject;
-using WIM.Core.Service;
-using WIM.Core.Common.Utility.Http;
-using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Common.Utility.Extensions;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using System.Collections.ObjectModel;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Http;
+using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Common.ValueObject;
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Service;
 
-namespace Master.WebApi.Controllers
+namespace WMS.WebApi.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/v1/apimt")]
-    public class ApiMTController :  ApiController
+    public class ApiMTController : ApiController
     {
         private IApiMTService ApiMTService;
 
@@ -36,7 +36,7 @@ namespace Master.WebApi.Controllers
             try
             {
                 IEnumerable<Api_MT> apis = ApiMTService.GetAPIs();
-                var group = apis.OrderBy(b => b.Controller).GroupBy(a => a.Controller);
+                var group = apis.GroupBy(a => a.Controller);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(group);
             }
@@ -58,26 +58,6 @@ namespace Master.WebApi.Controllers
             {
                 ApiMTDto ApiMT = ApiMTService.GetApiMT(id);
                 response.SetData(ApiMT);
-            }
-            catch (ValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
-
-        // GET: api/categories/1
-        [HttpGet]
-        [Route("module/{moduleidsys}")]
-        public HttpResponseMessage GetApiMTByModule([FromUri]int moduleidsys)
-        {
-            IResponseData<IEnumerable<IEnumerable<Api_MT>>> response = new ResponseData<IEnumerable<IEnumerable<Api_MT>>>();
-            try
-            {
-                IEnumerable<Api_MT> ApiMT = ApiMTService.GetAPIs(moduleidsys);
-                var group = ApiMT.OrderBy(b => b.Controller).GroupBy(a => a.Controller);
-                response.SetData(group);
             }
             catch (ValidationException ex)
             {
@@ -114,7 +94,7 @@ namespace Master.WebApi.Controllers
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpated = ApiMTService.UpdateApiMT( ApiMT);
+                bool isUpated = ApiMTService.UpdateApiMT(ApiMT);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -144,7 +124,6 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-       
         [HttpGet]
         [Route("description")]
         public HttpResponseMessage GetApiDescription()
@@ -213,7 +192,5 @@ namespace Master.WebApi.Controllers
             response.Data = apiDescList;
             return Request.ReturnHttpResponseMessage(response);
         }
-
-   
     }
 }

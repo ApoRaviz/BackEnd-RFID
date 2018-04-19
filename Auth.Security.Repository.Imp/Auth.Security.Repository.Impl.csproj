@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{449748D1-BC3D-459A-96E1-813F9388E44E}</ProjectGuid>
+    <ProjectGuid>{FAA2CA1A-9ACC-4250-A049-B6AB46E31A65}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WIM.Core.Security.Entity</RootNamespace>
-    <AssemblyName>WIM.Core.Security.Entity</AssemblyName>
+    <RootNamespace>Auth.Security.Repository.Impl</RootNamespace>
+    <AssemblyName>Auth.Security.Repository.Impl</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,18 +42,9 @@
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,33 +53,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountBindingModels.cs" />
-    <Compile Include="AccountViewModels.cs" />
-    <Compile Include="ApplicationRole.cs" />
-    <Compile Include="ApplicationUser.cs" />
-    <Compile Include="ApplicationUserRole.cs" />
-    <Compile Include="ClaimBindingModel.cs" />
-    <Compile Include="PasswordHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoleAndPermission\Api_MT.cs" />
-    <Compile Include="RoleAndPermission\MenuProjectMapping.cs" />
-    <Compile Include="RoleAndPermission\Menu_MT.cs" />
-    <Compile Include="RoleAndPermission\Permission.cs" />
-    <Compile Include="RoleAndPermission\Role.cs" />
-    <Compile Include="RoleAndPermission\RolePermission.cs" />
-    <Compile Include="RoleBindingModels.cs" />
-    <Compile Include="UserManagement\User.cs" />
-    <Compile Include="UserManagement\UserProjectMapping.cs" />
-    <Compile Include="UserManagement\UserRole.cs" />
+    <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth.Security.Context\Auth.Security.Context.csproj">
+      <Project>{4f1e111d-02eb-4c25-bfe9-b4c20389deac}</Project>
+      <Name>Auth.Security.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
+      <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
+      <Name>Auth.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Repository\Auth.Security.Repository.csproj">
+      <Project>{41e304a0-a876-40d9-b4ab-19972b61fd40}</Project>
+      <Name>Auth.Security.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository.Impl\WIM.Core.Repository.Impl.csproj">
+      <Project>{e365f321-091b-4d42-8934-6e919c7ff6b1}</Project>
+      <Name>WIM.Core.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Repository\WIM.Core.Repository.csproj">
+      <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
+      <Name>WIM.Core.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

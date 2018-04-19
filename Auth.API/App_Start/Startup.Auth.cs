@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
-using WIM.Core.Security;
-using WIM.Core.Security.Context;
-using WIM.Core.Security.Providers;
 using Microsoft.Owin;
+using Auth.Security.Context;
+using Auth.Security;
+using Auth.Security.Providers;
 
 namespace Auth.API
 {
@@ -33,7 +33,7 @@ namespace Auth.API
               
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/api/v1/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["as:ExToken"])),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["as:ExToken"])),
                
                 Provider = new CustomOAuthProvider(),
                 AccessTokenFormat = new CustomJwtFormat(ConfigurationManager.AppSettings["as:baseUrl"])

@@ -16,9 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using Fuji.WebApi.Results;
 using System.Linq;
 using Microsoft.VisualBasic;
-using WIM.Core.Security;
-using WIM.Core.Security.Entity;
-using WIM.Core.Security.Providers;
+
 using Fuji.WebApi.Providers.Firebase;
 using WIM.Core.Service.Impl;
 using RestSharp;
@@ -27,6 +25,9 @@ using WIM.Core.Entity.UserManagement;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using Auth.Security.Entity;
+using Auth.Security.Providers;
+using Auth.Security;
 
 namespace Fuji.WebApi.Controllers
 {
@@ -36,7 +37,7 @@ namespace Fuji.WebApi.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private int ExToken = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
+        private int ExToken = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
 
 
         public AccountController()
@@ -571,7 +572,7 @@ namespace Fuji.WebApi.Controllers
                     {
                         provider = description.AuthenticationType,
                         response_type = "token",
-                        client_id = Startup.PublicClientId,
+                        client_id = Auth.API.Startup.PublicClientId,
                         redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
                         state = state
                     }),
