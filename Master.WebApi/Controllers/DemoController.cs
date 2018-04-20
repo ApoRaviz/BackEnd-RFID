@@ -389,6 +389,7 @@ namespace Master.WebApi.Controllers
             ResponseData<List<ApiDesc>> response = new ResponseData<List<ApiDesc>>();
 
             Collection<ApiDescription> apis = Configuration.Services.GetApiExplorer().ApiDescriptions;
+
             ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = apis.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
 
             List<ApiDesc> apiDescList = new List<ApiDesc>();

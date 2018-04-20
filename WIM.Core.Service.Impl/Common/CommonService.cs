@@ -241,6 +241,34 @@ namespace WIM.Core.Service.Impl
             }
             return GenerateCode;
         }
+
+        public bool CreateValueGenerateCode(GeneralConfigs value)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (CoreDbContext Db = new CoreDbContext())
+                {
+                    IGeneralConfigsRepository repo = new GeneralConfigsRepository(Db);
+                    try
+                    {
+                        //GeneralConfigs general = new GeneralConfigs();
+                        //general.DetailConfig = value;
+                        //general.Keyword = "CheckStock";
+                        repo.Insert(value);
+                        scope.Complete();
+
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        scope.Dispose();
+                        return false;
+                        throw new ValidationException(e);
+                    }
+                }
+            }
+            return true;
+           
+        }
         //for(int i = 1; i < format.Length; i++)
         //{
         //    if(format.Substring(i,1) == alpha)

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-
 using System.Data.Entity.Infrastructure;
 using WIM.Core.Context;
 using WIM.Core.Entity.ProjectManagement;

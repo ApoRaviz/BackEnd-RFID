@@ -52,6 +52,8 @@ namespace WMS.WebApi
             container.RegisterType<IItemService, ItemService>();
             container.RegisterType<IItemSetService, ItemSetService>();
             container.RegisterType<IUnitService, UnitService>();
+            // Api
+            container.RegisterType<IApiMTService, ApiMTService>();
             // #JobComment
             container.RegisterType<ILabelService, LabelService>();
             container.RegisterType<ISupplierService, SupplierService>(); 

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Entity;
 
 namespace WMS.Entity.WarehouseManagement
@@ -30,6 +34,26 @@ namespace WMS.Entity.WarehouseManagement
         public int? ZoneID { get; set; }
         public byte Rows { get; set; }
         public byte Columns { get; set; }
+
+        [NotMapped]
+        public string StyleObject
+        {
+            get
+            {
+                string s = "{\"left\":\"" + (this.Left == null? 0 : this.Left) + "px"
+                    + "\",\"top\":\"" + (this.Top == null ? 0 : this.Top) + "px"
+                    + "\",\"width\":\"" + (this.Width == null ? 0 : this.Width) + "px"
+                    + "\",\"length\":\"" + (this.Length == null ? 0 : this.Length) + "px"
+                    + "\",\"height\":\"" + (this.Height == null ? 0 : this.Height) + "px"
+                    + "\",\"rotate\":\"10deg\"}";
+                return s;
+            }
+
+            set
+            {
+
+            }
+        }
 
         [ForeignKey("LocTypeIDSys")]
         public virtual LocationType LocationType { get; set; }

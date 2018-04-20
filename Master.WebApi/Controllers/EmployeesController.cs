@@ -8,6 +8,7 @@ using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity;
+using WIM.Core.Entity.PositionConfigManagement;
 using WIM.Core.Service;
 
 namespace Master.WebApi.Controllers
@@ -114,6 +115,24 @@ namespace Master.WebApi.Controllers
             {
                 bool isUpated = Employeeservice.DeleteEmployee(EmID);
                 response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("positionconfig2/{id}")]
+        public HttpResponseMessage setPositionConfig2(string id, [FromBody]WelfareConfig positionConfig)
+        {
+            IResponseData<Employee_MT> response = new ResponseData<Employee_MT>();
+            try
+            {
+                Employee_MT rs = Employeeservice.SetPositionConfig2(id, positionConfig);
+                response.SetData(rs);
             }
             catch (ValidationException ex)
             {

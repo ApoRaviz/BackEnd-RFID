@@ -25,6 +25,7 @@ namespace WMS.Common.ValueObject
         public int? ZoneID { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
+        public string StyleObject { get; set; }
         //public virtual IEnumerable<Location> Location { get; set; }
     }
 }

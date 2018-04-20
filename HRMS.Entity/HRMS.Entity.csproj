@@ -47,12 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Evaluate\Evaluated.cs" />
+    <Compile Include="Form\FormDetail.cs" />
+    <Compile Include="Form\FormQuestion.cs" />
+    <Compile Include="Form\FormTopic.cs" />
     <Compile Include="LeaveManagement\DayOff.cs" />
     <Compile Include="LeaveManagement\LeaveDetail.cs" />
     <Compile Include="LeaveManagement\LeaveHistory.cs" />
     <Compile Include="LeaveManagement\LeaveQuota.cs" />
     <Compile Include="LeaveManagement\Leave.cs" />
     <Compile Include="LeaveManagement\LeaveType.cs" />
+    <Compile Include="Probation\VEmployeeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

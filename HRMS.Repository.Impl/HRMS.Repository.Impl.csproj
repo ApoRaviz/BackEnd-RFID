@@ -47,9 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\FormDetailRepository.cs" />
+    <Compile Include="Evalute\EvaluatedRepository .cs" />
+    <Compile Include="Form\FormTopicRepository .cs" />
+    <Compile Include="Form\FormQuestonRepository.cs" />
     <Compile Include="LeaveManagement\LeaveDetailRepository.cs" />
     <Compile Include="LeaveManagement\LeaveRepository.cs" />
     <Compile Include="LeaveManagement\LeaveTypeRepository.cs" />
+    <Compile Include="Probation\VEmployeeInfoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
