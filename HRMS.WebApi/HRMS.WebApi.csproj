@@ -297,9 +297,7 @@
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -458,6 +456,18 @@
     <Content Include="Report\GenerateHeaderReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth.API\Auth.API.csproj">
+      <Project>{cde78836-0541-47fc-920e-732dd278f489}</Project>
+      <Name>Auth.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
+      <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
+      <Name>Auth.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
+      <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
+      <Name>Auth.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRMS.Common.ValueObject\HRMS.Common.ValueObject.csproj">
       <Project>{a3ea41df-d932-48b0-8100-a76e5df04b8e}</Project>
       <Name>HRMS.Common.ValueObject</Name>

@@ -302,9 +302,7 @@
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -519,6 +517,18 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth.API\Auth.API.csproj">
+      <Project>{cde78836-0541-47fc-920e-732dd278f489}</Project>
+      <Name>Auth.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
+      <Project>{F8B5CE45-9527-482E-BF27-9307D45CE503}</Project>
+      <Name>Auth.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
+      <Project>{BFEE452B-7031-4060-889D-913DAAA8B697}</Project>
+      <Name>Auth.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
       <Project>{B7EA8787-86EA-48FC-945F-6CAE2B397DA4}</Project>
       <Name>HRMS.Service.Impl</Name>
@@ -599,7 +609,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>80</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
