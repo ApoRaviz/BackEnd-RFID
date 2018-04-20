@@ -21,6 +21,7 @@ namespace WMS.Entity.WarehouseManagement
         [Key]
         public int GroupLocIDSys { get; set; }
         public int LocTypeIDSys { get; set; }
+        public int? WHIDSys { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Int16? Left { get; set; }
@@ -59,6 +60,7 @@ namespace WMS.Entity.WarehouseManagement
 
         [ForeignKey("GroupLocIDSys")]
         public virtual ICollection<Location> Location { get; set; }
+        [NotMapped]
         public List<Location> detail;
 
     }

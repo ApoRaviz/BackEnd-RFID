@@ -142,20 +142,28 @@ namespace WMS.Master
                         
                         ILocationGroupRepository repo = new LocationGroupRepository(Db);
                         ILocationRepository repoLoc = new LocationRepository(Db);
-                        if(locationGroup != null)
+                        List<GroupLocation> ChkLoc = new List<GroupLocation>();
+                        ChkLoc = repo.GetAll().ToList();
+                        if (locationGroup != null)
                         {
+                            locationGroup.LocationType = null;
                             repo.Update(locationGroup);
+                            repoLoc.Delete(x=>x.GroupLocIDSys == locationGroup.GroupLocIDSys);
                             foreach (Location loc in locationGroup.Location)
                             {
-                                if (loc.LocIDSys != 0)
+                                if(ChkLoc.Where(x=> x.WHIDSys == locationGroup.WHIDSys && x.Location.Where(xx=> xx.LocNo == loc.LocNo).Count() > 0).Count() > 0)
                                 {
-                                    repoLoc.Update(loc);
+                                    throw new DbEntityValidationException("Duplicate Location name");
                                 }
-                                else
-                                {
+                                //if (loc.LocIDSys != 0)
+                                //{
+                                //    repoLoc.Update(loc);
+                                //}
+                                //else
+                                //{
                                     loc.GroupLocIDSys = locationGroup.GroupLocIDSys;
                                     repoLoc.Insert(loc);
-                                }
+                                //}
                             }
                         }
 
@@ -212,7 +220,31 @@ namespace WMS.Master
             }
         }
 
-        public bool DeleteLocationGroup(int id)
+        public bool DeleteRowLocationGroup(int id,int row)
+        {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        ILocationGroupRepository repo = new LocationGroupRepository(Db);
+                        List<GroupLocation> ChkLoc = new List<GroupLocation>();
+                        repo.Delete(id);
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.E4017);
+                }
+                return true;
+            }
+        }
+
+            public bool DeleteLocationGroup(int id)
         {
             using (var scope = new TransactionScope())
             {

@@ -52,7 +52,8 @@ namespace WMS.Service.Impl.Common
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IGeneralConfigsRepository repo = new GeneralConfigsRepository(Db);
-                        confignew = repo.Insert(config);
+                        var res = repo.Insert(config);
+                        confignew = AutoMapper.Mapper.Map<BaseGeneralConfig, GeneralConfig>(res);
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -80,7 +81,32 @@ namespace WMS.Service.Impl.Common
                 using (WMSDbContext Db = new WMSDbContext())
                 {
                     IGeneralConfigsRepository repo = new GeneralConfigsRepository(Db);
-                    confignew = repo.GetByID(Keyword);
+                    BaseGeneralConfig res = repo.GetByID(Keyword);
+                    confignew = AutoMapper.Mapper.Map<BaseGeneralConfig, GeneralConfig>(res);
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                throw new ValidationException(e);
+            }
+            catch (DbUpdateException)
+            {
+                ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                throw ex;
+            }
+            return confignew;
+        }
+
+        public GeneralConfigLocationFormat GetLocationFormat()
+        {
+            GeneralConfigLocationFormat confignew = new GeneralConfigLocationFormat();
+            try
+            {
+                using (WMSDbContext Db = new WMSDbContext())
+                {
+                    IGeneralConfigsLocationFormatRepository repo = new GeneralConfigsLocationFormatRepository(Db);
+                    BaseGeneralConfig res = repo.GetByID("LocationFormat");
+                    confignew = AutoMapper.Mapper.Map<BaseGeneralConfig, GeneralConfigLocationFormat>(res);
                 }
             }
             catch (DbEntityValidationException e)
@@ -106,8 +132,16 @@ namespace WMS.Service.Impl.Common
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IGeneralConfigsLocationFormatRepository repo = new GeneralConfigsLocationFormatRepository(Db);
-
-                        var x = repo.Insert(param);
+                        var rs = repo.GetByID(param.Keyword);
+                        if ( rs == null)
+                        {
+                            var x = repo.Insert(param);
+                        }
+                        else
+                        {
+                            var x = repo.Update(param);
+                        }
+                     
                         Db.SaveChanges();
                         scope.Complete();
                     }
