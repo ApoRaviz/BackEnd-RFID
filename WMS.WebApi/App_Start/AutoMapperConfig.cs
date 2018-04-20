@@ -8,6 +8,7 @@ using WIM.Core.Entity.CustomerManagement;
 using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.ProjectManagement;
 using WMS.Common.ValueObject;
+using WMS.Entity.Common;
 using WMS.Entity.ItemManagement;
 
 namespace WMS.WebApi
@@ -38,6 +39,8 @@ namespace WMS.WebApi
                     .ForMember(d => d.Cost, opt => opt.MapFrom(s => s.Cost))
                     .ForMember(d => d.Price, opt => opt.MapFrom(s => s.Price));
                 cfg.CreateMap<LabelControl, LabelControlDto>();
+                cfg.CreateMap<BaseGeneralConfig, GeneralConfigLocationFormat>();
+                cfg.CreateMap<BaseGeneralConfig, GeneralConfig>();
 
             });
         }

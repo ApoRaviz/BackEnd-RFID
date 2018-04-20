@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,7 @@ using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.Employee;
+using WIM.Core.Entity.PositionConfigManagement;
 using WIM.Core.Service.EmployeeMaster;
 
 namespace Master.WebApi
@@ -126,12 +128,30 @@ namespace Master.WebApi
         [HttpPost]
         [Route("positionconfig/{id}")]
 
-        public HttpResponseMessage setPositionConfig(int id,[FromBody]  List<PositionConfig<List<PositionConfig<string>>>> positionConfig)
+        public HttpResponseMessage setPositionConfig(int id,[FromBody]  List<PositionConfig<List<PositionConfig<List<PositionConfig<string>>>>>> positionConfig)
         {
             IResponseData<Positions> response = new ResponseData<Positions>();
             try
             {
                 Positions rs = PositionService.SetPositionConfig(id,positionConfig);
+                response.SetData(rs);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("positionconfig2/{id}")]
+        public HttpResponseMessage setPositionConfig2(int id, [FromBody]WelfareConfig positionConfig)
+        {
+            IResponseData<Positions> response = new ResponseData<Positions>();
+            try
+            {
+                Positions rs = PositionService.SetPositionConfig2(id, positionConfig);
                 response.SetData(rs);
             }
             catch (ValidationException ex)

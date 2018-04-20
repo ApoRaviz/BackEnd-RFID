@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
-
+using WIM.Core.Entity.PositionConfigManagement;
 namespace WIM.Core.Service
 {
     public interface IEmployeeService : IService
@@ -15,6 +15,8 @@ namespace WIM.Core.Service
         string CreateEmployee(Employee_MT Employee);
         bool UpdateEmployee(Employee_MT Employee);
         bool UpdateEmployeeByID(Employee_MT Employee);
-        bool DeleteEmployee(string id);        
+        bool DeleteEmployee(string id);
+        Employee_MT SetPositionConfig2(string id, WelfareConfig positionConfig);
+
     }
 }

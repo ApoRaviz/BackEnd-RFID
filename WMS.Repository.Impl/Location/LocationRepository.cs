@@ -21,7 +21,8 @@ namespace WMS.Repository.Impl
 
 
         public GroupLocation GetLocationByGroupLocIDSys(int G_LocIDSys)
-        {
+        {   
+
             GroupLocation res = Db.GroupLocation.Include("LocationType").Include("Location").Include("Location.DimensionLayout_MT").Where(x => x.GroupLocIDSys == G_LocIDSys).FirstOrDefault();
             return res;
         }

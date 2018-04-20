@@ -24,7 +24,10 @@ namespace WMS.Context
 
     public class WMSDbContext : DbContext
     {
-        
+        //$DbSet
+
+
+
         public DbSet<BaseGeneralConfig> BaseGeneralConfig { get; set; }
         public DbSet<InspectType> InspectType { get; set; }
         public DbSet<Inspect_MT> Inspect_MT { get; set; }
