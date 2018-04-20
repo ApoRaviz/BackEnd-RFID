@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Entity;
 
 namespace WMS.Entity.WarehouseManagement
@@ -20,6 +17,7 @@ namespace WMS.Entity.WarehouseManagement
         [Key]
         public int GroupLocIDSys { get; set; }
         public int LocTypeIDSys { get; set; }
+        public int? WHIDSys { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Int16? Left { get; set; }
@@ -38,6 +36,7 @@ namespace WMS.Entity.WarehouseManagement
 
         [ForeignKey("GroupLocIDSys")]
         public virtual ICollection<Location> Location { get; set; }
+        [NotMapped]
         public List<Location> detail;
 
     }

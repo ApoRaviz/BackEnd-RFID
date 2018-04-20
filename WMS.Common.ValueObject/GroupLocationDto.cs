@@ -10,6 +10,8 @@ namespace WMS.Common.ValueObject
     {
         public int GroupLocIDSys { get; set; }
         public int LocTypeIDSys { get; set; }
+        public int WHIDSys { get; set; }
+        public string WHName { get; set; }
         public string LocTypeName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

@@ -125,22 +125,22 @@
     </Reference>
     <Reference Include="WIM.Core.Common.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CoreLibary\WIM.Core.Common.Utility\bin\Debug\WIM.Core.Common.Utility.dll</HintPath>
+      <HintPath>..\WIM.Core.Common.Utility\bin\Debug\WIM.Core.Common.Utility.dll</HintPath>
     </Reference>
     <Reference Include="WIM.Core.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CoreLibary\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
+      <HintPath>..\WIM.Core.Entity\bin\Debug\WIM.Core.Entity.dll</HintPath>
     </Reference>
     <Reference Include="WIM.Core.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CoreLibary\WIM.Core.Security\bin\Debug\WIM.Core.Security.dll</HintPath>
+      <HintPath>..\WIM.Core.Security\bin\Debug\WIM.Core.Security.dll</HintPath>
     </Reference>
     <Reference Include="WIM.Core.Security.Context">
-      <HintPath>..\..\CoreLibary\WIM.Core.Security.Context\bin\Debug\WIM.Core.Security.Context.dll</HintPath>
+      <HintPath>..\WIM.Core.Security.Context\bin\Debug\WIM.Core.Security.Context.dll</HintPath>
     </Reference>
     <Reference Include="WIM.Core.Security.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CoreLibary\WIM.Core.Service.Impl\bin\Debug\WIM.Core.Security.Entity.dll</HintPath>
+      <HintPath>..\WIM.Core.Security.Entity\bin\Debug\WIM.Core.Security.Entity.dll</HintPath>
     </Reference>
     <Reference Include="WIM.Core.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -148,7 +148,7 @@
     </Reference>
     <Reference Include="WIM.Core.Service.Impl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CoreLibary\WIM.Core.Service.Impl\bin\Debug\WIM.Core.Service.Impl.dll</HintPath>
+      <HintPath>..\WIM.Core.Service.Impl\bin\Debug\WIM.Core.Service.Impl.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

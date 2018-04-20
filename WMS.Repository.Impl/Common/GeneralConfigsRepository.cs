@@ -5,7 +5,7 @@ using WIM.Core.Repository.Impl;
 
 namespace WMS.Repository.Impl.Common
 {
-    public class GeneralConfigsRepository : Repository<GeneralConfig>,IGeneralConfigsRepository
+    public class GeneralConfigsRepository : Repository<BaseGeneralConfig>,IGeneralConfigsRepository
     {
         private WMSDbContext Db { get; set; }
         public GeneralConfigsRepository(WMSDbContext context):base(context)
