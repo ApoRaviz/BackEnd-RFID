@@ -18,6 +18,7 @@ namespace Isuzu.Service
         IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string rfid);
         bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem);
         void RegisterInboundItem_HANDY(InboundItemHandyDto item);
+        void UpdateHead_HANDY(InboundItemHandyDto InvNo);
         void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding);
         void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping);
         void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking);
