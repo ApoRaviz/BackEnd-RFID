@@ -338,7 +338,6 @@
     <Compile Include="Controllers\ApiMenuMappingController.cs" />
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Controllers\GeneralConfigsController.cs" />
     <Compile Include="Controllers\PermissionGroupController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
@@ -522,17 +521,21 @@
       <Project>{cde78836-0541-47fc-920e-732dd278f489}</Project>
       <Name>Auth.API</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Auth.Security.Context\Auth.Security.Context.csproj">
-      <Project>{4f1e111d-02eb-4c25-bfe9-b4c20389deac}</Project>
-      <Name>Auth.Security.Context</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Auth.Security.Entity\Auth.Security.Entity.csproj">
-      <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
+      <Project>{F8B5CE45-9527-482E-BF27-9307D45CE503}</Project>
       <Name>Auth.Security.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
-      <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
+      <Project>{BFEE452B-7031-4060-889D-913DAAA8B697}</Project>
       <Name>Auth.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
+      <Project>{B7EA8787-86EA-48FC-945F-6CAE2B397DA4}</Project>
+      <Name>HRMS.Service.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
+      <Project>{93A81E85-ACA4-4809-88DC-C3D67548EF83}</Project>
+      <Name>HRMS.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
       <Project>{9a37166e-bd6c-4ba9-9091-985bc77c68d6}</Project>
@@ -561,6 +564,18 @@
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
+      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
+      <Name>WIM.Core.Security.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
+      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
+      <Name>WIM.Core.Security.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
+      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
+      <Name>WIM.Core.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
       <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
@@ -594,13 +609,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>80</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/master-backend</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/master-backend</IISAppRootUrl>
+          <IISUrl>http://localhost/Master.WebApi</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

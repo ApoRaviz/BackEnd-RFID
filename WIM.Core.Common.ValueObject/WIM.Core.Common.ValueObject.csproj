@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AddressDto.cs" />
     <Compile Include="Api\ApiMenuMappingDto.cs" />
+    <Compile Include="Api\ApiDesc.cs" />
     <Compile Include="Api\ApiMTDto.cs" />
     <Compile Include="Autocomplete\AutocompleteCountryDto.cs" />
     <Compile Include="Autocomplete\AutocompleteCustomerDto.cs" />

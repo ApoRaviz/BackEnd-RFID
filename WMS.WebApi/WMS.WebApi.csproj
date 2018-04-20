@@ -18,7 +18,7 @@
     <AssemblyName>WMS.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>443</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
@@ -331,6 +331,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiLogHandler.cs" />
+    <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\DimensionController.cs" />
@@ -503,7 +504,7 @@
       <Name>Auth.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
-      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
       <Name>WIM.Core.Common.Utility</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.ValueObject\WIM.Core.Common.ValueObject.csproj">

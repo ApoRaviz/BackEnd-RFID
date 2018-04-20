@@ -31,7 +31,8 @@ namespace Isuzu.WebApi
             //Register OWin Authen
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<AccountController>(new InjectionConstructor());
-
+            // Api
+            container.RegisterType<IApiMTService, ApiMTService>();
             container.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication.User.Identity));
 
             //Register Service
