@@ -57,6 +57,24 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("LocationFormat")]
+        public HttpResponseMessage GetLocationFormat()
+        {
+            ResponseData<GeneralConfigLocationFormat> response = new ResponseData<GeneralConfigLocationFormat>();
+            try
+            {
+                GeneralConfigLocationFormat data = GeneralConfigsService.GetLocationFormat();
+                response.SetData(data);
+            }
+            catch (Validation.ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         //Create HeadReportControl
         [HttpPost]
         [Route("")]
