@@ -44,7 +44,7 @@ namespace WMS.Entity.WarehouseManagement
                     + "\",\"width\":\"" + (this.Width == null ? 0 : this.Width) + "px"
                     + "\",\"length\":\"" + (this.Length == null ? 0 : this.Length) + "px"
                     + "\",\"height\":\"" + (this.Height == null ? 0 : this.Height) + "px"
-                    + "\",\"rotate\":\"10deg\"}";
+                    + "\",\"rotate\":\"0deg\"}";
                 return s;
             }
 
