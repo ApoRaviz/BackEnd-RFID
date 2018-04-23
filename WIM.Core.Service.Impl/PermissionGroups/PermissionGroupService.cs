@@ -10,7 +10,7 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Repository.ApiMaster;
+using WIM.Core.Repository;
 using WIM.Core.Repository.Impl.ApiMaster;
 using WIM.Core.Repository.MenuAndPermission;
 using WIM.Core.Service.PermissionGroups;
