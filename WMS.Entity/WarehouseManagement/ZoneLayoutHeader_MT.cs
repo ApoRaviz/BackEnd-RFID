@@ -14,7 +14,7 @@ namespace WMS.Entity.WarehouseManagement
     {
         public ZoneLayoutHeader_MT()
         {
-            this.ZoneLayoutDetail_MT = new HashSet<ZoneLayoutDetail_MT>();
+            //this.ZoneLayoutDetail_MT = new HashSet<ZoneLayoutDetail_MT>();
         }
 
         [Key]
@@ -23,9 +23,10 @@ namespace WMS.Entity.WarehouseManagement
         public int Warehouse { get; set; }
         public string Area { get; set; }
         public Nullable<int> TotalFloor { get; set; }
-       
+
 
         public virtual ICollection<ZoneLayoutDetail_MT> ZoneLayoutDetail_MT { get; set; }
+        //public virtual Warehouse_MT Warehouse_MT { get; set; }
         public List<ZoneLayoutDetail_MT> detail;
     }
 }

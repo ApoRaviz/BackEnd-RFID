@@ -14,12 +14,14 @@ namespace WMS.Common.ValueObject
        public int ItemIDSys { get; set; }
        public string ItemName { get; set; }
        public string ItemCode { get; set; }
-       public string SerialNo { get; set; }
+       public string SerialNumber { get; set; }
        public decimal Qty { get; set; }
        public int UnitIDSys { get; set; }
        public int LocIDSys { get; set; }
        public string LocNo { get; set; }
        public int StatusIDSys { get; set; }
+       public double Price { get; set; }
+       public double Cost { get; set; }
        public DateTime ReceivingDate { get; set; }
        public Nullable<DateTime> Expire { get; set; }
        public string Serial { get; set; }
@@ -28,6 +30,8 @@ namespace WMS.Common.ValueObject
        public string Box { get; set; }
        public string Lot { get; set; }
        public string Pallet { get; set; }
-       public virtual IEnumerable<InventoryTransactionDto> Child { get; set; }
+       public double UsedDimension { get; set; }
+       public virtual List<InventoryTransactionDto> Child { get; set; }
+       public virtual List<InventoryTransactionDetailDto> InventoryTransactionDetail { get; set; }
     }
 }

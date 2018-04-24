@@ -62,6 +62,7 @@ namespace Master.WebApi
             container.RegisterType<IPermissionGroupService, PermissionGroupService>();
             container.RegisterType<IPermissionGroupApiService, PermissionGroupApiService>();
             container.RegisterType<IAddressService, AddressService>();
+            container.RegisterType<IResignService, ResignService>();
             
         }
     }

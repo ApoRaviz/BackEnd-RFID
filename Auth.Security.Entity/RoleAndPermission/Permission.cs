@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Auth.Security.Entity.RoleAndPermission
 {
+    [Table("Permissions")]
     public class Permission
     {
         public Permission()

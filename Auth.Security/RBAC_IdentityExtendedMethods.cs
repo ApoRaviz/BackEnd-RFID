@@ -114,10 +114,10 @@ public static class RBAC_ExtendedMethods_4_Principal
             string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
           .Select(c => c.Value).SingleOrDefault();
 
-            if (OTPCONFIRM != "True")
-            {
-                return false;
-            }
+            //if (OTPCONFIRM != "True")
+            //{
+            //    return false;
+            //}
             string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
 
             string fullUrl = _request.Method + reqUrl;
