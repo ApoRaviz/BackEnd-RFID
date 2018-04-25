@@ -127,7 +127,7 @@ namespace Isuzu.Service.Impl.Inbound
 
                         if (isDupAnother)
                         {
-                            throw new ValidationException(ErrorEnum.RFIDIsDuplicatedAnother);
+                            throw new ValidationException(ErrorEnum.RFIDDuplicated);
                         }
 
                         InboundItems itemExist = detailRepo.GetItemSingleBy(i => i.ISZJOrder == item.ISZJOrder);

@@ -201,6 +201,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Security.Repository", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Security.Repository.Impl", "Auth.Security.Repository.Imp\Auth.Security.Repository.Impl.csproj", "{FAA2CA1A-9ACC-4250-A049-B6AB46E31A65}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuji.Common.Utility", "Fuji.Common.Utility\Fuji.Common.Utility.csproj", "{EC7286FC-A144-43E7-A458-1378231A9F75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -475,6 +477,10 @@ Global
 		{FAA2CA1A-9ACC-4250-A049-B6AB46E31A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA2CA1A-9ACC-4250-A049-B6AB46E31A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAA2CA1A-9ACC-4250-A049-B6AB46E31A65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC7286FC-A144-43E7-A458-1378231A9F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC7286FC-A144-43E7-A458-1378231A9F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC7286FC-A144-43E7-A458-1378231A9F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC7286FC-A144-43E7-A458-1378231A9F75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -576,6 +582,7 @@ Global
 		{F8B5CE45-9527-482E-BF27-9307D45CE503} = {D520E260-635D-4D7D-86F4-317312352CFB}
 		{41E304A0-A876-40D9-B4AB-19972B61FD40} = {D520E260-635D-4D7D-86F4-317312352CFB}
 		{FAA2CA1A-9ACC-4250-A049-B6AB46E31A65} = {D520E260-635D-4D7D-86F4-317312352CFB}
+		{EC7286FC-A144-43E7-A458-1378231A9F75} = {B45DF483-3E3E-4E1B-94FC-70DED1B35981}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A988AAD2-BAE7-4EE3-9908-4E6C802AFADF}

@@ -89,7 +89,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbEntityValidationException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4011);
+                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
                 catch (DbUpdateException)

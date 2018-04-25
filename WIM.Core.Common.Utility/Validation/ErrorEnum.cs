@@ -1,49 +1,85 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Attributes;
 
 namespace WIM.Core.Common.Utility.Validation
-{
+{    
+
     public enum ErrorEnum
     {
-        [Description("Data not found!")]
-        DataNotFound = 3001,
+        #region ================================ CORE[10] ======================
 
-        [Description("Serial and ItemCode already exists!")]
-        ReceiveSerialRemainInStock = 3002,
+        #region ================================ CORE[10] -> General[10]
 
-        [Description("This RFID registered by another Order.")]
-        RFIDIsDuplicatedAnother = 3003,
+        [Description("DATA_NOT_FOUND")]
+        DataNotFound = 1010001,
 
-        [Description("RFID not Empty")]
-        RFIDNotEmpty = 3004,
+        #endregion /General
 
-        [Description("RFID not Empty")]
-        RFIDNeedRepeat = 3005,
+        #region ================================ CORE[10] -> Auth[11]
 
-        [Description("Cannot connect to printer server!\nPlease check printer and try again!")]
-        E1001 = 1001,
+        [Description("DATA_NOT_FOUND")]
+        InvalidUsernameOrPassword = 1011001,
 
-        [Description("Login Success"), HttpCode(HttpStatusCode.OK), Action("A0")]
-        E2001 = 2001,
+        [Description("NO_PERMISSION")]
+        NoPermission = 1011002,
 
-        [Description("Cannot login!, Please check network connecting or username/password.")]
-        E4001 = 4001,
+        #endregion /Auth
 
-        [Description("Data not found!")]
-        E4004 = 4004,
-
-        [Description("Cannot insert data!, Please check data that have some field invalid"), HttpCode(HttpStatusCode.PreconditionFailed)]
-        E4011 = 4011,
-
-        [Description("Cannot update data!, Please check data that have in database or not"), HttpCode(HttpStatusCode.PreconditionFailed)]
+        [Description("WRITE_DATABASE_PROBLEM"), HttpCode(HttpStatusCode.PreconditionFailed)]
         E4012 = 4012,
+
+
+        #endregion /CORE
+
+
+
+
+
+        #region ================================ MASTER[11] ======================
+
+        #endregion /MASTER
+
+
+
+
+
+        #region ================================ WMS[12] =========================
+
+        #endregion /WMS
+
+
+
+
+
+        #region ================================ FUJI[13] =========================
+
+
+        #region ================================ FUJI[13] -> Receive[12]
+
+        [Description("SERIAL_AND_ITEMCODE_ALREADY_EXISTS")]
+        SerialAndItemCodeAlreadyExist = 1312001,
+
+        #endregion /Receive
+
+
+
+        #endregion /FUJI
+
+
+        #region ================================ ISUZU[14] =========================
+
+        #region ================================ ISUZU[14] -> Register[11]
+
+        [Description("RFID_DUPLICATED")]
+        RFIDDuplicated = 1411001,
+
+        #endregion /Register
+
+        #endregion /ISUZU                    
+
+        
 
         [Description("Your Token Timeout!, Please login again."), HttpCode(HttpStatusCode.Unauthorized), Action("A1")]
         E4013 = 4013,

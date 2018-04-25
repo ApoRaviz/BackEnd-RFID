@@ -325,7 +325,7 @@ namespace Fuji.Service.Impl.ItemImport
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
                     ISerialDetailTempRepository SerialDetailTempRepo = new SerialDetailTempRepository(Db);
 
-                    var serialsRemainInStock = (from a in Db.ImportSerialDetail
+                    bool isSerialAndItemCodeAlreadyExist = (from a in Db.ImportSerialDetail
                                                 where Db.ImportSerialDetail.Any(b =>
                                                        receive.ItemGroups.Contains(b.ItemGroup)
                                                        && b.HeadID != "0"
@@ -346,11 +346,11 @@ namespace Fuji.Service.Impl.ItemImport
                                                     ItemCode = g.Key.ItemCode,
                                                     SerialNumber = g.Key.SerialNumber
                                                 }
-                        ).ToList();
+                        ).Any();
 
-                    if (serialsRemainInStock.Any())
+                    if (isSerialAndItemCodeAlreadyExist)
                     {
-                        throw new ValidationException(ErrorEnum.ReceiveSerialRemainInStock);
+                        throw new ValidationException(ErrorEnum.SerialAndItemCodeAlreadyExist);
                     }                   
 
                     var query = (from d in Db.ImportSerialDetail
