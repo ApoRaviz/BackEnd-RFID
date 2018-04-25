@@ -21,7 +21,7 @@ namespace Auth.Security.Context
         }
 
         //public DbSet<Entity.UserManagement.User> User { get; set; }
-        //public DbSet<Entity.RoleAndPermission.RolePermission> RolePermission { get; set; }
+        public DbSet<Entity.RoleAndPermission.RolePermission> RolePermission { get; set; }
         //public DbSet<Entity.RoleAndPermission.Role> Role { get; set; }
         //public DbSet<Entity.UserManagement.UserRole> UserRole { get; set; }
         //public DbSet<Entity.RoleAndPermission.Permission> Permission { get; set; }

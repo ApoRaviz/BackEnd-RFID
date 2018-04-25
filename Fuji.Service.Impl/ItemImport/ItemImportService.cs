@@ -1160,8 +1160,6 @@ namespace Fuji.Service.Impl.ItemImport
                 }
         }
 
-
-
             return items;
         }
 

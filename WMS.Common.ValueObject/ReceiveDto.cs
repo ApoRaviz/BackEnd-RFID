@@ -20,6 +20,7 @@ namespace WMS.Common.ValueObject
         public DateTime ReceiveDate { get; set; }
         public string CompName { get; set; }
         public string FileName { get; set; }
+        
         public virtual List<InventoryTransactionDto> InventoryTransactions { get; set; }
     }
 }

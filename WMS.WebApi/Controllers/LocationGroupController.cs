@@ -213,6 +213,31 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpPost]
+        [Route("Recommend")]
+        public HttpResponseMessage GetLocationRecommend(LocationControlDto control)
+        {
+            ResponseData<IEnumerable<ZoneLocationDto>> response = new ResponseData<IEnumerable<ZoneLocationDto>>();
+            try
+            {
+                IEnumerable<ZoneLocationDto> detail = LocGroupService.GetLocationForRecommend(control);
+                if (detail != null)
+                {
+                    response.SetData(detail);
+                }
+                else
+                {
+                    response.SetData(null);
+                }
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
 
         [HttpPut]
         [Route("UpdateLocationGroupBy/{GroupLocationIDSys}")]

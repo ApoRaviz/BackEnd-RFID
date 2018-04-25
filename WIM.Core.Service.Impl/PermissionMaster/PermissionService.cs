@@ -14,7 +14,7 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Repository.MenuAndPermission;
 using WIM.Core.Repository.Impl.ApiMaster;
-using WIM.Core.Repository.ApiMaster;
+using WIM.Core.Repository;
 
 namespace WIM.Core.Service.Impl
 {

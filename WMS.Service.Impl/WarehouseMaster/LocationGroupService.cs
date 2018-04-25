@@ -10,6 +10,7 @@ using WIM.Core.Common.Utility.Validation;
 using WMS.Repository.Impl.Warehouse;
 using WMS.Repository.Warehouse;
 using WMS.Common.ValueObject;
+using System;
 
 namespace WMS.Master
 {
@@ -417,6 +418,27 @@ namespace WMS.Master
                     throw new ValidationException(ErrorEnum.E4017);
                 }
              
+            }
+        }
+
+        public IEnumerable<ZoneLocationDto> GetLocationForRecommend(LocationControlDto control)
+        {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        ILocationGroupRepository repo = new LocationGroupRepository(Db);
+                        return repo.GetLocationRecommend(control);
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.E4017);
+                }
+
             }
         }
     }

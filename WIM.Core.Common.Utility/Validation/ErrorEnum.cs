@@ -115,6 +115,9 @@ namespace WIM.Core.Common.Utility.Validation
         E408 = 408,
 
         [Description("Program has a problem.\nPlease contact IT!!!")]
-        E500 = 500
+        E500 = 500,
+
+        [Description("This ISZJ order has 'NEW' status more than one order.")]
+        ISZJDuplicate = 3006
     }
 }
