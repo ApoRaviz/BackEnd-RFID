@@ -111,33 +111,47 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
                 {
-                    IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-
                     try
                     {
-                        bool isDupAnother = detailRepo.Exists(i =>
-                            i.RFIDTag == item.RFIDTag
-                            && i.ISZJOrder != item.ISZJOrder
-                            && !new List<string> {
-                                    statusShipped,
-                                    statusDeleted
-                                }.Contains(i.Status)
-                        );
-
-                        if (isDupAnother)
-                        {
-                            throw new ValidationException(ErrorEnum.RFIDDuplicated);
-                        }
-
-                        InboundItems itemExist = detailRepo.GetItemSingleBy(i => i.ISZJOrder == item.ISZJOrder);
+                        InboundItems itemExist = detailRepo.GetItemSingleBy(i =>
+                                                    i.ISZJOrder == item.ISZJOrder
+                                                    && !new List<string>
+                                                    {
+                                                        statusShipped,
+                                                        statusDeleted
+                                                    }.Contains(i.Status)
+                                                    );
 
                         itemExist.RFIDTag = item.RFIDTag;
                         itemExist.Status = item.Status;
                         itemExist.RegisterDate = DateTime.Now;
                         detailRepo.Update(itemExist);
 
-                        // #Update Head
+                        db.SaveChanges();
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        throw new ValidationException(e);
+                    }
+                }
+            }
+
+            Task.Run(() => {
+                UpdateHead_HANDY(item);
+            });
+        }
+
+        public void UpdateHead_HANDY(InboundItemHandyDto item)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository headRepo = new InboundHeadRepository(db);
+                    try
+                    {
                         InboundItemsHead itemHeadExist = headRepo.GetByID(item.InvNo);
 
                         itemHeadExist.Status = item.Status;
@@ -1262,13 +1276,17 @@ namespace Isuzu.Service.Impl.Inbound
                         case 1:
                             inboundItems.Weight1 = adjustWeight.Weight1;
                             break;
-                        case 2:inboundItems.Weight2 = adjustWeight.Weight2;
+                        case 2:
+                            inboundItems.Weight2 = adjustWeight.Weight2;
                             break;
-                        case 3:inboundItems.Weight3 = adjustWeight.Weight3;
+                        case 3:
+                            inboundItems.Weight3 = adjustWeight.Weight3;
                             break;
-                        case 4:inboundItems.Weight4 = adjustWeight.Weight4;
+                        case 4:
+                            inboundItems.Weight4 = adjustWeight.Weight4;
                             break;
-                        case 5: inboundItems.Weight5 = adjustWeight.Weight5;
+                        case 5:
+                            inboundItems.Weight5 = adjustWeight.Weight5;
                             break;
                     }
                     inboundItems.WeightDate = DateTime.Now;

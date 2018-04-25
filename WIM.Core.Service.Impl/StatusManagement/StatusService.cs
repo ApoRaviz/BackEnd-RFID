@@ -30,11 +30,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
             }
 
@@ -51,11 +51,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
             }
         }
@@ -79,11 +79,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                 }
             }
@@ -119,11 +119,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                 }
             }
@@ -167,12 +167,12 @@ namespace WIM.Core.Service.Impl.StatusManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                 }
             }
@@ -196,11 +196,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
             }
@@ -227,11 +227,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
             }
@@ -257,11 +257,11 @@ namespace WIM.Core.Service.Impl.StatusManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
             }
         }

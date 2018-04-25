@@ -75,11 +75,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
 
                 }
@@ -105,11 +105,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     return true;
                 }
@@ -140,11 +140,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     return ItemSet.ItemSetIDSys;
                 }
@@ -188,11 +188,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     return item.ItemSetIDSys;
                 }
@@ -221,11 +221,11 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     catch (DbUpdateException)
                     {
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     return item.ItemIDSys;
                 }
@@ -288,11 +288,11 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
             }
         }

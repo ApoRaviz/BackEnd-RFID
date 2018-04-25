@@ -101,7 +101,7 @@ namespace HRMS.Service.Impl.Form
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
                     throw ex;
                 }
             }
@@ -136,7 +136,7 @@ namespace HRMS.Service.Impl.Form
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return evaluated;
             }

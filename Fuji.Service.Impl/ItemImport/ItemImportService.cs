@@ -377,7 +377,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (Exception)
                     {
-                        throw new ValidationException(ErrorEnum.E5000);
+                        throw new ValidationException(ErrorEnum.UNKNOWN_ERROR);
                     }
 
                     foreach (ImportSerialDetail detail in query)
@@ -399,7 +399,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (Exception)
                     {
-                        throw new ValidationException(ErrorEnum.E5000);
+                        throw new ValidationException(ErrorEnum.UNKNOWN_ERROR);
                     }
 
                     ImportSerialHead importHead = (from h in Db.ImportSerialHead
@@ -419,7 +419,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (Exception)
                     {
-                        throw new ValidationException(ErrorEnum.E5000);
+                        throw new ValidationException(ErrorEnum.UNKNOWN_ERROR);
                     }
                 }
             }
