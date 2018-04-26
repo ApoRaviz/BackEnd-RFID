@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.MenuManagement;
 
-namespace WIM.Core.Repository.ApiMaster
+namespace WIM.Core.Repository
 {
     public interface IPermissionGroupRepository : IRepository<PermissionGroup>
     {

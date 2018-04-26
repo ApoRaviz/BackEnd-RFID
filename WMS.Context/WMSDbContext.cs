@@ -58,6 +58,8 @@ namespace WMS.Context
         public DbSet<GroupLocation> GroupLocation { get; set; }
         public DbSet<LocationType> LocationType { get; set; }
         public DbSet<InventoryTransaction> InventoryTransaction { get; set; }
+        public DbSet<InventoryTransactionDetail> InventoryTransactionDetail { get; set; }
+        public DbSet<InventoryDetail> InventoryDetail { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
         public DbSet<File_MT> File_MT { get; set; }
 

@@ -39,8 +39,14 @@ namespace Isuzu.Common.ValueObject
 
     public class InboundItemHoldingHandyRequest
     {
+        public List<string> ReceiveParams { get; set; }
+    }
+
+    public class InboundItemReceiveForUpdate
+    {
         public string InvNo { get; set; }
-        public List<string> RFIDTags { get; set; }
+        public string ISZJOrder { get; set; }
+        public Int16 IsFound { get; set; }
     }
 
     public class InboundItemShippingHandyRequest

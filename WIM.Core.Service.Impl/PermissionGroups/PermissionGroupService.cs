@@ -10,7 +10,7 @@ using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Repository.ApiMaster;
+using WIM.Core.Repository;
 using WIM.Core.Repository.Impl.ApiMaster;
 using WIM.Core.Repository.MenuAndPermission;
 using WIM.Core.Service.PermissionGroups;
@@ -122,7 +122,7 @@ namespace WIM.Core.Service.Impl.PermissionGroups
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
                     throw ex;
                 }
 
@@ -157,7 +157,7 @@ namespace WIM.Core.Service.Impl.PermissionGroups
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
                     throw ex;
                 }
 
@@ -187,7 +187,7 @@ namespace WIM.Core.Service.Impl.PermissionGroups
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
                     throw ex;
                 }
 

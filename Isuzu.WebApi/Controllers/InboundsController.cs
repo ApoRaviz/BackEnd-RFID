@@ -143,6 +143,25 @@ namespace Isuzu.Service.Impl
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/items/invoice/registered/{invNo}")]
+        public HttpResponseMessage GetInboundItemsRegisteredByInvoice_HANDY([FromUri]string invNo)
+        {
+            ResponseData<IEnumerable<InboundItemHandyDto>> responseHandy = new ResponseData<IEnumerable<InboundItemHandyDto>>();
+            try
+            {
+                IEnumerable<InboundItemHandyDto> items = InboundService.GetInboundItemsRegisteredByInvoice_HANDY(invNo);
+                responseHandy.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("handy/holding")]
         public HttpResponseMessage PerformHolding_HANDY([FromBody]InboundItemHoldingHandyRequest inboundItemHolding)

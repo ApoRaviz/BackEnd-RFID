@@ -136,7 +136,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4009);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return User.UserID;
@@ -180,7 +180,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 ;
                 return true;
@@ -208,7 +208,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
 
                 }
 

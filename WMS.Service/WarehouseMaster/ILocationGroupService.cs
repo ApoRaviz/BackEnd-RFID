@@ -18,6 +18,7 @@ namespace WMS.Master
         GroupLocation GetLocationGroupByGroupLocIDSys(int id);
         IEnumerable<GroupLocation> GetLocationGroupByZoneInfo(GroupLocation item);
         IEnumerable<GroupLocation> GetLocationGroupByZoneID(int zoneIDSys);
+        IEnumerable<ZoneLocationDto> GetLocationForRecommend(LocationControlDto control);
         IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term);
         GroupLocation CreateLocationGroup(GroupLocation locationGroup);
         bool UpdateLocationGroup(int locationGroupIDSys, GroupLocation locationGroup);

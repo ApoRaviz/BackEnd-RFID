@@ -17,18 +17,18 @@ namespace WMS.Entity.InventoryManagement
         [Key]
         public int InvenTranIDSys { get; set; }
         public int InvenIDSys { get; set; }
-        public int ReceiveIDSys { get; set; }
         public DateTime ReceivingDate { get; set; }
         public int ItemIDSys { get; set; }
-        public string SerialNo { get; set; }
         public decimal Qty { get; set; }
         public int UnitIDSys { get; set; }
-        //public int LocIDSys { get; set; }
         public int ConvertedQty { get; set; }
         public int StatusIDSys { get; set; }
+        public double Price { get; set; }
+        public double Cost { get; set; }
+        public string RefNO { get; set; }
 
         public virtual Inventory Inventory { get; set; }
-        public virtual Receive Receive { get; set; }
         public virtual Item_MT Item_MT { get; set; }
+        public virtual IEnumerable<InventoryTransactionDetail> InventoryTransactionDetail { get; set; }
     }
 }

@@ -99,7 +99,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return ReportSysID;
@@ -139,7 +139,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return true;
@@ -167,7 +167,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return result;
@@ -195,7 +195,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                 }
@@ -220,7 +220,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4017);
+                        throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     }
 
                     scope.Complete();
