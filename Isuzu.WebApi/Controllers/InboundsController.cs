@@ -23,6 +23,7 @@ using System.Net.Http.Headers;
 using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Service.FileManagement;
 using System.Web.Helpers;
+using Newtonsoft.Json;
 
 namespace Isuzu.Service.Impl
 {
@@ -164,12 +165,12 @@ namespace Isuzu.Service.Impl
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("handy/holding")]
-        public HttpResponseMessage PerformHolding_HANDY([FromBody]InboundItemHoldingHandyRequest inboundItemHolding)
+        public HttpResponseMessage PerformHolding_HANDY([FromBody]ReceiveParamsList inboundItemHolding)
         {
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformHolding_HANDY(inboundItemHolding);
+                InboundService.PerformHolding_HANDY(inboundItemHolding.ReceiveParams);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
