@@ -193,7 +193,11 @@ namespace WIM.Core.Service.Impl
 
                         if (employee.EmpConfidentialConfigs != null)
                         {
-                            employee.EmpConfidentialConfigs.PositionConfig.WelfareConfig = positionConfig;
+                            var x = employee.EmpConfidentialConfigs;
+                            x.PositionConfig.WelfareConfig = positionConfig;
+                            employee.ConfidentialConfigs = null;
+                            employee.EmpConfidentialConfigs = x;
+                            //employee.EmpConfidentialConfigs.PositionConfig.WelfareConfig = positionConfig;
                         }
                         else
                         {

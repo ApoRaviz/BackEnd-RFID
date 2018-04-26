@@ -130,7 +130,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.3177in</Height>
+                  <Height>0.36979in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -345,7 +345,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.3802in</Height>
+                  <Height>0.43229in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -359,8 +359,7 @@
                                 <TextRun>
                                   <Value>=RowNumber(Nothing)</Value>
                                   <Style>
-                                    <FontFamily />
-                                    <FontSize>11pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -378,7 +377,7 @@
                             <LeftBorder>
                               <Style>Solid</Style>
                             </LeftBorder>
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>1pt</PaddingLeft>
                             <PaddingRight>1pt</PaddingRight>
                             <PaddingTop>1pt</PaddingTop>
@@ -390,7 +389,6 @@
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="FormQ">
-                          <CanGrow>true</CanGrow>
                           <CanShrink>true</CanShrink>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -399,7 +397,8 @@
                                 <TextRun>
                                   <Value>=Fields!FormQ.Value</Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
+                                    <FontFamily>Angsana New</FontFamily>
+                                    <FontSize>12pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -412,7 +411,7 @@
                                 <TextRun>
                                   <Value>=Fields!FormQEn.Value</Value>
                                   <Style>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -667,7 +666,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>eva</DataSetName>
-            <Height>0.6979in</Height>
+            <Height>0.80208in</Height>
             <Width>7.27003in</Width>
             <Style>
               <Border>
@@ -677,7 +676,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>0.70833in</Height>
+        <Height>0.80208in</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -687,7 +686,7 @@
       <Width>7.27003in</Width>
       <Page>
         <PageHeight>1in</PageHeight>
-        <PageWidth>8.27in</PageWidth>
+        <PageWidth>7.27in</PageWidth>
         <InteractiveHeight>11.69in</InteractiveHeight>
         <InteractiveWidth>8.27in</InteractiveWidth>
         <Style />
