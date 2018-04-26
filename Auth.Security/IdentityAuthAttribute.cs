@@ -18,23 +18,23 @@ namespace Auth.Security
         public override Task OnAuthorizationAsync(HttpActionContext actionContext, System.Threading.CancellationToken cancellationToken)
         {
 
-            var principal = actionContext.RequestContext.Principal as ClaimsPrincipal; 
+            var principal = actionContext.RequestContext.Principal as ClaimsPrincipal;
 
-            if (principal.IsUrlIgnored(actionContext.Request))
-            {
-                return Task.FromResult<object>(null);
-            }
-            
+            //if (principal.IsUrlIgnored(actionContext.Request))
+            //{
+            //    return Task.FromResult<object>(null);
+            //}
+
             if (!principal.IsTimeOutToken())
             {
-                ValidationException ex = new ValidationException(ErrorEnum.E401);
+                ValidationException ex = new ValidationException(ErrorEnum.UNAUTHORIZED);
 
                 if (new List<HttpMethod> {
                     HttpMethod.Post,
                     HttpMethod.Put
                 }.Contains(actionContext.Request.Method))
                 {                    
-                    ex = new ValidationException(ErrorEnum.E402);
+                    ex = new ValidationException(ErrorEnum.UNAUTHORIZED2);
                 }
                     
                 IResponseData<int> response = new ResponseData<int>();

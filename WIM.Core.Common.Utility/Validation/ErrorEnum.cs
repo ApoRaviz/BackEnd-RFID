@@ -1,84 +1,102 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Attributes;
 
 namespace WIM.Core.Common.Utility.Validation
-{
+{    
+
     public enum ErrorEnum
     {
-        [Description("Data not found!")]
-        DataNotFound = 3001,
+        #region ================================ CORE[10] ======================
 
-        [Description("Serial and ItemCode already exists!")]
-        ReceiveSerialRemainInStock = 3002,
+        #region ================================ CORE[10] -> General[10]
 
-        [Description("This RFID registered by another Order.")]
-        RFIDIsDuplicatedAnother = 3003,
+        [Description("DATA_NOT_FOUND")]
+        DataNotFound = 1010001,
 
-        [Description("RFID not Empty")]
-        RFIDNotEmpty = 3004,
+        [Description("UNKNOWN_ERROR")]
+        UNKNOWN_ERROR = 1010500,
 
-        [Description("RFID not Empty")]
-        RFIDNeedRepeat = 3005,
+        #endregion /General
 
-        [Description("Cannot connect to printer server!\nPlease check printer and try again!")]
-        E1001 = 1001,
+        #region ================================ CORE[10] -> Auth[11]
 
-        [Description("Login Success"), HttpCode(HttpStatusCode.OK), Action("A0")]
-        E2001 = 2001,
+        [Description("INVALID_USERNAME_OR_PASSWORD")]
+        InvalidUsernameOrPassword = 1011001,
 
-        [Description("Cannot login!, Please check network connecting or username/password.")]
-        E4001 = 4001,
+        [Description("NO_PERMISSION")]
+        NO_PERMISSION = 1011002,
 
-        [Description("Data not found!")]
-        E4004 = 4004,
+        [Description("UNAUTHORIZED"), HttpCode(HttpStatusCode.Unauthorized), Action("A1")]
+        UNAUTHORIZED = 1011003,
 
-        [Description("Cannot insert data!, Please check data that have some field invalid"), HttpCode(HttpStatusCode.PreconditionFailed)]
-        E4011 = 4011,
+        [Description("UNAUTHORIZED2"), HttpCode(HttpStatusCode.Unauthorized), Action("A2")]
+        UNAUTHORIZED2 = 1011004,
 
-        [Description("Cannot update data!, Please check data that have in database or not"), HttpCode(HttpStatusCode.PreconditionFailed)]
-        E4012 = 4012,
+        #endregion /Auth
 
-        [Description("Your Token Timeout!, Please login again."), HttpCode(HttpStatusCode.Unauthorized), Action("A1")]
-        E4013 = 4013,
+        #region ================================ CORE[10] -> DATABASE[12]
 
-        [Description("Cannot insert data!, Please check you username have used or you have empty data when register"), HttpCode(HttpStatusCode.Conflict)]
-        E4009 = 4009,
+        [Description("WRITE_DATABASE_PROBLEM"), HttpCode(HttpStatusCode.PreconditionFailed)]
+        WRITE_DATABASE_PROBLEM = 1012001,
 
-        [Description("Cannot delete data!, This data has not in system or has been delete."), HttpCode(HttpStatusCode.ExpectationFailed)]
-        E4017 = 4017,
+        [Description("UPDATE_DATABASE_CONCURRENCY_PROBLEM"), HttpCode(HttpStatusCode.ExpectationFailed)]
+        UPDATE_DATABASE_CONCURRENCY_PROBLEM = 1012002,
 
-        [Description("Service Less than one!"), HttpCode(HttpStatusCode.PreconditionFailed)]
-        E4112 = 4112,
+        #endregion /DATABASE
 
-        [Description("Invalid Parameter in config"), HttpCode(HttpStatusCode.PreconditionFailed)]
-        E4113 = 4113,
+        #endregion /CORE
 
-        [Description("Program has a problem.\nPlease contact IT!!!")]
-        E5000 = 5000,
 
-        [Description("Your Token Timeout!, Please login again."), HttpCode(HttpStatusCode.Unauthorized), Action("A1")]
-        E401 = 401,
 
-        [Description("Your Token Timeout!, Cannot POST,PUT,DELETE Please login again."), HttpCode(HttpStatusCode.Unauthorized), Action("A2")]
-        E402 = 402,
 
-        [Description("Forbidden!, Not have permission to access this."), HttpCode(HttpStatusCode.Forbidden)]
-        E403 = 403,
 
-        [Description("Not Found!, Page cannot be found.")]
-        E404 = 404,
+        #region ================================ MASTER[11] ======================
 
-        [Description("Request timeout!, Please check network connecting or refresh page.")]
-        E408 = 408,
+        #endregion /MASTER
 
-        [Description("Program has a problem.\nPlease contact IT!!!")]
-        E500 = 500
+
+
+
+
+        #region ================================ WMS[12] =========================
+
+        #endregion /WMS
+
+
+
+
+
+        #region ================================ FUJI[13] =========================
+
+
+        #region ================================ FUJI[13] -> Receive[12]
+
+        [Description("SERIAL_AND_ITEMCODE_ALREADY_EXISTS")]
+        SerialAndItemCodeAlreadyExist = 1312001,
+
+        #endregion /Receive
+
+
+
+        #endregion /FUJI
+
+
+        #region ================================ ISUZU[14] =========================
+
+        #region ================================ ISUZU[14] -> Register[11]
+
+        [Description("RFID_DUPLICATED")]
+        RFIDDuplicated = 1411001,
+
+        [Description("ORDER_DUPLICATED")]
+        ISZJDuplicate = 1411002
+
+        #endregion /Register
+
+        #endregion /ISUZU                    
+
+
     }
 }

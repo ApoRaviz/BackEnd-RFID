@@ -29,31 +29,12 @@ namespace WMS.Entity.WarehouseManagement
         public double? Width { get; set; }
         public double? Length { get; set; }
         public double? Height { get; set; }
+        public int? RotateType { get; set; }
         public int? ZoneIDSys { get; set; }
         public int? Floor { get; set; }
         public int? ZoneID { get; set; }
         public byte Rows { get; set; }
         public byte Columns { get; set; }
-
-        [NotMapped]
-        public string StyleObject
-        {
-            get
-            {
-                string s = "{\"left\":\"" + (this.Left == null? 0 : this.Left) + "px"
-                    + "\",\"top\":\"" + (this.Top == null ? 0 : this.Top) + "px"
-                    + "\",\"width\":\"" + (this.Width == null ? 0 : this.Width) + "px"
-                    + "\",\"length\":\"" + (this.Length == null ? 0 : this.Length) + "px"
-                    + "\",\"height\":\"" + (this.Height == null ? 0 : this.Height) + "px"
-                    + "\",\"rotate\":\"10deg\"}";
-                return s;
-            }
-
-            set
-            {
-
-            }
-        }
 
         [ForeignKey("LocTypeIDSys")]
         public virtual LocationType LocationType { get; set; }

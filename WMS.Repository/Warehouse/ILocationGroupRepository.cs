@@ -13,5 +13,6 @@ namespace WMS.Repository.Warehouse
     {
         IEnumerable<AutocompleteLocationDto> AutocompleteLocation(string term);
         IEnumerable<GroupLocationDto> GetListLocationGroupDto();
+        IEnumerable<ZoneLocationDto> GetLocationRecommend(LocationControlDto control);
     }
 }

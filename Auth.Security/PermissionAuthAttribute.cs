@@ -17,12 +17,17 @@ namespace Auth.Security
     {
         public override Task OnAuthorizationAsync(HttpActionContext actionContext, System.Threading.CancellationToken cancellationToken)
         {
-            var principal = actionContext.RequestContext.Principal as ClaimsPrincipal;              
+            var principal = actionContext.RequestContext.Principal as ClaimsPrincipal;
+
+            if (principal.IsUrlIgnored(actionContext.Request))
+            {
+                return Task.FromResult<object>(null);
+            }
 
             if (!principal.HasPermission(actionContext.Request) && !principal.IsSysAdmin())
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
-                ValidationException ex = new ValidationException(ErrorEnum.E403);
+                ValidationException ex = new ValidationException(ErrorEnum.NO_PERMISSION);
                 IResponseData<int> response = new ResponseData<int>();
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);

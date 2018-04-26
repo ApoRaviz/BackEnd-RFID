@@ -21,14 +21,15 @@ namespace WMS.Entity.InventoryManagement
         public int OutboundQty { get; set; }
         public int LocIDSys { get; set; }
         public int StatusIDSys { get; set; }
-        public string Serial { get; set; }
         public string Inspect { get; set; }
         public Nullable<DateTime> Expire { get; set; }
         public string Dimension { get; set; }
         public string Box { get; set; }
         public string Lot { get; set; }
         public string Pallet { get; set; }
+        public int? ItemModeIDSys { get; set; }
         public int? ItemSetIDSys { get; set; }
+        public string Remark { get; set; }
 
         public virtual Location Location { get; set; }
     }

@@ -10,6 +10,7 @@ using WIM.Core.Common.Utility.Validation;
 using WMS.Repository.Impl.Warehouse;
 using WMS.Repository.Warehouse;
 using WMS.Common.ValueObject;
+using System;
 
 namespace WMS.Master
 {
@@ -123,7 +124,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 
                 return locationGroup;
@@ -178,7 +179,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 
                 return true;
@@ -213,7 +214,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return true;
@@ -238,7 +239,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4017);
+                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
                 return true;
             }
@@ -261,7 +262,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4017);
+                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
 
 
@@ -344,7 +345,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return true;
@@ -368,7 +369,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4017);
+                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
 
 
@@ -414,9 +415,30 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4017);
+                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
              
+            }
+        }
+
+        public IEnumerable<ZoneLocationDto> GetLocationForRecommend(LocationControlDto control)
+        {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    using (WMSDbContext Db = new WMSDbContext())
+                    {
+                        ILocationGroupRepository repo = new LocationGroupRepository(Db);
+                        return repo.GetLocationRecommend(control);
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                }
+
             }
         }
     }
