@@ -1,4 +1,5 @@
-﻿using HRMS.Context;
+﻿using HRMS.Common.ValueObject;
+using HRMS.Context;
 using HRMS.Entity.Evaluate;
 using HRMS.Entity.Form;
 using HRMS.Repository.Evaluate;
@@ -8,9 +9,13 @@ using HRMS.Service.Form;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
+using System.Net.Http;
 using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
+using Microsoft.Reporting.WebForms;
+using System.IO;
+using HRMS.Common.ValueObject.ReportEvaluation;
 
 namespace HRMS.Service.Impl.Form
 {
@@ -20,13 +25,13 @@ namespace HRMS.Service.Impl.Form
         {
         }
 
-        public IEnumerable<FormQuestion> GetFormQuestion()
+        public IEnumerable<FormQuestion> GetFormQuestionByFormTopicID(int id)
         {
             IEnumerable<FormQuestion> FormQuestion;
             using (HRMSDbContext Db = new HRMSDbContext())
             {
                 IFormQuestionRepository repo = new FormQuestionRepository(Db);
-                FormQuestion = repo.Get();
+                FormQuestion = repo.GetFormQByFormTopicID(id);
             }
             return FormQuestion;
         }
@@ -51,6 +56,105 @@ namespace HRMS.Service.Impl.Form
                 Evaluated = repo.GetList();
             }
             return Evaluated;
+        }
+
+        public IEnumerable<EvaluationTable> GetEvaluatedFormDetailByID(int id)
+        {
+            IEnumerable<EvaluationTable> EvaluatedFormDetail;
+            using (HRMSDbContext Db = new HRMSDbContext())
+            {
+                IEvaluatedRepository repo = new EvaluatedRepository(Db);
+                EvaluatedFormDetail = repo.GetFormDetailList(id);
+            }
+            return EvaluatedFormDetail;
+        }
+        public IEnumerable<EvaluatedReport> GetEvaluatedFormByID(int id)
+        {
+            IEnumerable<EvaluatedReport> EvaluatedForm;
+            using (HRMSDbContext Db = new HRMSDbContext())
+            {
+                IEvaluatedRepository repo = new EvaluatedRepository(Db);
+                EvaluatedForm = repo.GetFormReportList(id);
+            }
+            return EvaluatedForm;
+        }
+        public StreamContent GetReportStream(IEnumerable<EvaluatedReport> item1, IEnumerable<EvaluationTable> item2)
+        {
+            byte[] bytes;
+            Warning[] warnings;
+            string[] streamids;
+            string mimeType, encoding, extension;
+
+            //foreach (var item in item1)
+            //{
+            //    item.ValueOld = item.ValueArr[0];
+            //    item.ValueNew = item.ValueArr[1];
+            //}
+
+
+
+            
+ 
+
+
+
+
+
+
+            using (var reportViewer = new ReportViewer())
+            {
+                reportViewer.ProcessingMode = ProcessingMode.Local;
+                reportViewer.LocalReport.ReportPath = "Report/EvaluationFormHeader.rdlc";
+                reportViewer.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(localReport_SubreportProcessing);
+
+                reportViewer.LocalReport.Refresh();
+                reportViewer.LocalReport.EnableExternalImages = true;
+
+
+
+
+                ReportDataSource rds1 = new ReportDataSource
+                {
+                    Name = "evaluatedReport",
+                    Value = item1
+                };
+
+                ReportDataSource rds3 = new ReportDataSource
+                {
+                    Name = "eva",
+                    Value = item2
+                };
+
+
+
+                void localReport_SubreportProcessing(object sender, SubreportProcessingEventArgs e)
+
+
+                {
+                    ReportDataSource rds2 = new ReportDataSource
+                    {
+                        Name = "eva",
+                        Value = item2
+                    };
+
+
+                    e.DataSources.Add(rds2);
+
+
+                }
+
+
+                reportViewer.LocalReport.DataSources.Add(rds1);
+                reportViewer.LocalReport.DataSources.Add(rds3);
+
+
+                bytes = reportViewer.LocalReport.Render("Pdf", null, out mimeType, out encoding, out extension, out streamids, out warnings);
+
+            }
+
+            Stream stream = new MemoryStream(bytes);
+            return new StreamContent(stream);
+
         }
 
         public Evaluated GetEvaluatedByEvaID(int id)

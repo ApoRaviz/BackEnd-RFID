@@ -17,5 +17,17 @@ namespace HRMS.Repository.Impl
         {
             Db = context;
         }
+        public IEnumerable<FormQuestion> GetFormQByFormTopicID(int id)
+        {
+
+            var formq =
+                               from fq in Db.FormQuestion
+                               where fq.FormTopicIDSys == id
+
+                               select fq;
+
+            return formq.ToList();
+        }
     }
+
 }

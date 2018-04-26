@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Evauateform" targetNamespace="http://tempuri.org/Evauateform.xsd" xmlns:mstns="http://tempuri.org/Evauateform.xsd" xmlns="http://tempuri.org/Evauateform.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="Evauateform" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="Evauateform" msprop:Generator_UserDSName="Evauateform">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Evaluateform" msprop:Generator_TableClassName="EvaluateformDataTable" msprop:Generator_TableVarName="tableEvaluateform" msprop:Generator_RowChangedName="EvaluateformRowChanged" msprop:Generator_TablePropName="Evaluateform" msprop:Generator_RowDeletingName="EvaluateformRowDeleting" msprop:Generator_RowChangingName="EvaluateformRowChanging" msprop:Generator_RowEvHandlerName="EvaluateformRowChangeEventHandler" msprop:Generator_RowDeletedName="EvaluateformRowDeleted" msprop:Generator_RowClassName="EvaluateformRow" msprop:Generator_UserTableName="Evaluateform" msprop:Generator_RowEvArgName="EvaluateformRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="EvaluatedIDSys" msprop:Generator_ColumnVarNameInTable="columnEvaluatedIDSys" msprop:Generator_ColumnPropNameInRow="EvaluatedIDSys" msprop:Generator_ColumnPropNameInTable="EvaluatedIDSysColumn" msprop:Generator_UserColumnName="EvaluatedIDSys" type="xs:string" />
+              <xs:element name="EmID" msprop:Generator_ColumnVarNameInTable="columnEmID" msprop:Generator_ColumnPropNameInRow="EmID" msprop:Generator_ColumnPropNameInTable="EmIDColumn" msprop:Generator_UserColumnName="EmID" type="xs:string" minOccurs="0" />
+              <xs:element name="EvaluateBy" msprop:Generator_ColumnVarNameInTable="columnEvaluateBy" msprop:Generator_ColumnPropNameInRow="EvaluateBy" msprop:Generator_ColumnPropNameInTable="EvaluateByColumn" msprop:Generator_UserColumnName="EvaluateBy" type="xs:string" minOccurs="0" />
+              <xs:element name="EvaluateDate" msprop:Generator_ColumnVarNameInTable="columnEvaluateDate" msprop:Generator_ColumnPropNameInRow="EvaluateDate" msprop:Generator_ColumnPropNameInTable="EvaluateDateColumn" msprop:Generator_UserColumnName="EvaluateDate" type="xs:string" minOccurs="0" />
+              <xs:element name="ApproveBy" msprop:Generator_ColumnVarNameInTable="columnApproveBy" msprop:Generator_ColumnPropNameInRow="ApproveBy" msprop:Generator_ColumnPropNameInTable="ApproveByColumn" msprop:Generator_UserColumnName="ApproveBy" type="xs:string" minOccurs="0" />
+              <xs:element name="HR" msprop:Generator_ColumnVarNameInTable="columnHR" msprop:Generator_ColumnPropNameInRow="HR" msprop:Generator_ColumnPropNameInTable="HRColumn" msprop:Generator_UserColumnName="HR" type="xs:string" minOccurs="0" />
+              <xs:element name="Value" msprop:Generator_ColumnVarNameInTable="columnValue" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_ColumnPropNameInTable="ValueColumn" msprop:Generator_UserColumnName="Value" type="xs:string" minOccurs="0" />
+              <xs:element name="ValueDate" msprop:Generator_ColumnVarNameInTable="columnValueDate" msprop:Generator_ColumnPropNameInRow="ValueDate" msprop:Generator_ColumnPropNameInTable="ValueDateColumn" msprop:Generator_UserColumnName="ValueDate" type="xs:string" minOccurs="0" />
+              <xs:element name="Comment" msprop:Generator_ColumnVarNameInTable="columnComment" msprop:Generator_ColumnPropNameInRow="Comment" msprop:Generator_ColumnPropNameInTable="CommentColumn" msprop:Generator_UserColumnName="Comment" type="xs:string" minOccurs="0" />
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" type="xs:string" minOccurs="0" />
+              <xs:element name="Surname" msprop:Generator_ColumnVarNameInTable="columnSurname" msprop:Generator_ColumnPropNameInRow="Surname" msprop:Generator_ColumnPropNameInTable="SurnameColumn" msprop:Generator_UserColumnName="Surname" type="xs:string" minOccurs="0" />
+              <xs:element name="DepName" msprop:Generator_ColumnVarNameInTable="columnDepName" msprop:Generator_ColumnPropNameInRow="DepName" msprop:Generator_ColumnPropNameInTable="DepNameColumn" msprop:Generator_UserColumnName="DepName" type="xs:string" minOccurs="0" />
+              <xs:element name="EmTypeName" msprop:Generator_ColumnVarNameInTable="columnEmTypeName" msprop:Generator_ColumnPropNameInRow="EmTypeName" msprop:Generator_ColumnPropNameInTable="EmTypeNameColumn" msprop:Generator_UserColumnName="EmTypeName" type="xs:string" minOccurs="0" />
+              <xs:element name="FormQ" msprop:Generator_ColumnVarNameInTable="columnFormQ" msprop:Generator_ColumnPropNameInRow="FormQ" msprop:Generator_ColumnPropNameInTable="FormQColumn" msprop:Generator_UserColumnName="FormQ" type="xs:string" minOccurs="0" />
+              <xs:element name="FormQEn" msprop:Generator_ColumnVarNameInTable="columnFormQEn" msprop:Generator_ColumnPropNameInRow="FormQEn" msprop:Generator_ColumnPropNameInTable="FormQEnColumn" msprop:Generator_UserColumnName="FormQEn" type="xs:string" minOccurs="0" />
+              <xs:element name="FormAns" msprop:Generator_ColumnVarNameInTable="columnFormAns" msprop:Generator_ColumnPropNameInRow="FormAns" msprop:Generator_ColumnPropNameInTable="FormAnsColumn" msprop:Generator_UserColumnName="FormAns" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Evaluateform" />
+      <xs:field xpath="mstns:EvaluatedIDSys" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
