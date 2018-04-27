@@ -65,7 +65,7 @@ namespace WMS.Service.Impl.Common
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return confignew;
@@ -91,7 +91,7 @@ namespace WMS.Service.Impl.Common
             }
             catch (DbUpdateException)
             {
-                ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 throw ex;
             }
             return confignew;
@@ -115,7 +115,7 @@ namespace WMS.Service.Impl.Common
             }
             catch (DbUpdateException)
             {
-                ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 throw ex;
             }
             return confignew;
@@ -154,7 +154,7 @@ namespace WMS.Service.Impl.Common
                 {
                     var x = e;
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return confignew;
@@ -182,7 +182,7 @@ namespace WMS.Service.Impl.Common
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return true;

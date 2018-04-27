@@ -58,7 +58,7 @@ namespace WIM.Core.Common.Utility.Validation
                                 
                                 if (classname.Value == null)
                                 {
-                                    throw new ValidationException(ErrorEnum.E4012);
+                                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                                 }
                                 var z = classname.Value;
                             var y = z.GetType();
@@ -77,7 +77,7 @@ namespace WIM.Core.Common.Utility.Validation
                                         }
                                         else
                                         {
-                                            throw new ValidationException(ErrorEnum.E4012);
+                                            throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                                         }
                                     }
                                    
@@ -86,7 +86,7 @@ namespace WIM.Core.Common.Utility.Validation
                         }
                         if (!found)
                         {
-                            throw new ValidationException(ErrorEnum.E4012);
+                            throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                         }
                     }
                 }
@@ -131,7 +131,7 @@ namespace WIM.Core.Common.Utility.Validation
                 }
                 else
                 {
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
             }
 

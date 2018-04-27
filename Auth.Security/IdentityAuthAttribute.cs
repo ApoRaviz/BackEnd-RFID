@@ -27,14 +27,14 @@ namespace Auth.Security
 
             if (!principal.IsTimeOutToken())
             {
-                ValidationException ex = new ValidationException(ErrorEnum.E401);
+                ValidationException ex = new ValidationException(ErrorEnum.UNAUTHORIZED);
 
                 if (new List<HttpMethod> {
                     HttpMethod.Post,
                     HttpMethod.Put
                 }.Contains(actionContext.Request.Method))
                 {                    
-                    ex = new ValidationException(ErrorEnum.E402);
+                    ex = new ValidationException(ErrorEnum.UNAUTHORIZED2);
                 }
                     
                 IResponseData<int> response = new ResponseData<int>();

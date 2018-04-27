@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="EvaluatedReport" targetNamespace="http://tempuri.org/EvaluatedReport.xsd" xmlns:mstns="http://tempuri.org/EvaluatedReport.xsd" xmlns="http://tempuri.org/EvaluatedReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="EvaluatedReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="EvaluatedReport" msprop:Generator_UserDSName="EvaluatedReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="evaluatedReport" msprop:Generator_TableClassName="evaluatedReportDataTable" msprop:Generator_TableVarName="tableevaluatedReport" msprop:Generator_RowChangedName="evaluatedReportRowChanged" msprop:Generator_TablePropName="evaluatedReport" msprop:Generator_RowDeletingName="evaluatedReportRowDeleting" msprop:Generator_RowChangingName="evaluatedReportRowChanging" msprop:Generator_RowEvHandlerName="evaluatedReportRowChangeEventHandler" msprop:Generator_RowDeletedName="evaluatedReportRowDeleted" msprop:Generator_RowClassName="evaluatedReportRow" msprop:Generator_UserTableName="evaluatedReport" msprop:Generator_RowEvArgName="evaluatedReportRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="EvaluatedIDSys" msprop:Generator_ColumnVarNameInTable="columnEvaluatedIDSys" msprop:Generator_ColumnPropNameInRow="EvaluatedIDSys" msprop:Generator_ColumnPropNameInTable="EvaluatedIDSysColumn" msprop:Generator_UserColumnName="EvaluatedIDSys" type="xs:string" />
+              <xs:element name="FormTopicIDSys" msprop:Generator_ColumnVarNameInTable="columnFormTopicIDSys" msprop:Generator_ColumnPropNameInRow="FormTopicIDSys" msprop:Generator_ColumnPropNameInTable="FormTopicIDSysColumn" msprop:Generator_UserColumnName="FormTopicIDSys" type="xs:string" minOccurs="0" />
+              <xs:element name="EmID" msprop:Generator_ColumnVarNameInTable="columnEmID" msprop:Generator_ColumnPropNameInRow="EmID" msprop:Generator_ColumnPropNameInTable="EmIDColumn" msprop:Generator_UserColumnName="EmID" type="xs:string" minOccurs="0" />
+              <xs:element name="ResultProbationIDSys" msprop:Generator_ColumnVarNameInTable="columnResultProbationIDSys" msprop:Generator_ColumnPropNameInRow="ResultProbationIDSys" msprop:Generator_ColumnPropNameInTable="ResultProbationIDSysColumn" msprop:Generator_UserColumnName="ResultProbationIDSys" type="xs:string" minOccurs="0" />
+              <xs:element name="EvaluateBy" msprop:Generator_ColumnVarNameInTable="columnEvaluateBy" msprop:Generator_ColumnPropNameInRow="EvaluateBy" msprop:Generator_ColumnPropNameInTable="EvaluateByColumn" msprop:Generator_UserColumnName="EvaluateBy" type="xs:string" minOccurs="0" />
+              <xs:element name="EvaluateDate" msprop:Generator_ColumnVarNameInTable="columnEvaluateDate" msprop:Generator_ColumnPropNameInRow="EvaluateDate" msprop:Generator_ColumnPropNameInTable="EvaluateDateColumn" msprop:Generator_UserColumnName="EvaluateDate" type="xs:string" minOccurs="0" />
+              <xs:element name="ApproveBy" msprop:Generator_ColumnVarNameInTable="columnApproveBy" msprop:Generator_ColumnPropNameInRow="ApproveBy" msprop:Generator_ColumnPropNameInTable="ApproveByColumn" msprop:Generator_UserColumnName="ApproveBy" type="xs:string" minOccurs="0" />
+              <xs:element name="HR" msprop:Generator_ColumnVarNameInTable="columnHR" msprop:Generator_ColumnPropNameInRow="HR" msprop:Generator_ColumnPropNameInTable="HRColumn" msprop:Generator_UserColumnName="HR" type="xs:string" minOccurs="0" />
+              <xs:element name="Value" msprop:Generator_ColumnVarNameInTable="columnValue" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_ColumnPropNameInTable="ValueColumn" msprop:Generator_UserColumnName="Value" type="xs:string" minOccurs="0" />
+              <xs:element name="ValueDate" msprop:Generator_ColumnVarNameInTable="columnValueDate" msprop:Generator_ColumnPropNameInRow="ValueDate" msprop:Generator_ColumnPropNameInTable="ValueDateColumn" msprop:Generator_UserColumnName="ValueDate" type="xs:string" minOccurs="0" />
+              <xs:element name="Comment" msprop:Generator_ColumnVarNameInTable="columnComment" msprop:Generator_ColumnPropNameInRow="Comment" msprop:Generator_ColumnPropNameInTable="CommentColumn" msprop:Generator_UserColumnName="Comment" type="xs:string" minOccurs="0" />
+              <xs:element name="NameEn" msprop:Generator_ColumnVarNameInTable="columnNameEn" msprop:Generator_ColumnPropNameInRow="NameEn" msprop:Generator_ColumnPropNameInTable="NameEnColumn" msprop:Generator_UserColumnName="NameEn" type="xs:string" minOccurs="0" />
+              <xs:element name="SurnameEn" msprop:Generator_ColumnVarNameInTable="columnSurnameEn" msprop:Generator_ColumnPropNameInRow="SurnameEn" msprop:Generator_ColumnPropNameInTable="SurnameEnColumn" msprop:Generator_UserColumnName="SurnameEn" type="xs:string" minOccurs="0" />
+              <xs:element name="DepNameEn" msprop:Generator_ColumnVarNameInTable="columnDepNameEn" msprop:Generator_ColumnPropNameInRow="DepNameEn" msprop:Generator_ColumnPropNameInTable="DepNameEnColumn" msprop:Generator_UserColumnName="DepNameEn" type="xs:string" minOccurs="0" />
+              <xs:element name="PositionNameEn" msprop:Generator_ColumnVarNameInTable="columnPositionNameEn" msprop:Generator_ColumnPropNameInRow="PositionNameEn" msprop:Generator_ColumnPropNameInTable="PositionNameEnColumn" msprop:Generator_UserColumnName="PositionNameEn" type="xs:string" minOccurs="0" />
+              <xs:element name="HiredDate" msprop:Generator_ColumnVarNameInTable="columnHiredDate" msprop:Generator_ColumnPropNameInRow="HiredDate" msprop:Generator_ColumnPropNameInTable="HiredDateColumn" msprop:Generator_UserColumnName="HiredDate" type="xs:string" minOccurs="0" />
+              <xs:element name="CompletionOfProbation" msprop:Generator_ColumnVarNameInTable="columnCompletionOfProbation" msprop:Generator_ColumnPropNameInRow="CompletionOfProbation" msprop:Generator_ColumnPropNameInTable="CompletionOfProbationColumn" msprop:Generator_UserColumnName="CompletionOfProbation" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:evaluatedReport" />
+      <xs:field xpath="mstns:EvaluatedIDSys" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

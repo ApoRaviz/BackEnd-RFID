@@ -99,7 +99,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return ReportSysID;
@@ -139,7 +139,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return true;
@@ -147,7 +147,7 @@ namespace WMS.Service.Impl.Import
             }
         }
 
-        public string ImportDataToTable(int ImportIDSys, string data)
+        public string ImportDataToTable(int ImportIDSys, string data, string userUpdate)
         {
             string result = "";
 
@@ -157,7 +157,7 @@ namespace WMS.Service.Impl.Import
                 {
                     try
                     {
-                        result = Db.ProcImportDataToTable(ImportIDSys, DateTime.Now, DateTime.Now, "1", data);
+                        result = Db.ProcImportDataToTable(ImportIDSys, null, null, userUpdate, data);
                         Db.SaveChanges();
                     }
                     catch (DbEntityValidationException e)
@@ -167,7 +167,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return result;
@@ -184,7 +184,7 @@ namespace WMS.Service.Impl.Import
                     try
                     {
 
-                        Db.ProcInsertImportHistory(ImportIDSys, fileName, result, success, DateTime.Now, user);
+                        Db.ProcInsertImportHistory(ImportIDSys, fileName, result, success, null, user);
                         Db.SaveChanges();
 
                     }
@@ -195,7 +195,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4012);
+                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                 }
@@ -220,7 +220,7 @@ namespace WMS.Service.Impl.Import
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.E4017);
+                        throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     }
 
                     scope.Complete();

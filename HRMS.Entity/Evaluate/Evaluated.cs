@@ -19,7 +19,7 @@ namespace HRMS.Entity.Evaluate
         public int EvaluatedIDSys { get; set; }
         public int? FormTopicIDSys { get; set; }
         public string EmID { get; set; }
-        public int? ResultProbationIDSys { get; set; } 
+        public int? ResultProbationIDSys { get; set; }
         public string EvaluateBy { get; set; }
         public DateTime? EvaluateDate { get; set; }
         public string ApproveBy { get; set; }

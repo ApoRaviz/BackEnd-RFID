@@ -1030,7 +1030,7 @@ namespace WMS.WebApi.Report
                     DataRow row = tbl.Rows.Add();
                     foreach (var cell in wsRow)
                     {
-                        row[cell.Start.Column - 1] = cell.Text;
+                        row[cell.Start.Column - 1] = cell.Text.Replace("\"",string.Empty);
                     }
                 }
                 return tbl;
@@ -1066,15 +1066,18 @@ namespace WMS.WebApi.Report
                 while (!sr.EndOfStream)
                 {
                     string[] rows = sr.ReadLine().Split(delimiter.ToCharArray());
-                    DataRow dr = dt.NewRow();
-                    for (int i = 0; i < firstLine.Length; i++)
-                    {
-                        if (!string.IsNullOrEmpty(gualifier))
-                            dr[i] = rows[i].Replace(gualifier, "");
-                        else
-                            dr[i] = rows[i];
+                    if(rows.Length >= firstLine.Length)
+                    { 
+                        DataRow dr = dt.NewRow();
+                        for (int i = 0; i < firstLine.Length; i++)
+                        {
+                            if (!string.IsNullOrEmpty(gualifier))
+                                dr[i] = rows[i].Replace(gualifier, "");
+                            else
+                                dr[i] = rows[i];
+                        }
+                        dt.Rows.Add(dr);
                     }
-                    dt.Rows.Add(dr);
                 }
             }
 

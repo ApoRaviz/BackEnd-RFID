@@ -60,12 +60,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                         throw ex;
                     }
                     catch (DbUpdateException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                         throw ex;
                     }
                 }
@@ -83,12 +83,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
             }
@@ -105,12 +105,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
             }
@@ -128,12 +128,12 @@ namespace HRMS.Service.Impl.LeaveManagement
                 }
                 catch (DbEntityValidationException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 catch (DbUpdateException)
                 {
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
             }
@@ -167,13 +167,13 @@ namespace HRMS.Service.Impl.LeaveManagement
                     }
                     catch (DbEntityValidationException)
                     {
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                         throw ex;
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                        ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                         throw ex;
                     }
                 }

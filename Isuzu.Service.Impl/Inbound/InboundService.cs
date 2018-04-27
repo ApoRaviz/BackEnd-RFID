@@ -114,9 +114,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository detailRepo = new InboundRepository(db);
                     try
                     {
-                        try
-                        {
-                            InboundItems itemExist = detailRepo.GetItemSingleBy(i =>
+                        InboundItems itemExist = detailRepo.GetItemSingleBy(i =>
                                                     i.ISZJOrder == item.ISZJOrder
                                                     && !new List<string>
                                                     {
@@ -125,15 +123,10 @@ namespace Isuzu.Service.Impl.Inbound
                                                     }.Contains(i.Status)
                                                     );
 
-                            itemExist.RFIDTag = item.RFIDTag;
-                            itemExist.Status = item.Status;
-                            itemExist.RegisterDate = DateTime.Now;
-                            detailRepo.Update(itemExist);
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            throw new ValidationException(ErrorEnum.ISZJDuplicate);
-                        }
+                        itemExist.RFIDTag = item.RFIDTag;
+                        itemExist.Status = item.Status;
+                        itemExist.RegisterDate = DateTime.Now;
+                        detailRepo.Update(itemExist);
 
                         db.SaveChanges();
                         scope.Complete();
@@ -144,6 +137,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                 }
             }
+
             Task.Run(() => {
                 UpdateHead_HANDY(item);
             });
@@ -315,9 +309,40 @@ namespace Isuzu.Service.Impl.Inbound
 
         }
 
-        public void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding)
+        public IEnumerable<InboundItemHandyDto> GetInboundItemsRegisteredByInvoice_HANDY(string invNo)
         {
+            IEnumerable<InboundItemHandyDto> items;
 
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                items = (
+                   from i in Db.InboundItems
+                   where i.InvNo == invNo
+                   && new List<string> {
+                           statusRegisteredAtITA,
+                           statusRegisteredAtYUT
+                       }.Contains(i.Status)
+
+                   select new InboundItemHandyDto
+                   {
+                       ID = i.ID,
+                       InvNo = i.InvNo,
+                       ITAOrder = i.ITAOrder,
+                       RFIDTag = i.RFIDTag,
+                       ISZJOrder = i.ISZJOrder,
+                       ParrtName = i.ParrtName,
+                       PartNo = i.PartNo,
+                       Qty = i.Qty,
+                       Vendor = i.Vendor
+                   }
+               ).ToList();
+            }
+            return items;
+
+        }
+
+        public void PerformHolding_HANDY(List<ConfirmReceiveParameter> itemsHolding)
+        {
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -325,26 +350,24 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
 
-                    IEnumerable<InboundItems> items = detailRepo.GetMany(i =>
-                        new List<string> {
+                    List<ConfirmReceiveParameter> itemReceiveIsFoundForUpdates = itemsHolding.Where(x => x.IsFound == 1).ToList();
+
+                    IEnumerable<InboundItems> itemsForSave = detailRepo.GetMany(i =>
+                    itemReceiveIsFoundForUpdates.Select(x => x.InvNo).Contains(i.InvNo)
+                    && itemReceiveIsFoundForUpdates.Select(x => x.ISZJOrder).Contains(i.ISZJOrder)
+                    && new List<string> {
                            statusRegisteredAtITA,
                            statusRegisteredAtYUT
-                        }.Contains(i.Status)
+                       }.Contains(i.Status)
                     );
 
                     List<string> invNoList = new List<string>(); // #For Update Head
-                    foreach (InboundItems item in items)
+                    foreach (InboundItems item in itemsForSave)
                     {
-                        foreach (string scan in itemsHolding.RFIDTags)
-                        {
-                            if (scan.EndsWith(item.RFIDTag))
-                            {
-                                item.Status = statusReceivedAtYUT;
-                                item.HoldDate = DateTime.Now;
-                                detailRepo.Update(item);
-                                invNoList.Add(item.InvNo); // #For Update Head
-                            }
-                        }
+                        item.Status = statusReceivedAtYUT;
+                        item.HoldDate = DateTime.Now;
+                        detailRepo.Update(item);
+                        invNoList.Add(item.InvNo); // #For Update Head
                     }
 
                     // #Update Head
@@ -1282,13 +1305,17 @@ namespace Isuzu.Service.Impl.Inbound
                         case 1:
                             inboundItems.Weight1 = adjustWeight.Weight1;
                             break;
-                        case 2:inboundItems.Weight2 = adjustWeight.Weight2;
+                        case 2:
+                            inboundItems.Weight2 = adjustWeight.Weight2;
                             break;
-                        case 3:inboundItems.Weight3 = adjustWeight.Weight3;
+                        case 3:
+                            inboundItems.Weight3 = adjustWeight.Weight3;
                             break;
-                        case 4:inboundItems.Weight4 = adjustWeight.Weight4;
+                        case 4:
+                            inboundItems.Weight4 = adjustWeight.Weight4;
                             break;
-                        case 5: inboundItems.Weight5 = adjustWeight.Weight5;
+                        case 5:
+                            inboundItems.Weight5 = adjustWeight.Weight5;
                             break;
                     }
                     inboundItems.WeightDate = DateTime.Now;

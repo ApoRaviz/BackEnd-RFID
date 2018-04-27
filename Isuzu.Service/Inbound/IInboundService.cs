@@ -15,11 +15,12 @@ namespace Isuzu.Service
         int GetAmountRegistered_HANDY();
         int GetAmountInboundItemInInvoiceByRFID_HANDY(string rfid);
         InboundItemHandyDto GetInboundItemByRFID_HANDY(string rfid);
-        IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string rfid);
+        IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string invNo);
+        IEnumerable<InboundItemHandyDto> GetInboundItemsRegisteredByInvoice_HANDY(string invNo);
         bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem);
         void RegisterInboundItem_HANDY(InboundItemHandyDto item);
         void UpdateHead_HANDY(InboundItemHandyDto InvNo);
-        void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding);
+        void PerformHolding_HANDY(List<ConfirmReceiveParameter> itemsHolding);
         void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping);
         void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking);
         void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking);
