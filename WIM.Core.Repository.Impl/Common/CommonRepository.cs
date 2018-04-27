@@ -52,7 +52,7 @@ namespace WIM.Core.Repository.Impl
             var requestMethodParameter = !String.IsNullOrEmpty(requestMethod) ? new SqlParameter
             {
                 ParameterName = "@RequestMethod",
-                Value = logID
+                Value = requestMethod
             } : new SqlParameter("@RequestMethod", DBNull.Value);
 
             var requestUrlParameter = !String.IsNullOrEmpty(requestUrl) ? new SqlParameter

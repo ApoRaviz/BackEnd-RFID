@@ -92,6 +92,14 @@ namespace WIM.Core.Service.Impl
             {
                 ICommonRepository repo = new CommonRepository(Db);
                 userLogs = repo.ProcGetUserLog(logId, null, null, RequestDateFrom, RequestDateTo);
+
+                /*UserLog userLog = userLogs.FirstOrDefault(x => x.LogID == 177053);
+                string reqUrl = StringHelper.GetRequestUrl(userLog.RequestUri);
+                string[] reqUrlSplit = reqUrl.Split('/');
+                if (reqUrlSplit.Length > 3)
+                {
+
+                }*/
             }
             return userLogs;
         }
@@ -185,17 +193,19 @@ namespace WIM.Core.Service.Impl
                 {
                     if (value.DetailConfig.IsReset == "D")
                     {
-                        if(value.UpdateAt.Value.ToString("d") != DateTime.Now.ToString("d"))
+                        if (value.UpdateAt.Value.ToString("d") != DateTime.Now.ToString("d"))
                         {
                             temp.Key = 0.ToString();
                         }
-                    }else if (value.DetailConfig.IsReset == "M")
+                    }
+                    else if (value.DetailConfig.IsReset == "M")
                     {
                         if (value.UpdateAt.Value.ToString("M") != DateTime.Now.ToString("M"))
                         {
                             temp.Key = 0.ToString();
                         }
-                    }else if (value.DetailConfig.IsReset == "Y")
+                    }
+                    else if (value.DetailConfig.IsReset == "Y")
                     {
                         if (value.UpdateAt.Value.ToString("yyyy") != DateTime.Now.ToString("yyyy"))
                         {
@@ -222,7 +232,7 @@ namespace WIM.Core.Service.Impl
             string[] TimeFormat = { "yy", "yyyy", "mm", "dd", "d", "h", "hh", "HH", "H", "M", "MM", "s", "ss", "t", "tt" };
             string GenerateCode = "";
 
-            
+
             foreach (var a in Cases)
             {
                 if (TimeFormat.Contains(a))
@@ -231,8 +241,8 @@ namespace WIM.Core.Service.Impl
                 }
                 else if (a.Contains("#"))
                 {
-                        var lastnumber = int.Parse(value.Key);
-                        GenerateCode += lastnumber.ToString("D" + a.Length);
+                    var lastnumber = int.Parse(value.Key);
+                    GenerateCode += lastnumber.ToString("D" + a.Length);
                 }
                 else
                 {
@@ -267,7 +277,7 @@ namespace WIM.Core.Service.Impl
                 }
             }
             return true;
-           
+
         }
         //for(int i = 1; i < format.Length; i++)
         //{

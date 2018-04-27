@@ -104,61 +104,32 @@ public static class RBAC_ExtendedMethods_4_Principal
         return _retVal;
     }
 
+    public static bool IsOtpConfirmed(this IPrincipal _principal)
+    {
+        var ci = _principal.Identity as ClaimsIdentity;
+
+        string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
+      .Select(c => c.Value).SingleOrDefault();
+
+        return OTPCONFIRM == "True";
+    }
+
 
     public static bool HasPermission(this IPrincipal _principal, HttpRequestMessage _request)
     {
         bool _retVal = false;
         try
         {
-            var ci = _principal.Identity as ClaimsIdentity;
-            string OTPCONFIRM = ci.Claims.Where(c => c.Type == "OTPCONFIRM")
-          .Select(c => c.Value).SingleOrDefault();
-
-            //if (OTPCONFIRM != "True")
-            //{
-            //    return false;
-            //}
+            var ci = _principal.Identity as ClaimsIdentity;          
             string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
-
-            string fullUrl = _request.Method + reqUrl;
-            fullUrl = fullUrl.Replace("wimapi/", "");
-            string[] fullUrlplit = fullUrl.Split('?');
-            reqUrl = fullUrlplit[0];
-            string UpperReqUrl = reqUrl.ToUpper();
-           
-
-            if (reqUrl.Last() == '/')
+            string[] upperReqUrlSplit = reqUrl.ToUpper().Split('/');
+            if (upperReqUrlSplit.Length > 3)
             {
-                reqUrl = reqUrl.Substring(0, reqUrl.Length - 1);
 
-            }
+                var claims = (from c in ci.Claims
+                              where c.Type == "UrlPermission"
+                              select c).ToList();
 
-            int indexFirstslash = reqUrl.IndexOf('/');
-            int indexapiv1 = reqUrl.IndexOf("/api/v1");
-            if (indexFirstslash != -1 && indexapiv1 != -1)
-            {
-                string first = reqUrl.Substring(0, indexFirstslash);
-                string second = reqUrl.Substring(indexapiv1);
-                //reqUrl = reqUrl.Substring(indexFirstslash, indexapiv1 - indexFirstslash);
-                reqUrl = first + second;
-            }
-
-
-           
-
-            var claims = (from c in ci.Claims
-                          where c.Type == "UrlPermission"
-                          select c).ToList();
-
-            // Sub String v1/customers/ => v1/customers  
-
-
-
-            //url request
-            string[] reqUrlSplit = reqUrl.Split('/');
-            string[] upperReqUrlSplit = UpperReqUrl.Split('/');
-            if (upperReqUrlSplit.Length >= 4)
-            {
                 foreach (var c in claims)
                 {
                     //url from base

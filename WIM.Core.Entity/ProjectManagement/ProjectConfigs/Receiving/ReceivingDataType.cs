@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Receiving
 {
-    public class ReceivingDataType
+    public class ReceivingDataTypeReceiving
     {
         public bool IsSystem { get; set; }
         public bool IsSystemByCustomer { get; set; }
