@@ -17,6 +17,7 @@ using WMS.Service.Import;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using System.Text.RegularExpressions;
 
 namespace WMS.WebApi.Controller
 {
@@ -24,7 +25,7 @@ namespace WMS.WebApi.Controller
     public class UploadFileApiController : ApiController
     {
         private IImportService ImportService;
-
+        private const string DEFAULT_UPLOAD_PATH = "D:/Uploads/WIM/";
         public UploadFileApiController(IImportService importService)
         {
             this.ImportService = importService;
@@ -32,30 +33,33 @@ namespace WMS.WebApi.Controller
 
         [HttpPost]
         [Route("UploadForSample")]
-        public HttpResponseMessage UploadForSample()
+        public HttpResponseMessage UploadForSample(UploadSample uploadItem)
         {
             ResponseData<ImportDefinition> response = new ResponseData<ImportDefinition>();
             try
             {
-                var httpRequest = HttpContext.Current.Request;
-                if (httpRequest.Files.Count > 0)
-                {
+                //var httpRequest = HttpContext.Current.Request;
+                //if (httpRequest.Files.Count > 0)
+                //{
                     string path = "";
                     string fileName = "";
 
-                    foreach (string file in httpRequest.Files)
-                    {
-                        var postedFile = httpRequest.Files[file];
-                        var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
-                        postedFile.SaveAs(filePath);
-                        path = filePath;
-                        fileName = postedFile.FileName;
-                    }
+                    //foreach (string file in httpRequest.Files)
+                    //{
+                    //    var postedFile = httpRequest.Files[file];
+                    //    var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
+                    //    postedFile.SaveAs(filePath);
+                    //    path = filePath;
+                    //    fileName = postedFile.FileName;
+                    //}
 
-                    if (httpRequest.Form.Count > 0)
+                    if (uploadItem != null)
                     {
-                        string delimet = httpRequest.Form[0];
-                        string encode = httpRequest.Form[1];
+                        path = DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
+                        FileInfo f = new FileInfo(path);
+                        fileName = f.Name;
+                        string delimet = uploadItem.Delimiter;
+                        string encode = uploadItem.Encoding;
                         DataTable dt;
                         Encoding encoding = Encoding.Default;
                         string delimiter = ";";
@@ -78,8 +82,8 @@ namespace WMS.WebApi.Controller
 
                         if(delimet == "undefined")
                         {
-                            FileInfo f = new FileInfo(fileName);
-                            if(f.Extension == ".xlsx")
+                            FileInfo fi = new FileInfo(fileName);
+                            if(fi.Extension == ".xlsx")
                             {
                                 delimet = "Excel";
                             }
@@ -103,7 +107,7 @@ namespace WMS.WebApi.Controller
                         }
                         else
                         {
-                            dt = ReportUtils.GetDataTableFromFileWithFHeader(path, encoding, delimiter);
+                            dt = ReportUtils.GetDataTableFromFileWithFHeader(path, encoding, delimiter,"\"");
                         }
 
                         ImportDefinition imp = new ImportDefinition();
@@ -115,7 +119,7 @@ namespace WMS.WebApi.Controller
 
                         response.SetData(imp);
                     }
-                }
+                //}
             }
             catch (ValidationException ex)
             {
@@ -127,31 +131,33 @@ namespace WMS.WebApi.Controller
 
         [HttpPost]
         [Route("UploadForImport")]
-        public HttpResponseMessage UploadForImport()
+        public HttpResponseMessage UploadForImport(UploadItem uploadItem)
         {
             ResponseData<string> response = new ResponseData<string>();
             string result = string.Empty;
             try
             {
-                var httpRequest = HttpContext.Current.Request;
-                if (httpRequest.Files.Count > 0)
-                {
+                //var httpRequest = HttpContext.Current.Request;
+                //if (httpRequest.Files.Count > 0)
+                //{
                     string path = "";
                     string fileName = "";
 
-                    foreach (string file in httpRequest.Files)
-                    {
-                        var postedFile = httpRequest.Files[file];
-                        var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
-                        postedFile.SaveAs(filePath);
-                        path = filePath;
-                        fileName = postedFile.FileName;
-                    }
+                    //foreach (string file in httpRequest.Files)
+                    //{
+                    //    var postedFile = httpRequest.Files[file];
+                    //    var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
+                    //    postedFile.SaveAs(filePath);
+                    //    path = filePath;
+                    //    fileName = postedFile.FileName;
+                    //}
 
-                    if (httpRequest.Form.Count > 0)
+                    if (uploadItem != null)
                     {
-                        FileInfo f = new FileInfo(fileName);
-                        string FormatName = httpRequest.Form[0];
+                        path = DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
+                        FileInfo f = new FileInfo(path);
+                        fileName = f.Name;
+                        string FormatName = uploadItem.FormatName;
 
                         ImportDefinitionHeader_MT data = this.ImportService.GetImportDefinitionByImportIDSys(int.Parse(FormatName), "ImportDefinitionDetail_MT");
          
@@ -200,7 +206,7 @@ namespace WMS.WebApi.Controller
                                 if (string.IsNullOrEmpty(result))
                                 {
                                     string xml = PrepareData(dt, data.ImportDefinitionDetail_MT.ToList());
-                                    result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml);
+                                    result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, User.Identity.GetUserName());
 
                                     if (string.IsNullOrEmpty(result))
                                     {
@@ -215,7 +221,7 @@ namespace WMS.WebApi.Controller
 
                         response.SetData(result);
                     }
-                }
+                //}
             }
             catch (ValidationException ex)
             {
@@ -296,7 +302,7 @@ namespace WMS.WebApi.Controller
                     else
                         value = dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString();
 
-                    sb.AppendFormat(pXmlDetail, d.ColumnName, value);
+                    sb.AppendFormat(pXmlDetail, d.ColumnName, value.Replace("\"",string.Empty));
                 }
 
                 sb.Append("</row>");
@@ -311,6 +317,19 @@ namespace WMS.WebApi.Controller
         public List<tbColumn> header;
         public string[] headerSelect;
         public DataTable data;
+    }
+
+    public class UploadItem
+    {
+        public string FilePath { get;set;}
+        public string FormatName { get; set; }
+    }
+
+    public class UploadSample
+    {
+        public string FilePath { get; set; }
+        public string Delimiter { get; set; }
+        public string Encoding { get; set; }
     }
 
     public class tbColumn
