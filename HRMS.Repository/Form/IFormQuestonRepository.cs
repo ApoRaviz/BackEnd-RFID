@@ -10,6 +10,6 @@ namespace HRMS.Repository.Form
 {
     public interface IFormQuestionRepository : IRepository<FormQuestion>
     {
-
+        IEnumerable<FormQuestion> GetFormQByFormTopicID(int id);
     }
 }
