@@ -147,7 +147,7 @@ namespace WMS.Service.Impl.Import
             }
         }
 
-        public string ImportDataToTable(int ImportIDSys, string data)
+        public string ImportDataToTable(int ImportIDSys, string data, string userUpdate)
         {
             string result = "";
 
@@ -157,7 +157,7 @@ namespace WMS.Service.Impl.Import
                 {
                     try
                     {
-                        result = Db.ProcImportDataToTable(ImportIDSys, DateTime.Now, DateTime.Now, "1", data);
+                        result = Db.ProcImportDataToTable(ImportIDSys, null, null, userUpdate, data);
                         Db.SaveChanges();
                     }
                     catch (DbEntityValidationException e)
@@ -184,7 +184,7 @@ namespace WMS.Service.Impl.Import
                     try
                     {
 
-                        Db.ProcInsertImportHistory(ImportIDSys, fileName, result, success, DateTime.Now, user);
+                        Db.ProcInsertImportHistory(ImportIDSys, fileName, result, success, null, user);
                         Db.SaveChanges();
 
                     }

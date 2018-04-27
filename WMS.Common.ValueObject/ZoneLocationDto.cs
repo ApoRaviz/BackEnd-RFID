@@ -11,7 +11,7 @@ namespace WMS.Common.ValueObject
         public string ZoneName { get; set; }
         public string WHName { get; set; }
         public string Type { get; set; }
-        public double AvailableArea { get; set; }
+        public double? AvailableArea { get; set; }
         public int LocIDSys { get; set; }
         public string LocNo { get; set; }
 
