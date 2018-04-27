@@ -34,7 +34,7 @@ namespace HRMS.Entity.Probation
         public string PositionAcronym { get; set; }
         public string PositionName { get; set; }
         public string PositionNameEn { get; set; }
-        public int EmTypeIDSys { get; set; }
+        public int? EmTypeIDSys { get; set; }
         public string EmTypeName { get; set; }
         public string EmTypeNameEn { get; set; }
         public DateTime? HiredDate { get; set; }

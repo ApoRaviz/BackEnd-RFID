@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReportEvaluation\EvaluatedReport.cs" />
+    <Compile Include="ReportEvaluation\EvaluationTable.cs" />
     <Compile Include="LeaveManagement\LeaveTypeDto.cs" />
     <Compile Include="LeaveManagement\LeaveDetailDto.cs" />
     <Compile Include="LeaveManagement\LeaveDto.cs" />

@@ -341,7 +341,7 @@ namespace Isuzu.Service.Impl.Inbound
 
         }
 
-            public void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding)
+        public void PerformHolding_HANDY(List<ConfirmReceiveParameter> itemsHolding)
         {
             using (var scope = new TransactionScope())
             {
@@ -350,22 +350,7 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
 
-
-                    // ใช้ชั่วคราว
-                    List<InboundItemReceiveForUpdate> itemReceiveForUpdates = new List<InboundItemReceiveForUpdate>();
-                    foreach (string item in itemsHolding.ReceiveParams)
-                    {
-                        string[]itemArr = item.Split(',');
-                        InboundItemReceiveForUpdate inboundItemReceiveForUpdate = new InboundItemReceiveForUpdate
-                        {
-                            InvNo = itemArr[0],
-                            ISZJOrder = itemArr[1],
-                            IsFound = Convert.ToInt16(itemArr[2])
-                        };
-                        itemReceiveForUpdates.Add(inboundItemReceiveForUpdate);
-                    }
-
-                    List<InboundItemReceiveForUpdate> itemReceiveIsFoundForUpdates = itemReceiveForUpdates.Where(x => x.IsFound == 1).ToList();
+                    List<ConfirmReceiveParameter> itemReceiveIsFoundForUpdates = itemsHolding.Where(x => x.IsFound == 1).ToList();
 
                     IEnumerable<InboundItems> itemsForSave = detailRepo.GetMany(i =>
                     itemReceiveIsFoundForUpdates.Select(x => x.InvNo).Contains(i.InvNo)
