@@ -44,6 +44,15 @@ namespace WMS.WebApi.Controller
 
                     // TODO: Save the API log entry to the database
                     userLogEntry.RequestContentBody = HttpUtility.UrlDecode(userLogEntry.RequestContentBody);
+
+                    string x = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
+
+                 
+                    //JObject googleSearch = JObject.Parse(userLogEntry.RequestContentBody);
+
+                   /*userLogEntry.RequestUriFrondEnd = request.Method == HttpMethod.Get ?
+                    ((HttpContextBase)request.Properties["MS_HttpContext"]).Request["urlFrontEnd"] :
+                    "";*/
                     new CommonService().WriteUserLog(userLogEntry);
 
                     return response;

@@ -91,7 +91,7 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ICommonRepository repo = new CommonRepository(Db);
-                userLogs = repo.ProcGetUserLog(logId, null, null, RequestDateFrom, RequestDateTo);
+                userLogs = repo.ProcGetUserLog(logId, null, null, null, RequestDateFrom, RequestDateTo);
 
                 /*UserLog userLog = userLogs.FirstOrDefault(x => x.LogID == 177053);
                 string reqUrl = StringHelper.GetRequestUrl(userLog.RequestUri);
@@ -104,13 +104,13 @@ namespace WIM.Core.Service.Impl
             return userLogs;
         }
 
-        public IEnumerable<UserLog> GetUserLogData(string RequestMethod, string RequestUrl, DateTime? RequestDateFrom, DateTime? RequestDateTo)
+        public IEnumerable<UserLog> GetUserLogData(string RequestMethod, string RequestUrl, string RequestUrlFrontEnd, DateTime? RequestDateFrom, DateTime? RequestDateTo)
         {
             IEnumerable<UserLog> userLogs;
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ICommonRepository repo = new CommonRepository(Db);
-                userLogs = repo.ProcGetUserLog(null, RequestMethod, RequestUrl, RequestDateFrom, RequestDateTo);
+                userLogs = repo.ProcGetUserLog(null, RequestMethod, RequestUrl, RequestUrlFrontEnd, RequestDateFrom, RequestDateTo);
             }
             return userLogs;
         }

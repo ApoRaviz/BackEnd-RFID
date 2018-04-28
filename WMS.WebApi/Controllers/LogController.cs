@@ -68,7 +68,7 @@ namespace WMS.WebApi.Controller
             ResponseData<IEnumerable<UserLog>> response = new ResponseData<IEnumerable<UserLog>>();
             try
             {
-                IEnumerable<UserLog> logData = commonService.GetUserLogData(method, url, dateFrom, dateTo);
+                IEnumerable<UserLog> logData = commonService.GetUserLogData(method, url, "", dateFrom, dateTo);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(logData);
             }
