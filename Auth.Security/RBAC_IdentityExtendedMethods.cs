@@ -7,6 +7,7 @@ using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using Auth.Security;
 using Auth.Security.Entity;
+using WIM.Core.Common.Utility.Validation;
 
 public static class RBAC_ExtendedMethods_4_Principal
 {
@@ -245,7 +246,7 @@ public static class RBAC_ExtendedMethods_4_Principal
         }
         catch (Exception)
         {
-            throw;
+            throw new ValidationException(ErrorEnum.NO_PERMISSION);
         }
         return _retVal;
     }

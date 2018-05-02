@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,14 +46,17 @@ namespace WMS.WebApi.Controller
                     // TODO: Save the API log entry to the database
                     userLogEntry.RequestContentBody = HttpUtility.UrlDecode(userLogEntry.RequestContentBody);
 
-                    string x = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
+                    // จ๊อบ Comment กำลัง Dev อยู่
+                    /*if (request.Method == HttpMethod.Get)
+                    {
+                        userLogEntry.RequestUriFrondEnd = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
+                    }
+                    else
+                    {
+                        JObject body = JsonConvert.DeserializeObject<JObject>(userLogEntry.RequestContentBody);
+                        userLogEntry.RequestUriFrondEnd = body["urlFrontEnd"] + "";
+                    }*/
 
-                 
-                    //JObject googleSearch = JObject.Parse(userLogEntry.RequestContentBody);
-
-                   /*userLogEntry.RequestUriFrondEnd = request.Method == HttpMethod.Get ?
-                    ((HttpContextBase)request.Properties["MS_HttpContext"]).Request["urlFrontEnd"] :
-                    "";*/
                     new CommonService().WriteUserLog(userLogEntry);
 
                     return response;
