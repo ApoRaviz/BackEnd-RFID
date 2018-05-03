@@ -26,6 +26,7 @@ using WIM.Core.Service.Impl.StatusManagement;
 using WIM.Core.Service.FileManagement;
 using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Entity.FileManagement;
+using Isuzu.Entity.InboundManagement;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -107,41 +108,27 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void RegisterInboundItem_HANDY(InboundItemHandyDto item)
         {
+            InboundItems itemExist;
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
                 {
-                    IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
-
                     try
                     {
-                        bool isDupAnother = detailRepo.Exists(i =>
-                            i.RFIDTag == item.RFIDTag
-                            && i.ISZJOrder != item.ISZJOrder
-                            && !new List<string> {
-                                    statusShipped,
-                                    statusDeleted
-                                }.Contains(i.Status)
-                        );
-
-                        if (isDupAnother)
-                        {
-                            throw new ValidationException(ErrorEnum.RFIDIsDuplicatedAnother);
-                        }
-
-                        InboundItems itemExist = detailRepo.GetItemSingleBy(i => i.ISZJOrder == item.ISZJOrder);
+                        itemExist = detailRepo.GetItemSingleBy(i =>
+                                                    i.ISZJOrder == item.ISZJOrder
+                                                    && !new List<string>
+                                                    {
+                                                        statusShipped,
+                                                        statusDeleted
+                                                    }.Contains(i.Status)
+                                                    );
 
                         itemExist.RFIDTag = item.RFIDTag;
                         itemExist.Status = item.Status;
                         itemExist.RegisterDate = DateTime.Now;
                         detailRepo.Update(itemExist);
-
-                        // #Update Head
-                        InboundItemsHead itemHeadExist = headRepo.GetByID(item.InvNo);
-
-                        itemHeadExist.Status = item.Status;
-                        headRepo.Update(itemHeadExist);
 
                         db.SaveChanges();
                         scope.Complete();
@@ -152,6 +139,51 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                 }
             }
+            if (itemExist != null)
+            {
+                UpdateHead_HANDY(itemExist);
+            }
+        }
+
+        private void UpdateHead_HANDY(InboundItems item)
+        {
+            List<InboundItems> inboundItems = new List<InboundItems>();
+            inboundItems.Add(item);
+            UpdateHead_HANDY(inboundItems);
+        }
+
+        private void UpdateHead_HANDY(IEnumerable<InboundItems> items)
+        {
+            Task.Run(() =>
+            {
+                using (var scope = new TransactionScope())
+                {
+                    using (IsuzuDataContext db = new IsuzuDataContext())
+                    {
+                        IInboundHeadRepository headRepo = new InboundHeadRepository(db);
+                        try
+                        {
+                            IEnumerable<string> invoiceList = items.Select(x => x.InvNo).Distinct();
+                            IQueryable queryable = headRepo.GetMany(i =>
+                                invoiceList.Contains(i.InvNo)
+                            ).AsQueryable();
+
+                            foreach (InboundItems item in queryable)
+                            {
+                                item.Status = item.Status;
+                                headRepo.Update(item);
+                            }
+
+                            db.SaveChanges();
+                            scope.Complete();
+                        }
+                        catch (DbEntityValidationException e)
+                        {
+                            throw new ValidationException(e);
+                        }
+                    }
+                }
+            });
         }
 
         public int GetAmountRegistered_HANDY()
@@ -295,9 +327,41 @@ namespace Isuzu.Service.Impl.Inbound
 
         }
 
-        public void PerformHolding_HANDY(InboundItemHoldingHandyRequest itemsHolding)
+        public IEnumerable<InboundItemHandyDto> GetInboundItemsRegisteredByInvoice_HANDY(string invNo)
         {
+            IEnumerable<InboundItemHandyDto> items;
 
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                items = (
+                   from i in Db.InboundItems
+                   where i.InvNo == invNo
+                   && new List<string> {
+                           statusRegisteredAtITA,
+                           statusRegisteredAtYUT
+                       }.Contains(i.Status)
+
+                   select new InboundItemHandyDto
+                   {
+                       ID = i.ID,
+                       InvNo = i.InvNo,
+                       ITAOrder = i.ITAOrder,
+                       RFIDTag = i.RFIDTag,
+                       ISZJOrder = i.ISZJOrder,
+                       ParrtName = i.ParrtName,
+                       PartNo = i.PartNo,
+                       Qty = i.Qty,
+                       Vendor = i.Vendor
+                   }
+               ).ToList();
+            }
+            return items;
+
+        }
+
+        public void PerformHolding_HANDY(List<ConfirmReceiveParameter> itemsHolding)
+        {
+            IEnumerable<InboundItems> itemsForSave;
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
@@ -305,42 +369,31 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository headRepo = new InboundHeadRepository(db);
                     IInboundRepository detailRepo = new InboundRepository(db);
 
-                    IEnumerable<InboundItems> items = detailRepo.GetMany(i =>
-                        new List<string> {
+                    itemsForSave = detailRepo.GetMany(i =>
+                    itemsHolding.Select(x => x.InvNo).Contains(i.InvNo)
+                    && itemsHolding.Select(x => x.ISZJOrder).Contains(i.ISZJOrder)
+                    && new List<string> {
                            statusRegisteredAtITA,
                            statusRegisteredAtYUT
-                        }.Contains(i.Status)
+                       }.Contains(i.Status)
                     );
 
-                    List<string> invNoList = new List<string>(); // #For Update Head
-                    foreach (InboundItems item in items)
+                    foreach (InboundItems item in itemsForSave)
                     {
-                        foreach (string scan in itemsHolding.RFIDTags)
-                        {
-                            if (scan.EndsWith(item.RFIDTag))
-                            {
-                                item.Status = statusReceivedAtYUT;
-                                item.HoldDate = DateTime.Now;
-                                detailRepo.Update(item);
-                                invNoList.Add(item.InvNo); // #For Update Head
-                            }
-                        }
-                    }
-
-                    // #Update Head
-                    invNoList = invNoList.Distinct().ToList();
-                    foreach (var invNo in invNoList)
-                    {
-                        InboundItemsHead itemHeadExist = headRepo.Get(i =>
-                            i.InvNo == invNo
-                        );
-                        itemHeadExist.Status = statusReceivedAtYUT;
-                        headRepo.Update(itemHeadExist);
+                        item.Status = statusReceivedAtYUT;
+                        item.HoldDate = DateTime.Now;
+                        detailRepo.Update(item);
                     }
 
                     db.SaveChanges();
                     scope.Complete();
                 }
+            }
+
+            if (itemsForSave != null)
+            {
+                UpdateHead_HANDY(itemsForSave);
+                InsertRFIDTagNotFoundLog(itemsForSave, "RECEIVING-ISUZU");
             }
         }
 
@@ -482,6 +535,54 @@ namespace Isuzu.Service.Impl.Inbound
             }
             return inboundItems;
 
+        }
+
+        public void InsertRFIDTagNotFoundLog(IEnumerable<InboundItems> inboundItems, string functionName)
+        {
+            Task.Run(() =>
+            {
+                using (var scope = new TransactionScope())
+                {
+                    using (IsuzuDataContext db = new IsuzuDataContext())
+                    {
+                        IInboundRepository detailRepo = new InboundRepository(db);
+                        try
+                        {
+                            switch (functionName)
+                            {
+                                case "RECEIVING-ISUZU":
+                                    IEnumerable<string> invNoList = inboundItems.Select(x => x.InvNo).Distinct();
+                                    inboundItems = detailRepo.GetMany(i =>
+                                         invNoList.Contains(i.InvNo)
+                                         && new List<string> {
+                                            statusRegisteredAtITA,
+                                            statusRegisteredAtYUT
+                                         }.Contains(i.Status)
+                                     );
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            foreach (var item in inboundItems)
+                            {
+                                db.Set<RFIDTagNotFoundLog>().Add(new RFIDTagNotFoundLog
+                                {
+                                    IDRef = item.ID,
+                                    FunctionName = functionName
+                                });
+
+                                db.SaveChanges();
+                                scope.Complete();
+                            }
+                        }
+                        catch (DbEntityValidationException e)
+                        {
+                            throw new ValidationException(e);
+                        }
+                    }
+                }
+            });
         }
         #endregion
 
@@ -1262,13 +1363,17 @@ namespace Isuzu.Service.Impl.Inbound
                         case 1:
                             inboundItems.Weight1 = adjustWeight.Weight1;
                             break;
-                        case 2:inboundItems.Weight2 = adjustWeight.Weight2;
+                        case 2:
+                            inboundItems.Weight2 = adjustWeight.Weight2;
                             break;
-                        case 3:inboundItems.Weight3 = adjustWeight.Weight3;
+                        case 3:
+                            inboundItems.Weight3 = adjustWeight.Weight3;
                             break;
-                        case 4:inboundItems.Weight4 = adjustWeight.Weight4;
+                        case 4:
+                            inboundItems.Weight4 = adjustWeight.Weight4;
                             break;
-                        case 5: inboundItems.Weight5 = adjustWeight.Weight5;
+                        case 5:
+                            inboundItems.Weight5 = adjustWeight.Weight5;
                             break;
                     }
                     inboundItems.WeightDate = DateTime.Now;

@@ -337,6 +337,16 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />
     <Compile Include="Controllers\VEmployeeInfoController.cs" />
+    <Compile Include="Datasets\EvaluatedReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EvaluatedReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Datasets\Evauateform.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Evauateform.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -385,6 +395,28 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Datasets\Evauateform.xsc">
+      <DependentUpon>Evauateform.xsd</DependentUpon>
+    </Content>
+    <Content Include="Datasets\EvaluatedReport.xsc">
+      <DependentUpon>EvaluatedReport.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\EvaluatedReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EvaluatedReport.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Datasets\EvaluatedReport.xss">
+      <DependentUpon>EvaluatedReport.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\Evauateform.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Evauateform.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Datasets\Evauateform.xss">
+      <DependentUpon>Evauateform.xsd</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\hrms-debug.pubxml" />
     <None Include="Web.Debug.config">
@@ -448,6 +480,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Report\EvaluationFormHeader.rdlc" />
+    <EmbeddedResource Include="Report\EvaluationFormDetail.rdlc" />
     <EmbeddedResource Include="Report\IsuzuRfidReport.rdlc" />
     <EmbeddedResource Include="Report\BoxLabelReport.rdlc" />
     <EmbeddedResource Include="Report\CustomerReport.rdlc">
@@ -570,7 +604,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/HRMS.WebApi</IISUrl>
+          <IISUrl>http://localhost/hrms-backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost/hrms-backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

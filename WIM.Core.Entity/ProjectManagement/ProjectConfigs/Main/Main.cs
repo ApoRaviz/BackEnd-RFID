@@ -12,7 +12,7 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Main
     public class Main
     {
         
-        public Service Service { get; set; }
+        public ServiceMain Service { get; set; }
         public Business Business { get; set; }
         public bool IsVIPCustomer { get; set; }
         public Allocate Allocate { get; set; }

@@ -26,5 +26,7 @@ namespace Fuji.Service.ItemImport
         //Handy
         int HandyGetStatus();
         int UpdateCheckStockByHandy(FujiCheckStockHandy checkStock);
+        List<ItemBox> CheckByLoc_Handy(string orderNo);
+
     }
 }

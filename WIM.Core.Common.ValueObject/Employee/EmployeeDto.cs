@@ -11,8 +11,8 @@ namespace WIM.Core.Common.ValueObject
         public string EmID { get; set; }
         public int PersonIDSys { get; set; }
         public string Area { get; set; }
-        public string Position { get; set; }
-        public string Dept { get; set; }
+        public int PositionIDSys { get; set; }
+        public int DepIDSys { get; set; }
         public string TelOffice { get; set; }
         public string TelEx { get; set; }
         public byte Active { get; set; }

@@ -51,6 +51,17 @@ namespace WIM.Core.Service.Impl
             return Menu;
         }
 
+        public Menu_MT GetMenuByUrl(string url)
+        {
+            Menu_MT Menu;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IMenuRepository repo = new MenuRepository(Db);
+                Menu = repo.GetFirst(x => x.Url == url);
+            }
+            return Menu;
+        }
+
         public IEnumerable<AutocompleteMenuDto> AutocompleteMenu(string term){
 
             IEnumerable<AutocompleteMenuDto> autocompleteItemDto;
@@ -85,7 +96,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return Menunew.MenuIDSys;
@@ -122,7 +133,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
 
@@ -152,7 +163,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return true;
@@ -189,7 +200,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
 
@@ -215,7 +226,7 @@ namespace WIM.Core.Service.Impl
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
+                    ValidationException ex = new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     throw ex;
                 }
 
@@ -306,6 +317,7 @@ namespace WIM.Core.Service.Impl
                     MenuIDSys = b.MenuIDSys,
                     MenuName = b.MenuName,
                     MenuParentID = b.MenuParentID,
+                    ModuleIDSys = b.ModuleIDSys.HasValue? b.ModuleIDSys : 0,
                     Url = b.Url,
                     Api = b.Api,
                     Sort = b.Sort,

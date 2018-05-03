@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
 using WIM.Core.Entity.MenuManagement;
-using WIM.Core.Repository.ApiMaster;
+using WIM.Core.Repository;
 using WIM.Core.Common.ValueObject;
 
 namespace WIM.Core.Repository.Impl.ApiMaster

@@ -398,6 +398,7 @@ namespace Fuji.WebApi.Controllers
         public HttpResponseMessage ExportToExcel(string id)
         {
 
+
             IResponseData<int> response = new ResponseData<int>();
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
@@ -858,9 +859,7 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(respones);
 
         }
-
-
-
+        
 
     }
 }

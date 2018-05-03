@@ -65,7 +65,7 @@ namespace WIM.Core.Service.Impl.PermissionGroups
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.E4012));
+                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
                     throw ex;
                 }
 

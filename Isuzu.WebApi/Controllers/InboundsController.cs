@@ -23,6 +23,7 @@ using System.Net.Http.Headers;
 using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Service.FileManagement;
 using System.Web.Helpers;
+using Newtonsoft.Json;
 
 namespace Isuzu.Service.Impl
 {
@@ -143,14 +144,33 @@ namespace Isuzu.Service.Impl
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/items/invoice/registered/{invNo}")]
+        public HttpResponseMessage GetInboundItemsRegisteredByInvoice_HANDY([FromUri]string invNo)
+        {
+            ResponseData<IEnumerable<InboundItemHandyDto>> responseHandy = new ResponseData<IEnumerable<InboundItemHandyDto>>();
+            try
+            {
+                IEnumerable<InboundItemHandyDto> items = InboundService.GetInboundItemsRegisteredByInvoice_HANDY(invNo);
+                responseHandy.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
         [Route("handy/holding")]
-        public HttpResponseMessage PerformHolding_HANDY([FromBody]InboundItemHoldingHandyRequest inboundItemHolding)
+        public HttpResponseMessage PerformHolding_HANDY([FromBody]ReceiveParamsList inboundItemHolding)
         {
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformHolding_HANDY(inboundItemHolding);
+                InboundService.PerformHolding_HANDY(inboundItemHolding.ReceiveParams);
                 responseHandy.SetData(1);
             }
             catch (ValidationException ex)
@@ -247,6 +267,26 @@ namespace Isuzu.Service.Impl
             {
                 IEnumerable<InboundItems> items = InboundService.GetInboundItemsByRFIDs_HANDY(rfids);
                 responseHandy.SetData(items);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("handy/shipping/notfoundlog")]
+        public HttpResponseMessage InsertRFIDTagNotFoundLog_HANDY([FromBody]RFIDList rfids)
+        {
+            ResponseData<int> responseHandy = new ResponseData<int>();
+            try
+            {
+                IEnumerable<InboundItems> items = InboundService.GetInboundItemsByRFIDs_HANDY(rfids);
+                InboundService.InsertRFIDTagNotFoundLog(items, "SHIPPING-ISUZU");
+                responseHandy.SetData(1);
             }
             catch (ValidationException ex)
             {

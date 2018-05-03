@@ -382,11 +382,6 @@
     <Compile Include="Report\ReportUtil.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="YUT_WMS_DEVDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>YUT_WMS_DEVDataSet.xsd</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -484,17 +479,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="YUT_WMS_DEVDataSet.xsc">
-      <DependentUpon>YUT_WMS_DEVDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="YUT_WMS_DEVDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>YUT_WMS_DEVDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="YUT_WMS_DEVDataSet.xss">
-      <DependentUpon>YUT_WMS_DEVDataSet.xsd</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -529,14 +513,6 @@
       <Project>{BFEE452B-7031-4060-889D-913DAAA8B697}</Project>
       <Name>Auth.Security</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HRMS.Service.Impl\HRMS.Service.Impl.csproj">
-      <Project>{B7EA8787-86EA-48FC-945F-6CAE2B397DA4}</Project>
-      <Name>HRMS.Service.Impl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HRMS.Service\HRMS.Service.csproj">
-      <Project>{93A81E85-ACA4-4809-88DC-C3D67548EF83}</Project>
-      <Name>HRMS.Service</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Master.Common.ValueObject\Master.Common.ValueObject.csproj">
       <Project>{9a37166e-bd6c-4ba9-9091-985bc77c68d6}</Project>
       <Name>Master.Common.ValueObject</Name>
@@ -564,18 +540,6 @@
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
-      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
-      <Name>WIM.Core.Security.Context</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
-      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
-      <Name>WIM.Core.Security.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
       <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>

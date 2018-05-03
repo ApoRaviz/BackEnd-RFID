@@ -622,6 +622,29 @@ namespace Fuji.Service.Impl.ItemImport
             return status;
         }
 
+        public List<ItemBox> CheckByLoc_Handy(string orderNo)
+        {
+            List<ItemBox> serialByLoc;
+            using (FujiDbContext Db = new FujiDbContext())
+            {
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
+
+                serialByLoc = (from d in Db.ImportSerialDetail
+                               where d.Location == orderNo && d.Status == "RECEIVED" && d.ItemType == "1"
+                               orderby d.BoxNumber, d.ItemGroup
+                               select new ItemBox
+                               {
+                                   BoxNumber = d.BoxNumber,
+                                   SerialNumber = d.SerialNumber,
+                                   ItemGroup = d.ItemGroup
+                               }).ToList();
+                //if (!serialByLoc.Any())
+                //{
+                //    throw new ValidationException(ErrorEnum.DataNotFound);
+                //}
+            }
+            return serialByLoc;
+        }
 
         #endregion
     }

@@ -8,9 +8,11 @@ using WIM.Core.Service;
 using WIM.Core.Service.Address;
 using WIM.Core.Service.Common;
 using WIM.Core.Service.EmployeeMaster;
+using WIM.Core.Service.FileManagement;
 using WIM.Core.Service.Impl;
 using WIM.Core.Service.Impl.Common;
 using WIM.Core.Service.Impl.EmployeeMaster;
+using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Service.Impl.PermissionGroups;
 using WIM.Core.Service.Impl.StatusManagement;
 using WIM.Core.Service.PermissionGroups;
@@ -62,7 +64,10 @@ namespace Master.WebApi
             container.RegisterType<IPermissionGroupService, PermissionGroupService>();
             container.RegisterType<IPermissionGroupApiService, PermissionGroupApiService>();
             container.RegisterType<IAddressService, AddressService>();
-            
+            container.RegisterType<IResignService, ResignService>();
+            container.RegisterType<IFileService, FileService>();
+            container.RegisterType<IHistoryWarningService, HistoryWarningService>();
+
         }
     }
 }

@@ -13,6 +13,7 @@ namespace WIM.Core.Common.ValueObject
         public string MenuName { get; set; }
         public string Url { get; set; }
         public string Api { get; set; }
+        public int? ModuleIDSys { get; set; }
         public byte? Sort { get; set; }
         public string Icon { get; set; }
         public byte IsPermission { get; set; }

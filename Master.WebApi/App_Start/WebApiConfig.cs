@@ -10,6 +10,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Master.WebApi.Controllers;
+using Auth.Security;
 
 namespace Master.WebApi
 {
@@ -43,8 +44,8 @@ namespace Master.WebApi
             );
 
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
-            //config.Filters.Add(new IdentityAuthAttribute());
-            //config.Filters.Add(new PermissionAuthAttribute());
+            config.Filters.Add(new IdentityAuthAttribute());
+            config.Filters.Add(new PermissionAuthAttribute());
         }       
     }
 }

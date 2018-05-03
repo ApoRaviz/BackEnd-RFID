@@ -11,6 +11,7 @@ using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.MenuManagement;
 using WIM.Core.Service;
+using WIM.Core.Service.Impl;
 
 namespace Master.WebApi.Controllers
 {
@@ -140,13 +141,38 @@ namespace Master.WebApi.Controllers
                         menu.Add(x);
                     }
                 }
+
+                var tempGroupbyModule = menu.GroupBy(a => a.ModuleIDSys).Select(b => new {
+                    ModuleIDSys = b.Key,
+                    ParentMenu = b.ToList()
+                }).ToList();
+
+                var listModule = new ModuleService().GetModules().Where(a => tempGroupbyModule.Select(b => b.ModuleIDSys).Contains(a.ModuleIDSys)).ToList();
+                List<MenuDto> responseData = new List<MenuDto>();
+                foreach(var data in listModule)
+                {
+                    MenuDto temp = new MenuDto()
+                    {
+                        MenuIDSys = data.ModuleIDSys + 1000,
+                        MenuName = data.ModuleName,
+                        Sort = (byte)data.ModuleIDSys,
+                        ParentMenu = tempGroupbyModule.Where(a => a.ModuleIDSys == data.ModuleIDSys).Select(b => b.ParentMenu).FirstOrDefault()
+                    };
+
+                    responseData.Add(temp);
+                }
+                
+                if(tempGroupbyModule.Any(a => a.ModuleIDSys == 0))
+                {
+                    responseData.AddRange(tempGroupbyModule.Where(a => a.ModuleIDSys == 0).Select(b => b.ParentMenu).FirstOrDefault());
+                }
                 //List<MenuDto> menu = Menu[0];
                 //List<MenuDto> menu2 = new List<MenuDto>();
                 //for (int i = 0; i < menu.Count<MenuDto>(); i++)
                 //{
                 //    FindParent(menu[i], Menu);
                 //}
-                response.SetData(menu);
+                response.SetData(responseData);
             }
             catch (ValidationException ex)
             {

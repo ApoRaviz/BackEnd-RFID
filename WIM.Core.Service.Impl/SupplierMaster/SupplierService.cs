@@ -75,7 +75,7 @@ namespace WIM.Core.Service
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return Supplier;
@@ -105,7 +105,7 @@ namespace WIM.Core.Service
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return true;
@@ -129,7 +129,7 @@ namespace WIM.Core.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4017);
+                    ValidationException ex = new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     throw ex;
                 }
                 return true;

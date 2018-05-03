@@ -73,7 +73,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.E4012);
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return newResign.EmID;

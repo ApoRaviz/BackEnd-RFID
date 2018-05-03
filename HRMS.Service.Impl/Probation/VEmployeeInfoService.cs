@@ -78,14 +78,15 @@ namespace HRMS.Service.Impl
                         scope.Complete();
                     }
                 }
-                catch (DbEntityValidationException e)
+                catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(e);
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.E4012);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return true;
             }
