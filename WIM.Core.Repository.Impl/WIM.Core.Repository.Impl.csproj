@@ -123,10 +123,6 @@
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
-      <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
-      <Name>WMS.Context</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -14,7 +14,7 @@ namespace WMS.Service.Impl
 {
     public class SpareFieldService : WIM.Core.Service.Impl.Service, ISpareFieldService
     {
-        public SpareFieldService()
+        public SpareFieldService( )
         {
         }
 

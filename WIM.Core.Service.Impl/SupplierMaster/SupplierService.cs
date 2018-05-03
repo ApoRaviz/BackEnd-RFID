@@ -51,7 +51,7 @@ namespace WIM.Core.Service
             return Supplier;
         }
 
-        public int CreateSupplier(Supplier_MT Supplier)
+        public Supplier_MT CreateSupplier(Supplier_MT Supplier)
         {
             using (var scope = new TransactionScope())
             {
@@ -64,7 +64,8 @@ namespace WIM.Core.Service
                         Supplier.ProjectIDSys = Identity.GetProjectIDSys();
                         repo.Insert(Supplier);
                         Db.SaveChanges();
-                        scope.Complete();
+                        Supplier = repo.Get(x => x.SupID == Supplier.SupID);
+                        scope.Complete();   
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -77,7 +78,7 @@ namespace WIM.Core.Service
                     ValidationException ex = new ValidationException(ErrorEnum.E4012);
                     throw ex;
                 }
-                return Supplier.SupIDSys;
+                return Supplier;
             }
         }
 

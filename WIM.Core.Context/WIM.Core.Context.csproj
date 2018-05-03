@@ -63,10 +63,6 @@
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
-      <Project>{A0332865-E8ED-42D4-BD3A-11422E7524A9}</Project>
-      <Name>WMS.Entity</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
