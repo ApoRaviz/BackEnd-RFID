@@ -7,7 +7,7 @@ using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Main
 {
-    public class Service
+    public class ServiceMain
     {
         [MoreThanOne]
         public bool IsImport { get; set; }

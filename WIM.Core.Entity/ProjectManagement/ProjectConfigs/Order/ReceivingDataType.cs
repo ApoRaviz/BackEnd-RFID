@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Order
 {
-    public class ReceivingDataType
+    public class ReceivingDataTypeOrder
     {
         public bool IsSystem { get; set; }
         public bool IsSystemByCustomer { get; set; }

@@ -12,7 +12,6 @@ namespace WIM.Core.Entity.Module
     {
         public Module_MT()
         {
-            this.Project_MT = new HashSet<Project_MT>();
             this.Api_MT = new HashSet<Api_MT>();
         }
 
@@ -23,8 +22,6 @@ namespace WIM.Core.Entity.Module
         public string FrontEndPath { get; set; }
         public string DefaultLang { get; set; }
 
-
-        public virtual ICollection<Project_MT> Project_MT { get; set; }
         public virtual ICollection<Api_MT> Api_MT { get; set; }
     }
 }

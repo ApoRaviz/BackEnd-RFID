@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Inventory
 {
-    public class DeliveryCompany
+    public class DeliveryCompanyInventory
     {
         public int CusIDSys { get; set; }
         public string CusName { get; set; }

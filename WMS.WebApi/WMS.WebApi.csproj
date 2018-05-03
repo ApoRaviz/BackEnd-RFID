@@ -499,6 +499,14 @@
       <Project>{f8b5ce45-9527-482e-bf27-9307d45ce503}</Project>
       <Name>Auth.Security.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Repository.Imp\Auth.Security.Repository.Impl.csproj">
+      <Project>{faa2ca1a-9acc-4250-a049-b6ab46e31a65}</Project>
+      <Name>Auth.Security.Repository.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Auth.Security.Repository\Auth.Security.Repository.csproj">
+      <Project>{41e304a0-a876-40d9-b4ab-19972b61fd40}</Project>
+      <Name>Auth.Security.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
       <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
       <Name>Auth.Security</Name>

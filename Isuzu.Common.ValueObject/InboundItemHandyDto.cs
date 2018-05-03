@@ -34,7 +34,6 @@ namespace Isuzu.Common.ValueObject
         public string InvNo { get; set; }
         public string CartonNo { get; set; }
         public string RFIDTag { get; set; }
-
     }
 
     public class ReceiveParamsList

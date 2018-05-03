@@ -68,12 +68,12 @@ namespace Master.WebApi.Controllers
         [Route("")]
         public HttpResponseMessage Post([FromBody]Supplier_MT Supplier)
         {
-            IResponseData<int> response = new ResponseData<int>();
+            IResponseData<Supplier_MT> response = new ResponseData<Supplier_MT>();
             try
             {
                 Supplier.UpdateBy = User.Identity.Name;
-                int id = SupplierService.CreateSupplier(Supplier);
-                response.SetData(id);
+                Supplier_MT supplier = SupplierService.CreateSupplier(Supplier);
+                response.SetData(supplier);
             }
             catch (ValidationException ex)
             {

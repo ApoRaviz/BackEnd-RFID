@@ -13,7 +13,6 @@ namespace WIM.Core.Entity.Logs
     [Table("GeneralLogs")]
     public class GeneralLog : BaseEntity
     {
-
         public GeneralLog(string propName, object obj, string createAndUpdateBy, string remark = "")
         {
             Type typeObj = obj.GetType();

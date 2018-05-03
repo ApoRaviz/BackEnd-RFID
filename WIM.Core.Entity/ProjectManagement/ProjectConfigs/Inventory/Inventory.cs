@@ -8,8 +8,8 @@ namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Inventory
 {
     public class Inventory
     {
-        public Service Service { get; set; }
+        public ServiceInventory Service { get; set; }
         public bool IsFixDelivery { get; set; }
-        public virtual ICollection<DeliveryCompany> DeliveryCompany { get; set; }
+        public virtual ICollection<DeliveryCompanyInventory> DeliveryCompany { get; set; }
     }
 }

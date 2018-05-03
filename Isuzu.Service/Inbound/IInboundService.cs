@@ -19,13 +19,13 @@ namespace Isuzu.Service
         IEnumerable<InboundItemHandyDto> GetInboundItemsRegisteredByInvoice_HANDY(string invNo);
         bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem);
         void RegisterInboundItem_HANDY(InboundItemHandyDto item);
-        void UpdateHead_HANDY(InboundItemHandyDto InvNo);
         void PerformHolding_HANDY(List<ConfirmReceiveParameter> itemsHolding);
         void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping);
         void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking);
         void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking);
         InboundItemCartonHandyDto GetInboundItemCartonByRFID_HANDY(string rfid);
         IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids);
+        void InsertRFIDTagNotFoundLog(IEnumerable<InboundItems> inboundItems, string functionName);
 
         //Default
         InboundItems GetInboundItemByISZJOrder(string iszjOrder);
