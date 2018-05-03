@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Routing;
 using WIM.Core.Entity.Common;
+using WIM.Core.Entity.MenuManagement;
+using WIM.Core.Service;
 using WIM.Core.Service.Impl;
 
 namespace WMS.WebApi.Controller
 {
     public class ApiLogHandler : DelegatingHandler
-    {
+    {    
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var userLogEntry = CreateUserLogEntryWithRequestData(request);
@@ -47,15 +49,29 @@ namespace WMS.WebApi.Controller
                     userLogEntry.RequestContentBody = HttpUtility.UrlDecode(userLogEntry.RequestContentBody);
 
                     // จ๊อบ Comment กำลัง Dev อยู่
-                    /*if (request.Method == HttpMethod.Get)
+                    string urlFrontEnd;
+                    if (request.Method == HttpMethod.Get)
                     {
-                        userLogEntry.RequestUriFrondEnd = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
+                        urlFrontEnd = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
                     }
                     else
                     {
                         JObject body = JsonConvert.DeserializeObject<JObject>(userLogEntry.RequestContentBody);
-                        userLogEntry.RequestUriFrondEnd = body["urlFrontEnd"] + "";
-                    }*/
+                        urlFrontEnd = body["urlFrontEnd"] + "";
+                    }
+
+                    if (!string.IsNullOrEmpty(urlFrontEnd) && urlFrontEnd[0] == '/')
+                    {
+                        urlFrontEnd = urlFrontEnd.Substring(1);
+                    }
+                    urlFrontEnd = urlFrontEnd.Split('?')[0];
+                    urlFrontEnd = urlFrontEnd.Split(';')[0];
+
+                    IMenuService menuService = new MenuService();
+                    Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
+
+                    userLogEntry.RequestUriFrondEnd = menu.Url;
+                    userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
 
                     new CommonService().WriteUserLog(userLogEntry);
 

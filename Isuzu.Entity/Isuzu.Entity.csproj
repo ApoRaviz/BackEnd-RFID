@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="InboundManagement\InboundItems.cs" />
     <Compile Include="InboundManagement\InboundItemsHead.cs" />
+    <Compile Include="InboundManagement\RFIDTagNotFoundLog.cs" />
     <Compile Include="LabelManagement\LabelRunning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

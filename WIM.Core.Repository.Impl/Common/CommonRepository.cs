@@ -67,6 +67,12 @@ namespace WIM.Core.Repository.Impl
                 Value = requestUrlFrontEnd
             } : new SqlParameter("@RequestUrlFrontEnd", DBNull.Value);
 
+            /*var requestMenuNameFrontEndParameter = !String.IsNullOrEmpty(requestMenuNameFrontEnd) ? new SqlParameter
+            {
+                ParameterName = "@RequestMenuNameFrontEnd",
+                Value = requestMenuNameFrontEnd
+            } : new SqlParameter("@RequestMenuNameFrontEnd", DBNull.Value);*/
+
             var requestDateFromParameter = requestDateFrom.HasValue ? new SqlParameter
             {
                 ParameterName = "@RequestDateFrom",
