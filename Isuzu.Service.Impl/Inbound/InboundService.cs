@@ -168,7 +168,7 @@ namespace Isuzu.Service.Impl.Inbound
                                 invoiceList.Contains(i.InvNo)
                             ).AsQueryable();
 
-                            foreach (InboundItems item in queryable)
+                            foreach (InboundItemsHead item in queryable)
                             {
                                 item.Status = item.Status;
                                 headRepo.Update(item);
@@ -569,12 +569,13 @@ namespace Isuzu.Service.Impl.Inbound
                                 db.Set<RFIDTagNotFoundLog>().Add(new RFIDTagNotFoundLog
                                 {
                                     IDRef = item.ID,
-                                    FunctionName = functionName
-                                });
-
-                                db.SaveChanges();
-                                scope.Complete();
+                                    FunctionName = functionName,
+                                    CreateBy = "SYSTEM",
+                                    UpdateBy = "SYSTEM"
+                                });                                
                             }
+                            db.SaveChanges();
+                            scope.Complete();
                         }
                         catch (DbEntityValidationException e)
                         {
