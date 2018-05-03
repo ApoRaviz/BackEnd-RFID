@@ -13,6 +13,7 @@ using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Entity.Logs;
 using System.Threading.Tasks;
+using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -145,7 +146,7 @@ namespace WIM.Core.Repository.Impl
             TEntity entityForUpdate = GetByID(id);
             if (entityForUpdate == null)
             {
-                throw new Exception("Data Not Found.");
+                throw new Core.Common.Utility.Validation.ValidationException(ErrorEnum.DataNotFound);
             }
 
             Type typeEntityForUpdate = entityForUpdate.GetType();
