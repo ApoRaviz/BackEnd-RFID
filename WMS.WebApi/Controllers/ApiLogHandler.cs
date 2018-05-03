@@ -49,29 +49,29 @@ namespace WMS.WebApi.Controller
                     userLogEntry.RequestContentBody = HttpUtility.UrlDecode(userLogEntry.RequestContentBody);
 
                     // จ๊อบ Comment กำลัง Dev อยู่
-                    string urlFrontEnd;
-                    if (request.Method == HttpMethod.Get)
-                    {
-                        urlFrontEnd = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
-                    }
-                    else
-                    {
-                        JObject body = JsonConvert.DeserializeObject<JObject>(userLogEntry.RequestContentBody);
-                        urlFrontEnd = body["urlFrontEnd"] + "";
-                    }
+                    //string urlFrontEnd;
+                    //if (request.Method == HttpMethod.Get)
+                    //{
+                    //    urlFrontEnd = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
+                    //}
+                    //else
+                    //{
+                    //    JObject body = JsonConvert.DeserializeObject<JObject>(userLogEntry.RequestContentBody);
+                    //    urlFrontEnd = body["urlFrontEnd"] + "";
+                    //}
 
-                    if (!string.IsNullOrEmpty(urlFrontEnd) && urlFrontEnd[0] == '/')
-                    {
-                        urlFrontEnd = urlFrontEnd.Substring(1);
-                    }
-                    urlFrontEnd = urlFrontEnd.Split('?')[0];
-                    urlFrontEnd = urlFrontEnd.Split(';')[0];
+                    //if (!string.IsNullOrEmpty(urlFrontEnd) && urlFrontEnd[0] == '/')
+                    //{
+                    //    urlFrontEnd = urlFrontEnd.Substring(1);
+                    //}
+                    //urlFrontEnd = urlFrontEnd.Split('?')[0];
+                    //urlFrontEnd = urlFrontEnd.Split(';')[0];
 
-                    IMenuService menuService = new MenuService();
-                    Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
+                    //IMenuService menuService = new MenuService();
+                    //Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
 
-                    userLogEntry.RequestUriFrondEnd = menu.Url;
-                    userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
+                    //userLogEntry.RequestUriFrondEnd = menu.Url;
+                    //userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
 
                     new CommonService().WriteUserLog(userLogEntry);
 
