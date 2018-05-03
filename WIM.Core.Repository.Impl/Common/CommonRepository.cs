@@ -36,7 +36,7 @@ namespace WIM.Core.Repository.Impl
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
         }
 
-        public IEnumerable<UserLog> ProcGetUserLog(int? logID, string requestMethod, string requestUrl, DateTime? requestDateFrom, DateTime? requestDateTo)
+        public IEnumerable<UserLog> ProcGetUserLog(int? logID, string requestMethod, string requestUrl, string requestUrlFrontEnd, DateTime? requestDateFrom, DateTime? requestDateTo)
         {
 
             var logIDParameter = logID.HasValue ? new SqlParameter
@@ -52,7 +52,7 @@ namespace WIM.Core.Repository.Impl
             var requestMethodParameter = !String.IsNullOrEmpty(requestMethod) ? new SqlParameter
             {
                 ParameterName = "@RequestMethod",
-                Value = logID
+                Value = requestMethod
             } : new SqlParameter("@RequestMethod", DBNull.Value);
 
             var requestUrlParameter = !String.IsNullOrEmpty(requestUrl) ? new SqlParameter
@@ -60,6 +60,19 @@ namespace WIM.Core.Repository.Impl
                 ParameterName = "@RequestUrl",
                 Value = requestUrl
             } : new SqlParameter("@RequestUrl", DBNull.Value);
+
+            var requestUrlFrontEndParameter = !String.IsNullOrEmpty(requestUrlFrontEnd) ? new SqlParameter
+            {
+                ParameterName = "@RequestUrlFrontEnd",
+                Value = requestUrlFrontEnd
+            } : new SqlParameter("@RequestUrlFrontEnd", DBNull.Value);
+
+            // JobComment
+            /*var requestMenuNameFrontEndParameter = !String.IsNullOrEmpty(requestMenuNameFrontEnd) ? new SqlParameter
+            {
+                ParameterName = "@RequestMenuNameFrontEnd",
+                Value = requestMenuNameFrontEnd
+            } : new SqlParameter("@RequestMenuNameFrontEnd", DBNull.Value);*/
 
             var requestDateFromParameter = requestDateFrom.HasValue ? new SqlParameter
             {
@@ -82,15 +95,13 @@ namespace WIM.Core.Repository.Impl
                 DbType = DbType.DateTime
             };
 
-            var x = this.Context.Database.SqlQuery<UserLog>("exec ProcGetUserLog @LogID , @RequestMethod , @RequestUrl , @RequestDateFrom ," +
-            "@RequestDateTo", logIDParameter, requestMethodParameter, requestUrlParameter, requestDateFromParameter, requestDateToParameter).ToList();
+            var x = this.Context.Database.SqlQuery<UserLog>("exec ProcGetUserLog @LogID, @RequestMethod, @RequestUrl, @RequestUrlFrontEnd, @RequestDateFrom ," +
+            "@RequestDateTo", logIDParameter, requestMethodParameter, requestUrlParameter, requestUrlFrontEndParameter, requestDateFromParameter, requestDateToParameter).ToList();
 
             //var z = this.Context.Database.SqlQuery<string>("exec ProcGetUserLog @LogID , @RequestMethod , @RequestUrl , @RequestDateFrom ," +
             //"@RequestDateTo", logIDParameter, requestMethodParameter, requestUrlParameter, requestDateFromParameter, requestDateToParameter).ToList();
 
             return x;
-
-
 
         }
 

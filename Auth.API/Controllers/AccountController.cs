@@ -240,6 +240,12 @@ namespace Auth.API.Controllers
             try
             {
                 string roleID = "";
+                if(User == null)
+                {
+                    response.SetStatus(HttpStatusCode.Unauthorized);
+                    Request.ReturnHttpResponseMessage(response);
+                }
+                
                 Boolean IsSysAdmin = User.IsSysAdmin();
                 if (!IsSysAdmin)
                 {

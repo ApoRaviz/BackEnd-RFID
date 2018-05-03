@@ -51,6 +51,17 @@ namespace WIM.Core.Service.Impl
             return Menu;
         }
 
+        public Menu_MT GetMenuByUrl(string url)
+        {
+            Menu_MT Menu;
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                IMenuRepository repo = new MenuRepository(Db);
+                Menu = repo.GetFirst(x => x.Url == url);
+            }
+            return Menu;
+        }
+
         public IEnumerable<AutocompleteMenuDto> AutocompleteMenu(string term){
 
             IEnumerable<AutocompleteMenuDto> autocompleteItemDto;

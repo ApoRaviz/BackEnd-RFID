@@ -277,6 +277,26 @@ namespace Isuzu.Service.Impl
 
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("handy/shipping/notfoundlog")]
+        public HttpResponseMessage InsertRFIDTagNotFoundLog_HANDY([FromBody]RFIDList rfids)
+        {
+            ResponseData<int> responseHandy = new ResponseData<int>();
+            try
+            {
+                IEnumerable<InboundItems> items = InboundService.GetInboundItemsByRFIDs_HANDY(rfids);
+                InboundService.InsertRFIDTagNotFoundLog(items, "SHIPPING-ISUZU");
+                responseHandy.SetData(1);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("handy/items/amountRegistered")]
         public HttpResponseMessage GetAmountRegistered()

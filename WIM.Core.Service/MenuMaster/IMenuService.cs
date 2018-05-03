@@ -18,6 +18,7 @@ namespace WIM.Core.Service
         IEnumerable<AutocompleteMenuDto> AutocompleteMenu(string term);
         Menu_MT GetMenuByMenuIDSys(int id);
         IEnumerable<MenuDto> GetMenuByMenuParentID(int id);
+        Menu_MT GetMenuByUrl(string url);
         int CreateMenu(MenuDto Menu, int projectID,byte sort);
         int CreateMenu(Menu_MT Menu);
         bool UpdateMenu(Menu_MT Menu );

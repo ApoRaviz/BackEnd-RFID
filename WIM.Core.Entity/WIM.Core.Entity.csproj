@@ -99,7 +99,7 @@
     <Compile Include="ProjectManagement\ProjectConfigs\Delivery\Service.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Inspection\ReceivingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Inventory\DeliveryCompany.cs" />
-    <Compile Include="ProjectManagement\ProjectConfigs\Inventory\Service.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Inventory\ServiceInventory.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Allocate.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Main\Business.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Delivery\Delivery.cs" />
@@ -113,7 +113,7 @@
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\ReceivingDurationTime.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\Receiving.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\ReceivingDataType.cs" />
-    <Compile Include="ProjectManagement\ProjectConfigs\Main\Service.cs" />
+    <Compile Include="ProjectManagement\ProjectConfigs\Main\ServiceMain.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\DateTimeToReceive.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\Receiving\SendingDataType.cs" />
     <Compile Include="ProjectManagement\ProjectConfigs\SpareField\SpareField.cs" />
