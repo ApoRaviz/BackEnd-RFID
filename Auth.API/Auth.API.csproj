@@ -211,7 +211,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60856</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Auth.API</IISUrl>
+          <IISUrl>http://localhost/auth-backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost/auth-backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

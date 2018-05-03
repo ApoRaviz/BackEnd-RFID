@@ -22,6 +22,7 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
+using WIM.Core.Entity.Person;
 using WIM.Core.Entity.UserManagement;
 using WIM.Core.Service.Impl;
 
@@ -347,6 +348,8 @@ namespace Auth.API.Controllers
                 Json.Add("access_token", token);
                 Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                 Json.Add("status", "200");
+                Person_MT Persons = new PersonService().GetPersonByPersonIDSys(User.Identity.GetUserId());
+                Json.Add("name", Persons.Name);
 
                 var Project = new ProjectService().GetProjectByProjectIDSysIncludeModule(projectClaimBinding.ProjectIDSys);
                 if (Project != null)
