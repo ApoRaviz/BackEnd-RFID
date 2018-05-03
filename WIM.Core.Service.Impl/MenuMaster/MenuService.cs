@@ -317,6 +317,7 @@ namespace WIM.Core.Service.Impl
                     MenuIDSys = b.MenuIDSys,
                     MenuName = b.MenuName,
                     MenuParentID = b.MenuParentID,
+                    ModuleIDSys = b.ModuleIDSys.HasValue? b.ModuleIDSys : 0,
                     Url = b.Url,
                     Api = b.Api,
                     Sort = b.Sort,
