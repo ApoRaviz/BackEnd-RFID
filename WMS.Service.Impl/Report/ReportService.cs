@@ -145,23 +145,58 @@ namespace WMS.Service.Impl.Report
                     tablecolumn = tablecolumn.OrderBy(a => a.ColumnOrder).ToList();
 
                     string Query = "Select ";
-
+                    string OperSubQuery = "";
                     foreach (var column in tablecolumn)
                     {
                         Query += column.TableName + "." + column.ColumnName + " As '"+column.AliasName +"' ,";
                     }
                     if (data.ReportDetail.Operator != null)
                     {
+                        
                         if (data.ReportDetail.Operator.Count > 0)
                         {
+                            List<OperationDetail> inSubQuery = new List<OperationDetail>();
                             foreach (var oper in data.ReportDetail.Operator)
                             {
-                                Query += oper.ColumnFirst.TableName + '.' + oper.ColumnFirst.ColumnName + ' ' + oper.Operator + ' ' + oper.ColumnFirst.TableName + '.' + oper.ColumnSecond.ColumnName + " As '" + oper.AliasName + "' ,";
+                                string subquery = " ";
+                                if(inSubQuery.Any(l => oper.ColumnFirst.ColumnName == l.AliasName) || oper.ColumnFirst.TableName == "NULL")
+                                {
+                                    string tempquery = inSubQuery.Where(a => a.AliasName == oper.ColumnFirst.ColumnName).Select(s => s.ColumnFirst.ColumnName).FirstOrDefault();
+                                    subquery += tempquery;
+                                    Query += tempquery;
+                                }
+                                else
+                                {
+                                    subquery += oper.ColumnFirst.TableName + '.' + oper.ColumnFirst.ColumnName;
+                                    Query += oper.ColumnFirst.TableName + '.' + oper.ColumnFirst.ColumnName;
+                                }
+
+                                subquery += ' ' + oper.Operator + ' ';
+                                Query += ' ' + oper.Operator + ' ';
+
+                                if (inSubQuery.Any(l => oper.ColumnSecond.ColumnName == l.AliasName) || oper.ColumnSecond.TableName == "NULL")
+                                {
+
+                                    string tempquery = inSubQuery.Where(a => a.AliasName == oper.ColumnSecond.ColumnName).Select(s => s.ColumnFirst.ColumnName).FirstOrDefault();
+                                    subquery += tempquery;
+                                    Query += tempquery + "' ,";
+                                }
+                                else
+                                {
+                                    subquery += oper.ColumnSecond.TableName + '.' + oper.ColumnSecond.ColumnName;
+                                    Query += oper.ColumnSecond.TableName + '.' + oper.ColumnSecond.ColumnName;
+                                }
+
+                                 Query += " As '" + oper.AliasName + "' ,";
+                                OperationDetail tempdetail = new OperationDetail();
+                                tempdetail.ColumnFirst = new ColumnDetail() { ColumnName = "( " + subquery + " )"};
+                                tempdetail.AliasName = oper.AliasName;
+                                inSubQuery.Add(tempdetail);
                             }
                         }
                     }
 
-                    Query = Query.Substring(0,Query.Length-1) + " From " + JoiningTable(data.ReportDetail.Detail);
+                    Query = Query.Substring(0,Query.Length-1) + " From " + JoiningTable(data.ReportDetail.Detail)+OperSubQuery;
                     string[] likecondition = { "like", "not like" };
                         if (data.ReportDetail.Filter != null)
                         {
