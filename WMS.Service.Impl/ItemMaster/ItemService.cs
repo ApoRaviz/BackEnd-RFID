@@ -110,6 +110,10 @@ namespace WMS.Service
                         }
                     }
                 }
+                if(sending.SupIDSys != null)
+                {
+                    sending.SupName = Db.Supplier_MT.Where(a => a.SupIDSys.ToString() == sending.SupIDSys).Select(b => b.CompName).FirstOrDefault();
+                }
                 sending.ItemInspectMapping.Clear();
                 foreach (var data in inspect)
                 {

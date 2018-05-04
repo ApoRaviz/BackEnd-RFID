@@ -51,6 +51,17 @@ namespace WMS.Service.Impl
             return SpareField;
         }
 
+        public IEnumerable<SpareField> GetSpareFieldByTableName(string TableName)
+        {
+            IEnumerable<SpareField> SpareField;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ISpareFieldRepository repo = new SpareFieldRepository(Db);
+                SpareField = repo.GetMany(x => x.TableName == TableName);
+            }
+            return SpareField;
+        }
+
         public int CreateSpareField(IEnumerable<SpareField> SpareField)
         {
                 int proID = 0;
