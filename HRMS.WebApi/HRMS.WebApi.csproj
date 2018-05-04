@@ -558,22 +558,6 @@
       <Project>{ea0cb63c-87c2-470e-9651-3ccd1d8c8be4}</Project>
       <Name>WIM.Core.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Context\WIM.Core.Security.Context.csproj">
-      <Project>{9c29a518-0b8c-4e95-8196-4d9eb887a8d9}</Project>
-      <Name>WIM.Core.Security.Context</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Entity\WIM.Core.Security.Entity.csproj">
-      <Project>{449748d1-bc3d-459a-96e1-813f9388e44e}</Project>
-      <Name>WIM.Core.Security.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security.Repository\WIM.Core.Security.Repository.csproj">
-      <Project>{098b63f0-95bb-421f-ac45-047f397fa475}</Project>
-      <Name>WIM.Core.Security.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WIM.Core.Security\WIM.Core.Security.csproj">
-      <Project>{879ce366-c973-4ab8-860b-abc5c94f2a36}</Project>
-      <Name>WIM.Core.Security</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Service.Impl\WIM.Core.Service.Impl.csproj">
       <Project>{1cd73ce9-a580-479f-b049-288215cd5e04}</Project>
       <Name>WIM.Core.Service.Impl</Name>

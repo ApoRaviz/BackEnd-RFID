@@ -10,7 +10,7 @@ using WIM.Core.Entity.Status;
 namespace HRMS.Context
 {
     public class HRMSDbContext : DbContext
-    {       
+    {
         public DbSet<Leave> Leaves { get; set; }
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<LeaveDetail> LeaveDetails { get; set; }
@@ -19,13 +19,13 @@ namespace HRMS.Context
         public DbSet<DayOff> DayOffs { get; set; }
         public DbSet<Status_MT> Status_MT { get; set; }
         public DbSet<Project_MT> Project_MT { get; set; }
-        public DbSet<VEmployeeInfo> VEmployeeInfo { get; set; }
-        public DbSet<FormQuestion> FormQuestion { get; set; }
-        public DbSet<FormTopic> FormTopic { get; set; }
+        public DbSet<VEmployeeInfo> VEmployeeInfos { get; set; }
+        public DbSet<FormQuestion> FormQuestions { get; set; }
+        public DbSet<FormTopic> FormTopics { get; set; }
         public DbSet<Evaluated> Evaluated { get; set; }
-        public DbSet<FormDetail> FormDetail { get; set; }
+        public DbSet<FormDetail> FormDetails { get; set; }
 
-        
+
 
 
 
@@ -35,7 +35,7 @@ namespace HRMS.Context
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
-        }       
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -19,7 +19,7 @@ namespace HRMS.Repository.Impl
 
         public IEnumerable<FormDetail> Get1(int id)
         {
-             var formDetail = from fdt in Db.FormDetail
+             var formDetail = from fdt in Db.FormDetails
                             where fdt.EvaluatedIDSys == id
                             select fdt;
             return formDetail.ToList();

@@ -61,7 +61,6 @@
     <Compile Include="CustomerAndProject\IProjectRepository.cs" />
     <Compile Include="FileManagement\IFileRepository.cs" />
     <Compile Include="HeadReportControl\IHeadReportControlRepository.cs" />
-    <Compile Include="IGenericRepository.cs" />
     <Compile Include="LabelControl\ILabelControlRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuProjectMappingRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuRepository.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="StatusManagement\ISubModuleRepository.cs" />
     <Compile Include="Supplier\ISupplierRepository.cs" />
     <Compile Include="Common\ICommonRepository.cs" />
+    <Compile Include="TableControl\ITableControlRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -108,10 +108,6 @@
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WMS.Context\WMS.Context.csproj">
-      <Project>{a23c70b6-a16e-4e68-8741-498abc3f3538}</Project>
-      <Name>WMS.Context</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

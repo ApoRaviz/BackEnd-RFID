@@ -21,7 +21,7 @@ namespace HRMS.Repository.Impl
         {
 
             var formq =
-                               from fq in Db.FormQuestion
+                               from fq in Db.FormQuestions
                                where fq.FormTopicIDSys == id
 
                                select fq;

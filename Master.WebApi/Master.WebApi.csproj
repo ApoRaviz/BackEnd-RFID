@@ -346,6 +346,7 @@
     <Compile Include="Controllers\ProbationController.cs" />
     <Compile Include="Controllers\ResignController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\TableControlController.cs" />
     <Compile Include="Controllers\WarningController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
