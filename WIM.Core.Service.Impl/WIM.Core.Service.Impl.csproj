@@ -89,6 +89,7 @@
     <Compile Include="StatusManagement\StatusServiceStatic.cs" />
     <Compile Include="SupplierMaster\SupplierService.cs" />
     <Compile Include="Common\CommonService.cs" />
+    <Compile Include="TableControl\TableControlService.cs" />
     <Compile Include="UserMaster\UserService.cs" />
     <Compile Include="UserRole\UserRoleService.cs" />
   </ItemGroup>

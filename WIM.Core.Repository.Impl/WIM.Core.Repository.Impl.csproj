@@ -89,6 +89,7 @@
     <Compile Include="StatusManagement\SubModuleRepository.cs" />
     <Compile Include="Supplier\SupplierRepository.cs" />
     <Compile Include="Common\CommonRepository.cs" />
+    <Compile Include="TableControl\TableControlRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">

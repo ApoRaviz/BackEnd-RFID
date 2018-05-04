@@ -128,6 +128,7 @@
     <Compile Include="Status\StatusSubModules.cs" />
     <Compile Include="Status\Status_MT.cs" />
     <Compile Include="SupplierManagement\Supplier_MT.cs" />
+    <Compile Include="TableControl\TableControl.cs" />
     <Compile Include="UserManagement\User.cs" />
     <Compile Include="UserManagement\UserRole.cs" />
     <Compile Include="View\VPerson.cs" />
