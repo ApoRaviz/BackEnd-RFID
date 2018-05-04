@@ -71,6 +71,7 @@
     <Compile Include="EmployeeMaster\IResignService.cs" />
     <Compile Include="FileManagement\IFileService.cs" />
     <Compile Include="HeadReportControl\IHeadReportControlService.cs" />
+    <Compile Include="Import\IImportDataService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="LabelControl\ILabelControlService.cs" />
     <Compile Include="MenuMaster\IMenuService.cs" />

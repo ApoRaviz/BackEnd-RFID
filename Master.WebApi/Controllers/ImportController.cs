@@ -1,41 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Common;
-using System.Web.Http.Cors;
-using WIM.Core.Entity.Currency;
-using WIM.Core.Service;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Service;
+using WIM.Core.Entity.importManagement;
 
 namespace Master.WebApi.Controllers
 {
-    //[Authorize]
-    [RoutePrefix("api/v1/currency")]
-    public class CurrencyController : ApiController
+    [RoutePrefix("api/v1/import")]
+    public class ImportController : ApiController
     {
+        private IImportDataService ImportService;
 
-        private ICurrencyService CurrencyService;
-
-        public CurrencyController(ICurrencyService CurrencyService)
+        public ImportController(IImportDataService importService)
         {
-            this.CurrencyService = CurrencyService;
+            this.ImportService = importService;
         }
 
-        //get api/Currencys
         [HttpGet]
-        [Route("")]
-        public HttpResponseMessage Get()
+        [Route("GetHeader/{ForTable}")]
+        public HttpResponseMessage Get(string forTable)
         {
-            ResponseData<IEnumerable<CurrencyUnit>> response = new ResponseData<IEnumerable<CurrencyUnit>>();
+            ResponseData<IEnumerable<ImportDefinitionHeader_MT>> response = new ResponseData<IEnumerable<ImportDefinitionHeader_MT>>();
             try
             {
-                IEnumerable<CurrencyUnit> Currency = CurrencyService.GetCurrency();
-                response.SetData(Currency);
+                IEnumerable<ImportDefinitionHeader_MT> header = ImportService.GetAllImportHeader(forTable);
+                response.SetData(header);
             }
             catch (ValidationException ex)
             {
@@ -45,17 +38,16 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // get api/Currencys/id
-
+        // GET: api/label/1
         [HttpGet]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Get(int CurrencyIDSys)
+        [Route("{ImportIDSys}")]
+        public HttpResponseMessage Get(int ImportIDSys)
         {
-            IResponseData<CurrencyUnit> response = new ResponseData<CurrencyUnit>();
+            IResponseData<ImportDefinitionHeader_MT> response = new ResponseData<ImportDefinitionHeader_MT>();
             try
             {
-                CurrencyUnit Currency = CurrencyService.GetCurrencyByCurrIDSys(CurrencyIDSys);
-                response.SetData(Currency);
+                ImportDefinitionHeader_MT import = ImportService.GetImportDefinitionByImportIDSys(ImportIDSys, "ImportDefinitionDetail_MT");
+                response.SetData(import);
             }
             catch (ValidationException ex)
             {
@@ -65,17 +57,15 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // POST: api/Suppliers
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Post([FromBody]CurrencyUnit Currency)
+        public HttpResponseMessage Post([FromBody]ImportDefinitionHeader_MT data)
         {
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                Currency.Country_MT = null;
-                Currency.UpdateBy = User.Identity.Name;
-                int id = CurrencyService.CreateCurrency(Currency);
+                data.UpdateBy = User.Identity.Name;
+                int id = ImportService.CreateImportDifinitionForItemMaster(data).Value;
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -86,20 +76,16 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        // PUT: api/Suppliers/5
-
         [HttpPut]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Put(int CurrencyIDSys, [FromBody]CurrencyUnit Currency)
+        [Route("{ImportIDSys}")]
+        public HttpResponseMessage Put(int ImportIDSys, [FromBody]ImportDefinitionHeader_MT data)
         {
-
             IResponseData<bool> response = new ResponseData<bool>();
 
             try
             {
-                Currency.Country_MT = null;
-                bool isUpdated = CurrencyService.UpdateCurrency(Currency);
-                response.SetData(isUpdated);
+                bool isUpated = ImportService.UpdateImportForItemMaster(ImportIDSys, data);
+                response.SetData(isUpated);
             }
             catch (ValidationException ex)
             {
@@ -111,14 +97,14 @@ namespace Master.WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{CurrencyIDSys}")]
-        public HttpResponseMessage Delete(int CurrencyIDSys)
+        [Route("{ImportIDSys}")]
+        public HttpResponseMessage Delete(int ImportIDSys)
         {
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                bool isUpdated = CurrencyService.DeleteCurrency(CurrencyIDSys);
-                response.SetData(isUpdated);
+                bool isUpated = ImportService.DeleteImport(ImportIDSys);
+                response.SetData(isUpated);
             }
             catch (ValidationException ex)
             {
@@ -127,12 +113,5 @@ namespace Master.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
-
-        private ICurrencyService GetCurrencyService()
-        {
-            return CurrencyService;
-        }
-
     }
-
 }

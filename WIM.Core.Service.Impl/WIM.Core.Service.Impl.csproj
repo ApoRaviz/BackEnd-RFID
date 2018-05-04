@@ -72,6 +72,7 @@
     <Compile Include="EmployeeMaster\ResignService.cs" />
     <Compile Include="FileManagement\FileService.cs" />
     <Compile Include="HeadReportControl\HeadReportControlService.cs" />
+    <Compile Include="Import\ImportDataService.cs" />
     <Compile Include="LabelControl\LabelControlService.cs" />
     <Compile Include="MenuMaster\MenuService.cs" />
     <Compile Include="MenuProjectMapping\MenuProjectMappingService.cs" />

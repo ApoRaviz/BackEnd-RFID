@@ -339,6 +339,7 @@
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\GeneralConfigsController.cs" />
+    <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\PermissionGroupController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
@@ -346,6 +347,7 @@
     <Compile Include="Controllers\ProbationController.cs" />
     <Compile Include="Controllers\ResignController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\UploadFileApiController.cs" />
     <Compile Include="Controllers\WarningController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />

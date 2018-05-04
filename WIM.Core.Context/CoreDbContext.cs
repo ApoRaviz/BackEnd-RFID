@@ -23,6 +23,8 @@ using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.View;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.Address;
+using System;
+using WIM.Core.Entity.importManagement;
 
 namespace WIM.Core.Context
 {
@@ -66,6 +68,9 @@ namespace WIM.Core.Context
         public virtual DbSet<Province_MT> Province_MT { get; set; }
         public virtual DbSet<City_MT> City_MT { get; set; }
         public virtual DbSet<SubCity_MT> SubCity_MT { get; set; }
+
+        public DbSet<ImportDefinitionHeader_MT> ImportDefinitionHeader_MT { get; set; }
+        public DbSet<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
 
         /// <summary>
         /// View
@@ -142,6 +147,231 @@ namespace WIM.Core.Context
                         };
             return submodule.ToList();
         }
-        
+
+        //=====================Proc for ImportDefinition====================//
+        public Nullable<int> ProcCreateImportDefinition(string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        {
+            var forTableParameter = forTable != null ? new SqlParameter
+            {
+                ParameterName = "ForTable",
+                Value = forTable
+            } : new SqlParameter("ForTable", DBNull.Value);
+
+            var formatNameParameter = formatName != null ? new SqlParameter
+            {
+                ParameterName = "FormatName",
+                Value = formatName
+            } : new SqlParameter("FormatName", DBNull.Value);
+
+            var delimiterParameter = delimiter != null ? new SqlParameter
+            {
+                ParameterName = "Delimiter",
+                Value = delimiter
+            } : new SqlParameter("Delimiter", DBNull.Value);
+
+            var maxHeadingParameter = maxHeading.HasValue ? new SqlParameter
+            {
+                ParameterName = "MaxHeading",
+                Value = maxHeading
+            } : new SqlParameter("MaxHeading", 0);
+
+            var encodingParameter = encoding != null ? new SqlParameter
+            {
+                ParameterName = "Encoding",
+                Value = encoding
+            } : new SqlParameter("Encoding", DBNull.Value);
+
+            var skipFirstRecodeParameter = skipFirstRecode.HasValue ? new SqlParameter
+            {
+                ParameterName = "SkipFirstRecode",
+                Value = skipFirstRecode
+            } : new SqlParameter("SkipFirstRecode", false);
+
+            var createdDateParameter = createdDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "CreatedDate",
+                Value = createdDate
+            } : new SqlParameter("CreatedDate", DateTime.Now);
+
+            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "UpdatedDate",
+                Value = updatedDate
+            } : new SqlParameter("UpdatedDate", DateTime.Now);
+
+            var userUpdateParameter = userUpdate != null ? new SqlParameter
+            {
+                ParameterName = "UserUpdate",
+                Value = userUpdate
+            } : new SqlParameter("UserUpdate", DBNull.Value);
+
+            var xmlDetailParameter = new SqlParameter
+            {
+                ParameterName = "XmlDetail",
+                Value = xmlDetail
+            };
+
+            return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ForTable , @FormatName , @Delimiter , @MaxHeading ," +
+    "@Encoding , @SkipFirstRecode , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", forTableParameter, formatNameParameter, delimiterParameter,
+    maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+        }
+
+        public object ProcUpdateImportDefinition(Nullable<int> importIDSys, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        {
+            var importIDSysParameter = importIDSys.HasValue ? new SqlParameter
+            {
+                ParameterName = "ImportIDSys",
+                Value = importIDSys
+            } : new SqlParameter("ImportIDSys", 0);
+
+            var formatNameParameter = formatName != null ? new SqlParameter
+            {
+                ParameterName = "FormatName",
+                Value = formatName
+            } : new SqlParameter("FormatName", DBNull.Value);
+
+            var delimiterParameter = delimiter != null ? new SqlParameter
+            {
+                ParameterName = "Delimiter",
+                Value = delimiter
+            } : new SqlParameter("Delimiter", DBNull.Value);
+
+            var maxHeadingParameter = maxHeading.HasValue ? new SqlParameter
+            {
+                ParameterName = "MaxHeading",
+                Value = maxHeading
+            } : new SqlParameter("MaxHeading", 0);
+
+            var encodingParameter = encoding != null ? new SqlParameter
+            {
+                ParameterName = "Encoding",
+                Value = encoding
+            } : new SqlParameter("Encoding", DBNull.Value);
+
+            var skipFirstRecodeParameter = skipFirstRecode.HasValue ? new SqlParameter
+            {
+                ParameterName = "SkipFirstRecode",
+                Value = skipFirstRecode
+            } : new SqlParameter("SkipFirstRecode", false);
+
+            var createdDateParameter = createdDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "CreatedDate",
+                Value = createdDate
+            } : new SqlParameter("CreatedDate", DateTime.Now);
+
+            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "UpdatedDate",
+                Value = updatedDate
+            } : new SqlParameter("UpdatedDate", DateTime.Now);
+
+            var userUpdateParameter = userUpdate != null ? new SqlParameter
+            {
+                ParameterName = "UserUpdate",
+                Value = userUpdate
+            } : new SqlParameter("UserUpdate", DBNull.Value);
+
+            var xmlDetailParameter = new SqlParameter
+            {
+                ParameterName = "XmlDetail",
+                Value = xmlDetail
+            };
+
+            return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportIDSys , @FormatName , @Delimiter , @MaxHeading ," +
+    "@Encoding , @SkipFirstRecode , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter,
+    maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+        }
+
+        public string ProcImportDataToTable(Nullable<int> importSysID, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlData)
+        {
+            var importSysIDParameter = importSysID.HasValue ? new SqlParameter
+            {
+                ParameterName = "ImportSysID",
+                Value = importSysID
+            } : new SqlParameter("ImportSysID", 0);
+
+            var createdDateParameter = createdDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "CreatedDate",
+                Value = createdDate
+            } : new SqlParameter("CreatedDate", DateTime.Now);
+
+            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "UpdatedDate",
+                Value = updatedDate
+            } : new SqlParameter("UpdatedDate", DateTime.Now);
+
+            var userUpdateParameter = userUpdate != null ? new SqlParameter
+            {
+                ParameterName = "UserUpdate",
+                Value = userUpdate
+            } : new SqlParameter("UserUpdate", DBNull.Value);
+
+            var xmlDataParameter = new SqlParameter
+            {
+                ParameterName = "XmlDetail",
+                Value = xmlData
+            };
+
+            return Database.SqlQuery<string>("exec ProcImportDataToTable @ImportSysID , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter).FirstOrDefault();
+        }
+
+        public IEnumerable<int> ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
+        {
+            var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
+            {
+                ParameterName = "ImportDefinitionIDSys",
+                Value = importDefinitionIDSys
+            } : new SqlParameter("ImportDefinitionIDSys", 0);
+
+            var fileNameParameter = fileName != null ? new SqlParameter
+            {
+                ParameterName = "FileName",
+                Value = fileName
+            } : new SqlParameter("FileName", DBNull.Value);
+
+            var resultParameter = result != null ? new SqlParameter
+            {
+                ParameterName = "Result",
+                Value = result
+            } : new SqlParameter("Result", DBNull.Value);
+
+            var successParameter = success.HasValue ? new SqlParameter
+            {
+                ParameterName = "Success",
+                Value = success
+            } : new SqlParameter("Success", true);
+
+            var createdDateParameter = createdDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "CreatedDate",
+                Value = createdDate
+            } : new SqlParameter("CreatedDate", DateTime.Now);
+
+            var userUpdateParameter = userUpdate != null ? new SqlParameter
+            {
+                ParameterName = "UserUpdate",
+                Value = userUpdate
+            } : new SqlParameter("UserUpdate", DBNull.Value);
+
+
+            return Database.SqlQuery<int>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
+                ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
+                resultParameter, successParameter, createdDateParameter, userUpdateParameter);
+        }
+
+        public int ProcDeleteImportDefinition(Nullable<int> importIDSys)
+        {
+            var importIDSysParameter = importIDSys.HasValue ? new SqlParameter
+            {
+                ParameterName = "ImportIDSys",
+                Value = importIDSys
+            } : new SqlParameter("ImportIDSys", 0);
+
+            return Database.SqlQuery<int>("exec ProcDeleteImportDefinition @ImportIDSys", importIDSysParameter).FirstOrDefault();
+        }
+
     }
 }

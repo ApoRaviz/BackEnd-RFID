@@ -66,6 +66,7 @@ namespace Master.WebApi
             container.RegisterType<IAddressService, AddressService>();
             container.RegisterType<IResignService, ResignService>();
             container.RegisterType<IFileService, FileService>();
+            container.RegisterType<IImportDataService, ImportDataService>();
 
         }
     }
