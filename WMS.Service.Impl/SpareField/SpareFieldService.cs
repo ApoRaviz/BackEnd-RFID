@@ -154,7 +154,7 @@ namespace WMS.Service.Impl
                     {
 
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                        var deactivatedspf = repo.GetByID(id); ;
+                        var deactivatedspf = repo.GetByID(id);
                         deactivatedspf.IsActive = false;
                         repo.Update(deactivatedspf);
                         Db.SaveChanges();
