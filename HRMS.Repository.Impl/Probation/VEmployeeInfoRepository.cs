@@ -17,7 +17,7 @@ namespace HRMS.Repository.Impl
 
         public IEnumerable<VEmployeeInfo> GetList()
         {
-            var probation = from i in Db.VEmployeeInfo
+            var probation = from i in Db.VEmployeeInfos
                             where i.EmTypeIDSys == 3
                             select i;
             return probation.ToList();
@@ -25,7 +25,7 @@ namespace HRMS.Repository.Impl
 
         public IEnumerable<VEmployeeInfo> GetList2() 
         {
-            var probation = from i in Db.VEmployeeInfo
+            var probation = from i in Db.VEmployeeInfos
                             where (i.PositionTypeIDSys == 1) || (i.PositionTypeIDSys == 2)
                             select i;
             return probation.ToList();
