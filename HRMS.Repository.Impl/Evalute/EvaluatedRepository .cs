@@ -24,7 +24,7 @@ namespace HRMS.Repository.Impl
 
             var evaluatelist =
                                from eva in Db.Evaluated
-                               join vemp in Db.VEmployeeInfo on eva.EmID equals vemp.EmID
+                               join vemp in Db.VEmployeeInfos on eva.EmID equals vemp.EmID
                                select new { eva.EvaluatedIDSys, eva.EmID, eva.EvaluateDate, vemp.Name, vemp.Surname, vemp.DepName, vemp.EmTypeName };
 
             return evaluatelist.ToList();
@@ -35,10 +35,10 @@ namespace HRMS.Repository.Impl
 
             var evaluateformlist =
                                from eva in Db.Evaluated
-                               join vemp in Db.VEmployeeInfo on eva.EmID equals vemp.EmID
-                               join fdt in Db.FormDetail on eva.EvaluatedIDSys equals fdt.EvaluatedIDSys
+                               join vemp in Db.VEmployeeInfos on eva.EmID equals vemp.EmID
+                               join fdt in Db.FormDetails on eva.EvaluatedIDSys equals fdt.EvaluatedIDSys
 
-                               from fqt in Db.FormQuestion
+                               from fqt in Db.FormQuestions
                                where fqt.FormQIDSys == fdt.FormQIDSys
 
                                where eva.EvaluatedIDSys == id
@@ -58,7 +58,7 @@ namespace HRMS.Repository.Impl
 
             var evaluateformlist =
                                from eva in Db.Evaluated
-                               join vemp in Db.VEmployeeInfo on eva.EmID equals vemp.EmID
+                               join vemp in Db.VEmployeeInfos on eva.EmID equals vemp.EmID
 
                                where eva.EvaluatedIDSys == id
 
