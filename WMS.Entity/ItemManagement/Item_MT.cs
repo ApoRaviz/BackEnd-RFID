@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WIM.Core.Entity;
 using WIM.Core.Entity.ProjectManagement;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Common.ValueObject;
 
 namespace WMS.Entity.ItemManagement
 {
@@ -68,5 +69,7 @@ namespace WMS.Entity.ItemManagement
         public virtual Category_MT Category_MT { get; set; }
         public virtual ICollection<ItemUnitMapping> ItemUnitMapping { get; set; }
         public virtual ICollection<ItemSetDetail> ItemSetDetails { get; set; }
+        [NotMapped]
+        public virtual ICollection<SpareFieldsDto> SpareFields { get; set; }
     }
 }
