@@ -56,7 +56,7 @@ namespace WMS.Common.ValueObject
         public int ProjectIDSys { get; set; }
         public ProjectDto Project_MT { get; set; }
         public Supplier_MT Supplier_MT { get; set; }
-        public ICollection<SpareFields> SpareFields { get; set; }
+        public ICollection<SpareFieldsDto> SpareFields { get; set; }
         public ICollection<ItemUnitDto> ItemUnitMapping { get; set; }
         public ICollection<object> ItemInspectMapping { get; set; }
         public List<ControlValueDto> ControlValue { get; set; }

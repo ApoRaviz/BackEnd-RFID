@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace WMS.Common.ValueObject
 {
     public class SpareFieldsDto
     {
-        int SpfIDSys { get; set; }
-        int ProjectIDSys { get; set; }
-        int SpfdIDSys { get; set; }
-        int SpfRefID { get; set; }
-        string Text { get; set; }
-        string Type { get; set; }
-        string TableName { get; set; }
-        string Value { get; set; }
+        public int SpfIDSys { get; set; }
+        public int ProjectIDSys { get; set; }
+        public int? SpfdIDSys { get; set; }
+        public int? SpfdRefID { get; set; }
+        public string Text { get; set; }
+        public string Type { get; set; }
+        public string TableName { get; set; }
+        public string Value { get; set; }
     }
 }

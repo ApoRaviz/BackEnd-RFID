@@ -63,6 +63,10 @@
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
+      <Project>{30A80D17-B62F-4F7D-9430-B02425001E3B}</Project>
+      <Name>WMS.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMS.Entity\WMS.Entity.csproj">
       <Project>{a0332865-e8ed-42d4-bd3a-11422e7524a9}</Project>
       <Name>WMS.Entity</Name>
