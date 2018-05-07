@@ -6,6 +6,7 @@ using System.Linq;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.SupplierManagement;
+using WMS.Common.ValueObject;
 using WMS.Entity.Common;
 using WMS.Entity.ControlMaster;
 using WMS.Entity.Dimension;
@@ -25,6 +26,7 @@ namespace WMS.Context
     public class WMSDbContext : DbContext
     {
         //$DbSet
+		public DbSet<SpareFieldDetail> SpareFieldDetails { get; set; }
 
 
 
@@ -89,6 +91,29 @@ namespace WMS.Context
 
             return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
+
+        public ICollection<SpareFieldsDto> ProcGetSpareFieldsByTableAndRefID(int ProjectIDSys,string TableName,int RefID = 0)
+        {
+            var x1 = new SqlParameter
+            {
+                ParameterName = "ProjectIDSys",
+                Value = ProjectIDSys
+            };
+            var x2 = new SqlParameter
+            {
+                ParameterName = "TableName",
+                Value = TableName
+            };
+            var x3 = new SqlParameter
+            {
+                ParameterName = "RefID",
+                Value = RefID
+            };
+
+            return Database.SqlQuery<SpareFieldsDto>("exec ProcGetSpareFieldsByTableAndRefID @ProjectIDSys , @TableName , @RefID", x1, x2, x3).ToList();
+          
+        }
+
 
         public Nullable<int> ProcCreateLabelLayout(string forTable, string formatName, Nullable<decimal> width, string widthUnit, Nullable<decimal> height, string heightUnit, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
         {

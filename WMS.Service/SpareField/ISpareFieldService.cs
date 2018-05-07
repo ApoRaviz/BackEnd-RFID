@@ -10,6 +10,7 @@ namespace WMS.Service
         SpareField GetSpareFieldBySpfIDSys(int id);
         IEnumerable<SpareField> GetSpareFieldByProjectIDSys(int id);
         int CreateSpareField(IEnumerable<SpareField> resign);
+        IEnumerable<SpareField> GetSpareFieldByTableName(string TableName);
         bool UpdateSpareField(IEnumerable<SpareField> resign);
         bool DeleteSpareField(int id);
     }

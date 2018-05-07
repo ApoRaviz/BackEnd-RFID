@@ -5,6 +5,7 @@ using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
+using WMS.Common.ValueObject;
 using WMS.Context;
 using WMS.Entity.SpareField;
 using WMS.Repository;
@@ -50,6 +51,48 @@ namespace WMS.Service.Impl
             }
             return SpareField;
         }
+
+        public IEnumerable<SpareField> GetSpareFieldByTableName(string TableName)
+        {
+            IEnumerable<SpareField> SpareField;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ISpareFieldRepository repo = new SpareFieldRepository(Db);
+                SpareField = repo.GetMany(x => x.TableName == TableName && x.ProjectIDSys == Identity.GetProjectIDSys());
+            }
+            return SpareField;
+        }
+
+        //public IEnumerable<SpareFieldDetail> SaveSpareFieldDetail(IEnumerable<SpareFieldsDto> spdDto)
+        //{
+        //    IEnumerable<SpareFieldDetail> SpareField;
+
+        //    SpareField SpareFieldnew = new SpareField();
+        //    using (var scope = new TransactionScope())
+        //    {
+        //        try
+        //        {
+        //            using (WMSDbContext Db = new WMSDbContext())
+        //            {
+        //                ISpareFieldDetailRepository repo = new SpareFieldDetailRepository(Db);
+        //                repo.insertByDto(spdDto);
+        //                scope.Complete();
+        //            }
+        //        }
+        //        catch (DbEntityValidationException e)
+        //        {
+        //            scope.Dispose();
+        //            HandleValidationException(e);
+        //        }
+        //        catch (DbUpdateException)
+        //        {
+        //            scope.Dispose();
+        //            ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
+        //            throw ex;
+        //        }
+        //    }
+        //    return null;
+        //}
 
         public int CreateSpareField(IEnumerable<SpareField> SpareField)
         {
