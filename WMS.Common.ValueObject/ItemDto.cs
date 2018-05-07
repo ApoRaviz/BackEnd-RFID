@@ -27,6 +27,7 @@ namespace WMS.Common.ValueObject
         public Nullable<int> ItemSetIDSys { get; set; }
         public Nullable<int> CateIDSys { get; set; }
         public string CateName { get; set; }
+        public string SupName { get; set; }
         public string ItemSetName { get; set; }
         public bool SerialControl { get; set; }
         public string SerialDigit { get; set; }
@@ -55,6 +56,7 @@ namespace WMS.Common.ValueObject
         public int ProjectIDSys { get; set; }
         public ProjectDto Project_MT { get; set; }
         public Supplier_MT Supplier_MT { get; set; }
+        public ICollection<SpareFieldsDto> SpareFields { get; set; }
         public ICollection<ItemUnitDto> ItemUnitMapping { get; set; }
         public ICollection<object> ItemInspectMapping { get; set; }
         public List<ControlValueDto> ControlValue { get; set; }

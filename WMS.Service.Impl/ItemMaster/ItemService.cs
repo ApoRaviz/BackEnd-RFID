@@ -110,6 +110,11 @@ namespace WMS.Service
                         }
                     }
                 }
+                if(sending.SupIDSys != null)
+                {
+                    sending.SupName = Db.Supplier_MT.Where(a => a.SupIDSys.ToString() == sending.SupIDSys).Select(b => b.CompName).FirstOrDefault();
+                }
+                sending.SpareFields = Db.ProcGetSpareFieldsByTableAndRefID(sending.ProjectIDSys, "Item_MT",sending.ItemIDSys);
                 sending.ItemInspectMapping.Clear();
                 foreach (var data in inspect)
                 {
@@ -244,6 +249,7 @@ namespace WMS.Service
                         IItemRepository repo = new ItemRepository(Db);
                         IItemInspectRepository repoInspect = new ItemInspectRepository(Db);
                         IItemUnitRepository repoUnit = new ItemUnitRepository(Db);
+                        ISpareFieldDetailRepository repoSparefd = new SpareFieldDetailRepository(Db);
                         repo.Update(item);
                         var listiteminspect = repoInspect.GetMany(a => a.ItemIDSys == item.ItemIDSys);
                         var listitemunit = repoUnit.GetMany(a => a.ItemIDSys == item.ItemIDSys);
@@ -265,6 +271,10 @@ namespace WMS.Service
                                 data.ItemIDSys = item.ItemIDSys;
                                 repoInspect.Insert(data);
                             }
+                        }
+                        
+                        if (item.SpareFields != null) { 
+                            repoSparefd.insertByDto(item.ItemIDSys,item.SpareFields);
                         }
 
                         Db.SaveChanges();
