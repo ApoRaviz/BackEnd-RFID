@@ -240,11 +240,6 @@ namespace Auth.API.Controllers
             try
             {
                 string roleID = "";
-                if(User == null)
-                {
-                    response.SetStatus(HttpStatusCode.Unauthorized);
-                    Request.ReturnHttpResponseMessage(response);
-                }
                 
                 Boolean IsSysAdmin = User.IsSysAdmin();
                 if (!IsSysAdmin)
@@ -300,8 +295,10 @@ namespace Auth.API.Controllers
             }
             catch (ValidationException ex)
             {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
+                response.SetStatus(HttpStatusCode.Unauthorized);
+                Request.ReturnHttpResponseMessage(response);
+                //response.SetErrors(ex.Errors);
+                //response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
         }
