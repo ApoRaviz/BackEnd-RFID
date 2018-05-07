@@ -15,7 +15,7 @@ namespace WMS.Service.Impl
 {
     public class SpareFieldService : WIM.Core.Service.Impl.Service, ISpareFieldService
     {
-        public SpareFieldService( )
+        public SpareFieldService()
         {
         }
 
@@ -96,8 +96,8 @@ namespace WMS.Service.Impl
 
         public int CreateSpareField(IEnumerable<SpareField> SpareField)
         {
-                int proID = 0;
-                List<LabelConfig> labelConfig = new List<LabelConfig>();
+            int proID = 0;
+            List<LabelConfig> labelConfig = new List<LabelConfig>();
             using (var scope = new TransactionScope())
             {
                 SpareField SpareFieldnew = new SpareField();
@@ -197,9 +197,18 @@ namespace WMS.Service.Impl
                     {
 
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                        var deactivatedspf = repo.GetByID(id);
-                        deactivatedspf.IsActive = false;
-                        repo.Update(deactivatedspf);
+                        ISpareFieldDetailRepository repos = new SpareFieldDetailRepository(Db);
+                        var spareFieldDetail = repos.Get(x => x.SpfIDSys == id);
+                        var spareField = repo.GetByID(id);
+                        if (spareFieldDetail != null)
+                        {
+                            spareField.IsActive = false;
+                            repo.Update(spareField);
+                        }
+                        else
+                        {
+                            repo.Delete(spareField);
+                        }
                         Db.SaveChanges();
                         scope.Complete();
 
