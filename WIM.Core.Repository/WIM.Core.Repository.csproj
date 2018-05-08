@@ -61,7 +61,6 @@
     <Compile Include="CustomerAndProject\IProjectRepository.cs" />
     <Compile Include="FileManagement\IFileRepository.cs" />
     <Compile Include="HeadReportControl\IHeadReportControlRepository.cs" />
-    <Compile Include="IGenericRepository.cs" />
     <Compile Include="ImportDefinition\IImportDefinitionRepository.cs" />
     <Compile Include="LabelControl\ILabelControlRepository.cs" />
     <Compile Include="MenuAndPermission\IMenuProjectMappingRepository.cs" />
