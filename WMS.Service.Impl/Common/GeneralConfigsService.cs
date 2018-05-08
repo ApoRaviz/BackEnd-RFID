@@ -126,22 +126,22 @@ namespace WMS.Service.Impl.Common
             using (var scope = new TransactionScope())
             {
                 GeneralConfigLocationFormat confignew = new GeneralConfigLocationFormat();
-               
+
                 try
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IGeneralConfigsLocationFormatRepository repo = new GeneralConfigsLocationFormatRepository(Db);
-                        var rs = repo.GetByID(param.Keyword);
-                        if ( rs == null)
+                        var rs = repo.Get(x => x.Keyword == param.Keyword);
+                        if (rs == null)
                         {
-                            var x = repo.Insert(param);
+                            repo.Insert(param);
                         }
                         else
                         {
-                            var x = repo.Update(param);
+                            repo.Update(param);
                         }
-                     
+
                         Db.SaveChanges();
                         scope.Complete();
                     }

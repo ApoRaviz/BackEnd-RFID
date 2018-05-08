@@ -116,7 +116,7 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetItemLabel/{LabelIDSys}")]
         public HttpResponseMessage GetItemLabel(int LabelIDSys, [FromBody]Item_MT item)
         {

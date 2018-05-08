@@ -81,6 +81,24 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpGet]
+        [Route("table/{TableName}")]
+        public HttpResponseMessage GetSpareFieldByTableName(string TableName)
+        {
+            ResponseData<IEnumerable<SpareField>> response = new ResponseData<IEnumerable<SpareField>>();
+            try
+            {
+                IEnumerable<SpareField> SpareField = SpareFieldService.GetSpareFieldByTableName(TableName);
+                response.SetData(SpareField);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         // POST: api/Employees
         [HttpPost]
         [Route("")]

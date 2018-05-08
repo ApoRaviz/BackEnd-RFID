@@ -88,6 +88,7 @@
     <Compile Include="Report\ReportLayoutHeader_MT.cs" />
     <Compile Include="Report\ReportLayout_MT.cs" />
     <Compile Include="SpareField\SpareField.cs" />
+    <Compile Include="SpareField\SpareFieldDetail.cs" />
     <Compile Include="WarehouseManagement\GroupLocation.cs" />
     <Compile Include="WarehouseManagement\Location.cs" />
     <Compile Include="WarehouseManagement\LocationType.cs" />
@@ -112,6 +113,10 @@
     <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
       <Project>{de781960-445f-417b-8f15-b5fae25d15c5}</Project>
       <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
+      <Project>{30A80D17-B62F-4F7D-9430-B02425001E3B}</Project>
+      <Name>WMS.Common.ValueObject</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

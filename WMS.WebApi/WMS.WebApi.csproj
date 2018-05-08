@@ -353,6 +353,9 @@
     <Compile Include="Controllers\UploadFileApiController.cs" />
     <Compile Include="Controllers\WarehouseController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
+    <Compile Include="DataSet\MasterDataSet.cs">
+      <DependentUpon>MasterDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DataSet\MasterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

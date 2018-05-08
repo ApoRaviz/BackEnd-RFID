@@ -160,7 +160,7 @@ namespace Master.WebApi.Controllers
             //IResponseData<IEnumerable<List<MenuProjectMappingDto>>> response2 = new ResponseData<IEnumerable<List<MenuProjectMappingDto>>>();
             try
             {
-                IEnumerable<List<MenuProjectMappingDto>> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingByID(ProjectIDSys).GroupBy(u => u.MenuIDSysParent).Select(grp => grp.ToList());
+                IEnumerable<List<MenuProjectMappingDto>> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingByID(ProjectIDSys).GroupBy(u => u.MenuIDSysParent).OrderBy(u => u.Key).Select(grp => grp.ToList());
                 List<List<Permission>> permission = PermissionService.GetPermissionByProjectID(ProjectIDSys).GroupBy(c => c.MenuIDSys).Select(grp => grp.ToList()).ToList();
                 List<List<MenuProjectMappingDto>> temp = MenuProjectMapping.ToList();
                 List<MenuProjectMappingDto> forfindPermission;

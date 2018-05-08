@@ -5,6 +5,7 @@ using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
+using WMS.Common.ValueObject;
 using WMS.Context;
 using WMS.Entity.SpareField;
 using WMS.Repository;
@@ -14,7 +15,7 @@ namespace WMS.Service.Impl
 {
     public class SpareFieldService : WIM.Core.Service.Impl.Service, ISpareFieldService
     {
-        public SpareFieldService( )
+        public SpareFieldService()
         {
         }
 
@@ -51,10 +52,52 @@ namespace WMS.Service.Impl
             return SpareField;
         }
 
+        public IEnumerable<SpareField> GetSpareFieldByTableName(string TableName)
+        {
+            IEnumerable<SpareField> SpareField;
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ISpareFieldRepository repo = new SpareFieldRepository(Db);
+                SpareField = repo.GetMany(x => x.TableName == TableName && x.ProjectIDSys == Identity.GetProjectIDSys());
+            }
+            return SpareField;
+        }
+
+        //public IEnumerable<SpareFieldDetail> SaveSpareFieldDetail(IEnumerable<SpareFieldsDto> spdDto)
+        //{
+        //    IEnumerable<SpareFieldDetail> SpareField;
+
+        //    SpareField SpareFieldnew = new SpareField();
+        //    using (var scope = new TransactionScope())
+        //    {
+        //        try
+        //        {
+        //            using (WMSDbContext Db = new WMSDbContext())
+        //            {
+        //                ISpareFieldDetailRepository repo = new SpareFieldDetailRepository(Db);
+        //                repo.insertByDto(spdDto);
+        //                scope.Complete();
+        //            }
+        //        }
+        //        catch (DbEntityValidationException e)
+        //        {
+        //            scope.Dispose();
+        //            HandleValidationException(e);
+        //        }
+        //        catch (DbUpdateException)
+        //        {
+        //            scope.Dispose();
+        //            ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
+        //            throw ex;
+        //        }
+        //    }
+        //    return null;
+        //}
+
         public int CreateSpareField(IEnumerable<SpareField> SpareField)
         {
-                int proID = 0;
-                List<LabelConfig> labelConfig = new List<LabelConfig>();
+            int proID = 0;
+            List<LabelConfig> labelConfig = new List<LabelConfig>();
             using (var scope = new TransactionScope())
             {
                 SpareField SpareFieldnew = new SpareField();
@@ -154,9 +197,18 @@ namespace WMS.Service.Impl
                     {
 
                         ISpareFieldRepository repo = new SpareFieldRepository(Db);
-                        var deactivatedspf = repo.GetByID(id); ;
-                        deactivatedspf.IsActive = false;
-                        repo.Update(deactivatedspf);
+                        ISpareFieldDetailRepository repos = new SpareFieldDetailRepository(Db);
+                        var spareFieldDetail = repos.Get(x => x.SpfIDSys == id);
+                        var spareField = repo.GetByID(id);
+                        if (spareFieldDetail != null)
+                        {
+                            spareField.IsActive = false;
+                            repo.Update(spareField);
+                        }
+                        else
+                        {
+                            repo.Delete(spareField);
+                        }
                         Db.SaveChanges();
                         scope.Complete();
 

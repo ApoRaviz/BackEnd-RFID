@@ -370,12 +370,6 @@ namespace WMS.WebApi.DataSet {
             
             private global::System.Data.DataColumn columnActive;
             
-            private global::System.Data.DataColumn columnCreatedDate;
-            
-            private global::System.Data.DataColumn columnUpdateDate;
-            
-            private global::System.Data.DataColumn columnUserUpdate;
-            
             private global::System.Data.DataColumn columnItemSetIDSys;
             
             private global::System.Data.DataColumn columnRemark;
@@ -389,6 +383,16 @@ namespace WMS.WebApi.DataSet {
             private global::System.Data.DataColumn columnInspectTypeIDSys;
             
             private global::System.Data.DataColumn columnSupIDSys;
+            
+            private global::System.Data.DataColumn columnCreateBy;
+            
+            private global::System.Data.DataColumn columnCreateAt;
+            
+            private global::System.Data.DataColumn columnUpdateBy;
+            
+            private global::System.Data.DataColumn columnUpdateAt;
+            
+            private global::System.Data.DataColumn columnIsActive;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -649,30 +653,6 @@ namespace WMS.WebApi.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn CreatedDateColumn {
-                get {
-                    return this.columnCreatedDate;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn UpdateDateColumn {
-                get {
-                    return this.columnUpdateDate;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn UserUpdateColumn {
-                get {
-                    return this.columnUserUpdate;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public global::System.Data.DataColumn ItemSetIDSysColumn {
                 get {
                     return this.columnItemSetIDSys;
@@ -724,6 +704,46 @@ namespace WMS.WebApi.DataSet {
             public global::System.Data.DataColumn SupIDSysColumn {
                 get {
                     return this.columnSupIDSys;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn CreateByColumn {
+                get {
+                    return this.columnCreateBy;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn CreateAtColumn {
+                get {
+                    return this.columnCreateAt;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn UpdateByColumn {
+                get {
+                    return this.columnUpdateBy;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn UpdateAtColumn {
+                get {
+                    return this.columnUpdateAt;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn IsActiveColumn {
+                get {
+                    return this.columnIsActive;
                 }
             }
             
@@ -792,16 +812,18 @@ namespace WMS.WebApi.DataSet {
                         string TaxCond, 
                         byte TaxPerc, 
                         byte Active, 
-                        System.DateTime CreatedDate, 
-                        System.DateTime UpdateDate, 
-                        string UserUpdate, 
                         int ItemSetIDSys, 
                         string Remark, 
                         int UnitMinStock, 
                         System.DateTime ActiveDateFrom, 
                         System.DateTime ActiveDateTo, 
                         byte InspectTypeIDSys, 
-                        int SupIDSys) {
+                        int SupIDSys, 
+                        string CreateBy, 
+                        string CreateAt, 
+                        string UpdateBy, 
+                        string UpdateAt, 
+                        string IsActive) {
                 tb_ItemRow rowtb_ItemRow = ((tb_ItemRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -832,16 +854,18 @@ namespace WMS.WebApi.DataSet {
                         TaxCond,
                         TaxPerc,
                         Active,
-                        CreatedDate,
-                        UpdateDate,
-                        UserUpdate,
                         ItemSetIDSys,
                         Remark,
                         UnitMinStock,
                         ActiveDateFrom,
                         ActiveDateTo,
                         InspectTypeIDSys,
-                        SupIDSys};
+                        SupIDSys,
+                        CreateBy,
+                        CreateAt,
+                        UpdateBy,
+                        UpdateAt,
+                        IsActive};
                 rowtb_ItemRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowtb_ItemRow);
                 return rowtb_ItemRow;
@@ -899,9 +923,6 @@ namespace WMS.WebApi.DataSet {
                 this.columnTaxCond = base.Columns["TaxCond"];
                 this.columnTaxPerc = base.Columns["TaxPerc"];
                 this.columnActive = base.Columns["Active"];
-                this.columnCreatedDate = base.Columns["CreatedDate"];
-                this.columnUpdateDate = base.Columns["UpdateDate"];
-                this.columnUserUpdate = base.Columns["UserUpdate"];
                 this.columnItemSetIDSys = base.Columns["ItemSetIDSys"];
                 this.columnRemark = base.Columns["Remark"];
                 this.columnUnitMinStock = base.Columns["UnitMinStock"];
@@ -909,6 +930,11 @@ namespace WMS.WebApi.DataSet {
                 this.columnActiveDateTo = base.Columns["ActiveDateTo"];
                 this.columnInspectTypeIDSys = base.Columns["InspectTypeIDSys"];
                 this.columnSupIDSys = base.Columns["SupIDSys"];
+                this.columnCreateBy = base.Columns["CreateBy"];
+                this.columnCreateAt = base.Columns["CreateAt"];
+                this.columnUpdateBy = base.Columns["UpdateBy"];
+                this.columnUpdateAt = base.Columns["UpdateAt"];
+                this.columnIsActive = base.Columns["IsActive"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -970,12 +996,6 @@ namespace WMS.WebApi.DataSet {
                 base.Columns.Add(this.columnTaxPerc);
                 this.columnActive = new global::System.Data.DataColumn("Active", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnActive);
-                this.columnCreatedDate = new global::System.Data.DataColumn("CreatedDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCreatedDate);
-                this.columnUpdateDate = new global::System.Data.DataColumn("UpdateDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUpdateDate);
-                this.columnUserUpdate = new global::System.Data.DataColumn("UserUpdate", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUserUpdate);
                 this.columnItemSetIDSys = new global::System.Data.DataColumn("ItemSetIDSys", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnItemSetIDSys);
                 this.columnRemark = new global::System.Data.DataColumn("Remark", typeof(string), null, global::System.Data.MappingType.Element);
@@ -990,6 +1010,16 @@ namespace WMS.WebApi.DataSet {
                 base.Columns.Add(this.columnInspectTypeIDSys);
                 this.columnSupIDSys = new global::System.Data.DataColumn("SupIDSys", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSupIDSys);
+                this.columnCreateBy = new global::System.Data.DataColumn("CreateBy", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreateBy);
+                this.columnCreateAt = new global::System.Data.DataColumn("CreateAt", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreateAt);
+                this.columnUpdateBy = new global::System.Data.DataColumn("UpdateBy", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUpdateBy);
+                this.columnUpdateAt = new global::System.Data.DataColumn("UpdateAt", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUpdateAt);
+                this.columnIsActive = new global::System.Data.DataColumn("IsActive", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIsActive);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnItemIDSys}, true));
                 this.columnItemIDSys.AutoIncrement = true;
@@ -1013,14 +1043,7 @@ namespace WMS.WebApi.DataSet {
                 this.columnSpare3.MaxLength = 25;
                 this.columnSpare4.MaxLength = 25;
                 this.columnSpare5.MaxLength = 25;
-                this.columnTaxCond.AllowDBNull = false;
                 this.columnTaxCond.MaxLength = 50;
-                this.columnTaxPerc.AllowDBNull = false;
-                this.columnActive.AllowDBNull = false;
-                this.columnCreatedDate.AllowDBNull = false;
-                this.columnUpdateDate.AllowDBNull = false;
-                this.columnUserUpdate.AllowDBNull = false;
-                this.columnUserUpdate.MaxLength = 25;
                 this.columnRemark.MaxLength = 500;
                 this.columnSupIDSys.AllowDBNull = false;
             }
@@ -1186,13 +1209,15 @@ namespace WMS.WebApi.DataSet {
             
             private global::System.Data.DataColumn columnMobile;
             
-            private global::System.Data.DataColumn columnActive;
+            private global::System.Data.DataColumn columnCreateBy;
             
-            private global::System.Data.DataColumn columnCreatedDate;
+            private global::System.Data.DataColumn columnCreateAt;
             
-            private global::System.Data.DataColumn columnUpdateDate;
+            private global::System.Data.DataColumn columnUpdateBy;
             
-            private global::System.Data.DataColumn columnUserUpdate;
+            private global::System.Data.DataColumn columnUpdateAt;
+            
+            private global::System.Data.DataColumn columnIsActive;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -1349,33 +1374,41 @@ namespace WMS.WebApi.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn ActiveColumn {
+            public global::System.Data.DataColumn CreateByColumn {
                 get {
-                    return this.columnActive;
+                    return this.columnCreateBy;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn CreatedDateColumn {
+            public global::System.Data.DataColumn CreateAtColumn {
                 get {
-                    return this.columnCreatedDate;
+                    return this.columnCreateAt;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn UpdateDateColumn {
+            public global::System.Data.DataColumn UpdateByColumn {
                 get {
-                    return this.columnUpdateDate;
+                    return this.columnUpdateBy;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn UserUpdateColumn {
+            public global::System.Data.DataColumn UpdateAtColumn {
                 get {
-                    return this.columnUserUpdate;
+                    return this.columnUpdateAt;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn IsActiveColumn {
+                get {
+                    return this.columnIsActive;
                 }
             }
             
@@ -1431,10 +1464,11 @@ namespace WMS.WebApi.DataSet {
                         string TelOffice, 
                         string TelExt, 
                         string Mobile, 
-                        byte Active, 
-                        System.DateTime CreatedDate, 
-                        System.DateTime UpdateDate, 
-                        string UserUpdate) {
+                        string CreateBy, 
+                        System.DateTime CreateAt, 
+                        string UpdateBy, 
+                        System.DateTime UpdateAt, 
+                        bool IsActive) {
                 tb_SupplierRow rowtb_SupplierRow = ((tb_SupplierRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -1452,10 +1486,11 @@ namespace WMS.WebApi.DataSet {
                         TelOffice,
                         TelExt,
                         Mobile,
-                        Active,
-                        CreatedDate,
-                        UpdateDate,
-                        UserUpdate};
+                        CreateBy,
+                        CreateAt,
+                        UpdateBy,
+                        UpdateAt,
+                        IsActive};
                 rowtb_SupplierRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowtb_SupplierRow);
                 return rowtb_SupplierRow;
@@ -1500,10 +1535,11 @@ namespace WMS.WebApi.DataSet {
                 this.columnTelOffice = base.Columns["TelOffice"];
                 this.columnTelExt = base.Columns["TelExt"];
                 this.columnMobile = base.Columns["Mobile"];
-                this.columnActive = base.Columns["Active"];
-                this.columnCreatedDate = base.Columns["CreatedDate"];
-                this.columnUpdateDate = base.Columns["UpdateDate"];
-                this.columnUserUpdate = base.Columns["UserUpdate"];
+                this.columnCreateBy = base.Columns["CreateBy"];
+                this.columnCreateAt = base.Columns["CreateAt"];
+                this.columnUpdateBy = base.Columns["UpdateBy"];
+                this.columnUpdateAt = base.Columns["UpdateAt"];
+                this.columnIsActive = base.Columns["IsActive"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1539,14 +1575,16 @@ namespace WMS.WebApi.DataSet {
                 base.Columns.Add(this.columnTelExt);
                 this.columnMobile = new global::System.Data.DataColumn("Mobile", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnMobile);
-                this.columnActive = new global::System.Data.DataColumn("Active", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnActive);
-                this.columnCreatedDate = new global::System.Data.DataColumn("CreatedDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCreatedDate);
-                this.columnUpdateDate = new global::System.Data.DataColumn("UpdateDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUpdateDate);
-                this.columnUserUpdate = new global::System.Data.DataColumn("UserUpdate", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUserUpdate);
+                this.columnCreateBy = new global::System.Data.DataColumn("CreateBy", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreateBy);
+                this.columnCreateAt = new global::System.Data.DataColumn("CreateAt", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreateAt);
+                this.columnUpdateBy = new global::System.Data.DataColumn("UpdateBy", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUpdateBy);
+                this.columnUpdateAt = new global::System.Data.DataColumn("UpdateAt", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUpdateAt);
+                this.columnIsActive = new global::System.Data.DataColumn("IsActive", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIsActive);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnSupIDSys}, true));
                 this.columnSupIDSys.AutoIncrement = true;
@@ -1575,11 +1613,8 @@ namespace WMS.WebApi.DataSet {
                 this.columnTelOffice.MaxLength = 10;
                 this.columnTelExt.MaxLength = 5;
                 this.columnMobile.MaxLength = 10;
-                this.columnActive.AllowDBNull = false;
-                this.columnCreatedDate.AllowDBNull = false;
-                this.columnUpdateDate.AllowDBNull = false;
-                this.columnUserUpdate.AllowDBNull = false;
-                this.columnUserUpdate.MaxLength = 25;
+                this.columnCreateBy.MaxLength = 128;
+                this.columnUpdateBy.MaxLength = 128;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2109,7 +2144,12 @@ namespace WMS.WebApi.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public string TaxCond {
                 get {
-                    return ((string)(this[this.tabletb_Item.TaxCondColumn]));
+                    try {
+                        return ((string)(this[this.tabletb_Item.TaxCondColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TaxCond\' in table \'tb_Item\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tabletb_Item.TaxCondColumn] = value;
@@ -2120,7 +2160,12 @@ namespace WMS.WebApi.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public byte TaxPerc {
                 get {
-                    return ((byte)(this[this.tabletb_Item.TaxPercColumn]));
+                    try {
+                        return ((byte)(this[this.tabletb_Item.TaxPercColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TaxPerc\' in table \'tb_Item\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tabletb_Item.TaxPercColumn] = value;
@@ -2131,43 +2176,15 @@ namespace WMS.WebApi.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public byte Active {
                 get {
-                    return ((byte)(this[this.tabletb_Item.ActiveColumn]));
+                    try {
+                        return ((byte)(this[this.tabletb_Item.ActiveColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Active\' in table \'tb_Item\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tabletb_Item.ActiveColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public System.DateTime CreatedDate {
-                get {
-                    return ((global::System.DateTime)(this[this.tabletb_Item.CreatedDateColumn]));
-                }
-                set {
-                    this[this.tabletb_Item.CreatedDateColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public System.DateTime UpdateDate {
-                get {
-                    return ((global::System.DateTime)(this[this.tabletb_Item.UpdateDateColumn]));
-                }
-                set {
-                    this[this.tabletb_Item.UpdateDateColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string UserUpdate {
-                get {
-                    return ((string)(this[this.tabletb_Item.UserUpdateColumn]));
-                }
-                set {
-                    this[this.tabletb_Item.UserUpdateColumn] = value;
                 }
             }
             
@@ -2275,6 +2292,86 @@ namespace WMS.WebApi.DataSet {
                 }
                 set {
                     this[this.tabletb_Item.SupIDSysColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string CreateBy {
+                get {
+                    try {
+                        return ((string)(this[this.tabletb_Item.CreateByColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CreateBy\' in table \'tb_Item\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabletb_Item.CreateByColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string CreateAt {
+                get {
+                    try {
+                        return ((string)(this[this.tabletb_Item.CreateAtColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CreateAt\' in table \'tb_Item\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabletb_Item.CreateAtColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string UpdateBy {
+                get {
+                    try {
+                        return ((string)(this[this.tabletb_Item.UpdateByColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'UpdateBy\' in table \'tb_Item\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabletb_Item.UpdateByColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string UpdateAt {
+                get {
+                    try {
+                        return ((string)(this[this.tabletb_Item.UpdateAtColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'UpdateAt\' in table \'tb_Item\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabletb_Item.UpdateAtColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string IsActive {
+                get {
+                    try {
+                        return ((string)(this[this.tabletb_Item.IsActiveColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'IsActive\' in table \'tb_Item\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabletb_Item.IsActiveColumn] = value;
                 }
             }
             
@@ -2544,6 +2641,42 @@ namespace WMS.WebApi.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsTaxCondNull() {
+                return this.IsNull(this.tabletb_Item.TaxCondColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetTaxCondNull() {
+                this[this.tabletb_Item.TaxCondColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsTaxPercNull() {
+                return this.IsNull(this.tabletb_Item.TaxPercColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetTaxPercNull() {
+                this[this.tabletb_Item.TaxPercColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsActiveNull() {
+                return this.IsNull(this.tabletb_Item.ActiveColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetActiveNull() {
+                this[this.tabletb_Item.ActiveColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsItemSetIDSysNull() {
                 return this.IsNull(this.tabletb_Item.ItemSetIDSysColumn);
             }
@@ -2612,6 +2745,66 @@ namespace WMS.WebApi.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetInspectTypeIDSysNull() {
                 this[this.tabletb_Item.InspectTypeIDSysColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsCreateByNull() {
+                return this.IsNull(this.tabletb_Item.CreateByColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetCreateByNull() {
+                this[this.tabletb_Item.CreateByColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsCreateAtNull() {
+                return this.IsNull(this.tabletb_Item.CreateAtColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetCreateAtNull() {
+                this[this.tabletb_Item.CreateAtColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsUpdateByNull() {
+                return this.IsNull(this.tabletb_Item.UpdateByColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetUpdateByNull() {
+                this[this.tabletb_Item.UpdateByColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsUpdateAtNull() {
+                return this.IsNull(this.tabletb_Item.UpdateAtColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetUpdateAtNull() {
+                this[this.tabletb_Item.UpdateAtColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsIsActiveNull() {
+                return this.IsNull(this.tabletb_Item.IsActiveColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetIsActiveNull() {
+                this[this.tabletb_Item.IsActiveColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2831,45 +3024,81 @@ namespace WMS.WebApi.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public byte Active {
+            public string CreateBy {
                 get {
-                    return ((byte)(this[this.tabletb_Supplier.ActiveColumn]));
+                    try {
+                        return ((string)(this[this.tabletb_Supplier.CreateByColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CreateBy\' in table \'tb_Supplier\' is DBNull.", e);
+                    }
                 }
                 set {
-                    this[this.tabletb_Supplier.ActiveColumn] = value;
+                    this[this.tabletb_Supplier.CreateByColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public System.DateTime CreatedDate {
+            public System.DateTime CreateAt {
                 get {
-                    return ((global::System.DateTime)(this[this.tabletb_Supplier.CreatedDateColumn]));
+                    try {
+                        return ((global::System.DateTime)(this[this.tabletb_Supplier.CreateAtColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CreateAt\' in table \'tb_Supplier\' is DBNull.", e);
+                    }
                 }
                 set {
-                    this[this.tabletb_Supplier.CreatedDateColumn] = value;
+                    this[this.tabletb_Supplier.CreateAtColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public System.DateTime UpdateDate {
+            public string UpdateBy {
                 get {
-                    return ((global::System.DateTime)(this[this.tabletb_Supplier.UpdateDateColumn]));
+                    try {
+                        return ((string)(this[this.tabletb_Supplier.UpdateByColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'UpdateBy\' in table \'tb_Supplier\' is DBNull.", e);
+                    }
                 }
                 set {
-                    this[this.tabletb_Supplier.UpdateDateColumn] = value;
+                    this[this.tabletb_Supplier.UpdateByColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string UserUpdate {
+            public System.DateTime UpdateAt {
                 get {
-                    return ((string)(this[this.tabletb_Supplier.UserUpdateColumn]));
+                    try {
+                        return ((global::System.DateTime)(this[this.tabletb_Supplier.UpdateAtColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'UpdateAt\' in table \'tb_Supplier\' is DBNull.", e);
+                    }
                 }
                 set {
-                    this[this.tabletb_Supplier.UserUpdateColumn] = value;
+                    this[this.tabletb_Supplier.UpdateAtColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsActive {
+                get {
+                    try {
+                        return ((bool)(this[this.tabletb_Supplier.IsActiveColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'IsActive\' in table \'tb_Supplier\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabletb_Supplier.IsActiveColumn] = value;
                 }
             }
             
@@ -2955,6 +3184,66 @@ namespace WMS.WebApi.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetMobileNull() {
                 this[this.tabletb_Supplier.MobileColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsCreateByNull() {
+                return this.IsNull(this.tabletb_Supplier.CreateByColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetCreateByNull() {
+                this[this.tabletb_Supplier.CreateByColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsCreateAtNull() {
+                return this.IsNull(this.tabletb_Supplier.CreateAtColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetCreateAtNull() {
+                this[this.tabletb_Supplier.CreateAtColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsUpdateByNull() {
+                return this.IsNull(this.tabletb_Supplier.UpdateByColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetUpdateByNull() {
+                this[this.tabletb_Supplier.UpdateByColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsUpdateAtNull() {
+                return this.IsNull(this.tabletb_Supplier.UpdateAtColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetUpdateAtNull() {
+                this[this.tabletb_Supplier.UpdateAtColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsIsActiveNull() {
+                return this.IsNull(this.tabletb_Supplier.IsActiveColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetIsActiveNull() {
+                this[this.tabletb_Supplier.IsActiveColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -3166,22 +3455,11 @@ namespace WMS.WebApi.DataSet.MasterDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("Spare3", "Spare3");
             tableMapping.ColumnMappings.Add("Spare4", "Spare4");
             tableMapping.ColumnMappings.Add("Spare5", "Spare5");
-            tableMapping.ColumnMappings.Add("SerialControl", "SerialControl");
-            tableMapping.ColumnMappings.Add("InspectControl", "InspectControl");
-            tableMapping.ColumnMappings.Add("ExpireControl", "ExpireControl");
-            tableMapping.ColumnMappings.Add("DimensionControl", "DimensionControl");
-            tableMapping.ColumnMappings.Add("BoxControl", "BoxControl");
-            tableMapping.ColumnMappings.Add("LotControl", "LotControl");
-            tableMapping.ColumnMappings.Add("PalletControl", "PalletControl");
-            tableMapping.ColumnMappings.Add("ItemSetControl", "ItemSetControl");
             tableMapping.ColumnMappings.Add("MiniAlert", "MiniAlert");
             tableMapping.ColumnMappings.Add("AlertExp", "AlertExp");
             tableMapping.ColumnMappings.Add("TaxCond", "TaxCond");
             tableMapping.ColumnMappings.Add("TaxPerc", "TaxPerc");
             tableMapping.ColumnMappings.Add("Active", "Active");
-            tableMapping.ColumnMappings.Add("CreatedDate", "CreatedDate");
-            tableMapping.ColumnMappings.Add("UpdateDate", "UpdateDate");
-            tableMapping.ColumnMappings.Add("UserUpdate", "UserUpdate");
             tableMapping.ColumnMappings.Add("ItemSetIDSys", "ItemSetIDSys");
             tableMapping.ColumnMappings.Add("Remark", "Remark");
             tableMapping.ColumnMappings.Add("UnitMinStock", "UnitMinStock");
@@ -3189,14 +3467,87 @@ namespace WMS.WebApi.DataSet.MasterDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("ActiveDateTo", "ActiveDateTo");
             tableMapping.ColumnMappings.Add("InspectTypeIDSys", "InspectTypeIDSys");
             tableMapping.ColumnMappings.Add("SupIDSys", "SupIDSys");
+            tableMapping.ColumnMappings.Add("CreateBy", "CreateBy");
+            tableMapping.ColumnMappings.Add("UpdateBy", "UpdateBy");
             this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.DeleteCommand.Connection = this.Connection;
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [Item_MT] WHERE (([ItemIDSys] = @Original_ItemIDSys))";
+            this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ItemIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemIDSys", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.InsertCommand.Connection = this.Connection;
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [Item_MT] ([ProjectIDSys], [ItemCode], [JAN], [ScanCode], [ItemName], [ItemColor], [Description], [SerialFormat], [SupIDSys], [Spare1], [Spare2], [Spare3], [Spare4], [Spare5], [MiniAlert], [AlertExp], [TaxCond], [TaxPerc], [Active], [ItemSetIDSys], [Remark], [UnitMinStock], [ActiveDateFrom], [ActiveDateTo], [InspectTypeIDSys], [CreateBy], [UpdateBy]) VALUES (@ProjectIDSys, @ItemCode, @JAN, @ScanCode, @ItemName, @ItemColor, @Description, @SerialFormat, @SupIDSys, @Spare1, @Spare2, @Spare3, @Spare4, @Spare5, @MiniAlert, @AlertExp, @TaxCond, @TaxPerc, @Active, @ItemSetIDSys, @Remark, @UnitMinStock, @ActiveDateFrom, @ActiveDateTo, @InspectTypeIDSys, @CreateBy, @UpdateBy);
+SELECT ItemIDSys, ProjectIDSys, ItemCode, JAN, ScanCode, ItemName, ItemColor, Description, SerialFormat, SupIDSys, Spare1, Spare2, Spare3, Spare4, Spare5, MiniAlert, AlertExp, TaxCond, TaxPerc, Active, ItemSetIDSys, Remark, UnitMinStock, ActiveDateFrom, ActiveDateTo, InspectTypeIDSys, CreateBy, UpdateBy FROM Item_MT WHERE (ItemIDSys = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ProjectIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ProjectIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemCode", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemCode", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@JAN", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "JAN", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ScanCode", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ScanCode", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemColor", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemColor", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Description", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Description", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SerialFormat", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SerialFormat", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SupIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SupIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare1", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare1", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare2", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare2", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare3", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare3", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare4", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare4", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare5", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare5", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@MiniAlert", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "MiniAlert", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@AlertExp", global::System.Data.SqlDbType.SmallInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "AlertExp", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TaxCond", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TaxCond", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TaxPerc", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TaxPerc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Active", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Active", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemSetIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemSetIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Remark", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Remark", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UnitMinStock", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UnitMinStock", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ActiveDateFrom", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ActiveDateFrom", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ActiveDateTo", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ActiveDateTo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@InspectTypeIDSys", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "InspectTypeIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CreateBy", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CreateBy", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UpdateBy", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UpdateBy", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.UpdateCommand.Connection = this.Connection;
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Item_MT] SET [ProjectIDSys] = @ProjectIDSys, [ItemCode] = @ItemCode, [JAN] = @JAN, [ScanCode] = @ScanCode, [ItemName] = @ItemName, [ItemColor] = @ItemColor, [Description] = @Description, [SerialFormat] = @SerialFormat, [SupIDSys] = @SupIDSys, [Spare1] = @Spare1, [Spare2] = @Spare2, [Spare3] = @Spare3, [Spare4] = @Spare4, [Spare5] = @Spare5, [MiniAlert] = @MiniAlert, [AlertExp] = @AlertExp, [TaxCond] = @TaxCond, [TaxPerc] = @TaxPerc, [Active] = @Active, [ItemSetIDSys] = @ItemSetIDSys, [Remark] = @Remark, [UnitMinStock] = @UnitMinStock, [ActiveDateFrom] = @ActiveDateFrom, [ActiveDateTo] = @ActiveDateTo, [InspectTypeIDSys] = @InspectTypeIDSys, [CreateBy] = @CreateBy, [UpdateBy] = @UpdateBy WHERE (([ItemIDSys] = @Original_ItemIDSys));
+SELECT ItemIDSys, ProjectIDSys, ItemCode, JAN, ScanCode, ItemName, ItemColor, Description, SerialFormat, SupIDSys, Spare1, Spare2, Spare3, Spare4, Spare5, MiniAlert, AlertExp, TaxCond, TaxPerc, Active, ItemSetIDSys, Remark, UnitMinStock, ActiveDateFrom, ActiveDateTo, InspectTypeIDSys, CreateBy, UpdateBy FROM Item_MT WHERE (ItemIDSys = @ItemIDSys)";
+            this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ProjectIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ProjectIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemCode", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemCode", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@JAN", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "JAN", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ScanCode", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ScanCode", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemColor", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemColor", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Description", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Description", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SerialFormat", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SerialFormat", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SupIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SupIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare1", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare1", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare2", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare2", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare3", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare3", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare4", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare4", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Spare5", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Spare5", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@MiniAlert", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "MiniAlert", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@AlertExp", global::System.Data.SqlDbType.SmallInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "AlertExp", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TaxCond", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TaxCond", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TaxPerc", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TaxPerc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Active", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Active", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemSetIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemSetIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Remark", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Remark", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UnitMinStock", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UnitMinStock", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ActiveDateFrom", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ActiveDateFrom", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ActiveDateTo", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ActiveDateTo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@InspectTypeIDSys", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "InspectTypeIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CreateBy", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CreateBy", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UpdateBy", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UpdateBy", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ItemIDSys", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ItemIDSys", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemIDSys", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "ItemIDSys", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["YUT_WMS"].ConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3205,8 +3556,7 @@ namespace WMS.WebApi.DataSet.MasterDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT ItemIDSys, ProjectIDSys, ItemCode, JAN, ScanCode, ItemName, ItemColor, Description, SerialFormat, SupIDSys, Spare1, Spare2, Spare3, Spare4, Spare5, SerialControl, InspectControl, ExpireControl, DimensionControl, BoxControl, LotControl, PalletControl, ItemSetControl, MiniAlert, AlertExp, TaxCond, TaxPerc, Active, CreatedDate, UpdateDate, UserUpdate, ItemSetIDSys, Remark, UnitMinStock, ActiveDateFrom, ActiveDateTo, InspectTypeIDSys FROM Item_MT
-WHERE ItemCode=@ItemCode";
+            this._commandCollection[0].CommandText = @"SELECT ItemIDSys, ProjectIDSys, ItemCode, JAN, ScanCode, ItemName, ItemColor, Description, SerialFormat, SupIDSys, Spare1, Spare2, Spare3, Spare4, Spare5, MiniAlert, AlertExp, TaxCond, TaxPerc, Active, ItemSetIDSys, Remark, UnitMinStock, ActiveDateFrom, ActiveDateTo, InspectTypeIDSys, CreateBy, UpdateBy FROM Item_MT WHERE (ItemCode = @ItemCode)";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ItemCode", global::System.Data.SqlDbType.NVarChar, 15, global::System.Data.ParameterDirection.Input, 0, 0, "ItemCode", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
@@ -3245,6 +3595,35 @@ WHERE ItemCode=@ItemCode";
             MasterDataSet.tb_ItemDataTable dataTable = new MasterDataSet.tb_ItemDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(MasterDataSet.tb_ItemDataTable dataTable) {
+            return this.Adapter.Update(dataTable);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(MasterDataSet dataSet) {
+            return this.Adapter.Update(dataSet, "tb_Item");
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow dataRow) {
+            return this.Adapter.Update(new global::System.Data.DataRow[] {
+                        dataRow});
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow[] dataRows) {
+            return this.Adapter.Update(dataRows);
         }
     }
     
@@ -3384,10 +3763,11 @@ WHERE ItemCode=@ItemCode";
             tableMapping.ColumnMappings.Add("TelOffice", "TelOffice");
             tableMapping.ColumnMappings.Add("TelExt", "TelExt");
             tableMapping.ColumnMappings.Add("Mobile", "Mobile");
-            tableMapping.ColumnMappings.Add("Active", "Active");
-            tableMapping.ColumnMappings.Add("CreatedDate", "CreatedDate");
-            tableMapping.ColumnMappings.Add("UpdateDate", "UpdateDate");
-            tableMapping.ColumnMappings.Add("UserUpdate", "UserUpdate");
+            tableMapping.ColumnMappings.Add("CreateBy", "CreateBy");
+            tableMapping.ColumnMappings.Add("CreateAt", "CreateAt");
+            tableMapping.ColumnMappings.Add("UpdateBy", "UpdateBy");
+            tableMapping.ColumnMappings.Add("UpdateAt", "UpdateAt");
+            tableMapping.ColumnMappings.Add("IsActive", "IsActive");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -3395,7 +3775,7 @@ WHERE ItemCode=@ItemCode";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["YUT_CORE"].ConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3404,27 +3784,9 @@ WHERE ItemCode=@ItemCode";
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @" SELECT [SupIDSys]
-      ,[SupID]
-      ,[ProjectIDSys]
-      ,[CompName]
-      ,[Address]
-      ,[SubCity]
-      ,[City]
-      ,[Province]
-      ,[Zipcode]
-      ,[CountryCode]
-      ,[ContName]
-      ,[Email]
-      ,[TelOffice]
-      ,[TelExt]
-      ,[Mobile]
-      ,[Active]
-      ,[CreatedDate]
-      ,[UpdateDate]
-      ,[UserUpdate]
-  FROM [YUT_WMS_DEV].[dbo].[Supplier_MT]
-  WHERE SupID=@SupID";
+            this._commandCollection[0].CommandText = @"SELECT        SupIDSys, SupID, ProjectIDSys, CompName, Address, SubCity, City, Province, Zipcode, CountryCode, ContName, Email, TelOffice, TelExt, Mobile, CreateBy, CreateAt, UpdateBy, UpdateAt, IsActive
+FROM            Supplier_MT
+WHERE        (SupID = @SupID)";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SupID", global::System.Data.SqlDbType.NVarChar, 13, global::System.Data.ParameterDirection.Input, 0, 0, "SupID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
@@ -3478,6 +3840,8 @@ WHERE ItemCode=@ItemCode";
         
         private UpdateOrderOption _updateOrder;
         
+        private tb_ItemTableAdapter _tb_ItemTableAdapter;
+        
         private bool _backupDataSetBeforeUpdate;
         
         private global::System.Data.IDbConnection _connection;
@@ -3490,6 +3854,20 @@ WHERE ItemCode=@ItemCode";
             }
             set {
                 this._updateOrder = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso" +
+            "ft.VSDesigner, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3" +
+            "a", "System.Drawing.Design.UITypeEditor")]
+        public tb_ItemTableAdapter tb_ItemTableAdapter {
+            get {
+                return this._tb_ItemTableAdapter;
+            }
+            set {
+                this._tb_ItemTableAdapter = value;
             }
         }
         
@@ -3512,6 +3890,10 @@ WHERE ItemCode=@ItemCode";
                 if ((this._connection != null)) {
                     return this._connection;
                 }
+                if (((this._tb_ItemTableAdapter != null) 
+                            && (this._tb_ItemTableAdapter.Connection != null))) {
+                    return this._tb_ItemTableAdapter.Connection;
+                }
                 return null;
             }
             set {
@@ -3525,6 +3907,9 @@ WHERE ItemCode=@ItemCode";
         public int TableAdapterInstanceCount {
             get {
                 int count = 0;
+                if ((this._tb_ItemTableAdapter != null)) {
+                    count = (count + 1);
+                }
                 return count;
             }
         }
@@ -3536,6 +3921,15 @@ WHERE ItemCode=@ItemCode";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private int UpdateUpdatedRows(MasterDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
+            if ((this._tb_ItemTableAdapter != null)) {
+                global::System.Data.DataRow[] updatedRows = dataSet.tb_Item.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
+                updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
+                if (((updatedRows != null) 
+                            && (0 < updatedRows.Length))) {
+                    result = (result + this._tb_ItemTableAdapter.Update(updatedRows));
+                    allChangedRows.AddRange(updatedRows);
+                }
+            }
             return result;
         }
         
@@ -3546,6 +3940,14 @@ WHERE ItemCode=@ItemCode";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private int UpdateInsertedRows(MasterDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
+            if ((this._tb_ItemTableAdapter != null)) {
+                global::System.Data.DataRow[] addedRows = dataSet.tb_Item.Select(null, null, global::System.Data.DataViewRowState.Added);
+                if (((addedRows != null) 
+                            && (0 < addedRows.Length))) {
+                    result = (result + this._tb_ItemTableAdapter.Update(addedRows));
+                    allAddedRows.AddRange(addedRows);
+                }
+            }
             return result;
         }
         
@@ -3556,6 +3958,14 @@ WHERE ItemCode=@ItemCode";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private int UpdateDeletedRows(MasterDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
             int result = 0;
+            if ((this._tb_ItemTableAdapter != null)) {
+                global::System.Data.DataRow[] deletedRows = dataSet.tb_Item.Select(null, null, global::System.Data.DataViewRowState.Deleted);
+                if (((deletedRows != null) 
+                            && (0 < deletedRows.Length))) {
+                    result = (result + this._tb_ItemTableAdapter.Update(deletedRows));
+                    allChangedRows.AddRange(deletedRows);
+                }
+            }
             return result;
         }
         
@@ -3595,6 +4005,11 @@ WHERE ItemCode=@ItemCode";
             if ((dataSet.HasChanges() == false)) {
                 return 0;
             }
+            if (((this._tb_ItemTableAdapter != null) 
+                        && (this.MatchTableAdapterConnection(this._tb_ItemTableAdapter.Connection) == false))) {
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
+            }
             global::System.Data.IDbConnection workConnection = this.Connection;
             if ((workConnection == null)) {
                 throw new global::System.ApplicationException("TableAdapterManager contains no connection information. Set each TableAdapterMana" +
@@ -3627,6 +4042,15 @@ WHERE ItemCode=@ItemCode";
             try {
                 // ---- Prepare for update -----------
                 //
+                if ((this._tb_ItemTableAdapter != null)) {
+                    revertConnections.Add(this._tb_ItemTableAdapter, this._tb_ItemTableAdapter.Connection);
+                    this._tb_ItemTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(workConnection));
+                    this._tb_ItemTableAdapter.Transaction = ((global::System.Data.SqlClient.SqlTransaction)(workTransaction));
+                    if (this._tb_ItemTableAdapter.Adapter.AcceptChangesDuringUpdate) {
+                        this._tb_ItemTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
+                        adaptersWithAcceptChangesDuringUpdate.Add(this._tb_ItemTableAdapter.Adapter);
+                    }
+                }
                 // 
                 //---- Perform updates -----------
                 //
@@ -3684,6 +4108,10 @@ WHERE ItemCode=@ItemCode";
             finally {
                 if (workConnOpened) {
                     workConnection.Close();
+                }
+                if ((this._tb_ItemTableAdapter != null)) {
+                    this._tb_ItemTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._tb_ItemTableAdapter]));
+                    this._tb_ItemTableAdapter.Transaction = null;
                 }
                 if ((0 < adaptersWithAcceptChangesDuringUpdate.Count)) {
                     global::System.Data.Common.DataAdapter[] adapters = new System.Data.Common.DataAdapter[adaptersWithAcceptChangesDuringUpdate.Count];
