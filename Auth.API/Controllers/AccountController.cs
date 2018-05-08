@@ -237,6 +237,8 @@ namespace Auth.API.Controllers
         public async Task<HttpResponseMessage> ReTokenAsy([FromBody]ParamReToken param)
         {
             IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
+            Dictionary<string, string> Json = new Dictionary<string, string>();
+            response.SetStatus(HttpStatusCode.Unauthorized);
             try
             {
                 string roleID = "";
@@ -251,7 +253,7 @@ namespace Auth.API.Controllers
                     }
                 }
 
-                Dictionary<string, string> Json = new Dictionary<string, string>();
+               
 
 
 
@@ -292,6 +294,13 @@ namespace Auth.API.Controllers
                 }
 
                 response.SetData(Json);
+            }
+            catch (WebException ex)
+            {
+                response.SetStatus(HttpStatusCode.Unauthorized);
+                Request.ReturnHttpResponseMessage(response);
+                //response.SetErrors(ex.Errors);
+                //response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             catch (ValidationException ex)
             {
