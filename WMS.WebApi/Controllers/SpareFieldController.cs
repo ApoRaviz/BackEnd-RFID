@@ -89,11 +89,14 @@ namespace WMS.WebApi.Controller
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                ILabelControlService LabelService = new LabelControlService();
-                LabelControlDto labelResponse = new LabelControlDto();
-                labelResponse = LabelService.GetDto("th", SpareField[0].ProjectIDSys);
-                int id = SpareFieldService.CreateSpareField(SpareField);
-                response.SetData(id);
+                if (SpareField != null)
+                {
+                    ILabelControlService LabelService = new LabelControlService();
+                    LabelControlDto labelResponse = new LabelControlDto();
+                    labelResponse = LabelService.GetDto("th", SpareField[0].ProjectIDSys);
+                    int id = SpareFieldService.CreateSpareField(SpareField);
+                    response.SetData(id);
+                }
             }
             catch (ValidationException ex)
             {
@@ -114,8 +117,11 @@ namespace WMS.WebApi.Controller
 
             try
             {
-                bool isUpated = SpareFieldService.UpdateSpareField(SpareField);
-                response.SetData(isUpated);
+                if (SpareField != null)
+                {
+                    bool isUpated = SpareFieldService.UpdateSpareField(SpareField);
+                    response.SetData(isUpated);
+                }
             }
             catch (ValidationException ex)
             {

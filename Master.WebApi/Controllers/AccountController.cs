@@ -26,6 +26,7 @@ using WIM.Core.Common.Utility.Validation;
 using Auth.Security;
 using Auth.Security.Entity;
 using Auth.Security.Providers;
+using WIM.Core.Entity.Person;
 
 namespace Master.WebApi.Controllers
 {
@@ -345,6 +346,7 @@ namespace Master.WebApi.Controllers
                 Json.Add("access_token", token);
                 Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                 Json.Add("status", "200");
+                
 
                 var Project = new ProjectService().GetProjectByProjectIDSysIncludeModule(projectClaimBinding.ProjectIDSys);
                 if (Project != null)

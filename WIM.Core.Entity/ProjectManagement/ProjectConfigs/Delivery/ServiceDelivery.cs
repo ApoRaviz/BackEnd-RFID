@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WIM.Core.Entity.ProjectManagement.ProjectConfigs.Delivery
 {
-    public class Service
+    public class ServiceDelivery
     {
         public bool IsQC { get; set; }
         public bool IsDelivery { get; set; }

@@ -23,6 +23,7 @@ using WIM.Core.Entity.UserManagement;
 using WIM.Core.Entity.View;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.Address;
+using WIM.Core.Entity.TableControl;
 using System;
 using WIM.Core.Entity.importManagement;
 
@@ -30,6 +31,10 @@ namespace WIM.Core.Context
 {
     public class CoreDbContext : DbContext
     {
+
+        //$DbSet
+		public virtual DbSet<TableControl> TableControls { get; set; }
+
         public virtual DbSet<Api_MT> Api_MT { get; set; }
         public virtual DbSet<ApiMenuMapping> ApiMenuMapping { get; set; }
         public virtual DbSet<Customer_MT> Customer_MT { get; set; }
