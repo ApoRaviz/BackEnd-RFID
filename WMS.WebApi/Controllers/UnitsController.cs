@@ -95,7 +95,6 @@ namespace WMS.WebApi.Controller
             try
             {
                 unit.UnitID = "1";
-                unit.ProjectIDSys = User.Identity.GetProjectIDSys();
                 int id = UnitService.CreateUnit(unit);
                 unit.UnitIDSys = id;
                 response.SetData(unit);
@@ -116,7 +115,6 @@ namespace WMS.WebApi.Controller
             IResponseData<bool> response = new ResponseData<bool>();
             try
             {
-                unit.ProjectIDSys = User.Identity.GetProjectIDSys();
                 bool isUpated = UnitService.UpdateUnit(unit);
                 response.SetData(isUpated);
             }

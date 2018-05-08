@@ -25,7 +25,8 @@ namespace WMS.WebApi.Controller
     public class UploadFileApiController : ApiController
     {
         private IImportService ImportService;
-        private const string DEFAULT_UPLOAD_PATH = "D:/Uploads/WIM/";
+        private const string DEFAULT_UPLOAD_DRIVE = "D:";
+        private const string DEFAULT_UPLOAD_PATH = "/Uploads/WIM/";
         public UploadFileApiController(IImportService importService)
         {
             this.ImportService = importService;
@@ -55,7 +56,11 @@ namespace WMS.WebApi.Controller
 
                     if (uploadItem != null)
                     {
-                        path = DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
+                        string drive = DEFAULT_UPLOAD_DRIVE;
+                        if (!Directory.Exists(drive))
+                        drive = "C:";
+
+                        path = drive + DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
                         FileInfo f = new FileInfo(path);
                         fileName = f.Name;
                         string delimet = uploadItem.Delimiter;
@@ -154,7 +159,11 @@ namespace WMS.WebApi.Controller
 
                     if (uploadItem != null)
                     {
-                        path = DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
+                        string drive = DEFAULT_UPLOAD_DRIVE;
+                        if (!Directory.Exists(drive))
+                            drive = "C:";
+
+                        path = drive + DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
                         FileInfo f = new FileInfo(path);
                         fileName = f.Name;
                         string FormatName = uploadItem.FormatName;

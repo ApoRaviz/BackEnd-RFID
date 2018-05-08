@@ -452,9 +452,11 @@ namespace WMS.WebApi.Report
 
             writer.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
             writer.WriteStartElement("Report");
-            writer.WriteAttributeString("xmlns", null, "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition");
+            writer.WriteAttributeString("xmlns", null, "http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition");
             writer.WriteAttributeString("xmlns:rd", null, "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner");
 
+            writer.WriteStartElement("ReportSections");
+            writer.WriteStartElement("ReportSection");
             writer.WriteStartElement("Body");
             writer.WriteStartElement("ReportItems");
 
@@ -559,13 +561,15 @@ namespace WMS.WebApi.Report
             writer.WriteStartElement("Style");
             writer.WriteEndElement(); // Style
             writer.WriteEndElement(); // Page
+            writer.WriteEndElement(); // ReportSection
+            writer.WriteEndElement(); // ReportSections
 
             writer.WriteElementString("AutoRefresh", "0");
 
             // DataSource element
             writer.WriteStartElement("DataSources");
             writer.WriteStartElement("DataSource");
-            writer.WriteAttributeString("Name", null, "Master");
+            writer.WriteAttributeString("Name", null, "MasterDataSet");
             writer.WriteStartElement("ConnectionProperties");
             writer.WriteElementString("DataProvider", "System.Data.DataSet");
             writer.WriteElementString("ConnectString", "/* Local Connection */");
@@ -582,7 +586,7 @@ namespace WMS.WebApi.Report
 
             // Query element
             writer.WriteStartElement("Query");
-            writer.WriteElementString("DataSourceName", "Master");
+            writer.WriteElementString("DataSourceName", "MasterDataSet");
 
             writer.WriteElementString("CommandType", "Text");
             writer.WriteElementString("CommandText", "/* Local Query */");
@@ -647,9 +651,9 @@ namespace WMS.WebApi.Report
             //writer.WriteEndElement(); // ReportParameters
 
             writer.WriteEndElement(); // Report
-
             // Flush the writer and close the stream
-            writer.Flush();                     
+            writer.Flush();   
+            
 
             return stream;
         }

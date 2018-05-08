@@ -122,7 +122,7 @@ public static class RBAC_ExtendedMethods_4_Principal
         try
         {
             var ci = _principal.Identity as ClaimsIdentity;          
-            string reqUrl = StringHelper.GetRequestUrl(_request.RequestUri.PathAndQuery);
+            string reqUrl = StringHelper.GetRequestUrl(_request.Method +_request.RequestUri.PathAndQuery);
             string[] upperReqUrlSplit = reqUrl.ToUpper().Split('/');
             if (upperReqUrlSplit.Length > 3)
             {
