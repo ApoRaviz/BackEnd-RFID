@@ -63,6 +63,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IUnitRepository repo = new UnitRepository(Db);
+                        unit.ProjectIDSys = Identity.GetProjectIDSys();
                         repo.Insert(unit);
                         Db.SaveChanges();
                         scope.Complete();
@@ -90,6 +91,7 @@ namespace WMS.Service
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         IUnitRepository repo = new UnitRepository(Db);
+                        unit.ProjectIDSys = Identity.GetProjectIDSys();
                         repo.Update(unit);
                         Db.SaveChanges();
                         scope.Complete();

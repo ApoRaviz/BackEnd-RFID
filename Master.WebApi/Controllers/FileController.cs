@@ -42,7 +42,10 @@ namespace Master.WebApi.Controllers
                     throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
                 }
                 DateTime d = DateTime.Now;
-                string root = @"D:\Uploads\WIM";//HttpContext.Current.Server.MapPath("~/Handy/Upload");
+                string drive = "D:";
+                if (!Directory.Exists(drive))
+                    drive = "C:";
+                string root = drive + @"\Uploads\WIM";//HttpContext.Current.Server.MapPath("~/Handy/Upload");
                 if (!Directory.Exists(root))
                 {
                     Directory.CreateDirectory(root);
