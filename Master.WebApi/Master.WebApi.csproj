@@ -18,7 +18,7 @@
     <AssemblyName>Master.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>443</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
@@ -340,6 +340,7 @@
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\GeneralConfigsController.cs" />
+    <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\PermissionGroupController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
@@ -348,6 +349,7 @@
     <Compile Include="Controllers\ResignController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\TableControlController.cs" />
+    <Compile Include="Controllers\UploadFileApiController.cs" />
     <Compile Include="Controllers\WarningController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
@@ -550,6 +552,10 @@
     <ProjectReference Include="..\WIM.Core.Service\WIM.Core.Service.csproj">
       <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
       <Name>WIM.Core.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMS.Service\WMS.Service.csproj">
+      <Project>{7EBE4831-BEEE-4F55-A5CA-71EFA10522A7}</Project>
+      <Name>WMS.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
