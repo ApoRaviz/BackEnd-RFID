@@ -5,7 +5,6 @@ using System.Transactions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
-using WMS.Common.ValueObject;
 using WMS.Context;
 using WMS.Entity.SpareField;
 using WMS.Repository;
