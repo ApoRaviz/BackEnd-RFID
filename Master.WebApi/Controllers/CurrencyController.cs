@@ -98,8 +98,8 @@ namespace Master.WebApi.Controllers
             try
             {
                 Currency.Country_MT = null;
-                bool isUpated = CurrencyService.UpdateCurrency(Currency);
-                response.SetData(isUpated);
+                bool isUpdated = CurrencyService.UpdateCurrency(Currency);
+                response.SetData(isUpdated);
             }
             catch (ValidationException ex)
             {

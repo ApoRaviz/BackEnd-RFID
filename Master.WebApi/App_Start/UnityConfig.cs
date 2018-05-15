@@ -71,8 +71,6 @@ namespace Master.WebApi
             container.RegisterType<IHistoryWarningService, HistoryWarningService>();
             container.RegisterType<ITableControlService, TableControlService>();
             container.RegisterType<IImportMasterService, ImportMasterService>();
-
-
         }
     }
 }

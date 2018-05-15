@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity;
+using WIM.Core.Entity.Person;
 using WIM.Core.Entity.UserManagement;
 
 namespace WIM.Core.Common.ValueObject
@@ -31,5 +32,6 @@ namespace WIM.Core.Common.ValueObject
 
         public UserDto User { get; set; }
         public EmployeeDto Employee { get; set; }
+        public IEnumerable<Person_Email> Person_Email { get; set; }
     }
 }

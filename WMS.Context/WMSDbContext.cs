@@ -451,7 +451,7 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcImportDataToTable", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter);
         }
 
-        public IEnumerable<int> ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
+        public object ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
         {
             var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
             {
@@ -490,9 +490,9 @@ namespace WMS.Context
             } : new SqlParameter("UserUpdate", DBNull.Value);
 
 
-            return Database.SqlQuery<int>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
+            return Database.SqlQuery<object>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
                 ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
-                resultParameter, successParameter, createdDateParameter, userUpdateParameter);
+                resultParameter, successParameter, createdDateParameter, userUpdateParameter).FirstOrDefault();
             ;
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcInsertImportHistory", importDefinitionIDSysParameter, fileNameParameter, resultParameter, successParameter, createdDateParameter, userUpdateParameter);
         }

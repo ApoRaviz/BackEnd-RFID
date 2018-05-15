@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WIM.Core.Entity;
 
-namespace WIM.Core.Entity.ImportManagement
+namespace WIM.Core.Entity.importManagement
 {
     [Table("ImportDefinitionDetail_MT")]
     public class ImportDefinitionDetail_MT : BaseEntity

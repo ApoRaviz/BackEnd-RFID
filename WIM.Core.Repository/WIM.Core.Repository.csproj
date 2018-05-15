@@ -70,6 +70,7 @@
     <Compile Include="Personalize\IDepartmentRepository.cs" />
     <Compile Include="Personalize\IEmployeeRepository.cs" />
     <Compile Include="Personalize\IHistoryWarningRepository.cs" />
+    <Compile Include="Personalize\IPersonEmailRepository.cs" />
     <Compile Include="Personalize\IPersonRepository.cs" />
     <Compile Include="Personalize\IPositionRepository.cs" />
     <Compile Include="Personalize\IProbationRespository.cs" />

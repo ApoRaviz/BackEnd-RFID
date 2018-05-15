@@ -25,7 +25,7 @@ using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.Address;
 using WIM.Core.Entity.TableControl;
 using System;
-using WIM.Core.Entity.ImportManagement;
+using WIM.Core.Entity.importManagement;
 
 namespace WIM.Core.Context
 {
