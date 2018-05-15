@@ -1,4 +1,4 @@
-﻿using OfficeOpenXml;
+﻿using Master.WebApi.Report;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,17 +12,18 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
-using WIM.Core.Entity.importManagement;
-using WIM.Core.Service;
+using WIM.Core.Entity.ImportManagement;
+using WIM.Core.Service.Import;
 
 namespace Master.WebApi.Controllers
 {
     [RoutePrefix("api/v1/upload")]
     public class UploadFileApiController : ApiController
     {
-        private IImportDataService ImportService;
-        private const string DEFAULT_UPLOAD_PATH = "D:/Uploads/WIM/";
-        public UploadFileApiController(IImportDataService importService)
+        private IImportMasterService ImportService;
+        private const string DEFAULT_UPLOAD_DRIVE = "D:";
+        private const string DEFAULT_UPLOAD_PATH = "/Uploads/WIM/";
+        public UploadFileApiController(IImportMasterService importService)
         {
             this.ImportService = importService;
         }
@@ -34,12 +35,28 @@ namespace Master.WebApi.Controllers
             ResponseData<ImportDefinition> response = new ResponseData<ImportDefinition>();
             try
             {
+                //var httpRequest = HttpContext.Current.Request;
+                //if (httpRequest.Files.Count > 0)
+                //{
                 string path = "";
                 string fileName = "";
 
+                //foreach (string file in httpRequest.Files)
+                //{
+                //    var postedFile = httpRequest.Files[file];
+                //    var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
+                //    postedFile.SaveAs(filePath);
+                //    path = filePath;
+                //    fileName = postedFile.FileName;
+                //}
+
                 if (uploadItem != null)
                 {
-                    path = DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
+                    string drive = DEFAULT_UPLOAD_DRIVE;
+                    if (!Directory.Exists(drive))
+                        drive = "C:";
+
+                    path = drive + DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
                     FileInfo f = new FileInfo(path);
                     fileName = f.Name;
                     string delimet = uploadItem.Delimiter;
@@ -64,10 +81,10 @@ namespace Master.WebApi.Controllers
                         default: encoding = Encoding.Default; break;
                     }
 
-                    if(delimet == "undefined")
+                    if (delimet == "undefined")
                     {
                         FileInfo fi = new FileInfo(fileName);
-                        if(fi.Extension == ".xlsx")
+                        if (fi.Extension == ".xlsx")
                         {
                             delimet = "Excel";
                         }
@@ -81,21 +98,21 @@ namespace Master.WebApi.Controllers
                                 else if (data.IndexOf(",") > -1)
                                     delimiter = ",";
                             }
-                                    
+
                         }
                     }
 
                     if (delimet == "Excel")
                     {
-                        dt = GetDataTableFromExcelWithFHeader(path);
+                        dt = ReportUtil.GetDataTableFromExcelWithFHeader(path);
                     }
                     else
                     {
-                        dt = GetDataTableFromFileWithFHeader(path, encoding, delimiter,"\"");
+                        dt = ReportUtil.GetDataTableFromFileWithFHeader(path, encoding, delimiter, "\"");
                     }
 
                     ImportDefinition imp = new ImportDefinition();
-                    imp.data = dt;                  
+                    imp.data = dt;
                     imp.header = dt.Columns.Cast<DataColumn>().Select(x => new tbColumn { name = x.ColumnName.ToUpper() }).ToList();
                     imp.headerSelect = dt.Columns.Cast<DataColumn>().Select(x => x.ColumnName.ToUpper()).ToArray();
 
@@ -103,6 +120,7 @@ namespace Master.WebApi.Controllers
 
                     response.SetData(imp);
                 }
+                //}
             }
             catch (ValidationException ex)
             {
@@ -123,87 +141,91 @@ namespace Master.WebApi.Controllers
                 //var httpRequest = HttpContext.Current.Request;
                 //if (httpRequest.Files.Count > 0)
                 //{
-                    string path = "";
-                    string fileName = "";
+                string path = "";
+                string fileName = "";
 
-                    //foreach (string file in httpRequest.Files)
-                    //{
-                    //    var postedFile = httpRequest.Files[file];
-                    //    var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
-                    //    postedFile.SaveAs(filePath);
-                    //    path = filePath;
-                    //    fileName = postedFile.FileName;
-                    //}
+                //foreach (string file in httpRequest.Files)
+                //{
+                //    var postedFile = httpRequest.Files[file];
+                //    var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
+                //    postedFile.SaveAs(filePath);
+                //    path = filePath;
+                //    fileName = postedFile.FileName;
+                //}
 
-                    if (uploadItem != null)
+                if (uploadItem != null)
+                {
+                    string drive = DEFAULT_UPLOAD_DRIVE;
+                    if (!Directory.Exists(drive))
+                        drive = "C:";
+
+                    path = drive + DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
+                    FileInfo f = new FileInfo(path);
+                    fileName = f.Name;
+                    string FormatName = uploadItem.FormatName;
+
+                    ImportDefinitionHeader_MT data = this.ImportService.GetImportDefinitionByImportIDSys(int.Parse(FormatName), "ImportDefinitionDetail_MT");
+
+                    if (data != null)
                     {
-                        path = DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
-                        FileInfo f = new FileInfo(path);
-                        fileName = f.Name;
-                        string FormatName = uploadItem.FormatName;
+                        bool success = false;
 
-                        ImportDefinitionHeader_MT data = this.ImportService.GetImportDefinitionByImportIDSys(int.Parse(FormatName), "ImportDefinitionDetail_MT");
-         
-                        if(data != null)
+                        if (data.Delimiter == "Excel" && f.Extension != ".xlsx")
+                            result = "File Import incorrect format";
+                        else
                         {
-                            bool success = false;
+                            DataTable dt;
+                            Encoding encoding = Encoding.Default;
+                            string delimiter = ";";
 
-                            if (data.Delimiter == "Excel" && f.Extension != ".xlsx")
-                                result = "File Import incorrect format";
+                            switch (data.Delimiter)
+                            {
+                                case "Tab": delimiter = "\t"; break;
+                                case "Semicolon (;)": delimiter = ";"; break;
+                                case "Colon (:)": delimiter = ":"; break;
+                                case "Comma (,)": delimiter = ","; break;
+                            }
+
+                            switch (data.Encoding)
+                            {
+                                case "Unicode": encoding = Encoding.Unicode; break;
+                                case "Unicode big endian": encoding = Encoding.BigEndianUnicode; break;
+                                case "UTF-8": encoding = Encoding.UTF8; break;
+                                default: encoding = Encoding.Default; break;
+                            }
+
+                            if (data.Delimiter == "Excel")
+                            {
+                                dt = ReportUtil.GetDataTableFromExcelWithFHeader(path);
+                            }
                             else
                             {
-                                DataTable dt;
-                                Encoding encoding = Encoding.Default;
-                                string delimiter = ";";
+                                dt = ReportUtil.GetDataTableFromFileWithFHeader(path, encoding, delimiter);
+                            }
 
-                                switch (data.Delimiter)
-                                {
-                                    case "Tab": delimiter = "\t"; break;
-                                    case "Semicolon (;)": delimiter = ";"; break;
-                                    case "Colon (:)": delimiter = ":"; break;
-                                    case "Comma (,)": delimiter = ","; break;
-                                }
+                            if (data.SkipFirstRecode != null && data.SkipFirstRecode.Value)
+                                dt.Rows.RemoveAt(0);
 
-                                switch (data.Encoding)
-                                {
-                                    case "Unicode": encoding = Encoding.Unicode; break;
-                                    case "Unicode big endian": encoding = Encoding.BigEndianUnicode; break;
-                                    case "UTF-8": encoding = Encoding.UTF8; break;
-                                    default: encoding = Encoding.Default; break;
-                                }
+                            result = CheckImportData(dt, data, data.ImportDefinitionDetail_MT.ToList());
 
-                                if (data.Delimiter == "Excel")
-                                {
-                                    dt = GetDataTableFromExcelWithFHeader(path);
-                                }
-                                else
-                                {
-                                    dt = GetDataTableFromFileWithFHeader(path, encoding, delimiter);
-                                }
-
-                                if (data.SkipFirstRecode != null && data.SkipFirstRecode.Value)
-                                    dt.Rows.RemoveAt(0);
-
-                                result = CheckImportData(dt, data, data.ImportDefinitionDetail_MT.ToList());
+                            if (string.IsNullOrEmpty(result))
+                            {
+                                string xml = PrepareData(dt, data.ImportDefinitionDetail_MT.ToList());
+                                result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, User.Identity.GetUserName());
 
                                 if (string.IsNullOrEmpty(result))
                                 {
-                                    string xml = PrepareData(dt, data.ImportDefinitionDetail_MT.ToList());
-                                    result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, User.Identity.GetUserName());
-
-                                    if (string.IsNullOrEmpty(result))
-                                    {
-                                        result = "Import data complete!";
-                                        success = true;
-                                    }
+                                    result = "Import data complete!";
+                                    success = true;
                                 }
                             }
-
-                            this.ImportService.InsertImportHistory(int.Parse(FormatName), fileName, result, success, User.Identity.GetUserName());
                         }
 
-                        response.SetData(result);
+                        this.ImportService.InsertImportHistory(int.Parse(FormatName), fileName, result, success, User.Identity.GetUserName());
                     }
+
+                    response.SetData(result);
+                }
                 //}
             }
             catch (ValidationException ex)
@@ -211,13 +233,13 @@ namespace Master.WebApi.Controllers
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
-            return Request.ReturnHttpResponseMessage(response); 
+            return Request.ReturnHttpResponseMessage(response);
         }
 
         public string CheckImportData(DataTable dt, ImportDefinitionHeader_MT header, List<ImportDefinitionDetail_MT> detail)
         {
             System.Text.StringBuilder sb = new StringBuilder();
-            
+
             if (dt.Columns.Count < header.MaxHeading)
             {
                 //Check column refer (F...) <= column in file import
@@ -285,86 +307,13 @@ namespace Master.WebApi.Controllers
                     else
                         value = dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString();
 
-                    sb.AppendFormat(pXmlDetail, d.ColumnName, value.Replace("\"",string.Empty));
+                    sb.AppendFormat(pXmlDetail, d.ColumnName, value.Replace("\"", string.Empty));
                 }
 
                 sb.Append("</row>");
             }
 
             return sb.ToString();
-        }
-
-        public static DataTable GetDataTableFromExcelWithFHeader(string path)
-        {
-            using (var pck = new ExcelPackage())
-            {
-                using (var stream = File.OpenRead(path))
-                {
-                    pck.Load(stream);
-                }
-                var ws = pck.Workbook.Worksheets.First();
-                DataTable tbl = new DataTable();
-                foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
-                {
-                    tbl.Columns.Add(string.Format("f{0}", firstRowCell.Start.Column));
-                }
-                for (int rowNum = 1; rowNum <= ws.Dimension.End.Row; rowNum++)
-                {
-                    var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
-                    DataRow row = tbl.Rows.Add();
-                    foreach (var cell in wsRow)
-                    {
-                        row[cell.Start.Column - 1] = cell.Text.Replace("\"", string.Empty);
-                    }
-                }
-                return tbl;
-            }
-        }
-
-        public static DataTable GetDataTableFromFileWithFHeader(string path, Encoding encoding = null, string delimiter = ",", string gualifier = "")
-        {
-            DataTable dt = new DataTable();
-
-            if (encoding == null)
-                encoding = Encoding.Default;
-            using (StreamReader sr = new StreamReader(path, encoding))
-            {
-                string[] firstLine = sr.ReadLine().Split(delimiter.ToCharArray());
-                int colIdx = 1;
-                foreach (string text in firstLine)
-                {
-                    dt.Columns.Add(string.Format("f{0}", colIdx++));
-                }
-
-                DataRow drH = dt.NewRow();
-                for (int i = 0; i < firstLine.Length; i++)
-                {
-                    if (!string.IsNullOrEmpty(gualifier))
-                        drH[i] = firstLine[i].Replace(gualifier, "");
-                    else
-                        drH[i] = firstLine[i];
-                }
-                dt.Rows.Add(drH);
-
-                while (!sr.EndOfStream)
-                {
-                    string[] rows = sr.ReadLine().Split(delimiter.ToCharArray());
-                    if (rows.Length >= firstLine.Length)
-                    {
-                        DataRow dr = dt.NewRow();
-                        for (int i = 0; i < firstLine.Length; i++)
-                        {
-                            if (!string.IsNullOrEmpty(gualifier))
-                                dr[i] = rows[i].Replace(gualifier, "");
-                            else
-                                dr[i] = rows[i];
-                        }
-                        dt.Rows.Add(dr);
-                    }
-                }
-            }
-
-            return dt;
         }
     }
 
@@ -377,7 +326,7 @@ namespace Master.WebApi.Controllers
 
     public class UploadItem
     {
-        public string FilePath { get;set;}
+        public string FilePath { get; set; }
         public string FormatName { get; set; }
     }
 

@@ -4,6 +4,7 @@ using Microsoft.Practices.Unity;
 using System.Web;
 using System.Web.Http;
 using Unity.WebApi;
+using Wim.Core.Service.Impl.Import;
 using WIM.Core.Service;
 using WIM.Core.Service.Address;
 using WIM.Core.Service.Common;
@@ -15,6 +16,7 @@ using WIM.Core.Service.Impl.EmployeeMaster;
 using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Service.Impl.PermissionGroups;
 using WIM.Core.Service.Impl.StatusManagement;
+using WIM.Core.Service.Import;
 using WIM.Core.Service.PermissionGroups;
 using WIM.Core.Service.StatusManagement;
 
@@ -68,6 +70,7 @@ namespace Master.WebApi
             container.RegisterType<IFileService, FileService>();
             container.RegisterType<IHistoryWarningService, HistoryWarningService>();
             container.RegisterType<ITableControlService, TableControlService>();
+            container.RegisterType<IImportMasterService, ImportMasterService>();
 
             container.RegisterType<IImportDataService, ImportDataService>();
 

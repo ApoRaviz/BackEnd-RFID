@@ -25,7 +25,7 @@ using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.Address;
 using WIM.Core.Entity.TableControl;
 using System;
-using WIM.Core.Entity.importManagement;
+using WIM.Core.Entity.ImportManagement;
 
 namespace WIM.Core.Context
 {
@@ -44,7 +44,6 @@ namespace WIM.Core.Context
         public virtual DbSet<Menu_MT> Menu_MT { get; set; }
         public virtual DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
         public virtual DbSet<Person_MT> Person_MT { get; set; }
-        public virtual DbSet<Person_Email> Person_Email { get; set; }
         public virtual DbSet<Project_MT> Project_MT { get; set; }
         public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -69,14 +68,12 @@ namespace WIM.Core.Context
         public virtual DbSet<PermissionGroupApi> PermissionGroupApi { get; set; }
         public virtual DbSet<GeneralConfigs> GeneralConfigs { get; set; }
         public virtual DbSet<Probation_MT> Probation_MT { get; set; }
-        
+        public virtual DbSet<ImportDefinitionHeader_MT> ImportDefinitionHeader_MT { get; set; }
+        public virtual DbSet<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
 
         public virtual DbSet<Province_MT> Province_MT { get; set; }
         public virtual DbSet<City_MT> City_MT { get; set; }
         public virtual DbSet<SubCity_MT> SubCity_MT { get; set; }
-
-        public DbSet<ImportDefinitionHeader_MT> ImportDefinitionHeader_MT { get; set; }
-        public DbSet<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
 
         /// <summary>
         /// View
@@ -138,23 +135,75 @@ namespace WIM.Core.Context
         }
 
 
-        public IEnumerable<SubModuleDto> AutoCompleteSM(string txtsearch)
+        public object ProcUpdateImportDefinition(Nullable<int> importIDSys, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
         {
-            var submodule = from i in SubModule
-                            join m in Module_MT on i.ModuleIDSys equals m.ModuleIDSys
-                            where i.SubModuleName.Contains(txtsearch) || m.ModuleName.Contains(txtsearch)
-                            select new SubModuleDto()
-                            {
-                                SubModuleIDSys = i.SubModuleIDSys,
-                                ModuleIDSys = i.ModuleIDSys,
-                                ModuleName = m.ModuleName,
-                                SubModuleName = i.SubModuleName,
-                                LabelSubModuleName = m.ModuleName + " : " + i.SubModuleName
-                        };
-            return submodule.ToList();
+            var importIDSysParameter = importIDSys.HasValue ? new SqlParameter
+            {
+                ParameterName = "ImportIDSys",
+                Value = importIDSys
+            } : new SqlParameter("ImportIDSys", 0);
+
+            var formatNameParameter = formatName != null ? new SqlParameter
+            {
+                ParameterName = "FormatName",
+                Value = formatName
+            } : new SqlParameter("FormatName", DBNull.Value);
+
+            var delimiterParameter = delimiter != null ? new SqlParameter
+            {
+                ParameterName = "Delimiter",
+                Value = delimiter
+            } : new SqlParameter("Delimiter", DBNull.Value);
+
+            var maxHeadingParameter = maxHeading.HasValue ? new SqlParameter
+            {
+                ParameterName = "MaxHeading",
+                Value = maxHeading
+            } : new SqlParameter("MaxHeading", 0);
+
+            var encodingParameter = encoding != null ? new SqlParameter
+            {
+                ParameterName = "Encoding",
+                Value = encoding
+            } : new SqlParameter("Encoding", DBNull.Value);
+
+            var skipFirstRecodeParameter = skipFirstRecode.HasValue ? new SqlParameter
+            {
+                ParameterName = "SkipFirstRecode",
+                Value = skipFirstRecode
+            } : new SqlParameter("SkipFirstRecode", false);
+
+            var createdDateParameter = createdDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "CreatedDate",
+                Value = createdDate
+            } : new SqlParameter("CreatedDate", DateTime.Now);
+
+            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
+            {
+                ParameterName = "UpdatedDate",
+                Value = updatedDate
+            } : new SqlParameter("UpdatedDate", DateTime.Now);
+
+            var userUpdateParameter = userUpdate != null ? new SqlParameter
+            {
+                ParameterName = "UserUpdate",
+                Value = userUpdate
+            } : new SqlParameter("UserUpdate", DBNull.Value);
+
+            var xmlDetailParameter = new SqlParameter
+            {
+                ParameterName = "XmlDetail",
+                Value = xmlDetail
+            };
+
+            return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportIDSys , @FormatName , @Delimiter , @MaxHeading ," +
+            "@Encoding , @SkipFirstRecode , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter,
+            maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+
+            //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateImportDefinition", importIDSysParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        #region ======================== Proc for ImportDefinition =============================
         public Nullable<int> ProcCreateImportDefinition(string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
         {
             var forTableParameter = forTable != null ? new SqlParameter
@@ -220,73 +269,8 @@ namespace WIM.Core.Context
             return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ForTable , @FormatName , @Delimiter , @MaxHeading ," +
     "@Encoding , @SkipFirstRecode , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", forTableParameter, formatNameParameter, delimiterParameter,
     maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
-        }
 
-        public object ProcUpdateImportDefinition(Nullable<int> importIDSys, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
-        {
-            var importIDSysParameter = importIDSys.HasValue ? new SqlParameter
-            {
-                ParameterName = "ImportIDSys",
-                Value = importIDSys
-            } : new SqlParameter("ImportIDSys", 0);
-
-            var formatNameParameter = formatName != null ? new SqlParameter
-            {
-                ParameterName = "FormatName",
-                Value = formatName
-            } : new SqlParameter("FormatName", DBNull.Value);
-
-            var delimiterParameter = delimiter != null ? new SqlParameter
-            {
-                ParameterName = "Delimiter",
-                Value = delimiter
-            } : new SqlParameter("Delimiter", DBNull.Value);
-
-            var maxHeadingParameter = maxHeading.HasValue ? new SqlParameter
-            {
-                ParameterName = "MaxHeading",
-                Value = maxHeading
-            } : new SqlParameter("MaxHeading", 0);
-
-            var encodingParameter = encoding != null ? new SqlParameter
-            {
-                ParameterName = "Encoding",
-                Value = encoding
-            } : new SqlParameter("Encoding", DBNull.Value);
-
-            var skipFirstRecodeParameter = skipFirstRecode.HasValue ? new SqlParameter
-            {
-                ParameterName = "SkipFirstRecode",
-                Value = skipFirstRecode
-            } : new SqlParameter("SkipFirstRecode", false);
-
-            var createdDateParameter = createdDate.HasValue ? new SqlParameter
-            {
-                ParameterName = "CreatedDate",
-                Value = createdDate
-            } : new SqlParameter("CreatedDate", DateTime.Now);
-
-            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
-            {
-                ParameterName = "UpdatedDate",
-                Value = updatedDate
-            } : new SqlParameter("UpdatedDate", DateTime.Now);
-
-            var userUpdateParameter = userUpdate != null ? new SqlParameter
-            {
-                ParameterName = "UserUpdate",
-                Value = userUpdate
-            } : new SqlParameter("UserUpdate", DBNull.Value);
-
-            var xmlDetailParameter = new SqlParameter
-            {
-                ParameterName = "XmlDetail",
-                Value = xmlDetail
-            };
-
-            return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportIDSys , @FormatName , @Delimiter , @MaxHeading ," +
-    "@Encoding , @SkipFirstRecode , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter,
-    maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+            //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateImportDefinition", forTableParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
         public string ProcImportDataToTable(Nullable<int> importSysID, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlData)
@@ -322,9 +306,10 @@ namespace WIM.Core.Context
             };
 
             return Database.SqlQuery<string>("exec ProcImportDataToTable @ImportSysID , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter).FirstOrDefault();
+            //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcImportDataToTable", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter);
         }
 
-        public object ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
+        public IEnumerable<int> ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
         {
             var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
             {
@@ -362,8 +347,12 @@ namespace WIM.Core.Context
                 Value = userUpdate
             } : new SqlParameter("UserUpdate", DBNull.Value);
 
-            return Database.SqlQuery<object>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result, @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
-                resultParameter, successParameter, createdDateParameter, userUpdateParameter).FirstOrDefault();
+
+            return Database.SqlQuery<int>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
+                ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
+                resultParameter, successParameter, createdDateParameter, userUpdateParameter);
+            ;
+            //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcInsertImportHistory", importDefinitionIDSysParameter, fileNameParameter, resultParameter, successParameter, createdDateParameter, userUpdateParameter);
         }
 
         public int ProcDeleteImportDefinition(Nullable<int> importIDSys)
@@ -375,8 +364,25 @@ namespace WIM.Core.Context
             } : new SqlParameter("ImportIDSys", 0);
 
             return Database.SqlQuery<int>("exec ProcDeleteImportDefinition @ImportIDSys", importIDSysParameter).FirstOrDefault();
-        }
-        #endregion
 
+            //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcDeleteImportDefinition", importIDSysParameter);
+        }
+
+        public IEnumerable<SubModuleDto> AutoCompleteSM(string txtsearch)
+        {
+            var submodule = from i in SubModule
+                            join m in Module_MT on i.ModuleIDSys equals m.ModuleIDSys
+                            where i.SubModuleName.Contains(txtsearch) || m.ModuleName.Contains(txtsearch)
+                            select new SubModuleDto()
+                            {
+                                SubModuleIDSys = i.SubModuleIDSys,
+                                ModuleIDSys = i.ModuleIDSys,
+                                ModuleName = m.ModuleName,
+                                SubModuleName = i.SubModuleName,
+                                LabelSubModuleName = m.ModuleName + " : " + i.SubModuleName
+                        };
+            return submodule.ToList();
+        }
+        
     }
 }
