@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WIM.Core.Entity.ImportManagement;
+using WIM.Core.Entity.importManagement;
 using WIM.Core.Service;
 
 namespace WIM.Core.Service.Import

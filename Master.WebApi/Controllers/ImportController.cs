@@ -5,7 +5,7 @@ using System.Web.Http;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
-using WIM.Core.Service;
+using WIM.Core.Service.Import;
 using WIM.Core.Entity.importManagement;
 
 namespace Master.WebApi.Controllers
@@ -13,9 +13,9 @@ namespace Master.WebApi.Controllers
     [RoutePrefix("api/v1/import")]
     public class ImportController : ApiController
     {
-        private IImportDataService ImportService;
+        private IImportMasterService ImportService;
 
-        public ImportController(IImportDataService importService)
+        public ImportController(IImportMasterService importService)
         {
             this.ImportService = importService;
         }

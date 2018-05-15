@@ -11,7 +11,7 @@ using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Context;
-using WIM.Core.Entity.ImportManagement;
+using WIM.Core.Entity.importManagement;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Repository.Impl.ImportDefinition;
 using WIM.Core.Repository.ImportDefinition;

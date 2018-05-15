@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Context;
-using WIM.Core.Entity.ImportManagement;
+using WIM.Core.Entity.importManagement;
 using WIM.Core.Repository.Impl;
 using WIM.Core.Repository.ImportDefinition;
 
