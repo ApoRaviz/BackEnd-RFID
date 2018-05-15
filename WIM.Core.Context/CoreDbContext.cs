@@ -44,6 +44,7 @@ namespace WIM.Core.Context
         public virtual DbSet<Menu_MT> Menu_MT { get; set; }
         public virtual DbSet<MenuProjectMapping> MenuProjectMapping { get; set; }
         public virtual DbSet<Person_MT> Person_MT { get; set; }
+        public virtual DbSet<Person_Email> Person_Email { get; set; }
         public virtual DbSet<Project_MT> Project_MT { get; set; }
         public virtual DbSet<Supplier_MT> Supplier_MT { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -153,7 +154,7 @@ namespace WIM.Core.Context
             return submodule.ToList();
         }
 
-        //=====================Proc for ImportDefinition====================//
+        #region ======================== Proc for ImportDefinition =============================
         public Nullable<int> ProcCreateImportDefinition(string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
         {
             var forTableParameter = forTable != null ? new SqlParameter
@@ -323,7 +324,7 @@ namespace WIM.Core.Context
             return Database.SqlQuery<string>("exec ProcImportDataToTable @ImportSysID , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter).FirstOrDefault();
         }
 
-        public IEnumerable<int> ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
+        public object ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
         {
             var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
             {
@@ -361,10 +362,8 @@ namespace WIM.Core.Context
                 Value = userUpdate
             } : new SqlParameter("UserUpdate", DBNull.Value);
 
-
-            return Database.SqlQuery<int>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
-                ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
-                resultParameter, successParameter, createdDateParameter, userUpdateParameter);
+            return Database.SqlQuery<object>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result, @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
+                resultParameter, successParameter, createdDateParameter, userUpdateParameter).FirstOrDefault();
         }
 
         public int ProcDeleteImportDefinition(Nullable<int> importIDSys)
@@ -377,6 +376,7 @@ namespace WIM.Core.Context
 
             return Database.SqlQuery<int>("exec ProcDeleteImportDefinition @ImportIDSys", importIDSysParameter).FirstOrDefault();
         }
+        #endregion
 
     }
 }

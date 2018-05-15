@@ -16,7 +16,7 @@ namespace WIM.Core.Service
         PersonDto GetPersonByPersonID(int id);
         int CreatePerson(Person_MT Person);
         bool UpdatePerson(Person_MT Person);
-        bool UpdatePersonByID(Person_MT Person);
+        List<Person_Email> UpdatePersonByID(Person_MT Person);
         bool DeletePerson(int id);        
     }
 }
