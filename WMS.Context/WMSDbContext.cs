@@ -9,6 +9,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity;
 using WIM.Core.Entity.FileManagement;
@@ -1070,7 +1071,7 @@ namespace WMS.Context
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
         }
 
-        public string GetValidationWms(string tableName)
+        public string GetValidation(string tableName)
         {
             WMSDbContext wms = new WMSDbContext();
             List<DbSchema> schemaList = new List<DbSchema>();
@@ -1100,14 +1101,31 @@ namespace WMS.Context
                     if (schema.Fields.Count > 0)
                         schemaList.Add(schema);
                 }
-
                 ObjectContext objContext = ((IObjectContextAdapter)wms).ObjectContext;
                 var container = objContext.MetadataWorkspace.GetEntityContainer(objContext.DefaultContainerName, DataSpace.CSpace);
                 var propEntityset = container.EntitySets.Where(w => w.Name == tableName).FirstOrDefault();
 
                 if (propEntityset != null)
                 {
-                    var properties = propEntityset.ElementType.Properties;
+                   var properties = propEntityset.ElementType.Properties;
+                    if(properties.Count > 0)
+                    {
+                        foreach (var prop in properties)
+                        {
+                            if(!prop.Nullable | prop.MaxLength.HasValue)
+                            { 
+                            var i = schemaList.Where(w => w.FieldName.ToUpper() == prop.Name.ToUpper()).ToList();
+                                i.ForEach(f =>
+                                {
+                                    if (f.Fields.Any(a => a.Key == "Nullable") && !prop.Nullable)
+                                        f.Fields.Find(w => w.Key == "Nullable").Value = "NO";
+                                    if (!f.Fields.Any(a => a.Key == "MaxLength") && prop.MaxLength.HasValue)
+                                        f.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + prop.MaxLength.Value));
+                                });
+                            }
+                        }
+                    }
+                  
                 }
             }
             return JsonConvert.SerializeObject(schemaList);

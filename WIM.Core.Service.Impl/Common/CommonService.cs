@@ -85,6 +85,19 @@ namespace WIM.Core.Service.Impl
             return tableDescriptionWms;
         }
 
+        public string GetValidation(string tableName)
+        {
+            string validation = "";
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                ICommonRepository repo = new CommonRepository(Db);
+                validation = repo.GetValidation(tableName);
+            }
+            return validation;
+        }
+
+
+
         public IEnumerable<UserLog> GetUserLogData(int? logId, DateTime? RequestDateFrom, DateTime? RequestDateTo)
         {
             IEnumerable<UserLog> userLogs;

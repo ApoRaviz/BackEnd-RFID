@@ -76,6 +76,24 @@ namespace Master.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("validationField/{tableName}")]
+        public HttpResponseMessage ValidationField(string tableName)
+        {
+            IResponseData<string> response = new ResponseData<string>();
+            try
+            {
+                string tableColsDescription = CommonService.GetValidation(tableName);
+                response.SetData(tableColsDescription);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
         [Route("HttpStatusCode/{httpStatusCode}")]
         public HttpResponseMessage GetHttpStatusCode(int httpStatusCode)
         {

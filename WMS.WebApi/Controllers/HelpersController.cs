@@ -81,7 +81,7 @@ namespace WMS.WebApi.Controller
             IResponseData<string> response = new ResponseData<string>();
             try
             {
-                string tableColsDescription = new WMSDbContext().GetValidationWms(tableName);
+                string tableColsDescription = new WMSDbContext().GetValidation(tableName);
                 response.SetData(tableColsDescription);
             }
             catch (ValidationException ex)
