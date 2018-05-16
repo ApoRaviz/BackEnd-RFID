@@ -33,6 +33,8 @@ namespace WIM.Core.Entity.Person
 
         [ForeignKey("CusIDSys")]
         public virtual Customer_MT Customer_MT { get; set; }
+        public ICollection<Person_Email> Person_Email { get; set; }
+
     }
    
 }

@@ -12,6 +12,7 @@ using Microsoft.Owin.Security.OAuth;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
@@ -237,6 +238,7 @@ namespace Auth.API.Controllers
         public async Task<HttpResponseMessage> ReTokenAsy([FromBody]ParamReToken param)
         {
             IResponseData<Dictionary<string, string>> response = new ResponseData<Dictionary<string, string>>();
+            Dictionary<string, string> Json = new Dictionary<string, string>();
             try
             {
                 string roleID = "";
@@ -250,10 +252,6 @@ namespace Auth.API.Controllers
                         return null;
                     }
                 }
-
-                Dictionary<string, string> Json = new Dictionary<string, string>();
-
-
 
                 if (!string.IsNullOrEmpty(param.Time))
                 {
@@ -272,10 +270,10 @@ namespace Auth.API.Controllers
                     oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
                     oAuthIdentity.AddClaim(new Claim("OTPCONFIRM", "True"));
                     AuthenticationProperties props = new AuthenticationProperties();
-                    DateTime dateLatest = Convert.ToDateTime((param.Time));
+                    DateTime dateLatest = Convert.ToDateTime(param.Time, CultureInfo.CreateSpecificCulture("en-US"));
                     DateTime dateCur = DateTime.Now;
                     double timeAdd = ExToken - (dateCur - dateLatest).TotalMinutes;
-                    timeAdd = (timeAdd > ExToken) ? ExToken : timeAdd;
+                    timeAdd = (timeAdd > ExToken) ? ExToken : timeAdd < 1 ? ExToken : timeAdd;
                     TimeSpan spEx = TimeSpan.FromMinutes(timeAdd);
                     props.IssuedUtc = DateTime.Now;
                     props.ExpiresUtc = DateTime.Now.AddMinutes(timeAdd);
@@ -295,10 +293,8 @@ namespace Auth.API.Controllers
             }
             catch (ValidationException ex)
             {
-                response.SetStatus(HttpStatusCode.Unauthorized);
-                Request.ReturnHttpResponseMessage(response);
-                //response.SetErrors(ex.Errors);
-                //response.SetStatus(HttpStatusCode.PreconditionFailed);
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
         }

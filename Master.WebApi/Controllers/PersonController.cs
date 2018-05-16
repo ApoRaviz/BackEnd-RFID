@@ -87,6 +87,7 @@ namespace Master.WebApi.Controllers
                 PersonDto Person = PersonService.GetPersonByPersonID(PersonIDSys);
                 User user = UserService.GetUserByPersonIDSys(PersonIDSys);
                 Employee_MT Employee = EmployeeService.GetEmployeeByPerson(PersonIDSys);
+
                 if (Employee != null)
                 {
                     IEnumerable<HistoryWarning> Warning = WarningService.GetHistoryByEmID(Employee.EmID);
@@ -121,6 +122,7 @@ namespace Master.WebApi.Controllers
             {
                 Person.UpdateBy = User.Identity.Name;
                 int id = PersonService.CreatePerson(Person);
+                //this line for email add
                 response.SetData(id);
             }
             catch (ValidationException ex)
@@ -142,7 +144,7 @@ namespace Master.WebApi.Controllers
 
             try
             {
-                bool isUpated = PersonService.UpdatePerson( Person);//User.Identity.GetUserId(),
+                bool isUpated = PersonService.UpdatePerson(Person);//User.Identity.GetUserId(),
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -159,11 +161,10 @@ namespace Master.WebApi.Controllers
         public HttpResponseMessage PutByID([FromBody]Person_MT Person)
         {
 
-            IResponseData<bool> response = new ResponseData<bool>();
-
+            IResponseData<List<Person_Email>> response = new ResponseData<List<Person_Email>> ();
             try
             {
-                bool isUpated = PersonService.UpdatePersonByID(Person);
+                List<Person_Email> isUpated = PersonService.UpdatePersonByID(Person);
                 response.SetData(isUpated);
             }
             catch (ValidationException ex)
@@ -171,7 +172,6 @@ namespace Master.WebApi.Controllers
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
-
             return Request.ReturnHttpResponseMessage(response);
         }
 

@@ -7,42 +7,37 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Helpers;
-using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
-using WMS.Context;
-using WMS.Entity.ImportManagement;
-using WMS.Repository.Impl.ImportDefinition;
-using WMS.Repository.ImportDefinition;
-using WMS.Service.Import;
+using WIM.Core.Context;
+using WIM.Core.Entity.importManagement;
+using WIM.Core.Repository;
+using WIM.Core.Repository.Impl;
 
-namespace WMS.Service.Impl.Import
+namespace WIM.Core.Service.Impl
 {
-    public class ImportService : WIM.Core.Service.Impl.Service, IImportService
+    public class ImportDataService : WIM.Core.Service.Impl.Service, IImportDataService
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
                             "<Import>{5}</Import></row>";
 
-
-        public ImportService()
+        public ImportDataService()
         {
         }
 
         public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)
         {
-            using (WMSDbContext Db = new WMSDbContext())
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
                 List<ImportDefinitionHeader_MT> import = repo.GetMany(x => x.ForTable == forTable).ToList();
                 return import;
             }
-
         }
 
         public ImportDefinitionHeader_MT GetImportDefinitionByImportIDSys(int id, string include)
         {
-            using (WMSDbContext Db = new WMSDbContext())
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
                 ImportDefinitionHeader_MT import = repo.GetByID(id);
@@ -50,13 +45,15 @@ namespace WMS.Service.Impl.Import
                 {
                     return import;
                 }
-
+                if (string.IsNullOrWhiteSpace(include))
+                {
+                    include.Replace(" ",string.Empty);
+                }
                 string[] includes = include.Replace(" ", "").Split(',');
                 foreach (string inc in includes)
                 {
                     Db.Entry(import).Collection(inc).Load();
                 }
-
                 return import;
             }
         }
@@ -65,9 +62,6 @@ namespace WMS.Service.Impl.Import
         {
             System.Text.StringBuilder sb = new StringBuilder();
             int? ReportSysID = 0;
-
-
-
             foreach (ImportDefinitionDetail_MT d in data.detail)
             {
                 d.IsActive = true;
@@ -83,7 +77,7 @@ namespace WMS.Service.Impl.Import
                 data.CreateAt = DateTime.Now;
                 data.UpdateAt = DateTime.Now;
                 data.UpdateBy = Identity.Name;
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
@@ -123,12 +117,13 @@ namespace WMS.Service.Impl.Import
                 data.UpdateAt = DateTime.Now;
                 data.UpdateBy = Identity.Name;
 
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
                         Db.ProcUpdateImportDefinition(data.ImportIDSys, data.FormatName, data.Delimiter, data.MaxHeading
                                                   , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        
                         Db.SaveChanges();
                     }
                     catch (DbEntityValidationException e)
@@ -152,7 +147,7 @@ namespace WMS.Service.Impl.Import
 
             using (var scope = new TransactionScope())
             {
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
@@ -178,14 +173,12 @@ namespace WMS.Service.Impl.Import
         {
             using (var scope = new TransactionScope())
             {
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
-
                         Db.ProcInsertImportHistory(ImportIDSys, fileName, result, success, null, user);
                         Db.SaveChanges();
-
                     }
                     catch (DbEntityValidationException e)
                     {
@@ -205,7 +198,7 @@ namespace WMS.Service.Impl.Import
         {
             using (var scope = new TransactionScope())
             {
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
@@ -221,7 +214,6 @@ namespace WMS.Service.Impl.Import
                         scope.Dispose();
                         throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     }
-
                     scope.Complete();
                 }
             }

@@ -50,7 +50,7 @@ namespace WMS.Entity.ItemManagement
         public Nullable<int> MiniAlert { get; set; }
         public Nullable<short> AlertExp { get; set; }
         public string TaxCond { get; set; }
-        public byte TaxPerc { get; set; }
+        public Nullable<byte> TaxPerc { get; set; }
         public Nullable<int> ItemSetIDSys { get; set; }
         public string Remark { get; set; }
         public Nullable<int> UnitMinStock { get; set; }

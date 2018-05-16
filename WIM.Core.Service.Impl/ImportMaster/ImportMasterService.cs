@@ -10,28 +10,29 @@ using System.Transactions;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
-using WMS.Context;
-using WMS.Entity.ImportManagement;
-using WMS.Repository.Impl.ImportDefinition;
-using WMS.Repository.ImportDefinition;
-using WMS.Service.Import;
+using WIM.Core.Context;
+using WIM.Core.Entity.importManagement;
+using WIM.Core.Repository.Impl;
+using WIM.Core.Repository.Impl.ImportDefinition;
+using WIM.Core.Repository.ImportDefinition;
+using WIM.Core.Service.Import;
 
-namespace WMS.Service.Impl.Import
+namespace Wim.Core.Service.Impl.Import
 {
-    public class ImportService : WIM.Core.Service.Impl.Service, IImportService
+    public class ImportMasterService : WIM.Core.Service.Impl.Service, IImportMasterService
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
                             "<Import>{5}</Import></row>";
 
 
-        public ImportService()
+        public ImportMasterService()
         {
         }
 
         public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)
         {
-            using (WMSDbContext Db = new WMSDbContext())
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
                 List<ImportDefinitionHeader_MT> import = repo.GetMany(x => x.ForTable == forTable).ToList();
@@ -42,7 +43,7 @@ namespace WMS.Service.Impl.Import
 
         public ImportDefinitionHeader_MT GetImportDefinitionByImportIDSys(int id, string include)
         {
-            using (WMSDbContext Db = new WMSDbContext())
+            using (CoreDbContext Db = new CoreDbContext())
             {
                 IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
                 ImportDefinitionHeader_MT import = repo.GetByID(id);
@@ -83,7 +84,7 @@ namespace WMS.Service.Impl.Import
                 data.CreateAt = DateTime.Now;
                 data.UpdateAt = DateTime.Now;
                 data.UpdateBy = Identity.Name;
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
@@ -123,7 +124,7 @@ namespace WMS.Service.Impl.Import
                 data.UpdateAt = DateTime.Now;
                 data.UpdateBy = Identity.Name;
 
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
@@ -152,7 +153,7 @@ namespace WMS.Service.Impl.Import
 
             using (var scope = new TransactionScope())
             {
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
@@ -178,7 +179,7 @@ namespace WMS.Service.Impl.Import
         {
             using (var scope = new TransactionScope())
             {
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
@@ -205,7 +206,7 @@ namespace WMS.Service.Impl.Import
         {
             using (var scope = new TransactionScope())
             {
-                using (WMSDbContext Db = new WMSDbContext())
+                using (CoreDbContext Db = new CoreDbContext())
                 {
                     try
                     {
