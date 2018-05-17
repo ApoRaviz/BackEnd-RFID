@@ -1128,7 +1128,7 @@ namespace WMS.Context
                                             if(!f.Fields.Any(fs => fs.Key == fe.Name) && fe.GetValue(prop, null) != null)
                                                 f.Fields.Add(new DbSchema.ValidationField(fe.Name, fe.GetValue(prop, null).ToString()));
                                         });
-                                    if (!f.Fields.Any(a => a.Key == "MaxLength")
+                                    if (!f.Fields.Any(a => a.Key == "MaxLength"))
                                         f.Fields.Add(new DbSchema.ValidationField("MaxLength", GetMaxLengh(f.Fields)));
 
                                     // var jj = propertiesInfo[1].GetValue(prop, null);
