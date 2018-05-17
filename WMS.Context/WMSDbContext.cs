@@ -26,7 +26,7 @@ namespace WMS.Context
     public class WMSDbContext : DbContext
     {
         //$DbSet
-		public DbSet<SpareFieldDetail> SpareFieldDetails { get; set; }
+        public DbSet<SpareFieldDetail> SpareFieldDetails { get; set; }
 
 
 
@@ -92,26 +92,21 @@ namespace WMS.Context
             return Database.SqlQuery<string>("exec ProcGetNewID @Prefixes", prefixesParameter).SingleOrDefault();
         }
 
-        public ICollection<SpareFieldsDto> ProcGetSpareFieldsByTableAndRefID(int ProjectIDSys,string TableName,int RefID = 0)
+        public ICollection<SpareFieldsDto> ProcGetSpareFieldsByTableAndRefID(int ProjectIDSys, string TableName, int RefID = 0)
         {
-            var x1 = new SqlParameter
-            {
-                ParameterName = "ProjectIDSys",
-                Value = ProjectIDSys
-            };
-            var x2 = new SqlParameter
-            {
-                ParameterName = "TableName",
-                Value = TableName
-            };
-            var x3 = new SqlParameter
-            {
-                ParameterName = "RefID",
-                Value = RefID
-            };
-
+            var x1 = new SqlParameter { ParameterName = "ProjectIDSys", Value = ProjectIDSys };
+            var x2 = new SqlParameter { ParameterName = "TableName", Value = TableName };
+            var x3 = new SqlParameter { ParameterName = "RefID", Value = RefID };
             return Database.SqlQuery<SpareFieldsDto>("exec ProcGetSpareFieldsByTableAndRefID @ProjectIDSys , @TableName , @RefID", x1, x2, x3).ToList();
-          
+
+        }
+
+        public IEnumerable<CheckDependentPKDto> ProcCheckDependentPK(string TableName, string ColumnName, string Value = "")
+        {
+            var x1 = new SqlParameter { ParameterName = "TableName", Value = TableName };
+            var x2 = new SqlParameter { ParameterName = "ColumnName", Value = ColumnName };
+            var x3 = new SqlParameter { ParameterName = "Value", Value = Value };
+            return Database.SqlQuery<CheckDependentPKDto>("exec ProcCheckDependentPK @tableName , @columnName , @value", x1, x2, x3).ToList();
         }
 
 
@@ -178,7 +173,7 @@ namespace WMS.Context
             } : new SqlParameter("XmlDetail", DateTime.Now);
 
             return Database.SqlQuery<Nullable<int>>("exec ProcCreateLabelLayout @ForTable , @FormatName , @Width , @WidthUnit ," +
-    "@Height , @HeightUnit , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail " , forTableParameter, formatNameParameter, widthParameter,
+    "@Height , @HeightUnit , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", forTableParameter, formatNameParameter, widthParameter,
     widthUnitParameter, heightParameter, heightUnitParameter, createdDateParameter, updatedDateParameter,
     userUpdateParameter, xmlDetailParameter).FirstOrDefault();
 
@@ -244,7 +239,7 @@ namespace WMS.Context
 
             return Database.SqlQuery<object>("exec ProcUpdateLabelLayout @LabelIDSys , @FormatName , @Width , @WidthUnit ," +
     "@Height , @HeightUnit , @UpdatedDate , @UserUpdate , @XmlDetail ", labelIDSysParameter, formatNameParameter, widthParameter,
-    widthUnitParameter, heightParameter, heightUnitParameter, updatedDateParameter,userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+    widthUnitParameter, heightParameter, heightUnitParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateLabelLayout", labelIDSysParameter, formatNameParameter, widthParameter, widthUnitParameter, heightParameter, heightUnitParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
@@ -488,7 +483,7 @@ namespace WMS.Context
             {
                 ParameterName = "ForTable",
                 Value = forTable
-            } : new SqlParameter("ForTable",DBNull.Value);
+            } : new SqlParameter("ForTable", DBNull.Value);
 
             var formatNameParameter = formatName != null ? new SqlParameter
             {
@@ -524,13 +519,13 @@ namespace WMS.Context
             {
                 ParameterName = "Encoding",
                 Value = encoding
-            }: new SqlParameter("Encoding", DBNull.Value);
+            } : new SqlParameter("Encoding", DBNull.Value);
 
             var startExportRowParameter = startExportRow.HasValue ? new SqlParameter
             {
                 ParameterName = "StartExportRow",
                 Value = startExportRow
-            }: new SqlParameter("StartExportRow", 0);
+            } : new SqlParameter("StartExportRow", 0);
 
             var includeHeaderParameter = includeHeader.HasValue ? new SqlParameter
             {
@@ -560,7 +555,7 @@ namespace WMS.Context
             {
                 ParameterName = "UpdatedDate",
                 Value = updatedDate
-            }: new SqlParameter("UpdatedDate", DateTime.Now);
+            } : new SqlParameter("UpdatedDate", DateTime.Now);
 
             var userUpdateParameter = userUpdate != null ? new SqlParameter
             {
@@ -576,11 +571,11 @@ namespace WMS.Context
 
             return Database.SqlQuery<Nullable<int>>("exec ProcCreateReportLayout @ForTable , @FormatName , @FormatType , @FileExtention ," +
                 "@Delimiter , @TextGualifier , @Encoding , @StartExportRow , @IncludeHeader , @AddHeaderLayout , @HeaderLayout ," +
-                "@CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", forTableParameter , formatNameParameter , formatTypeParameter,
-                fileExtentionParameter , delimiterParameter , textGualifierParameter , encodingParameter , startExportRowParameter ,
-                includeHeaderParameter , addHeaderLayoutParameter , headerLayoutParameter , createdDateParameter , updatedDateParameter,
-                userUpdateParameter , xmlDetailParameter).FirstOrDefault();
-             //((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateReportLayout", forTableParameter, formatNameParameter, formatTypeParameter, fileExtentionParameter, delimiterParameter, textGualifierParameter, encodingParameter, startExportRowParameter, includeHeaderParameter, addHeaderLayoutParameter, headerLayoutParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
+                "@CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", forTableParameter, formatNameParameter, formatTypeParameter,
+                fileExtentionParameter, delimiterParameter, textGualifierParameter, encodingParameter, startExportRowParameter,
+                includeHeaderParameter, addHeaderLayoutParameter, headerLayoutParameter, createdDateParameter, updatedDateParameter,
+                userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+            //((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateReportLayout", forTableParameter, formatNameParameter, formatTypeParameter, fileExtentionParameter, delimiterParameter, textGualifierParameter, encodingParameter, startExportRowParameter, includeHeaderParameter, addHeaderLayoutParameter, headerLayoutParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
         public object ProcUpdateReportLayout(Nullable<int> reportIDSys, string formatName, string formatType, string fileExtention, string delimiter, string textGualifier, string encoding, Nullable<int> startExportRow, Nullable<bool> includeHeader, Nullable<bool> addHeaderLayout, string headerLayout, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
@@ -650,13 +645,13 @@ namespace WMS.Context
             {
                 ParameterName = "HeaderLayout",
                 Value = headerLayout
-            }: new SqlParameter("HeaderLayout", DBNull.Value);
+            } : new SqlParameter("HeaderLayout", DBNull.Value);
 
             var createdDateParameter = createdDate != null ? new SqlParameter
             {
                 ParameterName = "CreatedDate",
                 Value = createdDate
-            }: new SqlParameter("CreatedDate", DBNull.Value);
+            } : new SqlParameter("CreatedDate", DBNull.Value);
 
             var updatedDateParameter = updatedDate != null ? new SqlParameter
             {
@@ -699,7 +694,7 @@ namespace WMS.Context
                 Value = zoneID
             } : new SqlParameter("ZoneID", 0);
 
-            return Database.SqlQuery<RackLayout>("exec ProcGetRackLayout @ZoneIDSys , @ZoneID", zoneIDSysParameter , zoneIDParameter).ToList();
+            return Database.SqlQuery<RackLayout>("exec ProcGetRackLayout @ZoneIDSys , @ZoneID", zoneIDSysParameter, zoneIDParameter).ToList();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RackLayout>("ProcGetRackLayout", zoneIDSysParameter, zoneIDParameter);
         }
@@ -1055,15 +1050,15 @@ namespace WMS.Context
 
             var keywordParameter = /*new ObjectParameter("@keyword", keyword);*/
             new SqlParameter("keyword", keyword);
-            string x;
+            string data;
 
-                var y = Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
+            var rs = Database.SqlQuery<string>("ProcGetDataAutoComplete @columnNames, @tableName, @conditionColumnNames, @keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
 
-                x = y.FirstOrDefault();
-            
+            data = rs.FirstOrDefault();
+
             //var y = ((IObjectContextAdapter)this).ObjectContext.ExecuteStoreQuery<string>
             //    ("exec ProcGetDataAutoComplete @columnNames,@tableName,@conditionColumnNames,@keyword", columnNamesParameter, tableNameParameter, conditionColumnNamesParameter, keywordParameter);
-            return x;
+            return data;
 
         }
 

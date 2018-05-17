@@ -214,6 +214,26 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-   
+
+        // DELETE: api/Categories/5
+        [HttpPost]
+        [Route("delete")]
+        public HttpResponseMessage Delete(List<string> arrApi)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                bool isUpated = ApiMTService.DeleteApiMT(arrApi);
+                response.SetData(isUpated);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+
     }
 }
