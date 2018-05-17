@@ -459,6 +459,24 @@ namespace WMS.WebApi.Report
             writer.WriteStartElement("ReportSection");
             writer.WriteStartElement("Body");
             writer.WriteStartElement("ReportItems");
+            writer.WriteStartElement("Tablix");
+            writer.WriteAttributeString("Name", "Tablix1");
+            writer.WriteStartElement("TablixBody");
+
+            writer.WriteStartElement("TablixColumns");
+            writer.WriteStartElement("TablixColumn");
+            writer.WriteElementString("Width", " 4in");
+            writer.WriteEndElement(); //TablixColumn
+            writer.WriteEndElement(); //TablixColumns
+            writer.WriteStartElement("TablixRows");
+            writer.WriteStartElement("TablixRow");
+            writer.WriteElementString("Height", "1.97923in");
+            writer.WriteStartElement("TablixCells");
+            writer.WriteStartElement("TablixCell");
+            writer.WriteStartElement("CellContents");
+            writer.WriteStartElement("Rectangle");
+            writer.WriteAttributeString("Name", "Rectangle1");
+            writer.WriteStartElement("ReportItems");
 
             foreach (LabelLayoutDetail_MT detail in data.detail)
             {
@@ -479,7 +497,7 @@ namespace WMS.WebApi.Report
                     if (detail.Label_From == Constant.Newword_Text)
                         writer.WriteElementString("Value", detail.Label_Text);
                     else
-                        writer.WriteElementString("Value", string.Format("=First(Fields!{0}.Value, \"DataSet1\")", detail.Label_Item));
+                        writer.WriteElementString("Value", string.Format("=Fields!{0}.Value", detail.Label_Item));
 
                     writer.WriteStartElement("Style");
                     writer.WriteElementString("FontFamily", detail.Font_Name);
@@ -527,7 +545,7 @@ namespace WMS.WebApi.Report
                         colName = detail.Label_BarcodeType.ToString().Replace(" ", "") + detail.Label_Item;
                     }
 
-                    writer.WriteElementString("Value", string.Format("=First(Fields!{0}.Value, \"DataSet1\")", colName));
+                    writer.WriteElementString("Value", string.Format("=Fields!{0}.Value", colName));
                     writer.WriteElementString("MIMEType", "image/jpeg");
                     writer.WriteElementString("Sizing", "FitProportional");
                     writer.WriteElementString("Top", (float.Parse(detail.Label_Top.ToString()) / detail.PxPerInch_Ratio) + "in");
@@ -545,10 +563,58 @@ namespace WMS.WebApi.Report
                 }
             }
 
+            writer.WriteEndElement(); //ReportItems
+            writer.WriteElementString("KeepTogether","true");
+            writer.WriteStartElement("Style");
+            writer.WriteStartElement("Border");
+            writer.WriteElementString("Style", "None");
+            writer.WriteEndElement(); // Border
+            writer.WriteEndElement(); // StyleRectangle
+            writer.WriteEndElement(); // Rectangle
+            writer.WriteEndElement();// CellContents
+            writer.WriteEndElement();// TablixCell
+            writer.WriteEndElement();// TablixCells
+            writer.WriteEndElement();// TablixRow
+            writer.WriteEndElement();// TablixRows
+
+            writer.WriteEndElement();// TablixBody
+
+            writer.WriteStartElement("TablixColumnHierarchy"); 
+            writer.WriteStartElement("TablixMembers"); 
+            writer.WriteStartElement("TablixMember");
+            writer.WriteEndElement();// TablixMember
+            writer.WriteEndElement();// TablixMembers
+            writer.WriteEndElement();//TablixColumnHierarchy
+
+
+            writer.WriteStartElement("TablixRowHierarchy");
+            writer.WriteStartElement("TablixMembers");
+            writer.WriteStartElement("TablixMember"); 
+            writer.WriteStartElement("Group");
+            writer.WriteAttributeString("Name", "PrintLabelGroup");
+            writer.WriteStartElement("PageBreak"); 
+            writer.WriteElementString("BreakLocation", "Between");
+            writer.WriteEndElement();// PageBreak
+            writer.WriteEndElement();// Group
+            writer.WriteEndElement();// TablixMember
+            writer.WriteEndElement();// TablixMembers
+            writer.WriteEndElement();// TablixRowHierarchy
+
+            writer.WriteElementString("DataSetName", "DataSet1");
+            writer.WriteElementString("Height", "1.97923in"); 
+            writer.WriteElementString("Width", "4in");
+            writer.WriteStartElement("Style");
+            writer.WriteStartElement("Border");
+            writer.WriteElementString("Style", "None");
+            writer.WriteEndElement(); // Border
+            writer.WriteEndElement(); // StyleTablex
+            writer.WriteEndElement();// Tablix
+
             writer.WriteEndElement(); // ReportItems
             writer.WriteElementString("Height", data.Height + data.HeightUnit);
             writer.WriteStartElement("Style");
             writer.WriteEndElement(); // Style
+           
             writer.WriteEndElement(); // Body
 
             writer.WriteElementString("Width", data.Width + data.WidthUnit);

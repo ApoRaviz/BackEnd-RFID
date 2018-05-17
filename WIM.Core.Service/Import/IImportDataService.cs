@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WIM.Core.Entity.importManagement;
-using WIM.Core.Service;
 
-namespace WIM.Core.Service.Import
+namespace WIM.Core.Service
 {
-    public interface IImportMasterService : IService
+    public interface IImportDataService : IService
     {
         List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable);
         ImportDefinitionHeader_MT GetImportDefinitionByImportIDSys(int id, string include);

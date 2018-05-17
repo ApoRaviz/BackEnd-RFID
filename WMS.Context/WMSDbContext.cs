@@ -1,9 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using WIM.Core.Common.ValueObject;
+using WIM.Core.Entity;
 using WIM.Core.Entity.FileManagement;
 using WIM.Core.Entity.SupplierManagement;
 using WMS.Common.ValueObject;
@@ -71,6 +79,27 @@ namespace WMS.Context
             Configuration.LazyLoadingEnabled = false;
         }
 
+        public override int SaveChanges()
+        {
+            try
+            {
+                return base.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                var errorMessages = ex.EntityValidationErrors
+                        .SelectMany(x => x.ValidationErrors)
+                        .Select(x => x.ErrorMessage);
+
+                var fullErrorMessage = string.Join("; ", errorMessages);
+                
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                
+                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
+
+        }
+        
         public static WMSDbContext Create()
         {
             return new WMSDbContext();
@@ -418,7 +447,7 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcImportDataToTable", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter);
         }
 
-        public IEnumerable<int> ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
+        public object ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
         {
             var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
             {
@@ -457,9 +486,9 @@ namespace WMS.Context
             } : new SqlParameter("UserUpdate", DBNull.Value);
 
 
-            return Database.SqlQuery<int>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
+            return Database.SqlQuery<object>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
                 ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
-                resultParameter, successParameter, createdDateParameter, userUpdateParameter);
+                resultParameter, successParameter, createdDateParameter, userUpdateParameter).FirstOrDefault();
             ;
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcInsertImportHistory", importDefinitionIDSysParameter, fileNameParameter, resultParameter, successParameter, createdDateParameter, userUpdateParameter);
         }
@@ -1035,6 +1064,66 @@ namespace WMS.Context
             WMSDbContext wms = new WMSDbContext();
             return wms.Database.SqlQuery<string>("ProcGetTableDescription @tableName"
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
+        }
+
+        public string GetValidation(string tableName)
+        {
+            WMSDbContext wms = new WMSDbContext();
+            List<DbSchema> schemaList = new List<DbSchema>();
+            string mainResult =  wms.Database.SqlQuery<string>("ProcGetTableValidation @tableName"
+                , new SqlParameter("@tableName", tableName)).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(mainResult))
+            {
+                JObject objs = JsonConvert.DeserializeObject<JObject>(mainResult);
+               
+                foreach (var obj in objs)
+                {
+                    DbSchema schema = new DbSchema();
+                    schema.FieldName = obj.Key;
+                    var validates = obj.Value.ToArray();
+                    foreach (var validate in validates)
+                    {
+                        string[] arValidate = validate.ToString().Split(':');
+                        if(arValidate.Length == 2)
+                        {
+                            string validateType = arValidate[0].Replace("\"", "").Trim();
+                            string validateValue = arValidate[1].Replace("\"", "").Trim();
+                            if (!string.IsNullOrEmpty(validateValue))
+                                schema.Fields.Add(new DbSchema.ValidationField(validateType, validateValue));   
+                        }
+                    }
+                    if (schema.Fields.Count > 0)
+                        schemaList.Add(schema);
+                }
+                ObjectContext objContext = ((IObjectContextAdapter)wms).ObjectContext;
+                var container = objContext.MetadataWorkspace.GetEntityContainer(objContext.DefaultContainerName, DataSpace.CSpace);
+                var propEntityset = container.EntitySets.Where(w => w.Name == tableName).FirstOrDefault();
+
+                if (propEntityset != null)
+                {
+                   var properties = propEntityset.ElementType.Properties;
+                    if(properties.Count > 0)
+                    {
+                        foreach (var prop in properties)
+                        {
+                            if(!prop.Nullable | prop.MaxLength.HasValue)
+                            { 
+                            var i = schemaList.Where(w => w.FieldName.ToUpper() == prop.Name.ToUpper()).ToList();
+                                i.ForEach(f =>
+                                {
+                                    if (f.Fields.Any(a => a.Key == "Nullable") && !prop.Nullable)
+                                        f.Fields.Find(w => w.Key == "Nullable").Value = "NO";
+                                    if (!f.Fields.Any(a => a.Key == "MaxLength") && prop.MaxLength.HasValue)
+                                        f.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + prop.MaxLength.Value));
+                                });
+                            }
+                        }
+                    }
+                  
+                }
+            }
+            return JsonConvert.SerializeObject(schemaList);
         }
 
         public virtual string ProcGetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)
