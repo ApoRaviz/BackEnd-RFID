@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
@@ -1075,6 +1076,10 @@ namespace WMS.Context
         {
             WMSDbContext wms = new WMSDbContext();
             List<DbSchema> schemaList = new List<DbSchema>();
+            List<string> validationTypes = new List<string>()
+            {
+                "Nullable","MaxLength","Schema","Email","Type"
+            };
             string mainResult =  wms.Database.SqlQuery<string>("ProcGetTableValidation @tableName"
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
 
@@ -1101,6 +1106,7 @@ namespace WMS.Context
                     if (schema.Fields.Count > 0)
                         schemaList.Add(schema);
                 }
+
                 ObjectContext objContext = ((IObjectContextAdapter)wms).ObjectContext;
                 var container = objContext.MetadataWorkspace.GetEntityContainer(objContext.DefaultContainerName, DataSpace.CSpace);
                 var propEntityset = container.EntitySets.Where(w => w.Name == tableName).FirstOrDefault();
@@ -1117,10 +1123,26 @@ namespace WMS.Context
                             var i = schemaList.Where(w => w.FieldName.ToUpper() == prop.Name.ToUpper()).ToList();
                                 i.ForEach(f =>
                                 {
-                                    if (f.Fields.Any(a => a.Key == "Nullable") && !prop.Nullable)
-                                        f.Fields.Find(w => w.Key == "Nullable").Value = "NO";
-                                    if (!f.Fields.Any(a => a.Key == "MaxLength") && prop.MaxLength.HasValue)
-                                        f.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + prop.MaxLength.Value));
+                                    var propertiesInfo = prop.GetType().GetProperties();
+                                    var propNames = f.Fields.Select(s => s.Key).ToList();
+                                    var jj = propertiesInfo[1].GetValue(prop, null);
+                                   
+                                    var targetField = propertiesInfo.Where(fp => validationTypes.Contains(fp.Name)).ToList();
+                                    if(targetField != null)
+                                        targetField.ForEach(fe => {
+                                            if(!f.Fields.Any(fs => fs.Key == fe.Name) && fe.GetValue(prop, null) != null)
+                                                f.Fields.Add(new DbSchema.ValidationField(fe.Name, fe.GetValue(prop, null).ToString()));
+                                        });
+                                    if (!f.Fields.Any(a => a.Key == "MaxLength")
+                                        f.Fields.Add(new DbSchema.ValidationField("MaxLength", GetMaxLengh(f.Fields)));
+
+                                    // var jj = propertiesInfo[1].GetValue(prop, null);
+
+                                        //if (f.Fields.Any(a => a.Key == "Nullable") && !prop.Nullable)
+                                        //    f.Fields.Find(w => w.Key == "Nullable").Value = "NO";
+
+                                        //if (!f.Fields.Any(a => a.Key == "MaxLength") && prop.MaxLength.HasValue)
+                                        //    f.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + prop.MaxLength.Value));
                                 });
                             }
                         }
@@ -1129,6 +1151,24 @@ namespace WMS.Context
                 }
             }
             return JsonConvert.SerializeObject(schemaList);
+        }
+        private string GetMaxLengh(List<DbSchema.ValidationField> items)
+        {
+            string val = "0";
+            var max = items.Find(w => w.Key == "Type");
+           if(max != null)
+                switch(max.Value)
+                {
+                    case "int": val = "" + int.MaxValue.ToString().Length;
+                        break;
+                    case "float":
+                        val = "" + double.MaxValue.ToString().Length;
+                        break;
+                    case "datetime2":
+                        val = "" + DateTime.MaxValue.ToString().Length;
+                        break;
+                }
+            return val;
         }
 
         public virtual string ProcGetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword)

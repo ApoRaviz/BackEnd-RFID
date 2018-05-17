@@ -308,6 +308,7 @@ namespace WIM.Core.Repository.Impl
                                 {
                                     if (f.Fields.Any(a => a.Key == "Nullable") && !prop.Nullable)
                                         f.Fields.Find(w => w.Key == "Nullable").Value = "NO";
+
                                     if (!f.Fields.Any(a => a.Key == "MaxLength") && prop.MaxLength.HasValue)
                                         f.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + prop.MaxLength.Value));
                                 });
