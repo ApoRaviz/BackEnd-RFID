@@ -12,7 +12,6 @@ namespace WMS.Entity.Dimension
         public int DimensionIDSys { get; set; }
         [Required]
         public string FormatName { get; set; }
-        [MaxLength(10)]
         [Required]
         public string Unit { get; set; }
         [Required]

@@ -73,7 +73,8 @@ namespace WMS.WebApi.Controller
             IResponseData<string> response = new ResponseData<string>();
             try
             {
-                string tableColsDescription = new WMSDbContext().GetValidation(tableName);
+                Service.Common.ICommonService commonWMS = new Service.Impl.Common.CommonService();
+                string tableColsDescription = commonWMS.GetValidation(tableName);
                 response.SetData(tableColsDescription);
             }
             catch (ValidationException ex)
