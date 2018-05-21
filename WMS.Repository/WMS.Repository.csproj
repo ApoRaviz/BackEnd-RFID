@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\ICategoryRepository.cs" />
+    <Compile Include="Common\ICommonRepository.cs" />
     <Compile Include="Common\IGeneralConfigsLocationFormatRepository.cs" />
     <Compile Include="Common\IGeneralConfigsRepository.cs" />
     <Compile Include="ControlMaster\IControlRepository.cs" />

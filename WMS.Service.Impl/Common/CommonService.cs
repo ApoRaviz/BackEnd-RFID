@@ -5,6 +5,8 @@ using System.Transactions;
 using WIM.Core.Common.Utility.Validation;
 using WMS.Common.ValueObject;
 using WMS.Context;
+using WMS.Repository.Common;
+using WMS.Repository.Impl.Common;
 using WMS.Service.Common;
 
 namespace WMS.Service.Impl.Common
@@ -32,6 +34,17 @@ namespace WMS.Service.Impl.Common
             }
             return checkDependentPKDto;
 
+        }
+
+        public string GetValidation(string tableName)
+        {
+            string validation = "";
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                ICommonRepository repo = new CommonRepository(Db);
+                validation = repo.GetValidation(tableName);
+            }
+            return validation;
         }
     }
 }
