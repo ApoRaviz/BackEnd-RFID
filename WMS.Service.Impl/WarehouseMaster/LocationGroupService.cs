@@ -149,22 +149,25 @@ namespace WMS.Master
                         {
                             locationGroup.LocationType = null;
                             repo.Update(locationGroup);
-                            repoLoc.Delete(x => x.GroupLocIDSys == locationGroup.GroupLocIDSys);
-                            foreach (Location loc in locationGroup.Location)
+                            Service.Common.ICommonService CommonWMS = new Service.Impl.Common.CommonService();
+                            string ValStr = String.Join(",", locationGroup.Location.Select(x => x.LocIDSys.ToString()).ToList());
+                            if (CommonWMS.CheckDependentPK("Locations", "LocIDSys", ValStr).Any(x => x.Value > 0) )
                             {
-                                if (ChkLoc.Where(x => x.WHIDSys == locationGroup.WHIDSys && x.Location.Where(xx => xx.LocNo == loc.LocNo).Count() > 0).Count() > 0)
+                                foreach (Location loc in locationGroup.Location)
                                 {
-                                    throw new DbEntityValidationException("Duplicate Location name");
+                                    repoLoc.Update(loc);
                                 }
-                                //if (loc.LocIDSys != 0)
-                                //{
-                                //    repoLoc.Update(loc);
-                                //}
-                                //else
-                                //{
-                                loc.GroupLocIDSys = locationGroup.GroupLocIDSys;
-                                repoLoc.Insert(loc);
-                                //}
+                            }                            else                            {
+                                repoLoc.Delete(x => x.GroupLocIDSys == locationGroup.GroupLocIDSys);
+                                foreach (Location loc in locationGroup.Location)
+                                {
+                                    if (ChkLoc.Where(x => x.WHIDSys == locationGroup.WHIDSys && x.Location.Where(xx => xx.LocNo == loc.LocNo).Count() > 0).Count() > 0)
+                                    {
+                                        throw new DbEntityValidationException("Duplicate Location name");
+                                    }
+                                    loc.GroupLocIDSys = locationGroup.GroupLocIDSys;
+                                    repoLoc.Insert(loc);
+                                }
                             }
                         }
 
@@ -174,12 +177,8 @@ namespace WMS.Master
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM,e.Message);
                 }
 
                 return true;
@@ -212,11 +211,7 @@ namespace WMS.Master
                         scope.Complete();
                     }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
@@ -259,7 +254,20 @@ namespace WMS.Master
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ILocationGroupRepository repo = new LocationGroupRepository(Db);
-                        repo.Delete(id);
+                        GroupLocation locationGroup = new GroupLocation();
+                        string[] Include = { "Location" };
+                        locationGroup = repo.GetWithInclude(x=>x.GroupLocIDSys == id, Include).SingleOrDefault();
+                        Service.Common.ICommonService CommonWMS = new Service.Impl.Common.CommonService();
+                        string ValStr = String.Join(",", locationGroup.Location.Where(x=>x.GroupLocIDSys == id).Select(x => x.LocIDSys.ToString()).ToList());
+
+                        if (!CommonWMS.CheckDependentPK("Locations", "LocIDSys", ValStr).Any(x => x.Value > 0))
+                        {
+                            repo.Delete(id);
+                        }
+                        else
+                        {
+                            throw new DbEntityValidationException();
+                        }
                         Db.SaveChanges();
                         scope.Complete();
                     }

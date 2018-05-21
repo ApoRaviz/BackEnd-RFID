@@ -13,28 +13,25 @@ namespace WMS.Service.Impl.Common
     {
         public IEnumerable<CheckDependentPKDto> CheckDependentPK(string TableName, string ColumnName, string Value = "")
         {
-            using (var scope = new TransactionScope())
+            IEnumerable<CheckDependentPKDto> checkDependentPKDto = new List<CheckDependentPKDto>();
+            try
             {
-                IEnumerable<CheckDependentPKDto> checkDependentPKDto = new List<CheckDependentPKDto>();
-                try
+                using (WMSDbContext Db = new WMSDbContext())
                 {
-                    using (WMSDbContext Db = new WMSDbContext())
-                    {
-                        checkDependentPKDto = Db.ProcCheckDependentPK(TableName, ColumnName, Value);
-                    }
+                    checkDependentPKDto = Db.ProcCheckDependentPK(TableName, ColumnName, Value);
                 }
-                catch (DbEntityValidationException e)
-                {
-                    throw new ValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
-                    throw ex;
-                }
-                return checkDependentPKDto;
             }
+            catch (DbEntityValidationException e)
+            {
+                throw new ValidationException(e);
+            }
+            catch (DbUpdateException)
+            {
+                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                throw ex;
+            }
+            return checkDependentPKDto;
+
         }
     }
 }
