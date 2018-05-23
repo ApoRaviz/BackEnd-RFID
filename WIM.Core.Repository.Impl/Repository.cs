@@ -14,6 +14,13 @@ using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Entity.Logs;
 using System.Threading.Tasks;
 using WIM.Core.Common.Utility.Validation;
+using System.Data.SqlClient;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Collections;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -253,6 +260,141 @@ namespace WIM.Core.Repository.Impl
         public TEntity GetFirst(Func<TEntity, bool> predicate)
         {
             return DbSet.First<TEntity>(predicate);
+        }
+
+        public string GetValidation(string tableName)
+        {
+            List<DbSchema> schemaList = new List<DbSchema>();
+            string mainResult = Context.Database.SqlQuery<string>("ProcGetTableValidation @tableName"
+                , new SqlParameter("@tableName", tableName)).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(mainResult))
+            {
+                JObject objs = JsonConvert.DeserializeObject<JObject>(mainResult);
+
+                foreach (var obj in objs)
+                {
+                    DbSchema schema = new DbSchema();
+                    schema.FieldName = obj.Key;
+                    var validates = obj.Value.ToArray();
+                    foreach (var validate in validates)
+                    {
+                        string[] arValidate = validate.ToString().Split(':');
+                        if (arValidate.Length == 2)
+                        {
+                            string validateType = arValidate[0].Replace("\"", "").Trim();
+                            string validateValue = arValidate[1].Replace("\"", "").Trim();
+                            if (!string.IsNullOrEmpty(validateValue))
+                                schema.Fields.Add(new DbSchema.ValidationField(validateType, validateValue));
+                        }
+                    }
+                    if (schema.Fields.Count > 0)
+                        schemaList.Add(schema);
+                }
+
+                ObjectContext objContext = ((IObjectContextAdapter)Context).ObjectContext;
+                var container = objContext.MetadataWorkspace.GetEntityContainer(objContext.DefaultContainerName, DataSpace.CSpace);
+                var propEntityset = container.EntitySets.Where(w => w.Name == tableName).FirstOrDefault();
+
+                if (propEntityset != null)
+                {
+                    var properties = propEntityset.ElementType.Properties;
+                    if (properties.Count > 0)
+                    {
+                        foreach (var prop in properties)
+                        {
+                            var fieldNames = schemaList.Where(w => w.FieldName.ToUpper() == prop.Name.ToUpper()).FirstOrDefault();
+                            if (!fieldNames.Fields.Any(a => a.Key == "MaxLength"))
+                            {
+                                int maxFromType = GetMaxLengh(fieldNames.Fields);
+                                if (maxFromType > 0)
+                                    fieldNames.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + maxFromType));
+                            }
+                                
+
+                            var attrs = prop.MetadataProperties.Where(s => s.Name == "ClrAttributes").FirstOrDefault();
+                            if(attrs != null && fieldNames != null)
+                            {
+                                
+                                var MetaData = (IList)attrs.Value;
+                                for(int i = 0; i< MetaData.Count; i++)
+                                {
+                                    string nameAttribute = MetaData[i].GetType().GetTypeInfo().Name;
+                                    if (nameAttribute == "RequiredAttribute")
+                                    {
+                                        RequiredAttribute att = (RequiredAttribute)MetaData[i];
+                                        if (!fieldNames.Fields.Any(a => a.Key == "Required") )
+                                            fieldNames.Fields.Add(new DbSchema.ValidationField("Required", (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field"));
+                                        else
+                                            fieldNames.Fields.Find(w => w.Key == "Required").Value = (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage: "Required Field";
+                                    }
+                                    else if (nameAttribute == "MaxLengthAttribute")
+                                    {
+                                        MaxLengthAttribute att = (MaxLengthAttribute)MetaData[i];
+                                        if (!fieldNames.Fields.Any(a => a.Key == "MaxLength") && att.Length > 0)
+                                            fieldNames.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + att.Length));
+                                        else if (att.Length > 0)
+                                            fieldNames.Fields.Find(w => w.Key == "MaxLength").Value = "" + att.Length;
+                                    }
+                                    else if (nameAttribute == "EmailAddressAttribute")
+                                    {
+                                        EmailAddressAttribute att = (EmailAddressAttribute)MetaData[i];
+                                        if (!fieldNames.Fields.Any(a => a.Key == "Email"))
+                                            fieldNames.Fields.Add(new DbSchema.ValidationField("Email", (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Email Format Only"));
+                                    }
+                                    else if (nameAttribute == "MinLengthAttribute")
+                                    {
+                                        MinLengthAttribute att = (MinLengthAttribute)MetaData[i];
+                                        if (!fieldNames.Fields.Any(a => a.Key == "MinLength") && att.Length > 0)
+                                            fieldNames.Fields.Add(new DbSchema.ValidationField("MinLength", "" + att.Length));
+                                        else if (att.Length > 0)
+                                            fieldNames.Fields.Find(w => w.Key == "Required").Value = "" + att.Length;
+                                    }
+
+
+                                }
+                              
+                            }
+                          
+                        }
+                    }
+
+                }
+            }
+            return JsonConvert.SerializeObject(schemaList);
+        }
+
+        private int GetMaxLengh(List<DbSchema.ValidationField> items)
+        {
+            int val = 0;
+            var max = items.Find(w => w.Key == "Type");
+            if (max != null)
+                switch (max.Value)
+                {
+                    case "int":
+                        val = int.MaxValue.ToString().Length;
+                        break;
+                    case "float":
+                        val = double.MaxValue.ToString().Length;
+                        break;
+                    case "datetime2":
+                        val = DateTime.MaxValue.ToString().Length;
+                        break;
+                    case "decimal":
+                        val = Decimal.MaxValue.ToString().Length;
+                        break;
+                    case "real":
+                        val = Single.MaxValue.ToString().Length;
+                        break;
+                    case "smallint":
+                        val = Int16.MaxValue.ToString().Length;
+                        break;
+                    case "tinyint":
+                        val = Byte.MaxValue.ToString().Length;
+                        break;
+
+                }
+            return val;
         }
 
     }

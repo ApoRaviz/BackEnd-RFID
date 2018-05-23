@@ -10,13 +10,21 @@ namespace WMS.Entity.Dimension
     {
         [Key]
         public int DimensionIDSys { get; set; }
+        [Required]
         public string FormatName { get; set; }
+        [Required]
         public string Unit { get; set; }
+        [Required]
         public double? Width { get; set; }
+        [Required]
         public double? Length { get; set; }
+        [Required]
         public double? Height { get; set; }
+        [Required]
         public double? Weight { get; set; }
+        [Required]
         public string Type { get; set; }
+        [Required]
         public string Color { get; set; }
     }
 }

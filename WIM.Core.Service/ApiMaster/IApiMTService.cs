@@ -16,6 +16,7 @@ namespace WIM.Core.Service
         ApiMTDto GetApiMT(string id);
         string CreateApiMT(List<Api_MT> ApiMT);
         bool UpdateApiMT( Api_MT ApiMT);
-        bool DeleteApiMT(string id);        
+        bool DeleteApiMT(string id);         
+        bool DeleteApiMT(List<string> id);         
     }
 }

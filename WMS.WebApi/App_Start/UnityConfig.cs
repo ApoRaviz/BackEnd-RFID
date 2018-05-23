@@ -47,7 +47,7 @@ namespace WMS.WebApi
             container.RegisterType<AccountController>(new InjectionConstructor());
 
             //Register Service
-            container.RegisterType<ICommonService, CommonService>();
+            container.RegisterType<WIM.Core.Service.ICommonService, WIM.Core.Service.Impl.CommonService>();
             container.RegisterType<IProjectService, ProjectService>();
             container.RegisterType<IItemService, ItemService>();
             container.RegisterType<IItemSetService, ItemSetService>();

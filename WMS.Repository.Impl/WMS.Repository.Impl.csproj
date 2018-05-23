@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\CategoryRepository.cs" />
+    <Compile Include="Common\CommonRepository.cs" />
     <Compile Include="Common\GeneralConfigsLocationFormatRepository.cs" />
     <Compile Include="Common\GeneralConfigsRepository.cs" />
     <Compile Include="ControlMaster\ControlRepository.cs" />
