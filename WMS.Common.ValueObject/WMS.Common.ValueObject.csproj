@@ -47,6 +47,7 @@
     <Compile Include="AutocompleteItemDto.cs" />
     <Compile Include="AutocompleteUnitDto.cs" />
     <Compile Include="CategoryDto.cs" />
+    <Compile Include="CheckDependentPKDto.cs" />
     <Compile Include="ControlValueDto.cs" />
     <Compile Include="FromUriParamsObject.cs" />
     <Compile Include="GroupLocationDto.cs" />

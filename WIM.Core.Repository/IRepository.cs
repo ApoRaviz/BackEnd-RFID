@@ -36,5 +36,7 @@ namespace WIM.Core.Repository
         IQueryable<TEntity> GetWithInclude(Func<TEntity, bool> where, params string[] include);
         TEntity GetSingle(Func<TEntity, bool> predicate);
         TEntity GetFirst(Func<TEntity, bool> predicate);
+
+        string GetValidation(string tableName);
     }
 }

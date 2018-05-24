@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Web.Http;
-using WIM.Core.Common;
-using System.Data.Entity;
-using WMS.Service;
-using WIM.Core.Entity.CustomerManagement;
-using Newtonsoft.Json.Linq;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
 using WMS.Context;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Service;
-using WIM.Core.Context;
 using WIM.Core.Service.Impl;
+using WMS.Common.ValueObject;
 
 namespace WMS.WebApi.Controller
 {
@@ -64,6 +56,25 @@ namespace WMS.WebApi.Controller
             try
             {
                 IEnumerable<TableColumnsDescription> tableColsDescription = new WMSDbContext().GetTableColumnsDescription(tableName);
+                response.SetData(tableColsDescription);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("validationField/{tableName}")]
+        public HttpResponseMessage ValidationField(string tableName)
+        {
+            IResponseData<string> response = new ResponseData<string>();
+            try
+            {
+                Service.Common.ICommonService commonWMS = new Service.Impl.Common.CommonService();
+                string tableColsDescription = commonWMS.GetValidation(tableName);
                 response.SetData(tableColsDescription);
             }
             catch (ValidationException ex)
@@ -151,6 +162,32 @@ namespace WMS.WebApi.Controller
             {
                 ICommonService common = new CommonService();
                 string result = common.GetValueGenerateCode(keyword);
+                response.SetData(result);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("checkdependentPK")]
+        public HttpResponseMessage CheckDependentPK(string TableName, string ColumnName, string Value = "")
+        {
+            IResponseData<IEnumerable<CheckDependentPKDto>> response = new ResponseData<IEnumerable<CheckDependentPKDto>>();
+            if (string.IsNullOrEmpty(TableName) || string.IsNullOrEmpty(ColumnName))
+            {
+                response.SetData(null);
+                Request.ReturnHttpResponseMessage(response);
+            }
+
+            try
+            {
+                Service.Common.ICommonService commonWMS = new Service.Impl.Common.CommonService();
+                IEnumerable<CheckDependentPKDto> result = new List<CheckDependentPKDto>();
+                result = commonWMS.CheckDependentPK(TableName, ColumnName, Value);
                 response.SetData(result);
             }
             catch (ValidationException ex)
