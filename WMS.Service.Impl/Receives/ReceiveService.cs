@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
-using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Service.Impl;
 using WMS.Common.ValueObject;
@@ -73,6 +70,7 @@ namespace WMS.Service.Impl
                             IInventoryDetailRepository repoInvenDe = new InventoryDetailRepository(Db);
                             IInventoryTransactionDetailRepository repoTranDe = new InventoryTransactionDetailRepository(Db);
                             ILocationRepository repoLoc = new LocationRepository(Db);
+                            ISpareFieldDetailRepository repoSparefd = new SpareFieldDetailRepository(Db);
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
 
@@ -195,7 +193,14 @@ namespace WMS.Service.Impl
                                     repoInvenDe.Insert(inventorydetail);
                                 }
                             }
+
+                            if (receives.SpareFields != null)
+                            {
+                                repoSparefd.insertByDto(receives.ReceiveIDSys, receives.SpareFields);
+                            }
+
                         }
+
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -239,6 +244,7 @@ namespace WMS.Service.Impl
                             IInventoryDetailRepository repoInvenDe = new InventoryDetailRepository(Db);
                             IInventoryTransactionDetailRepository repoTranDe = new InventoryTransactionDetailRepository(Db);
                             ILocationRepository repoLoc = new LocationRepository(Db);
+                            ISpareFieldDetailRepository repoSparefd = new SpareFieldDetailRepository(Db);
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
                             var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.ControlLevel1, a.Dimention, a.Expire, a.Inspect, a.LocIDSys, a.ControlLevel2, a.ControlLevel3, a.Serial, a.ItemIDSys })
@@ -332,6 +338,11 @@ namespace WMS.Service.Impl
                                     };
                                     repoInvenDe.Insert(inventorydetail);
                                 }
+                            }
+
+                            if (receives.SpareFields != null && receives.SpareFields.Any())
+                            {
+                                repoSparefd.insertByDto(receives.ReceiveIDSys, receives.SpareFields);
                             }
                         }
                         Db.SaveChanges();

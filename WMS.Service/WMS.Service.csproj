@@ -54,7 +54,8 @@
     <Compile Include="Label\ILabelService.cs" />
     <Compile Include="LocationMaster\ILocationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Receive\IReceiveService.cs" />
+    <Compile Include="Receives\IInvoiceReceiveService.cs" />
+    <Compile Include="Receives\IReceiveService.cs" />
     <Compile Include="Report\IReportService.cs" />
     <Compile Include="SpareField\ISpareFieldService.cs" />
     <Compile Include="UnitMaster\IUnitService.cs" />
