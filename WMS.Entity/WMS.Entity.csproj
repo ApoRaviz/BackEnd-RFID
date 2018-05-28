@@ -64,6 +64,7 @@
     <Compile Include="ImportManagement\ImportDefinitionHeader_MT.cs" />
     <Compile Include="InspectionManagement\InspectType.cs" />
     <Compile Include="InspectionManagement\Inspect_MT.cs" />
+    <Compile Include="InventoryManagement\ConfirmReceive.cs" />
     <Compile Include="InventoryManagement\ReceiveTempInventoryTransaction.cs" />
     <Compile Include="InventoryManagement\Inventory.cs" />
     <Compile Include="InventoryManagement\InventoryDetail.cs" />

@@ -60,7 +60,7 @@ namespace WMS.Repository.Impl
                     .Select(e => new InventoryTransactionDto()
                     {
                         InvenTranIDSys = e.Tran.InvenTranIDSys,
-                        Box = e.Data[0].leftInventory.Box,
+                        ControlLevel1 = e.Data[0].leftInventory.ControlLevel1,
                         Dimention = e.Data[0].leftInventory.Dimension,
                         Expire = e.Data[0].leftInventory.Expire,
                         Inspect = e.Data[0].leftInventory.Inspect,
@@ -69,8 +69,8 @@ namespace WMS.Repository.Impl
                         ItemName = e.Data[0].leftItem.ItemName,
                         LocIDSys = e.Data[0].leftInventory.LocIDSys,
                         LocNo = e.Data[0].leftInventory.Location.LocNo,
-                        Lot = e.Data[0].leftInventory.Lot,
-                        Pallet = e.Data[0].leftInventory.Pallet,
+                        ControlLevel2 = e.Data[0].leftInventory.ControlLevel2,
+                        ControlLevel3 = e.Data[0].leftInventory.ControlLevel3,
                         Qty = e.Tran.Qty,
                         ReceivingDate = e.Tran.ReceivingDate,
                         StatusIDSys = e.Tran.StatusIDSys,
@@ -87,9 +87,9 @@ namespace WMS.Repository.Impl
                             LocIDSys = e.Data[0].leftInventory.LocIDSys,
                             LocNo = e.Data[0].leftInventory.Location.LocNo,
                             UnitIDSys = e.Data[0].receiv.UnitIDSys,
-                            Box = e.Data[0].leftInventory.Box,
-                            Lot = e.Data[0].leftInventory.Lot,
-                            Pallet = e.Data[0].leftInventory.Pallet
+                            ControlLevel1 = e.Data[0].leftInventory.ControlLevel1,
+                            ControlLevel2 = e.Data[0].leftInventory.ControlLevel2,
+                            ControlLevel3 = e.Data[0].leftInventory.ControlLevel3
                         }).ToList()
                     }).ToList();
 

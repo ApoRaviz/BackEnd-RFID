@@ -74,22 +74,22 @@ namespace WMS.Service.Impl
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
 
-                            var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.Box, a.Expire, a.Inspect, a.LocIDSys, a.Lot, a.Pallet, a.ItemIDSys })
+                            var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.ControlLevel1, a.Expire, a.Inspect, a.LocIDSys, a.ControlLevel2, a.ControlLevel3, a.ItemIDSys })
                                 .Select(b => new
                                 {
-                                    Box = b.Key.Box,
+                                    ControlLevel1 = b.Key.ControlLevel1,
                                     Expire = b.Key.Expire.HasValue ? b.Key.Expire : null,
-                                    Lot = b.Key.Lot,
+                                    ControlLevel2 = b.Key.ControlLevel2,
                                     Inspect = b.Key.Inspect,
                                     LocIDSys = b.Key.LocIDSys,
-                                    Pallet = b.Key.Pallet,
+                                    ControlLevel3 = b.Key.ControlLevel3,
                                     ItemIDSys = b.Key.ItemIDSys,
                                     Child = b.ToList()
                                 }).ToList();
                             List<int> listLocation = new List<int>();
                             for (int i = 0; i < realinvengroup.Count; i++)
                             {
-                                listLocation.Add(realinvengroup[i].LocIDSys != null ? realinvengroup[i].LocIDSys : 0);
+                                listLocation.Add(realinvengroup[i].LocIDSys);
                             }
                             location = Db.Locations.Where(a => listLocation.Contains(a.LocIDSys)).ToList();
                             List<Inventory> realinventory = new List<Inventory>();
@@ -115,9 +115,9 @@ namespace WMS.Service.Impl
                                     useDimension += tran.UsedDimension * (int)tran.Qty;
                                 }
 
-                                var laterInven = repoInven.Get(a => a.Box == invengroup.Box &&
-                                a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.Lot == invengroup.Lot && a.LocIDSys == invengroup.LocIDSys &&
-                                a.Pallet == invengroup.Pallet && a.ItemIDSys == invengroup.ItemIDSys);
+                                var laterInven = repoInven.Get(a => a.ControlLevel1 == invengroup.ControlLevel1 &&
+                                a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.ControlLevel2 == invengroup.ControlLevel2 && a.LocIDSys == invengroup.LocIDSys &&
+                                a.ControlLevel3 == invengroup.ControlLevel3 && a.ItemIDSys == invengroup.ItemIDSys);
                                 if (invengroup.Child[0] != null)
                                     location[location.FindIndex(a => a.LocIDSys == invengroup.Child[0].LocIDSys)].AvailableArea -= useDimension;
                                 if (laterInven == null)
@@ -144,9 +144,9 @@ namespace WMS.Service.Impl
                             Db.SaveChanges();
                             foreach (var inven in realinventory)
                             {
-                                var inventemp = realinvengroup.Where(a => a.Box == inven.Box &&
-                                a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.Lot == inven.Lot && a.LocIDSys == inven.LocIDSys &&
-                                a.Pallet == inven.Pallet && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
+                                var inventemp = realinvengroup.Where(a => a.ControlLevel1 == inven.ControlLevel1 &&
+                                a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.ControlLevel2 == inven.ControlLevel2 && a.LocIDSys == inven.LocIDSys &&
+                                a.ControlLevel3 == inven.ControlLevel3 && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
 
                                 foreach (var childtran in inventemp.Child)
                                 {
@@ -247,22 +247,22 @@ namespace WMS.Service.Impl
                             ISpareFieldDetailRepository repoSparefd = new SpareFieldDetailRepository(Db);
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
-                            var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.Box, a.Dimention, a.Expire, a.Inspect, a.LocIDSys, a.Lot, a.Pallet, a.Serial, a.ItemIDSys })
+                            var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.ControlLevel1, a.Dimention, a.Expire, a.Inspect, a.LocIDSys, a.ControlLevel2, a.ControlLevel3, a.Serial, a.ItemIDSys })
                                 .Select(b => new
                                 {
-                                    Box = b.Key.Box,
+                                    ControlLevel1 = b.Key.ControlLevel1,
                                     Expire = b.Key.Expire.HasValue ? b.Key.Expire : null,
-                                    Lot = b.Key.Lot,
+                                    ControlLevel2 = b.Key.ControlLevel2,
                                     Inspect = b.Key.Inspect,
                                     LocIDSys = b.Key.LocIDSys,
-                                    Pallet = b.Key.Pallet,
+                                    ControlLevel3 = b.Key.ControlLevel3,
                                     ItemIDSys = b.Key.ItemIDSys,
                                     Child = b.ToList()
                                 }).ToList();
                             List<int> listLocation = new List<int>();
                             for (int i = 0; i < realinvengroup.Count; i++)
                             {
-                                listLocation.Add(realinvengroup[i].LocIDSys != null ? realinvengroup[i].LocIDSys : 0);
+                                listLocation.Add(realinvengroup[i].LocIDSys);
                             }
                             location = Db.Locations.Where(a => listLocation.Contains(a.LocIDSys)).ToList();
                             List<Inventory> realinventory = new List<Inventory>();
@@ -276,9 +276,9 @@ namespace WMS.Service.Impl
                                     useDimension += tran.UsedDimension * (int)tran.Qty;
                                 }
 
-                                var laterInven = repoInven.Get(a => a.Box == invengroup.Box &&
-                                a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.Lot == invengroup.Lot && a.LocIDSys == invengroup.LocIDSys &&
-                                a.Pallet == invengroup.Pallet && a.ItemIDSys == invengroup.ItemIDSys);
+                                var laterInven = repoInven.Get(a => a.ControlLevel1 == invengroup.ControlLevel1 &&
+                                a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.ControlLevel2 == invengroup.ControlLevel2 && a.LocIDSys == invengroup.LocIDSys &&
+                                a.ControlLevel3 == invengroup.ControlLevel3 && a.ItemIDSys == invengroup.ItemIDSys);
 
                                 if (invengroup.Child[0] != null)
                                     location[location.FindIndex(a => a.LocIDSys == invengroup.Child[0].LocIDSys)].AvailableArea -= useDimension;
@@ -306,9 +306,9 @@ namespace WMS.Service.Impl
                             Db.SaveChanges();
                             foreach (var inven in realinventory)
                             {
-                                var inventemp = realinvengroup.Where(a => a.Box == inven.Box &&
-                                a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.Lot == inven.Lot && a.LocIDSys == inven.LocIDSys &&
-                                a.Pallet == inven.Pallet && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
+                                var inventemp = realinvengroup.Where(a => a.ControlLevel1 == inven.ControlLevel1 &&
+                                a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.ControlLevel2 == inven.ControlLevel2 && a.LocIDSys == inven.LocIDSys &&
+                                a.ControlLevel3 == inven.ControlLevel3 && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
 
                                 foreach (var childtran in inventemp.Child)
                                 {

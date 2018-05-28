@@ -46,7 +46,7 @@ namespace WIM.Core.Repository.Impl
             {
                 return UtilityHelper.GetIdentity();
             }
-        }
+        }       
 
         public IEnumerable<TEntity> Get()
         {
@@ -69,21 +69,33 @@ namespace WIM.Core.Repository.Impl
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await DbSet.ToListAsync();
-        }
+        }              
 
         public TEntity GetByID(params object[] id)
         {
             return DbSet.Find(id);
-        }
-        public async Task<TEntity> GetByIDAsync(params object[] id)
-        {
-            return await DbSet.FindAsync(id);
-        }
+        }        
 
         public TEntity GetByID(object id)
         {
             return DbSet.Find(id);
         }
+
+        public TEntity GetByID(bool isTryValidationNotNullException, params object[] id)
+        {
+            return GetByID(id).TryValidationNotNullException();
+        }
+
+        public TEntity GetByID(object id, bool isTryValidationNotNullException)
+        {
+            return GetByID(id).TryValidationNotNullException();
+        }
+
+        public async Task<TEntity> GetByIDAsync(params object[] id)
+        {
+            return await DbSet.FindAsync(id);
+        }
+
         public async Task<TEntity> GetByIDAsync(object id)
         {
             return await DbSet.FindAsync(id);
