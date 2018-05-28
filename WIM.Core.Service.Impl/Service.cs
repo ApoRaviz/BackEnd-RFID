@@ -1,5 +1,6 @@
 ﻿using System.Security.Principal;
 using WIM.Core.Common.Helpers;
+using WIM.Core.Common.Utility.UtilityHelpers;
 
 namespace WIM.Core.Service.Impl
 {
@@ -9,7 +10,7 @@ namespace WIM.Core.Service.Impl
         {
             get
             { 
-                return AuthHelper.GetIdentity();
+                return UtilityHelper.GetIdentity();
             }
         }
     }

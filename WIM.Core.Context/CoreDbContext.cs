@@ -74,6 +74,8 @@ namespace WIM.Core.Context
         public virtual DbSet<Province_MT> Province_MT { get; set; }
         public virtual DbSet<City_MT> City_MT { get; set; }
         public virtual DbSet<SubCity_MT> SubCity_MT { get; set; }
+        public virtual DbSet<WarehouseTest> WarehouseTests { get; set; }
+        
 
         /// <summary>
         /// View

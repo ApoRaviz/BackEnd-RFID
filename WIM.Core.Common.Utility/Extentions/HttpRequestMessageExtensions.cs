@@ -15,26 +15,23 @@ using System.Linq;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Attributes;
 
-namespace WIM.Core.Common.Utility.Extensions
+public static class HttpRequestMessageExtensions
 {
-    public static class HttpRequestMessageExtensions
+    public static HttpResponseMessage ReturnHttpResponseMessage<T>(this HttpRequestMessage request, IResponseData<T> response)
     {
-        public static HttpResponseMessage ReturnHttpResponseMessage<T>(this HttpRequestMessage request, IResponseData<T> response)
+        AttributeHelper.SetHashids(response.GetData());
+        return request.CreateResponse(response.GetStatus(), response);
+    }
+
+    public static string GetHeaderValue(this HttpRequestMessage request, string name)
+    {
+        IEnumerable<string> values;
+        var found = request.Headers.TryGetValues(name, out values);
+        if (found)
         {
-            AttributeHelper.SetHashids(response.GetData());
-            return request.CreateResponse(response.GetStatus(), response);
+            return values.FirstOrDefault();
         }
 
-        public static string GetHeaderValue(this HttpRequestMessage request, string name)
-        {
-            IEnumerable<string> values;
-            var found = request.Headers.TryGetValues(name, out values);
-            if (found)
-            {
-                return values.FirstOrDefault();
-            }
-
-            return null;
-        }
+        return null;
     }
 }

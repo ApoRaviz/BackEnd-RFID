@@ -10,6 +10,7 @@ using WMS.Repository.Impl;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WMS.Common.ValueObject;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.Service
 {

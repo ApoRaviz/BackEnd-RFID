@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using WIM.Core.Common.Utility.AppStates;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Extentions;
+using WIM.Core.Common.Utility.UtilityHelpers;
+
+namespace WIM.Core.Entity
+{
+    public static class BaseEntityExtensions
+    {
+        public static WriteDataState GetWriteDataState(this BaseEntity entity)
+        {
+            Type typeEntity = entity.GetType();
+            PropertyInfo[] properties = typeEntity.GetProperties();
+            List<string> namePropKeys = typeEntity.GetPropertiesName<KeyAttribute>(entity);
+
+            if (!namePropKeys.Any())
+            {
+                throw new Exception("NamePropKeys Not Found!");
+            }
+
+            object id = typeEntity.GetProperty(namePropKeys[0]).GetValue(entity, null);
+            Type type = typeEntity.GetProperty(namePropKeys[0]).PropertyType;
+            if (id == null)
+            {
+                return WriteDataState.INSERT;
+            }
+            else if (type == typeof(Int32) && Convert.ToInt32(id) == 0)
+            {
+                return WriteDataState.INSERT;
+            }
+            else if (type == typeof(String) && Convert.ToString(id) == "")
+            {
+                return WriteDataState.INSERT;
+            }
+            else
+            {
+                return WriteDataState.UPDATE;
+            }
+        }
+
+        public static bool IsInsertDataState(this BaseEntity entity)
+        {
+            return GetWriteDataState(entity) == WriteDataState.INSERT;
+        }
+
+        public static bool IsUpdateDataState(this BaseEntity entity)
+        {
+            return GetWriteDataState(entity) == WriteDataState.UPDATE;
+        }
+
+        public static void TrySetProjectIDSys<TEntity>(this TEntity entity)
+        {
+            try
+            {
+                IIdentity identity = UtilityHelper.GetIdentity();
+
+                if (identity == null)
+                {
+                    return;
+                }                
+
+                int projectIDSys = identity.GetProjectIDSys();
+                PropertyInfo propertyInfo = entity.GetType().GetProperty("ProjectIDSys");
+                propertyInfo.SetValue(entity, Convert.ChangeType(projectIDSys, propertyInfo.PropertyType), null);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+    }
+}

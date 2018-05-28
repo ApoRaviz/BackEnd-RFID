@@ -70,7 +70,7 @@ namespace Auth.API.Controllers
 
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                Email = Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity),
                 HasRegistered = externalLogin == null,
                 IsAdmin = User.IsSysAdmin(),
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null

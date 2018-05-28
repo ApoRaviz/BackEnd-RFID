@@ -22,5 +22,5 @@ namespace WMS.Common.ValueObject
         public string FileName { get; set; }
         
         public virtual List<InventoryTransactionDto> InventoryTransactions { get; set; }
-    }
+    }   
 }

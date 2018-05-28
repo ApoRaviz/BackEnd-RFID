@@ -9,6 +9,7 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.ValueObject;
 using WMS.Common.ValueObject;
+using WMS.Entity.InventoryManagement;
 using WMS.Entity.ItemManagement;
 using WMS.Entity.Receiving;
 using WMS.Service;
@@ -63,7 +64,6 @@ namespace WMS.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
-
         }
 
         //[HttpGet]
@@ -166,5 +166,82 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+        [HttpPost]
+        [Route("tempInventoryTransactions/receive")]
+        public HttpResponseMessage SaveReceive([FromBody]Receive receive)
+        {
+            IResponseData<Receive> response = new ResponseData<Receive>();
+            Receive receiveResponse;
+            try
+            {
+                receiveResponse = ReceiveService.SaveReceive(receive);
+                response.SetData(receiveResponse);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("tempInventoryTransactions/item")]
+        public HttpResponseMessage SaveItemFromReceiveToTempInventoryTransaction([FromBody]TempInventoryTransaction transaction)
+        {
+            IResponseData<TempInventoryTransaction> response = new ResponseData<TempInventoryTransaction>();
+            TempInventoryTransaction tempInventoryTransactionResponse;
+            try
+            {
+                tempInventoryTransactionResponse =ReceiveService.SaveTempInventoryTransaction(transaction);
+                response.SetData(tempInventoryTransactionResponse);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("tempInventoryTransactions/items")]
+        public HttpResponseMessage SaveItemFromReceiveToTempInventoryTransactions([FromBody]IEnumerable<TempInventoryTransaction> transactions)
+        {
+            IResponseData<IEnumerable<TempInventoryTransaction>> response = new ResponseData<IEnumerable<TempInventoryTransaction>>();
+            IEnumerable<TempInventoryTransaction> tempInventoryTransactionsResponse;
+            try
+            {
+                tempInventoryTransactionsResponse = ReceiveService.SaveTempInventoryTransactions(transactions);
+                response.SetData(tempInventoryTransactionsResponse);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpPost]
+        [Route("tempInventoryTransactions/receiveAndItems")]
+        public HttpResponseMessage SaveReceiveAndTempInventoryTransactions([FromBody]ReceiveTempInventoryTransaction receiveTempTransaction)
+        {
+            IResponseData<ReceiveTempInventoryTransaction> response = new ResponseData<ReceiveTempInventoryTransaction>();
+            ReceiveTempInventoryTransaction receiveResponse;
+            try
+            {
+                receiveResponse = ReceiveService.SaveReceiveAndTempInventoryTransactions(receiveTempTransaction);
+                response.SetData(receiveResponse);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
     }
+   
 }

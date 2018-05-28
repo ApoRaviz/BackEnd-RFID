@@ -57,6 +57,7 @@
     <Compile Include="InvenoryManagement\IInventoryRepository.cs" />
     <Compile Include="InvenoryManagement\IInventoryTransactionDetailRepository.cs" />
     <Compile Include="InvenoryManagement\IInventoryTransactionRepository.cs" />
+    <Compile Include="InvenoryManagement\ITempInventoryTransactionRepository.cs" />
     <Compile Include="ItemManagement\IItemInspectRepository.cs" />
     <Compile Include="ItemManagement\IItemRepository.cs" />
     <Compile Include="ItemManagement\IItemSetDetailRepository.cs" />

@@ -211,7 +211,7 @@ namespace Master.WebApi.Controllers
                             if (string.IsNullOrEmpty(result))
                             {
                                 string xml = PrepareData(dt, data.ImportDefinitionDetail_MT.ToList());
-                                result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, User.Identity.GetUserName());
+                                result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, User.Identity.GetUserNameApp());
 
                                 if (string.IsNullOrEmpty(result))
                                 {
@@ -221,7 +221,7 @@ namespace Master.WebApi.Controllers
                             }
                         }
 
-                        this.ImportService.InsertImportHistory(int.Parse(FormatName), fileName, result, success, User.Identity.GetUserName());
+                        this.ImportService.InsertImportHistory(int.Parse(FormatName), fileName, result, success, User.Identity.GetUserNameApp());
                     }
 
                     response.SetData(result);

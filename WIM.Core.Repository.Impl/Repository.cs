@@ -13,7 +13,7 @@ using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Entity.Logs;
 using System.Threading.Tasks;
-using WIM.Core.Common.Utility.Validation;
+using AppValidation = WIM.Core.Common.Utility.Validation;
 using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
@@ -21,6 +21,9 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Collections;
+using WIM.Core.Common.Utility.AppStates;
+using WIM.Core.Common.Utility.Extensions;
+using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -41,7 +44,7 @@ namespace WIM.Core.Repository.Impl
         {
             get
             {
-                return AuthHelper.GetIdentity();
+                return UtilityHelper.GetIdentity();
             }
         }
 
@@ -96,6 +99,17 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Any(where);
         }
 
+        public TEntity Save(TEntity entity)
+        {
+            switch (entity.GetWriteDataState())
+            {
+                case WriteDataState.INSERT:
+                     return Insert(entity);                   
+                 default:
+                    return Update(entity);                 
+            }
+        }
+
         public TEntity Insert(TEntity entityToInsert)
         {
             Type typeEntityToInsert = entityToInsert.GetType();
@@ -108,31 +122,25 @@ namespace WIM.Core.Repository.Impl
             foreach (PropertyInfo prop in entityproperties)
             {
                 var value = prop.GetValue(entityToInsert, null);
-                if (!prop.PropertyType.IsGenericType || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime))
+                bool isThisPropertyCanInsert = !prop.PropertyType.IsGenericType;
+                isThisPropertyCanInsert = isThisPropertyCanInsert || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime); // Nullable<DateTime>
+                isThisPropertyCanInsert = isThisPropertyCanInsert || prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+                if (isThisPropertyCanInsert)
                 {
-                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);                    
-                }
-                else if (prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                {
-                    if (typeEntityForInsert.GetProperty(prop.Name).GetValue(entityToInsert) != null)
-                    {
-                        typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
-                    }
-                    else
-                    {
-                        typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
-                    }
-                }
+                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                }                
 
                 if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
                 {
-                    GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForInsert, Identity.GetUserName()));
+                    GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForInsert, Identity.GetUserNameApp()));
                 }
             }
-
-            entityForInsert.CreateBy = Identity.GetUserName();
+            
+            entityForInsert.TrySetProjectIDSys(); // #Job Try
+            entityForInsert.CreateBy = Identity.GetUserNameApp();
             entityForInsert.CreateAt = DateTime.Now;
-            entityForInsert.UpdateBy = Identity.GetUserName();
+            entityForInsert.UpdateBy = Identity.GetUserNameApp();
             entityForInsert.UpdateAt = DateTime.Now;
             entityForInsert.IsActive = true;
 
@@ -140,7 +148,7 @@ namespace WIM.Core.Repository.Impl
             return entityForInsert;
         }
 
-        public TEntity Update(object entityToUpdate)
+        public TEntity Update(TEntity entityToUpdate)
         {
             Type typeEntityToUpdate = entityToUpdate.GetType();
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
@@ -153,47 +161,38 @@ namespace WIM.Core.Repository.Impl
             TEntity entityForUpdate = GetByID(id);
             if (entityForUpdate == null)
             {
-                throw new Core.Common.Utility.Validation.ValidationException(ErrorEnum.DataNotFound);
+                throw new AppValidation.ValidationException(ErrorEnum.DataNotFound);
             }
 
             Type typeEntityForUpdate = entityForUpdate.GetType();
 
             List<Task> tasks = new List<Task>();
-            var identName = Identity.GetUserName();
+            var identName = Identity.GetUserNameApp();
             
             foreach (var prop in properties)
             { 
                 var value = prop.GetValue(entityToUpdate);
-                if (typeEntityForUpdate.GetProperty(prop.Name) != null
-                    && (!prop.PropertyType.IsGenericType || Nullable.GetUnderlyingType(prop.PropertyType) != null))
+
+                bool isThisPropertyCanUpdate = !prop.PropertyType.IsGenericType;
+                isThisPropertyCanUpdate = isThisPropertyCanUpdate && typeEntityForUpdate.GetProperty(prop.Name) != null;
+                isThisPropertyCanUpdate = isThisPropertyCanUpdate || Nullable.GetUnderlyingType(prop.PropertyType) != null;
+
+                if (isThisPropertyCanUpdate)
                 {
-                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
+                    typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);                                     
+
                     if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
                     {
                         GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, identName));
                     }
                 }
-            } 
-
-            entityForUpdate.UpdateBy = Identity.GetUserName();
+            }
+            
+            entityForUpdate.TrySetProjectIDSys(); // #Job Try
+            entityForUpdate.UpdateBy = Identity.GetUserNameApp();
             entityForUpdate.UpdateAt = DateTime.Now.Date;
             return entityForUpdate;
         }
-
-        /*private List<string> GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
-        {
-            List<string> name = new List<string>();
-            foreach (PropertyInfo prop in properties)
-            {
-                KeyAttribute attr = prop.GetCustomAttribute<KeyAttribute>();
-                if (attr != null)
-                {
-                    name.Add(prop.Name);
-                }
-            }
-            return name;
-            throw new Exception("The Object Found KeyAttribute.");
-        }*/
 
         public void Delete(object id)
         {

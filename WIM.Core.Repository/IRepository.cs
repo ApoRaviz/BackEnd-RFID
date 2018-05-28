@@ -23,8 +23,9 @@ namespace WIM.Core.Repository
         Task<TEntity> GetByIDAsync(object id);
         bool Exists(object id);
         bool Exists(Func<TEntity, Boolean> where);
+        TEntity Save(TEntity entity);
         TEntity Insert(TEntity entity);
-        TEntity Update(object entityToUpdate);
+        TEntity Update(TEntity entityToUpdate);
         void Delete(object id);
         void Delete(TEntity entityToDelete);
 

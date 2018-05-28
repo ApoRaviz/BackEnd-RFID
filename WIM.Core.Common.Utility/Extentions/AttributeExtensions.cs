@@ -40,6 +40,6 @@ namespace WIM.Core.Common.Utility.Extentions
             }
             return propertiesName;
             throw new Exception("The Object Found KeyAttribute.");
-        }       
+        }
     }
 }
