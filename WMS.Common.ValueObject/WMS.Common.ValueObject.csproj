@@ -53,6 +53,7 @@
     <Compile Include="GroupLocationDto.cs" />
     <Compile Include="InventoryTransactionDetailDto.cs" />
     <Compile Include="InventoryTransactionDto.cs" />
+    <Compile Include="InvoiceReceivesDto.cs" />
     <Compile Include="ItemDto.cs" />
     <Compile Include="ItemGiftDto.cs" />
     <Compile Include="ItemSetDetailDto.cs" />
