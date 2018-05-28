@@ -11,8 +11,8 @@ namespace WMS.Entity.InventoryManagement
     {
         [Key]
         public int InvenTranIDSys { get; set; }
-        public DateTime ReceivingDate { get; set; }
         public int ItemIDSys { get; set; }
+        public DateTime ReceivingDate { get; set; }
         public decimal Qty { get; set; }
         public int ConvertedQty { get; set; }
         public int UnitIDSys { get; set; }
@@ -20,17 +20,15 @@ namespace WMS.Entity.InventoryManagement
         public int StatusIDSys { get; set; }
         public double Cost { get; set; }
         public double Price { get; set; }
+
         public string ControlLevel1 { get; set; }
         public string ControlLevel2 { get; set; }
         public string ControlLevel3 { get; set; }
-        public int ReceiveIDSys { get; set; }
-        public string ItemName { get; set; }
         public string ItemCode { get; set; }
-        public string SerialNumber { get; set; }
+        public string ItemName { get; set; }        
         public int LocIDSys { get; set; }
         public string LocNo { get; set; }
         public DateTime Expire { get; set; }
-        public string Serial { get; set; }
         public string Inspect { get; set; }
         public string Dimention { get; set; }
         public double UsedDimension { get; set; }
