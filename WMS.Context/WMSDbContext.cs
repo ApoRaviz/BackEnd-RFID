@@ -35,6 +35,7 @@ namespace WMS.Context
     public class WMSDbContext : DbContext
     {
         //$DbSet
+		public DbSet<InvoiceReceives> InvoiceReceives { get; set; }
         public DbSet<SpareFieldDetail> SpareFieldDetails { get; set; }
 
 

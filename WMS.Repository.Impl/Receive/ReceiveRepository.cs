@@ -18,7 +18,7 @@ namespace WMS.Repository.Impl
         {
             ReceiveDto receive = new ReceiveDto();
             //Receive receives;
-            
+
             using (WMSDbContext Db = new WMSDbContext())
             {
                 var query = (from i in Db.Receive
@@ -35,8 +35,8 @@ namespace WMS.Repository.Impl
                              join n in Db.Supplier_MT on i.SupplierIDSys equals n.SupIDSys into ns
                              from leftSup in ns
                              where i.ReceiveIDSys == receiveIDSys
-                             select new { i,receiv,leftItem,leftInventory,leftLocation,leftSup,leftTranDetail }).ToList();
-                if(query != null)
+                             select new { i, receiv, leftItem, leftInventory, leftLocation, leftSup, leftTranDetail }).ToList();
+                if (query != null)
                 {
                     receive = new ReceiveDto()
                     {
@@ -93,7 +93,7 @@ namespace WMS.Repository.Impl
                         }).ToList()
                     }).ToList();
 
-
+                receive.SpareFields = Db.ProcGetSpareFieldsByTableAndRefID(Identity.GetProjectIDSys(), "Receives", receive.ReceiveIDSys).ToList();
 
                 if (receive.FileRefID != null)
                 {

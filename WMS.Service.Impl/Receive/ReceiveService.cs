@@ -72,6 +72,7 @@ namespace WMS.Service.Impl
                             IInventoryDetailRepository repoInvenDe = new InventoryDetailRepository(Db);
                             IInventoryTransactionDetailRepository repoTranDe = new InventoryTransactionDetailRepository(Db);
                             ILocationRepository repoLoc = new LocationRepository(Db);
+                            ISpareFieldDetailRepository repoSparefd = new SpareFieldDetailRepository(Db);
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
                             
@@ -191,7 +192,14 @@ namespace WMS.Service.Impl
                                     repoInvenDe.Insert(inventorydetail);
                                 }
                             }
+
+                            if (receives.SpareFields != null)
+                            {
+                                repoSparefd.insertByDto(receives.ReceiveIDSys, receives.SpareFields);
+                            }
+
                         }
+
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -235,6 +243,7 @@ namespace WMS.Service.Impl
                             IInventoryDetailRepository repoInvenDe = new InventoryDetailRepository(Db);
                             IInventoryTransactionDetailRepository repoTranDe = new InventoryTransactionDetailRepository(Db);
                             ILocationRepository repoLoc = new LocationRepository(Db);
+                            ISpareFieldDetailRepository repoSparefd = new SpareFieldDetailRepository(Db);
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
                             var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.Box, a.Dimention, a.Expire, a.Inspect, a.LocIDSys, a.Lot, a.Pallet, a.Serial, a.ItemIDSys })
@@ -327,6 +336,11 @@ namespace WMS.Service.Impl
                                     };
                                     repoInvenDe.Insert(inventorydetail);
                                 }
+                            }
+
+                            if (receives.SpareFields != null && receives.SpareFields.Any())
+                            {
+                                repoSparefd.insertByDto(receives.ReceiveIDSys, receives.SpareFields);
                             }
                         }
                         Db.SaveChanges();
