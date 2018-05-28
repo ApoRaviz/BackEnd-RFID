@@ -113,6 +113,7 @@
     <Compile Include="Mail\EmailService.cs" />
     <Compile Include="UserLog.cs" />
     <Compile Include="Validation\CheckModelForNullAttribute.cs" />
+    <Compile Include="Validation\ValidationDbSchema.cs" />
     <Compile Include="Validation\ErrorEnum.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Validation\MoreThanOne.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Validation\ElementNotFound.cs" />
     <Compile Include="Validation\IValidationException.cs" />
     <Compile Include="Validation\ValidateModelAttribute.cs" />
+    <Compile Include="Validation\ValidationEnum.cs" />
     <Compile Include="Validation\ValidationError.cs" />
     <Compile Include="Validation\ValidationException.cs" />
   </ItemGroup>

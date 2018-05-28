@@ -263,7 +263,7 @@ namespace WIM.Core.Repository.Impl
 
         public string GetValidation(string tableName)
         {
-            List<DbSchema> schemaList = new List<DbSchema>();
+            List<ValidationDbSchema> schemaList = new List<ValidationDbSchema>();
             string mainResult = Context.Database.SqlQuery<string>("ProcGetTableValidation @tableName"
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
 
@@ -273,8 +273,8 @@ namespace WIM.Core.Repository.Impl
 
                 foreach (var obj in objs)
                 {
-                    DbSchema schema = new DbSchema();
-                    schema.FieldName = obj.Key;
+                    ValidationDbSchema schema = new ValidationDbSchema();
+                    schema.Fn = obj.Key;
                     var validates = obj.Value.ToArray();
                     foreach (var validate in validates)
                     {
@@ -284,10 +284,15 @@ namespace WIM.Core.Repository.Impl
                             string validateType = arValidate[0].Replace("\"", "").Trim();
                             string validateValue = arValidate[1].Replace("\"", "").Trim();
                             if (!string.IsNullOrEmpty(validateValue))
-                                schema.Fields.Add(new DbSchema.ValidationField(validateType, validateValue));
+                            {
+                                string enumValue = GetValidationEnum(validateType);
+                                if(!string.IsNullOrEmpty(enumValue))
+                                    schema.Fs.Add(new ValidationDbSchema.ValidationField(enumValue, validateValue));
+                            }
+                                
                         }
                     }
-                    if (schema.Fields.Count > 0)
+                    if (schema.Fs.Count > 0)
                         schemaList.Add(schema);
                 }
 
@@ -302,12 +307,12 @@ namespace WIM.Core.Repository.Impl
                     {
                         foreach (var prop in properties)
                         {
-                            var fieldNames = schemaList.Where(w => w.FieldName.ToUpper() == prop.Name.ToUpper()).FirstOrDefault();
-                            if (!fieldNames.Fields.Any(a => a.Key == "MaxLength"))
+                            var fieldNames = schemaList.Where(w => w.Fn.ToUpper() == prop.Name.ToUpper()).FirstOrDefault();
+                            if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()))
                             {
-                                int maxFromType = GetMaxLengh(fieldNames.Fields);
+                                int maxFromType = GetMaxLengh(fieldNames.Fs);
                                 if (maxFromType > 0)
-                                    fieldNames.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + maxFromType));
+                                    fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + maxFromType));
                             }
                                 
 
@@ -322,53 +327,54 @@ namespace WIM.Core.Repository.Impl
                                     if (nameAttribute == "RequiredAttribute")
                                     {
                                         RequiredAttribute att = (RequiredAttribute)MetaData[i];
-                                        if (!fieldNames.Fields.Any(a => a.Key == "Required") )
-                                            fieldNames.Fields.Add(new DbSchema.ValidationField("Required", (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field"));
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()) )
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Required.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field"));
                                         else
-                                            fieldNames.Fields.Find(w => w.Key == "Required").Value = (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage: "Required Field";
+                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.Required.GetValueEnum()).V = (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage: "Required Field";
                                     }
                                     else if (nameAttribute == "MaxLengthAttribute")
                                     {
                                         MaxLengthAttribute att = (MaxLengthAttribute)MetaData[i];
-                                        if (!fieldNames.Fields.Any(a => a.Key == "MaxLength") && att.Length > 0)
-                                            fieldNames.Fields.Add(new DbSchema.ValidationField("MaxLength", "" + att.Length));
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MaxLength.GetValueEnum()) && att.Length > 0)
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + att.Length));
                                         else if (att.Length > 0)
-                                            fieldNames.Fields.Find(w => w.Key == "MaxLength").Value = "" + att.Length;
+                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.MaxLength.GetValueEnum()).V = "" + att.Length;
                                     }
                                     else if (nameAttribute == "EmailAddressAttribute")
                                     {
                                         EmailAddressAttribute att = (EmailAddressAttribute)MetaData[i];
-                                        if (!fieldNames.Fields.Any(a => a.Key == "Email"))
-                                            fieldNames.Fields.Add(new DbSchema.ValidationField("Email", (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Email Format Only"));
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Email.GetValueEnum()))
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Email.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Email Format Only"));
                                     }
                                     else if (nameAttribute == "MinLengthAttribute")
                                     {
                                         MinLengthAttribute att = (MinLengthAttribute)MetaData[i];
-                                        if (!fieldNames.Fields.Any(a => a.Key == "MinLength") && att.Length > 0)
-                                            fieldNames.Fields.Add(new DbSchema.ValidationField("MinLength", "" + att.Length));
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MinLength.GetValueEnum()) && att.Length > 0)
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MinLength.GetValueEnum(), "" + att.Length));
                                         else if (att.Length > 0)
-                                            fieldNames.Fields.Find(w => w.Key == "Required").Value = "" + att.Length;
+                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.MinLength.GetValueEnum()).V = "" + att.Length;
                                     }
 
 
                                 }
-                              
+                                fieldNames.Fs.RemoveAll(re => re.K == "Type");
                             }
                           
                         }
                     }
 
                 }
+
             }
             return JsonConvert.SerializeObject(schemaList);
         }
 
-        private int GetMaxLengh(List<DbSchema.ValidationField> items)
+        private int GetMaxLengh(List<ValidationDbSchema.ValidationField> items)
         {
             int val = 0;
-            var max = items.Find(w => w.Key == "Type");
+            var max = items.Find(w => w.K == "Type");
             if (max != null)
-                switch (max.Value)
+                switch (max.V)
                 {
                     case "int":
                         val = int.MaxValue.ToString().Length;
@@ -394,6 +400,18 @@ namespace WIM.Core.Repository.Impl
 
                 }
             return val;
+        }
+        private string GetValidationEnum(string validateName)
+        {
+            switch(validateName.Trim())
+            {
+                case "Required": return ValidationEnum.Required.GetValueEnum();
+                case "Email": return ValidationEnum.Email.GetValueEnum();
+                case "MaxLength": return ValidationEnum.MaxLength.GetValueEnum();
+                case "MinLength": return ValidationEnum.MinLength.GetValueEnum();
+                case "Schema": return "Sk";
+            }
+            return validateName;
         }
 
     }
