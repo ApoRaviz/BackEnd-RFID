@@ -18,7 +18,7 @@ namespace WIM.Core.Entity
 {
     public static class BaseEntityExtensions
     {
-        public static WriteDataState GetWriteDataState(this BaseEntity entity)
+        public static WriteDataState GetWriteDataState<TEntity>(this TEntity entity)
         {
             Type typeEntity = entity.GetType();
             PropertyInfo[] properties = typeEntity.GetProperties();
@@ -49,12 +49,12 @@ namespace WIM.Core.Entity
             }
         }
 
-        public static bool IsInsertDataState(this BaseEntity entity)
+        public static bool IsInsertDataState<TEntity>(this TEntity entity)
         {
             return GetWriteDataState(entity) == WriteDataState.INSERT;
         }
 
-        public static bool IsUpdateDataState(this BaseEntity entity)
+        public static bool IsUpdateDataState<TEntity>(this TEntity entity)
         {
             return GetWriteDataState(entity) == WriteDataState.UPDATE;
         }
@@ -68,7 +68,7 @@ namespace WIM.Core.Entity
                 if (identity == null)
                 {
                     return;
-                }                
+                }
 
                 int projectIDSys = identity.GetProjectIDSys();
                 PropertyInfo propertyInfo = entity.GetType().GetProperty("ProjectIDSys");

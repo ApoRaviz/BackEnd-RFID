@@ -85,9 +85,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppStates\WriteDataState.cs" />
+    <Compile Include="Attributes\CreateOnlyAttribute.cs" />
     <Compile Include="Attributes\ForeignKeyCustomAttribute.cs" />
     <Compile Include="Attributes\GeneralLogAttribute.cs" />
     <Compile Include="Attributes\HashidsAttrbute.cs" />
+    <Compile Include="Attributes\SameCreateAtAttribute.cs" />
     <Compile Include="Attributes\ValueEnumAttribute.cs" />
     <Compile Include="Constants\Constant.cs" />
     <Compile Include="Extentions\DbSetExtensions.cs" />
