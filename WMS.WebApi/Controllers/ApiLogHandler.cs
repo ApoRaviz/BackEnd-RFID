@@ -48,7 +48,7 @@ namespace WMS.WebApi.Controller
                     // TODO: Save the API log entry to the database
                     userLogEntry.RequestContentBody = HttpUtility.UrlDecode(userLogEntry.RequestContentBody);
 
-                    // จ๊อบ Comment กำลัง Dev อยู่
+                    //จ๊อบ Comment กำลัง Dev อยู่
                     //string urlFrontEnd;
                     //if (request.Method == HttpMethod.Get)
                     //{

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WIM.Core.Entity.ProjectManagement;
@@ -38,6 +40,7 @@ namespace WIM.Core.Entity.CustomerManagement
         public string Zipcode { get; set; }
         public string CountryCode { get; set; }
         public string ContName { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
         public string TelOffice { get; set; }
         public string TelExt { get; set; }
@@ -51,4 +54,68 @@ namespace WIM.Core.Entity.CustomerManagement
 
         //public virtual ICollection<UserCustomerMapping> UserCustomerMappings { get; set; }
     }
+
+    [Table("WarehouseTest")]
+    public class WarehouseTest : BaseEntity, IAddress
+    {
+        public WarehouseTest()
+        {
+
+        }
+
+        [Key]
+        public int WHID { get; set; }
+        public string WHName { get; set; }
+        public int SubCityID { get; set; }
+        //public int CityID { get; set; }
+        private int cityID;
+
+        public int CityID
+        {
+            get { return cityID; }
+            set { cityID = value; base.NotifyPropertyChanged(); }
+        }
+
+        public int ProvinceID { get; set; }
+        [NotMapped]
+        public virtual Address Address { get; set; }
+
+       
+
+    }
+
+
+    public interface IAddress
+    {
+        int SubCityID { get; set; }
+        int CityID { get; set; }
+        int ProvinceID { get; set; }
+        Address Address { get; set; }
+
+        //int Func1();
+    }
+
+    public class SubCity
+    {
+        public int SubCityID { get; set; }
+        public string SubCityName { get; set; }
+
+    }
+
+
+    public class Address
+    {
+        public SubCity SubCity { get; set; }
+
+
+
+
+        //public int SubCityID { get; set; }
+        //public string SubCityName { get; set; }
+        //public int CityID { get; set; }
+        //public string CityName { get; set; }
+        //public int ProvinceID { get; set; }
+        //public string ProvinceName { get; set; }
+    }
+
 }

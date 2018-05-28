@@ -64,10 +64,12 @@
     <Compile Include="ImportManagement\ImportDefinitionHeader_MT.cs" />
     <Compile Include="InspectionManagement\InspectType.cs" />
     <Compile Include="InspectionManagement\Inspect_MT.cs" />
+    <Compile Include="InventoryManagement\ReceiveTempInventoryTransaction.cs" />
     <Compile Include="InventoryManagement\Inventory.cs" />
     <Compile Include="InventoryManagement\InventoryDetail.cs" />
     <Compile Include="InventoryManagement\InventoryTransaction.cs" />
     <Compile Include="InventoryManagement\InventoryTransactionDetail.cs" />
+    <Compile Include="InventoryManagement\TempInventoryTransaction.cs" />
     <Compile Include="ItemManagement\Category_MT.cs" />
     <Compile Include="ItemManagement\ItemInspectMapping.cs" />
     <Compile Include="ItemManagement\ItemSetDetail.cs" />

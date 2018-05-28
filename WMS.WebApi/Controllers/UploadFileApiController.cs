@@ -215,7 +215,7 @@ namespace WMS.WebApi.Controller
                                 if (string.IsNullOrEmpty(result))
                                 {
                                     string xml = PrepareData(dt, data.ImportDefinitionDetail_MT.ToList());
-                                    result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, User.Identity.GetUserName());
+                                    result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity));
 
                                     if (string.IsNullOrEmpty(result))
                                     {
@@ -225,7 +225,7 @@ namespace WMS.WebApi.Controller
                                 }
                             }
 
-                            this.ImportService.InsertImportHistory(int.Parse(FormatName), fileName, result, success, User.Identity.GetUserName());
+                            this.ImportService.InsertImportHistory(int.Parse(FormatName), fileName, result, success, Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity));
                         }
 
                         response.SetData(result);

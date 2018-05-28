@@ -51,7 +51,7 @@ namespace WMS.Service.Impl.LocationMaster
             }
             catch (DbUpdateException)
             {
-                ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
+                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 throw ex;
             }
 

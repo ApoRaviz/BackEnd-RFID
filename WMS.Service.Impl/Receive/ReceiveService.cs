@@ -65,7 +65,8 @@ namespace WMS.Service.Impl
                         newReceive = repo.Insert(receive);
                         Db.SaveChanges();
 
-                        if(receives.InventoryTransactions != null)
+
+                        if (receives.InventoryTransactions != null)
                         {
                             IInventoryTransactionRepository repoTran = new InventoryTransactionRepository(Db);
                             IInventoryRepository repoInven = new InventoryRepository(Db);
@@ -75,11 +76,12 @@ namespace WMS.Service.Impl
                             ISpareFieldDetailRepository repoSparefd = new SpareFieldDetailRepository(Db);
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
-                            
+
                             var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.Box, a.Expire, a.Inspect, a.LocIDSys, a.Lot, a.Pallet, a.ItemIDSys })
-                                .Select(b => new {
+                                .Select(b => new
+                                {
                                     Box = b.Key.Box,
-                                    Expire = b.Key.Expire.HasValue ? b.Key.Expire:null,
+                                    Expire = b.Key.Expire.HasValue ? b.Key.Expire : null,
                                     Lot = b.Key.Lot,
                                     Inspect = b.Key.Inspect,
                                     LocIDSys = b.Key.LocIDSys,
@@ -88,26 +90,26 @@ namespace WMS.Service.Impl
                                     Child = b.ToList()
                                 }).ToList();
                             List<int> listLocation = new List<int>();
-                            for(int i = 0; i < realinvengroup.Count; i++)
+                            for (int i = 0; i < realinvengroup.Count; i++)
                             {
                                 listLocation.Add(realinvengroup[i].LocIDSys != null ? realinvengroup[i].LocIDSys : 0);
                             }
                             location = Db.Locations.Where(a => listLocation.Contains(a.LocIDSys)).ToList();
                             List<Inventory> realinventory = new List<Inventory>();
-                            foreach(var invengroup in realinvengroup)
+                            foreach (var invengroup in realinvengroup)
                             {
                                 int actualQty = 0;
                                 double useDimension = 0;
-                                foreach(var tran in invengroup.Child)
+                                foreach (var tran in invengroup.Child)
                                 {
                                     var piece = (int)tran.Qty;
                                     var tranQty = Db.ItemUnitMapping.Where(qt => qt.ItemIDSys == tran.ItemIDSys).OrderBy(b => b.Sequence).ToList();
                                     var currentsequence = tranQty.Where(sq => sq.UnitIDSys == tran.UnitIDSys).Select(sqn => sqn.Sequence).SingleOrDefault();
                                     var lastUnit = tranQty.Last();
-                                    
-                                    foreach(var unit in tranQty)
+
+                                    foreach (var unit in tranQty)
                                     {
-                                        if(unit.Sequence > currentsequence )
+                                        if (unit.Sequence > currentsequence)
                                         {
                                             piece *= unit.QtyInParent;
                                         }
@@ -115,13 +117,13 @@ namespace WMS.Service.Impl
                                     actualQty += piece;
                                     useDimension += tran.UsedDimension * (int)tran.Qty;
                                 }
- 
-                                var laterInven = repoInven.Get(a => a.Box == invengroup.Box && 
+
+                                var laterInven = repoInven.Get(a => a.Box == invengroup.Box &&
                                 a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.Lot == invengroup.Lot && a.LocIDSys == invengroup.LocIDSys &&
-                                a.Pallet == invengroup.Pallet  && a.ItemIDSys == invengroup.ItemIDSys);
-                                if(invengroup.Child[0] != null)
-                                location[location.FindIndex(a => a.LocIDSys == invengroup.Child[0].LocIDSys)].AvailableArea -= useDimension;
-                                if(laterInven == null)
+                                a.Pallet == invengroup.Pallet && a.ItemIDSys == invengroup.ItemIDSys);
+                                if (invengroup.Child[0] != null)
+                                    location[location.FindIndex(a => a.LocIDSys == invengroup.Child[0].LocIDSys)].AvailableArea -= useDimension;
+                                if (laterInven == null)
                                 {
                                     Inventory inven = new CommonService().AutoMapper<Inventory>(invengroup.Child[0]);
                                     inven.InboundQty = actualQty;
@@ -136,20 +138,20 @@ namespace WMS.Service.Impl
                                     laterInven.AvailableQty = laterInven.InboundQty - laterInven.OutboundQty;
                                     realinventory.Add(repoInven.Update(laterInven));
                                 }
-                                
+
                             }
-                            for(int i = 0; i< location.Count; i++)
+                            for (int i = 0; i < location.Count; i++)
                             {
                                 repoLoc.Update(location[i]);
                             }
                             Db.SaveChanges();
-                            foreach(var inven in realinventory)
+                            foreach (var inven in realinventory)
                             {
-                                var inventemp = realinvengroup.Where(a => a.Box == inven.Box && 
+                                var inventemp = realinvengroup.Where(a => a.Box == inven.Box &&
                                 a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.Lot == inven.Lot && a.LocIDSys == inven.LocIDSys &&
                                 a.Pallet == inven.Pallet && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
 
-                                foreach(var childtran in inventemp.Child)
+                                foreach (var childtran in inventemp.Child)
                                 {
                                     var piece = (int)childtran.Qty;
                                     var tranQty = Db.ItemUnitMapping.Where(qt => qt.ItemIDSys == childtran.ItemIDSys).OrderBy(b => b.Sequence).ToList();
@@ -169,13 +171,15 @@ namespace WMS.Service.Impl
                                     tempchild.ReceivingDate = childtran.ReceivingDate;
                                     tempchild.ConvertedQty = piece;
                                     inventran.Add(repoTran.Insert(tempchild));
-                                    inventran[inventran.Count - 1].InventoryTransactionDetail = childtran.InventoryTransactionDetail.Select(a => new InventoryTransactionDetail() {
-                                    SerialNumber = a.SerialNumber}).ToList();
+                                    inventran[inventran.Count - 1].InventoryTransactionDetail = childtran.InventoryTransactionDetail.Select(a => new InventoryTransactionDetail()
+                                    {
+                                        SerialNumber = a.SerialNumber
+                                    }).ToList();
                                 }
                             }
                             Db.SaveChanges();
 
-                            foreach(var inventra in inventran)
+                            foreach (var inventra in inventran)
                             {
                                 inventra.InventoryTransactionDetail = inventra.InventoryTransactionDetail != null ? inventra.InventoryTransactionDetail : new List<InventoryTransactionDetail>();
                                 foreach (var detail in inventra.InventoryTransactionDetail)
@@ -204,15 +208,15 @@ namespace WMS.Service.Impl
                         scope.Complete();
                     }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException e)
+                catch (DbEntityValidationException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                }
+                catch (DbUpdateException)
+                {
+                    scope.Dispose();
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return newReceive.ReceiveIDSys;
             }
@@ -247,7 +251,8 @@ namespace WMS.Service.Impl
                             List<Location> location = new List<Location>();
                             List<InventoryTransaction> inventran = new List<InventoryTransaction>();
                             var realinvengroup = receives.InventoryTransactions.GroupBy(a => new { a.Box, a.Dimention, a.Expire, a.Inspect, a.LocIDSys, a.Lot, a.Pallet, a.Serial, a.ItemIDSys })
-                                .Select(b => new {
+                                .Select(b => new
+                                {
                                     Box = b.Key.Box,
                                     Expire = b.Key.Expire.HasValue ? b.Key.Expire : null,
                                     Lot = b.Key.Lot,
@@ -274,11 +279,11 @@ namespace WMS.Service.Impl
                                     useDimension += tran.UsedDimension * (int)tran.Qty;
                                 }
 
-                                var laterInven = repoInven.Get(a => a.Box == invengroup.Box && 
+                                var laterInven = repoInven.Get(a => a.Box == invengroup.Box &&
                                 a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.Lot == invengroup.Lot && a.LocIDSys == invengroup.LocIDSys &&
                                 a.Pallet == invengroup.Pallet && a.ItemIDSys == invengroup.ItemIDSys);
 
-                                if (invengroup.Child[0] != null) 
+                                if (invengroup.Child[0] != null)
                                     location[location.FindIndex(a => a.LocIDSys == invengroup.Child[0].LocIDSys)].AvailableArea -= useDimension;
 
                                 if (laterInven == null)
@@ -304,9 +309,9 @@ namespace WMS.Service.Impl
                             Db.SaveChanges();
                             foreach (var inven in realinventory)
                             {
-                                var inventemp = realinvengroup.Where(a => a.Box == inven.Box && 
+                                var inventemp = realinvengroup.Where(a => a.Box == inven.Box &&
                                 a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.Lot == inven.Lot && a.LocIDSys == inven.LocIDSys &&
-                                a.Pallet == inven.Pallet  && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
+                                a.Pallet == inven.Pallet && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
 
                                 foreach (var childtran in inventemp.Child)
                                 {
@@ -318,7 +323,7 @@ namespace WMS.Service.Impl
                                     inventran.Add(repoTran.Insert(tempchild));
                                 }
                             }
-                            
+
                             Db.SaveChanges();
                             foreach (var inventra in inventran)
                             {
@@ -348,15 +353,14 @@ namespace WMS.Service.Impl
                         scope.Complete();
                     }
                 }
-                catch (DbEntityValidationException e)
+                catch (DbEntityValidationException)
                 {
-                    HandleValidationException(e);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
-                    throw ex;
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return true;
@@ -366,17 +370,63 @@ namespace WMS.Service.Impl
         public bool DeleteReceive(int id)
         {
             throw new NotImplementedException();
+        }               
+
+        public TempInventoryTransaction SaveTempInventoryTransaction(TempInventoryTransaction tempTransaction)
+        {
+            List<TempInventoryTransaction> tempTransactions = new List<TempInventoryTransaction>();
+            tempTransactions.Add(tempTransaction);
+            return SaveTempInventoryTransactions(tempTransactions).SingleOrDefault();
         }
 
-        public void HandleValidationException(DbEntityValidationException ex)
+        public IEnumerable<TempInventoryTransaction> SaveTempInventoryTransactions(IEnumerable<TempInventoryTransaction> tempTransactions)
         {
-            foreach (var eve in ex.EntityValidationErrors)
+            try
             {
-                foreach (var ve in eve.ValidationErrors)
+                using (WMSDbContext db = new WMSDbContext())
                 {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                    ITempInventoryTransactionRepository tranRepo = new TempInventoryTransactionRepository(db);
+                    foreach (var transaction in tempTransactions)
+                    {
+                        tranRepo.Save(transaction);
+                    }
+                    db.SaveChanges();
                 }
+                return tempTransactions;
+            }
+            catch (DbUpdateException)
+            {
+                throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+            }            
+        }
+
+        public ReceiveTempInventoryTransaction SaveReceiveAndTempInventoryTransactions(ReceiveTempInventoryTransaction receiveTempTransaction)
+        {
+            using (var scope = Transaction.Default)
+            {
+                SaveReceive(receiveTempTransaction.Receive);
+                SaveTempInventoryTransactions(receiveTempTransaction.TempTransactions);
+                scope.Complete();
+                return receiveTempTransaction;
             }
         }
-    }
+
+        public Receive SaveReceive(Receive receive)
+        {
+            try
+            {
+                using (WMSDbContext db = new WMSDbContext())
+                {
+                    IReceiveRepository receiveRepo = new ReceiveRepository(db);
+                    receiveRepo.Save(receive);
+                    db.SaveChanges();
+                    return receive;
+                }
+            }
+            catch (DbEntityValidationException)
+            {
+                throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+            }
+        }
+    }    
 }

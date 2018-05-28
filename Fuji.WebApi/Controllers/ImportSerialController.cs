@@ -799,7 +799,7 @@ namespace Fuji.WebApi.Controllers
         [Route("importSerial/handy/SetSerial2Box/{boxNumberFrom}/{boxNumberTo}")]
         public HttpResponseMessage SetSerial2Box(string boxNumberFrom, string boxNumberTo, [FromBody]ItemGroupRequest itemGroup)
         {
-            string userName = User.Identity.GetUserName() ?? "SYSTEM";
+            string userName = Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity) ?? "SYSTEM";
 
             ResponseData<int> respones = new ResponseData<int>();       
             int flag = ItemImportService.SetSerial2Box(boxNumberFrom, boxNumberTo, itemGroup, userName);
@@ -814,7 +814,7 @@ namespace Fuji.WebApi.Controllers
         [Route("importSerial/handy/SetBox2Location/{locationTo}")]
         public HttpResponseMessage SetBox2Location(string locationTo, [FromBody]ItemGroupRequest itemGroup)
         {
-            string userName = User.Identity.GetUserName() ?? "SYSTEM";
+            string userName = Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity) ?? "SYSTEM";
 
             ResponseData<int> respones = new ResponseData<int>();
             int flag = ItemImportService.SetBox2Location(locationTo, itemGroup, userName);

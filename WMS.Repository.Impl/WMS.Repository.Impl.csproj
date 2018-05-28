@@ -64,6 +64,7 @@
     <Compile Include="InventoryManage\InventoryRepository.cs" />
     <Compile Include="InventoryManage\InventoryTransactionDetailRepository.cs" />
     <Compile Include="InventoryManage\InventoryTransactionRepository.cs" />
+    <Compile Include="InventoryManage\TempInventoryTransactionRepository.cs" />
     <Compile Include="ItemManagement\ItemInspectRepository.cs" />
     <Compile Include="ItemManagement\ItemRepository.cs" />
     <Compile Include="ItemManagement\ItemSetDetailRepository.cs" />
@@ -93,6 +94,10 @@
     <ProjectReference Include="..\Auth.Security\Auth.Security.csproj">
       <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
       <Name>Auth.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
+      <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
+      <Name>WIM.Core.Common.Utility</Name>
     </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Context\WIM.Core.Context.csproj">
       <Project>{c883f41b-e3bf-4e82-b7b2-55351566c55e}</Project>

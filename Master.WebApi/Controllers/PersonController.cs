@@ -44,7 +44,7 @@ namespace Master.WebApi.Controllers
             ResponseData<Person_MT> response = new ResponseData<Person_MT>();
             try
             {
-                Person_MT Persons = PersonService.GetPersonByPersonIDSys(User.Identity.GetUserId());
+                Person_MT Persons = PersonService.GetPersonByPersonIDSys(User.Identity.GetUserIdApp());
                 response.SetData(Persons);
             }
             catch (ValidationException ex)
