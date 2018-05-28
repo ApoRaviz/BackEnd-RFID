@@ -11,6 +11,8 @@ using WIM.Core.Common.Utility.AppStates;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Common.Utility.UtilityHelpers;
+using WIM.Core.Common.Utility.Validation;
+using AppValidation = WIM.Core.Common.Utility.Validation;
 
 namespace WIM.Core.Entity
 {
@@ -77,5 +79,15 @@ namespace WIM.Core.Entity
 
             }
         }
+
+        public static TEntity TryValidationNotNullException<TEntity>(this TEntity entity)
+        {
+            if (entity == null)
+            {
+                throw new AppValidation.ValidationException(ErrorEnum.DataNotFound);
+            }
+            return entity;
+        }
+
     }
 }

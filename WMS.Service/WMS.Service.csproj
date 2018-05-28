@@ -48,6 +48,7 @@
     <Compile Include="Dimension\IDimensionService.cs" />
     <Compile Include="Dimension\Import\IImportService.cs" />
     <Compile Include="Inspect\IInspectService.cs" />
+    <Compile Include="Inventories\IInventoryService.cs" />
     <Compile Include="ItemMaster\IItemService.cs" />
     <Compile Include="ItemSet\IItemSetService.cs" />
     <Compile Include="Label\ILabelService.cs" />
