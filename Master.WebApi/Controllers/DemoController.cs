@@ -83,9 +83,9 @@ namespace Master.WebApi.Controllers
         {
 
         }
-        public class From<A,B>
+        public class From<A, B>
         {
-            public A a  { get; set; }
+            public A a { get; set; }
             public B b { get; set; }
         }
 
@@ -452,7 +452,44 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpPost]
+        [Route("func8")]
+        public HttpResponseMessage Func8([FromBody]object x)
+        {
+            ResponseData<WarehouseTest> response = new ResponseData<WarehouseTest>();
+
+            WarehouseTest w;
+            using (CoreDbContext db = new CoreDbContext())
+            {
+                w = db.WarehouseTests.First();
+                w.CreateBy = "Job";
+            }
+
+            response.Data = w;
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
     }
+
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    public sealed class AddressAttribute : Attribute
+    {
+        public AddressAttribute()
+        {
+
+        }
+    }
+
+
+
+  
+
+
+
+
+
+
+
 
     public class ApiDesc
     {
@@ -496,3 +533,4 @@ namespace Master.WebApi.Controllers
         }
     }
 }
+

@@ -81,7 +81,7 @@ namespace WMS.WebApi.Controller
             ResponseData<object> response = new ResponseData<object>();
             try
             {
-                string userid = User.Identity.GetUserId();
+                string userid = User.Identity.GetUserIdApp();
                 object customer;
                 if (User.IsSysAdmin())
                 {
@@ -112,7 +112,7 @@ namespace WMS.WebApi.Controller
             ResponseData<object> response = new ResponseData<object>();
             try
             {
-                string userid = User.Identity.GetUserId();
+                string userid = User.Identity.GetUserIdApp();
                 object customer;
                 if (User.IsSysAdmin())
                 {

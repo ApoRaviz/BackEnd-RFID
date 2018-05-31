@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using WIM.Core.Repository.Impl;
 using WMS.Common.ValueObject;
 using WMS.Context;
@@ -16,17 +17,16 @@ namespace WMS.Repository.Impl
 
         public void insertByDto(int refID,IEnumerable<SpareFieldsDto> spdDto)
         {
-
+            
             List<SpareFieldDetail> spdList = new List<SpareFieldDetail>();
             SpareFieldDetail spd;
+            Delete(x=> x.SpfdRefID == spdDto.ElementAt(0).SpfdRefID);
             foreach (SpareFieldsDto obj in spdDto)
             {
                 if(obj.Value == null)
                 {
                     continue;
                 }
-
-
                 spd = new SpareFieldDetail();
                 spd.SpfIDSys = obj.SpfIDSys;
                 spd.SpfdRefID = refID;

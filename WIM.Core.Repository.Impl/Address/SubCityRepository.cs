@@ -52,21 +52,50 @@ namespace WIM.Core.Repository.Impl
                                 }
                                 ).ToList();
             var citytree = (from pv in Db.City_MT
-                                select new locationObj
-                                {
-                                    name = pv.CityName,
-                                    idsys = pv.ProvinceIDSys,
-                                    idsys2 = pv.CityIDSys
-                                }
+                            select new locationObj
+                            {
+                                name = pv.CityName,
+                                idsys = pv.ProvinceIDSys,
+                                idsys2 = pv.CityIDSys
+                            }
                                 ).ToList();
             var subcitytree = (from pv in Db.SubCity_MT
-                                select new locationObj
-                                {
-                                    name = pv.SubCityName,
-                                    idsys = pv.CityIDSys,
-                                    postal = pv.PostalCode
-                                }
+                               select new locationObj
+                               {
+                                   name = pv.SubCityName,
+                                   idsys = pv.CityIDSys,
+                                   postal = pv.PostalCode,
+                                   idsys2 = pv.SubCityIDSys
+                               }
                                 ).ToList();
+
+            //var province = Db.Province_MT.Select(x => x.ProvinceNameEn).ToList();
+            //var city = Db.City_MT.Select(x => x.CityNameEn).ToList();
+            //var subcity = Db.SubCity_MT.Select(x => x.SubCityNameEn).ToList();
+            //var provincetree = (from pv in Db.Province_MT
+            //                    select new locationObj
+            //                    {
+            //                        name = pv.ProvinceNameEn,
+            //                        idsys = pv.ProvinceIDSys
+            //                    }
+            //                    ).ToList();
+            //var citytree = (from pv in Db.City_MT
+            //                select new locationObj
+            //                {
+            //                    name = pv.CityNameEn,
+            //                    idsys = pv.ProvinceIDSys,
+            //                    idsys2 = pv.CityIDSys
+            //                }
+            //                    ).ToList();
+            //var subcitytree = (from pv in Db.SubCity_MT
+            //                   select new locationObj
+            //                   {
+            //                       name = pv.SubCityNameEn,
+            //                       idsys = pv.CityIDSys,
+            //                       postal = pv.PostalCode,
+            //                       idsys2 = pv.SubCityIDSys
+            //                   }
+            //                    ).ToList();
 
             List<List<object>> data = new List<List<object>>();
             for (var i = 0; i < provincetree.Count; i++)
@@ -83,11 +112,13 @@ namespace WIM.Core.Repository.Impl
                     subdata[j].Add(cityname[j]);
                     var scityname = subcitytree.Where(a => a.idsys == cityid[j]).Select(x => x.name).ToList();
                     var scitypost = subcitytree.Where(a => a.idsys == cityid[j]).Select(x => x.postal).ToList();
+                    var scityidsys = subcitytree.Where(a => a.idsys == cityid[j]).Select(x => x.idsys2).ToList();
                     for (var k = 0; k < scityname.Count; k++)
                     {
                         subdata2.Add(new List<object>());
                         subdata2[k].Add(scityname[k]);
                         subdata2[k].Add(scitypost[k]);
+                        subdata2[k].Add(scityidsys[k]);
                     }
                     subdata[j].Add(subdata2);
                 }
@@ -257,9 +288,9 @@ namespace WIM.Core.Repository.Impl
             data = new JavaScriptSerializer().Deserialize<List<List<object>>>(json);
             object realdata = new { data = data, lookup = jsonlookup, words = jsonword };
             string json1 = new JavaScriptSerializer().Serialize(realdata);
-            File.WriteAllText(@"D:\test2.json", json1);
+            File.WriteAllText(@"D:\test5.json", json1);
 
-            return lookup;
+            return data;
         }
 
         public List<string> numlessLoc(List<string> item)

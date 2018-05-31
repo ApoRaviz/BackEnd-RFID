@@ -19,12 +19,15 @@ namespace WIM.Core.Repository
         Task<IEnumerable<TEntity>> GetAllAsync();
         TEntity GetByID(object id);
         TEntity GetByID(params object[] id);
+        TEntity GetByID(object id, bool isTryValidationNotNullException);
+        TEntity GetByID(bool isTryValidationNotNullException, params object[] id);
         Task<TEntity> GetByIDAsync(params object[] id);
         Task<TEntity> GetByIDAsync(object id);
         bool Exists(object id);
         bool Exists(Func<TEntity, Boolean> where);
+        TEntity Save(TEntity entity);
         TEntity Insert(TEntity entity);
-        TEntity Update(object entityToUpdate);
+        TEntity Update(TEntity entityToUpdate);
         void Delete(object id);
         void Delete(TEntity entityToDelete);
 

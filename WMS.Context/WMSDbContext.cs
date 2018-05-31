@@ -35,9 +35,9 @@ namespace WMS.Context
     public class WMSDbContext : DbContext
     {
         //$DbSet
+		public DbSet<InvoiceReceive> InvoiceReceives { get; set; }
+		public DbSet<TempInventoryTransaction> TempInventoryTransactions { get; set; }
         public DbSet<SpareFieldDetail> SpareFieldDetails { get; set; }
-
-
 
         public DbSet<BaseGeneralConfig> BaseGeneralConfig { get; set; }
         public DbSet<InspectType> InspectType { get; set; }

@@ -125,7 +125,7 @@ namespace Master.WebApi.Controllers
             IResponseData<List<Role>> response = new ResponseData<List<Role>>();
             try
             {
-                List<Role> Role = RoleService.GetRoleByUserID(User.Identity.GetUserId());
+                List<Role> Role = RoleService.GetRoleByUserID(User.Identity.GetUserIdApp());
                 response.SetData(Role);
             }
             catch (ValidationException ex)

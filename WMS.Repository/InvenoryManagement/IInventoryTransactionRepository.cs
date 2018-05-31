@@ -10,6 +10,8 @@ namespace WMS.Repository.InvenoryManagement
 {
     public interface IInventoryTransactionRepository : IRepository<InventoryTransaction>
     {
-
+        // void GetInventoryTransaction();
     }
+
+
 }

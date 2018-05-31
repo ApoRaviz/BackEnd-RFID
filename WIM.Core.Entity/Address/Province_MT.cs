@@ -14,6 +14,7 @@ namespace WIM.Core.Entity.Address
         [Key]
         public int ProvinceIDSys { get; set; }
         public string ProvinceName { get; set; }
+        public string ProvinceNameEn { get; set; }
         public int CountryIDSys { get; set; }
     }
 }

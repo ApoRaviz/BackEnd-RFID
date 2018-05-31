@@ -74,7 +74,7 @@ namespace Fuji.WebApi.Controllers
 
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                Email = Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
