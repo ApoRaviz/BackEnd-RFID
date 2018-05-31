@@ -91,9 +91,18 @@ namespace WIM.Core.Common.Utility.Validation
         RFIDDuplicated = 1411001,
 
         [Description("ORDER_DUPLICATED")]
-        ISZJDuplicate = 1411002
+        ISZJDuplicate = 1411002,
 
         #endregion /Register
+
+
+        #region ================================ ISUZU[14] -> Import[12]
+
+        [Description("Import_Not_All_NEW")]
+        ImportStatusNotNew = 1412001,
+
+
+        #endregion /Import
 
         #endregion /ISUZU                    
 

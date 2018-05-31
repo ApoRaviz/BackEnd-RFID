@@ -66,9 +66,9 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [HttpGet]
-        [Route("validationField/{tableName}")]
-        public HttpResponseMessage ValidationField(string tableName)
+        [HttpPost]
+        [Route("validationField")]
+        public HttpResponseMessage ValidationField(List<string> tableName)
         {
             IResponseData<string> response = new ResponseData<string>();
             try
