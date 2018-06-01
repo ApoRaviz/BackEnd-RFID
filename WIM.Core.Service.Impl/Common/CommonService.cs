@@ -207,7 +207,11 @@ namespace WIM.Core.Service.Impl
                 {
                     query = query.Where(x => x.RequestMenuNameFrontEnd.Contains(logMasterParameters.RequestMenuNameFrontEnd)).AsQueryable();
                 }
-                if (!string.IsNullOrEmpty(logMasterParameters.RequestDateFrom.ToString()))
+                if (!string.IsNullOrEmpty(logMasterParameters.Username))
+                {
+                    query = query.Where(x => x.Username.Contains(logMasterParameters.Username)).AsQueryable();
+                }
+                if (logMasterParameters.RequestDateFrom != null)
                 {
                     query = query.Where(x => x.RequestTimestamp >= logMasterParameters.RequestDateFrom).AsQueryable();
                 }

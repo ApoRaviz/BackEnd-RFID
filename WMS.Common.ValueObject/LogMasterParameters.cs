@@ -14,6 +14,8 @@ namespace WMS.Common.ValueObject
         public string RequestMenuNameFrontEnd { get; set; }
         public DateTime? RequestDateFrom { get; set; }
         public DateTime? RequestDateTo { get; set; }
+        public string Username { get; set; }
+
         public int Rows { get; set; }
         public int PageNum { get; set; }
         public int Totalrow { get; set; }
