@@ -24,6 +24,6 @@ namespace WIM.Core.Service
         //void InsertLog(HandheldErrorLog errorLog);
         T AutoMapper<T>(object data);
         string GetValueGenerateCode(string key);
-        string GetValidation(string tableName);
+        string GetValidation(List<string> tableName);
     }
 }

@@ -40,7 +40,7 @@ namespace WIM.Core.Entity.CustomerManagement
         public string Zipcode { get; set; }
         public string CountryCode { get; set; }
         public string ContName { get; set; }
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Email Invalid Format")]
         public string Email { get; set; }
         public string TelOffice { get; set; }
         public string TelExt { get; set; }

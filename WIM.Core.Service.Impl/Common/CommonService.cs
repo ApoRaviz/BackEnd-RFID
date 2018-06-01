@@ -87,7 +87,7 @@ namespace WIM.Core.Service.Impl
             return tableDescriptionWms;
         }
 
-        public string GetValidation(string tableName)
+        public string GetValidation(List<string> tableName)
         {
             string validation = "";
             using (CoreDbContext Db = new CoreDbContext())

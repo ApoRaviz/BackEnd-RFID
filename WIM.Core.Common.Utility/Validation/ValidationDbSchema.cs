@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,11 @@ namespace WIM.Core.Common.Utility.Validation
         public ValidationDbSchema()
         {
             Fn = "";
+            Ft = "";
             Fs = new List<ValidationField>();
         }
-
         public string Fn { get; set; }
+        public string Ft { get; set; }
         public List<ValidationField> Fs { get; set; }
 
         public class ValidationField

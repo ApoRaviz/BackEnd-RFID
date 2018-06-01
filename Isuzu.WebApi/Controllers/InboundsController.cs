@@ -621,6 +621,69 @@ namespace Isuzu.Service.Impl
                     response.SetData(inboundList);
                     response.SetStatus(HttpStatusCode.OK);
                 }
+            }
+            catch (ValidationException e)
+            {
+                response.SetErrors(e.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("importByFileIDs")]
+        public HttpResponseMessage PostImportData([FromBody] List<IsuzuUploadItem> files)
+        {
+            DateTime d = DateTime.Now;
+            string drive = "D:";
+            if (!Directory.Exists(drive))
+                drive = "C:";
+            string root = drive + @"\Uploads\WIM";
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
+            }
+            ResponseData<List<InboundItems>> response = new ResponseData<List<InboundItems>>();
+            List<InboundItems> inboundList = new List<InboundItems>();
+            bool isDubplicat = false;
+            try
+            {
+
+                // This illustrates how to get the file names.
+                foreach (IsuzuUploadItem file in files)
+                {
+                    string path = Path.Combine(root,file.PathFile, file.LocalName);
+                    IsuzuDataImport returnImported = InboundService.OpenReadExcel(path);
+                    if (returnImported != null)
+                    {
+                        if (returnImported.isDuplicated)
+                        {
+                            isDubplicat = true;
+                            inboundList = returnImported.listItem;
+                            break;
+                        }
+                        else
+                            inboundList.AddRange(returnImported.listItem);
+                    }
+                }
+
+                if (isDubplicat)
+                {
+                    var dubplicateList = inboundList.Select(s => s.ISZJOrder).ToList();
+                    var Errorlist = new List<ValidationError>()
+                    {
+                        new ValidationError("1411002","Duplicate: " + String.Join(",",dubplicateList))
+                    };
+                    response.SetErrors(Errorlist);
+                    response.SetStatus(HttpStatusCode.Conflict);
+                }
+                else
+                {
+                    response.SetData(inboundList);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
 
             }
             catch (ValidationException e)

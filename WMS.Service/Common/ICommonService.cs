@@ -7,6 +7,6 @@ namespace WMS.Service.Common
     public interface ICommonService : IService
     {
         IEnumerable<CheckDependentPKDto> CheckDependentPK(string TableName, string ColumnName, string Value = "");
-        string GetValidation(string tableName);
+        string GetValidation(List<string> tableName);
     }
 }
