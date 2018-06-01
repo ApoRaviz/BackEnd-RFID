@@ -60,6 +60,8 @@
     <Compile Include="LocationControlDto.cs" />
     <Compile Include="LocationGroupDto.cs" />
     <Compile Include="LocationDto.cs" />
+    <Compile Include="LogMasterPaging.cs" />
+    <Compile Include="LogMasterParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceiveDto.cs" />
     <Compile Include="SpareFieldsDto.cs" />
