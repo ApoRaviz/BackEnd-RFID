@@ -26,7 +26,7 @@ namespace WMS.WebApi
 
             EnableCorsAttribute enableCors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(enableCors);
-
+ 
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
             config.Formatters.JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling = ReferenceLoopHandling.Ignore;

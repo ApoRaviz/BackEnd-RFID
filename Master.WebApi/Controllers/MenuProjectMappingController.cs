@@ -377,7 +377,7 @@ namespace Master.WebApi.Controllers
                 }
                 else
                 {
-                    MenuPermis = MenuProjectMappingService.GetMenuProjectPermission(User.Identity.GetUserId(), ProID,Db);
+                    MenuPermis = MenuProjectMappingService.GetMenuProjectPermission(User.Identity.GetUserIdApp(), ProID,Db);
                     MenuRes = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
                 }
                 IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID, MenuPermis.AsEnumerable(),Db).Select(row => new MenuProjectMappingDto

@@ -42,8 +42,17 @@
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -59,6 +68,7 @@
     <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -74,9 +84,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppStates\WriteDataState.cs" />
+    <Compile Include="Attributes\CreateOnlyAttribute.cs" />
     <Compile Include="Attributes\ForeignKeyCustomAttribute.cs" />
     <Compile Include="Attributes\GeneralLogAttribute.cs" />
     <Compile Include="Attributes\HashidsAttrbute.cs" />
+    <Compile Include="Attributes\SameCreateAtAttribute.cs" />
     <Compile Include="Attributes\ValueEnumAttribute.cs" />
     <Compile Include="Constants\Constant.cs" />
     <Compile Include="Extentions\DbSetExtensions.cs" />
@@ -86,6 +99,7 @@
     <Compile Include="Extentions\IdentityExtensions.cs" />
     <Compile Include="Extentions\AttributeExtensions.cs" />
     <Compile Include="Extentions\QueryableExtensions.cs" />
+    <Compile Include="Extentions\TransactionExtensions.cs" />
     <Compile Include="UtilityHelpers\AttributeHelper.cs" />
     <Compile Include="UtilityHelpers\DownloadHelper.cs" />
     <Compile Include="UtilityHelpers\FileHelper.cs" />
@@ -101,6 +115,7 @@
     <Compile Include="Mail\EmailService.cs" />
     <Compile Include="UserLog.cs" />
     <Compile Include="Validation\CheckModelForNullAttribute.cs" />
+    <Compile Include="Validation\ValidationDbSchema.cs" />
     <Compile Include="Validation\ErrorEnum.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Validation\MoreThanOne.cs" />
@@ -108,6 +123,7 @@
     <Compile Include="Validation\ElementNotFound.cs" />
     <Compile Include="Validation\IValidationException.cs" />
     <Compile Include="Validation\ValidateModelAttribute.cs" />
+    <Compile Include="Validation\ValidationEnum.cs" />
     <Compile Include="Validation\ValidationError.cs" />
     <Compile Include="Validation\ValidationException.cs" />
   </ItemGroup>

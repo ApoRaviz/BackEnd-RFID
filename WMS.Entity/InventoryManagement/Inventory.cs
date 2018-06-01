@@ -24,9 +24,9 @@ namespace WMS.Entity.InventoryManagement
         public string Inspect { get; set; }
         public Nullable<DateTime> Expire { get; set; }
         public string Dimension { get; set; }
-        public string Box { get; set; }
-        public string Lot { get; set; }
-        public string Pallet { get; set; }
+        public string ControlLevel1 { get; set; }
+        public string ControlLevel2 { get; set; }
+        public string ControlLevel3 { get; set; }
         public int? ItemModeIDSys { get; set; }
         public int? ItemSetIDSys { get; set; }
         public string Remark { get; set; }

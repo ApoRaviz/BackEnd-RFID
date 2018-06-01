@@ -9,6 +9,7 @@ using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Entity.ProjectManagement;
 using WMS.Common.ValueObject;
 using WMS.Entity.Common;
+using WMS.Entity.InventoryManagement;
 using WMS.Entity.ItemManagement;
 
 namespace WMS.WebApi
@@ -41,7 +42,8 @@ namespace WMS.WebApi
                 cfg.CreateMap<LabelControl, LabelControlDto>();
                 cfg.CreateMap<BaseGeneralConfig, GeneralConfigLocationFormat>();
                 cfg.CreateMap<BaseGeneralConfig, GeneralConfig>();
-
+                cfg.CreateMap<InventoryTransaction, TempInventoryTransaction>();
+                cfg.CreateMap<TempInventoryTransaction, InventoryTransaction>();
             });
         }
     }

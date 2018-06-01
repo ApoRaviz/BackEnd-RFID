@@ -18,7 +18,7 @@ namespace WMS.Repository.Impl
         {
             ReceiveDto receive = new ReceiveDto();
             //Receive receives;
-            
+
             using (WMSDbContext Db = new WMSDbContext())
             {
                 var query = (from i in Db.Receive
@@ -35,8 +35,8 @@ namespace WMS.Repository.Impl
                              join n in Db.Supplier_MT on i.SupplierIDSys equals n.SupIDSys into ns
                              from leftSup in ns
                              where i.ReceiveIDSys == receiveIDSys
-                             select new { i,receiv,leftItem,leftInventory,leftLocation,leftSup,leftTranDetail }).ToList();
-                if(query != null)
+                             select new { i, receiv, leftItem, leftInventory, leftLocation, leftSup, leftTranDetail }).ToList();
+                if (query != null)
                 {
                     receive = new ReceiveDto()
                     {
@@ -60,7 +60,7 @@ namespace WMS.Repository.Impl
                     .Select(e => new InventoryTransactionDto()
                     {
                         InvenTranIDSys = e.Tran.InvenTranIDSys,
-                        Box = e.Data[0].leftInventory.Box,
+                        ControlLevel1 = e.Data[0].leftInventory.ControlLevel1,
                         Dimention = e.Data[0].leftInventory.Dimension,
                         Expire = e.Data[0].leftInventory.Expire,
                         Inspect = e.Data[0].leftInventory.Inspect,
@@ -69,8 +69,8 @@ namespace WMS.Repository.Impl
                         ItemName = e.Data[0].leftItem.ItemName,
                         LocIDSys = e.Data[0].leftInventory.LocIDSys,
                         LocNo = e.Data[0].leftInventory.Location.LocNo,
-                        Lot = e.Data[0].leftInventory.Lot,
-                        Pallet = e.Data[0].leftInventory.Pallet,
+                        ControlLevel2 = e.Data[0].leftInventory.ControlLevel2,
+                        ControlLevel3 = e.Data[0].leftInventory.ControlLevel3,
                         Qty = e.Tran.Qty,
                         ReceivingDate = e.Tran.ReceivingDate,
                         StatusIDSys = e.Tran.StatusIDSys,
@@ -87,13 +87,13 @@ namespace WMS.Repository.Impl
                             LocIDSys = e.Data[0].leftInventory.LocIDSys,
                             LocNo = e.Data[0].leftInventory.Location.LocNo,
                             UnitIDSys = e.Data[0].receiv.UnitIDSys,
-                            Box = e.Data[0].leftInventory.Box,
-                            Lot = e.Data[0].leftInventory.Lot,
-                            Pallet = e.Data[0].leftInventory.Pallet
+                            ControlLevel1 = e.Data[0].leftInventory.ControlLevel1,
+                            ControlLevel2 = e.Data[0].leftInventory.ControlLevel2,
+                            ControlLevel3 = e.Data[0].leftInventory.ControlLevel3
                         }).ToList()
                     }).ToList();
 
-
+                receive.SpareFields = Db.ProcGetSpareFieldsByTableAndRefID(Identity.GetProjectIDSys(), "Receives", receive.ReceiveIDSys).ToList();
 
                 if (receive.FileRefID != null)
                 {

@@ -155,6 +155,35 @@ namespace WIM.Core.Service.Impl
                 }
                 return true;
             }
-        }        
+        }
+
+        public bool DeleteApiMT(List<string> arrApi)
+        {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    using (CoreDbContext Db = new CoreDbContext())
+                    {
+                        IApiMTRepository repo = new ApiMTRepository(Db);
+                        foreach (var item in arrApi)
+                        {
+                            //var existedApiMT = repo.GetByID(id);
+                            repo.Delete(x=>x.ApiIDSys == item);
+                        }
+                        Db.SaveChanges();
+                        scope.Complete();
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    scope.Dispose();
+                    ValidationException ex = new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw ex;
+                }
+                return true;
+            }
+        }
+
     }
 }

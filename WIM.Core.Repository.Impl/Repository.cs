@@ -13,6 +13,16 @@ using WIM.Core.Entity;
 using WIM.Core.Common.Utility.Extentions;
 using WIM.Core.Entity.Logs;
 using System.Threading.Tasks;
+using AppValidation = WIM.Core.Common.Utility.Validation;
+using System.Data.SqlClient;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Collections;
+using WIM.Core.Common.Utility.AppStates;
+using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.Core.Repository.Impl
@@ -34,7 +44,7 @@ namespace WIM.Core.Repository.Impl
         {
             get
             {
-                return AuthHelper.GetIdentity();
+                return UtilityHelper.GetIdentity();
             }
         }
 
@@ -61,19 +71,31 @@ namespace WIM.Core.Repository.Impl
             return await DbSet.ToListAsync();
         }
 
+        public TEntity GetByID(bool isTryValidationNotNullException, params object[] id)
+        {
+            return DbSet.Find(id).TryValidationNotNullException();
+        }
+
+        public TEntity GetByID(object id, bool isTryValidationNotNullException)
+        {
+            return DbSet.Find(id).TryValidationNotNullException();
+        }
+
         public TEntity GetByID(params object[] id)
         {
             return DbSet.Find(id);
-        }
-        public async Task<TEntity> GetByIDAsync(params object[] id)
-        {
-            return await DbSet.FindAsync(id);
         }
 
         public TEntity GetByID(object id)
         {
             return DbSet.Find(id);
         }
+
+        public async Task<TEntity> GetByIDAsync(params object[] id)
+        {
+            return await DbSet.FindAsync(id);
+        }
+
         public async Task<TEntity> GetByIDAsync(object id)
         {
             return await DbSet.FindAsync(id);
@@ -89,6 +111,17 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Any(where);
         }
 
+        public TEntity Save(TEntity entity)
+        {
+            switch (entity.GetWriteDataState())
+            {
+                case WriteDataState.INSERT:
+                    return Insert(entity);
+                default:
+                    return Update(entity);
+            }
+        }
+
         public TEntity Insert(TEntity entityToInsert)
         {
             Type typeEntityToInsert = entityToInsert.GetType();
@@ -101,31 +134,33 @@ namespace WIM.Core.Repository.Impl
             foreach (PropertyInfo prop in entityproperties)
             {
                 var value = prop.GetValue(entityToInsert, null);
-                if (!prop.PropertyType.IsGenericType || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime))
+                bool isThisPropertyCanInsert = !prop.PropertyType.IsGenericType;
+                isThisPropertyCanInsert = isThisPropertyCanInsert || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime); // Nullable<DateTime>
+                isThisPropertyCanInsert = isThisPropertyCanInsert || prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+                if (isThisPropertyCanInsert)
                 {
-                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);                    
+                    typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
                 }
-                else if (prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+
+                if (prop.GetCustomAttribute<SameCreateAtAttribute>() != null)
                 {
-                    if (typeEntityForInsert.GetProperty(prop.Name).GetValue(entityToInsert) != null)
+                    if (prop.PropertyType == typeof(DateTime) || prop.PropertyType.GetGenericTypeDefinition() == typeof(DateTime))
                     {
-                        typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
-                    }
-                    else
-                    {
-                        typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, value, null);
+                        typeEntityForInsert.GetProperty(prop.Name).SetValue(entityForInsert, DateTime.Now, null);
                     }
                 }
 
                 if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
                 {
-                    GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForInsert, Identity.GetUserName()));
+                    GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForInsert, Identity.GetUserNameApp()));
                 }
             }
 
-            entityForInsert.CreateBy = Identity.GetUserName();
+            entityForInsert.TrySetProjectIDSys(); // #Job Try
+            entityForInsert.CreateBy = Identity.GetUserNameApp();
             entityForInsert.CreateAt = DateTime.Now;
-            entityForInsert.UpdateBy = Identity.GetUserName();
+            entityForInsert.UpdateBy = Identity.GetUserNameApp();
             entityForInsert.UpdateAt = DateTime.Now;
             entityForInsert.IsActive = true;
 
@@ -133,7 +168,7 @@ namespace WIM.Core.Repository.Impl
             return entityForInsert;
         }
 
-        public TEntity Update(object entityToUpdate)
+        public TEntity Update(TEntity entityToUpdate)
         {
             Type typeEntityToUpdate = entityToUpdate.GetType();
             PropertyInfo[] properties = typeEntityToUpdate.GetProperties();
@@ -146,47 +181,43 @@ namespace WIM.Core.Repository.Impl
             TEntity entityForUpdate = GetByID(id);
             if (entityForUpdate == null)
             {
-                throw new Core.Common.Utility.Validation.ValidationException(ErrorEnum.DataNotFound);
+                throw new AppValidation.ValidationException(ErrorEnum.DataNotFound);
             }
 
             Type typeEntityForUpdate = entityForUpdate.GetType();
 
             List<Task> tasks = new List<Task>();
-            var identName = Identity.GetUserName();
-            
+            var identName = Identity.GetUserNameApp();
+
             foreach (var prop in properties)
-            { 
+            {
+                if (prop.GetCustomAttribute<CreateOnlyAttribute>() != null)
+                {
+                    continue;
+                }
+
                 var value = prop.GetValue(entityToUpdate);
-                if (typeEntityForUpdate.GetProperty(prop.Name) != null
-                    && (!prop.PropertyType.IsGenericType || Nullable.GetUnderlyingType(prop.PropertyType) != null))
+
+                bool isThisPropertyCanUpdate = !prop.PropertyType.IsGenericType;
+                isThisPropertyCanUpdate = isThisPropertyCanUpdate && typeEntityForUpdate.GetProperty(prop.Name) != null;
+                isThisPropertyCanUpdate = isThisPropertyCanUpdate || Nullable.GetUnderlyingType(prop.PropertyType) != null;
+
+                if (isThisPropertyCanUpdate)
                 {
                     typeEntityForUpdate.GetProperty(prop.Name).SetValue(entityForUpdate, value, null);
+
                     if (prop.GetCustomAttribute<GeneralLogAttribute>() != null)
                     {
                         GeneralLogDbSet.Add(new GeneralLog(prop.Name, entityForUpdate, identName));
                     }
                 }
-            } 
+            }
 
-            entityForUpdate.UpdateBy = Identity.GetUserName();
+            entityForUpdate.TrySetProjectIDSys(); // #Job Try
+            entityForUpdate.UpdateBy = Identity.GetUserNameApp();
             entityForUpdate.UpdateAt = DateTime.Now.Date;
             return entityForUpdate;
         }
-
-        /*private List<string> GetPropertyNameOfKeyAttribute(PropertyInfo[] properties)
-        {
-            List<string> name = new List<string>();
-            foreach (PropertyInfo prop in properties)
-            {
-                KeyAttribute attr = prop.GetCustomAttribute<KeyAttribute>();
-                if (attr != null)
-                {
-                    name.Add(prop.Name);
-                }
-            }
-            return name;
-            throw new Exception("The Object Found KeyAttribute.");
-        }*/
 
         public void Delete(object id)
         {
@@ -253,6 +284,159 @@ namespace WIM.Core.Repository.Impl
         public TEntity GetFirst(Func<TEntity, bool> predicate)
         {
             return DbSet.First<TEntity>(predicate);
+        }
+
+        public string GetValidation(string tableName)
+        {
+            List<ValidationDbSchema> schemaList = new List<ValidationDbSchema>();
+            string mainResult = Context.Database.SqlQuery<string>("ProcGetTableValidation @tableName"
+                , new SqlParameter("@tableName", tableName)).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(mainResult))
+            {
+                JObject objs = JsonConvert.DeserializeObject<JObject>(mainResult);
+
+                foreach (var obj in objs)
+                {
+                    ValidationDbSchema schema = new ValidationDbSchema();
+                    schema.Fn = obj.Key;
+                    var validates = obj.Value.ToArray();
+                    foreach (var validate in validates)
+                    {
+                        string[] arValidate = validate.ToString().Split(':');
+                        if (arValidate.Length == 2)
+                        {
+                            string validateType = arValidate[0].Replace("\"", "").Trim();
+                            string validateValue = arValidate[1].Replace("\"", "").Trim();
+                            if (!string.IsNullOrEmpty(validateValue))
+                            {
+                                string enumValue = GetValidationEnum(validateType);
+                                if (!string.IsNullOrEmpty(enumValue))
+                                    schema.Fs.Add(new ValidationDbSchema.ValidationField(enumValue, validateValue));
+                            }
+
+                        }
+                    }
+                    if (schema.Fs.Count > 0)
+                        schemaList.Add(schema);
+                }
+
+                ObjectContext objContext = ((IObjectContextAdapter)Context).ObjectContext;
+                var container = objContext.MetadataWorkspace.GetEntityContainer(objContext.DefaultContainerName, DataSpace.CSpace);
+                var propEntityset = container.EntitySets.Where(w => w.Name == tableName).FirstOrDefault();
+
+                if (propEntityset != null)
+                {
+                    var properties = propEntityset.ElementType.Properties;
+                    if (properties.Count > 0)
+                    {
+                        foreach (var prop in properties)
+                        {
+                            var fieldNames = schemaList.Where(w => w.Fn.ToUpper() == prop.Name.ToUpper()).FirstOrDefault();
+                            if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()))
+                            {
+                                int maxFromType = GetMaxLengh(fieldNames.Fs);
+                                if (maxFromType > 0)
+                                    fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + maxFromType));
+                            }
+
+
+                            var attrs = prop.MetadataProperties.Where(s => s.Name == "ClrAttributes").FirstOrDefault();
+                            if (attrs != null && fieldNames != null)
+                            {
+
+                                var MetaData = (IList)attrs.Value;
+                                for (int i = 0; i < MetaData.Count; i++)
+                                {
+                                    string nameAttribute = MetaData[i].GetType().GetTypeInfo().Name;
+                                    if (nameAttribute == "RequiredAttribute")
+                                    {
+                                        RequiredAttribute att = (RequiredAttribute)MetaData[i];
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()))
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Required.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field"));
+                                        else
+                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.Required.GetValueEnum()).V = (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field";
+                                    }
+                                    else if (nameAttribute == "MaxLengthAttribute")
+                                    {
+                                        MaxLengthAttribute att = (MaxLengthAttribute)MetaData[i];
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MaxLength.GetValueEnum()) && att.Length > 0)
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + att.Length));
+                                        else if (att.Length > 0)
+                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.MaxLength.GetValueEnum()).V = "" + att.Length;
+                                    }
+                                    else if (nameAttribute == "EmailAddressAttribute")
+                                    {
+                                        EmailAddressAttribute att = (EmailAddressAttribute)MetaData[i];
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Email.GetValueEnum()))
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Email.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Email Format Only"));
+                                    }
+                                    else if (nameAttribute == "MinLengthAttribute")
+                                    {
+                                        MinLengthAttribute att = (MinLengthAttribute)MetaData[i];
+                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MinLength.GetValueEnum()) && att.Length > 0)
+                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MinLength.GetValueEnum(), "" + att.Length));
+                                        else if (att.Length > 0)
+                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.MinLength.GetValueEnum()).V = "" + att.Length;
+                                    }
+
+
+                                }
+                                fieldNames.Fs.RemoveAll(re => re.K == "Type");
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+            return JsonConvert.SerializeObject(schemaList);
+        }
+
+        private int GetMaxLengh(List<ValidationDbSchema.ValidationField> items)
+        {
+            int val = 0;
+            var max = items.Find(w => w.K == "Type");
+            if (max != null)
+                switch (max.V)
+                {
+                    case "int":
+                        val = int.MaxValue.ToString().Length;
+                        break;
+                    case "float":
+                        val = double.MaxValue.ToString().Length;
+                        break;
+                    case "datetime2":
+                        val = DateTime.MaxValue.ToString().Length;
+                        break;
+                    case "decimal":
+                        val = Decimal.MaxValue.ToString().Length;
+                        break;
+                    case "real":
+                        val = Single.MaxValue.ToString().Length;
+                        break;
+                    case "smallint":
+                        val = Int16.MaxValue.ToString().Length;
+                        break;
+                    case "tinyint":
+                        val = Byte.MaxValue.ToString().Length;
+                        break;
+
+                }
+            return val;
+        }
+        private string GetValidationEnum(string validateName)
+        {
+            switch (validateName.Trim())
+            {
+                case "Required": return ValidationEnum.Required.GetValueEnum();
+                case "Email": return ValidationEnum.Email.GetValueEnum();
+                case "MaxLength": return ValidationEnum.MaxLength.GetValueEnum();
+                case "MinLength": return ValidationEnum.MinLength.GetValueEnum();
+                case "Schema": return "Sk";
+            }
+            return validateName;
         }
 
     }

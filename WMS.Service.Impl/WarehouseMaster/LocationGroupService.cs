@@ -28,9 +28,9 @@ namespace WMS.Master
                 ILocationGroupRepository repo = new LocationGroupRepository(Db);
                 string[] include = { "LocationType", "Location" };
                 groupLocation = repo.GetWithInclude(f => f.GroupLocIDSys != 0, include).ToList();
-                
+
             }
-            
+
             return groupLocation;
         }
 
@@ -59,7 +59,7 @@ namespace WMS.Master
                 string[] include = { "LocationType", "Location" };
                 groupLocation = repo.GetWithInclude(i => i.GroupLocIDSys == id, include).SingleOrDefault();
             }
-                return groupLocation;
+            return groupLocation;
         }
 
         public IEnumerable<GroupLocation> GetLocationGroupByZoneInfo(GroupLocation item)
@@ -67,7 +67,7 @@ namespace WMS.Master
             IEnumerable<GroupLocation> groupLocation = new List<GroupLocation>();
             using (WMSDbContext Db = new WMSDbContext())
             {
-                if( item != null)
+                if (item != null)
                 {
                     ILocationGroupRepository repo = new LocationGroupRepository(Db);
                     string[] include = { "LocationType", "Location" };
@@ -86,8 +86,8 @@ namespace WMS.Master
             {
                 ILocationGroupRepository repo = new LocationGroupRepository(Db);
                 string[] include = { "LocationType", "Location" };
-                groupLocation = repo.GetWithInclude(i => i.ZoneIDSys == zoneIDSys 
-                || i.ZoneIDSys == null 
+                groupLocation = repo.GetWithInclude(i => i.ZoneIDSys == zoneIDSys
+                || i.ZoneIDSys == null
                 || i.ZoneIDSys == 0
                 , include).ToList();
 
@@ -126,7 +126,7 @@ namespace WMS.Master
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
-                
+
                 return locationGroup;
             }
         }
@@ -140,7 +140,7 @@ namespace WMS.Master
                 {
                     using (WMSDbContext Db = new WMSDbContext())
                     {
-                        
+
                         ILocationGroupRepository repo = new LocationGroupRepository(Db);
                         ILocationRepository repoLoc = new LocationRepository(Db);
                         List<GroupLocation> ChkLoc = new List<GroupLocation>();
@@ -149,22 +149,25 @@ namespace WMS.Master
                         {
                             locationGroup.LocationType = null;
                             repo.Update(locationGroup);
-                            repoLoc.Delete(x=>x.GroupLocIDSys == locationGroup.GroupLocIDSys);
-                            foreach (Location loc in locationGroup.Location)
+                            Service.Common.ICommonService CommonWMS = new Service.Impl.Common.CommonService();
+                            string ValStr = String.Join(",", locationGroup.Location.Select(x => x.LocIDSys.ToString()).ToList());
+                            if (CommonWMS.CheckDependentPK("Locations", "LocIDSys", ValStr).Any(x => x.Value > 0) )
                             {
-                                if(ChkLoc.Where(x=> x.WHIDSys == locationGroup.WHIDSys && x.Location.Where(xx=> xx.LocNo == loc.LocNo).Count() > 0).Count() > 0)
+                                foreach (Location loc in locationGroup.Location)
                                 {
-                                    throw new DbEntityValidationException("Duplicate Location name");
+                                    repoLoc.Update(loc);
                                 }
-                                //if (loc.LocIDSys != 0)
-                                //{
-                                //    repoLoc.Update(loc);
-                                //}
-                                //else
-                                //{
+                            }                            else                            {
+                                repoLoc.Delete(x => x.GroupLocIDSys == locationGroup.GroupLocIDSys);
+                                foreach (Location loc in locationGroup.Location)
+                                {
+                                    if (ChkLoc.Where(x => x.WHIDSys == locationGroup.WHIDSys && x.Location.Where(xx => xx.LocNo == loc.LocNo).Count() > 0).Count() > 0)
+                                    {
+                                        throw new DbEntityValidationException("Duplicate Location name");
+                                    }
                                     loc.GroupLocIDSys = locationGroup.GroupLocIDSys;
                                     repoLoc.Insert(loc);
-                                //}
+                                }
                             }
                         }
 
@@ -174,17 +177,18 @@ namespace WMS.Master
                 }
                 catch (DbEntityValidationException e)
                 {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM,e.Message);
                 }
-                
+
                 return true;
             }
         }
+
+        //public bool UpdateLocationGroupOnly()
+        //{
+
+        //}
 
         public bool UpdateAllLocationGroup(List<GroupLocation> locationGroups)
         {
@@ -200,18 +204,14 @@ namespace WMS.Master
                         locationGroups.ForEach(f =>
                         {
                             if (f != null)
-                               repo.Update(f);
+                                repo.Update(f);
                         });
 
                         Db.SaveChanges();
                         scope.Complete();
                     }
                 }
-                catch (DbEntityValidationException e)
-                {
-                    HandleValidationException(e);
-                }
-                catch (DbUpdateException)
+                catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
@@ -221,7 +221,7 @@ namespace WMS.Master
             }
         }
 
-        public bool DeleteRowLocationGroup(int id,int row)
+        public bool DeleteRowLocationGroup(int id, int row)
         {
             using (var scope = new TransactionScope())
             {
@@ -245,7 +245,7 @@ namespace WMS.Master
             }
         }
 
-            public bool DeleteLocationGroup(int id)
+        public bool DeleteLocationGroup(int id)
         {
             using (var scope = new TransactionScope())
             {
@@ -254,7 +254,20 @@ namespace WMS.Master
                     using (WMSDbContext Db = new WMSDbContext())
                     {
                         ILocationGroupRepository repo = new LocationGroupRepository(Db);
-                        repo.Delete(id);
+                        GroupLocation locationGroup = new GroupLocation();
+                        string[] Include = { "Location" };
+                        locationGroup = repo.GetWithInclude(x=>x.GroupLocIDSys == id, Include).SingleOrDefault();
+                        Service.Common.ICommonService CommonWMS = new Service.Impl.Common.CommonService();
+                        string ValStr = String.Join(",", locationGroup.Location.Where(x=>x.GroupLocIDSys == id).Select(x => x.LocIDSys.ToString()).ToList());
+
+                        if (!CommonWMS.CheckDependentPK("Locations", "LocIDSys", ValStr).Any(x => x.Value > 0))
+                        {
+                            repo.Delete(id);
+                        }
+                        else
+                        {
+                            throw new DbEntityValidationException();
+                        }
                         Db.SaveChanges();
                         scope.Complete();
                     }
@@ -417,7 +430,7 @@ namespace WMS.Master
                     scope.Dispose();
                     throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
-             
+
             }
         }
 

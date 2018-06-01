@@ -47,11 +47,13 @@
     <Compile Include="AutocompleteItemDto.cs" />
     <Compile Include="AutocompleteUnitDto.cs" />
     <Compile Include="CategoryDto.cs" />
+    <Compile Include="CheckDependentPKDto.cs" />
     <Compile Include="ControlValueDto.cs" />
     <Compile Include="FromUriParamsObject.cs" />
     <Compile Include="GroupLocationDto.cs" />
     <Compile Include="InventoryTransactionDetailDto.cs" />
     <Compile Include="InventoryTransactionDto.cs" />
+    <Compile Include="InvoiceReceivesDto.cs" />
     <Compile Include="ItemDto.cs" />
     <Compile Include="ItemGiftDto.cs" />
     <Compile Include="ItemSetDetailDto.cs" />

@@ -36,7 +36,7 @@ namespace Isuzu.Service.Impl
         public InboundsController(IInboundService inboundService)
         {
             this.InboundService = inboundService;
-            Username = User.Identity.GetUserName() ?? "SYSTEM";
+            Username = Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity) ?? "SYSTEM";
         }
 
         #region ======================== HANDY =============================

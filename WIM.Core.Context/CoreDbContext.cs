@@ -74,6 +74,8 @@ namespace WIM.Core.Context
         public virtual DbSet<Province_MT> Province_MT { get; set; }
         public virtual DbSet<City_MT> City_MT { get; set; }
         public virtual DbSet<SubCity_MT> SubCity_MT { get; set; }
+        public virtual DbSet<WarehouseTest> WarehouseTests { get; set; }
+        
 
         /// <summary>
         /// View
@@ -309,7 +311,7 @@ namespace WIM.Core.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcImportDataToTable", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter);
         }
 
-        public IEnumerable<int> ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
+        public object ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
         {
             var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
             {
@@ -348,9 +350,9 @@ namespace WIM.Core.Context
             } : new SqlParameter("UserUpdate", DBNull.Value);
 
 
-            return Database.SqlQuery<int>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
+            return Database.SqlQuery<object>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
                 ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
-                resultParameter, successParameter, createdDateParameter, userUpdateParameter);
+                resultParameter, successParameter, createdDateParameter, userUpdateParameter).FirstOrDefault();
             ;
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcInsertImportHistory", importDefinitionIDSysParameter, fileNameParameter, resultParameter, successParameter, createdDateParameter, userUpdateParameter);
         }

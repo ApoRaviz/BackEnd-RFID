@@ -151,8 +151,9 @@ namespace HRMS.Service.Impl.LeaveManagement
                         Leave leaveUpdated;
                         ILeaveRepository repo = new LeaveRepository(db);
                         ILeaveDetailRepository dRepo = new LeaveDetailRepository(db);
-
-                        leaveUpdated = repo.Update(leave);
+                     
+                        Leave leaveForUpdate = Mapper.Map<Leave>(leave); 
+                        leaveUpdated = repo.Update(leaveForUpdate);
 
                         dRepo.Delete(x => x.LeaveIDSys == leaveUpdated.LeaveIDSys);
 

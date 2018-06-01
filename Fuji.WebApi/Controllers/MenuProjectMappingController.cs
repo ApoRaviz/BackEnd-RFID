@@ -373,7 +373,7 @@ namespace Fuji.WebApi.Controllers
             }
             else
             {
-                MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserId(), ProID);
+                MenuPermis = MenuProjectMappingService.GetMenuPermission(User.Identity.GetUserIdApp(), ProID);
                 res = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
             }
             IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID, MenuPermis);

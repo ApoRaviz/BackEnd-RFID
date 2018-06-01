@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryMaster\ICategoryRepository.cs" />
+    <Compile Include="Common\ICommonRepository.cs" />
     <Compile Include="Common\IGeneralConfigsLocationFormatRepository.cs" />
     <Compile Include="Common\IGeneralConfigsRepository.cs" />
     <Compile Include="ControlMaster\IControlRepository.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="InvenoryManagement\IInventoryRepository.cs" />
     <Compile Include="InvenoryManagement\IInventoryTransactionDetailRepository.cs" />
     <Compile Include="InvenoryManagement\IInventoryTransactionRepository.cs" />
+    <Compile Include="InvenoryManagement\ITempInventoryTransactionRepository.cs" />
     <Compile Include="ItemManagement\IItemInspectRepository.cs" />
     <Compile Include="ItemManagement\IItemRepository.cs" />
     <Compile Include="ItemManagement\IItemSetDetailRepository.cs" />
@@ -64,7 +66,8 @@
     <Compile Include="Label\ILabelLayoutDetailRepository.cs" />
     <Compile Include="Label\ILabelLayoutHeaderRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Receive\IReceiveRepository.cs" />
+    <Compile Include="Receives\IInvoiceReceiveRepository.cs" />
+    <Compile Include="Receives\IReceiveRepository.cs" />
     <Compile Include="Report\IReportLayoutDetailRepository.cs" />
     <Compile Include="Report\IReportLayoutHeaderRepository.cs" />
     <Compile Include="Report\IReportLayoutRepository.cs" />

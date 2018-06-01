@@ -16,8 +16,8 @@ namespace WMS.Common.ValueObject
         public int UnitIDSys { get; set; }
         public int LocIDSys { get; set; }
         public string LocNo { get; set; }
-        public string Box { get; set; }
-        public string Lot { get; set; }
-        public string Pallet { get; set; }
+        public string ControlLevel1 { get; set; }
+        public string ControlLevel2 { get; set; }
+        public string ControlLevel3 { get; set; }
     }
 }

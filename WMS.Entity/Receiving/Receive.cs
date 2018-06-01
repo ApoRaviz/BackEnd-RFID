@@ -14,9 +14,22 @@ namespace WMS.Entity.Receiving
     [Table("Receives")]
     public class Receive : BaseEntity
     {
+        private int _receiveIDSys;
         [Key]
-        public int ReceiveIDSys { get; set; }
+        public int ReceiveIDSys
+        {
+            get
+            {
+                return _receiveIDSys;
+            }
+            set
+            {
+                _receiveIDSys = value;
+                //NotifyPropertyChanged();
+            }
+        }
         public string ReceiveNO { get; set; }
+        public int ProjectIDSys { get; set; }
         public string InvoiceNO { get; set; }
         public string PONO { get; set; }
         public int? SupplierIDSys { get; set; }
@@ -27,7 +40,7 @@ namespace WMS.Entity.Receiving
         public string FileRefID { get; set; }
 
         [NotMapped]
-        public virtual IEnumerable<InventoryTransaction> InventoryTransaction { get; set; }
+        public virtual IEnumerable<InventoryTransaction> InventoryTransactions { get; set; }
         [NotMapped]
         public virtual Supplier_MT Supplier_MT { get; set; }
     }

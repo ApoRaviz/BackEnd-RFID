@@ -289,6 +289,28 @@ namespace WMS.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public HttpResponseMessage DeleteLocationGroup(int id = 0)
+        {
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                if (id == 0)
+                {
+                    throw new Exception("Missing ID");
+                }
+                bool customer = LocGroupService.DeleteLocationGroup(id);
+                response.SetData(customer);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
         [HttpGet]
         [Route("autocomplete/{term}")]
         public HttpResponseMessage AutocompleteLocation(string term)

@@ -4,6 +4,7 @@ using WIM.Core.Repository.Impl;
 using WMS.Context;
 using WMS.Entity.ItemManagement;
 using WMS.Common.ValueObject;
+using WIM.Core.Common.Utility.Extensions;
 
 namespace WMS.Repository.Impl
 {
