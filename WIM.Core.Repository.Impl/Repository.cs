@@ -286,11 +286,14 @@ namespace WIM.Core.Repository.Impl
             return DbSet.First<TEntity>(predicate);
         }
 
-        public string GetValidation(string tableName)
+        public string GetValidation(List<string> tableName)
         {
+            string result = "";
+            string tables = String.Join(",", tableName);
             List<ValidationDbSchema> schemaList = new List<ValidationDbSchema>();
             string mainResult = Context.Database.SqlQuery<string>("ProcGetTableValidation @tableName"
-                , new SqlParameter("@tableName", tableName)).FirstOrDefault();
+                , new SqlParameter("@tableName", tables)).FirstOrDefault();
+
 
             if (!string.IsNullOrEmpty(mainResult))
             {
@@ -299,7 +302,13 @@ namespace WIM.Core.Repository.Impl
                 foreach (var obj in objs)
                 {
                     ValidationDbSchema schema = new ValidationDbSchema();
-                    schema.Fn = obj.Key;
+                    var tableInfo = obj.Key.Split('.');
+                    if (tableInfo.Length > 1)
+                    {
+                        schema.Ft = tableInfo[0];
+                        schema.Fn = tableInfo[1];
+                    }
+
                     var validates = obj.Value.ToArray();
                     foreach (var validate in validates)
                     {
@@ -323,75 +332,97 @@ namespace WIM.Core.Repository.Impl
 
                 ObjectContext objContext = ((IObjectContextAdapter)Context).ObjectContext;
                 var container = objContext.MetadataWorkspace.GetEntityContainer(objContext.DefaultContainerName, DataSpace.CSpace);
-                var propEntityset = container.EntitySets.Where(w => w.Name == tableName).FirstOrDefault();
+                var propEntitysets = container.EntitySets.Where(w => tableName.Any(a => a.Contains(w.Name))).ToList();
 
-                if (propEntityset != null)
+                if (propEntitysets != null)
                 {
-                    var properties = propEntityset.ElementType.Properties;
-                    if (properties.Count > 0)
+                    foreach (var propEntityset in propEntitysets)
                     {
-                        foreach (var prop in properties)
+                        string currentTable = "";
+
+                        var tableInfo = schemaList.Where(w => w.Ft.Contains(propEntityset.Name)).ToList();
+
+                        var properties = propEntityset.ElementType.Properties;
+                        if (properties.Count > 0)
                         {
-                            var fieldNames = schemaList.Where(w => w.Fn.ToUpper() == prop.Name.ToUpper()).FirstOrDefault();
-                            if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()))
+                            foreach (var prop in properties)
                             {
-                                int maxFromType = GetMaxLengh(fieldNames.Fs);
-                                if (maxFromType > 0)
-                                    fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + maxFromType));
-                            }
+                                var fieldNames = tableInfo.Where(w => w.Fn.ToUpper() == prop.Name.ToUpper()).FirstOrDefault();
+                                if (fieldNames == null)
+                                    continue;
 
+                                if (string.IsNullOrEmpty(currentTable))
+                                    currentTable = fieldNames.Ft;
 
-                            var attrs = prop.MetadataProperties.Where(s => s.Name == "ClrAttributes").FirstOrDefault();
-                            if (attrs != null && fieldNames != null)
-                            {
-
-                                var MetaData = (IList)attrs.Value;
-                                for (int i = 0; i < MetaData.Count; i++)
+                                if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()))
                                 {
-                                    string nameAttribute = MetaData[i].GetType().GetTypeInfo().Name;
-                                    if (nameAttribute == "RequiredAttribute")
-                                    {
-                                        RequiredAttribute att = (RequiredAttribute)MetaData[i];
-                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()))
-                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Required.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field"));
-                                        else
-                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.Required.GetValueEnum()).V = (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field";
-                                    }
-                                    else if (nameAttribute == "MaxLengthAttribute")
-                                    {
-                                        MaxLengthAttribute att = (MaxLengthAttribute)MetaData[i];
-                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MaxLength.GetValueEnum()) && att.Length > 0)
-                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + att.Length));
-                                        else if (att.Length > 0)
-                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.MaxLength.GetValueEnum()).V = "" + att.Length;
-                                    }
-                                    else if (nameAttribute == "EmailAddressAttribute")
-                                    {
-                                        EmailAddressAttribute att = (EmailAddressAttribute)MetaData[i];
-                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Email.GetValueEnum()))
-                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Email.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Email Format Only"));
-                                    }
-                                    else if (nameAttribute == "MinLengthAttribute")
-                                    {
-                                        MinLengthAttribute att = (MinLengthAttribute)MetaData[i];
-                                        if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MinLength.GetValueEnum()) && att.Length > 0)
-                                            fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MinLength.GetValueEnum(), "" + att.Length));
-                                        else if (att.Length > 0)
-                                            fieldNames.Fs.Find(w => w.K == ValidationEnum.MinLength.GetValueEnum()).V = "" + att.Length;
-                                    }
-
-
+                                    int maxFromType = GetMaxLengh(fieldNames.Fs);
+                                    if (maxFromType > 0)
+                                        fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + maxFromType));
                                 }
-                                fieldNames.Fs.RemoveAll(re => re.K == "Type");
-                            }
 
+
+                                var attrs = prop.MetadataProperties.Where(s => s.Name == "ClrAttributes").FirstOrDefault();
+                                if (attrs != null && fieldNames != null)
+                                {
+
+                                    var MetaData = (IList)attrs.Value;
+                                    for (int i = 0; i < MetaData.Count; i++)
+                                    {
+                                        string nameAttribute = MetaData[i].GetType().GetTypeInfo().Name;
+                                        if (nameAttribute == "RequiredAttribute")
+                                        {
+                                            RequiredAttribute att = (RequiredAttribute)MetaData[i];
+                                            if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Required.GetValueEnum()))
+                                                fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Required.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field"));
+                                            else
+                                                fieldNames.Fs.Find(w => w.K == ValidationEnum.Required.GetValueEnum()).V = (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Required Field";
+                                        }
+                                        else if (nameAttribute == "MaxLengthAttribute")
+                                        {
+                                            MaxLengthAttribute att = (MaxLengthAttribute)MetaData[i];
+                                            if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MaxLength.GetValueEnum()) && att.Length > 0)
+                                                fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MaxLength.GetValueEnum(), "" + att.Length));
+                                            else if (att.Length > 0)
+                                                fieldNames.Fs.Find(w => w.K == ValidationEnum.MaxLength.GetValueEnum()).V = "" + att.Length;
+                                        }
+                                        else if (nameAttribute == "EmailAddressAttribute")
+                                        {
+                                            EmailAddressAttribute att = (EmailAddressAttribute)MetaData[i];
+                                            if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.Email.GetValueEnum()))
+                                                fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.Email.GetValueEnum(), (!string.IsNullOrEmpty(att.ErrorMessage)) ? att.ErrorMessage : "Email Format Incorrect"));
+                                        }
+                                        else if (nameAttribute == "MinLengthAttribute")
+                                        {
+                                            MinLengthAttribute att = (MinLengthAttribute)MetaData[i];
+                                            if (!fieldNames.Fs.Any(a => a.K == ValidationEnum.MinLength.GetValueEnum()) && att.Length > 0)
+                                                fieldNames.Fs.Add(new ValidationDbSchema.ValidationField(ValidationEnum.MinLength.GetValueEnum(), "" + att.Length));
+                                            else if (att.Length > 0)
+                                                fieldNames.Fs.Find(w => w.K == ValidationEnum.MinLength.GetValueEnum()).V = "" + att.Length;
+                                        }
+
+
+                                    }
+                                    fieldNames.Fs.RemoveAll(re => re.K == "Type");
+                                }
+
+                            }
                         }
+                        var q = (from p in schemaList
+                                 select new
+                                 {
+                                     Fn = p.Fn,
+                                     Fs = p.Fs
+                                 }).ToList();
+                        result += string.Format("\"" + currentTable + "\": {0}", JsonConvert.SerializeObject(q)) + ",";
                     }
+
+                    result = "{" + result.Substring(0, result.Length - 1) + "}";
 
                 }
 
             }
-            return JsonConvert.SerializeObject(schemaList);
+            return result;
         }
 
         private int GetMaxLengh(List<ValidationDbSchema.ValidationField> items)
