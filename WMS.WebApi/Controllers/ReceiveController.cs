@@ -113,9 +113,9 @@ namespace WMS.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage PostInvoiceReceives([FromBody]InvoiceReceives invReceive)
+        public HttpResponseMessage PostInvoiceReceives([FromBody]InvoiceReceive invReceive)
         {
-            IResponseData<InvoiceReceives> response = new ResponseData<InvoiceReceives>();
+            IResponseData<InvoiceReceive> response = new ResponseData<InvoiceReceive>();
             try
             {
                 //IInvoiceReceivesRepository invReceiveRopo = new InvoiceReceivesRepository();
