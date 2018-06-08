@@ -9,6 +9,7 @@ using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.Common;
 using WIM.Core.Service;
+using WMS.Common.ValueObject;
 using WMS.Service;
 
 namespace WMS.WebApi.Controller
@@ -63,14 +64,35 @@ namespace WMS.WebApi.Controller
 
         [HttpGet]
         [Route("Search")]
-        public HttpResponseMessage Search(string method, string url, DateTime? dateFrom, DateTime? dateTo)
+        public HttpResponseMessage Search(string method, string url, string path, string menuname, DateTime? dateFrom, DateTime? dateTo)
         {
             ResponseData<IEnumerable<UserLog>> response = new ResponseData<IEnumerable<UserLog>>();
             try
             {
-                IEnumerable<UserLog> logData = commonService.GetUserLogData(method, url, "", dateFrom, dateTo);
+                IEnumerable<UserLog> logData = commonService.GetUserLogData(method, url, path, menuname, dateFrom, dateTo);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(logData);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+
+        }
+
+        [HttpPost]
+        [Route("Search2")]
+        public HttpResponseMessage Search2(LogMasterParameters logMasterParameters)
+        {
+            ResponseData<LogMasterPaging> response = new ResponseData<LogMasterPaging>();
+            try
+            {
+                IEnumerable<UserLogDto> logData = commonService.GetUserLogData3(logMasterParameters);
+                LogMasterPaging logMasterPaging = new LogMasterPaging(logMasterParameters.Totalrow, logData);
+                response.SetStatus(HttpStatusCode.OK);
+                response.SetData(logMasterPaging);
             }
             catch (ValidationException ex)
             {
