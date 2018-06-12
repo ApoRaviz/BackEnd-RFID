@@ -29,7 +29,7 @@ namespace Master.WebApi
             AutoMapperConfig.Initialize();
             ApiHashTableHelper.Initialize();
             TableHashTableHelper.Initialize();
-            RabbitMQMessageListener.Start();
+            RabbitMQMessageListener.Start(RabbitMQConfig.Initialize());
         }
 
         protected void Application_End()

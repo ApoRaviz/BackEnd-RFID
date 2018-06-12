@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web;
 
@@ -22,7 +23,7 @@ namespace Master.WebApi.ServiceBus
         private static string _ReceiveQueue = ConfigurationManager.AppSettings["rb:SubscriptionClientName"];
         private static string _SenderQueue = "publisher_queue";
 
-        public static void Start()
+        public static void Start(IList<string> routingNames)
         {
             var factory = new ConnectionFactory
             {
@@ -53,18 +54,18 @@ namespace Master.WebApi.ServiceBus
                 type: ExchangeType.Direct);
 
             var consumer = new EventingBasicConsumer(_channel);
-            GenerateSenderQueue(_ReceiveQueue, consumer, new List<string>() { _ReceiveQueue });
-            consumer.Received += ConsumerOnReceived;
+            GenerateSenderQueue(_ReceiveQueue, consumer, routingNames);
+            consumer.Received += SubscribeSender;
 
             // publisher
             //var consumerPub = new EventingBasicConsumer(_channel);
             //props = GenerateConsumerRouting(_SenderQueue1, _SenderQueue1, consumerPub);
 
-            //consumerPub.Received += SenderOnReceived;
+            //consumerPub.Received += SubscribePublisher;
         }
 
         #region SenderConsumer
-        private static void GenerateSenderQueue(string queueName, EventingBasicConsumer consumer, List<string> routingName)
+        private static void GenerateSenderQueue(string queueName, EventingBasicConsumer consumer, IList<string> routingName)
         {
             _channel.QueueDeclare(queue: queueName, durable: true,
                           exclusive: false, autoDelete: true, arguments: null);
@@ -107,7 +108,7 @@ namespace Master.WebApi.ServiceBus
                 }
         #endregion
 
-        public static string Publish(IntegrationEvent @event)
+        public static void Publish(IntegrationEvent @event)
         {
             var eventName = @event.GetType()
                    .Name;
@@ -121,35 +122,46 @@ namespace Master.WebApi.ServiceBus
                 basicProperties: props,
                 body: messageBytes);
 
-            return respQueue.Take();
+           // return respQueue.Take();
         }
 
         public static void Stop()
         {
-            _channel.Close(200, "Goodbye");
+            if(_channel != null)
+                _channel.Close(200, "Goodbye");
+            if(_connection != null)
             _connection.Close();
         }
-        private static void SenderOnReceived(object sender, BasicDeliverEventArgs ea)
+        private static void SubscribePublisher(object sender, BasicDeliverEventArgs ea)
         {
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body);
             respQueue.Add(message);
         }
 
-        private static void ConsumerOnReceived(object sender, BasicDeliverEventArgs ea)
+        private static void SubscribeSender(object sender, BasicDeliverEventArgs ea)
         {
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body);
 
             var props = ea.BasicProperties;
+            string keyObj = ea.RoutingKey;
             //var replyProps = _channel.CreateBasicProperties();
             //replyProps.CorrelationId = props.CorrelationId;
+
+            var eventType = Type.GetType("Master.WebApi.ServiceBus.Events." + keyObj);
+            var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
+            var handler = Type.GetType("Master.WebApi.ServiceBus.EventsHandler." + keyObj + "Handler");
+            object objHandler = Activator.CreateInstance(handler, new object[] { });
+            var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+            concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });
+
+            _channel.BasicAck(deliveryTag: ea.DeliveryTag,
+              multiple: false);
 
 
             if (props.ReplyTo != null)
             {
-
-
                 // REPLY Message
                 //var responseBytes = Encoding.UTF8.GetBytes("Received Cammand: " + message);
                 //_channel.BasicPublish(exchange: _ExchangeName, routingKey: props.ReplyTo,

@@ -9,6 +9,8 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using Master.WebApi.ServiceBus;
+using Master.WebApi.ServiceBus.Events;
 
 namespace WMS.WebApi.Controller
 {
@@ -92,6 +94,41 @@ namespace WMS.WebApi.Controller
                 {
                     customer = CustomerService.GetCustomers(userid);
                 }
+
+                response.SetData(customer);
+            }
+            catch (ValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("TestRabbit")]
+        public HttpResponseMessage GetTestRabbit()
+        {
+            ResponseData<object> response = new ResponseData<object>();
+            try
+            {
+                string userid = User.Identity.GetUserIdApp();
+                object customer;
+                if (User.IsSysAdmin())
+                {
+
+                    customer = CustomerService.GetCustomerAll();
+                }
+                else
+                {
+                    customer = CustomerService.GetCustomers(userid);
+                }
+
+                //CustomerEvent cusEvent = new CustomerEvent(001,"ss1","asdfe");
+
+                TestEvent testEvent = new TestEvent(001, "asdfe");
+
+                RabbitMQMessageListener.Publish(testEvent);
 
                 response.SetData(customer);
             }
