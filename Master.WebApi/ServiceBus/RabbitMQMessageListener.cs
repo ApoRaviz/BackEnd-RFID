@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
+using RabbitMQ.Client.MessagePatterns;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -29,10 +31,16 @@ namespace Master.WebApi.ServiceBus
             {
                 HostName = ConfigurationManager.AppSettings["rb:HostName"],
                 AutomaticRecoveryEnabled = true,
-                NetworkRecoveryInterval = TimeSpan.FromSeconds(15)
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(15),
+
             };
 
-            if(!string.IsNullOrEmpty(ConfigurationManager.AppSettings["rb:UserName"]))
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["rb:Port"]))
+            {
+                factory.Port = Convert.ToInt32(ConfigurationManager.AppSettings["rb:Port"]);
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["rb:UserName"]))
             {
                 factory.UserName = ConfigurationManager.AppSettings["rb:UserName"];
             }
@@ -49,19 +57,21 @@ namespace Master.WebApi.ServiceBus
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
+            _channel.BasicQos(0, 1, false);
 
             _channel.ExchangeDeclare(exchange: _ExchangeName,
-                type: ExchangeType.Direct);
+                durable: true, type: ExchangeType.Direct);
 
             var consumer = new EventingBasicConsumer(_channel);
             GenerateSenderQueue(_ReceiveQueue, consumer, routingNames);
             consumer.Received += SubscribeSender;
 
-            // publisher
-            //var consumerPub = new EventingBasicConsumer(_channel);
-            //props = GenerateConsumerRouting(_SenderQueue1, _SenderQueue1, consumerPub);
 
-            //consumerPub.Received += SubscribePublisher;
+            // publisher
+            var consumerPub = new EventingBasicConsumer(_channel);
+            GenerateConsumerRouting(_SenderQueue, routingNames, consumerPub);
+
+            consumerPub.Received += SubscribePublisher;
         }
 
         #region SenderConsumer
@@ -71,41 +81,40 @@ namespace Master.WebApi.ServiceBus
                           exclusive: false, autoDelete: true, arguments: null);
             for (int i = 0; i < routingName.Count; i++)
             {
-                GenerateSenderRouting(queueName, routingName[i], consumer);
+                _channel.QueueBind(queueName, _ExchangeName, routingName[i], null);
             }
 
             _channel.BasicConsume(queue: queueName,
             autoAck: false,
             consumer: consumer);
         }
-        private static void GenerateSenderRouting(string queueName, string routingName, EventingBasicConsumer consumer)
-        {
-            _channel.QueueBind(queueName, _ExchangeName, routingName, null);
-        }
 
         #endregion
 
         #region PublisherConsumer
-        private static IBasicProperties GenerateConsumerRouting(string QueueName, string routingName, EventingBasicConsumer consumer)
-                {
-                    _channel.QueueDeclare(queue: QueueName, durable: true,
-                      exclusive: false, autoDelete: true, arguments: null);
+        private static void GenerateConsumerRouting(string queueName, IList<string> routingName, EventingBasicConsumer consumer)
+        {
+            _channel.QueueDeclare(queue: queueName, durable: true,
+                exclusive: false, autoDelete: true, arguments: null);
 
-                    _channel.QueueBind(QueueName, _ExchangeName, routingName, null);
+            for (int i = 0; i < routingName.Count; i++)
+            {
+                _channel.QueueBind(queueName, _ExchangeName, "reply_" + routingName[i], null);
+            }
 
-                    _channel.BasicConsume(queue: QueueName,
-                       autoAck: true,
-                       consumer: consumer);
+            _channel.BasicConsume(queue: queueName,
+                autoAck: true,
+                consumer: consumer);
 
-                    var pp = _channel.CreateBasicProperties();
-                    var correlationId2 = Guid.NewGuid().ToString();
-                    pp.CorrelationId = correlationId2;
-                    pp.ReplyTo = routingName;
-                    pp.Persistent = true;
+            //var pp = _channel.CreateBasicProperties();
+            //var correlationId2 = Guid.NewGuid().ToString();
+            //pp.CorrelationId = correlationId2;
+            //pp.ReplyTo = routingName;
+            //pp.Persistent = true;
 
-                    return pp;
+            //return pp;
 
-                }
+        }
         #endregion
 
         public static void Publish(IntegrationEvent @event)
@@ -115,30 +124,30 @@ namespace Master.WebApi.ServiceBus
 
             var message = JsonConvert.SerializeObject(@event);
 
+            props = _channel.CreateBasicProperties();
+            var deliveryTag = _channel.NextPublishSeqNo;
+            props.DeliveryMode = 2;
+            props.ReplyTo = "reply_"+ eventName;
+
+
             var messageBytes = Encoding.UTF8.GetBytes(message);
             _channel.BasicPublish(
                 exchange: _ExchangeName,
                 routingKey: eventName,
+                mandatory: true,
                 basicProperties: props,
                 body: messageBytes);
 
-           // return respQueue.Take();
+
+            // return respQueue.Take();
         }
 
-        public static void Stop()
-        {
-            if(_channel != null)
-                _channel.Close(200, "Goodbye");
-            if(_connection != null)
-            _connection.Close();
-        }
         private static void SubscribePublisher(object sender, BasicDeliverEventArgs ea)
         {
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body);
             respQueue.Add(message);
         }
-
         private static void SubscribeSender(object sender, BasicDeliverEventArgs ea)
         {
             var body = ea.Body;
@@ -146,7 +155,8 @@ namespace Master.WebApi.ServiceBus
 
             var props = ea.BasicProperties;
             string keyObj = ea.RoutingKey;
-            //var replyProps = _channel.CreateBasicProperties();
+            var replyProps = _channel.CreateBasicProperties();
+            replyProps.DeliveryMode = 2;
             //replyProps.CorrelationId = props.CorrelationId;
 
             var eventType = Type.GetType("Master.WebApi.ServiceBus.Events." + keyObj);
@@ -156,20 +166,28 @@ namespace Master.WebApi.ServiceBus
             var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
             concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });
 
-            _channel.BasicAck(deliveryTag: ea.DeliveryTag,
-              multiple: false);
-
-
             if (props.ReplyTo != null)
             {
                 // REPLY Message
-                //var responseBytes = Encoding.UTF8.GetBytes("Received Cammand: " + message);
-                //_channel.BasicPublish(exchange: _ExchangeName, routingKey: props.ReplyTo,
-                //  basicProperties: replyProps, body: responseBytes);
-
-                //_channel.BasicAck(deliveryTag: ea.DeliveryTag,
-                //  multiple: false);
+                var responseBytes = Encoding.UTF8.GetBytes("AckNo=" + ea.DeliveryTag);
+                _channel.BasicPublish(exchange: _ExchangeName, 
+                                        routingKey: props.ReplyTo,
+                                        mandatory: true,
+                                        basicProperties: replyProps,
+                                        body: responseBytes);
             }
+            _channel.BasicAck(deliveryTag: ea.DeliveryTag,
+                  multiple: false);
+            
         }
+
+        public static void Stop()
+        {
+            if (_channel != null)
+                _channel.Close(200, "Goodbye");
+            if (_connection != null)
+                _connection.Close();
+        }
+
     }
 }
