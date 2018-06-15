@@ -71,8 +71,14 @@ namespace Isuzu.Entity
         }
 
         [GeneralLog]
-        [StringLength(20)]
+        [StringLength(30)]
         public string Status { get; set; }
+
+        [StringLength(10)]
+        public string RegisterLocation { get; set; }
+
+        [StringLength(10)]
+        public string ReceiveLocation { get; set; }
 
         public DateTime? WeightDate { get; set; }
         public DateTime? RegisterDate { get; set; }

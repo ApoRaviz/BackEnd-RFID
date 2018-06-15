@@ -29,6 +29,20 @@ namespace Isuzu.Common.ValueObject
         [ValueEnum("RECEIVED_YUT")]
         ReceivedAtYUT,
         [ValueEnum("RECEIVED_ITA")]
-        ReceivedAtITA
+        ReceivedAtITA,
+
+        //Addition
+        [ValueEnum("REGISTERED")]
+        Registered,
+        [ValueEnum("CARTON_PACKED")]
+        CartonPacked,
+        [ValueEnum("CASE_PACKED")]
+        CasePacked,
+        [ValueEnum("REGISTERED_PARTIAL")]
+        RegisteredPartial,
+        [ValueEnum("CARTON_PACKED_PARTIAL")]
+        CartonPackedPartial,
+        [ValueEnum("CASE_PACKED_PARTIAL")]
+        CasePackedPartial,
     }
 }
