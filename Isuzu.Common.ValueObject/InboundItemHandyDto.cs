@@ -14,6 +14,8 @@ namespace Isuzu.Common.ValueObject
         public string RFIDTag { get; set; }
         public string ISZJOrder { get; set; }
         public string Status { get; set; }
+        public string RegisterLocation { get; set; }
+        public string ReceiveLocation { get; set; }
         public decimal Weight1 { get; set; }
         public decimal Weight2 { get; set; }
         public decimal Weight3 { get; set; }
@@ -61,6 +63,16 @@ namespace Isuzu.Common.ValueObject
         public string RFIDTag { get; set; }
     }
 
+    public class InboundItemCartonPackingHandyRequestNew
+    {
+        public string CartonNo { get; set; }
+        public string CaseNo { get; set; }
+        public string RFIDTag { get; set; }
+        public string ISZJOrder { get; set; }
+        public string InvNo { get; set; }
+        public List<string> OrderScannedList { get; set; }
+    }
+
     public class InboundItemCasePackingHandyRequest
     {
         public string InvNo { get; set; }
@@ -72,5 +84,13 @@ namespace Isuzu.Common.ValueObject
     {        
         public string FunctionName { get; set; }
         public List<string> RFIDTags { get; set; }
+    }
+
+    public class RegisterRemaining
+    {
+        public string InvNo { get; set; }
+        public int Qty { get; set; }
+        public int Registered { get; set; }
+        public int Remaining { get; set; }
     }
 }

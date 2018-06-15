@@ -14,14 +14,23 @@ namespace Isuzu.Service
         InboundItemHandyDto GetInboundItemByISZJOrder_HANDY(string iszjOrder);
         int GetAmountRegistered_HANDY();
         int GetAmountInboundItemInInvoiceByRFID_HANDY(string rfid);
+        List<RegisterRemaining> GetAmountNewStatusRemaining_HANDY(string invoice);
+        List<InboundItemHandyDto> GetUnregisteredOrder_HANDY(string invoice);
         InboundItemHandyDto GetInboundItemByRFID_HANDY(string rfid);
         IEnumerable<InboundItemHandyDto> GetInboundItemsByInvoice_HANDY(string invNo);
         IEnumerable<InboundItemHandyDto> GetInboundItemsRegisteredByInvoice_HANDY(string invNo);
         bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem);
-        void RegisterInboundItem_HANDY(InboundItemHandyDto item);
+        int RegisterInboundItem_HANDY(InboundItemHandyDto item);
+        InboundItemHandyDto RegisterInboundItemByOrder_HANDY(InboundItemHandyDto item);
         void PerformHolding_HANDY(List<ConfirmReceiveParameter> itemsHolding);
         void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping);
         void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking);
+        void UpdateHead_HANDY2(string invNo, string status);
+
+        void PerformPackingCartonNew_HANDY(InboundItemCartonPackingHandyRequestNew inboundItemCartonPacking);
+        InboundItemCartonPackingHandyRequestNew GetItemCartonByISZJOrder_HANDY(string ISZJOrder);
+        List<InboundItemCartonPackingHandyRequestNew> GetCartonPackedItemByRFID_HANDY(string rfid);
+
         void PerformPackingCase_HANDY(InboundItemCasePackingHandyRequest inboundItemCasePacking);
         InboundItemCartonHandyDto GetInboundItemCartonByRFID_HANDY(string rfid);
         IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids);
