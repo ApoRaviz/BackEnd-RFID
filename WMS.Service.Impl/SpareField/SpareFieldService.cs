@@ -2,6 +2,7 @@
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Transactions;
+using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Entity.LabelManagement.LabelConfigs;
@@ -86,7 +87,7 @@ namespace WMS.Service.Impl
         //        catch (DbUpdateException)
         //        {
         //            scope.Dispose();
-        //            ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
+        //            ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
         //            throw ex;
         //        }
         //    }
@@ -127,7 +128,7 @@ namespace WMS.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return SpareFieldnew.SpfIDSys;
@@ -178,7 +179,7 @@ namespace WMS.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(UtilityHelper.GetHandleErrorMessageException(ErrorEnum.WRITE_DATABASE_PROBLEM));
+                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 //return true;

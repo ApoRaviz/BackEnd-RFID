@@ -1000,9 +1000,10 @@ namespace Isuzu.Service.Impl.Inbound
                         {
                             if (HeadRepo.IsItemExistBy(a => a.InvNo == i.InvNo))
                             {
-
+                                
                                 var item = HeadRepo.GetItemFirstBy(f => f.InvNo == i.InvNo);
-                                if (item != null)
+                                var allItemNew = DetailRepo.GetItemFirstBy(f => f.InvNo == i.InvNo && f.Status != statusNew);
+                                if (item != null && allItemNew == null)
                                 {
                                     i.GroupList.ForEach(x =>
                                     {
@@ -1016,6 +1017,10 @@ namespace Isuzu.Service.Impl.Inbound
                                     item.Qty = item.InboundItems.Count;
                                     HeadRepo.Update(item);
                                     Db.SaveChanges();
+                                }
+                                else
+                                {
+                                    throw new ValidationException(ErrorEnum.ImportStatusNotNew);
                                 }
 
                             }

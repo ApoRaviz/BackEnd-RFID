@@ -26,6 +26,8 @@ using WMS.Service.Impl.Common;
 using WMS.Service.Common;
 using WMS.Service.ControlMaster;
 using WMS.Service.Impl.ControlMaster;
+using WMS.Service.Inventories;
+using WMS.Service.Impl.Inventories;
 
 namespace WMS.WebApi
 {
@@ -68,9 +70,9 @@ namespace WMS.WebApi
             container.RegisterType<ILocationGroupService, LocationGroupService>();
             container.RegisterType<IReceiveService, ReceiveService>();
             container.RegisterType<IGeneralConfigsService, GeneralConfigsService>();
-
             container.RegisterType<IControlService, ControlService>();
             container.RegisterType<ISpareFieldService, SpareFieldService>();
+            container.RegisterType<IInventoryService, InventoryService>();
         }
     }
 }

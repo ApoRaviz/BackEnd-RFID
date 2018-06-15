@@ -110,6 +110,7 @@
     <Content Include="obj\Release\WIM.Core.Common.ValueObject.pdb" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="bin\Release\WIM.Core.Common.Utility.dll.config" />
     <None Include="bin\Release\WIM.Core.Entity.dll.config" />
     <None Include="obj\Debug\CoreCompileInputs.cache" />

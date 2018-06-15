@@ -82,7 +82,6 @@
   <ItemGroup>
     <Compile Include="HandheldErrorLog.cs" />
     <Compile Include="Helpers\ApiHashTableHelper.cs" />
-    <Compile Include="Helpers\AuthHelper.cs" />
     <Compile Include="Helpers\TableHashTableHelper.cs" />
     <Compile Include="IResourceItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

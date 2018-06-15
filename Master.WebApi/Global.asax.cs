@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Master.WebApi.ServiceBus;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -28,6 +29,12 @@ namespace Master.WebApi
             AutoMapperConfig.Initialize();
             ApiHashTableHelper.Initialize();
             TableHashTableHelper.Initialize();
+            RabbitMQMessageListener.Start(RabbitMQConfig.Initialize());
+        }
+
+        protected void Application_End()
+        {
+            RabbitMQMessageListener.Stop();
         }
     }
 }

@@ -81,7 +81,8 @@ namespace Isuzu.Common.ValueObject
     }
 
     public class RFIDList
-    {
+    {        
+        public string FunctionName { get; set; }
         public List<string> RFIDTags { get; set; }
     }
 

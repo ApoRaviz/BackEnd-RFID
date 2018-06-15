@@ -58,6 +58,7 @@
     <Compile Include="IsuzuReportHelper.cs" />
     <Compile Include="IsuzuStatus.cs" />
     <Compile Include="IsuzuTagReport.cs" />
+    <Compile Include="IsuzuUploadItem.cs" />
     <Compile Include="ParameterSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,6 +71,9 @@
       <Project>{58317ee7-1858-4ac8-ad9f-27ced24af4c7}</Project>
       <Name>WIM.Core.Common.Utility</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

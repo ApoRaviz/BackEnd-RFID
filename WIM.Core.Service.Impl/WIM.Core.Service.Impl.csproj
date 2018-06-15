@@ -135,6 +135,10 @@
       <Project>{7526f7f0-d2aa-442f-b170-1db30880e0ef}</Project>
       <Name>WIM.Core.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMS.Common.ValueObject\WMS.Common.ValueObject.csproj">
+      <Project>{30A80D17-B62F-4F7D-9430-B02425001E3B}</Project>
+      <Name>WMS.Common.ValueObject</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

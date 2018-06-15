@@ -17,10 +17,13 @@ using WIM.Core.Service.Impl;
 namespace WMS.WebApi.Controller
 {
     public class ApiLogHandler : DelegatingHandler
-    {    
+    {
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+
             var userLogEntry = CreateUserLogEntryWithRequestData(request);
+
+
             if (request.Content != null)
             {
                 await request.Content.ReadAsStringAsync()
@@ -49,34 +52,34 @@ namespace WMS.WebApi.Controller
                     userLogEntry.RequestContentBody = HttpUtility.UrlDecode(userLogEntry.RequestContentBody);
 
                     // จ๊อบ Comment กำลัง Dev อยู่
-                    //string urlFrontEnd;
-                    //if (request.Method == HttpMethod.Get)
-                    //{
-                    //    urlFrontEnd = request.GetQueryNameValuePairs().FirstOrDefault(kv => kv.Key == "urlFrontEnd").Value;
-                    //}
-                    //else
-                    //{
-                    //    JObject body = JsonConvert.DeserializeObject<JObject>(userLogEntry.RequestContentBody);
-                    //    urlFrontEnd = body["urlFrontEnd"] + "";
-                    //}
+                    string urlFrontEnd;
+                    if (request.Headers.Referrer != null)
+                    {
+                    urlFrontEnd = request.Headers.Referrer.AbsolutePath;
+                    
 
-                    //if (!string.IsNullOrEmpty(urlFrontEnd) && urlFrontEnd[0] == '/')
-                    //{
-                    //    urlFrontEnd = urlFrontEnd.Substring(1);
-                    //}
-                    //urlFrontEnd = urlFrontEnd.Split('?')[0];
-                    //urlFrontEnd = urlFrontEnd.Split(';')[0];
+                    if (!string.IsNullOrEmpty(urlFrontEnd) && urlFrontEnd[0] == '/')
+                    {
+                        urlFrontEnd = urlFrontEnd.Substring(1);
+                    }
+                    urlFrontEnd = urlFrontEnd.Split('?')[0];
+                    urlFrontEnd = urlFrontEnd.Split(';')[0];
 
-                    //IMenuService menuService = new MenuService();
-                    //Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
+                    IMenuService menuService = new MenuService();
+                    Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
 
-                    //userLogEntry.RequestUriFrondEnd = menu.Url;
-                    //userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
+                    userLogEntry.RequestUriFrondEnd = menu.Url;
+                    userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
+                    }
 
-                    new CommonService().WriteUserLog(userLogEntry);
+                    if (userLogEntry.RequestUriFrondEnd != "wms/admin/loglist" && userLogEntry.RequestUriFrondEnd != "wms/admin/logdetail")
+                    {
+                        new CommonService().WriteUserLog(userLogEntry);
+                    }
 
                     return response;
                 }, cancellationToken);
+
         }
 
         private UserLog CreateUserLogEntryWithRequestData(HttpRequestMessage request)
@@ -84,11 +87,11 @@ namespace WMS.WebApi.Controller
             var context = ((HttpContextBase)request.Properties["MS_HttpContext"]);
             var routeData = request.GetRouteData();
             var User = context.User.Identity.Name;
-
+            var Browser = context.Request.Browser.Type;
             return new UserLog
             {
-                //Machine = Environment.MachineName,
-                Machine = User,
+                Machine = Browser,
+                Username = User,
                 RequestContentType = context.Request.ContentType,
                 RequestIpAddress = context.Request.UserHostAddress,
                 RequestMethod = request.Method.Method,
@@ -124,5 +127,5 @@ namespace WMS.WebApi.Controller
 
             return JsonConvert.SerializeObject(dict, Formatting.Indented);
         }
-    }    
+    }
 }

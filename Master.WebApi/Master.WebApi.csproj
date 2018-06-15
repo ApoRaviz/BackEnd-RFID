@@ -105,6 +105,9 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel.Logging, Version=1.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Logging.1.1.4\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
     </Reference>
@@ -178,6 +181,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\QRCoder.dll</HintPath>
     </Reference>
+    <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.5.0.1\lib\net451\RabbitMQ.Client.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=106.1.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.1.0\lib\net452\RestSharp.dll</HintPath>
     </Reference>
@@ -222,6 +228,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Serialization" />
@@ -302,6 +309,7 @@
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RabbitMQConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -339,6 +347,7 @@
     <Compile Include="Controllers\ApiMenuMappingController.cs" />
     <Compile Include="Controllers\ApiMTController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Controllers\GeneralConfigsController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\PermissionGroupController.cs" />
@@ -385,6 +394,12 @@
     <Compile Include="Report\ReportEngine\ReportBuilderEngine.cs" />
     <Compile Include="Report\ReportUtil.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="ServiceBus\EventsHandler\TestEventHandler.cs" />
+    <Compile Include="ServiceBus\Events\TestEvent.cs" />
+    <Compile Include="ServiceBus\Events\CustomerEvent.cs" />
+    <Compile Include="ServiceBus\IEventHandler.cs" />
+    <Compile Include="ServiceBus\IntegrationEvent.cs" />
+    <Compile Include="ServiceBus\RabbitMQMessageListener.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

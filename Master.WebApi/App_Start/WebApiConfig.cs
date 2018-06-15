@@ -43,9 +43,12 @@ namespace Master.WebApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
+           
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
-            config.Filters.Add(new IdentityAuthAttribute());
-            config.Filters.Add(new PermissionAuthAttribute());
+            //config.Filters.Add(new IdentityAuthAttribute());
+            //config.Filters.Add(new PermissionAuthAttribute());
+
+
         }       
     }
 }
