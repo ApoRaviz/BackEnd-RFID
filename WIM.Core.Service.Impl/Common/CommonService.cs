@@ -154,11 +154,11 @@ namespace WIM.Core.Service.Impl
                 }
                 if (!string.IsNullOrEmpty(logMasterParameters.RequestUrlFrontEnd))
                 {
-                    query = query.Where(x => x.RequestUriFrondEnd.Contains(logMasterParameters.RequestUrlFrontEnd)).AsQueryable();
+                    //query = query.Where(x => x.RequestUriFrondEnd.Contains(logMasterParameters.RequestUrlFrontEnd)).AsQueryable();
                 }
                 if (!string.IsNullOrEmpty(logMasterParameters.RequestMenuNameFrontEnd))
                 {
-                    query = query.Where(x => x.RequestMenuNameFrontEnd.Contains(logMasterParameters.RequestMenuNameFrontEnd)).AsQueryable();
+                    //query = query.Where(x => x.RequestMenuNameFrontEnd.Contains(logMasterParameters.RequestMenuNameFrontEnd)).AsQueryable();
                 }
                 if (!string.IsNullOrEmpty(logMasterParameters.RequestDateFrom.ToString()))
                 {
@@ -201,15 +201,15 @@ namespace WIM.Core.Service.Impl
                 }
                 if (!string.IsNullOrEmpty(logMasterParameters.RequestUrlFrontEnd))
                 {
-                    query = query.Where(x => x.RequestUriFrondEnd.Contains(logMasterParameters.RequestUrlFrontEnd)).AsQueryable();
+                    //query = query.Where(x => x.RequestUriFrondEnd.Contains(logMasterParameters.RequestUrlFrontEnd)).AsQueryable();
                 }
                 if (!string.IsNullOrEmpty(logMasterParameters.RequestMenuNameFrontEnd))
                 {
-                    query = query.Where(x => x.RequestMenuNameFrontEnd.Contains(logMasterParameters.RequestMenuNameFrontEnd)).AsQueryable();
+                    //query = query.Where(x => x.RequestMenuNameFrontEnd.Contains(logMasterParameters.RequestMenuNameFrontEnd)).AsQueryable();
                 }
                 if (!string.IsNullOrEmpty(logMasterParameters.Username))
                 {
-                    query = query.Where(x => x.Username.Contains(logMasterParameters.Username)).AsQueryable();
+                   // query = query.Where(x => x.Username.Contains(logMasterParameters.Username)).AsQueryable();
                 }
                 if (logMasterParameters.RequestDateFrom != null)
                 {
