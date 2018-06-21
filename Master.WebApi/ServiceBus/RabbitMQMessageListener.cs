@@ -25,8 +25,11 @@ namespace Master.WebApi.ServiceBus
         private static string _ReceiveQueue = ConfigurationManager.AppSettings["rb:SubscriptionClientName"];
         private static string _SenderQueue = "publisher_queue";
 
-        public static void Start(IList<string> routingNames)
+        public static bool Start(IList<string> routingNames)
         {
+            if (!Convert.ToBoolean(ConfigurationManager.AppSettings["rb:RabbitEnable"]))
+                return false ;
+
             var factory = new ConnectionFactory
             {
                 HostName = ConfigurationManager.AppSettings["rb:HostName"],
@@ -72,6 +75,8 @@ namespace Master.WebApi.ServiceBus
             GenerateConsumerRouting(_SenderQueue, routingNames, consumerPub);
 
             consumerPub.Received += SubscribePublisher;
+
+            return true;
         }
 
         #region SenderConsumer

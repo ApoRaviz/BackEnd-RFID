@@ -715,7 +715,8 @@ namespace Isuzu.Service.Impl.Inbound
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 item = (from i in Db.InboundItems
-                        where i.RFIDTag == rfid &&
+                            // where i.RFIDTag == rfid &&
+                        where rfid.EndsWith(i.RFIDTag) &&
                               i.Status == statusCartonPacked
                         select new InboundItemCartonPackingHandyRequestNew
                         {
@@ -741,7 +742,8 @@ namespace Isuzu.Service.Impl.Inbound
                                             statusNew,
                                             statusShipped,
                                             statusDeleted
-                                       }.Contains(i.Status)
+                                       }.Contains(i.Status) 
+                                       && i.RFIDTag != null
                                        select i);
 
                     foreach (InboundItems item in queryForPacking)
