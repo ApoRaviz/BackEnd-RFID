@@ -68,8 +68,7 @@ namespace Isuzu.Service.Impl.Inbound
             InboundItemHandyDto item;
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
-                item = (
-                         from i in Db.InboundItems
+                item = (from i in Db.InboundItems
                          where i.ISZJOrder == iszjOrder
                          && !new List<string> {
                                     statusShipped,
@@ -90,8 +89,7 @@ namespace Isuzu.Service.Impl.Inbound
                              Qty = i.Qty,
                              PartNo = i.PartNo,
                              ParrtName = i.ParrtName
-                         }
-                     ).SingleOrDefault();
+                         }).SingleOrDefault();
             }
             return item;
         }
@@ -180,25 +178,49 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundRepository detailRepo = new InboundRepository(db);
                     try
                     {
+                        //itemExist = (from i in db.InboundItems
+                        //             where i.ISZJOrder == item.ISZJOrder &&
+                        //             i.Status == statusNew
+                        //             select i
+                        //             ).SingleOrDefault();
+
+                        //if (itemExist == null) return null;
+
                         itemExist = (from i in db.InboundItems
-                                     where i.ISZJOrder == item.ISZJOrder &&
-                                     i.Status == statusNew
+                                     where i.ISZJOrder == item.ISZJOrder
+                                     && !new List<string>
+                                        {
+                                            statusShipped,
+                                            statusDeleted
+                                        }.Contains(i.Status)
                                      select i
                                      ).SingleOrDefault();
-
                         if (itemExist == null) return null;
 
-                        itemReturn = new InboundItemHandyDto
+                        if (itemExist.Status == statusNew)
                         {
-                            InvNo = itemExist.InvNo,
-                            ISZJOrder = item.ISZJOrder
-                        };
-                        itemExist.Status = statusRegistered;
-                        itemExist.RegisterLocation = item.RegisterLocation;
-                        itemExist.RegisterDate = DateTime.Now;
+                            itemReturn = new InboundItemHandyDto
+                            {
+                                InvNo = itemExist.InvNo,
+                                ISZJOrder = itemExist.ISZJOrder,
+                                Status = itemExist.Status
+                            };
+                            itemExist.Status = statusRegistered;
+                            itemExist.RegisterLocation = item.RegisterLocation;
+                            itemExist.RegisterDate = DateTime.Now;
 
-                        detailRepo.Update(itemExist);
-                        db.SaveChanges();
+                            detailRepo.Update(itemExist);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            itemReturn = new InboundItemHandyDto
+                            {
+                                InvNo = itemExist.InvNo,
+                                ISZJOrder = itemExist.ISZJOrder,
+                                Status = itemExist.Status
+                            };
+                        }
                         scope.Complete();
                     }
                     catch (DbEntityValidationException e)
@@ -207,7 +229,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                 }
             }
-            if (itemExist != null)
+            if (itemExist != null && itemExist.Status == statusNew)
             {
                 UpdateHead_HANDY2(itemExist.InvNo, statusRegistered);
             }
@@ -580,20 +602,29 @@ namespace Isuzu.Service.Impl.Inbound
 
         public void PerformShipping_HANDY(InboundItemShippingHandyRequest itemsShipping)
         {
-            List<InboundItems> items = null;
+            List<InboundItems> items;
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext db = new IsuzuDataContext())
                 {
                     IInboundRepository detailRepo = new InboundRepository(db);
-
-                    items = detailRepo.GetMany(i =>
-                            i.InvNo == itemsShipping.InvNo
-                            && !new List<string> {
+                    items = (from i in db.InboundItems
+                             where i.InvNo == itemsShipping.InvNo
+                             && !new List<string> {
                                statusNew,
                                statusShipped,
                                statusDeleted
-                            }.Contains(i.Status)).ToList();
+                               }.Contains(i.Status)
+                             select i).ToList();
+                    
+                    foreach (InboundItems item in items)
+                    {
+                        item.Status = statusShipped;
+                        item.ShippingDate = DateTime.Now;
+                        detailRepo.Update(item);
+                    }
+                    db.SaveChanges();
+                    scope.Complete();
                     //Pram comment : อาจจะไม่จำเป็นต้อง check tag เพราะตอน ship ต้องยก order ทั้ง Inv ที่หน้าบ้านอยู่แล้ว
                     //foreach (InboundItems item in items)
                     //{
@@ -607,17 +638,9 @@ namespace Isuzu.Service.Impl.Inbound
                     //        }
                     //    }
                     //}
-                    foreach(InboundItems item in items)
-                    {
-                        item.Status = statusShipped;
-                        item.ShippingDate = DateTime.Now;
-                        detailRepo.Update(item);
-                    }
-                    db.SaveChanges();
-                    scope.Complete();
                 }
             }
-            if (items != null)
+            if (items.Any())
             {
                 UpdateHead_HANDY2(items[0].InvNo, statusShipped);
             }
@@ -682,7 +705,7 @@ namespace Isuzu.Service.Impl.Inbound
                     scope.Complete();
                 }
             }
-            if(queryForPacking != null)
+            if(queryForPacking.Any())
             {
                UpdateHead_HANDY2(queryForPacking[0].InvNo, statusCartonPacked);
             }
@@ -709,13 +732,34 @@ namespace Isuzu.Service.Impl.Inbound
             return item;
         }
 
+        public List<InboundItemCartonPackingHandyRequest> GetCartonNoByInvoice_HANDY(string InvNo)
+        {
+            List<InboundItemCartonPackingHandyRequest> item;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                item = (from i in Db.InboundItems
+                        where i.InvNo == InvNo &&
+                        i.CartonNo != null &&
+                        !new List<string> {
+                            statusNew,
+                            statusShipped,
+                            statusDeleted
+                        }.Contains(i.Status)
+                        select new InboundItemCartonPackingHandyRequest
+                        {
+                            CartonNo = i.CartonNo
+                        }).Distinct().ToList();
+            }
+            return item;
+        }
+
         public List<InboundItemCartonPackingHandyRequestNew> GetCartonPackedItemByRFID_HANDY(string rfid)
         {
             List<InboundItemCartonPackingHandyRequestNew> item;
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 item = (from i in Db.InboundItems
-                            // where i.RFIDTag == rfid &&
+                            //where i.RFIDTag == rfid &&
                         where rfid.EndsWith(i.RFIDTag) &&
                               i.Status == statusCartonPacked
                         select new InboundItemCartonPackingHandyRequestNew
@@ -742,8 +786,8 @@ namespace Isuzu.Service.Impl.Inbound
                                             statusNew,
                                             statusShipped,
                                             statusDeleted
-                                       }.Contains(i.Status) 
-                                       && i.RFIDTag != null
+                                       }.Contains(i.Status) &&
+                                       i.RFIDTag != null
                                        select i);
 
                     foreach (InboundItems item in queryForPacking)
@@ -769,6 +813,27 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 UpdateHead_HANDY2(InvStore.InvNo, statusCasePacked);
             }
+        }
+
+        public List<InboundItemCasePackingHandyRequest> GetCaseNoByInvoice_HANDY(string InvNo)
+        {
+            List<InboundItemCasePackingHandyRequest> item;
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                item = (from i in Db.InboundItems
+                        where i.InvNo == InvNo &&
+                        i.CaseNo != null &&
+                        !new List<string> {
+                            statusNew,
+                            statusShipped,
+                            statusDeleted
+                        }.Contains(i.Status)
+                        select new InboundItemCasePackingHandyRequest
+                        {
+                            CaseNo = i.CaseNo
+                        }).Distinct().ToList();
+            }
+            return item;
         }
 
         public IEnumerable<InboundItems> GetInboundItemsByRFIDs_HANDY(RFIDList rfids)
