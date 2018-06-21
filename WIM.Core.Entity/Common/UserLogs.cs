@@ -13,11 +13,11 @@ namespace WIM.Core.Entity.Common
         [Key]
         public int LogID { get; set; }
         public string Machine { get; set; }
-        public string Username { get; set; }
+        //public string Username { get; set; }
         public string RequestIpAddress { get; set; }
         public string RequestUri { get; set; }
-        public string RequestUriFrondEnd { get; set; }
-        public string RequestMenuNameFrontEnd { get; set; }
+        //public string RequestUriFrondEnd { get; set; }
+        //public string RequestMenuNameFrontEnd { get; set; }
         public string RequestContentType { get; set; }
         public string RequestContentBody { get; set; }
         public string RequestMethod { get; set; }
