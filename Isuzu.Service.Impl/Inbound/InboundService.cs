@@ -705,7 +705,7 @@ namespace Isuzu.Service.Impl.Inbound
                     scope.Complete();
                 }
             }
-            if(queryForPacking != null)
+            if(queryForPacking.Any())
             {
                UpdateHead_HANDY2(queryForPacking[0].InvNo, statusCartonPacked);
             }
