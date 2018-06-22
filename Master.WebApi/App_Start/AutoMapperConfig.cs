@@ -10,6 +10,7 @@ using Master.Common.ValueObject;
 using WIM.Core.Entity.LabelManagement;
 using WIM.Core.Common.Utility.UtilityHelpers;
 using Newtonsoft.Json;
+using Master.WebApi.ServiceBus.Events;
 
 namespace Master.WebApi
 {
@@ -21,6 +22,8 @@ namespace Master.WebApi
             {
                 cfg.CreateMap<HeadReportControl, HeadReportControlDto>();
                 cfg.CreateMap<LabelControl, LabelControlDto>();
+                //EventBus
+                cfg.CreateMap<TestEvent, Customer_MT>();
             });
             //Mapper.Initialize(cfg =>
             //{

@@ -36,7 +36,7 @@ namespace WMS.Service.Impl.Common
 
         }
 
-        public string GetValidation(string tableName)
+        public string GetValidation(List<string> tableName)
         {
             string validation = "";
             using (WMSDbContext Db = new WMSDbContext())

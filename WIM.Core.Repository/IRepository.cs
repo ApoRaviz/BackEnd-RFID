@@ -41,6 +41,6 @@ namespace WIM.Core.Repository
         TEntity GetSingle(Func<TEntity, bool> predicate);
         TEntity GetFirst(Func<TEntity, bool> predicate);
 
-        string GetValidation(string tableName);
+        string GetValidation(List<string> tableName);
     }
 }

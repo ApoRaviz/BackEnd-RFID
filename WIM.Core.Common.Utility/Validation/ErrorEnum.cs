@@ -13,7 +13,7 @@ namespace WIM.Core.Common.Utility.Validation
         #region ================================ CORE[10] -> General[10]
 
         [Description("DATA_NOT_FOUND")]
-        DATA_NOT_FOUND = 1010001,
+        DataNotFound = 1010001,
 
         [Description("UNKNOWN_ERROR")]
         UNKNOWN_ERROR = 1010500,
@@ -23,7 +23,7 @@ namespace WIM.Core.Common.Utility.Validation
         #region ================================ CORE[10] -> Auth[11]
 
         [Description("INVALID_USERNAME_OR_PASSWORD")]
-        INVALID_USERNAME_OR_PASSWORD = 1011001,
+        InvalidUsernameOrPassword = 1011001,
 
         [Description("NO_PERMISSION")]
         NO_PERMISSION = 1011002,
@@ -62,17 +62,6 @@ namespace WIM.Core.Common.Utility.Validation
 
         #region ================================ WMS[12] =========================
 
-        #region ================================ WMS[12] -> Inventories[11]
-
-        [Description("INBOUND_QTY_EQUAL_0")]
-        INBOUND_QTY_EQUAL_0 = 1211001,
-
-        [Description("INVALID_INVENTORY_ID")]
-        INVALID_INVENTORY_ID = 1211002,
-
-
-        #endregion /General
-
         #endregion /WMS
 
 
@@ -85,7 +74,7 @@ namespace WIM.Core.Common.Utility.Validation
         #region ================================ FUJI[13] -> Receive[12]
 
         [Description("SERIAL_AND_ITEMCODE_ALREADY_EXISTS")]
-        SERIAL_AND_ITEMCODE_ALREADY_EXISTS = 1312001,
+        SerialAndItemCodeAlreadyExist = 1312001,
 
         #endregion /Receive
 
@@ -99,12 +88,21 @@ namespace WIM.Core.Common.Utility.Validation
         #region ================================ ISUZU[14] -> Register[11]
 
         [Description("RFID_DUPLICATED")]
-        RFID_DUPLICATED = 1411001,
+        RFIDDuplicated = 1411001,
 
         [Description("ORDER_DUPLICATED")]
-        ORDER_DUPLICATED = 1411002,
+        ISZJDuplicate = 1411002,
 
         #endregion /Register
+
+
+        #region ================================ ISUZU[14] -> Import[12]
+
+        [Description("Import_Not_All_NEW")]
+        ImportStatusNotNew = 1412001,
+
+
+        #endregion /Import
 
         #endregion /ISUZU                    
 

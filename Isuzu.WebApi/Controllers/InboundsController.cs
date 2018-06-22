@@ -75,8 +75,27 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.RegisterInboundItem_HANDY(inboundItem);
-                responseHandy.SetData(1);
+                int IsUsedRFID = InboundService.RegisterInboundItem_HANDY(inboundItem);
+                responseHandy.SetData(IsUsedRFID);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("handy/orders")]
+        public HttpResponseMessage RegisterInboundItemByOrder_HANDY([FromBody]InboundItemHandyDto orderNum)
+        {
+            ResponseData<InboundItemHandyDto> responseHandy = new ResponseData<InboundItemHandyDto>();
+            try
+            {
+                InboundItemHandyDto item = InboundService.RegisterInboundItemByOrder_HANDY(orderNum);
+                responseHandy.SetData(item);
             }
             catch (AppValidationException ex)
             {
@@ -221,6 +240,102 @@ namespace Isuzu.Service.Impl
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
+        [Route("handy/packingCartonNew")]
+        public HttpResponseMessage PerformPackingCartonNew_HANDY([FromBody]InboundItemCartonPackingHandyRequestNew item)
+        {
+            ResponseData<int> responseHandy = new ResponseData<int>();
+            try
+            {
+                InboundService.PerformPackingCartonNew_HANDY(item);
+                responseHandy.SetData(1);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/packingCarton/{ISZJOrder}")]
+        public HttpResponseMessage GetItemCartonByISZJOrder_HANDY([FromUri]string ISZJOrder)
+        {
+            ResponseData<InboundItemCartonPackingHandyRequestNew> responseHandy = new ResponseData<InboundItemCartonPackingHandyRequestNew>();
+            try
+            {
+                InboundItemCartonPackingHandyRequestNew item = InboundService.GetItemCartonByISZJOrder_HANDY(ISZJOrder);
+                responseHandy.SetData(item);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/CartonNo/{InvNo}")]
+        public HttpResponseMessage GetCartonNoByInvoice_HANDY([FromUri]string InvNo)
+        {
+            ResponseData<List<InboundItemCartonPackingHandyRequest>> responseHandy = new ResponseData<List<InboundItemCartonPackingHandyRequest>>();
+            try
+            {
+                List<InboundItemCartonPackingHandyRequest> item = InboundService.GetCartonNoByInvoice_HANDY(InvNo);
+                responseHandy.SetData(item);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/CaseNo/{InvNo}")]
+        public HttpResponseMessage GetCaseNoByInvoice_HANDY([FromUri]string InvNo)
+        {
+            ResponseData<List<InboundItemCasePackingHandyRequest>> responseHandy = new ResponseData<List<InboundItemCasePackingHandyRequest>>();
+            try
+            {
+                List<InboundItemCasePackingHandyRequest> item = InboundService.GetCaseNoByInvoice_HANDY(InvNo);
+                responseHandy.SetData(item);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/packingCarton/adjust/{rfid}")]
+        public HttpResponseMessage GetCartonPackedItemByRFID_HANDY([FromUri]string rfid)
+        {
+            ResponseData<List<InboundItemCartonPackingHandyRequestNew>> responseHandy = new ResponseData<List<InboundItemCartonPackingHandyRequestNew>>();
+            try
+            {
+                List<InboundItemCartonPackingHandyRequestNew> item = InboundService.GetCartonPackedItemByRFID_HANDY(rfid);
+                responseHandy.SetData(item);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
         [Route("handy/packingCase")]
         public HttpResponseMessage PerformPackingCase_HANDY([FromBody]InboundItemCasePackingHandyRequest itemReq)
         {
@@ -308,6 +423,44 @@ namespace Isuzu.Service.Impl
                 responseHandy.SetData(amount);
             }
             catch (AppValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/items/amountNewRemaining/{invoice}")]
+        public HttpResponseMessage GetAmountNewStatusRemaining([FromUri]string invoice)
+        {
+            ResponseData<List<RegisterRemaining>> responseHandy = new ResponseData<List<RegisterRemaining>>();
+            try
+            {
+                List<RegisterRemaining> item = InboundService.GetAmountNewStatusRemaining_HANDY(invoice);
+                responseHandy.SetData(item);
+            }
+            catch (ValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("handy/items/unregisteredOrder/{invoice}")]
+        public HttpResponseMessage GetUnregisteredOrderByInvoice([FromUri]string invoice)
+        {
+            ResponseData<List<InboundItemHandyDto>> responseHandy = new ResponseData<List<InboundItemHandyDto>>();
+            try
+            {
+                List<InboundItemHandyDto> item = InboundService.GetUnregisteredOrder_HANDY(invoice);
+                responseHandy.SetData(item);
+            }
+            catch (ValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -621,6 +774,69 @@ namespace Isuzu.Service.Impl
                     response.SetData(inboundList);
                     response.SetStatus(HttpStatusCode.OK);
                 }
+            }
+            catch (ValidationException e)
+            {
+                response.SetErrors(e.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("importByFileIDs")]
+        public HttpResponseMessage PostImportData([FromBody] List<IsuzuUploadItem> files)
+        {
+            DateTime d = DateTime.Now;
+            string drive = "D:";
+            if (!Directory.Exists(drive))
+                drive = "C:";
+            string root = drive + @"\Uploads\WIM";
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
+            }
+            ResponseData<List<InboundItems>> response = new ResponseData<List<InboundItems>>();
+            List<InboundItems> inboundList = new List<InboundItems>();
+            bool isDubplicat = false;
+            try
+            {
+
+                // This illustrates how to get the file names.
+                foreach (IsuzuUploadItem file in files)
+                {
+                    string path = Path.Combine(root,file.PathFile, file.LocalName);
+                    IsuzuDataImport returnImported = InboundService.OpenReadExcel(path);
+                    if (returnImported != null)
+                    {
+                        if (returnImported.isDuplicated)
+                        {
+                            isDubplicat = true;
+                            inboundList = returnImported.listItem;
+                            break;
+                        }
+                        else
+                            inboundList.AddRange(returnImported.listItem);
+                    }
+                }
+
+                if (isDubplicat)
+                {
+                    var dubplicateList = inboundList.Select(s => s.ISZJOrder).ToList();
+                    var Errorlist = new List<ValidationError>()
+                    {
+                        new ValidationError("1411002","Duplicate: " + String.Join(",",dubplicateList))
+                    };
+                    response.SetErrors(Errorlist);
+                    response.SetStatus(HttpStatusCode.Conflict);
+                }
+                else
+                {
+                    response.SetData(inboundList);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
 
             }
             catch (AppValidationException e)
@@ -901,6 +1117,28 @@ namespace Isuzu.Service.Impl
                 responseHandy.SetErrors(ex.Errors);
             }
             return Request.ReturnHttpResponseMessage(responseHandy);
+
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("Goodtest/{inn}")]
+        public HttpResponseMessage test([FromUri]string inn)
+        {
+            ResponseData<int> respones = new ResponseData<int>();
+            try
+            {
+                InboundService.UpdateHead_HANDY2("VITTEST","REGISTERED_YUT");
+                respones.SetStatus(HttpStatusCode.OK);
+                respones.SetData(1);
+            }
+            catch (ValidationException ex)
+            {
+                respones.SetErrors(ex.Errors);
+                respones.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(respones);
 
         }
 

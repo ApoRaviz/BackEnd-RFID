@@ -17,6 +17,8 @@ using WIM.Core.Repository;
 using WIM.Core.Repository.Common;
 using WIM.Core.Repository.Impl.Common;
 using System.Data.Linq.SqlClient;
+using WMS.Common.ValueObject;
+using AutoMapper;
 
 namespace WIM.Core.Service.Impl
 {
@@ -85,7 +87,7 @@ namespace WIM.Core.Service.Impl
             return tableDescriptionWms;
         }
 
-        public string GetValidation(string tableName)
+        public string GetValidation(List<string> tableName)
         {
             string validation = "";
             using (CoreDbContext Db = new CoreDbContext())
@@ -104,7 +106,7 @@ namespace WIM.Core.Service.Impl
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ICommonRepository repo = new CommonRepository(Db);
-                userLogs = repo.ProcGetUserLog(logId, null, null, null, RequestDateFrom, RequestDateTo);
+                userLogs = repo.ProcGetUserLog(logId, null, null, null, null, RequestDateFrom, RequestDateTo);
 
                 /*UserLog userLog = userLogs.FirstOrDefault(x => x.LogID == 177053);
                 string reqUrl = StringHelper.GetRequestUrl(userLog.RequestUri);
@@ -117,16 +119,122 @@ namespace WIM.Core.Service.Impl
             return userLogs;
         }
 
-        public IEnumerable<UserLog> GetUserLogData(string RequestMethod, string RequestUrl, string RequestUrlFrontEnd, DateTime? RequestDateFrom, DateTime? RequestDateTo)
+        public IEnumerable<UserLog> GetUserLogData(string RequestMethod, string RequestUrl, string RequestUrlFrontEnd, string RequestMenuNameFrontEnd, DateTime? RequestDateFrom, DateTime? RequestDateTo)
         {
             IEnumerable<UserLog> userLogs;
             using (CoreDbContext Db = new CoreDbContext())
             {
                 ICommonRepository repo = new CommonRepository(Db);
-                userLogs = repo.ProcGetUserLog(null, RequestMethod, RequestUrl, RequestUrlFrontEnd, RequestDateFrom, RequestDateTo);
+                userLogs = repo.ProcGetUserLog(null, RequestMethod, RequestUrl, RequestUrlFrontEnd, RequestMenuNameFrontEnd, RequestDateFrom, RequestDateTo);
             }
             return userLogs;
         }
+
+        public IEnumerable<UserLog> GetUserLogData2(LogMasterParameters logMasterParameters)
+        {
+            IEnumerable<UserLog> userLogs;
+
+
+
+
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                ICommonRepository repo = new CommonRepository(Db);
+
+                var query = Db.UserLogs.AsQueryable();
+
+
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestMethod))
+                {
+                    query = query.Where(x => x.RequestMethod == logMasterParameters.RequestMethod).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestUrl))
+                {
+                    query = query.Where(x => x.RequestUri.Contains(logMasterParameters.RequestUrl)).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestUrlFrontEnd))
+                {
+                    //query = query.Where(x => x.RequestUriFrondEnd.Contains(logMasterParameters.RequestUrlFrontEnd)).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestMenuNameFrontEnd))
+                {
+                    //query = query.Where(x => x.RequestMenuNameFrontEnd.Contains(logMasterParameters.RequestMenuNameFrontEnd)).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestDateFrom.ToString()))
+                {
+                    query = query.Where(x => x.RequestTimestamp >= logMasterParameters.RequestDateFrom).AsQueryable();
+                }
+                if (logMasterParameters.RequestDateTo != null)
+                {
+                    DateTime dt = Convert.ToDateTime(logMasterParameters.RequestDateTo);
+                    dt = new DateTime(dt.Year, dt.Month, dt.Day, 23, 59, 59);
+                    logMasterParameters.RequestDateTo = dt;
+                    query = query.Where(x => x.RequestTimestamp <= logMasterParameters.RequestDateTo).AsQueryable();
+                }
+
+
+                query = query.Take(500).OrderByDescending(x => x.RequestTimestamp);
+                userLogs = query.ToList();
+            }
+            return userLogs;
+
+        }
+
+        public IEnumerable<UserLogDto> GetUserLogData3(LogMasterParameters logMasterParameters)
+        {
+            IEnumerable<UserLog> userLogs;
+
+            using (CoreDbContext Db = new CoreDbContext())
+            {
+                ICommonRepository repo = new CommonRepository(Db);
+
+                var query = Db.UserLogs.AsQueryable();
+
+
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestMethod))
+                {
+                    query = query.Where(x => x.RequestMethod == logMasterParameters.RequestMethod).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestUrl))
+                {
+                    query = query.Where(x => x.RequestUri.Contains(logMasterParameters.RequestUrl)).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestUrlFrontEnd))
+                {
+                    //query = query.Where(x => x.RequestUriFrondEnd.Contains(logMasterParameters.RequestUrlFrontEnd)).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.RequestMenuNameFrontEnd))
+                {
+                    //query = query.Where(x => x.RequestMenuNameFrontEnd.Contains(logMasterParameters.RequestMenuNameFrontEnd)).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(logMasterParameters.Username))
+                {
+                   // query = query.Where(x => x.Username.Contains(logMasterParameters.Username)).AsQueryable();
+                }
+                if (logMasterParameters.RequestDateFrom != null)
+                {
+                    query = query.Where(x => x.RequestTimestamp >= logMasterParameters.RequestDateFrom).AsQueryable();
+                }
+                if (logMasterParameters.RequestDateTo != null)
+                {
+                    DateTime dt = Convert.ToDateTime(logMasterParameters.RequestDateTo);
+                    dt = new DateTime(dt.Year, dt.Month, dt.Day, 23, 59, 59);
+                    logMasterParameters.RequestDateTo = dt;
+                    query = query.Where(x => x.RequestTimestamp <= logMasterParameters.RequestDateTo).AsQueryable();
+                }
+
+                logMasterParameters.Totalrow = query.Count();
+                query = query.OrderByDescending(x => x.RequestTimestamp).Skip(logMasterParameters.Rows * logMasterParameters.PageNum).Take(logMasterParameters.Rows);
+                userLogs = query.ToList();
+
+
+            }
+            IEnumerable<UserLogDto> userLogList = Mapper.Map<IEnumerable<UserLogDto>>(userLogs);
+            return userLogList;
+
+        }
+
+
 
         public void InsertLog(HandheldErrorLog errorLog)
         {
@@ -154,29 +262,25 @@ namespace WIM.Core.Service.Impl
 
         public bool WriteUserLog(UserLog log)
         {
-            using (var scope = new TransactionScope())
+            try
             {
-                try
+                using (CoreDbContext Db = new CoreDbContext())
                 {
-                    using (CoreDbContext Db = new CoreDbContext())
-                    {
-                        ICommonRepository repo = new CommonRepository(Db);
-                        repo.Insert(log);
-                        Db.SaveChanges();
-                        scope.Complete();
-                    }
-                }
-                catch (DbEntityValidationException e)
-                {
-                    throw new AppValidationException(e);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
-                    throw ex;
+                    ICommonRepository repo = new CommonRepository(Db);
+                    repo.Insert(log);
+                    Db.SaveChanges();
                 }
             }
+            catch (DbEntityValidationException e)
+            {
+                throw new ValidationException(e);
+            }
+            catch (DbUpdateException)
+            {
+                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                throw ex;
+            }
+
             return true;
         }
 
@@ -285,7 +389,7 @@ namespace WIM.Core.Service.Impl
                     {
                         scope.Dispose();
                         return false;
-                        throw new AppValidationException(e);
+                        throw new ValidationException(e);
                     }
                 }
             }

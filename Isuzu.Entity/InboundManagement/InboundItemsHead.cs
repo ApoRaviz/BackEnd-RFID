@@ -20,7 +20,7 @@ namespace Isuzu.Entity
 
         public int? Qty { get; set; }
 
-        [StringLength(20)]
+        [StringLength(30)]
         public string Status { get; set; }
 
         public bool? IsExport { get; set; }

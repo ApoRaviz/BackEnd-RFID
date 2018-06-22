@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Owin;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Services.Description;
 
 [assembly: OwinStartup("Auth", typeof(Auth.API.Startup))]
 
@@ -19,6 +20,7 @@ namespace Master.WebApi
             //CreateRolesandUsers();
         }
 
+
         // In this method we will create default User roles and Admin user for login
         //private void CreateRolesandUsers()
         //{
@@ -26,7 +28,7 @@ namespace Master.WebApi
 
         //    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
         //    var userManager = new UserManager<ApplicationUser, string>(new UserStore<ApplicationUser>(context));
-           
+
         //    // In Startup iam creating first Admin Role and creating a default Admin User 
         //    if (!roleManager.RoleExists("Admin"))
         //    {

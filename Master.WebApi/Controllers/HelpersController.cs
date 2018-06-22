@@ -75,9 +75,9 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [HttpGet]
-        [Route("validationField/{tableName}")]
-        public HttpResponseMessage ValidationField(string tableName)
+        [HttpPost]
+        [Route("validationField")]
+        public HttpResponseMessage ValidationField([FromBody]List<string> tableName)
         {
             IResponseData<string> response = new ResponseData<string>();
             try

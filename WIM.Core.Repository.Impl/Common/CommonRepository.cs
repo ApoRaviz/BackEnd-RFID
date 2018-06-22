@@ -6,7 +6,7 @@ using System.Linq;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.Common;
-
+using WMS.Common.ValueObject;
 
 namespace WIM.Core.Repository.Impl
 {
@@ -36,7 +36,7 @@ namespace WIM.Core.Repository.Impl
                 , new SqlParameter("@tableName", tableName)).FirstOrDefault();
         }
 
-        public IEnumerable<UserLog> ProcGetUserLog(int? logID, string requestMethod, string requestUrl, string requestUrlFrontEnd, DateTime? requestDateFrom, DateTime? requestDateTo)
+        public IEnumerable<UserLog> ProcGetUserLog(int? logID, string requestMethod, string requestUrl, string requestUrlFrontEnd, string requestMenunameFrontEnd, DateTime? requestDateFrom, DateTime? requestDateTo)
         {
 
             var logIDParameter = logID.HasValue ? new SqlParameter
@@ -68,10 +68,10 @@ namespace WIM.Core.Repository.Impl
             } : new SqlParameter("@RequestUrlFrontEnd", DBNull.Value);
 
             // JobComment
-            var requestMenuNameFrontEndParameter = !String.IsNullOrEmpty("") ? new SqlParameter
+            var requestMenuNameFrontEndParameter = !String.IsNullOrEmpty(requestMenunameFrontEnd) ? new SqlParameter
             {
                 ParameterName = "@RequestMenuNameFrontEnd",
-                Value = ""
+                Value = requestMenunameFrontEnd
             } : new SqlParameter("@RequestMenuNameFrontEnd", DBNull.Value);
 
             var requestDateFromParameter = requestDateFrom.HasValue ? new SqlParameter
@@ -88,15 +88,15 @@ namespace WIM.Core.Repository.Impl
             var requestDateToParameter = requestDateTo.HasValue ? new SqlParameter
             {
                 ParameterName = "@RequestDateTo",
-                Value = requestDateFrom
+                Value = requestDateTo
             } : new SqlParameter() {
                 ParameterName = "@RequestDateTo",
                 Value = DBNull.Value,
                 DbType = DbType.DateTime
             };
 
-            var x = this.Context.Database.SqlQuery<UserLog>("exec ProcGetUserLog @LogID, @RequestMethod, @RequestUrl, @RequestUrlFrontEnd, @RequestMenuNameFrontEnd, @RequestDateFrom ," +
-            "@RequestDateTo", logIDParameter, requestMethodParameter, requestUrlParameter, requestUrlFrontEndParameter, requestMenuNameFrontEndParameter, requestDateFromParameter, requestDateToParameter).ToList();
+            var x = this.Context.Database.SqlQuery<UserLog>("exec ProcGetUserLog @LogID, @RequestMethod, @RequestUrl, @RequestUrlFrontEnd, @RequestMenuNameFrontEnd, @RequestDateFrom ,@RequestDateTo" 
+            , logIDParameter, requestMethodParameter, requestUrlParameter, requestUrlFrontEndParameter, requestMenuNameFrontEndParameter, requestDateFromParameter, requestDateToParameter).ToList();
 
             //var z = this.Context.Database.SqlQuery<string>("exec ProcGetUserLog @LogID , @RequestMethod , @RequestUrl , @RequestDateFrom ," +
             //"@RequestDateTo", logIDParameter, requestMethodParameter, requestUrlParameter, requestDateFromParameter, requestDateToParameter).ToList();
@@ -105,7 +105,8 @@ namespace WIM.Core.Repository.Impl
 
         }
 
-        public IEnumerable<TableColumnsDescription> ProcGetTableColumnsDescription(string tableName)
+
+            public IEnumerable<TableColumnsDescription> ProcGetTableColumnsDescription(string tableName)
         {
            var tableNameParameter = /*new ObjectParameter("@tableName", tableName);*/
            new SqlParameter("tableName", tableName);
