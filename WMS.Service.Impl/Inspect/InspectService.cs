@@ -72,7 +72,7 @@ namespace WMS.Service.Impl.Inspect
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 
                 return Inspect.InspectIDSys;
@@ -96,7 +96,7 @@ namespace WMS.Service.Impl.Inspect
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 
                 return true;

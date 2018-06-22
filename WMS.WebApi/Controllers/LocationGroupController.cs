@@ -38,7 +38,7 @@ namespace WMS.WebApi.Controllers
                 GroupLocation res = LocGroupService.CreateLocationGroup(body);
                 response.SetData(res);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -56,7 +56,7 @@ namespace WMS.WebApi.Controllers
                 bool res = LocGroupService.UpdateLocationGroup(body.GroupLocIDSys, body);
                 response.SetData(res);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -74,7 +74,7 @@ namespace WMS.WebApi.Controllers
                 IEnumerable<GroupLocation> detail = LocGroupService.GetLocationGroup();
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -92,7 +92,7 @@ namespace WMS.WebApi.Controllers
                 IEnumerable<GroupLocationDto> detail = LocGroupService.GetListLocationGroupDto();
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -111,7 +111,7 @@ namespace WMS.WebApi.Controllers
                 IEnumerable<GroupLocation> detail = LocGroupService.GetUnassignLocationGroup();
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -129,7 +129,7 @@ namespace WMS.WebApi.Controllers
                GroupLocation detail = LocGroupService.GetLocationGroupByGroupLocIDSys(GroupLocIDSys);
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -180,7 +180,7 @@ namespace WMS.WebApi.Controllers
                     response.SetData(null);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -205,7 +205,7 @@ namespace WMS.WebApi.Controllers
                     response.SetData(null);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -230,7 +230,7 @@ namespace WMS.WebApi.Controllers
                     response.SetData(null);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -256,7 +256,7 @@ namespace WMS.WebApi.Controllers
                     response.SetData(false);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -281,7 +281,7 @@ namespace WMS.WebApi.Controllers
                     response.SetData(false);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -303,7 +303,7 @@ namespace WMS.WebApi.Controllers
                 bool customer = LocGroupService.DeleteLocationGroup(id);
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -325,7 +325,7 @@ namespace WMS.WebApi.Controllers
                 IEnumerable<AutocompleteLocationDto> customer = LocGroupService.AutocompleteLocation(term);
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

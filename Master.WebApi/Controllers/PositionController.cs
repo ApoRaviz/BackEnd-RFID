@@ -36,7 +36,7 @@ namespace Master.WebApi
                 IEnumerable<Positions> Employees = PositionService.GetPositions();
                 response.SetData(Employees);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -55,7 +55,7 @@ namespace Master.WebApi
                 Positions Employee = PositionService.GetPositionByPositionIDSys(DepIDSys);
                 response.SetData(Employee);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -75,7 +75,7 @@ namespace Master.WebApi
                 int id = PositionService.CreatePosition(Position);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -97,7 +97,7 @@ namespace Master.WebApi
                 bool isUpated = PositionService.UpdatePosition(Position);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -117,7 +117,7 @@ namespace Master.WebApi
                 bool isUpated = PositionService.DeletePosition(DepID);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -136,7 +136,7 @@ namespace Master.WebApi
                 Positions rs = PositionService.SetPositionConfig(id,positionConfig);
                 response.SetData(rs);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -154,7 +154,7 @@ namespace Master.WebApi
                 Positions rs = PositionService.SetPositionConfig2(id, positionConfig);
                 response.SetData(rs);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

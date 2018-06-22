@@ -40,7 +40,7 @@ namespace Master.WebApi.Controllers
 
                 response.SetData(Menu);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -59,7 +59,7 @@ namespace Master.WebApi.Controllers
                 Menu_MT Menu = MenuService.GetMenuByMenuIDSys(MenuIDSys);
                 response.SetData(Menu);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -87,7 +87,7 @@ namespace Master.WebApi.Controllers
 
                 response.SetData(menuresponse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -109,7 +109,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<AutocompleteMenuDto> menu = MenuService.AutocompleteMenu(term);
                 response.SetData(menu);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -174,7 +174,7 @@ namespace Master.WebApi.Controllers
                 //}
                 response.SetData(responseData);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -219,7 +219,7 @@ namespace Master.WebApi.Controllers
                     mother.ParentMenu[j].MenuParentID = mother.ParentMenu[j].MenuIDSys;
                     mother.ParentMenu[j].Sort = forsort;
                 }
-                catch (ValidationException)
+                catch (AppValidationException)
                 {
                 }
             }
@@ -238,7 +238,7 @@ namespace Master.WebApi.Controllers
                 int id = MenuService.CreateMenu(Menu);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -271,7 +271,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = MenuService.UpdateMenu(MenuList);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -292,7 +292,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = MenuService.UpdateMenu(Menu);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -311,7 +311,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = MenuService.DeleteMenu(MenuIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -341,7 +341,7 @@ namespace Master.WebApi.Controllers
                     int id = MenuService.CreateMenu(mother.ParentMenu[j], ProjectID, forsort);
 
                 }
-                catch (ValidationException)
+                catch (AppValidationException)
                 {
                 }
             }

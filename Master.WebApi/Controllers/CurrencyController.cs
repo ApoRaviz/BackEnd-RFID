@@ -37,7 +37,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<CurrencyUnit> Currency = CurrencyService.GetCurrency();
                 response.SetData(Currency);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -57,7 +57,7 @@ namespace Master.WebApi.Controllers
                 CurrencyUnit Currency = CurrencyService.GetCurrencyByCurrIDSys(CurrencyIDSys);
                 response.SetData(Currency);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -78,7 +78,7 @@ namespace Master.WebApi.Controllers
                 int id = CurrencyService.CreateCurrency(Currency);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -101,7 +101,7 @@ namespace Master.WebApi.Controllers
                 bool isUpdated = CurrencyService.UpdateCurrency(Currency);
                 response.SetData(isUpdated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -120,7 +120,7 @@ namespace Master.WebApi.Controllers
                 bool isUpdated = CurrencyService.DeleteCurrency(CurrencyIDSys);
                 response.SetData(isUpdated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

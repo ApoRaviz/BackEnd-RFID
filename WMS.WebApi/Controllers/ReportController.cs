@@ -67,7 +67,7 @@ namespace WMS.WebApi.Controller
 
                 response.SetData(header);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -86,7 +86,7 @@ namespace WMS.WebApi.Controller
                 ReportLayout_MT report = ReportService.GetReportLayoutByReportIDSys(ReportIDSys);
                 response.SetData(report);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -105,7 +105,7 @@ namespace WMS.WebApi.Controller
                 int id = ReportService.CreateReportForItemMaster(data);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -124,7 +124,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ReportService.UpdateReportForItemMaster(ReportIDSys, data);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

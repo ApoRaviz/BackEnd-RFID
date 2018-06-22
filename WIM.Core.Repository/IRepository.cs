@@ -33,6 +33,7 @@ namespace WIM.Core.Repository
 
         // Other
         IEnumerable<TEntity> GetMany(Func<TEntity, bool> where);
+        IEnumerable<TEntity> GetMany(Func<TEntity, bool> where, bool isTryValidationNotNullException);
         IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where);        
         void Delete(Func<TEntity, Boolean> where);        
         //IQueryable<TEntity> GetWithInclude(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate, params string[] include);

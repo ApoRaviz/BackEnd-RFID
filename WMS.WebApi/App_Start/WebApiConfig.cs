@@ -43,8 +43,8 @@ namespace WMS.WebApi
             );
 
             //config.MessageHandlers.Add(new AcceptJsonHttpMessageHandler());
-            config.Filters.Add(new IdentityAuthAttribute());
-            config.Filters.Add(new PermissionAuthAttribute());
+            //config.Filters.Add(new IdentityAuthAttribute());
+            //config.Filters.Add(new PermissionAuthAttribute());
         }       
     }
 }

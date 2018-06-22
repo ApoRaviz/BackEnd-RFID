@@ -37,7 +37,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<InspectType> InspectTypes = InspectService.GetInspectTypes();
                 response.SetData(InspectTypes);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -56,7 +56,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<Inspect_MT> Inspects = InspectService.GetInspects();
                 response.SetData(Inspects);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -75,7 +75,7 @@ namespace WMS.WebApi.Controller
                 Inspect_MT Inspect = InspectService.GetInspectBySupIDSys(inspectIDSys);
                 response.SetData(Inspect);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -95,7 +95,7 @@ namespace WMS.WebApi.Controller
                 int id = InspectService.CreateInspect(Inspect);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -116,7 +116,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = InspectService.UpdateInspect(Inspect);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -136,7 +136,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = InspectService.DeleteInspect(inspectIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

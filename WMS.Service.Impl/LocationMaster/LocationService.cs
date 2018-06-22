@@ -51,7 +51,7 @@ namespace WMS.Service.Impl.LocationMaster
             }
             catch (DbUpdateException)
             {
-                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 throw ex;
             }
 
@@ -71,12 +71,12 @@ namespace WMS.Service.Impl.LocationMaster
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return true;
@@ -95,7 +95,7 @@ namespace WMS.Service.Impl.LocationMaster
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
                 return true;
             }
@@ -116,12 +116,12 @@ namespace WMS.Service.Impl.LocationMaster
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return Location;
             }

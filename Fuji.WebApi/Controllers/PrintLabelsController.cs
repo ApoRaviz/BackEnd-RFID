@@ -44,7 +44,7 @@ namespace Fuji.WebApi.Controllers.ExternalInterface
                 result.Content = PrintLabelService.GetReportStream(item.Running, baseRunning);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
             }

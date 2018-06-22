@@ -28,11 +28,13 @@ using WMS.Entity.Receiving;
 using WMS.Entity.Report;
 using WMS.Entity.SpareField;
 using WMS.Entity.WarehouseManagement;
+using System.Runtime.CompilerServices;
+using WIM.Core.Context;
 
 namespace WMS.Context
 {
 
-    public class WMSDbContext : DbContext
+    public class WMSDbContext : BaseDbContext
     {
         //$DbSet
 		public DbSet<InvoiceReceive> InvoiceReceives { get; set; }
@@ -74,11 +76,12 @@ namespace WMS.Context
         public DbSet<Inventory> Inventory { get; set; }
         public DbSet<File_MT> File_MT { get; set; }
 
-        public WMSDbContext() : base("name=YUT_WMS")
+        public WMSDbContext([CallerMemberName] string methodName = "") : base("name=YUT_WMS", methodName)
         {
             Configuration.ProxyCreationEnabled = false;
-            Configuration.LazyLoadingEnabled = false;
+            Configuration.LazyLoadingEnabled = false;                    
         }
+
 
         public override int SaveChanges()
         {

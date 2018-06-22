@@ -40,7 +40,7 @@ namespace WMS.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(units);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -59,7 +59,7 @@ namespace WMS.WebApi.Controllers
                 ReceiveDto unit = ReceiveService.GetReceiveByReceiveIDSys(receiveIDSys);
                 response.SetData(unit);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -103,7 +103,7 @@ namespace WMS.WebApi.Controllers
                 receive.ReceiveIDSys = id;
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -113,9 +113,9 @@ namespace WMS.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage PostInvoiceReceives([FromBody]InvoiceReceives invReceive)
+        public HttpResponseMessage PostInvoiceReceives([FromBody]InvoiceReceive invReceive)
         {
-            IResponseData<InvoiceReceives> response = new ResponseData<InvoiceReceives>();
+            IResponseData<InvoiceReceive> response = new ResponseData<InvoiceReceive>();
             try
             {
                 //IInvoiceReceivesRepository invReceiveRopo = new InvoiceReceivesRepository();
@@ -123,7 +123,7 @@ namespace WMS.WebApi.Controllers
                 //receive.ReceiveIDSys = id;
                 //response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -142,7 +142,7 @@ namespace WMS.WebApi.Controllers
                 bool isUpated = ReceiveService.UpdateReceive(unit);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -162,7 +162,7 @@ namespace WMS.WebApi.Controllers
                 bool isUpated = ReceiveService.UpdateReceive(unit);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -182,7 +182,7 @@ namespace WMS.WebApi.Controllers
                 //bool isUpated = UnitService.DeleteUnit(unitIDSys);
                 response.SetData(false);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -201,7 +201,7 @@ namespace WMS.WebApi.Controllers
                 receiveResponse = ReceiveService.SaveReceive(receive);
                 response.SetData(receiveResponse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -220,7 +220,7 @@ namespace WMS.WebApi.Controllers
                 tempInventoryTransactionResponse = ReceiveService.SaveTempInventoryTransaction(transaction);
                 response.SetData(tempInventoryTransactionResponse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -239,7 +239,7 @@ namespace WMS.WebApi.Controllers
                 tempInventoryTransactionsResponse = ReceiveService.SaveTempInventoryTransactions(transactions);
                 response.SetData(tempInventoryTransactionsResponse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -258,7 +258,7 @@ namespace WMS.WebApi.Controllers
                 receiveResponse = ReceiveService.SaveReceiveAndTempInventoryTransactions(receiveTempTransaction);
                 response.SetData(receiveResponse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

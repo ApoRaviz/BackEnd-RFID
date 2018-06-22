@@ -35,11 +35,11 @@ namespace WMS.Service.Impl.Receives
             }
             catch (DbEntityValidationException)
             {
-                throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
             }
             catch (DbUpdateException)
             {
-                throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
             }
             
             

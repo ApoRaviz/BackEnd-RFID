@@ -92,7 +92,7 @@ namespace Fuji.Service.Impl.ItemImport
                     catch (DbEntityValidationException e)
                     {
                         scope.Dispose();
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
                 }
@@ -128,7 +128,7 @@ namespace Fuji.Service.Impl.ItemImport
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
             }
 
@@ -157,7 +157,7 @@ namespace Fuji.Service.Impl.ItemImport
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
             }
 
@@ -306,7 +306,7 @@ namespace Fuji.Service.Impl.ItemImport
                     catch (DbEntityValidationException e)
                     {
                         scope.Dispose();
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -365,7 +365,7 @@ namespace Fuji.Service.Impl.ItemImport
                     catch (DbEntityValidationException e)
                     {
                         scope.Dispose();
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
                 }
@@ -407,7 +407,7 @@ namespace Fuji.Service.Impl.ItemImport
                     catch (DbEntityValidationException e)
                     {
                         scope.Dispose();
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -434,7 +434,7 @@ namespace Fuji.Service.Impl.ItemImport
                     catch (DbEntityValidationException e)
                     {
                         scope.Dispose();
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -488,7 +488,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
 
@@ -551,7 +551,7 @@ namespace Fuji.Service.Impl.ItemImport
                     {
                         scope.Dispose();
                         status = 0;
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -614,7 +614,7 @@ namespace Fuji.Service.Impl.ItemImport
                     {
                         scope.Dispose();
                         status = 0;
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }

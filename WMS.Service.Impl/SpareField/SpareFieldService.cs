@@ -128,7 +128,7 @@ namespace WMS.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return SpareFieldnew.SpfIDSys;
@@ -179,7 +179,7 @@ namespace WMS.Service.Impl
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 //return true;
@@ -217,7 +217,7 @@ namespace WMS.Service.Impl
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    AppValidationException ex = new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     throw ex;
                 }
                 return true;
@@ -230,7 +230,7 @@ namespace WMS.Service.Impl
             {
                 foreach (var ve in eve.ValidationErrors)
                 {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                    throw new AppValidationException(ve.PropertyName, ve.ErrorMessage);
                 }
             }
         }

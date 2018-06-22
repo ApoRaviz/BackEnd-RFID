@@ -88,7 +88,7 @@ namespace Fuji.Service.Impl.PrintLabel
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                    
                 }

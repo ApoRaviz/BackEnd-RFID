@@ -44,7 +44,7 @@ namespace Master.WebApi.Controllers
                 
                 response.SetData(Projects);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -85,7 +85,7 @@ namespace Master.WebApi.Controllers
                 response.SetData(Projects);
                 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -104,7 +104,7 @@ namespace Master.WebApi.Controllers
                 List<Project_MT> Projects = ProjectService.ProjectCustomer(CusIDSys);
                 response.SetData(Projects);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -130,7 +130,7 @@ namespace Master.WebApi.Controllers
                 }
                     response.SetData(Project);
                 }
-                catch (ValidationException ex)
+                catch (AppValidationException ex)
                 {
                     response.SetErrors(ex.Errors);
                     response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -153,7 +153,7 @@ namespace Master.WebApi.Controllers
                     Project_MT Project = ProjectService.GetProjectByProjectIDSysIncludeCustomer(projectIDSys);
                     response.SetData(Project);
                 }
-                catch (ValidationException ex)
+                catch (AppValidationException ex)
                 {
                     response.SetErrors(ex.Errors);
                     response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -168,7 +168,7 @@ namespace Master.WebApi.Controllers
                     Project_MT Project = ProjectService.GetProjectByProjectIDSys(projectIDSys);
                     response.SetData(Project);
                 }
-                catch (ValidationException ex)
+                catch (AppValidationException ex)
                 {
                     response.SetErrors(ex.Errors);
                     response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -193,7 +193,7 @@ namespace Master.WebApi.Controllers
                 Project_MT newProject = ProjectService.CreateProject(project);
                 response.SetData(newProject);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -238,7 +238,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ProjectService.UpdateProject(project);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -257,7 +257,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ProjectService.DeleteProject(projectIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

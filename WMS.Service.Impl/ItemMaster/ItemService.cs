@@ -160,12 +160,12 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return itemresponse.ItemIDSys;
             }
@@ -196,12 +196,12 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return itemresponse.ItemIDSys;
             }
@@ -227,12 +227,12 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return itemresponse;
             }
@@ -283,12 +283,12 @@ namespace WMS.Service
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return true;
             }
@@ -312,7 +312,7 @@ namespace WMS.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
                 return true;
             }
@@ -336,7 +336,7 @@ namespace WMS.Service
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
                 return true;
             }

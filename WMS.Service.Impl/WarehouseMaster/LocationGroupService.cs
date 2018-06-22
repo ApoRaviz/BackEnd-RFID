@@ -124,7 +124,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return locationGroup;
@@ -178,7 +178,7 @@ namespace WMS.Master
                 catch (DbEntityValidationException e)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM,e.Message);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM,e.Message);
                 }
 
                 return true;
@@ -214,7 +214,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return true;
@@ -239,7 +239,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
                 return true;
             }
@@ -275,7 +275,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
 
 
@@ -358,7 +358,7 @@ namespace WMS.Master
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return true;
@@ -382,7 +382,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
 
 
@@ -408,7 +408,7 @@ namespace WMS.Master
             {
                 foreach (var ve in eve.ValidationErrors)
                 {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                    throw new AppValidationException(ve.PropertyName, ve.ErrorMessage);
                 }
             }
         }
@@ -428,7 +428,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
 
             }
@@ -449,7 +449,7 @@ namespace WMS.Master
                 catch (DbUpdateConcurrencyException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                 }
 
             }

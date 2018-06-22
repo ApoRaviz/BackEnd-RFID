@@ -33,7 +33,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<Location> GeoupLocation = LocationService.GetList();
                 response.SetData(GeoupLocation);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -55,7 +55,7 @@ namespace WMS.WebApi.Controller
                 GroupLocation GeoupLocation = LocationService.GetLocationByGroupLocIDSys(paramsObject.IDSys);
                 response.SetData(GeoupLocation);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -76,7 +76,7 @@ namespace WMS.WebApi.Controller
                 Location Location = LocationService.GetLocationByLocIDSys(LocIDSys);
                 response.SetData(Location);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -137,7 +137,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = LocationService.UpdateLocation(LocIDSys, Location);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -156,7 +156,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = LocationService.DeleteLocation(LocIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

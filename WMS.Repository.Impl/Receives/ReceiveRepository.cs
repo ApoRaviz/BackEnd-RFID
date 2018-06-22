@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Repository.Impl;
 using WMS.Common.ValueObject;
 using WMS.Context;

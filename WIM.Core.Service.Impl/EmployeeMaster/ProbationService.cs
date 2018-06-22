@@ -65,7 +65,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return Probationnew.ProbationIDSys;
             }
@@ -92,7 +92,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return true;
             }
@@ -109,7 +109,7 @@ namespace WIM.Core.Service.Impl.EmployeeMaster
             {
                 foreach (var ve in eve.ValidationErrors)
                 {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                    throw new AppValidationException(ve.PropertyName, ve.ErrorMessage);
                 }
             }
         }

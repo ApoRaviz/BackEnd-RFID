@@ -34,7 +34,7 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(logData);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -52,7 +52,7 @@ namespace WMS.WebApi.Controller
                 UserLog log = commonService.GetUserLogData(id, null, null).FirstOrDefault();
                 response.SetData(log);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -72,7 +72,7 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(logData);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -91,7 +91,7 @@ namespace WMS.WebApi.Controller
                 bool isInserted = commonService.WriteUserLog(log);
                 response.SetData(isInserted);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

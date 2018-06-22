@@ -81,12 +81,12 @@ namespace HRMS.Service.Impl
                 catch (DbEntityValidationException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return true;
             }

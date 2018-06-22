@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
                 HeadReportControl data = HeadReportControlService.GetHeadReportControlByID(id);
                 response.SetData(data);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -54,7 +54,7 @@ namespace Master.WebApi.Controllers
                 bool isUpdated = HeadReportControlService.UpdateHeadReportControl(HeadReportControlUpdate);
                 response.SetData(isUpdated);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -73,7 +73,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<HeadReportControl> HeadReportControlByID = HeadReportControlService.GetHeadReportControlsByModuleID(SubModuleIDSys);
                 response.SetData(HeadReportControlByID);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -92,7 +92,7 @@ namespace Master.WebApi.Controllers
                 HeadReportControl HeadReportControlByID = HeadReportControlService.GetHeadReportControlByID(HeadReportControlIDSys);
                 response.SetData(HeadReportControlByID);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -111,7 +111,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<HeadReportControl> HeadReportControl = HeadReportControlService.GetHeadReportControls();
                 response.SetData(HeadReportControl);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

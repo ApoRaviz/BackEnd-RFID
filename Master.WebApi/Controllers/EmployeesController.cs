@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<Employee_MT> Employees = Employeeservice.GetEmployees();
                 response.SetData(Employees);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -54,7 +54,7 @@ namespace Master.WebApi.Controllers
                 Employee_MT Employee = Employeeservice.GetEmployeeByEmployeeIDSys(EmID);
                 response.SetData(Employee);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -74,7 +74,7 @@ namespace Master.WebApi.Controllers
                 string id = Employeeservice.CreateEmployee(Employee);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -96,7 +96,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = Employeeservice.UpdateEmployeeByID(Employee);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -116,7 +116,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = Employeeservice.DeleteEmployee(EmID);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -134,7 +134,7 @@ namespace Master.WebApi.Controllers
                 Employee_MT rs = Employeeservice.SetPositionConfig2(id, positionConfig);
                 response.SetData(rs);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

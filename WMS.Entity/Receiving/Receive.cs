@@ -28,6 +28,7 @@ namespace WMS.Entity.Receiving
                 //NotifyPropertyChanged();
             }
         }
+  
         public string ReceiveNO { get; set; }
         public int ProjectIDSys { get; set; }
         public string InvoiceNO { get; set; }

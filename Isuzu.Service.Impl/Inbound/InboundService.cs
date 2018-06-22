@@ -135,7 +135,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -179,11 +179,62 @@ namespace Isuzu.Service.Impl.Inbound
                         }
                         catch (DbEntityValidationException e)
                         {
-                            throw new ValidationException(e);
+                            throw new AppValidationException(e);
                         }
                     }
                 }
             });
+        }
+
+        private void Register()
+        {
+            ///////
+            ///////
+            ///////
+          
+
+            UpdateHead_HANDY2("V180234", "REGISTERED_ITA");
+        }
+
+        private void UpdateHead_HANDY2(string invNo, string status)
+        {
+            using (IsuzuDataContext db = new IsuzuDataContext())
+            {
+                string statusLatest = null;
+                var statusList = db.InboundItems.Where(w => w.InvNo == invNo).Select(s => s.Status).Distinct();
+                int countStatus = statusList.Count();
+               
+                switch (countStatus)
+                {
+                    case 1:
+                        /*
+                           REGISTERED_ITA
+                           REGISTERED_ITA
+                           REGISTERED_ITA
+                           REGISTERED_ITA
+                           REGISTERED_ITA
+                        */
+                        statusLatest = status;
+                        break;
+                    case 2:
+                        /*
+                          NEW
+                          NEW
+                          REGISTERED_ITA
+                          REGISTERED_ITA
+                          REGISTERED_ITA
+                        */
+                        statusLatest = status + "_PARTIAL";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                IInboundHeadRepository headRepo = new InboundHeadRepository(db);
+                var head = headRepo.GetByID(invNo);
+                head.Status = statusLatest;
+            }
         }
 
         public int GetAmountRegistered_HANDY()
@@ -572,14 +623,14 @@ namespace Isuzu.Service.Impl.Inbound
                                     FunctionName = functionName,
                                     CreateBy = "SYSTEM",
                                     UpdateBy = "SYSTEM"
-                                });                                
+                                });
                             }
                             db.SaveChanges();
                             scope.Complete();
                         }
                         catch (DbEntityValidationException e)
                         {
-                            throw new ValidationException(e);
+                            throw new AppValidationException(e);
                         }
                     }
                 }
@@ -786,7 +837,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
                 }
@@ -993,7 +1044,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
 
@@ -1031,7 +1082,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
 
@@ -1070,7 +1121,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
 
@@ -1101,7 +1152,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
 

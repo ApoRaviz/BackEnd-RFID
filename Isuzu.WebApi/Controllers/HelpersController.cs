@@ -43,7 +43,7 @@ namespace Isuzu.WebApi.Controllers
                 string tableDescription = CommonService.GetTableDescription(tableName);
                 response.SetData(tableDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -61,7 +61,7 @@ namespace Isuzu.WebApi.Controllers
                 IEnumerable<TableColumnsDescription> tableColsDescription = CommonService.GetTableColumnsDescription(tableName);
                 response.SetData(tableColsDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,9 +77,9 @@ namespace Isuzu.WebApi.Controllers
             try
             {
                 response.SetData("");
-                throw new ValidationException("Key_1", "Error 1");
+                throw new AppValidationException("Key_1", "Error 1");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 ex.Add(new ValidationError("Key_2", "Error 2", null));
                 response.SetErrors(ex.Errors);
@@ -122,7 +122,7 @@ namespace Isuzu.WebApi.Controllers
                 string result = CommonService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

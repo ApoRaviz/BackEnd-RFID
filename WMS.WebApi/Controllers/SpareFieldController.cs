@@ -34,7 +34,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<SpareField> SpareField = SpareFieldService.GetSpareField();
                 response.SetData(SpareField);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -53,7 +53,7 @@ namespace WMS.WebApi.Controller
                 SpareField SpareField = SpareFieldService.GetSpareFieldBySpfIDSys(SpfIDSys);
                 response.SetData(SpareField);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -73,7 +73,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<SpareField> SpareField = SpareFieldService.GetSpareFieldByProjectIDSys(ProjectIDSys);
                 response.SetData(SpareField);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -91,7 +91,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<SpareField> SpareField = SpareFieldService.GetSpareFieldByTableName(TableName);
                 response.SetData(SpareField);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -116,7 +116,7 @@ namespace WMS.WebApi.Controller
                     response.SetData(id);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -141,7 +141,7 @@ namespace WMS.WebApi.Controller
                     response.SetData(isUpated);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -161,7 +161,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = SpareFieldService.DeleteSpareField(SpfIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

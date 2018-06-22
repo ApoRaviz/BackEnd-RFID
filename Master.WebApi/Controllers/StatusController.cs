@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
                 Status_MT id = StatusService.CreateStatus(Status,status.StatusSubModule);
                 response.SetData(id);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -54,7 +54,7 @@ namespace Master.WebApi.Controllers
                 Status_MT isUpdated = StatusService.UpdateStatus(statusUpdate);
                 response.SetData(isUpdated);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -73,7 +73,7 @@ namespace Master.WebApi.Controllers
                 StatusDto statusByID = StatusService.GetStatusByID(StatusIDSys);
                 response.SetData(statusByID);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -92,7 +92,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<StatusSubModuleDto> status = StatusService.GetStatus();
                 response.SetData(status);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(categories);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -54,7 +54,7 @@ namespace Master.WebApi.Controllers
                 ApiMenuMappingDto ApiMenuMapping = ApiMenuMappingService.GetApiMenuMapping(id);
                 response.SetData(ApiMenuMapping);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -72,7 +72,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<ApiMenuMapping> ApiMT = ApiMenuMappingService.GetListApiMenuMapping(MenuIDSys);
                 response.SetData(ApiMT);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -92,7 +92,7 @@ namespace Master.WebApi.Controllers
                  id = ApiMenuMappingService.CreateApiMenuMapping(ApiMenuMapping);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -111,7 +111,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ApiMenuMappingService.UpdateApiInMenu(ApiMenuMapping);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -130,7 +130,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ApiMenuMappingService.UpdateApiMenuMapping(ApiMenuMapping);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -149,7 +149,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ApiMenuMappingService.DeleteApiMenuMapping(id);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

@@ -36,7 +36,7 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -60,7 +60,7 @@ namespace WMS.WebApi.Controller
                 ItemDto item = ItemService.GetItem(id, tableNames);                
                 response.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -83,7 +83,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<AutocompleteItemDto> item = ItemService.AutocompleteItem(term);
                 response.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -101,7 +101,7 @@ namespace WMS.WebApi.Controller
             {
                 response.SetData("pass");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -121,7 +121,7 @@ namespace WMS.WebApi.Controller
                 int id = ItemService.CreateItem(item);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -140,7 +140,7 @@ namespace WMS.WebApi.Controller
                 int id = ItemService.CreateItemGift(item);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -158,7 +158,7 @@ namespace WMS.WebApi.Controller
                 ItemUnitMapping id = ItemService.CreateItemUnit(item);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -177,7 +177,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ItemService.UpdateItem(item);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -196,7 +196,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ItemService.DeleteItem(id);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -214,7 +214,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ItemService.DeleteItemUnit(item);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

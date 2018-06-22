@@ -72,12 +72,12 @@ namespace WMS.Service.Impl.Report
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return newData.ReportIDSys;
@@ -104,12 +104,12 @@ namespace WMS.Service.Impl.Report
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return true;

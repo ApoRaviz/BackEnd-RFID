@@ -63,12 +63,12 @@ namespace WMS.Service.Impl.ControlMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                 }
                 return x.ControlIDSys;
@@ -91,12 +91,12 @@ namespace WMS.Service.Impl.ControlMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
 
                     }
                 }
@@ -123,7 +123,7 @@ namespace WMS.Service.Impl.ControlMaster
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     }
 
                 }

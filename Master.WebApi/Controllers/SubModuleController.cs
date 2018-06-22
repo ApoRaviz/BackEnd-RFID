@@ -36,7 +36,7 @@ namespace Master.WebApi.Controllers
 
                 response.SetData(modules);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -56,7 +56,7 @@ namespace Master.WebApi.Controllers
                 SubModules module = ModuleService.GetSubModulesByID(submoduleIDSys);
                 response.SetData(module);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -75,7 +75,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<SubModules> module = ModuleService.GetSubModulesByModuleID(moduleIDSys);
                 response.SetData(module);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -95,7 +95,7 @@ namespace Master.WebApi.Controllers
                 SubModules newModule = ModuleService.CreateModule(module);
                 response.SetData(newModule);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -114,7 +114,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ModuleService.UpdateModule(module);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -133,7 +133,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ModuleService.DeleteModule(moduleIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

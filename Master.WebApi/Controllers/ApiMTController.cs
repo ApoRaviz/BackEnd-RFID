@@ -40,7 +40,7 @@ namespace Master.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(group);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -59,7 +59,7 @@ namespace Master.WebApi.Controllers
                 ApiMTDto ApiMT = ApiMTService.GetApiMT(id);
                 response.SetData(ApiMT);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -79,7 +79,7 @@ namespace Master.WebApi.Controllers
                 var group = ApiMT.OrderBy(b => b.Controller).GroupBy(a => a.Controller);
                 response.SetData(group);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -98,7 +98,7 @@ namespace Master.WebApi.Controllers
                 string id = ApiMTService.CreateApiMT(ApiMT);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -117,7 +117,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ApiMTService.UpdateApiMT( ApiMT);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -136,7 +136,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ApiMTService.DeleteApiMT(id);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -226,7 +226,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ApiMTService.DeleteApiMT(arrApi);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

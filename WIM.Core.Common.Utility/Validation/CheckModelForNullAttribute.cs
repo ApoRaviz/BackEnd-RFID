@@ -58,7 +58,7 @@ namespace WIM.Core.Common.Utility.Validation
                                 
                                 if (classname.Value == null)
                                 {
-                                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                                 }
                                 var z = classname.Value;
                             var y = z.GetType();
@@ -77,7 +77,7 @@ namespace WIM.Core.Common.Utility.Validation
                                         }
                                         else
                                         {
-                                            throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                                            throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                                         }
                                     }
                                    
@@ -86,7 +86,7 @@ namespace WIM.Core.Common.Utility.Validation
                         }
                         if (!found)
                         {
-                            throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                            throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                         }
                     }
                 }
@@ -96,7 +96,7 @@ namespace WIM.Core.Common.Utility.Validation
                     HttpStatusCode.BadRequest, "The argument cannot be null");
                 }
             }
-            catch (ValidationException)
+            catch (AppValidationException)
             {
                 actionContext.Response = actionContext.Request.CreateErrorResponse(
                     HttpStatusCode.BadRequest, "The argument cannot be null");
@@ -131,7 +131,7 @@ namespace WIM.Core.Common.Utility.Validation
                 }
                 else
                 {
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
             }
 

@@ -35,7 +35,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<TableControl> tableControl = TableControlService.GetTableControl();
                 response.SetData(tableControl);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

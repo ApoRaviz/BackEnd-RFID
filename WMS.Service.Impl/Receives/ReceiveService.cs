@@ -102,7 +102,7 @@ namespace WMS.Service.Impl
                                     var piece = (int)tran.Qty;
                                     var tranQty = Db.ItemUnitMapping.Where(qt => qt.ItemIDSys == tran.ItemIDSys).OrderBy(b => b.Sequence).ToList();
                                     var currentsequence = tranQty.Where(sq => sq.UnitIDSys == tran.UnitIDSys).Select(sqn => sqn.Sequence).SingleOrDefault();
-                                    var lastUnit = tranQty.Last();
+                                    //var lastUnit = tranQty.Last();
 
                                     foreach (var unit in tranQty)
                                     {
@@ -208,12 +208,12 @@ namespace WMS.Service.Impl
                 catch (DbEntityValidationException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 return newReceive.ReceiveIDSys;
             }
@@ -352,12 +352,12 @@ namespace WMS.Service.Impl
                 }
                 catch (DbEntityValidationException)
                 {
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return true;
@@ -393,7 +393,7 @@ namespace WMS.Service.Impl
             }
             catch (DbUpdateException)
             {
-                throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
             }            
         }
 
@@ -422,7 +422,7 @@ namespace WMS.Service.Impl
             }
             catch (DbEntityValidationException)
             {
-                throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
             }
         }
     }    

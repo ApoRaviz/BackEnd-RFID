@@ -38,7 +38,7 @@ namespace HRMS.WebApi.Controllers
                 IEnumerable<FormQuestion> FormQuestion = FormService.GetFormQuestionByFormTopicID(id);
                 response.SetData(FormQuestion);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -56,7 +56,7 @@ namespace HRMS.WebApi.Controllers
                 IEnumerable<FormDetail> FormDetail = FormService.GetFormDetailByEvaID(EvaluatedIDSys);
                 response.SetData(FormDetail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -74,7 +74,7 @@ namespace HRMS.WebApi.Controllers
                 Evaluated evaluated = FormService.GetEvaluatedByEvaID(EvaluatedIDSys);
                 response.SetData(evaluated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -92,7 +92,7 @@ namespace HRMS.WebApi.Controllers
                 IEnumerable<object> evaluated = FormService.GetEvaluated();
                 response.SetData(evaluated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -118,7 +118,7 @@ namespace HRMS.WebApi.Controllers
                 }
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
                 //response.SetErrors(ex.Errors);
@@ -145,7 +145,7 @@ namespace HRMS.WebApi.Controllers
                 bool isUpated = FormService.UpdateFormDetail(formDetail);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -168,7 +168,7 @@ namespace HRMS.WebApi.Controllers
                 Evaluated isUpated = FormService.UpdateEvaluated(evaluated);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
