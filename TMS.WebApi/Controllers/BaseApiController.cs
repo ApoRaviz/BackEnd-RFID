@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using Auth.Security;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WIM.Core.Security;
 
 namespace TMS.WebApi.Controllers
 {
