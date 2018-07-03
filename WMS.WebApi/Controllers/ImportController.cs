@@ -33,7 +33,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<ImportDefinitionHeader_MT> header = ImportService.GetAllImportHeader(forTable);
                 response.SetData(header);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -52,7 +52,7 @@ namespace WMS.WebApi.Controller
                 ImportDefinitionHeader_MT import = ImportService.GetImportDefinitionByImportIDSys(ImportIDSys, "ImportDefinitionDetail_MT");
                 response.SetData(import);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -71,7 +71,7 @@ namespace WMS.WebApi.Controller
                 int id = ImportService.CreateImportDifinitionForItemMaster(data).Value;
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -90,7 +90,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ImportService.UpdateImportForItemMaster(ImportIDSys, data);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -109,7 +109,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ImportService.DeleteImport(ImportIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

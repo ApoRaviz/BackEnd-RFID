@@ -79,7 +79,7 @@ namespace HRMS.WebApi.Controllers
 
                 response.SetData(leaveRequest);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

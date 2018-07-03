@@ -65,7 +65,7 @@ namespace WIM.Core.Service.Impl.PermissionGroups
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
 
@@ -89,7 +89,7 @@ namespace WIM.Core.Service.Impl.PermissionGroups
             {
                 foreach (var ve in eve.ValidationErrors)
                 {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                    throw new AppValidationException(ve.PropertyName, ve.ErrorMessage);
                 }
             }
         }

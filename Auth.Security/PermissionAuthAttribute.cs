@@ -27,7 +27,7 @@ namespace Auth.Security
             if (!principal.HasPermission(actionContext.Request) && !principal.IsSysAdmin())
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.MethodNotAllowed);
-                ValidationException ex = new ValidationException(ErrorEnum.NO_PERMISSION);
+                AppValidationException ex = new AppValidationException(ErrorEnum.NO_PERMISSION);
                 IResponseData<int> response = new ResponseData<int>();
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.Unauthorized);

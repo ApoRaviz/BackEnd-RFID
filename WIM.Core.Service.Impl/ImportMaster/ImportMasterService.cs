@@ -94,12 +94,12 @@ namespace Wim.Core.Service.Impl.Import
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return ReportSysID;
@@ -134,12 +134,12 @@ namespace Wim.Core.Service.Impl.Import
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return true;
@@ -162,12 +162,12 @@ namespace Wim.Core.Service.Impl.Import
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                     return result;
@@ -190,12 +190,12 @@ namespace Wim.Core.Service.Impl.Import
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     }
                     scope.Complete();
                 }
@@ -215,12 +215,12 @@ namespace Wim.Core.Service.Impl.Import
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (DbUpdateConcurrencyException)
                     {
                         scope.Dispose();
-                        throw new ValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
+                        throw new AppValidationException(ErrorEnum.UPDATE_DATABASE_CONCURRENCY_PROBLEM);
                     }
 
                     scope.Complete();

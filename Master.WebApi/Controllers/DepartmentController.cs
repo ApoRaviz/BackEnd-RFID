@@ -34,7 +34,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<Departments> Employees = DepartmentService.GetDepartments();
                 response.SetData(Employees);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -53,7 +53,7 @@ namespace Master.WebApi.Controllers
                 Departments Employee = DepartmentService.GetDepartmentByDepIDSys(DepIDSys);
                 response.SetData(Employee);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -73,7 +73,7 @@ namespace Master.WebApi.Controllers
                 int id = DepartmentService.CreateDepartment(Department);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -95,7 +95,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = DepartmentService.UpdateDepartment(Department);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -115,7 +115,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = DepartmentService.DeleteDepartment(DepID);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

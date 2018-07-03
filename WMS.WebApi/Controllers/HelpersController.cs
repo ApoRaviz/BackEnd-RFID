@@ -10,10 +10,12 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;
 using WMS.Common.ValueObject;
+using System.Linq;
+using WMS.Entity.ItemManagement;
 
 namespace WMS.WebApi.Controller
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/v1/helpers")]
     public class HelpersController : ApiController
     {
@@ -40,7 +42,7 @@ namespace WMS.WebApi.Controller
                 string tableDescription = new WMSDbContext().GetTableDescriptionWms(tableName);
                 response.SetData(tableDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -58,7 +60,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<TableColumnsDescription> tableColsDescription = new WMSDbContext().GetTableColumnsDescription(tableName);
                 response.SetData(tableColsDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,7 +79,7 @@ namespace WMS.WebApi.Controller
                 string tableColsDescription = commonWMS.GetValidation(tableName);
                 response.SetData(tableColsDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -93,9 +95,9 @@ namespace WMS.WebApi.Controller
             try
             {
                 response.SetData("");
-                throw new ValidationException("Key_1", "Error 1");
+                throw new AppValidationException("Key_1", "Error 1");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 ex.Add(new ValidationError("Key_2", "Error 2", null));
                 response.SetErrors(ex.Errors);
@@ -139,7 +141,7 @@ namespace WMS.WebApi.Controller
                 string result = db.ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -164,7 +166,7 @@ namespace WMS.WebApi.Controller
                 string result = common.GetValueGenerateCode(keyword);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -190,11 +192,89 @@ namespace WMS.WebApi.Controller
                 result = commonWMS.CheckDependentPK(TableName, ColumnName, Value);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("func1")]
+        public HttpResponseMessage Func1()
+        {
+            ResponseData<IEnumerable<ItemUnitMapping>> response = new ResponseData<IEnumerable<ItemUnitMapping>>();
+            IEnumerable<ItemUnitMapping> itemUnitMappings = new List<ItemUnitMapping>();
+            int itemIDSys = 78;
+            using (WMSDbContext db = new WMSDbContext())
+            {
+                IQueryable<ItemUnitMapping> query = db.ItemUnitMapping.Where(a =>
+                    a.ItemIDSys == itemIDSys
+                    && a.Sequence > (
+                        db.ItemUnitMapping.Where(b =>
+                            b.ItemIDSys == itemIDSys
+                            && b.UnitIDSys == 1
+                        ).Select(x => x.Sequence).FirstOrDefault()
+                    )
+                );
+
+                itemUnitMappings = query.ToList();
+            }
+
+            response.Data = itemUnitMappings;
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("func2")]
+        public HttpResponseMessage Func2()
+        {
+            ResponseData<IEnumerable<ItemUnitMapping>> response = new ResponseData<IEnumerable<ItemUnitMapping>>();
+            IEnumerable<ItemUnitMapping> itemUnitMappings = new List<ItemUnitMapping>();
+            int itemIDSys = 78;
+            using (WMSDbContext db = new WMSDbContext())
+            {
+                IQueryable<ItemUnitMapping> query = db.ItemUnitMapping.Where(a =>
+                    a.ItemIDSys == itemIDSys
+                    && a.Sequence > (
+                        db.ItemUnitMapping.Where(b =>
+                            b.ItemIDSys == itemIDSys
+                            && b.UnitIDSys == 1
+                        ).FirstOrDefault().Sequence
+                    )
+                );
+
+                itemUnitMappings = query.ToList();
+            }
+
+            response.Data = itemUnitMappings;
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("func3")]
+        public HttpResponseMessage Func3()
+        {
+            ResponseData<IEnumerable<ItemUnitMapping>> response = new ResponseData<IEnumerable<ItemUnitMapping>>();
+            IEnumerable<ItemUnitMapping> itemUnitMappings = new List<ItemUnitMapping>();
+            int itemIDSys = 78;
+            using (WMSDbContext db = new WMSDbContext())
+            {
+                IQueryable<ItemUnitMapping> query = db.ItemUnitMapping.Where(a =>
+                    a.ItemIDSys == itemIDSys
+                    && a.Sequence > (
+                        db.ItemUnitMapping.Where(b =>
+                            b.ItemIDSys == itemIDSys
+                            && b.UnitIDSys == 1
+                        ).SingleOrDefault().Sequence
+                    )
+                );
+
+                itemUnitMappings = query.ToList();
+            }
+
+            response.Data = itemUnitMappings;
             return Request.ReturnHttpResponseMessage(response);
         }
     }

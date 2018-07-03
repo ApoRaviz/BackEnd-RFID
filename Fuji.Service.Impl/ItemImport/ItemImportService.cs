@@ -124,7 +124,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -156,7 +156,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 if (itemHead == null)
                 {
-                    throw new ValidationException(ErrorEnum.DataNotFound);
+                    throw new AppValidationException(ErrorEnum.DATA_NOT_FOUND);
                 }
             }
             return itemHead;
@@ -231,7 +231,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -280,12 +280,12 @@ namespace Fuji.Service.Impl.ItemImport
 
                     if (importHead == null)
                     {
-                        throw new ValidationException(ErrorEnum.DataNotFound);
+                        throw new AppValidationException(ErrorEnum.DATA_NOT_FOUND);
                     }
 
                     if (resultGroup.Count() != importHead.Qty)
                     {
-                        throw new ValidationException(new ValidationError("48888", "Head ไม่เท่ากับที่ Scan รับ"));
+                        throw new AppValidationException(new ValidationError("48888", "Head ไม่เท่ากับที่ Scan รับ"));
                     }
 
                     importHead.Status = statusScanned;
@@ -310,7 +310,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -350,7 +350,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                     if (isSerialAndItemCodeAlreadyExist)
                     {
-                        throw new ValidationException(ErrorEnum.SerialAndItemCodeAlreadyExist);
+                        throw new AppValidationException(ErrorEnum.SerialAndItemCodeAlreadyExist);
                     }                   
 
                     var query = (from d in Db.ImportSerialDetail
@@ -373,11 +373,11 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (Exception)
                     {
-                        throw new ValidationException(ErrorEnum.UNKNOWN_ERROR);
+                        throw new AppValidationException(ErrorEnum.UNKNOWN_ERROR);
                     }
 
                     foreach (ImportSerialDetail detail in query)
@@ -395,11 +395,11 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     catch (Exception)
                     {
-                        throw new ValidationException(ErrorEnum.UNKNOWN_ERROR);
+                        throw new AppValidationException(ErrorEnum.UNKNOWN_ERROR);
                     }
 
                     ImportSerialHead importHead = (from h in Db.ImportSerialHead
@@ -419,7 +419,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (Exception)
                     {
-                        throw new ValidationException(ErrorEnum.UNKNOWN_ERROR);
+                        throw new AppValidationException(ErrorEnum.UNKNOWN_ERROR);
                     }
                 }
             }
@@ -442,7 +442,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                 if (!itemGroups.Any())
                 {
-                    throw new ValidationException(ErrorEnum.DataNotFound);
+                    throw new AppValidationException(ErrorEnum.DATA_NOT_FOUND);
                 }
             }
 
@@ -476,7 +476,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
 
@@ -535,7 +535,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }
@@ -640,7 +640,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
                 }
@@ -715,7 +715,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
                 }
@@ -748,7 +748,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
                 }
@@ -808,7 +808,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
 
@@ -881,7 +881,7 @@ namespace Fuji.Service.Impl.ItemImport
                 var item = itemGroups.SingleOrDefault();
                 if (item == null)
                 {
-                    throw new ValidationException(ErrorEnum.DataNotFound);
+                    throw new AppValidationException(ErrorEnum.DATA_NOT_FOUND);
                 }
                 if (isAddItem)
                     retItem = new FujiPickingGroup(item.GroupID, item.GroupList.Count(), item.GroupList);
@@ -915,7 +915,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
 
                 }
@@ -1156,7 +1156,7 @@ namespace Fuji.Service.Impl.ItemImport
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
         }
 
@@ -1346,7 +1346,7 @@ namespace Fuji.Service.Impl.ItemImport
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }

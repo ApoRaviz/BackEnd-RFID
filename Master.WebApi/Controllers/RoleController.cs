@@ -47,7 +47,7 @@ namespace Master.WebApi.Controllers
                 
                 response.SetData(Role);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -65,7 +65,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<RolePermissionDto> Role = RoleService.GetRoleNotPermissionID(permissionID);
                 response.SetData(Role);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -84,7 +84,7 @@ namespace Master.WebApi.Controllers
                 Role Role = RoleService.GetRoleByName(Name);
                 response.SetData(Role);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -110,7 +110,7 @@ namespace Master.WebApi.Controllers
                 }
                 response.SetData(Role);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -128,7 +128,7 @@ namespace Master.WebApi.Controllers
                 List<Role> Role = RoleService.GetRoleByUserID(User.Identity.GetUserIdApp());
                 response.SetData(Role);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -147,7 +147,7 @@ namespace Master.WebApi.Controllers
                 Role Role = RoleService.GetRoleByLocIDSys(RoleID);
                 response.SetData(Role);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -171,7 +171,7 @@ namespace Master.WebApi.Controllers
                 string id = RoleService.CreateRole(Role);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -197,7 +197,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = RoleService.UpdateRole( Role);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -216,7 +216,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = RoleService.DeleteRole(RoleID);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

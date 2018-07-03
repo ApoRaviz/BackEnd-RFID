@@ -37,7 +37,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -56,7 +56,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -75,7 +75,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(isUpdated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -100,7 +100,7 @@ namespace Fuji.WebApi.Controllers
                 }
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -124,7 +124,7 @@ namespace Fuji.WebApi.Controllers
                 }
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -144,7 +144,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -162,7 +162,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -182,7 +182,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -199,7 +199,7 @@ namespace Fuji.WebApi.Controllers
                 result.Content = CheckStockService.GetReportStream(head);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
             }
@@ -224,7 +224,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(status);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -243,7 +243,7 @@ namespace Fuji.WebApi.Controllers
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(status);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -260,7 +260,7 @@ namespace Fuji.WebApi.Controllers
                 List<ItemBox> result = CheckStockService.CheckByLoc_Handy(id);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

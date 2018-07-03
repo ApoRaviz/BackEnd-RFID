@@ -273,11 +273,11 @@ namespace WIM.Core.Service.Impl
             }
             catch (DbEntityValidationException e)
             {
-                throw new ValidationException(e);
+                throw new AppValidationException(e);
             }
             catch (DbUpdateException)
             {
-                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 throw ex;
             }
 
@@ -389,7 +389,7 @@ namespace WIM.Core.Service.Impl
                     {
                         scope.Dispose();
                         return false;
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
             }

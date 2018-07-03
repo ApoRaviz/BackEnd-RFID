@@ -38,7 +38,7 @@ namespace Isuzu.WebApi.Controllers
                 IEnumerable<User> User = UserService.GetUsers();
                 response.SetData(User);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -59,7 +59,7 @@ namespace Isuzu.WebApi.Controllers
                 User User = UserService.GetUserByUserID(UserID);
                 response.SetData(User);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -87,7 +87,7 @@ namespace Isuzu.WebApi.Controllers
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -109,7 +109,7 @@ namespace Isuzu.WebApi.Controllers
                 id = UserService.CreateUser(User);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -141,7 +141,7 @@ namespace Isuzu.WebApi.Controllers
                 UserService.GetKeyRegisterMobile(userid, key);
                 response.SetData(sreRs);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -171,7 +171,7 @@ namespace Isuzu.WebApi.Controllers
                 }
                 response.SetData(Json);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -201,7 +201,7 @@ namespace Isuzu.WebApi.Controllers
                 }
                 response.SetData(Json);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -222,7 +222,7 @@ namespace Isuzu.WebApi.Controllers
                 bool isUpated = UserService.UpdateUser(User);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -245,7 +245,7 @@ namespace Isuzu.WebApi.Controllers
                 bool isUpated = UserService.UpdateUser(User);
                 response.SetData(User.PasswordHash);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -265,7 +265,7 @@ namespace Isuzu.WebApi.Controllers
                 bool isUpated = UserService.DeleteUser(LocIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

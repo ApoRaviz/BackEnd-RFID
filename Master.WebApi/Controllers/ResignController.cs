@@ -34,7 +34,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<Resign> resign = ResignService.GetResign();
                 response.SetData(resign);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -53,7 +53,7 @@ namespace Master.WebApi.Controllers
                 Resign Employee = ResignService.GetResignByEmID(EmID);
                 response.SetData(Employee);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -72,7 +72,7 @@ namespace Master.WebApi.Controllers
                 string id = ResignService.CreateResign(resign);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -94,7 +94,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ResignService.UpdateResign(warning);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

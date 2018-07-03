@@ -50,7 +50,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<LabelLayoutHeader_MT> header = LabelService.GetAllLabelHeader(forTable);
                 response.SetData(header);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -69,7 +69,7 @@ namespace WMS.WebApi.Controller
                 LabelLayoutHeader_MT label = LabelService.GetLabelLayoutByReportIDSys(LabelIDSys, "LabelLayoutDetail_MT");
                 response.SetData(label);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -88,7 +88,7 @@ namespace WMS.WebApi.Controller
                 int id = LabelService.CreateLabelForItemMaster(data).Value;          
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -107,7 +107,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = LabelService.UpdateLabelForItemMaster(LabelIDSys, data);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

@@ -37,7 +37,7 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(ItemSets);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -56,7 +56,7 @@ namespace WMS.WebApi.Controller
                 ItemSetDto ItemSet = ItemSetService.GetItemSet(id);
                 response.SetData(ItemSet);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,7 +77,7 @@ namespace WMS.WebApi.Controller
                 object id = ItemSetService.CreateItemSet(ItemSet);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -97,7 +97,7 @@ namespace WMS.WebApi.Controller
                 int idSet = ItemSetService.UpdateItemSet(ItemSet);
                 response.SetData(idSet);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -116,7 +116,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ItemSetService.UpdateItemSet(id,ItemSet);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -135,7 +135,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ItemSetService.DeleteItemSetDto(id);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

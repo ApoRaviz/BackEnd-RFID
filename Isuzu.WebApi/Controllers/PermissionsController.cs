@@ -39,7 +39,7 @@ namespace Isuzu.WebApi.Controllers
                 IEnumerable<Permission> Permission = PermissionService.GetPermissions();
                 response.SetData(Permission);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -57,7 +57,7 @@ namespace Isuzu.WebApi.Controllers
                 List<PermissionTree> Permission = PermissionService.GetPermissionTree(ProjectIDSys);
                 response.SetData(Permission);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,7 +77,7 @@ namespace Isuzu.WebApi.Controllers
                 List<Permission> Permission = PermissionService.GetPermissionByMenuID(MenuIDSys, ProjectIDSys);
                 response.SetData(Permission);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -95,7 +95,7 @@ namespace Isuzu.WebApi.Controllers
                 List<Permission> Permission = PermissionService.GetPermissionAuto(MenuIDSys, ProjectIDSys);
                 response.SetData(Permission);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -113,7 +113,7 @@ namespace Isuzu.WebApi.Controllers
                 List<Permission> Permission = PermissionService.GetPermissionByRoleID(RoleID, ProjectIDSys);
                 response.SetData(Permission);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -131,7 +131,7 @@ namespace Isuzu.WebApi.Controllers
                 Permission Permission = PermissionService.GetPermissionByLocIDSys(Id);
                 response.SetData(Permission);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -156,7 +156,7 @@ namespace Isuzu.WebApi.Controllers
                 responseData.Roles = Roles;
                 response.SetData(responseData);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -184,7 +184,7 @@ namespace Isuzu.WebApi.Controllers
                 string id = PermissionService.CreatePermission(temp);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -204,7 +204,7 @@ namespace Isuzu.WebApi.Controllers
                     string id = PermissionService.CreateRolePermission(Permission.PermissionID, Permission.Roles[i].RoleID);
                     response.SetData(id);
                 }
-                catch (ValidationException ex)
+                catch (AppValidationException ex)
                 {
                     response.SetErrors(ex.Errors);
                     response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -224,7 +224,7 @@ namespace Isuzu.WebApi.Controllers
                 string id = PermissionService.CreateRolePermission(RoleID, Permission);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -246,7 +246,7 @@ namespace Isuzu.WebApi.Controllers
                 bool isUpated = PermissionService.UpdatePermission(Permission);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -267,7 +267,7 @@ namespace Isuzu.WebApi.Controllers
 
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -288,7 +288,7 @@ namespace Isuzu.WebApi.Controllers
                     isUpated = PermissionService.DeletePermission(PermissionID);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

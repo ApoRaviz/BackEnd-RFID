@@ -34,7 +34,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<Warehouse_MT> Warehouse = WarehouseService.GetWarehouses();
                 response.SetData(Warehouse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -54,7 +54,7 @@ namespace WMS.WebApi.Controller
                 Warehouse_MT Warehouse = WarehouseService.GetWarehouseByLocIDSys(LocIDSys);
                 response.SetData(Warehouse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -74,7 +74,7 @@ namespace WMS.WebApi.Controller
                 int id = WarehouseService.CreateWarehouse(Warehouse);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -96,7 +96,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = WarehouseService.UpdateWarehouse(Warehouse);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -115,7 +115,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = WarehouseService.DeleteWarehouse(LocIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

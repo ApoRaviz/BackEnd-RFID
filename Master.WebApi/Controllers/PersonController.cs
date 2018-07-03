@@ -47,7 +47,7 @@ namespace Master.WebApi.Controllers
                 Person_MT Persons = PersonService.GetPersonByPersonIDSys(User.Identity.GetUserIdApp());
                 response.SetData(Persons);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -65,7 +65,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<VPersons> Persons = PersonService.GetPersons();
                 response.SetData(Persons);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -104,7 +104,7 @@ namespace Master.WebApi.Controllers
                 
                 response.SetData(Person);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -125,7 +125,7 @@ namespace Master.WebApi.Controllers
                 //this line for email add
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -147,7 +147,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = PersonService.UpdatePerson(Person);//User.Identity.GetUserId(),
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -167,7 +167,7 @@ namespace Master.WebApi.Controllers
                 List<Person_Email> isUpated = PersonService.UpdatePersonByID(Person);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -186,7 +186,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = PersonService.DeletePerson(PersonIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

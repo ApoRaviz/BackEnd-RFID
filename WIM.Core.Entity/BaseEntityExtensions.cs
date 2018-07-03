@@ -84,10 +84,28 @@ namespace WIM.Core.Entity
         {
             if (entity == null)
             {
-                throw new AppValidation.ValidationException(ErrorEnum.DataNotFound);
+                throw new AppValidation.AppValidationException(ErrorEnum.DATA_NOT_FOUND);
             }
             return entity;
         }
 
+        public static List<TEntity> TryValidationNotNullException<TEntity>(this List<TEntity> entity)
+        {
+            if (entity == null || !entity.Any())
+            {
+                throw new AppValidation.AppValidationException(ErrorEnum.DATA_NOT_FOUND);
+            }
+            return entity;
+        }
+
+        public static IEnumerable<TEntity> TryValidationNotNullException<TEntity>(this IEnumerable<TEntity> entity)
+        {
+            if (entity == null || !entity.Any())
+            {
+                throw new AppValidation.AppValidationException(ErrorEnum.DATA_NOT_FOUND);
+            }
+            return entity;
+        }
     }
+
 }

@@ -39,7 +39,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<User> User = UserService.GetUsers();
                 response.SetData(User);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -60,7 +60,7 @@ namespace Master.WebApi.Controllers
                 User User = UserService.GetUserByUserID(UserID);
                 response.SetData(User);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -88,7 +88,7 @@ namespace Master.WebApi.Controllers
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -116,7 +116,7 @@ namespace Master.WebApi.Controllers
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -144,7 +144,7 @@ namespace Master.WebApi.Controllers
                 id = UserService.CreateUser(User);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -176,7 +176,7 @@ namespace Master.WebApi.Controllers
                 UserService.GetKeyRegisterMobile(userid, key);
                 response.SetData(sreRs);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -206,7 +206,7 @@ namespace Master.WebApi.Controllers
                 }
                 response.SetData(Json);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -236,7 +236,7 @@ namespace Master.WebApi.Controllers
                 }
                 response.SetData(Json);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -257,7 +257,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = UserService.UpdateUser(User);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -280,7 +280,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = UserService.UpdateUser(User);
                 response.SetData(User.PasswordHash);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -300,7 +300,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = UserService.DeleteUser(LocIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

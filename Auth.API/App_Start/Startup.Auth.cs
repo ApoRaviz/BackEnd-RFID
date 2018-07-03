@@ -52,7 +52,7 @@ namespace Auth.API
 
             app.UseJwtBearerAuthentication(
                 new JwtBearerAuthenticationOptions
-                {
+                {                    
                     AuthenticationMode = AuthenticationMode.Active,
                     AllowedAudiences = new[] { audienceId },
                     IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]

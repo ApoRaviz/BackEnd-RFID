@@ -52,7 +52,7 @@ namespace Isuzu.Service.Impl
                 InboundItemHandyDto item = InboundService.GetInboundItemByISZJOrder_HANDY(iszjOrder);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -78,7 +78,7 @@ namespace Isuzu.Service.Impl
                 int IsUsedRFID = InboundService.RegisterInboundItem_HANDY(inboundItem);
                 responseHandy.SetData(IsUsedRFID);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -97,7 +97,7 @@ namespace Isuzu.Service.Impl
                 InboundItemHandyDto item = InboundService.RegisterInboundItemByOrder_HANDY(orderNum);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -116,7 +116,7 @@ namespace Isuzu.Service.Impl
                 int amount = InboundService.GetAmountInboundItemInInvoiceByRFID_HANDY(rfid);
                 responseHandy.SetData(amount);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -135,7 +135,7 @@ namespace Isuzu.Service.Impl
                 InboundItemHandyDto item = InboundService.GetInboundItemByRFID_HANDY(rfid);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -154,7 +154,7 @@ namespace Isuzu.Service.Impl
                 IEnumerable<InboundItemHandyDto> items = InboundService.GetInboundItemsByInvoice_HANDY(invNo);
                 responseHandy.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -173,7 +173,7 @@ namespace Isuzu.Service.Impl
                 IEnumerable<InboundItemHandyDto> items = InboundService.GetInboundItemsRegisteredByInvoice_HANDY(invNo);
                 responseHandy.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -192,7 +192,7 @@ namespace Isuzu.Service.Impl
                 InboundService.PerformHolding_HANDY(inboundItemHolding.ReceiveParams);
                 responseHandy.SetData(1);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -211,7 +211,7 @@ namespace Isuzu.Service.Impl
                 InboundService.PerformShipping_HANDY(inboundItemShipping);
                 responseHandy.SetData(1);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -230,7 +230,7 @@ namespace Isuzu.Service.Impl
                 InboundService.PerformPackingCarton_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -249,7 +249,7 @@ namespace Isuzu.Service.Impl
                 int IsUsedRFID = InboundService.PerformPackingCartonNew_HANDY(item);
                 responseHandy.SetData(IsUsedRFID);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -268,7 +268,7 @@ namespace Isuzu.Service.Impl
                 InboundItemCartonPackingHandyRequestNew item = InboundService.GetItemCartonByISZJOrder_HANDY(ISZJOrder);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -287,7 +287,7 @@ namespace Isuzu.Service.Impl
                 List<InboundItemCartonPackingHandyRequest> item = InboundService.GetCartonNoByInvoice_HANDY(InvNo);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -306,7 +306,7 @@ namespace Isuzu.Service.Impl
                 List<InboundItemCasePackingHandyRequest> item = InboundService.GetCaseNoByInvoice_HANDY(InvNo);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -325,7 +325,7 @@ namespace Isuzu.Service.Impl
                 List<InboundItemCartonPackingHandyRequestNew> item = InboundService.GetCartonPackedItemByRFID_HANDY(rfid);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -345,7 +345,7 @@ namespace Isuzu.Service.Impl
                 InboundService.PerformPackingCase_HANDY(itemReq);
                 responseHandy.SetData(1);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -364,7 +364,7 @@ namespace Isuzu.Service.Impl
                 InboundItemCartonHandyDto item = InboundService.GetInboundItemCartonByRFID_HANDY(rfid);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -383,7 +383,7 @@ namespace Isuzu.Service.Impl
                 IEnumerable<InboundItems> items = InboundService.GetInboundItemsByRFIDs_HANDY(rfids);
                 responseHandy.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -403,7 +403,7 @@ namespace Isuzu.Service.Impl
                 InboundService.InsertRFIDTagNotFoundLog(items, "SHIPPING-ISUZU");
                 responseHandy.SetData(1);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -422,7 +422,7 @@ namespace Isuzu.Service.Impl
                 int amount = InboundService.GetAmountRegistered_HANDY();
                 responseHandy.SetData(amount);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -441,7 +441,7 @@ namespace Isuzu.Service.Impl
                 List<RegisterRemaining> item = InboundService.GetAmountNewStatusRemaining_HANDY(invoice);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -460,7 +460,7 @@ namespace Isuzu.Service.Impl
                 List<InboundItemHandyDto> item = InboundService.GetUnregisteredOrder_HANDY(invoice);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -487,7 +487,7 @@ namespace Isuzu.Service.Impl
                 respones.SetData(items);
                 respones.SetStatus(HttpStatusCode.OK);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -514,7 +514,7 @@ namespace Isuzu.Service.Impl
                 }
                
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -538,7 +538,7 @@ namespace Isuzu.Service.Impl
                 }
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -581,7 +581,7 @@ namespace Isuzu.Service.Impl
                 InboundItemHandyDto item = InboundService.GetInboundItemByISZJOrder_HANDY(iszjOrder);
                 responseHandy.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -608,7 +608,7 @@ namespace Isuzu.Service.Impl
                 IEnumerable<InboundItemsHead> result = InboundService.GetDataGroupByColumn(column, keyword);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -635,7 +635,7 @@ namespace Isuzu.Service.Impl
                     respones.SetData(ret);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -660,7 +660,7 @@ namespace Isuzu.Service.Impl
                     respones.SetData(ret);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -683,7 +683,7 @@ namespace Isuzu.Service.Impl
                     respones.SetData(items);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }
@@ -775,7 +775,7 @@ namespace Isuzu.Service.Impl
                     response.SetStatus(HttpStatusCode.OK);
                 }
             }
-            catch (ValidationException e)
+            catch (AppValidationException e)
             {
                 response.SetErrors(e.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -839,7 +839,7 @@ namespace Isuzu.Service.Impl
                 }
 
             }
-            catch (ValidationException e)
+            catch (AppValidationException e)
             {
                 response.SetErrors(e.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -859,7 +859,7 @@ namespace Isuzu.Service.Impl
                
                 response.SetData(true);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
             }
@@ -916,7 +916,7 @@ namespace Isuzu.Service.Impl
                 }
                 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -968,7 +968,7 @@ namespace Isuzu.Service.Impl
                 response.SetStatus(HttpStatusCode.OK);
 
             }
-            catch (ValidationException e)
+            catch (AppValidationException e)
             {
                 response.SetErrors(e.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -999,7 +999,7 @@ namespace Isuzu.Service.Impl
                 }
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -1019,7 +1019,7 @@ namespace Isuzu.Service.Impl
                 InboundService.GetDeletedFileID(FileIDSys);
                 response.SetData(true);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -1046,7 +1046,7 @@ namespace Isuzu.Service.Impl
                 }
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -1066,7 +1066,7 @@ namespace Isuzu.Service.Impl
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(datas);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -1085,7 +1085,7 @@ namespace Isuzu.Service.Impl
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
                 respones.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -1112,7 +1112,7 @@ namespace Isuzu.Service.Impl
                 InboundService.AdjustWeight(adjustWeight);
                 responseHandy.SetData(adjustWeight);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 responseHandy.SetErrors(ex.Errors);
             }
@@ -1133,7 +1133,7 @@ namespace Isuzu.Service.Impl
                 respones.SetStatus(HttpStatusCode.OK);
                 respones.SetData(1);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
                 respones.SetStatus(HttpStatusCode.PreconditionFailed);

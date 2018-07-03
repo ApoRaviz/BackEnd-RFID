@@ -39,7 +39,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(group);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -58,7 +58,7 @@ namespace Fuji.WebApi.Controllers
                 ApiMTDto ApiMT = ApiMTService.GetApiMT(id);
                 response.SetData(ApiMT);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,7 +77,7 @@ namespace Fuji.WebApi.Controllers
                 string id = ApiMTService.CreateApiMT(ApiMT);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -96,7 +96,7 @@ namespace Fuji.WebApi.Controllers
                 bool isUpated = ApiMTService.UpdateApiMT(ApiMT);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -115,7 +115,7 @@ namespace Fuji.WebApi.Controllers
                 bool isUpated = ApiMTService.DeleteApiMT(id);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

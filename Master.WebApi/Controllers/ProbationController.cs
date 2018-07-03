@@ -35,7 +35,7 @@ namespace Master.WebApi
                 IEnumerable<Probation_MT> probation = ProbationService.GetProbation();
                 response.SetData(probation);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -54,7 +54,7 @@ namespace Master.WebApi
                 Probation_MT Employee = ProbationService.GetProbationByProbationIDSys(ProbationIDSys);
                 response.SetData(Employee);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -74,7 +74,7 @@ namespace Master.WebApi
                 int id = ProbationService.CreateProbation(Probation);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -96,7 +96,7 @@ namespace Master.WebApi
                 bool isUpated = ProbationService.UpdateProbation(Probation);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -116,7 +116,7 @@ namespace Master.WebApi
                 bool isUpated = ProbationService.DeleteProbation(DepID);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

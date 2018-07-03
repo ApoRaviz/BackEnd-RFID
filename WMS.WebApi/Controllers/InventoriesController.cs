@@ -31,7 +31,7 @@ namespace WMS.WebApi.Controllers
                 response.SetData(1);
                 response.SetStatus(HttpStatusCode.OK);                
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

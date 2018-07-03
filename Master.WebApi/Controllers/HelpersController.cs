@@ -49,7 +49,7 @@ namespace Master.WebApi.Controllers
                 string tableDescription = CommonService.GetTableDescription(tableName);
                 response.SetData(tableDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -67,7 +67,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<TableColumnsDescription> tableColsDescription = CommonService.GetTableColumnsDescription(tableName);
                 response.SetData(tableColsDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -85,7 +85,7 @@ namespace Master.WebApi.Controllers
                 string tableColsDescription = CommonService.GetValidation(tableName);
                 response.SetData(tableColsDescription);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -101,9 +101,9 @@ namespace Master.WebApi.Controllers
             try
             {
                 response.SetData("");
-                throw new ValidationException("Key_1", "Error 1");
+                throw new AppValidationException("Key_1", "Error 1");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 ex.Add(new ValidationError("Key_2", "Error 2", null));
                 response.SetErrors(ex.Errors);
@@ -146,7 +146,7 @@ namespace Master.WebApi.Controllers
                 string result = new CoreDbContext().ProcGetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -170,7 +170,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<SubModuleDto> result = CommonService.SMAutoComplete(txt);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -195,7 +195,7 @@ namespace Master.WebApi.Controllers
                 string result = common.GetValueGenerateCode(keyword);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

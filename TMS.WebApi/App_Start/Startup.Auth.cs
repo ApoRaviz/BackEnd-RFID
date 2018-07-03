@@ -12,9 +12,9 @@ using System.Configuration;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security;
-using WIM.Core.Security;
-using WIM.Core.Security.Context;
-using WIM.Core.Security.Providers;
+using Auth.Security.Context;
+using Auth.Security;
+using Auth.Security.Providers;
 
 namespace TMS.WebApi
 {

@@ -176,7 +176,7 @@ public static class RBAC_ExtendedMethods_4_Principal
         }
         catch (Exception)
         {
-            throw new ValidationException(ErrorEnum.NO_PERMISSION);
+            throw new AppValidationException(ErrorEnum.NO_PERMISSION);
         }
         return _retVal;
     }

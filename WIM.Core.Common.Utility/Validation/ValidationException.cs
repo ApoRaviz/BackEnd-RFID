@@ -7,26 +7,26 @@ using System.Linq;
 
 namespace WIM.Core.Common.Utility.Validation
 {
-    public class ValidationException : Exception, IValidationException
+    public class AppValidationException : Exception, IValidationException
     {
-        public ValidationException() : base()
+        public AppValidationException() : base()
         {
             this.Errors = new List<ValidationError>();
         }
 
-        public ValidationException(string key) : base()
+        public AppValidationException(string key) : base()
         {
             this.Errors = new List<ValidationError>();
             this.Add(new ValidationError(key, string.Empty));
         }
 
-        public ValidationException(ValidationError error) : base()
+        public AppValidationException(ValidationError error) : base()
         {
             this.Errors = new List<ValidationError>();
             this.Add(error);
         }
 
-        public ValidationException(string key, params object[] args) : this()
+        public AppValidationException(string key, params object[] args) : this()
         {
             IList<string> extParam = new List<string>();
             foreach (object param in args)
@@ -36,25 +36,25 @@ namespace WIM.Core.Common.Utility.Validation
             this.Add(new ValidationError(key, string.Empty, extParam));
         }
 
-        public ValidationException(ErrorEnum errorEnum) : base()
+        public AppValidationException(ErrorEnum errorEnum) : base()
         {
             this.Errors = new List<ValidationError>();
             this.Add(new ValidationError(errorEnum));
         }
 
-        public ValidationException(ErrorEnum errorEnum, string message) : base()
+        public AppValidationException(ErrorEnum errorEnum, string message) : base()
         {
             this.Errors = new List<ValidationError>();
             this.Add(new ValidationError(errorEnum, message));
         }
 
-        public ValidationException(DbEntityValidationException ex)
+        public AppValidationException(DbEntityValidationException ex)
         {
             foreach (var eve in ex.EntityValidationErrors)
             {
                 foreach (var ve in eve.ValidationErrors)
                 {
-                    throw new ValidationException(ve.PropertyName, ve.ErrorMessage);
+                    throw new AppValidationException(ve.PropertyName, ve.ErrorMessage);
                 }
             }
         }

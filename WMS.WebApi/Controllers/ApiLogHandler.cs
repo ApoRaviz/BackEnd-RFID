@@ -68,14 +68,14 @@ namespace WMS.WebApi.Controller
                     IMenuService menuService = new MenuService();
                     Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
 
-                    userLogEntry.RequestUriFrondEnd = menu.Url;
-                    userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
+                    //userLogEntry.RequestUriFrondEnd = menu.Url;
+                    //userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
                     }
 
-                    if (userLogEntry.RequestUriFrondEnd != "wms/admin/loglist" && userLogEntry.RequestUriFrondEnd != "wms/admin/logdetail")
-                    {
-                        new CommonService().WriteUserLog(userLogEntry);
-                    }
+                    //if (userLogEntry.RequestUriFrondEnd != "wms/admin/loglist" && userLogEntry.RequestUriFrondEnd != "wms/admin/logdetail")
+                    //{
+                    //    new CommonService().WriteUserLog(userLogEntry);
+                    //}
 
                     return response;
                 }, cancellationToken);
@@ -91,7 +91,7 @@ namespace WMS.WebApi.Controller
             return new UserLog
             {
                 Machine = Browser,
-                Username = User,
+                //Username = User,
                 RequestContentType = context.Request.ContentType,
                 RequestIpAddress = context.Request.UserHostAddress,
                 RequestMethod = request.Method.Method,

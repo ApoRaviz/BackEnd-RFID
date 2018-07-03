@@ -312,13 +312,13 @@ namespace Auth.Security
                     Db.SaveChanges();
                     return u.TokenMobile;
                 }
-                catch (ValidationException)
+                catch (AppValidationException)
                 {
-                    throw new ValidationException();
+                    throw new AppValidationException();
                 }
                 catch (Exception)
                 {
-                    throw new ValidationException();
+                    throw new AppValidationException();
                 }
             }
         }

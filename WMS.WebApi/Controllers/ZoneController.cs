@@ -34,7 +34,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<ZoneLayoutHeader_MT> header = ZoneService.GetAllZoneHeader();
                 response.SetData(header);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -52,7 +52,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<ZoneLayoutDetail_MT> detail = ZoneService.GetAllZoneDetail();
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -73,7 +73,7 @@ namespace WMS.WebApi.Controller
 
                 response.SetData(zone);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -92,7 +92,7 @@ namespace WMS.WebApi.Controller
                 int id = ZoneService.CreateZoneLayout(data).Value;
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -111,7 +111,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = ZoneService.UpdateZoneLayout(ZoneIDSys, data);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -132,7 +132,7 @@ namespace WMS.WebApi.Controller
                 int id = ZoneService.CreateRackLayout(data).Value;
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -150,7 +150,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<RackLayout> detail = ZoneService.GetAllRackDetail(ZoneIDSys, ZoneID);
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -168,7 +168,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<RackLayout> detail = ZoneService.GetRackDetailByZoneIDSys(ZoneIDSys);
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -191,7 +191,7 @@ namespace WMS.WebApi.Controller
                     detail = detail.OrderByDescending(d => d.Priority);
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -209,7 +209,7 @@ namespace WMS.WebApi.Controller
                 ZoneType detail = ZoneService.GetZoneTypeByID(ZoneTypeIDSys);
                 response.SetData(detail);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -227,7 +227,7 @@ namespace WMS.WebApi.Controller
                 int? retID = ZoneService.CreateZoneType(data);
                 response.SetData(retID);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -245,7 +245,7 @@ namespace WMS.WebApi.Controller
                 bool isUpdate =  ZoneService.UpdateZoneType(ZoneTypeIDSys,data);
                 response.SetData(isUpdate);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -264,7 +264,7 @@ namespace WMS.WebApi.Controller
                  ZoneService.RemoveZoneTypeByID(ZoneTypeIDSys);
                 response.SetData(true);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

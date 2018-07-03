@@ -75,7 +75,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<File_MT> newFile = fileService.CreateFiles(files);
                 response.SetData(newFile);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -94,7 +94,7 @@ namespace Master.WebApi.Controllers
                 bool isUpdated = fileService.UpdateFile(statusUpdate);
                 response.SetData(isUpdated);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -112,7 +112,7 @@ namespace Master.WebApi.Controllers
                 fileService.GetFile(FileIDSys);
                 response.SetData(true);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -131,7 +131,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<File_MT> status = fileService.GetFiles();
                 response.SetData(status);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

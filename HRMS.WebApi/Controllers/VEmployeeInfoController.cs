@@ -37,7 +37,7 @@ namespace HRMS.WebApi.Controllers
                 IEnumerable<VEmployeeInfo> VEmployeeInfo = VEmployeeInfoService.GetProbation();
                 response.SetData(VEmployeeInfo);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -55,7 +55,7 @@ namespace HRMS.WebApi.Controllers
                 IEnumerable<VEmployeeInfo> VEmployeeInfo = VEmployeeInfoService.GetEmployeetoEvaluate(); 
                 response.SetData(VEmployeeInfo);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -74,7 +74,7 @@ namespace HRMS.WebApi.Controllers
                 VEmployeeInfo Employee = VEmployeeInfoService.GetEmployeeByEmployeeIDSys(EmID);
                 response.SetData(Employee);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -94,7 +94,7 @@ namespace HRMS.WebApi.Controllers
                 bool isUpated = VEmployeeInfoService.UpdateEmployeeByID(Employee);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

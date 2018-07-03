@@ -30,7 +30,7 @@ namespace WMS.WebApi.Controllers
                 GeneralConfig data = GeneralConfigsService.CreateGeneralConfigs(config);
                 response.SetData(data);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -49,7 +49,7 @@ namespace WMS.WebApi.Controllers
                 GeneralConfig data = GeneralConfigsService.GetGeneralConfigs(Keyword);
                 response.SetData(data);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -67,7 +67,7 @@ namespace WMS.WebApi.Controllers
                 GeneralConfigLocationFormat data = GeneralConfigsService.GetLocationFormat();
                 response.SetData(data);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -95,7 +95,7 @@ namespace WMS.WebApi.Controllers
                 GeneralConfig data = GeneralConfigsService.CreateGeneralConfigs(Config);
                 response.SetData(data);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -116,7 +116,7 @@ namespace WMS.WebApi.Controllers
                 GeneralConfigLocationFormat data = GeneralConfigsService.saveGeneralConfigLocationFormat(config);
                 response.SetData(data);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -139,7 +139,7 @@ namespace WMS.WebApi.Controllers
                 bool isUpdated = GeneralConfigsService.UpdateGeneralConfigs(Config);
                 response.SetData(isUpdated);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

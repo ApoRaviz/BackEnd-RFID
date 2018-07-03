@@ -136,7 +136,7 @@ namespace Fuji.WebApi.Controllers
                 IRestResponse res = fireb.SendNotificationsToMobile(fireBaseParam);
                 response.SetData("OTP");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -198,7 +198,7 @@ namespace Fuji.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -259,7 +259,7 @@ namespace Fuji.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -309,7 +309,7 @@ namespace Fuji.WebApi.Controllers
 
                 response.SetData(Json);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

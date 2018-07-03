@@ -46,7 +46,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<MenuProjectMapping> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMapping();
                 response.SetData(MenuProjectMapping);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -68,7 +68,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<MenuDto> MenuProjectMapping = MenuProjectMappingService.GetMenuDtoDefault(0);
                 response.SetData(MenuProjectMapping);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -88,7 +88,7 @@ namespace Master.WebApi.Controllers
                 List<MenuProjectMappingDto> MenuProjectMapping = MenuProjectMappingService.GetMenuProjectMappingByID(ProjectIDSys).ToList();
                 response.SetData(MenuProjectMapping);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -110,7 +110,7 @@ namespace Master.WebApi.Controllers
                 menu = Sorting(Menu);
                 response.SetData(menu);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -142,7 +142,7 @@ namespace Master.WebApi.Controllers
                 else
                 { response.SetData(null); }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -192,7 +192,7 @@ namespace Master.WebApi.Controllers
                 }
                 response.SetData(MenuProjectMappingresponse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -239,7 +239,7 @@ namespace Master.WebApi.Controllers
                 }
                 response.SetData(MenuProjectMappingresponse);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -259,7 +259,7 @@ namespace Master.WebApi.Controllers
                 int id = MenuProjectMappingService.CreateMenuProjectMapping(MenuProjectMapping);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -291,7 +291,7 @@ namespace Master.WebApi.Controllers
                         setParent(menu[i], ProjectIDSys);
                     }
                 }
-                catch (ValidationException ex)
+                catch (AppValidationException ex)
                 {
                     response.SetErrors(ex.Errors);
                     response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -325,7 +325,7 @@ namespace Master.WebApi.Controllers
                         int id = MenuProjectMappingService.CreateMenuProjectMapping(mother.ParentMenu[j], ProjectID, forsort);
                     }
                 }
-                catch (ValidationException)
+                catch (AppValidationException)
                 {
                 }
             }
@@ -352,7 +352,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = MenuProjectMappingService.UpdateMenuProjectMapping(MenuProjectMappingList);
                 response.SetData(true);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -518,7 +518,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = MenuProjectMappingService.UpdateMenuProjectMapping(MenuProjectMapping);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -537,7 +537,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = MenuProjectMappingService.DeleteMenuProjectMapping(menu.ToList());
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

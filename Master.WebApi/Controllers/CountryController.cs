@@ -38,7 +38,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<Country_MT> Country = CountryService.GetCountry();
                 response.SetData(Country);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -58,7 +58,7 @@ namespace Master.WebApi.Controllers
                 Country_MT Country = CountryService.GetCountryByCountryIDSys(CountryIDSys);
                 response.SetData(Country);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -76,7 +76,7 @@ namespace Master.WebApi.Controllers
                 int id = CountryService.CreateCountry(Country);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -98,7 +98,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = CountryService.UpdateCountry( Country);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -117,7 +117,7 @@ namespace Master.WebApi.Controllers
                 bool isUpdated = CountryService.DeleteCountry(CountryIDSys);
                 response.SetData(isUpdated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -147,7 +147,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<AutocompleteCountryDto> sub = CountryService.AutocompleteCountry(term);
                 response.SetData(sub);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

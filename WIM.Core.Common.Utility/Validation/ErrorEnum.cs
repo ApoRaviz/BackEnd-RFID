@@ -13,7 +13,7 @@ namespace WIM.Core.Common.Utility.Validation
         #region ================================ CORE[10] -> General[10]
 
         [Description("DATA_NOT_FOUND")]
-        DataNotFound = 1010001,
+        DATA_NOT_FOUND = 1010001,
 
         [Description("UNKNOWN_ERROR")]
         UNKNOWN_ERROR = 1010500,

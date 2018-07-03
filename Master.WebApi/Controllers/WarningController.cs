@@ -39,7 +39,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<HistoryWarning> warning = WarningService.GetHistories();
                 response.SetData(warning);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -58,7 +58,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<HistoryWarning> Employee = WarningService.GetHistoryByEmID(EmID);
                 response.SetData(Employee);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,7 +77,7 @@ namespace Master.WebApi.Controllers
                 response.SetData(true);
                 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -96,7 +96,7 @@ namespace Master.WebApi.Controllers
                 int id = WarningService.CreateHistory(warning);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -118,7 +118,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = WarningService.UpdateHistory(warning);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -160,7 +160,7 @@ namespace Master.WebApi.Controllers
 
                 response.SetData("success");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

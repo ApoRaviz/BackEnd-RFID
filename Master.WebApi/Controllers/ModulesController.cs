@@ -39,7 +39,7 @@ namespace Master.WebApi.Controllers
                 
                 response.SetData(modules);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -59,7 +59,7 @@ namespace Master.WebApi.Controllers
                 Module_MT module = ModuleService.GetProjectByModuleIDSys(moduleIDSys);
                 response.SetData(module);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -79,7 +79,7 @@ namespace Master.WebApi.Controllers
                 Module_MT newModule = ModuleService.CreateModule(module);
                 response.SetData(newModule);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -98,7 +98,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ModuleService.UpdateModule(module);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -117,7 +117,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = ModuleService.DeleteModule(moduleIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

@@ -184,7 +184,7 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
 
                 return customernew.CusIDSys;
@@ -207,7 +207,7 @@ namespace WIM.Core.Service.Impl
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
                 return true;

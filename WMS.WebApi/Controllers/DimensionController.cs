@@ -32,7 +32,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<DimensionLayout_MT> data = DimensionService.GetAllDimension();
                 response.SetData(data);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -51,7 +51,7 @@ namespace WMS.WebApi.Controller
                 DimensionLayout_MT data = DimensionService.GetDimensionLayoutByDimensionIDSys(DimensionIDSys);
                 response.SetData(data);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -70,7 +70,7 @@ namespace WMS.WebApi.Controller
                 List<string> data = DimensionService.GetColorInSystem(DimensionIDSys);
                 response.SetData(data);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -88,7 +88,7 @@ namespace WMS.WebApi.Controller
                 List<DimensionLayout_MT> data = DimensionService.GetBlock();
                 response.SetData(data);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -107,7 +107,7 @@ namespace WMS.WebApi.Controller
                 int id = DimensionService.CreateDimensionOfLocation(data).Value;            
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -126,7 +126,7 @@ namespace WMS.WebApi.Controller
                 int isUpated = DimensionService.UpdateDimensionOfLocation(DimensionIDSys, data).Value;
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

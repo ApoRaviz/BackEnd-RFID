@@ -33,7 +33,7 @@ namespace HRMS.WebApi.Controllers
                 Leave id = LeaveService.CreateLeave(leaveRequest);
                 response.SetData(id);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -52,7 +52,7 @@ namespace HRMS.WebApi.Controllers
                 Leave isUpdated = LeaveService.UpdateLeave(leaveRequest);
                 response.SetData(isUpdated);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -71,7 +71,7 @@ namespace HRMS.WebApi.Controllers
                 LeaveDto leaveReqByID = LeaveService.GetLeaveByID(LeaveIDSys);
                 response.SetData(leaveReqByID);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -90,7 +90,7 @@ namespace HRMS.WebApi.Controllers
                 IEnumerable<Leave> leaveReq = LeaveService.GetLeaves();
                 response.SetData(leaveReq);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -109,7 +109,7 @@ namespace HRMS.WebApi.Controllers
                 IEnumerable<LeaveTypeDto> leaveType = LeaveService.GetLeaveType();
                 response.SetData(leaveType);
             }
-            catch (Validation.ValidationException ex)
+            catch (Validation.AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

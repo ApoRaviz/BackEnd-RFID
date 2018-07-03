@@ -92,7 +92,7 @@ namespace WMS.Service.Impl.Label
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                     return ReportSysID;
@@ -122,7 +122,7 @@ namespace WMS.Service.Impl.Label
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     
                     return true;

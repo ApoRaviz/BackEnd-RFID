@@ -126,7 +126,7 @@ namespace WMS.WebApi.Controller
                     }
                 //}
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -232,7 +232,7 @@ namespace WMS.WebApi.Controller
                     }
                 //}
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

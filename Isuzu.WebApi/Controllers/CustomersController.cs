@@ -64,7 +64,7 @@ namespace Isuzu.WebApi.Controllers
                 CustomerDto customer = CustomerService.GetCustomerByCusIDSysIncludeProjects(cusIDSys);
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -95,7 +95,7 @@ namespace Isuzu.WebApi.Controllers
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -126,7 +126,7 @@ namespace Isuzu.WebApi.Controllers
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -150,7 +150,7 @@ namespace Isuzu.WebApi.Controllers
                 CustomerDto customer = CustomerService.GetCustomersInclude(cusIDSys, tableNames);
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -171,7 +171,7 @@ namespace Isuzu.WebApi.Controllers
                 int id = CustomerService.CreateCustomer(customer);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -193,7 +193,7 @@ namespace Isuzu.WebApi.Controllers
                 bool isUpated = CustomerService.UpdateCustomer(customer);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -213,7 +213,7 @@ namespace Isuzu.WebApi.Controllers
                 bool isUpated = CustomerService.DeleteCustomer(cusIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

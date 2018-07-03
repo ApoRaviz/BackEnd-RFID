@@ -32,7 +32,7 @@ namespace Fuji.WebApi.Controllers
                 ProgramVersionHistory version = ProgramVersionService.GetProgramVersion(programName);
                 response.SetData(version);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

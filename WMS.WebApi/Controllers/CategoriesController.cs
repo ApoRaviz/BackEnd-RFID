@@ -39,7 +39,7 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(categories);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -58,7 +58,7 @@ namespace WMS.WebApi.Controller
                 Category_MT category = CategoryService.GetCategory(id);
                 response.SetData(category);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,7 +77,7 @@ namespace WMS.WebApi.Controller
                 int id = CategoryService.CreateCategory(category);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -115,7 +115,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = CategoryService.UpdateCategory(category);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -134,7 +134,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = CategoryService.DeleteCategory(id);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -156,7 +156,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<AutocompleteCategoryDto> category = CategoryService.AutocompleteCategory(term);
                 response.SetData(category);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

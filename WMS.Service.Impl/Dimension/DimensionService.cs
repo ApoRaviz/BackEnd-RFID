@@ -73,7 +73,7 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                 }
 
@@ -99,7 +99,7 @@ namespace WMS.Service
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                 }

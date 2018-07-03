@@ -46,7 +46,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -66,7 +66,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -88,7 +88,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -109,7 +109,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(new List<FujiPickingGroup>() { result });
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -162,7 +162,7 @@ namespace Fuji.WebApi.Controllers
                 bool flag = ItemImportService.SetScanned(receive);
                 response.SetData(flag ? 1 : 0);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.OK);
@@ -182,7 +182,7 @@ namespace Fuji.WebApi.Controllers
                 bool flag = ItemImportService.Receive(receive);
                 response.SetData(flag ? 1 : 0);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.OK);
@@ -202,7 +202,7 @@ namespace Fuji.WebApi.Controllers
                 List<string> itemGroups = ItemImportService.GetItemGroupByOrderNo_Handy(orderNo);
                 response.SetData(itemGroups);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -222,7 +222,7 @@ namespace Fuji.WebApi.Controllers
                 bool flag = ItemImportService.ConfirmPicking(confirmRequest);
                 response.SetData(flag ? 1 : 0);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -264,7 +264,7 @@ namespace Fuji.WebApi.Controllers
                 bool flag = ItemImportService.RegisterRFID_HANDY(registerRequest);
                 response.SetData(flag ? 1 : 0);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -290,7 +290,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(items);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -316,7 +316,7 @@ namespace Fuji.WebApi.Controllers
                     response.SetData(ret);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -337,7 +337,7 @@ namespace Fuji.WebApi.Controllers
                 ImportSerialHead item = ItemImportService.GetItemByDocID(id);
                 response.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -359,7 +359,7 @@ namespace Fuji.WebApi.Controllers
                 ItemImportDto item = ItemImportService.GetItemByDocID_Handy(id);
                 response.SetData(item);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.OK);
@@ -383,7 +383,7 @@ namespace Fuji.WebApi.Controllers
                 }
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
             }
@@ -492,7 +492,7 @@ namespace Fuji.WebApi.Controllers
                 ImportSerialHead newItem = ItemImportService.CreateItem(item);
                 response.SetData(newItem);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -513,7 +513,7 @@ namespace Fuji.WebApi.Controllers
                 bool isUpated = ItemImportService.UpdateItem(id, item);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -534,7 +534,7 @@ namespace Fuji.WebApi.Controllers
                 ItemImportService.DeleteItem(id);
                 response.SetData(true);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -560,7 +560,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetData(result);
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -587,7 +587,7 @@ namespace Fuji.WebApi.Controllers
                 string result = ItemImportService.GetDataAutoComplete(columnNames, tableName, conditionColumnNames, keyword);
                 response.SetData(result);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -613,7 +613,7 @@ namespace Fuji.WebApi.Controllers
                 }
                 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -656,7 +656,7 @@ namespace Fuji.WebApi.Controllers
                 }
 
             }
-            catch (ValidationException e)
+            catch (AppValidationException e)
             {
                 response.SetErrors(e.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -677,7 +677,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.OK);
@@ -700,7 +700,7 @@ namespace Fuji.WebApi.Controllers
                 response.SetStatus(HttpStatusCode.OK);
 
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.InternalServerError);
@@ -729,7 +729,7 @@ namespace Fuji.WebApi.Controllers
                     respones.SetData(ret);
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 respones.SetErrors(ex.Errors);
             }

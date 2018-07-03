@@ -40,7 +40,7 @@ namespace Master.WebApi.Controllers
                 Object Address = AddressService.GetAddress();
                 response.SetData(Address);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

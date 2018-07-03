@@ -66,7 +66,7 @@ namespace WMS.WebApi.Controller
                 CustomerDto customer = CustomerService.GetCustomerByCusIDSysIncludeProjects(cusIDSys);
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -97,7 +97,7 @@ namespace WMS.WebApi.Controller
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -132,7 +132,7 @@ namespace WMS.WebApi.Controller
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -163,7 +163,7 @@ namespace WMS.WebApi.Controller
 
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -187,7 +187,7 @@ namespace WMS.WebApi.Controller
                 CustomerDto customer = CustomerService.GetCustomersInclude(cusIDSys, tableNames);
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -208,7 +208,7 @@ namespace WMS.WebApi.Controller
                 int id = CustomerService.CreateCustomer(customer);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -230,7 +230,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = CustomerService.UpdateCustomer(customer);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -250,7 +250,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = CustomerService.DeleteCustomer(cusIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -282,7 +282,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<AutocompleteCustomerDto> customer = CustomerService.AutocompleteCustomer(term);
                 response.SetData(customer);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

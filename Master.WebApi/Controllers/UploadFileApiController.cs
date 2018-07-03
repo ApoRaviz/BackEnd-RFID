@@ -122,7 +122,7 @@ namespace Master.WebApi.Controllers
                 }
                 //}
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -228,7 +228,7 @@ namespace Master.WebApi.Controllers
                 }
                 //}
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

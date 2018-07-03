@@ -34,7 +34,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<Supplier_MT> Suppliers = SupplierService.GetSuppliersByProjectID(User.Identity.GetProjectIDSys());
                 response.SetData(Suppliers);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -53,7 +53,7 @@ namespace Master.WebApi.Controllers
                 Supplier_MT Supplier = SupplierService.GetSupplierBySupIDSys(supIDSys);
                 response.SetData(Supplier);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -75,7 +75,7 @@ namespace Master.WebApi.Controllers
                 Supplier_MT supplier = SupplierService.CreateSupplier(Supplier);
                 response.SetData(supplier);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -97,7 +97,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = SupplierService.UpdateSupplier(Supplier);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -117,7 +117,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = SupplierService.DeleteSupplier(supIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -140,7 +140,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<AutocompleteSupplierDto> sub = SupplierService.AutocompleteSupplier(term);
                 response.SetData(sub);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

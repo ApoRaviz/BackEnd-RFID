@@ -39,7 +39,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<PermissionGroup> Group = GroupService.GetPermissionGroup();
                 response.SetData(Group);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -59,7 +59,7 @@ namespace Master.WebApi.Controllers
                 PermissionGroup Group = GroupService.GetGroupByGroupIDSys(GroupIDSys);
                 response.SetData(Group);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -77,7 +77,7 @@ namespace Master.WebApi.Controllers
                 IEnumerable<PermissionGroup> Group = GroupService.GetGroupByMenuIDSys(MenuIDSys);
                 response.SetData(Group);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -100,7 +100,7 @@ namespace Master.WebApi.Controllers
                 bool id = GroupService.CreateGroup(Group);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -119,7 +119,7 @@ namespace Master.WebApi.Controllers
                 bool id = GroupService.CreateApi(Group);
                 response.SetData(id);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -140,7 +140,7 @@ namespace Master.WebApi.Controllers
                 bool isUpated = GroupService.UpdateGroup( group);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -159,7 +159,7 @@ namespace Master.WebApi.Controllers
                 //bool isUpdated = CountryService.DeleteCountry(CountryIDSys);
                 response.SetData(true);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

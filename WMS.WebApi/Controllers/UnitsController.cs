@@ -36,7 +36,7 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(units);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -55,7 +55,7 @@ namespace WMS.WebApi.Controller
                 Unit_MT unit = UnitService.GetUnitByUnitIDSys(unitIDSys);
                 response.SetData(unit);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -78,7 +78,7 @@ namespace WMS.WebApi.Controller
                 IEnumerable<AutocompleteUnitDto> unit = UnitService.AutocompleteUnit(term);
                 response.SetData(unit);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -99,7 +99,7 @@ namespace WMS.WebApi.Controller
                 unit.UnitIDSys = id;
                 response.SetData(unit);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -118,7 +118,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = UnitService.UpdateUnit(unit);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
@@ -139,7 +139,7 @@ namespace WMS.WebApi.Controller
                 bool isUpated = UnitService.DeleteUnit(unitIDSys);
                 response.SetData(isUpated);
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);

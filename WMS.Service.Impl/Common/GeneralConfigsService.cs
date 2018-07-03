@@ -60,12 +60,12 @@ namespace WMS.Service.Impl.Common
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return confignew;
@@ -87,11 +87,11 @@ namespace WMS.Service.Impl.Common
             }
             catch (DbEntityValidationException e)
             {
-                throw new ValidationException(e);
+                throw new AppValidationException(e);
             }
             catch (DbUpdateException)
             {
-                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 throw ex;
             }
             return confignew;
@@ -111,11 +111,11 @@ namespace WMS.Service.Impl.Common
             }
             catch (DbEntityValidationException e)
             {
-                throw new ValidationException(e);
+                throw new AppValidationException(e);
             }
             catch (DbUpdateException)
             {
-                ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 throw ex;
             }
             return confignew;
@@ -148,13 +148,13 @@ namespace WMS.Service.Impl.Common
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException e)
                 {
                     var x = e;
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return confignew;
@@ -177,12 +177,12 @@ namespace WMS.Service.Impl.Common
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    ValidationException ex = new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    AppValidationException ex = new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                     throw ex;
                 }
                 return true;

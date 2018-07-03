@@ -73,22 +73,30 @@ namespace WIM.Core.Repository.Impl
 
         public TEntity GetByID(bool isTryValidationNotNullException, params object[] id)
         {
-            return DbSet.Find(id).TryValidationNotNullException();
+            if (isTryValidationNotNullException)
+            {                
+                return DbSet.Find(id).TryValidationNotNullException();
+            }
+            return DbSet.Find(id);
         }
 
         public TEntity GetByID(object id, bool isTryValidationNotNullException)
         {
-            return DbSet.Find(id).TryValidationNotNullException();
+            if (isTryValidationNotNullException)
+            {                
+                return DbSet.Find(id).TryValidationNotNullException();
+            }
+            return DbSet.Find(id);
         }
 
         public TEntity GetByID(params object[] id)
         {
-            return DbSet.Find(id);
+            return GetByID(false, id);
         }
 
         public TEntity GetByID(object id)
         {
-            return DbSet.Find(id);
+            return GetByID(id, false);
         }
 
         public async Task<TEntity> GetByIDAsync(params object[] id)
@@ -181,12 +189,11 @@ namespace WIM.Core.Repository.Impl
             TEntity entityForUpdate = GetByID(id);
             if (entityForUpdate == null)
             {
-                throw new AppValidation.ValidationException(ErrorEnum.DataNotFound);
+                throw new AppValidation.AppValidationException(ErrorEnum.DATA_NOT_FOUND);
             }
 
             Type typeEntityForUpdate = entityForUpdate.GetType();
 
-            List<Task> tasks = new List<Task>();
             var identName = Identity.GetUserNameApp();
 
             foreach (var prop in properties)
@@ -254,6 +261,15 @@ namespace WIM.Core.Repository.Impl
         // Other
         public IEnumerable<TEntity> GetMany(Func<TEntity, bool> where)
         {
+            return GetMany(where, false);
+        }
+
+        public IEnumerable<TEntity> GetMany(Func<TEntity, bool> where, bool isTryValidationNotNullException)
+        {
+            if (isTryValidationNotNullException)
+            {
+                return DbSet.Where(where).ToList().TryValidationNotNullException();
+            }
             return DbSet.Where(where).ToList();
         }
 
@@ -278,7 +294,12 @@ namespace WIM.Core.Repository.Impl
 
         public TEntity GetSingle(Func<TEntity, bool> predicate)
         {
-            return DbSet.Single<TEntity>(predicate);
+            TEntity entity = DbSet.SingleOrDefault<TEntity>(predicate);
+            if (entity == null)
+            {
+                throw new AppValidation.AppValidationException(ErrorEnum.DATA_NOT_FOUND);
+            }
+            return entity;
         }
 
         public TEntity GetFirst(Func<TEntity, bool> predicate)
@@ -323,7 +344,6 @@ namespace WIM.Core.Repository.Impl
                                 if (!string.IsNullOrEmpty(enumValue))
                                     schema.Fs.Add(new ValidationDbSchema.ValidationField(enumValue, validateValue));
                             }
-
                         }
                     }
                     if (schema.Fs.Count > 0)

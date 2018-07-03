@@ -72,13 +72,13 @@ namespace WIM.Core.Service.Impl
                 }
 
             }
-            catch (ValidationException e)
+            catch (AppValidationException e)
             {
                 throw e;
             }
             catch (Exception)
             {
-                throw new ValidationException();
+                throw new AppValidationException();
             }
         }
 
@@ -131,12 +131,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
 
                 return User.UserID;
@@ -175,12 +175,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
                 }
                 ;
                 return true;
@@ -203,12 +203,12 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 catch (DbUpdateException)
                 {
                     scope.Dispose();
-                    throw new ValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
 
                 }
 
@@ -221,7 +221,7 @@ namespace WIM.Core.Service.Impl
         public bool GetKeyRegisterMobile(string userid, string key)
         {
             if (String.IsNullOrEmpty(userid))
-                throw new ValidationException();
+                throw new AppValidationException();
 
             using (var scope = new TransactionScope())
             {try
@@ -239,7 +239,7 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (Exception)
                 {
-                    throw new ValidationException();
+                    throw new AppValidationException();
                 }
                 return true;
             }
@@ -270,7 +270,7 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 return true;
             }
@@ -322,7 +322,7 @@ namespace WIM.Core.Service.Impl
                 }
                 catch (DbEntityValidationException e)
                 {
-                    throw new ValidationException(e);
+                    throw new AppValidationException(e);
                 }
                 return true;
             }

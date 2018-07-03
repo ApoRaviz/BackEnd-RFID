@@ -106,7 +106,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                     return ZoneSysID;
@@ -152,7 +152,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                     return true;
@@ -188,7 +188,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                     return RackSysID;
@@ -262,7 +262,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                     return ZoneTypeIDSys;
@@ -288,7 +288,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                     return isUpdate;
@@ -311,7 +311,7 @@ namespace WMS.Service.Impl.WarehouseMaster
                     }
                     catch (DbEntityValidationException e)
                     {
-                        throw new ValidationException(e);
+                        throw new AppValidationException(e);
                     }
                     scope.Complete();
                 }
