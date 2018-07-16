@@ -16,12 +16,12 @@ using Microsoft.Owin.Security.OAuth;
 using TMS.WebApi.Results;
 using System.Linq;
 using Microsoft.VisualBasic;
-using WIM.Core.Security;
-using WIM.Core.Security.Entity;
-using WIM.Core.Security.Providers;
 using WIM.Core.Common.Utility.Http;
 using System.Net;
 using WIM.Core.Common.Utility.Extensions;
+using Auth.Security.Entity;
+using Auth.Security;
+using Auth.Security.Providers;
 
 namespace TMS.WebApi.Controllers
 {

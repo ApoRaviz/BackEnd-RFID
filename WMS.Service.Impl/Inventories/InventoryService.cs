@@ -79,7 +79,7 @@ namespace WMS.Service.Impl.Inventories
             }
             if (inboundQty == 0M)
             {
-                throw new AppValidationException(ErrorEnum.INBOUND_QTY_EQUAL_0);
+                throw new AppValidationException(ErrorEnum.DATA_NOT_FOUND);//INBOUND_QTY_EQUAL_0
             }
             return inboundQty;
         }
@@ -155,125 +155,126 @@ namespace WMS.Service.Impl.Inventories
 
         private int PerformConfirmReceive(Receive receive, IEnumerable<TempInventoryTransaction> tempInventoryTransactions)
         {
-            using (var scope = Transaction.Default)
-            {
-                try
-                {
-                    using (WMSDbContext db = new WMSDbContext())
-                    {
-                        IEnumerable<InventoryTransactionGroup> inTranGroups = GetInventoryTransactionGroups(tempInventoryTransactions);
+            return 0;
+            //using (var scope = Transaction.Default)
+            //{
+            //    try
+            //    {
+            //        using (WMSDbContext db = new WMSDbContext())
+            //        {
+            //            IEnumerable<InventoryTransactionGroup> inTranGroups = GetInventoryTransactionGroups(tempInventoryTransactions);
 
-                        foreach (InventoryTransactionGroup inTranGroup in inTranGroups)
-                        {
-                            decimal inboundQty = GetSumInventoryInboundQty(inTranGroup);                            
-                            Inventory inventory = GetInventory(inTranGroup);
-                        }
+            //            foreach (InventoryTransactionGroup inTranGroup in inTranGroups)
+            //            {
+            //                decimal inboundQty = GetSumInventoryInboundQty(inTranGroup);                            
+            //                Inventory inventory = GetInventory(inTranGroup);
+            //            }
 
-                        IEnumerable<int> locIDSysList = inTranGroups.Select(x => x.GroupKey.LocIDSys);
-                        IEnumerable<Location> locations = GetListLocations(locIDSysList);
+            //            IEnumerable<int> locIDSysList = inTranGroups.Select(x => x.GroupKey.LocIDSys);
+            //            IEnumerable<Location> locations = GetListLocations(locIDSysList);
 
-                        foreach (var invengroup in realinvengroup)
-                        {
-
-
-
+            //            foreach (var invengroup in realinvengroup)
+            //            {
 
 
-                            var laterInven = repoInven.Get(a => a.ControlLevel1 == invengroup.ControlLevel1 &&
-                            a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.ControlLevel2 == invengroup.ControlLevel2 && a.LocIDSys == invengroup.LocIDSys &&
-                            a.ControlLevel3 == invengroup.ControlLevel3 && a.ItemIDSys == invengroup.ItemIDSys);
 
-                            if (laterInven == null)
-                            {
-                                Inventory inven = new CommonService().AutoMapper<Inventory>(invengroup.Child[0]);
-                                inven.InboundQty = actualQty;
-                                inven.AvailableQty = inven.InboundQty - inven.OutboundQty;
-                                inven.StatusIDSys = invengroup.Child[0].StatusIDSys;
-                                inven.Expire = invengroup.Expire;
-                                realinventory.Add(repoInven.Insert(inven));
-                            }
-                            else
-                            {
-                                laterInven.InboundQty += actualQty;
-                                laterInven.AvailableQty = laterInven.InboundQty - laterInven.OutboundQty;
-                                realinventory.Add(repoInven.Update(laterInven));
-                            }
 
-                        }
-                        for (int i = 0; i < location.Count; i++)
-                        {
-                            locationRepo.Update(location[i]);
-                        }
-                        db.SaveChanges();
-                        foreach (var inven in realinventory)
-                        {
-                            var inventemp = realinvengroup.Where(a => a.ControlLevel1 == inven.ControlLevel1 &&
-                            a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.ControlLevel2 == inven.ControlLevel2 && a.LocIDSys == inven.LocIDSys &&
-                            a.ControlLevel3 == inven.ControlLevel3 && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
 
-                            foreach (var childtran in inventemp.Child)
-                            {
-                                var piece = (int)childtran.Qty;
-                                var tranQty = db.ItemUnitMapping.Where(qt => qt.ItemIDSys == childtran.ItemIDSys).OrderBy(b => b.Sequence).ToList();
-                                var currentsequence = tranQty.Where(sq => sq.UnitIDSys == childtran.UnitIDSys).Select(sqn => sqn.Sequence).SingleOrDefault();
-                                var lastUnit = tranQty.Last();
-                                foreach (var unit in tranQty)
-                                {
-                                    if (unit.Sequence > currentsequence)
-                                    {
-                                        piece *= unit.QtyInParent;
-                                    }
-                                }
+            //                var laterInven = repoInven.Get(a => a.ControlLevel1 == invengroup.ControlLevel1 &&
+            //                a.Expire == invengroup.Expire && a.Inspect == invengroup.Inspect && a.ControlLevel2 == invengroup.ControlLevel2 && a.LocIDSys == invengroup.LocIDSys &&
+            //                a.ControlLevel3 == invengroup.ControlLevel3 && a.ItemIDSys == invengroup.ItemIDSys);
 
-                                //InventoryTransaction tempchild = new CommonService().AutoMapper<InventoryTransaction>(childtran);
-                                //tempchild.InvenIDSys = inven.InvenIDSys;
-                                //tempchild.RefNO = newReceive.ReceiveIDSys.ToString();
-                                //tempchild.ReceivingDate = childtran.ReceivingDate;
-                                //tempchild.ConvertedQty = piece;
-                                //inventran.Add(repoTran.Insert(tempchild));
-                                //inventran[inventran.Count - 1].InventoryTransactionDetail = childtran.InventoryTransactionDetail.Select(a => new InventoryTransactionDetail()
-                                //{
-                                //    SerialNumber = a.SerialNumber
-                                //}).ToList();
-                            }
-                        }
+            //                if (laterInven == null)
+            //                {
+            //                    Inventory inven = new CommonService().AutoMapper<Inventory>(invengroup.Child[0]);
+            //                    inven.InboundQty = actualQty;
+            //                    inven.AvailableQty = inven.InboundQty - inven.OutboundQty;
+            //                    inven.StatusIDSys = invengroup.Child[0].StatusIDSys;
+            //                    inven.Expire = invengroup.Expire;
+            //                    realinventory.Add(repoInven.Insert(inven));
+            //                }
+            //                else
+            //                {
+            //                    laterInven.InboundQty += actualQty;
+            //                    laterInven.AvailableQty = laterInven.InboundQty - laterInven.OutboundQty;
+            //                    realinventory.Add(repoInven.Update(laterInven));
+            //                }
 
-                        db.SaveChanges();
+            //            }
+            //            for (int i = 0; i < location.Count; i++)
+            //            {
+            //                locationRepo.Update(location[i]);
+            //            }
+            //            db.SaveChanges();
+            //            foreach (var inven in realinventory)
+            //            {
+            //                var inventemp = realinvengroup.Where(a => a.ControlLevel1 == inven.ControlLevel1 &&
+            //                a.Expire == inven.Expire && a.Inspect == inven.Inspect && a.ControlLevel2 == inven.ControlLevel2 && a.LocIDSys == inven.LocIDSys &&
+            //                a.ControlLevel3 == inven.ControlLevel3 && a.ItemIDSys == inven.ItemIDSys).SingleOrDefault();
 
-                        //foreach (var inventra in inventran)
-                        //{
-                        //    inventra.InventoryTransactionDetail = inventra.InventoryTransactionDetail != null ? inventra.InventoryTransactionDetail : new List<InventoryTransactionDetail>();
-                        //    foreach (var detail in inventra.InventoryTransactionDetail)
-                        //    {
-                        //        detail.InvenTranIDSys = inventra.InvenTranIDSys;
-                        //        repoTranDe.Insert(detail);
-                        //        InventoryDetail inventorydetail = new InventoryDetail()
-                        //        {
-                        //            InvenIDSys = inventra.InvenIDSys,
-                        //            ItemIDSys = inventra.ItemIDSys,
-                        //            SerialNumber = detail.SerialNumber,
-                        //            StatusIDSys = inventra.StatusIDSys
-                        //        };
-                        //        repoInvenDe.Insert(inventorydetail);
-                        //    }
-                        //}
+            //                foreach (var childtran in inventemp.Child)
+            //                {
+            //                    var piece = (int)childtran.Qty;
+            //                    var tranQty = db.ItemUnitMapping.Where(qt => qt.ItemIDSys == childtran.ItemIDSys).OrderBy(b => b.Sequence).ToList();
+            //                    var currentsequence = tranQty.Where(sq => sq.UnitIDSys == childtran.UnitIDSys).Select(sqn => sqn.Sequence).SingleOrDefault();
+            //                    var lastUnit = tranQty.Last();
+            //                    foreach (var unit in tranQty)
+            //                    {
+            //                        if (unit.Sequence > currentsequence)
+            //                        {
+            //                            piece *= unit.QtyInParent;
+            //                        }
+            //                    }
 
-                        db.SaveChanges();
-                        scope.Complete();
-                    }
-                }
-                catch (DbEntityValidationException)
-                {
-                    scope.Dispose();
-                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
-                }
-                catch (DbUpdateException)
-                {
-                    scope.Dispose();
-                    throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
-                }
-                return newReceive.ReceiveIDSys;
-            }
+            //                    //InventoryTransaction tempchild = new CommonService().AutoMapper<InventoryTransaction>(childtran);
+            //                    //tempchild.InvenIDSys = inven.InvenIDSys;
+            //                    //tempchild.RefNO = newReceive.ReceiveIDSys.ToString();
+            //                    //tempchild.ReceivingDate = childtran.ReceivingDate;
+            //                    //tempchild.ConvertedQty = piece;
+            //                    //inventran.Add(repoTran.Insert(tempchild));
+            //                    //inventran[inventran.Count - 1].InventoryTransactionDetail = childtran.InventoryTransactionDetail.Select(a => new InventoryTransactionDetail()
+            //                    //{
+            //                    //    SerialNumber = a.SerialNumber
+            //                    //}).ToList();
+            //                }
+            //            }
+
+            //            db.SaveChanges();
+
+            //            //foreach (var inventra in inventran)
+            //            //{
+            //            //    inventra.InventoryTransactionDetail = inventra.InventoryTransactionDetail != null ? inventra.InventoryTransactionDetail : new List<InventoryTransactionDetail>();
+            //            //    foreach (var detail in inventra.InventoryTransactionDetail)
+            //            //    {
+            //            //        detail.InvenTranIDSys = inventra.InvenTranIDSys;
+            //            //        repoTranDe.Insert(detail);
+            //            //        InventoryDetail inventorydetail = new InventoryDetail()
+            //            //        {
+            //            //            InvenIDSys = inventra.InvenIDSys,
+            //            //            ItemIDSys = inventra.ItemIDSys,
+            //            //            SerialNumber = detail.SerialNumber,
+            //            //            StatusIDSys = inventra.StatusIDSys
+            //            //        };
+            //            //        repoInvenDe.Insert(inventorydetail);
+            //            //    }
+            //            //}
+
+            //            db.SaveChanges();
+            //            scope.Complete();
+            //        }
+            //    }
+            //    catch (DbEntityValidationException)
+            //    {
+            //        scope.Dispose();
+            //        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+            //    }
+            //    catch (DbUpdateException)
+            //    {
+            //        scope.Dispose();
+            //        throw new AppValidationException(ErrorEnum.WRITE_DATABASE_PROBLEM);
+            //    }
+            //    return newReceive.ReceiveIDSys;
+            //}
         }
 
     }

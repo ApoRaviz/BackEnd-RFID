@@ -74,7 +74,7 @@ namespace WMS.Entity.InventoryManagement
 
             if (invenIDSysList.Count() > 1)
             {
-                throw new AppValidationException(ErrorEnum.INVALID_INVENTORY_ID);
+                throw new AppValidationException(ErrorEnum.DATA_NOT_FOUND);
             }
             return 0;
         }

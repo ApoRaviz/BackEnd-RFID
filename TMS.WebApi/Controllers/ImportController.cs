@@ -72,13 +72,13 @@ namespace TMS.WebApi.Controllers
                     else
                     {
                         List<ValidationError> ex = new List<ValidationError>();
-                        ex.Add(new ValidationError(ErrorEnum.E500.ToString(), (string)json.Message));
+                        ex.Add(new ValidationError(ErrorEnum.DATA_NOT_FOUND.ToString(), (string)json.Message));
                         response.SetErrors(ex);
                         response.SetStatus(HttpStatusCode.InternalServerError);
                     }
                 }
             }
-            catch (ValidationException ex)
+            catch (AppValidationException ex)
             {
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
