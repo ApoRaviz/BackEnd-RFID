@@ -24,6 +24,7 @@ using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Service.FileManagement;
 using System.Web.Helpers;
 using Newtonsoft.Json;
+using WIM.Core.Entity.Logs;
 
 namespace Isuzu.Service.Impl
 {
@@ -588,7 +589,6 @@ namespace Isuzu.Service.Impl
             return Request.ReturnHttpResponseMessage(responseHandy);
         }
 
-
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
@@ -613,6 +613,52 @@ namespace Isuzu.Service.Impl
                 response.SetErrors(ex.Errors);
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        //-----------------------PRAM-------------------------//
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("search/allcolumn/{pageIndex}/{pageSize}/{keyword}")]
+        public HttpResponseMessage GetDataByKeyword([FromUri]int pageIndex, [FromUri]int pageSize, [FromUri]string keyword)
+        {
+            IResponseData<IsuzuDataInboundGroupItems> response = new ResponseData<IsuzuDataInboundGroupItems>();
+            int totalRecord = 0;
+            if (keyword == "NOKEYWORD") //Get all
+            {
+                try
+                {
+                    IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroupPaging(pageIndex, pageSize, out totalRecord);
+                    if (items != null && totalRecord > 0)
+                    {
+                        IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord, items);
+                        response.SetData(dataItem);
+                        response.SetStatus(HttpStatusCode.OK);
+                    }
+                }
+                catch (AppValidationException ex)
+                {
+                    response.SetErrors(ex.Errors);
+                    response.SetStatus(HttpStatusCode.PreconditionFailed);
+                }
+            }
+            else //Search By KeyWord
+            {
+                try
+                {
+                    IEnumerable<InboundItemsHead> items = InboundService.GetDataGroupByKeyword(keyword, pageIndex, pageSize, out totalRecord);
+                    IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord, items);
+                    response.SetData(dataItem);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
+                catch (AppValidationException ex)
+                {
+                    response.SetErrors(ex.Errors);
+                    response.SetStatus(HttpStatusCode.PreconditionFailed);
+                }
+            }
+            
             return Request.ReturnHttpResponseMessage(response);
         }
 
@@ -688,6 +734,71 @@ namespace Isuzu.Service.Impl
                 respones.SetErrors(ex.Errors);
             }
             return Request.ReturnHttpResponseMessage(respones);
+        }
+        //--------------------------------PRAM-----------------------------------
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("itemImport/allcolumn/{pageIndex}/{pageSize}/{keyword}")]
+        public HttpResponseMessage SearchItemByKeyword([FromUri]int pageIndex, [FromUri]int pageSize, [FromUri]string keyword)
+        {
+            IResponseData<IsuzuDataInboundItems> response = new ResponseData<IsuzuDataInboundItems>();
+            int totalRecord = 0;
+            if (keyword == "NOKEYWORD") //Get all
+            {
+                try
+                {
+                    IEnumerable<InboundItems> items = InboundService.GetInboundItemPaging(pageIndex, pageSize, out totalRecord);
+                    if (items != null && totalRecord > 0)
+                    {
+                        IsuzuDataInboundItems dataItem = new IsuzuDataInboundItems(totalRecord, items);
+                        response.SetData(dataItem);
+                        response.SetStatus(HttpStatusCode.OK);
+                    }
+                }
+                catch (AppValidationException ex)
+                {
+                    response.SetErrors(ex.Errors);
+                    response.SetStatus(HttpStatusCode.PreconditionFailed);
+                }
+            }
+            else //Search By KeyWord
+            {
+                try
+                {
+                    IEnumerable<InboundItems> items = InboundService.GetDataImportByKeyword(keyword, pageIndex, pageSize, out totalRecord);
+                    IsuzuDataInboundItems dataItem = new IsuzuDataInboundItems(totalRecord, items);
+                    response.SetData(dataItem);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
+                catch (AppValidationException ex)
+                {
+                    response.SetErrors(ex.Errors);
+                    response.SetStatus(HttpStatusCode.PreconditionFailed);
+                }
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpGet]
+        [Route("itemImport/logs/{refID}")]
+        public HttpResponseMessage GetOrderLogByID([FromUri]string refID)
+        {
+            IResponseData<IEnumerable<GeneralLog>> response = new ResponseData<IEnumerable<GeneralLog>>();
+            IEnumerable<GeneralLog> orderlog = new List<GeneralLog>();
+            try
+            {
+                orderlog = InboundService.GetOrderLogByID(refID);
+                response.SetData(orderlog);
+            }
+            catch (AppValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
         }
 
         //[HttpPost]

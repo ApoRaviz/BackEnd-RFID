@@ -27,6 +27,7 @@ using WIM.Core.Service.FileManagement;
 using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Entity.FileManagement;
 using Isuzu.Entity.InboundManagement;
+using WIM.Core.Entity.Logs;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -1249,6 +1250,53 @@ namespace Isuzu.Service.Impl.Inbound
             return items;
 
         }
+        public IEnumerable<InboundItems> GetDataImportByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord)
+        {
+            IEnumerable<InboundItems> items = new List<InboundItems>() { };
+            totalRecord = 0;
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        items = Db.ProcPagingInboundItemSearching(keyword, pageIndex, pageSize, out totalRecord);
+                        scope.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        return new List<InboundItems>() { };
+                    }
+
+                }
+                return items;
+            }
+        }
+        public IEnumerable<GeneralLog> GetOrderLogByID(string refID)
+        {
+            IEnumerable<GeneralLog> items = new List<GeneralLog>();
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        items = (from i in Db.GeneralLogs
+                                 where i.RefID == refID
+                                 select i).ToList();
+                        scope.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        return new List<GeneralLog>() { };
+                    }
+
+                }
+                return items;
+            }
+        }
         public IEnumerable<InboundItemsHead> GetInboundGroup(int max = 50)
         {
             List<InboundItemsHead> items = new List<InboundItemsHead>();
@@ -1371,6 +1419,29 @@ namespace Isuzu.Service.Impl.Inbound
                 return items;
             }
 
+        }
+        public IEnumerable<InboundItemsHead> GetDataGroupByKeyword(string keyword,int pageIndex, int pageSize, out int totalRecord)
+        {
+            IEnumerable<InboundItemsHead> items = new List<InboundItemsHead>() { };
+            totalRecord = 0;
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        items = Db.ProcPagingInboundItemHeadSearching(keyword,pageIndex, pageSize, out totalRecord);
+                        scope.Complete();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItemsHead>() { };
+                    }
+
+                }
+                return items;
+            }
         }
         public bool UpdateStausExport(InboundItemsHead item)
         {
