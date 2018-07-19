@@ -311,7 +311,12 @@ namespace WIM.Core.Service.Impl
                 CoreDbContext Db2 = new CoreDbContext();
                 var menuQuery = repo.GetMany((c => !(Db2.MenuProjectMapping).Where(a => a.ProjectIDSys == projectIDSys)
                 .Any(b => b.MenuIDSys == c.MenuIDSys))).OrderBy(c => c.MenuParentID).OrderBy(c => c.Sort);
-                Console.Write(menuQuery);
+                /*
+                select *
+                from menu_mt a , menu_project b
+                where a.menuidsys not in ( select menuidsys from menuprojectmapping where projectidsys = @projectid)
+                order by a.menuparentid , a.sort
+                */
                 menudto = menuQuery.Select(b => new MenuDto()
                 {
                     MenuIDSys = b.MenuIDSys,
@@ -322,7 +327,7 @@ namespace WIM.Core.Service.Impl
                     Api = b.Api,
                     Sort = b.Sort,
                     Icon = b.MenuPic,
-                    have = 1
+                    have = 1 //บอกว่าเคยมีใน database แล้ว
                 }
                     ).ToList();
             }

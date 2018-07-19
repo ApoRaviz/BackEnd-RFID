@@ -68,32 +68,32 @@ namespace Master.WebApi.Controllers
         }
 
         // get api/Menus/id/parent
-        [HttpGet]
-        [Route("parent")]
-        public HttpResponseMessage GetParent()
-        {
-            IResponseData<List<MenuDto>> response = new ResponseData<List<MenuDto>>();
-            //IResponseData<IEnumerable<List<MenuDto>>> response2 = new ResponseData<IEnumerable<List<MenuDto>>>();
-            try
-            {
-                IEnumerable<List<MenuDto>> Menu = MenuService.GetMenuDto().GroupBy(u => u.MenuParentID).Select(grp => grp.ToList());
-                //response2.SetData(Menu);
-                List<List<MenuDto>> temp = Menu.ToList();
-                List<MenuDto> menuresponse = temp[0];
-                for (int i = 0; i < menuresponse.Count<MenuDto>(); i++)
-                {
-                    FindParent(menuresponse[i], temp);
-                }
+        //[HttpGet]
+        //[Route("parent")]
+        //public HttpResponseMessage GetParent()
+        //{
+        //    IResponseData<List<MenuDto>> response = new ResponseData<List<MenuDto>>();
+        //    //IResponseData<IEnumerable<List<MenuDto>>> response2 = new ResponseData<IEnumerable<List<MenuDto>>>();
+        //    try
+        //    {
+        //        IEnumerable<List<MenuDto>> Menu = MenuService.GetMenuDto().GroupBy(u => u.MenuParentID).Select(grp => grp.ToList());
+        //        //response2.SetData(Menu);
+        //        List<List<MenuDto>> temp = Menu.ToList();
+        //        List<MenuDto> menuresponse = temp[0];
+        //        for (int i = 0; i < menuresponse.Count<MenuDto>(); i++)
+        //        {
+        //            FindParent(menuresponse[i], temp);
+        //        }
 
-                response.SetData(menuresponse);
-            }
-            catch (AppValidationException ex)
-            {
-                response.SetErrors(ex.Errors);
-                response.SetStatus(HttpStatusCode.PreconditionFailed);
-            }
-            return Request.ReturnHttpResponseMessage(response);
-        }
+        //        response.SetData(menuresponse);
+        //    }
+        //    catch (AppValidationException ex)
+        //    {
+        //        response.SetErrors(ex.Errors);
+        //        response.SetStatus(HttpStatusCode.PreconditionFailed);
+        //    }
+        //    return Request.ReturnHttpResponseMessage(response);
+        //}
 
         [HttpGet]
         [Route("autocomplete/{term}")]
@@ -166,12 +166,7 @@ namespace Master.WebApi.Controllers
                 {
                     responseData.AddRange(tempGroupbyModule.Where(a => a.ModuleIDSys == 0).Select(b => b.ParentMenu).FirstOrDefault());
                 }
-                //List<MenuDto> menu = Menu[0];
-                //List<MenuDto> menu2 = new List<MenuDto>();
-                //for (int i = 0; i < menu.Count<MenuDto>(); i++)
-                //{
-                //    FindParent(menu[i], Menu);
-                //}
+
                 response.SetData(responseData);
             }
             catch (AppValidationException ex)
@@ -182,25 +177,25 @@ namespace Master.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        public void FindParent(MenuDto mother, List<List<MenuDto>> allData)
-        {
-            List<MenuDto> temp;
-            for (int i = 0; i < allData.Count(); i++)
-            {
-                temp = allData[i];
-                if (temp[0].MenuParentID == mother.MenuIDSys)
-                {
-                    mother.ParentMenu = temp;
-                }
-            }
-            if (mother.ParentMenu != null)
-            {
-                for (int i = 0; i < mother.ParentMenu.Count(); i++)
-                {
-                    FindParent(mother.ParentMenu[i], allData);
-                }
-            }
-        }
+        //public void FindParent(MenuDto mother, List<List<MenuDto>> allData)
+        //{
+        //    List<MenuDto> temp;
+        //    for (int i = 0; i < allData.Count(); i++)
+        //    {
+        //        temp = allData[i];
+        //        if (temp[0].MenuParentID == mother.MenuIDSys)
+        //        {
+        //            mother.ParentMenu = temp;
+        //        }
+        //    }
+        //    if (mother.ParentMenu != null)
+        //    {
+        //        for (int i = 0; i < mother.ParentMenu.Count(); i++)
+        //        {
+        //            FindParent(mother.ParentMenu[i], allData);
+        //        }
+        //    }
+        //}
 
         public void setParent(MenuDto mother)
         {
