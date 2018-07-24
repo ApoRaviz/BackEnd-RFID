@@ -67,7 +67,7 @@ namespace WMS.WebApi.Controller
             IResponseData<int> response = new ResponseData<int>();
             try
             {
-                data.UpdateBy = User.Identity.Name;
+                data.CreateBy = User.Identity.Name;
                 int id = ImportService.CreateImportDifinitionForItemMaster(data).Value;
                 response.SetData(id);
             }
@@ -87,6 +87,7 @@ namespace WMS.WebApi.Controller
 
             try
             {
+                data.UpdateBy = User.Identity.Name;
                 bool isUpated = ImportService.UpdateImportForItemMaster(ImportIDSys, data);
                 response.SetData(isUpated);
             }

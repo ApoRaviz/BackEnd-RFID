@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 
-namespace Master.WebApi.ServiceBus
+namespace WMS.WebApi.ServiceBus
 {
     public static class RabbitMQMessageListener
     {
@@ -165,9 +165,9 @@ namespace Master.WebApi.ServiceBus
             replyProps.DeliveryMode = 2;
             //replyProps.CorrelationId = props.CorrelationId;
 
-            var eventType = Type.GetType("Master.WebApi.ServiceBus.Events." + keyObj);
+            var eventType = Type.GetType("WMS.WebApi.ServiceBus.Events." + keyObj);
             var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
-            var handler = Type.GetType("Master.WebApi.ServiceBus.EventsHandler." + keyObj + "Handler");
+            var handler = Type.GetType("WMS.WebApi.ServiceBus.EventsHandler." + keyObj + "Handler");
             object objHandler = Activator.CreateInstance(handler, new object[] { });
             var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
             concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });

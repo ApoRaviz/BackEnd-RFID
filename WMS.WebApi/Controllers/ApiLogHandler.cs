@@ -65,8 +65,8 @@ namespace WMS.WebApi.Controller
                     urlFrontEnd = urlFrontEnd.Split('?')[0];
                     urlFrontEnd = urlFrontEnd.Split(';')[0];
 
-                    IMenuService menuService = new MenuService();
-                    Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
+                    //IMenuService menuService = new MenuService();
+                    //Menu_MT menu = menuService.GetMenuByUrl(urlFrontEnd);
 
                     //userLogEntry.RequestUriFrondEnd = menu.Url;
                     //userLogEntry.RequestMenuNameFrontEnd = menu.MenuName;
