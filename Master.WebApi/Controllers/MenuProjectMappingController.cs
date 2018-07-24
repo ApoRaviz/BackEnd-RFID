@@ -65,7 +65,7 @@ namespace Master.WebApi.Controllers
             ResponseData<IEnumerable<MenuDto>> response = new ResponseData<IEnumerable<MenuDto>>();
             try
             {
-                IEnumerable<MenuDto> MenuProjectMapping = MenuProjectMappingService.GetMenuDtoDefault(0);
+                IEnumerable<MenuDto> MenuProjectMapping = MenuProjectMappingService.GetMenuDtoDefault(0);// default = 0 คือ ทั่วไป
                 response.SetData(MenuProjectMapping);
             }
             catch (AppValidationException ex)
@@ -371,13 +371,13 @@ namespace Master.WebApi.Controllers
             {
                 if (User.IsSysAdmin())
                 {
-                    MenuPermis = MenuProjectMappingService.GetMenuProjectByID(ProID,Db);
+                    MenuPermis = MenuProjectMappingService.GetMenuProjectByID(ProID,Db); // get menu ทั้งหมด
                     var something = MenuPermis.ToList();
-                    MenuRes = MenuPermis.Where(x => /*x.MenuIDSysParent != 0 &&*/ x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
+                    MenuRes = MenuPermis.Where(x => x.Url != null).GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
                 }
                 else
                 {
-                    MenuPermis = MenuProjectMappingService.GetMenuProjectPermission(User.Identity.GetUserIdApp(), ProID,Db);
+                    MenuPermis = MenuProjectMappingService.GetMenuProjectPermission(User.Identity.GetUserIdApp(), ProID,Db);// เรียกเมนูที่ user นี้มี Permission
                     MenuRes = MenuPermis.GroupBy(x => x.MenuName).Select(grp => grp.First()).ToList();
                 }
                 IEnumerable<MenuProjectMappingDto> MenuAll = MenuProjectMappingService.GetAllMenu(ProID, MenuPermis.AsEnumerable(),Db).Select(row => new MenuProjectMappingDto
@@ -389,16 +389,6 @@ namespace Master.WebApi.Controllers
                     Url = row.Url ?? String.Empty,
                     Sort = row.Sort
                 }); ;
-                //MenuRes = MenuProjectRes.Select(row => new MenuProjectMappingDto
-                //{
-                //    MenuIDSys = row.MenuIDSys,
-                //    ProjectIDSys = row.ProjectIDSys,
-                //    MenuName = row.MenuName,
-                //    MenuIDSysParent = row.MenuIDSysParent,
-                //    Url = row.Menu_MT.Url ?? String.Empty,
-                //    Sort = row.Sort
-                //});
-
                 foreach (MenuProjectMappingDto resX in MenuRes)
                 {
                     FindParentMenu(MenuAll, resX, resX.MenuIDSysParent);
