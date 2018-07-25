@@ -21,7 +21,6 @@ namespace WMS.Entity.ImportManagement
         [Key]
         public int ImportDefHeadIDSys { get; set; }
         public int ProjectIDSys { get; set; }
-        public int SubModuleIDSys { get; set; }
         public string ForTable { get; set; }
         public string FormatName { get; set; }
         public string Delimiter { get; set; }

@@ -87,14 +87,12 @@ namespace WMS.Service.Impl.Import
                 data.CreateAt = DateTime.Now;
                 data.CreateBy = _identity.Name;
 
-                data.SubModuleIDSys = 2;
-
                 using (WMSDbContext Db = new WMSDbContext())
                 {
                    
                     try
                     {
-                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.SubModuleIDSys,data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
+                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
                                                   , data.CreateAt, data.CreateBy, sb.ToString());
                         Db.SaveChanges();
                     }

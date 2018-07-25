@@ -277,19 +277,13 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateLabelLayout", labelIDSysParameter, formatNameParameter, widthParameter, widthUnitParameter, heightParameter, heightUnitParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public Nullable<int> ProcCreateImportDefinition(Nullable<int> ProjectIDSys, Nullable<int> SubModuleIDSys,string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, string userCreate, string xmlDetail)
+        public Nullable<int> ProcCreateImportDefinition(Nullable<int> ProjectIDSys,string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, string userCreate, string xmlDetail)
         {
             var projectIDSys = ProjectIDSys.HasValue ? new SqlParameter
             {
                 ParameterName = "ProjectIDSys",
                 Value = ProjectIDSys
             } : new SqlParameter("ProjectIDSys", 0);
-
-            var subModuleIDSys = SubModuleIDSys.HasValue ? new SqlParameter
-            {
-                ParameterName = "SubModuleIDSys",
-                Value = SubModuleIDSys
-            } : new SqlParameter("SubModuleIDSys", 0);
 
             var forTableParameter = forTable != null ? new SqlParameter
             {
@@ -346,8 +340,8 @@ namespace WMS.Context
                 Value = xmlDetail
             };
 
-            return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ProjectIDSys, @SubModuleIDSys, @ForTable , @FormatName , @Delimiter , @MaxHeading ," +
-            "@Encoding , @SkipFirstRecode , @CreateAt , @CreateBy , @XmlDetail ", projectIDSys, subModuleIDSys, forTableParameter, formatNameParameter, delimiterParameter,
+            return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ProjectIDSys, @ForTable , @FormatName , @Delimiter , @MaxHeading ," +
+            "@Encoding , @SkipFirstRecode , @CreateAt , @CreateBy , @XmlDetail ", projectIDSys, forTableParameter, formatNameParameter, delimiterParameter,
             maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, userCreateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateImportDefinition", forTableParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
