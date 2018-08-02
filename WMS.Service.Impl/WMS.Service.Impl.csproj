@@ -87,6 +87,10 @@
       <Project>{bfee452b-7031-4060-889d-913daaa8b697}</Project>
       <Name>Auth.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Master.Context\Master.Context.csproj">
+      <Project>{C075D9B8-702B-4CE9-91DC-83FC22A2B4AA}</Project>
+      <Name>Master.Context</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WIM.Core.Common.Utility\WIM.Core.Common.Utility.csproj">
       <Project>{58317EE7-1858-4AC8-AD9F-27CED24AF4C7}</Project>
       <Name>WIM.Core.Common.Utility</Name>

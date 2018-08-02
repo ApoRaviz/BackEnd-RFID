@@ -142,20 +142,9 @@ namespace WMS.WebApi.Controller
             string result = string.Empty;
             try
             {
-                //var httpRequest = HttpContext.Current.Request;
-                //if (httpRequest.Files.Count > 0)
-                //{
+
                     string path = "";
                     string fileName = "";
-
-                    //foreach (string file in httpRequest.Files)
-                    //{
-                    //    var postedFile = httpRequest.Files[file];
-                    //    var filePath = HttpContext.Current.Server.MapPath("~/UploadFile/" + postedFile.FileName);
-                    //    postedFile.SaveAs(filePath);
-                    //    path = filePath;
-                    //    fileName = postedFile.FileName;
-                    //}
 
                     if (uploadItem != null)
                     {
@@ -166,9 +155,17 @@ namespace WMS.WebApi.Controller
                         path = drive + DEFAULT_UPLOAD_PATH + uploadItem.FilePath;
                         FileInfo f = new FileInfo(path);
                         fileName = f.Name;
-                        string FormatName = uploadItem.FormatName;
 
-                        ImportDefinitionHeader_MT data = this.ImportService.GetImportDefinitionByImportIDSys(int.Parse(FormatName), "ImportDefinitionDetail_MT");
+                        if(uploadItem.FormatId > 0)
+                        {
+                            //response.SetErrors();
+                            response.SetStatus(HttpStatusCode.PreconditionFailed);
+                            return Request.ReturnHttpResponseMessage(response);
+                        }
+                       
+
+
+                    ImportDefinitionHeader_MT data = this.ImportService.GetImportDefinitionByImportIDSys(uploadItem.FormatId, "ImportDefinitionDetail_MT");
          
                         if(data != null)
                         {
@@ -215,7 +212,7 @@ namespace WMS.WebApi.Controller
                                 if (string.IsNullOrEmpty(result))
                                 {
                                     string xml = PrepareData(dt, data.ImportDefinitionDetail_MT.ToList());
-                                    result = this.ImportService.ImportDataToTable(int.Parse(FormatName), xml, Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity));
+                                    result = this.ImportService.ImportDataToTable(uploadItem.FormatId, xml, Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity));
 
                                     if (string.IsNullOrEmpty(result))
                                     {
@@ -225,7 +222,7 @@ namespace WMS.WebApi.Controller
                                 }
                             }
 
-                            this.ImportService.InsertImportHistory(int.Parse(FormatName), fileName, result, success, Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity));
+                            this.ImportService.InsertImportHistory(uploadItem.FormatId, fileName, result, success, Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity));
                         }
 
                         response.SetData(result);
@@ -296,7 +293,7 @@ namespace WMS.WebApi.Controller
         public string PrepareData(DataTable dt, List<ImportDefinitionDetail_MT> detail)
         {
             string pXmlDetail = "<{0}>{1}</{0}>";
-            System.Text.StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             foreach (DataRow dr in dt.Rows)
             {
@@ -331,7 +328,7 @@ namespace WMS.WebApi.Controller
     public class UploadItem
     {
         public string FilePath { get;set;}
-        public string FormatName { get; set; }
+        public int FormatId { get; set; }
     }
 
     public class UploadSample

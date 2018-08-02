@@ -29,7 +29,6 @@ namespace Master.WebApi
             AutoMapperConfig.Initialize();
             ApiHashTableHelper.Initialize();
             TableHashTableHelper.Initialize();
-            //SwaggerConfig.Register();
             RabbitMQMessageListener.Start(RabbitMQConfig.Initialize());
         }
 
