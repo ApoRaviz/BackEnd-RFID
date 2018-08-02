@@ -10,6 +10,9 @@ using WMS.Entity.ImportManagement;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using System.IO;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace WMS.WebApi.Controller
 {
@@ -32,6 +35,31 @@ namespace WMS.WebApi.Controller
             {
                 IEnumerable<ImportDefinitionHeader_MT> header = ImportService.GetAllImportHeader(forTable);
                 response.SetData(header);
+            }
+            catch (AppValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("GetDefColDetail/{Table}")]
+        public HttpResponseMessage GetDefinitionColumnDetail(string Table)
+        {
+            ResponseData<object> response = new ResponseData<object>();
+            try
+            {
+                object items;
+                string serverpath = HttpContext.Current.Server.MapPath("~/Config/Definition/" + Table + "-Def.json"); 
+                using (StreamReader r = new StreamReader(serverpath))
+                {
+                    string json = r.ReadToEnd();
+                    items = JsonConvert.DeserializeObject<object>(json);
+                }
+
+                response.SetData(items);
             }
             catch (AppValidationException ex)
             {

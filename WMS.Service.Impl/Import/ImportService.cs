@@ -22,7 +22,7 @@ namespace WMS.Service.Impl.Import
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
-                            "<Import>{5}</Import></row>";
+                            "<Import>{5}</Import><IsHead>{6}</IsHead><IsRefKey>{7}</IsRefKey></row>";
 
 
         public ImportService()
@@ -74,7 +74,7 @@ namespace WMS.Service.Impl.Import
                 d.CreateAt = DateTime.Now;
                 d.UpdateAt = DateTime.Now;
                 d.UpdateBy = Identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import);
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead);
             }
 
             using (var scope = new TransactionScope())
