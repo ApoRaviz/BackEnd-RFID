@@ -25,6 +25,7 @@ namespace WMS.Entity.ImportManagement
         public string FixedValue { get; set; }
         public string Import { get; set; }
         public bool IsHead { get; set; }
+        public bool IsRefKey { get; set; }
         public int Digits { get; set; }
         public string DataType { get; set; }
 

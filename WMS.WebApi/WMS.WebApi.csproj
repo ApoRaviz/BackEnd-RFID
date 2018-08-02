@@ -312,6 +312,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RabbitMQConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -383,9 +384,12 @@
     <Compile Include="Providers\Firebase\FirebaseModel.cs" />
     <Compile Include="Report\ReportUtils.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="ServiceBus\EventHandlers\StampImportHistoryEventHandler.cs" />
     <Compile Include="ServiceBus\EventHandlers\ReceiveManualImportEventHandler.cs" />
     <Compile Include="ServiceBus\Events\ManualImport\ReceiveManualImportReplyEvent.cs" />
     <Compile Include="ServiceBus\Events\ManualImport\ReceiveManualImportEvent.cs" />
+    <Compile Include="ServiceBus\Events\StampImportHistory\StampImportItem.cs" />
+    <Compile Include="ServiceBus\Events\StampImportHistory\StampImportHistoryEvent.cs" />
     <Compile Include="ServiceBus\IEventHandler.cs" />
     <Compile Include="ServiceBus\IntegrationEvent.cs" />
     <Compile Include="ServiceBus\RabbitMQMessageListener.cs" />

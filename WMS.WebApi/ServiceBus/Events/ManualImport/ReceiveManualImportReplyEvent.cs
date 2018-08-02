@@ -8,12 +8,12 @@ namespace WMS.WebApi.ServiceBus.Events
 {
     public class ReceiveManualImportReplyEvent : IntegrationEvent
     {
-        public ReceiveManualImportReplyEvent(IEnumerable<int> fileIds, ImportDefinitionHeader_MT cusID)
+        public ReceiveManualImportReplyEvent(IEnumerable<int> fileIds, ImportDefinitionHeader_MT defHead)
         {
             this.FileIds = fileIds;
-            this.CusID = cusID;
+            this.DefHead = defHead;
         }
         public IEnumerable<int> FileIds { get; set; }
-        public ImportDefinitionHeader_MT CusID { get; set; }
+        public ImportDefinitionHeader_MT DefHead { get; set; }
     }
 }

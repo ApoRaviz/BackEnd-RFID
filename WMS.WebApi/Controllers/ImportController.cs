@@ -23,15 +23,18 @@ namespace WMS.WebApi.Controller
             this.ImportService = importService;
         }
 
-        [HttpGet]
-        [Route("GetHeader/{ForTable}")]
-        public HttpResponseMessage Get(string forTable)
+        [HttpPost]
+        [Route("GetHeader")]
+        public HttpResponseMessage GetHeader(GetHeaderParam getHeader)
         {
             ResponseData<IEnumerable<ImportDefinitionHeader_MT>> response = new ResponseData<IEnumerable<ImportDefinitionHeader_MT>>();
             try
             {
-                IEnumerable<ImportDefinitionHeader_MT> header = ImportService.GetAllImportHeader(forTable);
-                response.SetData(header);
+                if(getHeader != null)
+                { 
+                    IEnumerable<ImportDefinitionHeader_MT> header = ImportService.GetAllImportHeader(getHeader.ProjectId,getHeader.ForTable);
+                    response.SetData(header);
+                }
             }
             catch (AppValidationException ex)
             {
@@ -116,6 +119,13 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
+        }
+
+
+        public class GetHeaderParam
+        {
+            public string ForTable { get; set; }
+            public int ProjectId { get; set; }
         }
     }
 }

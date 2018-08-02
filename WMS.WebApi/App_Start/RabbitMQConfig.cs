@@ -13,7 +13,8 @@ namespace WMS.WebApi
         public static IList<string> Initialize()
         {
             AddConfig<ReceiveManualImportEvent>();
-           
+            AddConfig<StampImportHistoryEvent>();
+
             return _listConfig;
         }
 

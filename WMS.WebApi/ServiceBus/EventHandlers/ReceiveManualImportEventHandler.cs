@@ -27,7 +27,31 @@ namespace WMS.WebApi.ServiceBus.EventsHandler
 
             ImportDefinitionHeader_MT def = null;
             if (@event.FormatId > 0)
+            {
                 def = _importService.GetImportDefinitionByImportIDSys(@event.FormatId, "ImportDefinitionDetail_MT");
+                def.ImportDefinitionDetail_MT = (from p in def.ImportDefinitionDetail_MT
+                                                 select new ImportDefinitionDetail_MT()
+                                                 {
+                                                     ImportDefHeadIDSys = p.ImportDefHeadIDSys,
+                                                     ImportDefDetailIDSys = p.ImportDefDetailIDSys,
+                                                     ColumnName = p.ColumnName,
+                                                     Digits = p.Digits,
+                                                     DataType = p.DataType,
+                                                     FixedValue = p.FixedValue,
+                                                     Import = p.Import,
+                                                     IsActive = p.IsActive,
+                                                     CreateAt = p.CreateAt,
+                                                     CreateBy = p.CreateBy,
+                                                     IsHead = p.IsHead,
+                                                     IsRefKey = p.IsRefKey,
+                                                     Mandatory = p.Mandatory,
+                                                     UpdateAt = p.UpdateAt,
+                                                     UpdateBy = p.UpdateBy
+                                                 }).ToList();
+
+
+            }
+              
 
             if (def != null)
             {

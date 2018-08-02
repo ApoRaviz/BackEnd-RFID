@@ -54,6 +54,7 @@ namespace WMS.Context
         public DbSet<LabelLayoutDetail_MT> LabelLayoutDetail_MT { get; set; }
         public DbSet<ImportDefinitionHeader_MT> ImportDefinitionHeader_MT { get; set; }
         public DbSet<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
+        public DbSet<ImportHistory> ImportHistory { get; set; }
         public DbSet<ItemInspectMapping> ItemInspectMapping { get; set; }
         public DbSet<ItemUnitMapping> ItemUnitMapping { get; set; }
         public DbSet<ReportLayoutHeader_MT> ReportLayoutHeader_MT { get; set; }
@@ -448,11 +449,18 @@ namespace WMS.Context
 
         public object ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
         {
-            var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
+
+            //var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
+            //{
+            //    ParameterName = "ImportDefinitionIDSys",
+            //    Value = importDefinitionIDSys
+            //} : new SqlParameter("ImportDefinitionIDSys", 0);
+
+            var importDefHeadIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
             {
-                ParameterName = "ImportDefinitionIDSys",
+                ParameterName = "ImportDefHeadIDSys",
                 Value = importDefinitionIDSys
-            } : new SqlParameter("ImportDefinitionIDSys", 0);
+            } : new SqlParameter("ImportDefHeadIDSys", 0);
 
             var fileNameParameter = fileName != null ? new SqlParameter
             {
@@ -486,7 +494,7 @@ namespace WMS.Context
 
 
             return Database.SqlQuery<object>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
-                ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
+                ", @Success , @CreatedDate , @UserUpdate ", importDefHeadIDSysParameter, fileNameParameter,
                 resultParameter, successParameter, createdDateParameter, userUpdateParameter).FirstOrDefault();
             ;
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcInsertImportHistory", importDefinitionIDSysParameter, fileNameParameter, resultParameter, successParameter, createdDateParameter, userUpdateParameter);

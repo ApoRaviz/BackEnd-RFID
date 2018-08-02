@@ -12,11 +12,9 @@ namespace WMS.WebApi.ServiceBus
         {
             Id = Guid.NewGuid();
             CreateAt = DateTime.UtcNow;
-            CreateBy = "anonymous";
         }
 
         public Guid Id { get; }
         public DateTime CreateAt { get; }
-        public string CreateBy { get; }
     }
 }

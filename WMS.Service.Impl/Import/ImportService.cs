@@ -32,12 +32,13 @@ namespace WMS.Service.Impl.Import
             _identity =  UtilityHelper.GetIdentity();
         }
 
-        public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)
+        public List<ImportDefinitionHeader_MT> GetAllImportHeader(int projectId,string forTable)
         {
             using (WMSDbContext Db = new WMSDbContext())
             {
                 IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
-                List<ImportDefinitionHeader_MT> import = repo.GetMany(x => x.ForTable == forTable).ToList();
+                List<ImportDefinitionHeader_MT> import = repo.GetMany(x => x.ForTable == forTable 
+                && x.ProjectIDSys == projectId).ToList();
                 return import;
             }
 
@@ -62,6 +63,15 @@ namespace WMS.Service.Impl.Import
 
                 return import;
             }
+        }
+
+        public List<ImportHistory> GetImportHistoryByImportIDSys(int id,int projectId)
+        {
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                return Db.ImportHistory.Where(w => w.ImportDefHeadIDSys == id && w.ProjectIdSys == projectId).ToList();
+            }
+
         }
 
         public int? CreateImportDifinitionForItemMaster(ImportDefinitionHeader_MT data)
