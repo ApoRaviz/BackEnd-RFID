@@ -9,7 +9,7 @@ namespace WMS.WebApi.ServiceBus
     public interface IEventHandler<in TIntegrationEvent> : IEventHandler
        where TIntegrationEvent : IntegrationEvent
     {
-        void Handle(TIntegrationEvent @event);
+        string Handle(TIntegrationEvent @event);
     }
 
     public interface IEventHandler

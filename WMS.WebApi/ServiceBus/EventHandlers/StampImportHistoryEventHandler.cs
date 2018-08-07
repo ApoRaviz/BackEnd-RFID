@@ -21,7 +21,7 @@ namespace WMS.WebApi.ServiceBus.EventsHandler
         {
         }
 
-        public void Handle(StampImportHistoryEvent @event)
+        public string Handle(StampImportHistoryEvent @event)
         {
             _importService = new ImportService();
             
@@ -39,6 +39,8 @@ namespace WMS.WebApi.ServiceBus.EventsHandler
                 
 
             }
+
+            return "";
         }
     }
 }
