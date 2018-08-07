@@ -59,6 +59,10 @@
       <Project>{13dd01f7-c348-4566-ad0e-db5f790ed5f2}</Project>
       <Name>Isuzu.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WIM.Core.Entity\WIM.Core.Entity.csproj">
+      <Project>{DE781960-445F-417B-8F15-B5FAE25D15C5}</Project>
+      <Name>WIM.Core.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -480,6 +480,7 @@
     <Content Include="DataSet\MasterDataSet.xsc">
       <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </Content>
+    <Content Include="Config\Definition\Receiving-Def.json" />
     <None Include="DataSet\MasterDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>MasterDataSet.Designer.cs</LastGenOutput>

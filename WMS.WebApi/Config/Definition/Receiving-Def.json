@@ -1,0 +1,65 @@
+﻿{
+  "Head": [
+    {
+      "Digits": 25,
+      "ColumnName": "ReceiveId",
+      "HeadingName": "Receive ID",
+      "DataType": "int",
+      "Mandatory": true
+    },
+    {
+      "Digits": 25,
+      "ColumnName": "ItemId",
+      "HeadingName": "Item ID",
+      "DataType": "int",
+      "Mandatory": true
+    },
+    {
+      "Digits": 200,
+      "ColumnName": "ItemName",
+      "HeadingName": "Item Name",
+      "DataType": "string",
+      "Mandatory": false
+    },
+    {
+      "Digits": 25,
+      "ColumnName": "Qty",
+      "HeadingName": "Item Code",
+      "DataType": "int",
+      "Mandatory": false
+    }
+  ],
+
+  "Detail": [
+    {
+      "Digits": 50,
+      "ColumnName": "ReceiveNo",
+      "HeadingName": "Receive No.",
+      "DataType": "string",
+      "Mandatory": true
+    },
+    {
+      "Digits": 50,
+      "ColumnName": "PoNo",
+      "HeadingName": "PO No.",
+      "DataType": "string",
+      "Mandatory": true
+    },
+    {
+      "Digits": 10,
+      "ColumnName": "ReceiveDate",
+      "HeadingName": "Receive Date",
+      "DataType": "DateTime",
+      "Mandatory": false
+    },
+    {
+      "Digits": 500,
+      "ColumnName": "Remark",
+      "HeadingName": "Remark",
+      "DataType": "string",
+      "Mandatory": false
+    }
+  ]
+}
+  
+
