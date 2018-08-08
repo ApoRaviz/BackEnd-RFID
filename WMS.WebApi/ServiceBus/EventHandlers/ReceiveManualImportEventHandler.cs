@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace WMS.WebApi.ServiceBus.EventsHandler
         {
         }
 
-        public void Handle(ReceiveManualImportEvent @event)
+        public string Handle(ReceiveManualImportEvent @event)
         {
             _importService = new ImportService();
 
@@ -52,12 +53,13 @@ namespace WMS.WebApi.ServiceBus.EventsHandler
 
             }
               
+            
+            ReceiveManualImportReplyEvent ret = new ReceiveManualImportReplyEvent(@event.FileIds, def);
 
-            if (def != null)
-            {
-                ReceiveManualImportReplyEvent ret = new ReceiveManualImportReplyEvent(@event.FileIds, def);
-                RabbitMQMessageListener.Publish(ret);
-            }
+            return JsonConvert.SerializeObject(ret);
+           
         }
+        
+        
     }
 }
