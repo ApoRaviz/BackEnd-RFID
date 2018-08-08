@@ -254,20 +254,20 @@ namespace WMS.WebApi.Controller
                 {
                     foreach (ImportDefinitionDetail_MT d in detail)
                     {
-                        if (d.Mandatory != "0" && !string.IsNullOrEmpty(d.Import) && (dr[int.Parse(d.Import.Replace("F", "")) - 1] == null || dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString() == ""))
+                        if (d.Mandatory != false && !string.IsNullOrEmpty(d.Import) && (dr[int.Parse(d.Import.Replace("F", "")) - 1] == null || dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString() == ""))
                         {
                             sb.AppendLine(String.Format("File at row {0} and column {1} must have data", row, int.Parse(d.Import.Replace("F", ""))));
                         }
                         else
                         {
-                            if (d.DataType == "DateTime" && d.Mandatory != "0" && d.Mandatory != "1")
+                            if (d.DataType == "DateTime" && d.Mandatory != false && d.Mandatory != false)
                             {
                                 DateTime dateTime;
 
-                                if (!DateTime.TryParseExact(dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString(), d.Mandatory, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
-                                {
-                                    sb.AppendLine(String.Format("File at row {0} and column {1} have date format incorrect (Format {2})", row, int.Parse(d.Import.Replace("F", "")), d.Mandatory));
-                                }
+                                //if (!DateTime.TryParseExact(dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString(), d.Mandatory, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+                                //{
+                                //    sb.AppendLine(String.Format("File at row {0} and column {1} have date format incorrect (Format {2})", row, int.Parse(d.Import.Replace("F", "")), d.Mandatory));
+                                //}
                             }
                             if (!string.IsNullOrEmpty(d.Import))
                             {

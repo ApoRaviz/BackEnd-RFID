@@ -23,7 +23,7 @@ namespace WMS.Service.Impl.Import
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
-                            "<Import>{5}</Import><IsHead>{6}</IsHead></row>";
+                            "<Import>{5}</Import><IsHead>{6}</IsHead><IsRefKey>{7}</IsRefKey></row>";
 
         private IIdentity _identity;
         
@@ -88,7 +88,7 @@ namespace WMS.Service.Impl.Import
                 d.CreateBy = _identity.Name;
                 d.UpdateAt = DateTime.Now;
                 d.UpdateBy = _identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead);
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey);
             }
 
             using (var scope = new TransactionScope())
@@ -130,7 +130,7 @@ namespace WMS.Service.Impl.Import
                 d.IsActive = true;
                 d.UpdateAt = DateTime.Now;
                 d.UpdateBy = _identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead);
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey);
             }
 
             using (var scope = new TransactionScope())
