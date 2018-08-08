@@ -29,7 +29,7 @@ namespace WMS.WebApi.ServiceBus
         private static string _ReceiveQueue = ConfigurationManager.AppSettings["rb:SubscriptionClientName"];
         private static string _SenderQueue = "publisher_queue";
 
-        public static bool Start(IList<string> routingNames)
+        public static bool Start(IList<string> routingNames, IList<string> rawRoutingNames)
         {
             if (!Convert.ToBoolean(ConfigurationManager.AppSettings["rb:RabbitEnable"]))
                 return false;
@@ -69,12 +69,12 @@ namespace WMS.WebApi.ServiceBus
             _channel.ExchangeDeclare(exchange: _ExchangeName,
                 durable: true, type: ExchangeType.Topic);
 
-           
 
 
-            //var consumer = new EventingBasicConsumer(_channel);
-            //GenerateSenderQueue(_ReceiveQueue, consumer, routingNames);
-            //consumer.Received += SubscribeSender;
+
+            var consumer = new EventingBasicConsumer(_channel);
+            GenerateSenderQueue(_ReceiveQueue, consumer, routingNames);
+            consumer.Received += SubscribeSender;
 
 
             // publisher
@@ -82,7 +82,7 @@ namespace WMS.WebApi.ServiceBus
             GenerateConsumerRouting(_SenderQueue, routingNames, consumerPub);
             consumerPub.Received += SubscribePublisher;
 
-            RegisterRawRabbit();
+            GenerateRawrabbitConsumer(rawRoutingNames);
 
             return true;
         }
@@ -101,7 +101,44 @@ namespace WMS.WebApi.ServiceBus
             autoAck: false,
             consumer: consumer);
         }
+        private static void GenerateRawrabbitConsumer(IList<string> routers)
+        {
+            var config = new RawRabbitConfiguration
+            {
+                Username = ConfigurationManager.AppSettings["rb:UserName"],
+                Password = ConfigurationManager.AppSettings["rb:Password"],
+                Port = Convert.ToInt32(ConfigurationManager.AppSettings["rb:Port"]),
+                VirtualHost = ConfigurationManager.AppSettings["rb:VirsualHost"],
+                Hostnames = { ConfigurationManager.AppSettings["rb:HostName"] }
+                // more props here.
+            };
 
+            var client = BusClientFactory.CreateDefault(config);
+
+            foreach (var route in routers)
+            {
+                client.RespondAsync<string, string>(async (message, context) =>
+                {
+                    var eventType = Type.GetType("WMS.WebApi.ServiceBus.Events." + route);
+                    var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
+                    var handler = Type.GetType("WMS.WebApi.ServiceBus.EventsHandler." + route + "Handler");
+                    object objHandler = Activator.CreateInstance(handler, new object[] { });
+                    var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                    var result = concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });
+
+                    if (result != null)
+                        return result.ToString();
+
+                    return string.Empty;
+                }, cgf => cgf.WithExchange(w => w.WithName("wim_event_topic"))
+                .WithQueue(w => w.WithName("WMSTopic")
+                .WithDurability()
+                .WithExclusivity(false)
+                .WithAutoDelete())
+                .WithRoutingKey(route));
+            }
+            
+        }
         #endregion
 
         #region PublisherConsumer
@@ -195,39 +232,6 @@ namespace WMS.WebApi.ServiceBus
                       multiple: false);
             }
 
-        }
-
-        private static void RegisterRawRabbit()
-        {
-            var config = new RawRabbitConfiguration
-            {
-                Username = ConfigurationManager.AppSettings["rb:UserName"],
-                Password = ConfigurationManager.AppSettings["rb:Password"],
-                Port = Convert.ToInt32(ConfigurationManager.AppSettings["rb:Port"]),
-                VirtualHost = ConfigurationManager.AppSettings["rb:VirsualHost"],
-                Hostnames = { ConfigurationManager.AppSettings["rb:HostName"] }
-                // more props here.
-            };
-
-            var client = BusClientFactory.CreateDefault(config);
-            client.RespondAsync<string, string>(async (message, context) =>
-            {
-                var eventType = Type.GetType("WMS.WebApi.ServiceBus.Events.ReceiveManualImportEvent");
-                var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
-                var handler = Type.GetType("WMS.WebApi.ServiceBus.EventsHandler.ReceiveManualImportEventHandler");
-                object objHandler = Activator.CreateInstance(handler, new object[] { });
-                var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
-                var result = concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });
-               
-
-                return result.ToString();
-
-            }, cgf => cgf.WithExchange(w => w.WithName("wim_event_topic"))
-            .WithQueue(w => w.WithName("WMS_Topic")
-            .WithDurability()
-            .WithExclusivity(false)
-            .WithAutoDelete())
-            .WithRoutingKey("ReceiveManualImportEvent"));
         }
 
         public static void Stop()

@@ -185,7 +185,7 @@ namespace WMS.WebApi.Controller
                                     case "Semicolon (;)": delimiter = ";"; break;
                                     case "Colon (:)": delimiter = ":"; break;
                                     case "Comma (,)": delimiter = ","; break;
-                                }
+                            }
 
                                 switch (data.Encoding)
                                 {

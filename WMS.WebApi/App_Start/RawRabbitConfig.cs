@@ -6,13 +6,13 @@ using WMS.WebApi.ServiceBus.Events;
 
 namespace WMS.WebApi
 {
-    public static class RabbitMQConfig
+    public static class RawRabbitConfig
     {
         private static IList<string> _listConfig = new List<string>();
 
         public static IList<string> Initialize()
         {
-            //AddConfig<ReceiveManualImportEvent>();
+            AddConfig<ReceiveManualImportEvent>();
             //AddConfig<StampImportHistoryEvent>();
 
             return _listConfig;
