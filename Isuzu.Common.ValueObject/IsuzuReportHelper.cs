@@ -117,10 +117,12 @@ namespace Isuzu.Common.ValueObject
                 dataTable.Columns.Add(new DataColumn("Last Pack Case (Status)"));
                 dataTable.Columns.Add(new DataColumn("First Shipping (Status)"));
                 dataTable.Columns.Add(new DataColumn("Last Shipping (Status)"));
+                dataTable.Columns.Add(new DataColumn("Total Carton No."));
+                dataTable.Columns.Add(new DataColumn("Total Case No."));
 
                 for (int i = 0; i < items.Count(); i++)
                 {
-                    object[] obj = new object[12];
+                    object[] obj = new object[14];
                     obj[0] = items[i].InvNo;
                     obj[1] = items[i].Status;
                     obj[2] = items[i].QtyOrder;
@@ -133,6 +135,8 @@ namespace Isuzu.Common.ValueObject
                     obj[9] = (items[i].CaseEnd != null) ? Convert.ToDateTime(items[i].CaseEnd).ToString("dd/MM/yyyy HH:mm") : items[i].CaseEnd.ToString();
                     obj[10] = (items[i].ShipStart != null) ? Convert.ToDateTime(items[i].ShipStart).ToString("dd/MM/yyyy HH:mm") : items[i].ShipStart.ToString();
                     obj[11] = (items[i].ShipEnd != null) ? Convert.ToDateTime(items[i].ShipEnd).ToString("dd/MM/yyyy HH:mm") : items[i].ShipEnd.ToString();
+                    obj[12] = items[i].totalCarton;
+                    obj[13] = items[i].totalCase;
                     dataTable.Rows.Add(obj);
                 }
             }

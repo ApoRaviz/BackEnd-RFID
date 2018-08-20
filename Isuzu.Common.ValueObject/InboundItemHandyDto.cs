@@ -109,6 +109,8 @@ namespace Isuzu.Common.ValueObject
         public DateTime? CaseEnd { get; set; }
         public DateTime? ShipStart { get; set; }
         public DateTime? ShipEnd { get; set; }
+        public int totalCarton { get; set; }
+        public int totalCase { get; set; }
     }
     
     public class InvHistoryFilter

@@ -1871,11 +1871,12 @@ namespace Isuzu.Service.Impl.Inbound
             string sql = "";
             string startDate = "'" + filter.startDate.ToString("yyyy-MM-dd 00:00:00") + "'";
             string endDate = "'" + filter.endDate.ToString("yyyy-MM-dd 23:59:59") + "'";
-            sql += "select a.InvNo,a.Status,a.CreateAt,count(*) as QtyOrder,sum(b.Qty) as QtyItem," +
-                   "min(b.RegisterDate) as RegisterStart,max(b.RegisterDate) as RegisterEnd," +
-                   "min(b.PackCartonDate) as CartonStart,max(b.PackCartonDate) as CartonEnd," +
-                   "min(b.PackCaseDate) as CaseStart,max(b.PackCaseDate) as CaseEnd," +
-                   "min(b.ShippingDate) as ShipStart,max(b.ShippingDate) as ShipEnd " +
+            sql += "select a.InvNo,a.Status,a.CreateAt,count(*) as QtyOrder,sum(b.Qty) as QtyItem, " +
+                   "min(b.RegisterDate) as RegisterStart,max(b.RegisterDate) as RegisterEnd, " +
+                   "min(b.PackCartonDate) as CartonStart,max(b.PackCartonDate) as CartonEnd, " +
+                   "min(b.PackCaseDate) as CaseStart,max(b.PackCaseDate) as CaseEnd, " +
+                   "min(b.ShippingDate) as ShipStart,max(b.ShippingDate) as ShipEnd, " +
+                   "count(distinct(b.CartonNo)) as totalCarton, count(distinct(b.CaseNo)) as totalCase " +
                    "from InboundItemsHead a inner join InboundItems b on a.InvNo = b.InvNo " +
                    "where a.CreateAt >= " + startDate +
                    "and a.CreateAt <= " + endDate;
