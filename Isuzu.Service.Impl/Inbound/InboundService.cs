@@ -254,18 +254,18 @@ namespace Isuzu.Service.Impl.Inbound
                             var statusList = db.InboundItems.Where(w => w.InvNo == invNo && w.Status != statusDeleted).Select(s => s.Status).Distinct().ToList();
                             int countStatus = statusList.Count;
 
-                            if (statusList.Contains(statusCasePacked))
-                            {
-                                status = statusCasePacked;
-                            }
-                            else if (statusList.Contains(statusCartonPacked))
-                            {
-                                status = statusCartonPacked;
-                            }
-                            else if (statusList.Contains(statusRFIDMatched))
-                            {
-                                status = statusRFIDMatched;
-                            }
+                            //if (statusList.Contains(statusCasePacked))
+                            //{
+                            //    status = statusCasePacked;
+                            //}
+                            //else if (statusList.Contains(statusCartonPacked))
+                            //{
+                            //    status = statusCartonPacked;
+                            //}
+                            //else if (statusList.Contains(statusRFIDMatched))
+                            //{
+                            //    status = statusRFIDMatched;
+                            //}
 
                             switch (countStatus)
                             {
@@ -273,7 +273,14 @@ namespace Isuzu.Service.Impl.Inbound
                                     statusLastest = status;
                                     break;
                                 default:
-                                    statusLastest = status + "_PARTIAL";
+                                    if (new List<string> { statusCasePacked, statusCartonPacked, statusRFIDMatched }.Contains(status))
+                                    {
+                                        statusLastest = status;
+                                    }
+                                    else
+                                    {
+                                        statusLastest = status + "_PARTIAL";
+                                    }
                                     break;
                             }
 
@@ -1381,9 +1388,6 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItemsHead>() { };
                     }
                 }
-
-
-
             }
             return items;
 
@@ -1418,7 +1422,6 @@ namespace Isuzu.Service.Impl.Inbound
 
                 return items;
             }
-
         }
         public IEnumerable<InboundItemsHead> GetDataGroupByKeyword(string keyword,int pageIndex, int pageSize, out int totalRecord)
         {
@@ -1860,6 +1863,45 @@ namespace Isuzu.Service.Impl.Inbound
                     Db.SaveChanges();
                     scope.Complete();
                 }
+            }
+        }
+
+        public IEnumerable<InvoiceReportDetail> GetInvoiceHistory(InvHistoryFilter filter)
+        {
+            string sql = "";
+            string startDate = "'" + filter.startDate.ToString("yyyy-MM-dd 00:00:00") + "'";
+            string endDate = "'" + filter.endDate.ToString("yyyy-MM-dd 23:59:59") + "'";
+            sql += "select a.InvNo,a.Status,a.CreateAt,count(*) as QtyOrder,sum(b.Qty) as QtyItem," +
+                   "min(b.RegisterDate) as RegisterStart,max(b.RegisterDate) as RegisterEnd," +
+                   "min(b.PackCartonDate) as CartonStart,max(b.PackCartonDate) as CartonEnd," +
+                   "min(b.PackCaseDate) as CaseStart,max(b.PackCaseDate) as CaseEnd," +
+                   "min(b.ShippingDate) as ShipStart,max(b.ShippingDate) as ShipEnd " +
+                   "from InboundItemsHead a inner join InboundItems b on a.InvNo = b.InvNo " +
+                   "where a.CreateAt >= " + startDate +
+                   "and a.CreateAt <= " + endDate;
+            if (filter.status != null && filter.status != "All")
+            {
+                sql += "and a.Status = '" + filter.status + "'";
+            }
+
+            sql += "group by a.InvNo,a.Status,a.CreateAt order by a.CreateAt desc";
+
+            List<InvoiceReportDetail> items = new List<InvoiceReportDetail>() { };
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    try
+                    {
+                        items = Db.Database.SqlQuery<InvoiceReportDetail>(sql).ToList();
+                    }
+                    catch (Exception ex)
+                    {
+                        return new List<InvoiceReportDetail>() { };
+                    }
+
+                }
+                return items;
             }
         }
 

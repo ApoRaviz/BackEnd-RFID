@@ -24,6 +24,7 @@ namespace WMS.Entity.ImportManagement
         public string ForTable { get; set; }
         public string FormatName { get; set; }
         public string Delimiter { get; set; }
+        public string Qualifier { get; set; }
         public Nullable<int> MaxHeading { get; set; }
         public string Encoding { get; set; }
         public Nullable<bool> SkipFirstRecode { get; set; }

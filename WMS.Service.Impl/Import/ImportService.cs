@@ -102,7 +102,7 @@ namespace WMS.Service.Impl.Import
                    
                     try
                     {
-                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
+                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.Qualifier,data.MaxHeading, data.Encoding, data.SkipFirstRecode
                                                   , data.CreateAt, data.CreateBy, sb.ToString());
                         Db.SaveChanges();
                     }
@@ -142,7 +142,7 @@ namespace WMS.Service.Impl.Import
                 {
                     try
                     {
-                        Db.ProcUpdateImportDefinition(data.ImportDefHeadIDSys, data.FormatName, data.Delimiter, data.MaxHeading
+                        Db.ProcUpdateImportDefinition(data.ImportDefHeadIDSys, data.FormatName, data.Delimiter, data.Qualifier, data.MaxHeading
                                                   , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
                         Db.SaveChanges();
                     }
