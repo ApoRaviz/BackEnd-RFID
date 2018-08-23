@@ -19,8 +19,8 @@ using Microsoft.VisualBasic;
 using WIM.Core.Common.Utility.Http;
 using System.Net;
 using WIM.Core.Common.Utility.Extensions;
-using Auth.Security.Entity;
 using Auth.Security;
+using Auth.Security.Entity;
 using Auth.Security.Providers;
 
 namespace TMS.WebApi.Controllers

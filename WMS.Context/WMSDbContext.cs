@@ -277,8 +277,14 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateLabelLayout", labelIDSysParameter, formatNameParameter, widthParameter, widthUnitParameter, heightParameter, heightUnitParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public Nullable<int> ProcCreateImportDefinition(string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        public Nullable<int> ProcCreateImportDefinition(Nullable<int> ProjectIDSys,string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, string userCreate, string xmlDetail)
         {
+            var projectIDSys = ProjectIDSys.HasValue ? new SqlParameter
+            {
+                ParameterName = "ProjectIDSys",
+                Value = ProjectIDSys
+            } : new SqlParameter("ProjectIDSys", 0);
+
             var forTableParameter = forTable != null ? new SqlParameter
             {
                 ParameterName = "ForTable",
@@ -317,21 +323,16 @@ namespace WMS.Context
 
             var createdDateParameter = createdDate.HasValue ? new SqlParameter
             {
-                ParameterName = "CreatedDate",
+                ParameterName = "CreateAt",
                 Value = createdDate
-            } : new SqlParameter("CreatedDate", DateTime.Now);
+            } : new SqlParameter("CreateAt", DateTime.Now);
 
-            var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
+            var userCreateParameter = userCreate != null ? new SqlParameter
             {
-                ParameterName = "UpdatedDate",
-                Value = updatedDate
-            } : new SqlParameter("UpdatedDate", DateTime.Now);
+                ParameterName = "CreateBy",
+                Value = userCreate
+            } : new SqlParameter("CreateBy", DBNull.Value);
 
-            var userUpdateParameter = userUpdate != null ? new SqlParameter
-            {
-                ParameterName = "UserUpdate",
-                Value = userUpdate
-            } : new SqlParameter("UserUpdate", DBNull.Value);
 
             var xmlDetailParameter = new SqlParameter
             {
@@ -339,20 +340,20 @@ namespace WMS.Context
                 Value = xmlDetail
             };
 
-            return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ForTable , @FormatName , @Delimiter , @MaxHeading ," +
-    "@Encoding , @SkipFirstRecode , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", forTableParameter, formatNameParameter, delimiterParameter,
-    maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+            return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ProjectIDSys, @ForTable , @FormatName , @Delimiter , @MaxHeading ," +
+            "@Encoding , @SkipFirstRecode , @CreateAt , @CreateBy , @XmlDetail ", projectIDSys, forTableParameter, formatNameParameter, delimiterParameter,
+            maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, userCreateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateImportDefinition", forTableParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public object ProcUpdateImportDefinition(Nullable<int> importIDSys, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        public object ProcUpdateImportDefinition(Nullable<int> ImportDefHeadIDSys, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
         {
-            var importIDSysParameter = importIDSys.HasValue ? new SqlParameter
+            var importIDSysParameter = ImportDefHeadIDSys.HasValue ? new SqlParameter
             {
-                ParameterName = "ImportIDSys",
-                Value = importIDSys
-            } : new SqlParameter("ImportIDSys", 0);
+                ParameterName = "ImportDefHeadIDSys",
+                Value = ImportDefHeadIDSys
+            } : new SqlParameter("ImportDefHeadIDSys", 0);
 
             var formatNameParameter = formatName != null ? new SqlParameter
             {
@@ -384,23 +385,17 @@ namespace WMS.Context
                 Value = skipFirstRecode
             } : new SqlParameter("SkipFirstRecode", false);
 
-            var createdDateParameter = createdDate.HasValue ? new SqlParameter
-            {
-                ParameterName = "CreatedDate",
-                Value = createdDate
-            } : new SqlParameter("CreatedDate", DateTime.Now);
-
             var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
             {
-                ParameterName = "UpdatedDate",
+                ParameterName = "UpdateAt",
                 Value = updatedDate
-            } : new SqlParameter("UpdatedDate", DateTime.Now);
+            } : new SqlParameter("UpdateAt", DateTime.Now);
 
             var userUpdateParameter = userUpdate != null ? new SqlParameter
             {
-                ParameterName = "UserUpdate",
+                ParameterName = "UpdateBy",
                 Value = userUpdate
-            } : new SqlParameter("UserUpdate", DBNull.Value);
+            } : new SqlParameter("UpdateBy", DBNull.Value);
 
             var xmlDetailParameter = new SqlParameter
             {
@@ -408,20 +403,20 @@ namespace WMS.Context
                 Value = xmlDetail
             };
 
-            return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportIDSys , @FormatName , @Delimiter , @MaxHeading ," +
-    "@Encoding , @SkipFirstRecode , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter,
-    maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+            return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportDefHeadIDSys, @FormatName , @Delimiter , @MaxHeading ," +
+            "@Encoding , @SkipFirstRecode , @UpdateAt , @UpdateBy , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter,
+            maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateImportDefinition", importIDSysParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public string ProcImportDataToTable(Nullable<int> importSysID, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlData)
+        public string ProcImportDataToTable(Nullable<int> ImportDefHeadIDSys, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlData)
         {
-            var importSysIDParameter = importSysID.HasValue ? new SqlParameter
+            var importDefHeadIDSys = ImportDefHeadIDSys.HasValue ? new SqlParameter
             {
-                ParameterName = "ImportSysID",
-                Value = importSysID
-            } : new SqlParameter("ImportSysID", 0);
+                ParameterName = "ImportDefHeadIDSys",
+                Value = ImportDefHeadIDSys
+            } : new SqlParameter("ImportDefHeadIDSys", 0);
 
             var createdDateParameter = createdDate.HasValue ? new SqlParameter
             {
@@ -447,7 +442,7 @@ namespace WMS.Context
                 Value = xmlData
             };
 
-            return Database.SqlQuery<string>("exec ProcImportDataToTable @ImportSysID , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter).FirstOrDefault();
+            return Database.SqlQuery<string>("exec ProcImportDataToTable @ImportDefHeadIDSys , @CreatedDate , @UpdatedDate , @UserUpdate , @XmlDetail ", importDefHeadIDSys, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter).FirstOrDefault();
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ProcImportDataToTable", importSysIDParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDataParameter);
         }
 

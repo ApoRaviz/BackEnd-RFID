@@ -246,8 +246,8 @@ namespace Isuzu.Service.Impl
             ResponseData<int> responseHandy = new ResponseData<int>();
             try
             {
-                InboundService.PerformPackingCartonNew_HANDY(item);
-                responseHandy.SetData(1);
+                int IsUsedRFID = InboundService.PerformPackingCartonNew_HANDY(item);
+                responseHandy.SetData(IsUsedRFID);
             }
             catch (AppValidationException ex)
             {

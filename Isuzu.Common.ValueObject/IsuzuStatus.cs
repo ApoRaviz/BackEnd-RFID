@@ -38,6 +38,10 @@ namespace Isuzu.Common.ValueObject
         CartonPacked,
         [ValueEnum("CASE_PACKED")]
         CasePacked,
+        [ValueEnum("RFID_MATCHED")]
+        RFIDMatched,
+
+
         [ValueEnum("REGISTERED_PARTIAL")]
         RegisteredPartial,
         [ValueEnum("CARTON_PACKED_PARTIAL")]

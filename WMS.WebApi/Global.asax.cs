@@ -9,6 +9,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using WIM.Core.Common.Helpers;
 using WIM.Core.Context;
+using WMS.WebApi.ServiceBus;
 
 namespace WMS.WebApi
 {
@@ -25,6 +26,7 @@ namespace WMS.WebApi
             AutoMapperConfig.Initialize();
             ApiHashTableHelper.Initialize();
             TableHashTableHelper.Initialize();
+            RabbitMQMessageListener.Start(RabbitMQConfig.Initialize());
 
         }
     }

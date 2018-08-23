@@ -56,10 +56,12 @@ namespace Isuzu.Service.Impl.Inbound
         string statusRegistered = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.Registered.GetValueEnum());
         string statusCartonPacked = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.CartonPacked.GetValueEnum());
         string statusCasePacked = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.CasePacked.GetValueEnum());
-        
+        string statusRFIDMatched = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RFIDMatched.GetValueEnum());
+
         string statusRegisteredPartial = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.RegisteredPartial.GetValueEnum());
         string statusCartonPackedPartial = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.CartonPackedPartial.GetValueEnum());
         string statusCasePackedPartial = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, IsuzuStatus.CasePackedPartial.GetValueEnum());
+        
 
 
         #region =========================== HANDY ===========================
@@ -125,7 +127,7 @@ namespace Isuzu.Service.Impl.Inbound
                     try
                     {
                         var IsUsedRFID = (from i in db.InboundItems
-                                          where i.RFIDTag == item.RFIDTag
+                                          where item.RFIDTag.EndsWith(i.RFIDTag)
                                           && !new List<string>
                                           {
                                               statusShipped,
@@ -146,7 +148,7 @@ namespace Isuzu.Service.Impl.Inbound
                                      ).SingleOrDefault();
 
                         itemExist.RFIDTag = item.RFIDTag;
-                        itemExist.Status = statusRegistered;
+                        itemExist.Status = statusRFIDMatched; // RFIDMATCHED 
                         itemExist.RegisterLocation = item.RegisterLocation;
                         itemExist.RegisterDate = DateTime.Now;
                         detailRepo.Update(itemExist);
@@ -162,7 +164,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
             if (itemExist != null)
             {
-                UpdateHead_HANDY2(itemExist.InvNo, statusRegistered);
+                UpdateHead_HANDY2(itemExist.InvNo, statusRFIDMatched);
             }
             return 1;
         }
@@ -229,7 +231,7 @@ namespace Isuzu.Service.Impl.Inbound
                     }
                 }
             }
-            if (itemExist != null && itemExist.Status == statusNew)
+            if (itemExist != null && itemExist.Status == statusRegistered)
             {
                 UpdateHead_HANDY2(itemExist.InvNo, statusRegistered);
             }
@@ -258,6 +260,10 @@ namespace Isuzu.Service.Impl.Inbound
                             else if (statusList.Contains(statusCartonPacked))
                             {
                                 status = statusCartonPacked;
+                            }
+                            else if (statusList.Contains(statusRFIDMatched))
+                            {
+                                status = statusRFIDMatched;
                             }
 
                             switch (countStatus)
@@ -727,7 +733,7 @@ namespace Isuzu.Service.Impl.Inbound
             }
         }
 
-        public void PerformPackingCartonNew_HANDY(InboundItemCartonPackingHandyRequestNew inboundItemCartonPacking)
+        public int PerformPackingCartonNew_HANDY(InboundItemCartonPackingHandyRequestNew inboundItemCartonPacking)
         {
             List<InboundItems> queryForPacking;
             using (var scope = new TransactionScope())
@@ -735,6 +741,20 @@ namespace Isuzu.Service.Impl.Inbound
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
                     IInboundRepository DetailRepo = new InboundRepository(Db);
+                    if(inboundItemCartonPacking.function == "Packing")
+                    {
+                        var IsUsedRFID = (from i in Db.InboundItems
+                                          where inboundItemCartonPacking.RFIDTag.EndsWith(i.RFIDTag)
+                                          && !new List<string>
+                                          {
+                                              statusShipped,
+                                              statusDeleted
+                                          }.Contains(i.Status)
+                                          select i).FirstOrDefault();
+
+                        if (IsUsedRFID != null) return 0;
+                    }
+
                     queryForPacking = ( from i in Db.InboundItems
                                             where inboundItemCartonPacking.OrderScannedList.Contains(i.ISZJOrder) &&
                                                  !new List<string> {
@@ -760,6 +780,7 @@ namespace Isuzu.Service.Impl.Inbound
             {
                UpdateHead_HANDY2(queryForPacking[0].InvNo, statusCartonPacked);
             }
+            return 1;
         }
 
         public InboundItemCartonPackingHandyRequestNew GetItemCartonByISZJOrder_HANDY(string ISZJOrder)
@@ -777,7 +798,8 @@ namespace Isuzu.Service.Impl.Inbound
                         select new InboundItemCartonPackingHandyRequestNew
                         {
                             InvNo = i.InvNo,
-                            ISZJOrder = i.ISZJOrder
+                            ISZJOrder = i.ISZJOrder,
+                            CartonNo = i.CartonNo
                         }).FirstOrDefault();
             }
             return item;
@@ -810,7 +832,6 @@ namespace Isuzu.Service.Impl.Inbound
             using (IsuzuDataContext Db = new IsuzuDataContext())
             {
                 item = (from i in Db.InboundItems
-                            //where i.RFIDTag == rfid &&
                         where rfid.EndsWith(i.RFIDTag) &&
                               i.Status == statusCartonPacked
                         select new InboundItemCartonPackingHandyRequestNew

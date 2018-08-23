@@ -144,7 +144,7 @@ namespace WMS.Service.Impl.Inventories
 
             if (invenIDSysList.Count() > 1)
             {
-                throw new AppValidationException(ErrorEnum.INVALID_INVENTORY_ID);
+                throw new AppValidationException(ErrorEnum.DATA_NOT_FOUND);//INVALID_INVENTORY_ID
             }
 
             int invenIDSys = invenIDSysList.SingleOrDefault();

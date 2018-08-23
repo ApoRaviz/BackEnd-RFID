@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Master.Context;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
@@ -22,11 +23,13 @@ namespace WMS.Service.Impl.Import
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
-                            "<Import>{5}</Import></row>";
+                            "<Import>{5}</Import><IsHead>{6}</IsHead></row>";
 
-
+        private IIdentity _identity;
+        
         public ImportService()
         {
+            _identity =  UtilityHelper.GetIdentity();
         }
 
         public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)
@@ -72,23 +75,25 @@ namespace WMS.Service.Impl.Import
             {
                 d.IsActive = true;
                 d.CreateAt = DateTime.Now;
+                d.CreateBy = _identity.Name;
                 d.UpdateAt = DateTime.Now;
-                d.UpdateBy = Identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import);
+                d.UpdateBy = _identity.Name;
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead);
             }
 
             using (var scope = new TransactionScope())
             {
                 data.IsActive = true;
                 data.CreateAt = DateTime.Now;
-                data.UpdateAt = DateTime.Now;
-                data.UpdateBy = Identity.Name;
+                data.CreateBy = _identity.Name;
+
                 using (WMSDbContext Db = new WMSDbContext())
                 {
+                   
                     try
                     {
-                        ReportSysID = Db.ProcCreateImportDefinition(data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
-                                                  , data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
+                                                  , data.CreateAt, data.CreateBy, sb.ToString());
                         Db.SaveChanges();
                     }
                     catch (DbEntityValidationException e)
@@ -114,20 +119,20 @@ namespace WMS.Service.Impl.Import
             {
                 d.IsActive = true;
                 d.UpdateAt = DateTime.Now;
-                d.UpdateBy = Identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import);
+                d.UpdateBy = _identity.Name;
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead);
             }
 
             using (var scope = new TransactionScope())
             {
                 data.UpdateAt = DateTime.Now;
-                data.UpdateBy = Identity.Name;
+                data.UpdateBy = _identity.Name;
 
                 using (WMSDbContext Db = new WMSDbContext())
                 {
                     try
                     {
-                        Db.ProcUpdateImportDefinition(data.ImportIDSys, data.FormatName, data.Delimiter, data.MaxHeading
+                        Db.ProcUpdateImportDefinition(data.ImportDefHeadIDSys, data.FormatName, data.Delimiter, data.MaxHeading
                                                   , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
                         Db.SaveChanges();
                     }
@@ -207,6 +212,7 @@ namespace WMS.Service.Impl.Import
             {
                 using (WMSDbContext Db = new WMSDbContext())
                 {
+                    
                     try
                     {
                         Db.ProcDeleteImportDefinition(ImportIDSys);

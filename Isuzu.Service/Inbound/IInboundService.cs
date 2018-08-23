@@ -27,7 +27,7 @@ namespace Isuzu.Service
         void PerformPackingCarton_HANDY(InboundItemCartonPackingHandyRequest inboundItemCartonPacking);
         void UpdateHead_HANDY2(string invNo, string status);
 
-        void PerformPackingCartonNew_HANDY(InboundItemCartonPackingHandyRequestNew inboundItemCartonPacking);
+        int PerformPackingCartonNew_HANDY(InboundItemCartonPackingHandyRequestNew inboundItemCartonPacking);
         InboundItemCartonPackingHandyRequestNew GetItemCartonByISZJOrder_HANDY(string ISZJOrder);
         List<InboundItemCartonPackingHandyRequest> GetCartonNoByInvoice_HANDY(string InvNo);
         List<InboundItemCartonPackingHandyRequestNew> GetCartonPackedItemByRFID_HANDY(string rfid);

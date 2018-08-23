@@ -71,6 +71,7 @@ namespace Isuzu.Common.ValueObject
         public string ISZJOrder { get; set; }
         public string InvNo { get; set; }
         public List<string> OrderScannedList { get; set; }
+        public string function { get; set; }
     }
 
     public class InboundItemCasePackingHandyRequest
