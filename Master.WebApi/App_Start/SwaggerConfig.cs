@@ -1,9 +1,9 @@
 using System.Web.Http;
-using WebActivatorEx;
 using Master.WebApi;
 using Swashbuckle.Application;
+using System.Web;
 
-[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
+// [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
 namespace Master.WebApi
 {

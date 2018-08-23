@@ -11,15 +11,11 @@ using WIM.Core.Common.Helpers;
 
 namespace Master.WebApi
 {
-    public class WebApiApplication : System.Web.HttpApplication
+    public class WebApiApplication : HttpApplication
     {
         protected void Application_Start()
         {
             HttpConfiguration config = GlobalConfiguration.Configuration;
-
-            config.Formatters.JsonFormatter
-                        .SerializerSettings
-                        .ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             AreaRegistration.RegisterAllAreas();
             UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
