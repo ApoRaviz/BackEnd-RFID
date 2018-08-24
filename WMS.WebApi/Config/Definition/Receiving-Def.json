@@ -9,8 +9,8 @@
     },
     {
       "Digits": 25,
-      "ColumnName": "ItemId",
-      "HeadingName": "Item ID",
+      "ColumnName": "ReceiveNo",
+      "HeadingName": "ReceiveNo",
       "DataType": "int",
       "Mandatory": true
     },
