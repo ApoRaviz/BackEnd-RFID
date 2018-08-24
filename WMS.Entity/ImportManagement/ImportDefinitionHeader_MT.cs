@@ -27,8 +27,7 @@ namespace WMS.Entity.ImportManagement
         public string Qualifier { get; set; }
         public Nullable<int> MaxHeading { get; set; }
         public string Encoding { get; set; }
-        public Nullable<bool> SkipFirstRecode { get; set; }
-        public string FormatDatetime { get; set; }
+        public Nullable<int> StartRow { get; set; }
 
 
         public virtual ICollection<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
