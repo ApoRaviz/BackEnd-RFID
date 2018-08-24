@@ -99,6 +99,51 @@ namespace Isuzu.Common.ValueObject
             return dataTable;
         }
 
+        public static DataTable getExportInvHistoryDataTable(List<InvoiceReportDetail> items)
+        {
+            DataTable dataTable = new DataTable();
+            //custom fields
+            if (items != null)
+            {
+                dataTable.Columns.Add(new DataColumn("Invoice No."));
+                dataTable.Columns.Add(new DataColumn("Status"));
+                dataTable.Columns.Add(new DataColumn("Total Order No."));
+                dataTable.Columns.Add(new DataColumn("Total (Item) Qty"));
+                dataTable.Columns.Add(new DataColumn("First Register (Status)"));
+                dataTable.Columns.Add(new DataColumn("Last Register (Status)"));
+                dataTable.Columns.Add(new DataColumn("First Pack Carton (Status)"));
+                dataTable.Columns.Add(new DataColumn("Last Pack Carton (Status)"));
+                dataTable.Columns.Add(new DataColumn("First Pack Case (Status)"));
+                dataTable.Columns.Add(new DataColumn("Last Pack Case (Status)"));
+                dataTable.Columns.Add(new DataColumn("First Shipping (Status)"));
+                dataTable.Columns.Add(new DataColumn("Last Shipping (Status)"));
+                dataTable.Columns.Add(new DataColumn("Total Carton No."));
+                dataTable.Columns.Add(new DataColumn("Total Case No."));
+
+                for (int i = 0; i < items.Count(); i++)
+                {
+                    object[] obj = new object[14];
+                    obj[0] = items[i].InvNo;
+                    obj[1] = items[i].Status;
+                    obj[2] = items[i].QtyOrder;
+                    obj[3] = items[i].QtyItem;
+                    obj[4] = (items[i].RegisterStart != null) ? Convert.ToDateTime(items[i].RegisterStart).ToString("dd/MM/yyyy HH:mm") : items[i].RegisterStart.ToString();
+                    obj[5] = (items[i].RegisterEnd != null) ? Convert.ToDateTime(items[i].RegisterEnd).ToString("dd/MM/yyyy HH:mm") : items[i].RegisterEnd.ToString();
+                    obj[6] = (items[i].CartonStart != null) ? Convert.ToDateTime(items[i].CartonStart).ToString("dd/MM/yyyy HH:mm") : items[i].CartonStart.ToString(); 
+                    obj[7] = (items[i].CartonEnd != null) ? Convert.ToDateTime(items[i].CartonEnd).ToString("dd/MM/yyyy HH:mm") : items[i].CartonEnd.ToString();
+                    obj[8] = (items[i].CaseStart != null) ? Convert.ToDateTime(items[i].CaseStart).ToString("dd/MM/yyyy HH:mm") : items[i].CaseStart.ToString();
+                    obj[9] = (items[i].CaseEnd != null) ? Convert.ToDateTime(items[i].CaseEnd).ToString("dd/MM/yyyy HH:mm") : items[i].CaseEnd.ToString();
+                    obj[10] = (items[i].ShipStart != null) ? Convert.ToDateTime(items[i].ShipStart).ToString("dd/MM/yyyy HH:mm") : items[i].ShipStart.ToString();
+                    obj[11] = (items[i].ShipEnd != null) ? Convert.ToDateTime(items[i].ShipEnd).ToString("dd/MM/yyyy HH:mm") : items[i].ShipEnd.ToString();
+                    obj[12] = items[i].totalCarton;
+                    obj[13] = items[i].totalCase;
+                    dataTable.Rows.Add(obj);
+                }
+            }
+
+            return dataTable;
+        }
+
         public static string GetIsuzuAutoGenHeader(string input)
         {
             //if (input.Length == 1)

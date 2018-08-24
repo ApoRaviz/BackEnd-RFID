@@ -1003,7 +1003,6 @@ namespace Isuzu.Service.Impl
             return result;
         }
 
-
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
@@ -1254,5 +1253,54 @@ namespace Isuzu.Service.Impl
         }
 
         #endregion
+        #region =======================INVOICE HISTORY=======================
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("export/getInvoiceHistory")]
+        public HttpResponseMessage GetInvoiceHistory([FromBody]InvHistoryFilter filter)
+        {
+            ResponseData<IEnumerable<InvoiceReportDetail>> response = new ResponseData<IEnumerable<InvoiceReportDetail>>();
+            try
+            {
+                IEnumerable<InvoiceReportDetail> item = InboundService.GetInvoiceHistory(filter);
+                response.SetData(item);
+            }
+            catch (AppValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("export/InvoiceHistory")]
+        public HttpResponseMessage ExportInvoiceHistory([FromBody]InvHistoryFilter data)
+        {
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
+
+            IEnumerable<InvoiceReportDetail> invoiceHistory = InboundService.GetInvoiceHistory(data);
+            if (invoiceHistory != null)
+            {
+                string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
+
+                string fileName = "{0}_{1}.{2}";
+                fileName = String.Format(fileName, "Export_Isuzu_", DateTime.Now.ToString("yyyy-MM-dd_HHmmss", new System.Globalization.CultureInfo("en-US")), "xlsx");
+                DataTable dt = IsuzuReportHelper.getExportInvHistoryDataTable(invoiceHistory.ToList());
+                var ms = IsuzuReportHelper.parseExcelToDownload(dt, filePath, fileName, HttpContext.Current.Response);
+                result.Content = new ByteArrayContent(ms.ToArray());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
+            }
+            return result;
+        }
+        #endregion
     }
+
+
 }

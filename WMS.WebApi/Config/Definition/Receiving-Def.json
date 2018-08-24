@@ -24,7 +24,7 @@
     {
       "Digits": 25,
       "ColumnName": "Qty",
-      "HeadingName": "Item Code",
+      "HeadingName": "Qty",
       "DataType": "int",
       "Mandatory": false
     }

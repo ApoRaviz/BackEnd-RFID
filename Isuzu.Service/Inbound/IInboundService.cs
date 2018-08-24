@@ -65,6 +65,7 @@ namespace Isuzu.Service
         void GetDeletedFileID(string fileID);
         InboundItemHandyDto GetBeforeAdjustWeight(InboundItemHandyDto adjustWeight);
         void AdjustWeight(InboundItemHandyDto adjustWeight);
+        IEnumerable<InvoiceReportDetail> GetInvoiceHistory(InvHistoryFilter filter);
         //Async
 
     }

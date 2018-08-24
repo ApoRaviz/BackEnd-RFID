@@ -94,4 +94,29 @@ namespace Isuzu.Common.ValueObject
         public int Registered { get; set; }
         public int Remaining { get; set; }
     }
+
+    public class InvoiceReportDetail
+    {
+        public string InvNo { get; set; }
+        public string Status { get; set; }
+        public int QtyOrder { get; set; }
+        public int QtyItem { get; set; }
+        public DateTime? RegisterStart { get; set; }
+        public DateTime? RegisterEnd { get; set; }
+        public DateTime? CartonStart { get; set; }
+        public DateTime? CartonEnd { get; set; }
+        public DateTime? CaseStart { get; set; }
+        public DateTime? CaseEnd { get; set; }
+        public DateTime? ShipStart { get; set; }
+        public DateTime? ShipEnd { get; set; }
+        public int totalCarton { get; set; }
+        public int totalCase { get; set; }
+    }
+    
+    public class InvHistoryFilter
+    {
+        public DateTime startDate { get; set; }
+        public DateTime endDate { get; set; }
+        public string status { get; set; }
+    }
 }
