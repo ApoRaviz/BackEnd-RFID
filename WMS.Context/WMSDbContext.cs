@@ -54,6 +54,7 @@ namespace WMS.Context
         public DbSet<LabelLayoutDetail_MT> LabelLayoutDetail_MT { get; set; }
         public DbSet<ImportDefinitionHeader_MT> ImportDefinitionHeader_MT { get; set; }
         public DbSet<ImportDefinitionDetail_MT> ImportDefinitionDetail_MT { get; set; }
+        public DbSet<ImportHistory> ImportHistory { get; set; }
         public DbSet<ItemInspectMapping> ItemInspectMapping { get; set; }
         public DbSet<ItemUnitMapping> ItemUnitMapping { get; set; }
         public DbSet<ReportLayoutHeader_MT> ReportLayoutHeader_MT { get; set; }
@@ -277,7 +278,7 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateLabelLayout", labelIDSysParameter, formatNameParameter, widthParameter, widthUnitParameter, heightParameter, heightUnitParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public Nullable<int> ProcCreateImportDefinition(Nullable<int> ProjectIDSys,string forTable, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, string userCreate, string xmlDetail)
+        public Nullable<int> ProcCreateImportDefinition(Nullable<int> ProjectIDSys,string forTable, string formatName, string delimiter, string qualifier, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, string userCreate, string xmlDetail)
         {
             var projectIDSys = ProjectIDSys.HasValue ? new SqlParameter
             {
@@ -302,6 +303,12 @@ namespace WMS.Context
                 ParameterName = "Delimiter",
                 Value = delimiter
             } : new SqlParameter("Delimiter", DBNull.Value);
+
+            var qualifierParameter = qualifier != null ? new SqlParameter
+            {
+                ParameterName = "Qualifier",
+                Value = qualifier
+            } : new SqlParameter("Qualifier", DBNull.Value);
 
             var maxHeadingParameter = maxHeading.HasValue ? new SqlParameter
             {
@@ -340,14 +347,14 @@ namespace WMS.Context
                 Value = xmlDetail
             };
 
-            return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ProjectIDSys, @ForTable , @FormatName , @Delimiter , @MaxHeading ," +
-            "@Encoding , @SkipFirstRecode , @CreateAt , @CreateBy , @XmlDetail ", projectIDSys, forTableParameter, formatNameParameter, delimiterParameter,
+            return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ProjectIDSys, @ForTable , @FormatName , @Delimiter , @Qualifier , @MaxHeading ," +
+            "@Encoding , @SkipFirstRecode , @CreateAt , @CreateBy , @XmlDetail ", projectIDSys, forTableParameter, formatNameParameter, delimiterParameter, qualifierParameter ,
             maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, userCreateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateImportDefinition", forTableParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public object ProcUpdateImportDefinition(Nullable<int> ImportDefHeadIDSys, string formatName, string delimiter, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        public object ProcUpdateImportDefinition(Nullable<int> ImportDefHeadIDSys, string formatName, string delimiter, string qualifier,Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
         {
             var importIDSysParameter = ImportDefHeadIDSys.HasValue ? new SqlParameter
             {
@@ -366,6 +373,12 @@ namespace WMS.Context
                 ParameterName = "Delimiter",
                 Value = delimiter
             } : new SqlParameter("Delimiter", DBNull.Value);
+
+            var qualifierParameter = qualifier != null ? new SqlParameter
+            {
+                ParameterName = "Qualifier",
+                Value = qualifier
+            } : new SqlParameter("Qualifier", DBNull.Value);
 
             var maxHeadingParameter = maxHeading.HasValue ? new SqlParameter
             {
@@ -403,8 +416,8 @@ namespace WMS.Context
                 Value = xmlDetail
             };
 
-            return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportDefHeadIDSys, @FormatName , @Delimiter , @MaxHeading ," +
-            "@Encoding , @SkipFirstRecode , @UpdateAt , @UpdateBy , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter,
+            return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportDefHeadIDSys, @FormatName , @Delimiter , @Qualifier , @MaxHeading ," +
+            "@Encoding , @SkipFirstRecode , @UpdateAt , @UpdateBy , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter, qualifierParameter,
             maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateImportDefinition", importIDSysParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
@@ -448,11 +461,18 @@ namespace WMS.Context
 
         public object ProcInsertImportHistory(Nullable<int> importDefinitionIDSys, string fileName, string result, Nullable<bool> success, Nullable<System.DateTime> createdDate, string userUpdate)
         {
-            var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
+
+            //var importDefinitionIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
+            //{
+            //    ParameterName = "ImportDefinitionIDSys",
+            //    Value = importDefinitionIDSys
+            //} : new SqlParameter("ImportDefinitionIDSys", 0);
+
+            var importDefHeadIDSysParameter = importDefinitionIDSys.HasValue ? new SqlParameter
             {
-                ParameterName = "ImportDefinitionIDSys",
+                ParameterName = "ImportDefHeadIDSys",
                 Value = importDefinitionIDSys
-            } : new SqlParameter("ImportDefinitionIDSys", 0);
+            } : new SqlParameter("ImportDefHeadIDSys", 0);
 
             var fileNameParameter = fileName != null ? new SqlParameter
             {
@@ -486,7 +506,7 @@ namespace WMS.Context
 
 
             return Database.SqlQuery<object>("exec ProcInsertImportHistory @ImportDefinitionIDSys , @FileName , @Result " +
-                ", @Success , @CreatedDate , @UserUpdate ", importDefinitionIDSysParameter, fileNameParameter,
+                ", @Success , @CreatedDate , @UserUpdate ", importDefHeadIDSysParameter, fileNameParameter,
                 resultParameter, successParameter, createdDateParameter, userUpdateParameter).FirstOrDefault();
             ;
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcInsertImportHistory", importDefinitionIDSysParameter, fileNameParameter, resultParameter, successParameter, createdDateParameter, userUpdateParameter);

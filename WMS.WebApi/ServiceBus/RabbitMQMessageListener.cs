@@ -3,6 +3,8 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using RabbitMQ.Client.MessagePatterns;
+using RawRabbit.Configuration;
+using RawRabbit.vNext;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Web;
+using WMS.WebApi.ServiceBus.Events;
 
 namespace WMS.WebApi.ServiceBus
 {
@@ -21,14 +24,15 @@ namespace WMS.WebApi.ServiceBus
         private static BlockingCollection<string> respQueue = new BlockingCollection<string>();
         private static IBasicProperties props;
 
-        private static string _ExchangeName = "wim_event_bus";
+        private static string _ExchangeName = "wim_event_topic";
+
         private static string _ReceiveQueue = ConfigurationManager.AppSettings["rb:SubscriptionClientName"];
         private static string _SenderQueue = "publisher_queue";
 
-        public static bool Start(IList<string> routingNames)
+        public static bool Start(IList<string> routingNames, IList<string> rawRoutingNames)
         {
             if (!Convert.ToBoolean(ConfigurationManager.AppSettings["rb:RabbitEnable"]))
-                return false ;
+                return false;
 
             var factory = new ConnectionFactory
             {
@@ -63,9 +67,11 @@ namespace WMS.WebApi.ServiceBus
             _channel.BasicQos(0, 1, false);
 
             _channel.ExchangeDeclare(exchange: _ExchangeName,
-                durable: true, type: ExchangeType.Direct);
+                durable: true, type: ExchangeType.Topic);
 
-            
+
+
+
             var consumer = new EventingBasicConsumer(_channel);
             GenerateSenderQueue(_ReceiveQueue, consumer, routingNames);
             consumer.Received += SubscribeSender;
@@ -74,8 +80,9 @@ namespace WMS.WebApi.ServiceBus
             // publisher
             var consumerPub = new EventingBasicConsumer(_channel);
             GenerateConsumerRouting(_SenderQueue, routingNames, consumerPub);
-
             consumerPub.Received += SubscribePublisher;
+
+            GenerateRawrabbitConsumer(rawRoutingNames);
 
             return true;
         }
@@ -87,14 +94,51 @@ namespace WMS.WebApi.ServiceBus
                           exclusive: false, autoDelete: true, arguments: null);
             for (int i = 0; i < routingName.Count; i++)
             {
-                _channel.QueueBind(queueName, _ExchangeName, routingName[i], null);
+                _channel.QueueBind(queueName, _ExchangeName, routingName[i]+ ".#", null);
             }
 
             _channel.BasicConsume(queue: queueName,
             autoAck: false,
             consumer: consumer);
         }
+        private static void GenerateRawrabbitConsumer(IList<string> routers)
+        {
+            var config = new RawRabbitConfiguration
+            {
+                Username = ConfigurationManager.AppSettings["rb:UserName"],
+                Password = ConfigurationManager.AppSettings["rb:Password"],
+                Port = Convert.ToInt32(ConfigurationManager.AppSettings["rb:Port"]),
+                VirtualHost = ConfigurationManager.AppSettings["rb:VirsualHost"],
+                Hostnames = { ConfigurationManager.AppSettings["rb:HostName"] }
+                // more props here.
+            };
 
+            var client = BusClientFactory.CreateDefault(config);
+
+            foreach (var route in routers)
+            {
+                client.RespondAsync<string, string>(async (message, context) =>
+                {
+                    var eventType = Type.GetType("WMS.WebApi.ServiceBus.Events." + route);
+                    var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
+                    var handler = Type.GetType("WMS.WebApi.ServiceBus.EventsHandler." + route + "Handler");
+                    object objHandler = Activator.CreateInstance(handler, new object[] { });
+                    var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                    var result = concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });
+
+                    if (result != null)
+                        return result.ToString();
+
+                    return string.Empty;
+                }, cgf => cgf.WithExchange(w => w.WithName("wim_event_topic"))
+                .WithQueue(w => w.WithName("WMSTopic")
+                .WithDurability()
+                .WithExclusivity(false)
+                .WithAutoDelete())
+                .WithRoutingKey(route));
+            }
+            
+        }
         #endregion
 
         #region PublisherConsumer
@@ -133,7 +177,7 @@ namespace WMS.WebApi.ServiceBus
             props = _channel.CreateBasicProperties();
             var deliveryTag = _channel.NextPublishSeqNo;
             props.DeliveryMode = 2;
-            props.ReplyTo = "reply_"+ eventName;
+            props.ReplyTo = "reply_" + eventName;
 
 
             var messageBytes = Encoding.UTF8.GetBytes(message);
@@ -157,34 +201,37 @@ namespace WMS.WebApi.ServiceBus
         private static void SubscribeSender(object sender, BasicDeliverEventArgs ea)
         {
             var body = ea.Body;
-            var message = Encoding.UTF8.GetString(body);
+            var message = Encoding.UTF8.GetString(body).Trim('"').Replace("\\","");
 
             var props = ea.BasicProperties;
-            string keyObj = ea.RoutingKey;
+            string keyObj = ea.RoutingKey.Split('.')[0] ?? "";
             var replyProps = _channel.CreateBasicProperties();
             replyProps.DeliveryMode = 2;
             //replyProps.CorrelationId = props.CorrelationId;
 
-            var eventType = Type.GetType("WMS.WebApi.ServiceBus.Events." + keyObj);
-            var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
-            var handler = Type.GetType("WMS.WebApi.ServiceBus.EventsHandler." + keyObj + "Handler");
-            object objHandler = Activator.CreateInstance(handler, new object[] { });
-            var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
-            concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });
-
-            if (props.ReplyTo != null)
+            if (!string.IsNullOrEmpty(keyObj))
             {
-                // REPLY Message
-                var responseBytes = Encoding.UTF8.GetBytes("AckNo=" + ea.DeliveryTag);
-                _channel.BasicPublish(exchange: _ExchangeName, 
-                                        routingKey: props.ReplyTo,
-                                        mandatory: true,
-                                        basicProperties: replyProps,
-                                        body: responseBytes);
+                var eventType = Type.GetType("WMS.WebApi.ServiceBus.Events." + keyObj);
+                var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
+                var handler = Type.GetType("WMS.WebApi.ServiceBus.EventsHandler." + keyObj + "Handler");
+                object objHandler = Activator.CreateInstance(handler, new object[] { });
+                var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                concreteType.GetMethod("Handle").Invoke(objHandler, new object[] { integrationEvent });
+
+                if (props.ReplyTo != null)
+                {
+                    // REPLY Message
+                    var responseBytes = Encoding.UTF8.GetBytes("AckNo=" + ea.DeliveryTag);
+                    _channel.BasicPublish(exchange: _ExchangeName,
+                                            routingKey: props.ReplyTo,
+                                            mandatory: true,
+                                            basicProperties: replyProps,
+                                            body: responseBytes);
+                }
+                _channel.BasicAck(deliveryTag: ea.DeliveryTag,
+                      multiple: false);
             }
-            _channel.BasicAck(deliveryTag: ea.DeliveryTag,
-                  multiple: false);
-            
+
         }
 
         public static void Stop()

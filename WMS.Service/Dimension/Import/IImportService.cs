@@ -10,8 +10,9 @@ namespace WMS.Service.Import
 {
     public interface IImportService : IService
     {
-        List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable);
+        List<ImportDefinitionHeader_MT> GetAllImportHeader(int projectId, string forTable);
         ImportDefinitionHeader_MT GetImportDefinitionByImportIDSys(int id, string include);
+        List<ImportHistory> GetImportHistoryByImportIDSys(int id,int projectId);
         int? CreateImportDifinitionForItemMaster(ImportDefinitionHeader_MT data);
         bool UpdateImportForItemMaster(int ImportIDSys, ImportDefinitionHeader_MT data);
         string ImportDataToTable(int ImportIDSys, string data,string userUpdate);

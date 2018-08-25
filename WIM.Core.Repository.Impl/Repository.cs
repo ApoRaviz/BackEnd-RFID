@@ -222,7 +222,7 @@ namespace WIM.Core.Repository.Impl
 
             entityForUpdate.TrySetProjectIDSys(); // #Job Try
             entityForUpdate.UpdateBy = Identity.GetUserNameApp();
-            entityForUpdate.UpdateAt = DateTime.Now.Date;
+            entityForUpdate.UpdateAt = DateTime.Now;
             return entityForUpdate;
         }
 

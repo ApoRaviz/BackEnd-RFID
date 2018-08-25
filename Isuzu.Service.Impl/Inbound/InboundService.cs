@@ -27,6 +27,7 @@ using WIM.Core.Service.FileManagement;
 using WIM.Core.Service.Impl.FileManagement;
 using WIM.Core.Entity.FileManagement;
 using Isuzu.Entity.InboundManagement;
+using WIM.Core.Entity.Logs;
 
 namespace Isuzu.Service.Impl.Inbound
 {
@@ -253,18 +254,18 @@ namespace Isuzu.Service.Impl.Inbound
                             var statusList = db.InboundItems.Where(w => w.InvNo == invNo && w.Status != statusDeleted).Select(s => s.Status).Distinct().ToList();
                             int countStatus = statusList.Count;
 
-                            if (statusList.Contains(statusCasePacked))
-                            {
-                                status = statusCasePacked;
-                            }
-                            else if (statusList.Contains(statusCartonPacked))
-                            {
-                                status = statusCartonPacked;
-                            }
-                            else if (statusList.Contains(statusRFIDMatched))
-                            {
-                                status = statusRFIDMatched;
-                            }
+                            //if (statusList.Contains(statusCasePacked))
+                            //{
+                            //    status = statusCasePacked;
+                            //}
+                            //else if (statusList.Contains(statusCartonPacked))
+                            //{
+                            //    status = statusCartonPacked;
+                            //}
+                            //else if (statusList.Contains(statusRFIDMatched))
+                            //{
+                            //    status = statusRFIDMatched;
+                            //}
 
                             switch (countStatus)
                             {
@@ -272,7 +273,14 @@ namespace Isuzu.Service.Impl.Inbound
                                     statusLastest = status;
                                     break;
                                 default:
-                                    statusLastest = status + "_PARTIAL";
+                                    if (new List<string> { statusCasePacked, statusCartonPacked, statusRFIDMatched }.Contains(status))
+                                    {
+                                        statusLastest = status;
+                                    }
+                                    else
+                                    {
+                                        statusLastest = status + "_PARTIAL";
+                                    }
                                     break;
                             }
 
@@ -1249,6 +1257,53 @@ namespace Isuzu.Service.Impl.Inbound
             return items;
 
         }
+        public IEnumerable<InboundItems> GetDataImportByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord)
+        {
+            IEnumerable<InboundItems> items = new List<InboundItems>() { };
+            totalRecord = 0;
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        items = Db.ProcPagingInboundItemSearching(keyword, pageIndex, pageSize, out totalRecord);
+                        scope.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        return new List<InboundItems>() { };
+                    }
+
+                }
+                return items;
+            }
+        }
+        public IEnumerable<GeneralLog> GetOrderLogByID(string refID)
+        {
+            IEnumerable<GeneralLog> items = new List<GeneralLog>();
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        items = (from i in Db.GeneralLogs
+                                 where i.RefID == refID
+                                 select i).ToList();
+                        scope.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        return new List<GeneralLog>() { };
+                    }
+
+                }
+                return items;
+            }
+        }
         public IEnumerable<InboundItemsHead> GetInboundGroup(int max = 50)
         {
             List<InboundItemsHead> items = new List<InboundItemsHead>();
@@ -1333,9 +1388,6 @@ namespace Isuzu.Service.Impl.Inbound
                         return new List<InboundItemsHead>() { };
                     }
                 }
-
-
-
             }
             return items;
 
@@ -1370,7 +1422,29 @@ namespace Isuzu.Service.Impl.Inbound
 
                 return items;
             }
+        }
+        public IEnumerable<InboundItemsHead> GetDataGroupByKeyword(string keyword,int pageIndex, int pageSize, out int totalRecord)
+        {
+            IEnumerable<InboundItemsHead> items = new List<InboundItemsHead>() { };
+            totalRecord = 0;
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
+                    try
+                    {
+                        items = Db.ProcPagingInboundItemHeadSearching(keyword,pageIndex, pageSize, out totalRecord);
+                        scope.Complete();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<InboundItemsHead>() { };
+                    }
 
+                }
+                return items;
+            }
         }
         public bool UpdateStausExport(InboundItemsHead item)
         {
@@ -1789,6 +1863,46 @@ namespace Isuzu.Service.Impl.Inbound
                     Db.SaveChanges();
                     scope.Complete();
                 }
+            }
+        }
+
+        public IEnumerable<InvoiceReportDetail> GetInvoiceHistory(InvHistoryFilter filter)
+        {
+            string sql = "";
+            string startDate = "'" + filter.startDate.ToString("yyyy-MM-dd 00:00:00") + "'";
+            string endDate = "'" + filter.endDate.ToString("yyyy-MM-dd 23:59:59") + "'";
+            sql += "select a.InvNo,a.Status,a.CreateAt,count(*) as QtyOrder,sum(b.Qty) as QtyItem, " +
+                   "min(b.RegisterDate) as RegisterStart,max(b.RegisterDate) as RegisterEnd, " +
+                   "min(b.PackCartonDate) as CartonStart,max(b.PackCartonDate) as CartonEnd, " +
+                   "min(b.PackCaseDate) as CaseStart,max(b.PackCaseDate) as CaseEnd, " +
+                   "min(b.ShippingDate) as ShipStart,max(b.ShippingDate) as ShipEnd, " +
+                   "count(distinct(b.CartonNo)) as totalCarton, count(distinct(b.CaseNo)) as totalCase " +
+                   "from InboundItemsHead a inner join InboundItems b on a.InvNo = b.InvNo " +
+                   "where a.CreateAt >= " + startDate +
+                   "and a.CreateAt <= " + endDate;
+            if (filter.status != null && filter.status != "All")
+            {
+                sql += "and a.Status = '" + filter.status + "'";
+            }
+
+            sql += "group by a.InvNo,a.Status,a.CreateAt order by a.CreateAt desc";
+
+            List<InvoiceReportDetail> items = new List<InvoiceReportDetail>() { };
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    try
+                    {
+                        items = Db.Database.SqlQuery<InvoiceReportDetail>(sql).ToList();
+                    }
+                    catch (Exception ex)
+                    {
+                        return new List<InvoiceReportDetail>() { };
+                    }
+
+                }
+                return items ;
             }
         }
 

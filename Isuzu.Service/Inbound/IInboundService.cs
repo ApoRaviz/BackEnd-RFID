@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIM.Core.Entity.Logs;
 
 namespace Isuzu.Service
 {
@@ -46,7 +47,10 @@ namespace Isuzu.Service
         IEnumerable<InboundItems> GetInboundItemByQty(int Qty, bool isShipped = false);
         IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false);
         IEnumerable<InboundItems> GetDataByColumn(ParameterSearch parameterSearch);
+        IEnumerable<InboundItems> GetDataImportByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord);
+        IEnumerable<GeneralLog> GetOrderLogByID(string refID);
         IEnumerable<InboundItemsHead> GetDataGroupByColumn(string column, string keyword);
+        IEnumerable<InboundItemsHead> GetDataGroupByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<InboundItemsHead> GetInboundGroup(int max = 20);
         InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo,bool isAddItems = false);
@@ -61,6 +65,7 @@ namespace Isuzu.Service
         void GetDeletedFileID(string fileID);
         InboundItemHandyDto GetBeforeAdjustWeight(InboundItemHandyDto adjustWeight);
         void AdjustWeight(InboundItemHandyDto adjustWeight);
+        IEnumerable<InvoiceReportDetail> GetInvoiceHistory(InvHistoryFilter filter);
         //Async
 
     }

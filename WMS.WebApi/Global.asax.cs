@@ -26,7 +26,8 @@ namespace WMS.WebApi
             AutoMapperConfig.Initialize();
             ApiHashTableHelper.Initialize();
             TableHashTableHelper.Initialize();
-            RabbitMQMessageListener.Start(RabbitMQConfig.Initialize());
+            RabbitMQMessageListener.Start(RabbitMQConfig.Initialize()
+                ,RawRabbitConfig.Initialize());
 
         }
     }

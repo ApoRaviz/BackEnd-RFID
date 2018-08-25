@@ -23,7 +23,7 @@ namespace WMS.Service.Impl.Import
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
-                            "<Import>{5}</Import><IsHead>{6}</IsHead></row>";
+                            "<Import>{5}</Import><IsHead>{6}</IsHead><IsRefKey>{7}</IsRefKey></row>";
 
         private IIdentity _identity;
         
@@ -32,12 +32,13 @@ namespace WMS.Service.Impl.Import
             _identity =  UtilityHelper.GetIdentity();
         }
 
-        public List<ImportDefinitionHeader_MT> GetAllImportHeader(string forTable)
+        public List<ImportDefinitionHeader_MT> GetAllImportHeader(int projectId,string forTable)
         {
             using (WMSDbContext Db = new WMSDbContext())
             {
                 IImportDefinitionRepository repo = new ImportDefinitionRepository(Db);
-                List<ImportDefinitionHeader_MT> import = repo.GetMany(x => x.ForTable == forTable).ToList();
+                List<ImportDefinitionHeader_MT> import = repo.GetMany(x => x.ForTable == forTable 
+                && x.ProjectIDSys == projectId).ToList();
                 return import;
             }
 
@@ -64,6 +65,15 @@ namespace WMS.Service.Impl.Import
             }
         }
 
+        public List<ImportHistory> GetImportHistoryByImportIDSys(int id,int projectId)
+        {
+            using (WMSDbContext Db = new WMSDbContext())
+            {
+                return Db.ImportHistory.Where(w => w.ImportDefHeadIDSys == id && w.ProjectIdSys == projectId).ToList();
+            }
+
+        }
+
         public int? CreateImportDifinitionForItemMaster(ImportDefinitionHeader_MT data)
         {
             System.Text.StringBuilder sb = new StringBuilder();
@@ -78,7 +88,7 @@ namespace WMS.Service.Impl.Import
                 d.CreateBy = _identity.Name;
                 d.UpdateAt = DateTime.Now;
                 d.UpdateBy = _identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead);
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey);
             }
 
             using (var scope = new TransactionScope())
@@ -92,7 +102,7 @@ namespace WMS.Service.Impl.Import
                    
                     try
                     {
-                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.MaxHeading, data.Encoding, data.SkipFirstRecode
+                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.Qualifier,data.MaxHeading, data.Encoding, data.SkipFirstRecode
                                                   , data.CreateAt, data.CreateBy, sb.ToString());
                         Db.SaveChanges();
                     }
@@ -120,7 +130,7 @@ namespace WMS.Service.Impl.Import
                 d.IsActive = true;
                 d.UpdateAt = DateTime.Now;
                 d.UpdateBy = _identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead);
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey);
             }
 
             using (var scope = new TransactionScope())
@@ -132,7 +142,7 @@ namespace WMS.Service.Impl.Import
                 {
                     try
                     {
-                        Db.ProcUpdateImportDefinition(data.ImportDefHeadIDSys, data.FormatName, data.Delimiter, data.MaxHeading
+                        Db.ProcUpdateImportDefinition(data.ImportDefHeadIDSys, data.FormatName, data.Delimiter, data.Qualifier, data.MaxHeading
                                                   , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
                         Db.SaveChanges();
                     }

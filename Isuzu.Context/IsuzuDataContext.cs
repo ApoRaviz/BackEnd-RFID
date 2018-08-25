@@ -57,6 +57,22 @@ namespace Isuzu.Context
 
             return items;
         }
+        public IEnumerable<InboundItemsHead> ProcPagingInboundItemHeadSearching(string keyword,int page, int size, out int totalRecord)
+        {
+            totalRecord = 0;
+            var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
+            output.Direction = ParameterDirection.Output;
+
+            var items = this.Database.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHeadSearching @keyword,@page,@size,@totalRecord out"
+                , new SqlParameter("@keyword", keyword)
+                , new SqlParameter("@page", page)
+                , new SqlParameter("@size", size)
+                , output).ToList();
+
+            totalRecord = Convert.ToInt32(output.Value);
+
+            return items;
+        }
         public IEnumerable<InboundItems> ProcPagingInboundItems(int page, int size, out int totalRecord)
         {
             totalRecord = 0;
@@ -82,6 +98,29 @@ namespace Isuzu.Context
                 , new SqlParameter("@page", page)
                 , new SqlParameter("@size", size)
                 , output).ToList();
+
+            totalRecord = Convert.ToInt32(output.Value);
+
+            return items;
+        }
+        public IEnumerable<InboundItems> ProcPagingInboundItemSearching(string keyword, int page, int size, out int totalRecord)
+        {
+            totalRecord = 0;
+            var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
+            output.Direction = ParameterDirection.Output;
+            var items = new List<InboundItems>();
+            try
+            {
+                items = this.Database.SqlQuery<InboundItems>("ProcPagingInboundItemSearching @keyword,@page,@size,@totalRecord out"
+                , new SqlParameter("@keyword", keyword)
+                , new SqlParameter("@page", page)
+                , new SqlParameter("@size", size)
+                , output).ToList();
+            }catch(Exception e)
+            {
+                return new List<InboundItems>() { };
+            }
+            
 
             totalRecord = Convert.ToInt32(output.Value);
 

@@ -10,6 +10,9 @@ using WMS.Entity.ImportManagement;
 using WIM.Core.Common.Utility.Http;
 using WIM.Core.Common.Utility.Validation;
 using WIM.Core.Common.Utility.Extensions;
+using System.IO;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace WMS.WebApi.Controller
 {
@@ -23,15 +26,43 @@ namespace WMS.WebApi.Controller
             this.ImportService = importService;
         }
 
-        [HttpGet]
-        [Route("GetHeader/{ForTable}")]
-        public HttpResponseMessage Get(string forTable)
+        [HttpPost]
+        [Route("GetHeader")]
+        public HttpResponseMessage GetHeader(GetHeaderParam getHeader)
         {
             ResponseData<IEnumerable<ImportDefinitionHeader_MT>> response = new ResponseData<IEnumerable<ImportDefinitionHeader_MT>>();
             try
             {
-                IEnumerable<ImportDefinitionHeader_MT> header = ImportService.GetAllImportHeader(forTable);
-                response.SetData(header);
+                if(getHeader != null)
+                { 
+                    IEnumerable<ImportDefinitionHeader_MT> header = ImportService.GetAllImportHeader(getHeader.ProjectId,getHeader.ForTable);
+                    response.SetData(header);
+                }
+            }
+            catch (AppValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [HttpGet]
+        [Route("GetDefColDetail/{Table}")]
+        public HttpResponseMessage GetDefinitionColumnDetail(string Table)
+        {
+            ResponseData<object> response = new ResponseData<object>();
+            try
+            {
+                object items;
+                string serverpath = HttpContext.Current.Server.MapPath("~/Config/Definition/" + Table + "-Def.json"); 
+                using (StreamReader r = new StreamReader(serverpath))
+                {
+                    string json = r.ReadToEnd();
+                    items = JsonConvert.DeserializeObject<object>(json);
+                }
+
+                response.SetData(items);
             }
             catch (AppValidationException ex)
             {
@@ -116,6 +147,13 @@ namespace WMS.WebApi.Controller
                 response.SetStatus(HttpStatusCode.PreconditionFailed);
             }
             return Request.ReturnHttpResponseMessage(response);
+        }
+
+
+        public class GetHeaderParam
+        {
+            public string ForTable { get; set; }
+            public int ProjectId { get; set; }
         }
     }
 }

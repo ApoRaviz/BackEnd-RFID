@@ -21,10 +21,11 @@ namespace WMS.Entity.ImportManagement
         [Key]
         [Column(Order = 2)]
         public string ColumnName { get; set; }
-        public string Mandatory { get; set; }
+        public bool Mandatory { get; set; }
         public string FixedValue { get; set; }
         public string Import { get; set; }
         public bool IsHead { get; set; }
+        public bool IsRefKey { get; set; }
         public int Digits { get; set; }
         public string DataType { get; set; }
 
