@@ -23,7 +23,8 @@ namespace WMS.Service.Impl.Import
     {
         string pXmlDetail = "<row><ColumnName>{0}</ColumnName><Digits>{1}</Digits><DataType>{2}</DataType>" +
                             "<Mandatory>{3}</Mandatory><FixedValue>{4}</FixedValue>" +
-                            "<Import>{5}</Import><IsHead>{6}</IsHead><IsRefKey>{7}</IsRefKey></row>";
+                            "<Import>{5}</Import><IsHead>{6}</IsHead><IsRefKey>{7}</IsRefKey>" +
+                            "<FormatDateTime>{8}</FormatDateTime><FormatNumber>{9}</FormatNumber></row>";
 
         private IIdentity _identity;
         
@@ -88,7 +89,7 @@ namespace WMS.Service.Impl.Import
                 d.CreateBy = _identity.Name;
                 d.UpdateAt = DateTime.Now;
                 d.UpdateBy = _identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey);
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey, d.FormatDateTime, d.FormatNumber);
             }
 
             using (var scope = new TransactionScope())
@@ -102,7 +103,7 @@ namespace WMS.Service.Impl.Import
                    
                     try
                     {
-                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.Qualifier,data.MaxHeading, data.Encoding, data.SkipFirstRecode
+                        ReportSysID = Db.ProcCreateImportDefinition(data.ProjectIDSys,data.ForTable, data.FormatName, data.Delimiter, data.Qualifier,data.MaxHeading, data.Encoding, data.StartRow
                                                   , data.CreateAt, data.CreateBy, sb.ToString());
                         Db.SaveChanges();
                     }
@@ -130,7 +131,7 @@ namespace WMS.Service.Impl.Import
                 d.IsActive = true;
                 d.UpdateAt = DateTime.Now;
                 d.UpdateBy = _identity.Name;
-                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey);
+                sb.AppendFormat(pXmlDetail, d.ColumnName, d.Digits, d.DataType, d.Mandatory, d.FixedValue, d.Import, d.IsHead, d.IsRefKey, d.FormatDateTime, d.FormatNumber);
             }
 
             using (var scope = new TransactionScope())
@@ -143,7 +144,7 @@ namespace WMS.Service.Impl.Import
                     try
                     {
                         Db.ProcUpdateImportDefinition(data.ImportDefHeadIDSys, data.FormatName, data.Delimiter, data.Qualifier, data.MaxHeading
-                                                  , data.Encoding, data.SkipFirstRecode, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
+                                                  , data.Encoding, data.StartRow, data.CreateAt, data.UpdateAt, data.UpdateBy, sb.ToString());
                         Db.SaveChanges();
                     }
                     catch (DbEntityValidationException e)

@@ -28,6 +28,8 @@ namespace WMS.Entity.ImportManagement
         public bool IsRefKey { get; set; }
         public int Digits { get; set; }
         public string DataType { get; set; }
+        public string FormatDateTime { get; set; }
+        public string FormatNumber { get; set; }
 
         [ForeignKey("ImportDefHeadIDSys")]
         public virtual ImportDefinitionHeader_MT ImportDefinitionHeader_MT { get; set; }
