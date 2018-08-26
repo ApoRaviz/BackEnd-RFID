@@ -9,20 +9,20 @@ using WIM.Core.Service.Impl;
 using WMS.Entity.ImportManagement;
 using WMS.Service.Impl.Import;
 using WMS.Service.Import;
-using WMS.WebApi.ServiceBus.Events;
+using WMS.WebApi.ServiceBus.IntegrationEvents;
 
 namespace WMS.WebApi.ServiceBus.EventsHandler
 {
-    public class ReceiveManualImportEventHandler : IEventHandler<ReceiveManualImportEvent>
+    public class ReceiveManualImportIntegrationEventHandler : IEventHandler<ReceiveManualImportIntegrationEvent>
     {
 
         private IImportService _importService;
 
-        public ReceiveManualImportEventHandler()
+        public ReceiveManualImportIntegrationEventHandler()
         {
         }
 
-        public string Handle(ReceiveManualImportEvent @event)
+        public string Handle(ReceiveManualImportIntegrationEvent @event)
         {
             _importService = new ImportService();
 
@@ -52,9 +52,9 @@ namespace WMS.WebApi.ServiceBus.EventsHandler
 
 
             }
-              
-            
-            ReceiveManualImportReplyEvent ret = new ReceiveManualImportReplyEvent(@event.FileIds, def);
+
+
+            ReceiveManualImportReplyIntegrationEvent ret = new ReceiveManualImportReplyIntegrationEvent(@event.FileIds, def);
 
             return JsonConvert.SerializeObject(ret);
            
