@@ -62,6 +62,13 @@ namespace WIM.Core.Common.Utility.Validation
 
         #region ================================ WMS[12] =========================
 
+        #region ================================ WMS[12] -> Inventory Transaction[11]
+
+        [Description("INVALID_INVENTORY_ID")]
+        INVALID_INVENTORY_ID = 1211001,
+
+        #endregion /Inventory Transaction
+
         #endregion /WMS
 
 

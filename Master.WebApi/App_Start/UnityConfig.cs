@@ -37,7 +37,7 @@ namespace Master.WebApi
 
             //Register OWin Authen
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
-            container.RegisterType<AccountController>(new InjectionConstructor());
+            // container.RegisterType<AccountController>(new InjectionConstructor());
             container.RegisterType<ICommonService, CommonService>();
             container.RegisterType<ICustomerService, CustomerService>();
             container.RegisterType<ICurrencyService, CurrencyService>();

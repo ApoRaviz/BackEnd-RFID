@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WMS.Entity.ImportManagement;
 using WMS.Service;
-using WMS.WebApi.ServiceBus.Events;
+using WMS.WebApi.ServiceBus.IntegrationEvents;
 
 namespace WMS.WebApi.Controller
 {

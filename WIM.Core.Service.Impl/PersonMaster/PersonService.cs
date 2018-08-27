@@ -136,6 +136,7 @@ namespace WIM.Core.Service.Impl
                     {
                         IPersonRepository repo = new PersonRepository(Db);
                         repo.Update(Person);
+                        Db.SaveChanges();
                         scope.Complete();
                     }
                 }

@@ -13,6 +13,7 @@ using WIM.Core.Common.Utility.Extensions;
 using System.IO;
 using Newtonsoft.Json;
 using System.Web;
+using WMS.WebApi.ServiceBus.IntegrationEvents;
 
 namespace WMS.WebApi.Controller
 {
@@ -149,6 +150,35 @@ namespace WMS.WebApi.Controller
             return Request.ReturnHttpResponseMessage(response);
         }
 
+        [HttpPost]
+        [Route("GetReceiveManualImportDefinition")]
+        public HttpResponseMessage GetReceiveImportDefinition(ReceiveManualImportIntegrationEvent @event)
+        {
+            var def = ImportService.GetImportDefinitionByImportIDSys(@event.FormatId, "ImportDefinitionDetail_MT");
+            def.ImportDefinitionDetail_MT = (from p in def.ImportDefinitionDetail_MT
+                                             select new ImportDefinitionDetail_MT()
+                                             {
+                                                 ImportDefHeadIDSys = p.ImportDefHeadIDSys,
+                                                 ImportDefDetailIDSys = p.ImportDefDetailIDSys,
+                                                 ColumnName = p.ColumnName,
+                                                 Digits = p.Digits,
+                                                 DataType = p.DataType,
+                                                 FixedValue = p.FixedValue,
+                                                 Import = p.Import,
+                                                 IsActive = p.IsActive,
+                                                 CreateAt = p.CreateAt,
+                                                 CreateBy = p.CreateBy,
+                                                 IsHead = p.IsHead,
+                                                 IsRefKey = p.IsRefKey,
+                                                 Mandatory = p.Mandatory,
+                                                 UpdateAt = p.UpdateAt,
+                                                 UpdateBy = p.UpdateBy
+                                             }).ToList();
+
+            ReceiveManualImportReplyIntegrationEvent ret = new ReceiveManualImportReplyIntegrationEvent(@event.FileIds, def);
+
+            return Request.CreateResponse(ret);
+        }
 
         public class GetHeaderParam
         {

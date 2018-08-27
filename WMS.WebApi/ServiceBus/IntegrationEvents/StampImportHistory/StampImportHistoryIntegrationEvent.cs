@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using WIM.Core.Entity.importManagement;
 
-namespace WMS.WebApi.ServiceBus.Events
+namespace WMS.WebApi.ServiceBus.IntegrationEvents
 {
-    public class StampImportHistoryEvent : IntegrationEvent
+    public class StampImportHistoryIntegrationEvent : IntegrationEvent
     {
-        public StampImportHistoryEvent()
+        public StampImportHistoryIntegrationEvent()
         {
             Items = new List<StampImportItem>();
         }

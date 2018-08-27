@@ -421,7 +421,7 @@ namespace Master.WebApi.Controllers
                 LocalLoginProvider = LocalLoginProvider,
                 Email = user.UserName,
                 Logins = logins,
-                ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
+                //ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
             };
         }
 
@@ -589,45 +589,45 @@ namespace Master.WebApi.Controllers
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
-        [AllowAnonymous]
-        [Route("ExternalLogins")]
-        public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
-        {
-            IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
-            List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
+        //[AllowAnonymous]
+        //[Route("ExternalLogins")]
+        //public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
+        //{
+        //    IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
+        //    List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
 
-            string state;
+        //    string state;
 
-            if (generateState)
-            {
-                const int strengthInBits = 256;
-                state = RandomOAuthStateGenerator.Generate(strengthInBits);
-            }
-            else
-            {
-                state = null;
-            }
+        //    if (generateState)
+        //    {
+        //        const int strengthInBits = 256;
+        //        state = RandomOAuthStateGenerator.Generate(strengthInBits);
+        //    }
+        //    else
+        //    {
+        //        state = null;
+        //    }
 
-            foreach (AuthenticationDescription description in descriptions)
-            {
-                ExternalLoginViewModel login = new ExternalLoginViewModel
-                {
-                    Name = description.Caption,
-                    Url = Url.Route("ExternalLogin", new
-                    {
-                        provider = description.AuthenticationType,
-                        response_type = "token",
-                        client_id = Auth.API.Startup.PublicClientId,
-                        redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
-                        state = state
-                    }),
-                    State = state
-                };
-                logins.Add(login);
-            }
+        //    foreach (AuthenticationDescription description in descriptions)
+        //    {
+        //        ExternalLoginViewModel login = new ExternalLoginViewModel
+        //        {
+        //            Name = description.Caption,
+        //            Url = Url.Route("ExternalLogin", new
+        //            {
+        //                provider = description.AuthenticationType,
+        //                response_type = "token",
+        //                client_id = Auth.API.Startup.PublicClientId,
+        //                redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
+        //                state = state
+        //            }),
+        //            State = state
+        //        };
+        //        logins.Add(login);
+        //    }
 
-            return logins;
-        }
+        //    return logins;
+        //}
 
         // POST api/Account/Register
         [AllowAnonymous]

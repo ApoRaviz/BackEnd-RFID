@@ -13,7 +13,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Web;
-using WMS.WebApi.ServiceBus.Events;
+using WMS.WebApi.ServiceBus.IntegrationEvents;
 
 namespace WMS.WebApi.ServiceBus
 {

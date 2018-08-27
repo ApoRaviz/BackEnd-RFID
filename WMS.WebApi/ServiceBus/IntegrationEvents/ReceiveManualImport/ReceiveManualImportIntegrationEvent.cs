@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using WIM.Core.Entity.importManagement;
 
-namespace WMS.WebApi.ServiceBus.Events
+namespace WMS.WebApi.ServiceBus.IntegrationEvents
 {
-    public class ReceiveManualImportEvent : IntegrationEvent
+    public class ReceiveManualImportIntegrationEvent : IntegrationEvent
     {
-        public ReceiveManualImportEvent(IEnumerable<int> fileIds)
+        public ReceiveManualImportIntegrationEvent(IEnumerable<int> fileIds)
         {
             this.FileIds = fileIds;
         }

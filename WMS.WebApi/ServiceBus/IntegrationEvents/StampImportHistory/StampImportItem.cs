@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using WIM.Core.Entity.importManagement;
 
-namespace WMS.WebApi.ServiceBus.Events
+namespace WMS.WebApi.ServiceBus.IntegrationEvents
 {
     public class StampImportItem
     {
