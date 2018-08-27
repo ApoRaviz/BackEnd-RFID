@@ -196,7 +196,7 @@
       "Digits": 25,
       "Mandatory": false,
       "AllowAutomate": false,
-      "FormatDateTime": "#,###.##"
+      "FormatDateTime": "yyyy-MM-dd"
     },
     {
       "ColumnName": "ControlLevel1",
