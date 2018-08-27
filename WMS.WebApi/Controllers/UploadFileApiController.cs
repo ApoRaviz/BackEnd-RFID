@@ -204,8 +204,8 @@ namespace WMS.WebApi.Controller
                                     dt = ReportUtils.GetDataTableFromFileWithFHeader(path, encoding, delimiter);
                                 }
 
-                                if (data.SkipFirstRecode != null && data.SkipFirstRecode.Value)
-                                    dt.Rows.RemoveAt(0);
+                                //if (data.SkipFirstRecode != null && data.SkipFirstRecode.Value)
+                                //    dt.Rows.RemoveAt(0);
 
                                 result = CheckImportData(dt, data, data.ImportDefinitionDetail_MT.ToList());
 
@@ -264,7 +264,7 @@ namespace WMS.WebApi.Controller
                             {
                                 DateTime dateTime;
 
-                                if (!DateTime.TryParseExact(dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString(), header.FormatDatetime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+                                if (!DateTime.TryParseExact(dr[int.Parse(d.Import.Replace("F", "")) - 1].ToString(), d.FormatDateTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
                                 {
                                     sb.AppendLine(String.Format("File at row {0} and column {1} have date format incorrect (Format {2})", row, int.Parse(d.Import.Replace("F", "")), d.Mandatory));
                                 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WMS.WebApi.ServiceBus.Events;
+using WMS.WebApi.ServiceBus.IntegrationEvents;
 
 namespace WMS.WebApi
 {
@@ -12,7 +12,7 @@ namespace WMS.WebApi
 
         public static IList<string> Initialize()
         {
-            AddConfig<ReceiveManualImportEvent>();
+            AddConfig<ReceiveManualImportIntegrationEvent>();
             //AddConfig<StampImportHistoryEvent>();
 
             return _listConfig;

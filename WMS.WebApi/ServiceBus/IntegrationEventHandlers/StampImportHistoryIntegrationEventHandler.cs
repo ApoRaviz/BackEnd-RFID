@@ -8,20 +8,20 @@ using WIM.Core.Service.Impl;
 using WMS.Entity.ImportManagement;
 using WMS.Service.Impl.Import;
 using WMS.Service.Import;
-using WMS.WebApi.ServiceBus.Events;
+using WMS.WebApi.ServiceBus.IntegrationEvents;
 
 namespace WMS.WebApi.ServiceBus.EventsHandler
 {
-    public class StampImportHistoryEventHandler : IEventHandler<StampImportHistoryEvent>
+    public class StampImportHistoryIntegrationEventHandler : IEventHandler<StampImportHistoryIntegrationEvent>
     {
 
         private IImportService _importService;
 
-        public StampImportHistoryEventHandler()
+        public StampImportHistoryIntegrationEventHandler()
         {
         }
 
-        public string Handle(StampImportHistoryEvent @event)
+        public string Handle(StampImportHistoryIntegrationEvent @event)
         {
             _importService = new ImportService();
             

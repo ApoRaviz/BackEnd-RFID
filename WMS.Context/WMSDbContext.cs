@@ -278,7 +278,7 @@ namespace WMS.Context
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateLabelLayout", labelIDSysParameter, formatNameParameter, widthParameter, widthUnitParameter, heightParameter, heightUnitParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public Nullable<int> ProcCreateImportDefinition(Nullable<int> ProjectIDSys,string forTable, string formatName, string delimiter, string qualifier, Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, string userCreate, string xmlDetail)
+        public Nullable<int> ProcCreateImportDefinition(Nullable<int> ProjectIDSys,string forTable, string formatName, string delimiter, string qualifier, Nullable<int> maxHeading, string encoding, Nullable<int> startRow, Nullable<System.DateTime> createdDate, string userCreate, string xmlDetail)
         {
             var projectIDSys = ProjectIDSys.HasValue ? new SqlParameter
             {
@@ -322,11 +322,11 @@ namespace WMS.Context
                 Value = encoding
             } : new SqlParameter("Encoding", DBNull.Value);
 
-            var skipFirstRecodeParameter = skipFirstRecode.HasValue ? new SqlParameter
+            var startRowParameter = startRow.HasValue ? new SqlParameter
             {
-                ParameterName = "SkipFirstRecode",
-                Value = skipFirstRecode
-            } : new SqlParameter("SkipFirstRecode", false);
+                ParameterName = "StartRow",
+                Value = startRow
+            } : new SqlParameter("StartRow", 1);
 
             var createdDateParameter = createdDate.HasValue ? new SqlParameter
             {
@@ -348,13 +348,13 @@ namespace WMS.Context
             };
 
             return Database.SqlQuery<Nullable<int>>("exec ProcCreateImportDefinition @ProjectIDSys, @ForTable , @FormatName , @Delimiter , @Qualifier , @MaxHeading ," +
-            "@Encoding , @SkipFirstRecode , @CreateAt , @CreateBy , @XmlDetail ", projectIDSys, forTableParameter, formatNameParameter, delimiterParameter, qualifierParameter ,
-            maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, userCreateParameter, xmlDetailParameter).FirstOrDefault();
+            "@Encoding , @StartRow , @CreateAt , @CreateBy , @XmlDetail ", projectIDSys, forTableParameter, formatNameParameter, delimiterParameter, qualifierParameter ,
+            maxHeadingParameter, encodingParameter, startRowParameter, createdDateParameter, userCreateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ProcCreateImportDefinition", forTableParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
 
-        public object ProcUpdateImportDefinition(Nullable<int> ImportDefHeadIDSys, string formatName, string delimiter, string qualifier,Nullable<int> maxHeading, string encoding, Nullable<bool> skipFirstRecode, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
+        public object ProcUpdateImportDefinition(Nullable<int> ImportDefHeadIDSys, string formatName, string delimiter, string qualifier,Nullable<int> maxHeading, string encoding, Nullable<int> startRow, Nullable<System.DateTime> createdDate, Nullable<System.DateTime> updatedDate, string userUpdate, string xmlDetail)
         {
             var importIDSysParameter = ImportDefHeadIDSys.HasValue ? new SqlParameter
             {
@@ -392,11 +392,11 @@ namespace WMS.Context
                 Value = encoding
             } : new SqlParameter("Encoding", DBNull.Value);
 
-            var skipFirstRecodeParameter = skipFirstRecode.HasValue ? new SqlParameter
+            var startRowParameter = startRow.HasValue ? new SqlParameter
             {
-                ParameterName = "SkipFirstRecode",
-                Value = skipFirstRecode
-            } : new SqlParameter("SkipFirstRecode", false);
+                ParameterName = "StartRow",
+                Value = startRow
+            } : new SqlParameter("StartRow", 1);
 
             var updatedDateParameter = updatedDate.HasValue ? new SqlParameter
             {
@@ -417,8 +417,8 @@ namespace WMS.Context
             };
 
             return Database.SqlQuery<object>("exec ProcUpdateImportDefinition @ImportDefHeadIDSys, @FormatName , @Delimiter , @Qualifier , @MaxHeading ," +
-            "@Encoding , @SkipFirstRecode , @UpdateAt , @UpdateBy , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter, qualifierParameter,
-            maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
+            "@Encoding , @StartRow , @UpdateAt , @UpdateBy , @XmlDetail ", importIDSysParameter, formatNameParameter, delimiterParameter, qualifierParameter,
+            maxHeadingParameter, encodingParameter, startRowParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter).FirstOrDefault();
 
             //return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ProcUpdateImportDefinition", importIDSysParameter, formatNameParameter, delimiterParameter, maxHeadingParameter, encodingParameter, skipFirstRecodeParameter, createdDateParameter, updatedDateParameter, userUpdateParameter, xmlDetailParameter);
         }
