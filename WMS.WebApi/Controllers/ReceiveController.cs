@@ -1,8 +1,14 @@
-﻿using System;
+﻿using BarcodeLib;
+using Microsoft.Reporting.WebForms;
+using QRCoder;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using WIM.Core.Common.Utility.Extensions;
 using WIM.Core.Common.Utility.Http;
@@ -265,6 +271,124 @@ namespace WMS.WebApi.Controllers
             }
             return Request.ReturnHttpResponseMessage(response);
         }
+
+        [HttpGet]
+        [Route("putAway")]
+        public HttpResponseMessage GetPutAway()
+        {
+
+            HttpResponseMessage result = new HttpResponseMessage();
+            try
+            {
+
+                result.Content = GetReportStream();
+
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+            }
+            catch (AppValidationException ex)
+            {
+                //result = Request.CreateResponse(HttpStatusCode.PreconditionFailed, ex.Message);
+            }
+
+            return result;
+        }
+
+        private StreamContent GetReportStream()
+        {
+            byte[] bytes;
+            string[] streamids;
+            Warning[] warnings;
+            string mimeType, encoding, extension;
+
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode("xxded11", QRCodeGenerator.ECCLevel.L);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(10);
+
+            MemoryStream qrStream = new MemoryStream();
+            qrCodeImage.Save(qrStream, System.Drawing.Imaging.ImageFormat.Bmp);
+            byte[] imageBytes = qrStream.ToArray();
+
+
+
+
+
+            List<TestData> testLIst = new List<TestData>();
+            testLIst.Add(new TestData()
+            {
+                QRCode1 = imageBytes,
+                Qty = 10,
+                ReceiveNo = "xxx", 
+                ItemCode = "AA",
+                ItemName = "BB",
+                Location = "CCC",
+                PoNo = "DFSD",
+                ReceiveDate = DateTime.Now,
+                ExpireDate = DateTime.Now
+            });
+            testLIst.Add(new TestData()
+            {
+                QRCode1 = imageBytes,
+                Qty = 10,
+                ReceiveNo = "xxx",
+                ItemCode = "AA",
+                ItemName = "BB",
+                Location = "CCC",
+                PoNo = "DFSD",
+                ReceiveDate = DateTime.Now,
+                ExpireDate = DateTime.Now
+            });
+            testLIst.Add(new TestData()
+            {
+                QRCode1 = imageBytes,
+                Qty = 10,
+                ReceiveNo = "xxx",
+                ItemCode = "AA",
+                ItemName = "BB",
+                Location = "CCC",
+                PoNo = "DFSD",
+                ReceiveDate = DateTime.Now,
+                ExpireDate = DateTime.Now
+            });
+
+
+            using (var reportViewer = new ReportViewer())
+            {
+                reportViewer.ProcessingMode = ProcessingMode.Local;
+                reportViewer.LocalReport.ReportPath = "Report/PutAwayReport.rdlc";
+
+                reportViewer.LocalReport.Refresh();
+                reportViewer.LocalReport.EnableExternalImages = true;
+
+                ReportDataSource rds1 = new ReportDataSource();
+                rds1.Name = "DataSet1";
+                rds1.Value = testLIst;
+
+
+
+                reportViewer.LocalReport.DataSources.Add(rds1);
+                bytes = reportViewer.LocalReport.Render("Pdf", null, out mimeType, out encoding, out extension, out streamids, out warnings);
+
+            }
+
+            Stream stream = new MemoryStream(bytes);
+            return new StreamContent(stream);
+
+        }
+    }
+
+    public class TestData
+    {
+        public byte[] QRCode1 { get; set; }
+        public int Qty { get; set; }
+        public string ReceiveNo { get; set; }
+        public string ItemCode { get; set; }
+        public string ItemName { get; set; }
+        public DateTime ExpireDate { get; set; }
+        public DateTime ReceiveDate { get; set; }
+        public string Location { get; set; }
+        public string PoNo { get; set; }
     }
 
 }

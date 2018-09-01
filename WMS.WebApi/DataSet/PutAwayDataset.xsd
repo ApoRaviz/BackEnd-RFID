@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PutAwayDataset" targetNamespace="http://tempuri.org/PutAwayDataset.xsd" xmlns:mstns="http://tempuri.org/PutAwayDataset.xsd" xmlns="http://tempuri.org/PutAwayDataset.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="PutAwayDataset" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="PutAwayDataset" msprop:Generator_UserDSName="PutAwayDataset">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="tableputaway" msprop:Generator_TableClassName="tableputawayDataTable" msprop:Generator_TableVarName="tabletableputaway" msprop:Generator_TablePropName="tableputaway" msprop:Generator_RowDeletingName="tableputawayRowDeleting" msprop:Generator_RowChangingName="tableputawayRowChanging" msprop:Generator_RowEvHandlerName="tableputawayRowChangeEventHandler" msprop:Generator_RowDeletedName="tableputawayRowDeleted" msprop:Generator_UserTableName="tableputaway" msprop:Generator_RowChangedName="tableputawayRowChanged" msprop:Generator_RowEvArgName="tableputawayRowChangeEvent" msprop:Generator_RowClassName="tableputawayRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ReceiveNo" msprop:Generator_ColumnVarNameInTable="columnReceiveNo" msprop:Generator_ColumnPropNameInRow="ReceiveNo" msprop:Generator_ColumnPropNameInTable="ReceiveNoColumn" msprop:Generator_UserColumnName="ReceiveNo" type="xs:string" />
+              <xs:element name="Qty" msprop:Generator_ColumnVarNameInTable="columnQty" msprop:Generator_ColumnPropNameInRow="Qty" msprop:Generator_ColumnPropNameInTable="QtyColumn" msprop:Generator_UserColumnName="Qty" type="xs:int" minOccurs="0" />
+              <xs:element name="ItemCode" msprop:Generator_ColumnVarNameInTable="columnItemCode" msprop:Generator_ColumnPropNameInRow="ItemCode" msprop:Generator_ColumnPropNameInTable="ItemCodeColumn" msprop:Generator_UserColumnName="ItemCode" type="xs:string" minOccurs="0" />
+              <xs:element name="ItemName" msprop:Generator_ColumnVarNameInTable="columnItemName" msprop:Generator_ColumnPropNameInRow="ItemName" msprop:Generator_ColumnPropNameInTable="ItemNameColumn" msprop:Generator_UserColumnName="ItemName" type="xs:string" minOccurs="0" />
+              <xs:element name="ExpireDate" msprop:Generator_ColumnVarNameInTable="columnExpireDate" msprop:Generator_ColumnPropNameInRow="ExpireDate" msprop:Generator_ColumnPropNameInTable="ExpireDateColumn" msprop:Generator_UserColumnName="ExpireDate" type="xs:string" minOccurs="0" />
+              <xs:element name="ReceiveDate" msprop:Generator_ColumnVarNameInTable="columnReceiveDate" msprop:Generator_ColumnPropNameInRow="ReceiveDate" msprop:Generator_ColumnPropNameInTable="ReceiveDateColumn" msprop:Generator_UserColumnName="ReceiveDate" type="xs:string" minOccurs="0" />
+              <xs:element name="Location" msprop:Generator_ColumnVarNameInTable="columnLocation" msprop:Generator_ColumnPropNameInRow="Location" msprop:Generator_ColumnPropNameInTable="LocationColumn" msprop:Generator_UserColumnName="Location" type="xs:string" minOccurs="0" />
+              <xs:element name="PoNo" msprop:Generator_ColumnVarNameInTable="columnPoNo" msprop:Generator_ColumnPropNameInRow="PoNo" msprop:Generator_ColumnPropNameInTable="PoNoColumn" msprop:Generator_UserColumnName="PoNo" type="xs:string" minOccurs="0" />
+              <xs:element name="PoDate" msprop:Generator_ColumnVarNameInTable="columnPoDate" msprop:Generator_ColumnPropNameInRow="PoDate" msprop:Generator_ColumnPropNameInTable="PoDateColumn" msprop:Generator_UserColumnName="PoDate" type="xs:string" minOccurs="0" />
+              <xs:element name="QRCode1" msprop:Generator_ColumnVarNameInTable="columnQRCode1" msprop:Generator_ColumnPropNameInRow="QRCode1" msprop:Generator_ColumnPropNameInTable="QRCode1Column" msprop:Generator_UserColumnName="QRCode1" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tableputaway" />
+      <xs:field xpath="mstns:ReceiveNo" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
