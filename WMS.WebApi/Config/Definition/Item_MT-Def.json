@@ -1,0 +1,35 @@
+﻿[
+  {
+    "ColumnName": "ItemCode",
+    "HeadingName": "Item Code",
+    "DataType": "String",
+    "Digits": 50,
+    "Mandatory": true
+  },
+  {
+    "ColumnName": "ItemName",
+    "HeadingName": "Item Name",
+    "DataType": "String",
+    "Digits": 50,
+    "Mandatory": true
+
+  },
+  {
+    "ColumnName": "ImportDate",
+    "HeadingName": "Create Date",
+    "DataType": "DateTime",
+    "Digits": 500,
+    "Mandatory": false,
+    "FormatDateTime": "yyyy-MMM-dd",
+    "AllowAutomate":  true
+  },
+  {
+    "ColumnName": "Qty",
+    "HeadingName": "Qty in piece",
+    "DataType": "int",
+    "Digits": 20,
+    "Mandatory": true,
+    "FormatNumber": "#"
+  },
+
+]

@@ -1,0 +1,237 @@
+﻿{
+  "Head": [
+    {
+      "ColumnName": "PoNo",
+      "HeadingName": "Purchase Number",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": true
+    },
+    {
+      "ColumnName": "PoDate",
+      "HeadingName": "Purchase Date",
+      "DataType": "DateTime",
+      "Digits": 50,
+      "Mandatory": false,
+      "FormatDateTime": "yyyy-MM-dd"
+    },
+    {
+      "ColumnName": "Remark",
+      "HeadingName": "Comment",
+      "DataType": "String",
+      "Digits": 500,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ReceiveSupplierCode",
+      "HeadingName": "Supplier Code",
+      "DataType": "String",
+      "Digits": 20,
+      "Mandatory": true
+    },
+    {
+      "ColumnName": "ReceiveSupplierName",
+      "HeadingName": "Supplier Name",
+      "DataType": "String",
+      "Digits": 255,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ReceiveSupplierPIC",
+      "HeadingName": "PIC",
+      "DataType": "String",
+      "Digits": 255,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ReceiveSupplierZipCode",
+      "HeadingName": "ZIP Code",
+      "DataType": "String",
+      "Digits": 20,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ReceiveSupplierAddress",
+      "HeadingName": "Address",
+      "DataType": "String",
+      "Digits": 500,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ReceiveSupplierPhoneNumber",
+      "HeadingName": "Phone Number",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ReceiveSupplierFaxNumber",
+      "HeadingName": "Fax Number",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": false
+    }
+  ],
+
+  "Detail": [
+    {
+      "ColumnName": "ItemCode",
+      "HeadingName": "Item Code",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": true
+    },
+    {
+      "ColumnName": "ItemName",
+      "HeadingName": "Item Name",
+      "DataType": "String",
+      "Digits": 255,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "LotNo",
+      "HeadingName": "Lot Number",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ExpireDate",
+      "HeadingName": "Expire Date",
+      "DataType": "DateTime",
+      "Digits": 50,
+      "Mandatory": false,
+      "FormatDateTime": "yyyy-MM-dd"
+    },
+    {
+      "ColumnName": "Qty",
+      "HeadingName": "Qty",
+      "DataType": "int",
+      "Digits": 20,
+      "Mandatory": true,
+      "FormatNumber": "#"
+    },
+    {
+      "ColumnName": "UnitName",
+      "HeadingName": "Unit",
+      "DataType": "String",
+      "Digits": 200,
+      "Mandatory": true
+    },
+    {
+      "ColumnName": "Price",
+      "HeadingName": "Price",
+      "DataType": "decimal",
+      "Digits": 20,
+      "Mandatory": true,
+      "FormatNumber": "#.##"
+    },
+    {
+      "ColumnName": "Length",
+      "HeadingName": "Length",
+      "DataType": "decimal",
+      "Digits": 20,
+      "Mandatory": true,
+      "FormatNumber": "#.##"
+    },
+    {
+      "ColumnName": "Width",
+      "HeadingName": "Width",
+      "DataType": "decimal",
+      "Digits": 20,
+      "Mandatory": true,
+      "FormatNumber": "#.##"
+    },
+    {
+      "ColumnName": "Height",
+      "HeadingName": "Height",
+      "DataType": "decimal",
+      "Digits": 20,
+      "Mandatory": true,
+      "FormatNumber": "#.##"
+    },
+    {
+      "ColumnName": "Remark",
+      "HeadingName": "Comment",
+      "DataType": "String",
+      "Digits": 500,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "Cost",
+      "HeadingName": "Cost",
+      "DataType": "decimal",
+      "Digits": 20,
+      "Mandatory": false,
+      "FormatNumber": "#.##"
+    },
+    {
+      "ColumnName": "ManufacturingDate",
+      "HeadingName": "Manufacturing Date",
+      "DataType": "DateTime",
+      "Digits": 50,
+      "Mandatory": false,
+      "FormatDateTime":  "yyyy-MM-dd"
+    },
+    {
+      "ColumnName": "ControlLevel1",
+      "HeadingName": "Control Level 1",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ControlLevel2",
+      "HeadingName": "Control Level 2",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": false
+    },
+    {
+      "ColumnName": "ControlLevel3",
+      "HeadingName": "Control Level 3",
+      "DataType": "String",
+      "Digits": 50,
+      "Mandatory": false
+    }
+  ]
+}
+
+    //{
+    //  "ColumnName": "Test1",
+    //  "HeadingName": "DecimalTest",
+    //  "DataType": "decimal",
+    //  "Digits": 25,
+    //  "Mandatory": true,
+    //  "AllowAutomate": true,
+    //  "FormatNumber": "#.##"
+    //},
+    //{
+    //  "ColumnName": "Test2",
+    //  "HeadingName": "MoneyTest",
+    //  "DataType": "money",
+    //  "Digits": 25,
+    //  "Mandatory": true,
+    //  "AllowAutomate": false,
+    //  "FormatNumber": "#,###.##"
+    //},
+    //{
+    //  "ColumnName": "Test3",
+    //  "HeadingName": "IntTest",
+    //  "DataType": "int",
+    //  "Digits": 25,
+    //  "Mandatory": true,
+    //  "AllowAutomate": true,
+    //  "FormatNumber": "#"
+    //},
+    //{
+    //  "ColumnName": "PoDate",
+    //  "HeadingName": "PO Date",
+    //  "DataType": "DateTime",
+    //  "Digits": 25,
+    //  "Mandatory": true,
+    //  "AllowAutomate": true,
+    //  "FormatDateTime": "yyyy-MM-dd"
+    //},
+  
+

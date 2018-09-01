@@ -487,6 +487,7 @@
       <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </Content>
     <Content Include="Config\Definition\Receiving-Def.json" />
+    <Content Include="Config\Definition\Item_MT-Def.json" />
     <None Include="DataSet\MasterDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>MasterDataSet.Designer.cs</LastGenOutput>
