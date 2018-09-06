@@ -50,7 +50,10 @@ namespace Master.WebApi.Controllers
             ResponseData<LabelControlDto> response = new ResponseData<LabelControlDto>();
             try
             {
-                LabelData.ProjectIDSys = (User.IsSysAdmin()) ? LabelData.ProjectIDSys : User.Identity.GetProjectIDSys();
+                //Job Comment, ProjectIDSys ไม่ถูก
+                //LabelData.ProjectIDSys = (User.IsSysAdmin()) ? LabelData.ProjectIDSys : User.Identity.GetProjectIDSys();
+
+                LabelData.ProjectIDSys = LabelData.ProjectIDSys;
                 labelResponse = LabelService.CreateLabelControl(LabelData);
                 response.SetData(labelResponse);
             }

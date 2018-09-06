@@ -40,16 +40,30 @@ namespace WIM.Core.Entity.ProjectManagement
         public ProjectConfig ProjectConfig
         {
             get
-            {
+            {               
                 if (!string.IsNullOrEmpty(Config))
                 {
-                    return JsonConvert.DeserializeObject<ProjectConfig>(StringHelper.Decompress(Config));
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<ProjectConfig>(Config);
+                    }
+                    catch (Exception)
+                    {
+                        return JsonConvert.DeserializeObject<ProjectConfig>(StringHelper.Decompress(Config));
+                    }                    
                 }
                 return null;
             }
             set
             {
-                Config = StringHelper.Compress(JsonConvert.SerializeObject(value));
+                try
+                {
+                    Config = JsonConvert.SerializeObject(value);
+                }
+                catch (Exception)
+                {
+                    Config = StringHelper.Compress(JsonConvert.SerializeObject(value));
+                }                
             }
         }
 
