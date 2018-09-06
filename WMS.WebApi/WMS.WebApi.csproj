@@ -414,6 +414,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MasterDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="DataSet\PutAwayDataset.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PutAwayDataset.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -493,6 +498,17 @@
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="DataSet\PutAwayDataset.xsc">
+      <DependentUpon>PutAwayDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSet\PutAwayDataset.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>PutAwayDataset.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSet\PutAwayDataset.xss">
+      <DependentUpon>PutAwayDataset.xsd</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
@@ -635,6 +651,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Report\PutAwayReport.rdlc" />
     <EmbeddedResource Include="Report\BoxLabelReport.rdlc" />
     <EmbeddedResource Include="Report\CustomerReport.rdlc">
       <SubType>Designer</SubType>

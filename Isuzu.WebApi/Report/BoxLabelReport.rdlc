@@ -100,7 +100,7 @@
                               <Value>=Fields!Barcode.Value</Value>
                               <MIMEType>image/png</MIMEType>
                               <Sizing>FitProportional</Sizing>
-                              <Top>0.01863in</Top>
+                              <Top>0.00475in</Top>
                               <Left>0.5in</Left>
                               <Height>1in</Height>
                               <Width>2.985in</Width>
