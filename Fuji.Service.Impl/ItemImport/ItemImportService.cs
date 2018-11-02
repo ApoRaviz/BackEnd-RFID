@@ -205,7 +205,8 @@ namespace Fuji.Service.Impl.ItemImport
                 using (var Db = new FujiDbContext())
                 {
                     var query = (from d in Db.ImportSerialDetail
-                                 where d.HeadID == "0"
+                                 where itemGroupsFromScan.Contains(d.ItemGroup)
+                                    // && d.HeadID == "0"
                                     && new List<string> {
                                     statusNew,
                                     statusScanned
@@ -252,7 +253,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                     var query = (from d in Db.ImportSerialDetail
                                  where receive.ItemGroups.Contains(d.ItemGroup)
-                                    && d.HeadID == "0"
+                                    //&& d.HeadID == "0"
                                     //&& d.Status == FujiStatus.NEW.ToString()
                                     && new List<string> {
                                     statusNew,
@@ -260,6 +261,9 @@ namespace Fuji.Service.Impl.ItemImport
                                     }.Contains(d.Status)
                                  select d
                          );
+
+
+                  
 
                     if (query != null)
                     {
