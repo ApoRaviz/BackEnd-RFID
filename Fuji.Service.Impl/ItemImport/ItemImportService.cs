@@ -199,7 +199,7 @@ namespace Fuji.Service.Impl.ItemImport
         }
         public void ReGenerateRFID(List<string> itemGroupsFromScan)
         {
- 
+
             using (var scope = new TransactionScope())
             {
                 using (var Db = new FujiDbContext())
@@ -263,7 +263,7 @@ namespace Fuji.Service.Impl.ItemImport
                          );
 
 
-                  
+
 
                     if (query != null)
                     {
@@ -330,32 +330,32 @@ namespace Fuji.Service.Impl.ItemImport
                     ISerialDetailTempRepository SerialDetailTempRepo = new SerialDetailTempRepository(Db);
 
                     bool isSerialAndItemCodeAlreadyExist = (from a in Db.ImportSerialDetail
-                                                where Db.ImportSerialDetail.Any(b =>
-                                                       receive.ItemGroups.Contains(b.ItemGroup)
-                                                       && b.HeadID != "0"
-                                                       && b.ItemCode == a.ItemCode
-                                                       && b.SerialNumber == a.SerialNumber
-                                                       && b.ItemType == a.ItemType
-                                                       && a.Status != statusShipped
-                                                       && a.Status != statusDeleted
-                                                   )
-                                                group a by new
-                                                {
-                                                    a.ItemCode,
-                                                    a.SerialNumber
-                                                } into g
-                                                where g.Count() > 1
-                                                select new SerialsRemainInStock
-                                                {
-                                                    ItemCode = g.Key.ItemCode,
-                                                    SerialNumber = g.Key.SerialNumber
-                                                }
+                                                            where Db.ImportSerialDetail.Any(b =>
+                                                                   receive.ItemGroups.Contains(b.ItemGroup)
+                                                                   && b.HeadID != "0"
+                                                                   && b.ItemCode == a.ItemCode
+                                                                   && b.SerialNumber == a.SerialNumber
+                                                                   && b.ItemType == a.ItemType
+                                                                   && a.Status != statusShipped
+                                                                   && a.Status != statusDeleted
+                                                               )
+                                                            group a by new
+                                                            {
+                                                                a.ItemCode,
+                                                                a.SerialNumber
+                                                            } into g
+                                                            where g.Count() > 1
+                                                            select new SerialsRemainInStock
+                                                            {
+                                                                ItemCode = g.Key.ItemCode,
+                                                                SerialNumber = g.Key.SerialNumber
+                                                            }
                         ).Any();
 
                     if (isSerialAndItemCodeAlreadyExist)
                     {
                         throw new AppValidationException(ErrorEnum.SerialAndItemCodeAlreadyExist);
-                    }                   
+                    }
 
                     var query = (from d in Db.ImportSerialDetail
                                  where receive.ItemGroups.Contains(d.ItemGroup)
@@ -434,8 +434,8 @@ namespace Fuji.Service.Impl.ItemImport
             using (FujiDbContext Db = new FujiDbContext())
             {
                 ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
-                var items = SerialDetailRepo.GetMany(d => 
-                    d.OrderNo == orderNo 
+                var items = SerialDetailRepo.GetMany(d =>
+                    d.OrderNo == orderNo
                     && d.Status == statusImpPicking
                 );
 
@@ -557,7 +557,7 @@ namespace Fuji.Service.Impl.ItemImport
                     foreach (string scan in ItemGroup.ItemGroups)
                     {
                         if (detail.ItemGroup.EndsWith(scan))
-                        {                           
+                        {
                             detail.BoxNumber = boxNumberTo;
                             SerialDetailRepo.Update(detail);
                             Db.SaveChanges();
@@ -578,7 +578,7 @@ namespace Fuji.Service.Impl.ItemImport
                 var query = SerialDetailRepo.GetMany(i => boxList.ItemGroups.Contains(i.BoxNumber));
 
                 foreach (ImportSerialDetail detail in query)
-                {                    
+                {
                     detail.Location = locationTo;
                     SerialDetailRepo.Update(detail);
                     Db.SaveChanges();
@@ -656,7 +656,7 @@ namespace Fuji.Service.Impl.ItemImport
         {
             using (var scope = new TransactionScope())
             {
-                
+
                 using (FujiDbContext Db = new FujiDbContext())
                 {
                     ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(Db);
@@ -1146,7 +1146,8 @@ namespace Fuji.Service.Impl.ItemImport
 
                     items = SerialDetailRepo.GetMany(g => g.BoxNumber == boxNumber)
                         .OrderBy(o => o.SerialNumber)
-                        .Select(s => new FujiSerialAndRFIDModel() {
+                        .Select(s => new FujiSerialAndRFIDModel()
+                        {
                             SerialNumber = s.SerialNumber
                             ,
                             IsValid = (s.ItemGroup.Length > 4)
@@ -1155,14 +1156,14 @@ namespace Fuji.Service.Impl.ItemImport
                             ? Convert.ToInt32(s.ItemGroup.Substring(s.ItemGroup.Length - 4, 4), 16)
                             : Convert.ToInt32(s.ItemGroup, 16)).ToString()
                         }).ToList();
-                   
+
 
                 }
                 catch (DbEntityValidationException e)
                 {
                     throw new AppValidationException(e);
                 }
-        }
+            }
 
             return items;
         }
@@ -1196,7 +1197,7 @@ namespace Fuji.Service.Impl.ItemImport
                     items = (from p in scannedItems
                              orderby p.BoxNumber
                              group p by p.BoxNumber
-                            into g
+                             into g
                              select new FujiBoxNumberAndAmountModel
                              {
                                  ItemIndex = ix++
@@ -1204,6 +1205,8 @@ namespace Fuji.Service.Impl.ItemImport
                                  BoxNumber = g.Key
                   ,
                                  Amount = g.ToList().Count
+                  ,
+                                 Type = 0
                              }).ToList();
 
                 }
@@ -1241,7 +1244,7 @@ namespace Fuji.Service.Impl.ItemImport
             string[] ml = new string[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             List<FujiTagReport> items = new List<FujiTagReport>();
             string result = "", startDate = "", endDate = "";
-          
+
             int cnt = parameterSearch != null && parameterSearch.Columns != null ? parameterSearch.Columns.Count : 0;
             if (cnt != 2)
                 return null;

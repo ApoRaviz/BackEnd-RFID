@@ -11,5 +11,6 @@ namespace Fuji.Common.ValueObject
         public int ItemIndex { get; set; }
         public string BoxNumber { get; set; }
         public int Amount { get; set; }
+        public int Type { get; set; }
     }
 }
