@@ -669,7 +669,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55644</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/isuzu-backend</IISUrl>
+          <IISUrl>http://localhost/Isuzu-backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost/isuzu-backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

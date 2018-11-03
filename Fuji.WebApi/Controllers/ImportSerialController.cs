@@ -190,7 +190,7 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(response);
         }
 
-        [Authorize]
+        //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
         [Route("importSerial/handy/itemGroups/{*orderNo}")]

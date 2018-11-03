@@ -30,13 +30,30 @@ namespace WIM.Core.Entity.LabelManagement
             {
                 if (!string.IsNullOrEmpty(Config))
                 {
-                    return JsonConvert.DeserializeObject<List<LabelConfig>>(StringHelper.Decompress(Config));
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<List<LabelConfig>>(Config);
+                    }
+                    catch (Exception)
+                    {
+                        return JsonConvert.DeserializeObject<List<LabelConfig>>(StringHelper.Decompress(Config));
+                    }
+                    
                 }
                 return null;
             }
             set
             {
-                Config = StringHelper.Compress(JsonConvert.SerializeObject(value));
+                try
+                {
+                    Config = JsonConvert.SerializeObject(value);
+                }
+                catch (Exception)
+                {
+
+                    Config = StringHelper.Compress(JsonConvert.SerializeObject(value));
+                }
+                
             }
         }
     }

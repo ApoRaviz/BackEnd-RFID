@@ -69,9 +69,15 @@ namespace WIM.Core.Entity
                 {
                     return;
                 }
-
-                int projectIDSys = identity.GetProjectIDSys();
+                
                 PropertyInfo propertyInfo = entity.GetType().GetProperty("ProjectIDSys");
+                object _projectIDSys = propertyInfo.GetValue(entity, null);
+                int projectIDSys = 0;
+                if (!int.TryParse(_projectIDSys + "", out projectIDSys))
+                {
+                    projectIDSys = identity.GetProjectIDSys();
+                }
+
                 propertyInfo.SetValue(entity, Convert.ChangeType(projectIDSys, propertyInfo.PropertyType), null);
             }
             catch (Exception)
