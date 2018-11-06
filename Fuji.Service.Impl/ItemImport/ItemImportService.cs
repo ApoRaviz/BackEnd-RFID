@@ -249,8 +249,10 @@ namespace Fuji.Service.Impl.ItemImport
 
                     var query = (from d in Db.ImportSerialDetail
                                  where receive.ItemGroups.Contains(d.ItemGroup)
-                                    && ((d.HeadID == "0" && d.Status == statusNew)
-                                    || (d.HeadID == receive.HeadID && d.Status == statusScanned))
+                                    && (
+                                            (d.HeadID == "0" && d.Status == statusNew)
+                                            || (d.HeadID == receive.HeadID && d.Status == statusScanned)
+                                        )
                                  select d
                          );
                   
