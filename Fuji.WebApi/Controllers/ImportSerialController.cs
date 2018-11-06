@@ -193,7 +193,7 @@ namespace Fuji.WebApi.Controllers
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpGet]
-        [Route("importSerial/handy/itemGroups/{orderNo}")]
+        [Route("importSerial/handy/itemGroups/{*orderNo}")]
         public HttpResponseMessage GetByOrder(string orderNo)
         {
             IResponseData<List<string>> response = new ResponseData<List<string>>();
