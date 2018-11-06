@@ -197,7 +197,7 @@ namespace Fuji.Service.Impl.ItemImport
                 }
             }
         }
-        public void ReGenerateRFID(List<string> itemGroupsFromScan)
+        public void ReGenerateRFID(List<string> itemGroupsFromScan, string headId)
         {
  
             using (var scope = new TransactionScope())
@@ -205,12 +205,8 @@ namespace Fuji.Service.Impl.ItemImport
                 using (var Db = new FujiDbContext())
                 {
                     var query = (from d in Db.ImportSerialDetail
-                                 where itemGroupsFromScan.Contains(d.ItemGroup)
-                                    // && d.HeadID == "0"
-                                    && new List<string> {
-                                    statusNew,
-                                    statusScanned
-                                    }.Contains(d.Status)
+                                 where (d.HeadID == "0" && d.Status == statusNew)
+                                 || (d.HeadID == headId && d.Status == statusScanned)
                                  select d
                         );
 
@@ -240,7 +236,7 @@ namespace Fuji.Service.Impl.ItemImport
         }
         public bool SetScanned(SetScannedRequest receive)
         {
-            ReGenerateRFID(receive.ItemGroups);
+            ReGenerateRFID(receive.ItemGroups, receive.HeadID);
 
             RemoveRegisterDuplicate();
 
@@ -253,16 +249,10 @@ namespace Fuji.Service.Impl.ItemImport
 
                     var query = (from d in Db.ImportSerialDetail
                                  where receive.ItemGroups.Contains(d.ItemGroup)
-                                    //&& d.HeadID == "0"
-                                    //&& d.Status == FujiStatus.NEW.ToString()
-                                    && new List<string> {
-                                    statusNew,
-                                    statusScanned
-                                    }.Contains(d.Status)
+                                    && ((d.HeadID == "0" && d.Status == statusNew)
+                                    || (d.HeadID == receive.HeadID && d.Status == statusScanned))
                                  select d
                          );
-
-
                   
 
                     if (query != null)
