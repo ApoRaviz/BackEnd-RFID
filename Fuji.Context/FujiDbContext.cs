@@ -34,7 +34,9 @@ namespace Fuji.Context
                 if(methodName.StartsWith("Update") 
                     || methodName.StartsWith("Create")
                     || methodName.StartsWith("Set")
-                    || methodName.StartsWith("Receive"))
+                    || methodName.StartsWith("Receive")
+                    || methodName.StartsWith("Remove")
+                    )
                 { 
                     string projectName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location).Split('.').FirstOrDefault();
                     string className = new System.Diagnostics.StackFrame(1)?.GetMethod()?.ReflectedType.Name;
