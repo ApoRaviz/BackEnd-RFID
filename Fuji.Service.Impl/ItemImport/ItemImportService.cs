@@ -1175,20 +1175,23 @@ namespace Fuji.Service.Impl.ItemImport
             ObjectCache cache = MemoryCache.Default;
 
 
-            string cacheDateTime = cache["Cache_DateTimeStamp_SetScanned"] + "";
-            if (string.IsNullOrEmpty(cacheDateTime))
-                return null;
-            if (!DateTime.TryParse(cache["Cache_DateTimeStamp_SetScanned"].ToString(), out lastestDate))
-                return null;
-            string cacheContent = cache["Cache_SelectSQL_SetScanned"] + "";
-            if (string.IsNullOrEmpty(cacheContent))
-                return null;
+            //string cacheDateTime = cache["Cache_DateTimeStamp_SetScanned"] + "";
+            //if (string.IsNullOrEmpty(cacheDateTime))
+            //    return null;
+            //if (!DateTime.TryParse(cache["Cache_DateTimeStamp_SetScanned"].ToString(), out lastestDate))
+            //    return null;
+            //string cacheContent = cache["Cache_SelectSQL_SetScanned"] + "";
+            //if (string.IsNullOrEmpty(cacheContent))
+            //    return null;
 
             IEnumerable<FujiBoxNumberAndAmountModel> items = new List<FujiBoxNumberAndAmountModel>();
             using (FujiDbContext Db = new FujiDbContext())
             {
-                string sql = cacheContent;
-                sql = sql.Remove(sql.IndexOf("AND"));
+                //string sql = cacheContent;
+                //sql = sql.Remove(sql.IndexOf("AND"));
+                //var scannedItems = Db.Database.SqlQuery<ImportSerialDetail>(sql).ToList();
+                ISerialDetailRepository SerialDetailRepo = new SerialDetailRepository(Db);
+                string sql = "SELECT * FROM ImportSerialDetail WHERE Status='" + statusNew + "'"; 
                 var scannedItems = Db.Database.SqlQuery<ImportSerialDetail>(sql).ToList();
                 if (scannedItems != null)
                 {
@@ -1212,7 +1215,7 @@ namespace Fuji.Service.Impl.ItemImport
                 }
             }
             model.BoxAndAmount = items;
-            model.LastestDate = lastestDate;
+            model.LastestDate = DateTime.UtcNow;//lastestDate;
 
 
             return model;
