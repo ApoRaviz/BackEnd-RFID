@@ -17,7 +17,7 @@ using WIM.Core.Repository;
 using WIM.Core.Repository.Common;
 using WIM.Core.Repository.Impl.Common;
 using System.Data.Linq.SqlClient;
-using WMS.Common.ValueObject;
+using WIM.Common.ValueObject;
 using AutoMapper;
 
 namespace WIM.Core.Service.Impl

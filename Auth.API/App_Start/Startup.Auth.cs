@@ -55,9 +55,9 @@ namespace Auth.API
                 {                    
                     AuthenticationMode = AuthenticationMode.Active,
                     AllowedAudiences = new[] { audienceId },
-                    IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
+                    IssuerSecurityKeyProviders = new IIssuerSecurityKeyProvider[]
                     {
-                        new SymmetricKeyIssuerSecurityTokenProvider(issuer, audienceSecret)
+                        new SymmetricKeyIssuerSecurityKeyProvider(issuer, audienceSecret)
                     }
                 });
         }

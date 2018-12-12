@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -32,15 +33,16 @@ namespace Auth.Security.Providers
 
             string audienceSecret = ConfigurationManager.AppSettings["as:AudienceSecret"];
 
-            var keyByteArray = TextEncodings.Base64Url.Decode(audienceSecret);
+            var securityKey = new Microsoft.IdentityModel.Tokens.
+        SymmetricSecurityKey(Encoding.UTF8.GetBytes(audienceSecret));
 
-            var signingKey = new HmacSigningCredentials(keyByteArray);
+            var signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(securityKey, "HS256");
 
             var issued = data.Properties.IssuedUtc;
 
             var expires = data.Properties.ExpiresUtc;
 
-            var token = new JwtSecurityToken(_issuer, audienceId, data.Identity.Claims, issued.Value.UtcDateTime, expires.Value.UtcDateTime, signingKey);
+            var token = new JwtSecurityToken(_issuer, audienceId, data.Identity.Claims, issued.Value.UtcDateTime, expires.Value.UtcDateTime, signingCredentials);
 
             var handler = new JwtSecurityTokenHandler();
 

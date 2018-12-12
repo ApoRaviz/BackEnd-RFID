@@ -8,7 +8,7 @@ namespace Fuji.Common.ValueObject
 {
     public class FujiCheckRegister
     {
-        public DateTime LastestDate { get; set; }
+        public DateTime? LastestDate { get; set; }
         public int TotalRecord { get; set; }
         public IEnumerable<FujiBoxNumberAndAmountModel> BoxAndAmount { get; set; }
     }

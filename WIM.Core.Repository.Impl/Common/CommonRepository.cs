@@ -6,7 +6,6 @@ using System.Linq;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Context;
 using WIM.Core.Entity.Common;
-using WMS.Common.ValueObject;
 
 namespace WIM.Core.Repository.Impl
 {

@@ -116,7 +116,7 @@ namespace Isuzu.Context
                 , new SqlParameter("@page", page)
                 , new SqlParameter("@size", size)
                 , output).ToList();
-            }catch(Exception e)
+            }catch(Exception)
             {
                 return new List<InboundItems>() { };
             }

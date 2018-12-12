@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.Common;
-using WMS.Common.ValueObject;
 
 namespace WIM.Core.Repository
 {

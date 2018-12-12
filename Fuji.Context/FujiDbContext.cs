@@ -22,6 +22,7 @@ namespace Fuji.Context
         public DbSet<ProgramVersionHistory> ProgramVersionHistory { get; set; }
         public DbSet<CheckStockHead> CheckStockHead { get; set; }
         public DbSet<GeneralLog> GeneralLogs { get; set; }
+        public DbSet<ItemScanLastest> ItemScanLastests { get; set; }        
 
 
         public FujiDbContext(string message = "",[System.Runtime.CompilerServices.CallerMemberName] string methodName = "") : base("name=YUT_FUJI")
@@ -81,8 +82,10 @@ namespace Fuji.Context
 
         public IEnumerable<ImportSerialDetail> ProcPagingImportSerialDetail(int page, int size, out int totalRecord)
         {
-            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
-            output.Direction = ParameterDirection.Output;
+            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30)
+            {
+                Direction = ParameterDirection.Output
+            };
 
             var items = this.Database.SqlQuery<ImportSerialDetail>("ProcPagingImportSerialDetail @page,@size,@totalrow out"
                 , new SqlParameter("@page", page)
@@ -97,8 +100,10 @@ namespace Fuji.Context
         public IEnumerable<ImportSerialHead> ProcPagingImportSerialHead(int page, int size, out int totalRecord, string sort = "CreateAt", string sortDecending = "DESC")
         {
             totalRecord = 0;
-            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
-            output.Direction = ParameterDirection.Output;
+            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30)
+            {
+                Direction = ParameterDirection.Output
+            };
 
             var items = this.Database.SqlQuery<ImportSerialHead>("ProcPagingImportSerialHead @page,@size,@sort,@sortdecending,@totalrow out"
                 , new SqlParameter("@page", page)
@@ -115,8 +120,10 @@ namespace Fuji.Context
         public IEnumerable<CheckStockHead> ProcPagingCheckStock(int page, int size, out int totalRecord)
         {
             totalRecord = 0;
-            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30);
-            output.Direction = ParameterDirection.Output;
+            var output = new SqlParameter("@totalrow", SqlDbType.Int, 30)
+            {
+                Direction = ParameterDirection.Output
+            };
 
             var items = this.Database.SqlQuery<CheckStockHead>("ProcPagingCheckStock @page,@size,@totalrow out"
                 , new SqlParameter("@page", page)

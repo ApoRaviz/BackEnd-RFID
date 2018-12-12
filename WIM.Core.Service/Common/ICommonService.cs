@@ -4,7 +4,7 @@ using WIM.Core.Common.ValueObject;
 using WIM.Core.Entity.Common;
 using WIM.Core.Entity.SupplierManagement;
 using WIM.Core.Service;
-using WMS.Common.ValueObject;
+using WIM.Common.ValueObject;
 
 namespace WIM.Core.Service
 {
@@ -16,8 +16,8 @@ namespace WIM.Core.Service
         IEnumerable<UserLog> UserLogData();
         IEnumerable<UserLog> GetUserLogData(int? logId, DateTime? RequestDateFrom, DateTime? RequestDateTo);
         IEnumerable<UserLog> GetUserLogData(string RequestMethod, string RequestUrl, string RequestUrlFrontEnd, string RequestMenuNameFrontEnd, DateTime? RequestDateFrom, DateTime? RequestDateTo);
-        IEnumerable<UserLog> GetUserLogData2(LogMasterParameters logMasterParameters);
-        IEnumerable<UserLogDto> GetUserLogData3(LogMasterParameters logMasterParameters);
+        //IEnumerable<UserLog> GetUserLogData2(LogMasterParameters logMasterParameters);
+        //IEnumerable<UserLogDto> GetUserLogData3(LogMasterParameters logMasterParameters);
         IEnumerable<TableColumnsDescription> GetTableColumnsDescription(string TableName);
         string GetDataAutoComplete(string columnNames, string tableName, string conditionColumnNames, string keyword);
         IEnumerable<SubModuleDto> SMAutoComplete(string key);

@@ -15,7 +15,7 @@ namespace Fuji.Entity.ItemManagement
     {
         [Key]
         [StringLength(50)]
-        public string DetailID { get; set; }        
+        public string DetailID { get; set; }
         public string ItemCode { get; set; }
         public string SerialNumber { get; set; }
         [GeneralLog]
@@ -31,6 +31,17 @@ namespace Fuji.Entity.ItemManagement
         //public string UserUpdate { get; set; }
         [StringLength(50)]
         public string HeadID { get; set; }
-        public virtual ImportSerialHead ImportSerialHead { get; set; }
+        // public virtual ImportSerialHead ImportSerialHead { get; set; }
+    }
+
+    [Table("ItemScanLastests")]
+    public partial class ItemScanLastest : BaseEntity
+    {
+        public string Id { get; set; }
+        public string HeadID { get; set; }
+        public string ItemCode { get; set; }
+        public string BoxNumber { get; set; }
+        public string ItemGroup { get; set; }
+        public string ItemType { get; set; }
     }
 }

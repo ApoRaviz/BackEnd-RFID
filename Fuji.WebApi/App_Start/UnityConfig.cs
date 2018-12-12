@@ -10,6 +10,7 @@ using Microsoft.Practices.Unity;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Http;
+using Unity;
 using Unity.WebApi;
 using WIM.Core.Service;
 using WIM.Core.Service.Impl;

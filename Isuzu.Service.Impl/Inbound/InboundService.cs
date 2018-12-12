@@ -1271,7 +1271,7 @@ namespace Isuzu.Service.Impl.Inbound
                         items = Db.ProcPagingInboundItemSearching(keyword, pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return new List<InboundItems>() { };
                     }
@@ -1295,7 +1295,7 @@ namespace Isuzu.Service.Impl.Inbound
                                  select i).ToList();
                         scope.Complete();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return new List<GeneralLog>() { };
                     }
@@ -1896,7 +1896,7 @@ namespace Isuzu.Service.Impl.Inbound
                     {
                         items = Db.Database.SqlQuery<InvoiceReportDetail>(sql).ToList();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return new List<InvoiceReportDetail>() { };
                     }

@@ -307,8 +307,7 @@ namespace Fuji.WebApi.Controllers
             ResponseData<FujiDataImportSerialHead> response = new ResponseData<FujiDataImportSerialHead>();
             try
             {
-                int totalRecord = 0;
-                IEnumerable<ImportSerialHead> items = ItemImportService.GetItems(pageIndex, pageSize, out totalRecord);
+                IEnumerable<ImportSerialHead> items = ItemImportService.GetItems(pageIndex, pageSize, out int totalRecord);
                 if (totalRecord > 0)
                 {
                     FujiDataImportSerialHead ret = new FujiDataImportSerialHead(totalRecord, items);
@@ -770,7 +769,7 @@ namespace Fuji.WebApi.Controllers
         {
             ResponseData<FujiCheckRegister> respones = new ResponseData<FujiCheckRegister>();
             FujiCheckRegister items = new FujiCheckRegister();
-            items = ItemImportService.GetLastestBoxNumberItems();
+            items = ItemImportService.GetItemScanLastest();
             respones.SetStatus(HttpStatusCode.OK);
             respones.SetData(items);
             return Request.ReturnHttpResponseMessage(respones);
@@ -859,7 +858,6 @@ namespace Fuji.WebApi.Controllers
             return Request.ReturnHttpResponseMessage(respones);
 
         }
-        
 
     }
 }
