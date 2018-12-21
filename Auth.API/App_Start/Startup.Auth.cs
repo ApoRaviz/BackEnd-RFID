@@ -23,21 +23,21 @@ namespace Auth.API
 
         public void ConfigureAuth(IAppBuilder app)
         {
-           
+
             app.CreatePerOwinContext(SecurityDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
 
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
-              
+
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/api/v1/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["as:ExToken"])),
-               
+
                 Provider = new CustomOAuthProvider(),
                 AccessTokenFormat = new CustomJwtFormat(ConfigurationManager.AppSettings["as:baseUrl"])
-             
+
             };
 
             app.UseOAuthAuthorizationServer(OAuthOptions);
@@ -52,12 +52,12 @@ namespace Auth.API
 
             app.UseJwtBearerAuthentication(
                 new JwtBearerAuthenticationOptions
-                {                    
+                {
                     AuthenticationMode = AuthenticationMode.Active,
                     AllowedAudiences = new[] { audienceId },
-                    IssuerSecurityKeyProviders = new IIssuerSecurityKeyProvider[]
+                    IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
                     {
-                        new SymmetricKeyIssuerSecurityKeyProvider(issuer, audienceSecret)
+                        new SymmetricKeyIssuerSecurityTokenProvider(issuer, audienceSecret)
                     }
                 });
         }

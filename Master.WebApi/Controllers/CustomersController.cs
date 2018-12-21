@@ -126,9 +126,9 @@ namespace WMS.WebApi.Controller
 
                 //CustomerEvent cusEvent = new CustomerEvent(001,"ss1","asdfe");
 
-                TestEvent testEvent = new TestEvent(001, "asdfe");
+                // TestEvent testEvent = new TestEvent(001, "asdfe");
 
-                RabbitMQMessageListener.Publish(testEvent);
+                // RabbitMQMessageListener.Publish(testEvent);
 
                 response.SetData(customer);
             }

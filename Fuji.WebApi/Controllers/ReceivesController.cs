@@ -1,4 +1,6 @@
-﻿using Fuji.Service.Receive;
+﻿using Fuji.Service.ItemImport;
+using Fuji.Service.Receive;
+using Fuji.WebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,11 +17,14 @@ namespace Fuji.WebApi.Controllers
     [RoutePrefix("api/v1/receives")]
     public class ReceivesController : ApiController
     {
-
         private IReceiveService _receiveService;
-        public ReceivesController(IReceiveService receiveService)
-        {
+        private IItemImportService _itemImportService;
+        public ReceivesController(
+            IReceiveService receiveService,
+            IItemImportService itemImportService
+        ) {
             _receiveService = receiveService;
+            _itemImportService = itemImportService;
         }
 
         [Authorize]
@@ -27,24 +32,24 @@ namespace Fuji.WebApi.Controllers
         [Route("confirm2stock")]
         public async Task<HttpResponseMessage> Confirm2Stock([FromBody]Confirm2StockRequest confirm2StockRequest)
         {
+            ResponseData<bool> responseData = new ResponseData<bool>();
             try
             {
-                await _receiveService.Confirm2Stock(confirm2StockRequest.HeadId);
-
-                ResponseData<string> responseData = new ResponseData<string>();
+                var isConfirmedStock = await _receiveService.Confirm2Stock(confirm2StockRequest.HeadId);
+                if (isConfirmedStock)
+                {
+                    _itemImportService.SetConfirmToStock(confirm2StockRequest.HeadId);              
+                }
                 responseData.SetStatus(HttpStatusCode.OK);
-                responseData.SetData("");
+                responseData.SetData(true);
                 return Request.ReturnHttpResponseMessage(responseData);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                responseData.SetErrors(new List<string> { ex.Message });
+                responseData.SetStatus(HttpStatusCode.InternalServerError);
+                return Request.ReturnHttpResponseMessage(responseData);
             }
         }
-    }
-
-    public class Confirm2StockRequest
-    {
-        public string HeadId { get; set; }
     }
 }

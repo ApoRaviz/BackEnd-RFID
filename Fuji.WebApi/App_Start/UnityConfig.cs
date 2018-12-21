@@ -1,9 +1,11 @@
 using Fuji.Service.Impl.ItemImport;
 using Fuji.Service.Impl.PrintLabel;
 using Fuji.Service.Impl.ProgramVersion;
+using Fuji.Service.Impl.Receive;
 using Fuji.Service.ItemImport;
 using Fuji.Service.PrintLabel;
 using Fuji.Service.ProgramVersion;
+using Fuji.Service.Receive;
 using Fuji.WebApi.Controllers;
 using Microsoft.Owin.Security;
 using Microsoft.Practices.Unity;
@@ -45,7 +47,8 @@ namespace Fuji.WebApi
             container.RegisterType<IItemImportService, ItemImportService>();
             container.RegisterType<IProgramVersionService, ProgramVersionService>();
             container.RegisterType<IPrintLabelService, PrintLabelService>();
-
+            container.RegisterType<IReceiveService, ReceiveService>();
+            
             //CORE
             //container.RegisterType<IMenuService, MenuService>();
             //container.RegisterType<IMenuProjectMappingService, MenuProjectMappingService>();

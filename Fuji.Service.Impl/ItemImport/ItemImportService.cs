@@ -593,9 +593,6 @@ namespace Fuji.Service.Impl.ItemImport
         #region Default
         public ImportSerialHead GetItemByDocID(string id, bool isIncludeChild = false)
         {
-            /*var item = Repo.GetByID(id);
-            return item;*/
-            //return Db.ProcGetImportSerialHeadByHeadID(docId).FirstOrDefault();
             ImportSerialHead headItem;
             using (FujiDbContext Db = new FujiDbContext())
             {
@@ -1309,6 +1306,34 @@ namespace Fuji.Service.Impl.ItemImport
 
             }
             return items;
+        }
+
+        public bool SetConfirmToStock(string headId)
+        {
+            using (var scope = new TransactionScope())
+            {
+                using (FujiDbContext db = new FujiDbContext())
+                {
+                    ISerialHeadRepository SerialHeadRepo = new SerialHeadRepository(db);
+                    ImportSerialHead importSerialHead = GetItemByDocID(headId);
+
+                    try
+                    {
+                        if (importSerialHead != null)
+                        {
+                            importSerialHead.IsConfirmedToStock = true;
+                            SerialHeadRepo.Update(importSerialHead);
+                            db.SaveChanges();                            
+                        }
+                        scope.Complete();
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        throw new AppValidationException(e);
+                    }
+                }
+            }
+            return true;
         }
 
         private IEnumerable<ImportSerialDetail> MapFormScan(List<ImportSerialDetail> items, List<string> scans, bool isPerformMap)

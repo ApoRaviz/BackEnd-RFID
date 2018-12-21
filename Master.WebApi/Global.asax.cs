@@ -24,7 +24,7 @@ namespace Master.WebApi
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.Initialize();
             ApiHashTableHelper.Initialize();
-            TableHashTableHelper.Initialize();
+            // TableHashTableHelper.Initialize();
             RabbitMQMessageListener.Start(RabbitMQConfig.Initialize());
         }
 

@@ -42,6 +42,7 @@ namespace Fuji.Entity.ItemManagement
         public string Spare9 { get; set; }
         public string Spare10 { get; set; }
         public bool IsExport { get; set; }
+        public bool? IsConfirmedToStock { get; set; }
 
         public virtual ICollection<ImportSerialDetail> ImportSerialDetail { get; set; }
     }

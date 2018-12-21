@@ -3,6 +3,8 @@ using Microsoft.Owin.Security;
 using Microsoft.Practices.Unity;
 using System.Web;
 using System.Web.Http;
+using Unity;
+using Unity.Injection;
 using Unity.WebApi;
 using Wim.Core.Service.Impl.Import;
 using WIM.Core.Service;

@@ -71,6 +71,7 @@
     <Compile Include="PrintLabel\IPrintLabelService.cs" />
     <Compile Include="ProgramVersion\IProgramVersionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receive\IReceiveService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PrintLabel\Report1.rdlc" />

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
@@ -9,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Web;
+using System.Web.Http.ModelBinding;
 using WIM.Core.Common.Utility.Validation;
 
 namespace WIM.Core.Common.Utility.UtilityHelpers
@@ -63,6 +66,30 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
             var accessToken = result["access_token"];
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
             return client;
+        }
+
+        public static async Task<T> PostAsync<T>(string url, StringContent content, string identityUrl = null)
+        {
+            HttpClient client = new HttpClient();
+            if (!string.IsNullOrEmpty(identityUrl))
+            {
+                client = await GetHttpClientForIdentityServerAsync(identityUrl);
+            }
+            HttpResponseMessage response = await client.PostAsync(url, content);
+            string body = await response.Content.ReadAsStringAsync();
+            var responseData = JsonConvert.DeserializeObject<APIResponse>(body);
+
+            if (responseData.StatusCode != 200)
+            {
+                string message = responseData.Message;
+                if (responseData.ResponseException != null)
+                {
+                    message += $"\n{responseData.ResponseException.ExceptionMessage}";
+                }
+                throw new Exception(message);
+            }
+            var result = JsonConvert.SerializeObject(responseData.Result); 
+            return JsonConvert.DeserializeObject<T>(result);
         }
 
         public static string B2H(byte[] bytes)
@@ -140,5 +167,46 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
             return B2D(bin);
         }
 
+    }
+
+    public class APIResponse
+    {
+        public APIResponse(int statusCode, string message = "", object result = null, ApiError responseException = null, string version = "1.0.0.0")
+        {
+            StatusCode = statusCode;
+            Message = message;
+            Result = result;
+            ResponseException = responseException;
+            Version = version;
+        }
+
+        public string Version { get; set; }
+
+        public int StatusCode { get; set; }
+
+        public string Message { get; set; }
+
+        public ApiError ResponseException { get; set; }
+        public object Result { get; set; }
+    }
+
+    public class ApiError
+    {
+        public ApiError(bool isError, string exceptionMessage, string details, string referenceErrorCode, string referenceDocumentLink, IEnumerable<ValidationError> validationErrors)
+        {
+            IsError = isError;
+            ExceptionMessage = exceptionMessage;
+            Details = details;
+            ReferenceErrorCode = referenceErrorCode;
+            ReferenceDocumentLink = referenceDocumentLink;
+            ValidationErrors = validationErrors;
+        }
+
+        public bool IsError { get; set; }
+        public string ExceptionMessage { get; set; }
+        public string Details { get; set; }
+        public string ReferenceErrorCode { get; set; }
+        public string ReferenceDocumentLink { get; set; }
+        public IEnumerable<ValidationError> ValidationErrors { get; set; }
     }
 }

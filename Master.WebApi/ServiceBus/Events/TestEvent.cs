@@ -7,12 +7,10 @@ namespace Master.WebApi.ServiceBus.Events
 {
     public class TestEvent : IntegrationEvent
     {
-        public TestEvent(int id, string name)
+        public TestEvent(string name)
         {
-            Id = id;
             Name = name;
         }
-        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

@@ -46,6 +46,8 @@ namespace Fuji.Service.ItemImport
         string GetRFIDInfo(ParameterSearch parameter);
         IEnumerable<FujiTagReport> GetReportByYearRang(ParameterSearch parameterSearch);
         StreamContent GetReportStream(ImportSerialHead item);
+        bool SetConfirmToStock(string headId);
+
 
         //Async
 

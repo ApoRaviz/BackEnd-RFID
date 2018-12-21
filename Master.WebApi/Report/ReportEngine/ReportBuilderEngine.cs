@@ -34,11 +34,15 @@ public static class ReportEngine
                 {
                     DataTable dt = ds.Tables[j];
                     ReportColumns[] columns = new ReportColumns[dt.Columns.Count];
-                    ReportScale ColumnScale = new ReportScale();
-                    ColumnScale.Width = 4;
-                    ColumnScale.Height = 1;
-                    ReportDimensions ColumnPadding = new ReportDimensions();
-                    ColumnPadding.Default = 2;
+                    ReportScale ColumnScale = new ReportScale
+                    {
+                        Width = 4,
+                        Height = 1
+                    };
+                    ReportDimensions ColumnPadding = new ReportDimensions
+                    {
+                        Default = 2
+                    };
                     for (int i = 0; i < dt.Columns.Count; i++)
                     {
                         columns[i] = new ReportColumns() { ColumnCell = new ReportTextBoxControl() { Name = dt.Columns[i].ColumnName, Size = ColumnScale, Padding = ColumnPadding }, HeaderText = dt.Columns[i].ColumnName, HeaderColumnPadding = ColumnPadding };
@@ -48,8 +52,10 @@ public static class ReportEngine
                 }
 
             }
-            reportBuilder.Body = new ReportBody();
-            reportBuilder.Body.ReportControlItems = new ReportItems();
+            reportBuilder.Body = new ReportBody
+            {
+                ReportControlItems = new ReportItems()
+            };
             reportBuilder.Body.ReportControlItems.ReportTable = reportTables;
         }
         return reportBuilder;
@@ -258,24 +264,8 @@ public static class ReportEngine
     static string GetSortingDetails(ReportBuilder reportBuilder)
     {
         return "";
-        ReportTable[] tables = reportBuilder.Body.ReportControlItems.ReportTable;
-        ReportColumns[] columns = reportBuilder.Body.ReportControlItems.ReportTable[0].ReportDataColumns;
-        ReportTextBoxControl sortColumn = new ReportTextBoxControl();
-        if (columns == null) return "";
-
-        string strSorting = "";
-        strSorting = @" <SortExpressions>";
-        for (int i = 0; i < columns.Length; i++)
-        {
-            sortColumn = columns[i].ColumnCell;
-            strSorting += "<SortExpression><Value>=Fields!" + sortColumn.Name + @".Value</Value>";
-            if (columns[i].SortDirection == ReportSort.Descending)
-                strSorting += "<Direction>Descending</Direction>";
-            strSorting += @"</SortExpression>";
-        }
-        strSorting += "</SortExpressions>";
-        return strSorting;
     }
+
     static string GenerateTableRow(ReportBuilder reportBuilder, ReportTable table)
     {
         ReportColumns[] columns = table.ReportDataColumns;

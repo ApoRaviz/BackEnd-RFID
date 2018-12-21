@@ -3,6 +3,7 @@ using Fuji.Context;
 using Fuji.Entity.ItemManagement;
 using Fuji.Service.Receive;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -50,7 +51,7 @@ namespace Fuji.Service.Impl.Receive
 
             int seq = 0;
 
-            List<ReceiveItem> receiveItems = new List<ReceiveItem>();
+            List<InterfaceReceiveItem> receiveItems = new List<InterfaceReceiveItem>();
 
             var serialNumberList = new List<SerialNumber>();
             foreach (var groupIB in receiveGroupByItemCodeAndBoxNumbers)
@@ -63,27 +64,53 @@ namespace Fuji.Service.Impl.Receive
 
                 foreach (var group in receiveGroupByItemGroups)
                 {
-                    var serialNumber1 = group.ReceiveItems[0].SerialNumber; //group.ReceiveItems.FirstOrDefault(i => i.ItemGroup == group.Key.ItemGroup && i.ItemType == "1").SerialNumber;
-                    var serialNumber2 = group.ReceiveItems.Count > 1 ? group.ReceiveItems[1].SerialNumber : null;  //group.ReceiveItems.FirstOrDefault(i => i.ItemGroup == group.Key.ItemGroup && i.ItemType == "2").SerialNumber;
+                    var serialNumber1 = group.ReceiveItems[0].SerialNumber; 
+                    var serialNumber2 = group.ReceiveItems.Count > 1 ? group.ReceiveItems[1].SerialNumber : null;  
                     var serialNumber = new SerialNumber(_ProjectId, 0, 0, ++seq, serialNumber1, serialNumber2, null, group.Key.ItemGroup);
                     serialNumberList.Add(serialNumber);
-
                 }
 
-                var receiveItem = new ReceiveItem(0, 0, 0, 0, groupIB.Key.ItemCode, null, null, 0, 0, 0, 0, 0, 0, 0
-                , 0, 0, 0, 0, null, null, null, null, null, null, true, groupIB.Key.BoxNumber, false, null, false, null
-                , true, serialNumberList, false, null, null, null, "", false);
+                var receiveItem = new InterfaceReceiveItem(
+                    itemCode: groupIB.Key.ItemCode, 
+                    scanCode: "", 
+                    jAN: "",
+                    qty: 1, 
+                    unit: "ชิ้น",
+                    smallestQty: 1, 
+                    smallestUnit: "ชิ้น", 
+                    cost: 0, 
+                    price: 0, 
+                    currency: "THB", 
+                    width: 0, 
+                    height: 0, 
+                    length: 0, 
+                    weight: 0,
+                    location: receive.Location, 
+                    expireDate: null, 
+                    manufacturingDate: null, 
+                    bestBeforeDate: null, 
+                    controlLevel1: groupIB.Key.BoxNumber, 
+                    controlLevel2: "", 
+                    controlLevel3: "", 
+                    remark: "", 
+                    serialNumbers: serialNumberList
+               );
+
                 receiveItems.Add(receiveItem);
             }
 
-            var receiveCommand = new InterfaceReceiveCommand(1, 57, 1, 1, receive.InvoiceNumber
-                , receive.ReceivingDate, receive.ReceivingDate, "S001", "Sup1"
-                , "Address 1", "Address 2", "Address 3", "Address 4", "Address 5"
-                , "Address 1 EN", "Address 2 EN", "Address 3 EN", "Address 4 EN", "Address 5 EN"
-                , "02256982", "10320", "", "", "", false, 0
-                , null, null
-                , receiveItems
-                );
+            var receiveCommand = new InterfaceReceiveCommand(
+                receiveType: "Normal",
+                receiveQualityType: "GOOD",
+                receiveNo: receive.HeadID,
+                poNo: receive.InvoiceNumber,
+                remark: receive.Remark,
+                poDate: receive.ReceivingDate,
+                receiveDate: receive.ReceivingDate,
+                supplierCode: "FUJI001",
+                receiveItems: receiveItems
+            );
+
             return receiveCommand;
         }
 
@@ -92,12 +119,10 @@ namespace Fuji.Service.Impl.Receive
             var receive = GetReceived(headId);
             var receiveCommand = MapReceiveForInterface(receive);
             var stringData = JsonConvert.SerializeObject(receiveCommand);
-            var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-            HttpClient client = await UtilityHelper.GetHttpClientForIdentityServerAsync(ConfigurationManager.AppSettings["identity"]);
+            var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");            
             var url = $"{ConfigurationManager.AppSettings["receiveServiceUrl"]}/interfaces/confirm2stock";
-            HttpResponseMessage response = await client.PostAsync(url, contentData);
-            string body = await response.Content.ReadAsStringAsync();
-            return true;
+            var result = await UtilityHelper.PostAsync<int>(url, contentData, ConfigurationManager.AppSettings["identity"]);
+            return result != 0;
         }
     }
 }

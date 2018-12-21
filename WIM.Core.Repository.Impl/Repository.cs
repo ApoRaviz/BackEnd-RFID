@@ -57,7 +57,7 @@ namespace WIM.Core.Repository.Impl
             return await DbSet.Take(2000).ToListAsync();
         }
 
-        public TEntity Get(Func<TEntity, Boolean> where)
+        public TEntity Get(Func<TEntity, bool> where)
         {
             return DbSet.Where(where).FirstOrDefault<TEntity>();
         }
@@ -114,7 +114,7 @@ namespace WIM.Core.Repository.Impl
             return DbSet.Any();
         }
 
-        public bool Exists(Func<TEntity, Boolean> where)
+        public bool Exists(Func<TEntity, bool> where)
         {
             return DbSet.Any(where);
         }
@@ -232,9 +232,9 @@ namespace WIM.Core.Repository.Impl
             Delete(entityToDelete);
         }
 
-        public void Delete(Func<TEntity, Boolean> where)
+        public void Delete(Func<TEntity, Boolean> predicate)
         {
-            IQueryable<TEntity> objects = DbSet.Where<TEntity>(where).AsQueryable();
+            IQueryable<TEntity> objects = DbSet.Where<TEntity>(predicate).AsQueryable();
             foreach (TEntity obj in objects)
                 DbSet.Remove(obj);
         }
@@ -259,18 +259,18 @@ namespace WIM.Core.Repository.Impl
 
 
         // Other
-        public IEnumerable<TEntity> GetMany(Func<TEntity, bool> where)
+        public IEnumerable<TEntity> GetMany(Func<TEntity, bool> predicate)
         {
-            return GetMany(where, false);
+            return GetMany(predicate, false);
         }
 
-        public IEnumerable<TEntity> GetMany(Func<TEntity, bool> where, bool isTryValidationNotNullException)
+        public IEnumerable<TEntity> GetMany(Func<TEntity, bool> predicate, bool isTryValidationNotNullException)
         {
             if (isTryValidationNotNullException)
             {
-                return DbSet.Where(where).ToList().TryValidationNotNullException();
+                return DbSet.Where(predicate).ToList().TryValidationNotNullException();
             }
-            return DbSet.Where(where).ToList();
+            return DbSet.Where(predicate).ToList();
         }
 
         public IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where)
