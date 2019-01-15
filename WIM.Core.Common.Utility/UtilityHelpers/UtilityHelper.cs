@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Principal;
 using System.Text;
@@ -48,7 +49,7 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
             var nonce = "N" + new Random().Next() + "" + DateTime.Now.ToString("yyyyMMddTHHmmss");
             var state = DateTime.Now.ToString("yyyyMMddTHHmmss") + "" + new Random().Next();
             identityUrl += $"&nonce={nonce}&state={state}";
-            
+
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(identityUrl);
             response.EnsureSuccessStatusCode();
@@ -64,8 +65,20 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
                 result.Add(path[0], path[1]);
             }
             var accessToken = result["access_token"];
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             return client;
+
+        }
+
+        public static async Task<T> GetAsync<T>(string url, string identityUrl = null)
+        {
+            HttpClient client = new HttpClient();
+            if (!string.IsNullOrEmpty(identityUrl))
+            {
+                client = await GetHttpClientForIdentityServerAsync(identityUrl);
+            }
+            HttpResponseMessage response = await client.GetAsync(url);
+            return await MapHttpClientResponseDataAsync<T>(response);
         }
 
         public static async Task<T> PostAsync<T>(string url, StringContent content, string identityUrl = null)
@@ -76,6 +89,11 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
                 client = await GetHttpClientForIdentityServerAsync(identityUrl);
             }
             HttpResponseMessage response = await client.PostAsync(url, content);
+            return await MapHttpClientResponseDataAsync<T>(response);
+        }
+
+        private static async Task<T> MapHttpClientResponseDataAsync<T>(HttpResponseMessage response)
+        {
             string body = await response.Content.ReadAsStringAsync();
             var responseData = JsonConvert.DeserializeObject<APIResponse>(body);
 
@@ -88,7 +106,7 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
                 }
                 throw new Exception(message);
             }
-            var result = JsonConvert.SerializeObject(responseData.Result); 
+            var result = JsonConvert.SerializeObject(responseData.Result);
             return JsonConvert.DeserializeObject<T>(result);
         }
 
