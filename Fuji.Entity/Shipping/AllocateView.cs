@@ -62,6 +62,7 @@ namespace Fuji.Entity.Shipping
         public string SerialNumber1 { get; set; }
         public string SerialNumber2 { get; set; }
         public string SerialNumber3 { get; set; }
+        public string SerialGroup { get; set; }
         public string Remark { get; set; }
         public List<ItemInspectViewModel> ItemInspects { get; set; }
     }
