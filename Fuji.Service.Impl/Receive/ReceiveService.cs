@@ -56,7 +56,7 @@ namespace Fuji.Service.Impl.Receive
             var serialNumberList = new List<SerialNumber>();
             foreach (var groupIB in receiveGroupByItemCodeAndBoxNumbers)
             {
-                serialNumberList.Clear();
+                serialNumberList = new List<SerialNumber>();
                 var receiveGroupByItemGroups = groupIB.ReceiveItems.GroupBy(
               i => new { i.ItemGroup },
               i => i,
@@ -74,7 +74,7 @@ namespace Fuji.Service.Impl.Receive
                     itemCode: groupIB.Key.ItemCode, 
                     scanCode: "", 
                     jAN: "",
-                    qty: 1, 
+                    qty: serialNumberList.Count, 
                     unit: "ชิ้น",
                     smallestQty: 1, 
                     smallestUnit: "ชิ้น", 
@@ -108,6 +108,7 @@ namespace Fuji.Service.Impl.Receive
                 poDate: receive.ReceivingDate,
                 receiveDate: receive.ReceivingDate,
                 supplierCode: "FUJI001",
+                projectId: "a1145d0f-05ba-4df8-8271-4d9efb4ec949",
                 receiveItems: receiveItems
             );
 

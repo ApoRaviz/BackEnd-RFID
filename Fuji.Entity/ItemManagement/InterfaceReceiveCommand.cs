@@ -12,7 +12,9 @@ namespace Fuji.Entity.ItemManagement
             string receiveType, string receiveQualityType
             , string receiveNo, string poNo, string remark
             , DateTime? poDate
-            , DateTime? receiveDate, string supplierCode, List<InterfaceReceiveItem> receiveItems)
+            , DateTime? receiveDate, string supplierCode
+            , string projectId
+            , List<InterfaceReceiveItem> receiveItems)
         {
             ReceiveType = receiveType;
             ReceiveQualityType = receiveQualityType;
@@ -22,7 +24,9 @@ namespace Fuji.Entity.ItemManagement
             PoDate = poDate;
             ReceiveDate = receiveDate;
             SupplierCode = supplierCode;
+            ProjectId = projectId;
             ReceiveItems = receiveItems;
+            
         }
 
         public string ReceiveType { get; private set; }
@@ -37,6 +41,7 @@ namespace Fuji.Entity.ItemManagement
         public DateTime? ReceiveDate { get; private set; }
 
         public string SupplierCode { get; private set; }
+        public string ProjectId { get; private set; }
 
         public List<InterfaceReceiveItem> ReceiveItems { get; private set; }
     }

@@ -42,7 +42,7 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
                 return null;
             }
         }
-        
+
         public static async Task<HttpClient> GetHttpClientForIdentityServerAsync(string baseUrl)
         {
             var identityUrl = baseUrl;
@@ -50,22 +50,40 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
             var state = DateTime.Now.ToString("yyyyMMddTHHmmss") + "" + new Random().Next();
             identityUrl += $"&nonce={nonce}&state={state}";
 
+
+            HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                {"client_id", "yutsys-wms-frontend-dev"},
+                {"client_secret", "wms1234"},
+                {"username", "13006"},
+                {"password", "Zxcv123!"},
+                {"scope", "openid profile wms wmsreceiving"},
+                {"grant_type", "password"},
+                { "customerName","แผนกกล้อง ฟูจิ ประเทศไทย"},
+                { "customerId", "20"},
+                { "warehouseId", "1"},
+                { "projectName", "Fuji Bangna ZT40"},
+                { "projectId", "a1145d0f-05ba-4df8-8271-4d9efb4ec949"},
+                { "auth_type", "2"},
+
+            }
+            );
+            
+
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(identityUrl);
+            HttpResponseMessage response = await client.PostAsync("http://192.168.110.2:50001/connect/Token", content);
             response.EnsureSuccessStatusCode();
             if (response.RequestMessage.RequestUri.LocalPath.EndsWith("error"))
             {
                 throw new Exception("UnAuthorized!");
             }
-            var fragmentSplits = response.RequestMessage.RequestUri.Fragment.Split('&');
-            var result = new Dictionary<string, string>();
-            foreach (string f in fragmentSplits)
-            {
-                var path = f.Split('=');
-                result.Add(path[0], path[1]);
-            }
-            var accessToken = result["access_token"];
+            var responseString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<JObject>(responseString);
+            var accessToken = result["access_token"].GetValue();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+
+
             return client;
 
         }
