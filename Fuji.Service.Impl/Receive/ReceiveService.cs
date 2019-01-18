@@ -75,9 +75,9 @@ namespace Fuji.Service.Impl.Receive
                     scanCode: "", 
                     jAN: "",
                     qty: serialNumberList.Count, 
-                    unit: "ชิ้น",
+                    unit: "PIECE",
                     smallestQty: 1, 
-                    smallestUnit: "ชิ้น", 
+                    smallestUnit: "PIECE", 
                     cost: 0, 
                     price: 0, 
                     currency: "THB", 
@@ -122,7 +122,16 @@ namespace Fuji.Service.Impl.Receive
             var stringData = JsonConvert.SerializeObject(receiveCommand);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");            
             var url = $"{ConfigurationManager.AppSettings["receiveServiceUrl"]}/interfaces/confirm2stock";
-            var result = await UtilityHelper.PostAsync<int>(url, contentData, ConfigurationManager.AppSettings["identity"]);
+            var result = await UtilityHelper.PostAsync<int>(url, contentData
+                , ConfigurationManager.AppSettings["identity"]
+                , ConfigurationManager.AppSettings["clientId"]
+                , ConfigurationManager.AppSettings["clientSecret"]
+                , ConfigurationManager.AppSettings["userName"]
+                , ConfigurationManager.AppSettings["password"]
+                , ConfigurationManager.AppSettings["scope"]
+                , ConfigurationManager.AppSettings["grantType"]
+                , ConfigurationManager.AppSettings["customerId"]
+                , ConfigurationManager.AppSettings["projectId"]);
             return result != 0;
         }
     }

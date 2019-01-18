@@ -43,35 +43,31 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
             }
         }
 
-        public static async Task<HttpClient> GetHttpClientForIdentityServerAsync(string baseUrl)
+        public static async Task<HttpClient> GetHttpClientForIdentityServerAsync(string baseUrl
+            , string clientId
+            , string clientSecret
+            , string userName 
+            , string password
+            , string scope 
+            , string grantType 
+            , string customerId
+            , string projectId
+            , string authType = "2")
         {
-            var identityUrl = baseUrl;
-            var nonce = "N" + new Random().Next() + "" + DateTime.Now.ToString("yyyyMMddTHHmmss");
-            var state = DateTime.Now.ToString("yyyyMMddTHHmmss") + "" + new Random().Next();
-            identityUrl += $"&nonce={nonce}&state={state}";
-
-
             HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
-                {"client_id", "yutsys-wms-frontend-dev"},
-                {"client_secret", "wms1234"},
-                {"username", "13006"},
-                {"password", "Zxcv123!"},
-                {"scope", "openid profile wms wmsreceiving"},
-                {"grant_type", "password"},
-                { "customerName","แผนกกล้อง ฟูจิ ประเทศไทย"},
-                { "customerId", "20"},
-                { "warehouseId", "1"},
-                { "projectName", "Fuji Bangna ZT40"},
-                { "projectId", "a1145d0f-05ba-4df8-8271-4d9efb4ec949"},
-                { "auth_type", "2"},
-
-            }
-            );
-            
-
+                {"client_id", clientId},
+                {"client_secret", clientSecret},
+                {"username", userName},
+                {"password", password},
+                {"scope", scope},
+                {"grant_type", grantType},
+                {"customer_name","แผนกกล้อง ฟูจิ ประเทศไทย"},
+                {"customer_id",customerId},
+                {"project_id", projectId},
+                {"auth_type", authType}});
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.PostAsync("http://192.168.110.2:50001/connect/Token", content);
+            HttpResponseMessage response = await client.PostAsync(baseUrl, content);
             response.EnsureSuccessStatusCode();
             if (response.RequestMessage.RequestUri.LocalPath.EndsWith("error"))
             {
@@ -88,23 +84,25 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
 
         }
 
-        public static async Task<T> GetAsync<T>(string url, string identityUrl = null)
+        public static async Task<T> GetAsync<T>(string url, string identityUrl = null, string clientId = "", string clientSecret = "", string userName = ""
+            , string password = "", string scope = "", string grantType = "", string customerId = "", string projectId = "", string authType = "2")
         {
             HttpClient client = new HttpClient();
             if (!string.IsNullOrEmpty(identityUrl))
             {
-                client = await GetHttpClientForIdentityServerAsync(identityUrl);
+                client = await GetHttpClientForIdentityServerAsync(identityUrl, clientId, userName, password, scope, grantType, customerId, projectId, authType);
             }
             HttpResponseMessage response = await client.GetAsync(url);
             return await MapHttpClientResponseDataAsync<T>(response);
         }
 
-        public static async Task<T> PostAsync<T>(string url, StringContent content, string identityUrl = null)
+        public static async Task<T> PostAsync<T>(string url, StringContent content, string identityUrl = null, string clientId = "", string clientSecret = ""
+            , string userName = "", string password = "", string scope = "", string grantType = "", string customerId = "", string projectId = "", string authType = "2")
         {
             HttpClient client = new HttpClient();
             if (!string.IsNullOrEmpty(identityUrl))
             {
-                client = await GetHttpClientForIdentityServerAsync(identityUrl);
+                client = await GetHttpClientForIdentityServerAsync(identityUrl, clientId, userName, password, scope, grantType, customerId, projectId, authType);
             }
             HttpResponseMessage response = await client.PostAsync(url, content);
             return await MapHttpClientResponseDataAsync<T>(response);
