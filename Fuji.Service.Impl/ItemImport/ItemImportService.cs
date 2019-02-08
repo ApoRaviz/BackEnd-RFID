@@ -1168,8 +1168,10 @@ namespace Fuji.Service.Impl.ItemImport
 
         private string ConvertRFID(string hexRFID)
         {
-            var bin18 = UtilityHelper.H2B(hexRFID);            
-            return UtilityHelper.B2D(bin18); //.Substring(bin18.Length - 18)
+            var bin96 = UtilityHelper.H2B(hexRFID);  
+            return bin96.Length == 96 ? 
+                UtilityHelper.B2D(bin96.Substring(bin96.Length - 18)) 
+                : UtilityHelper.B2D(bin96);
         }
 
         public FujiCheckRegister GetLastestBoxNumberItems()
