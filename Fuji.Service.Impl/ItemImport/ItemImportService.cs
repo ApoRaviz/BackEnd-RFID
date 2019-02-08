@@ -1157,6 +1157,10 @@ namespace Fuji.Service.Impl.ItemImport
                 {
                     throw new AppValidationException(e);
                 }
+                catch (Exception e)
+                {
+
+                }
             }
 
             return items;
@@ -1165,7 +1169,7 @@ namespace Fuji.Service.Impl.ItemImport
         private string ConvertRFID(string hexRFID)
         {
             var bin18 = UtilityHelper.H2B(hexRFID);            
-            return UtilityHelper.B2D(bin18.Substring(bin18.Length - 18));
+            return UtilityHelper.B2D(bin18); //.Substring(bin18.Length - 18)
         }
 
         public FujiCheckRegister GetLastestBoxNumberItems()
@@ -1222,26 +1226,29 @@ namespace Fuji.Service.Impl.ItemImport
             IEnumerable<FujiBoxNumberAndAmountModel> items = new List<FujiBoxNumberAndAmountModel>();
             using (FujiDbContext db = new FujiDbContext())
             {
-                var scannedItems = db.ItemScanLastests.ToList();
-                model.TotalRecord = scannedItems.Count;
-                int ix = 1;
-                items = (from p in scannedItems
-                         orderby p.BoxNumber
-                         group p by p.BoxNumber
-                        into g
-                         select new FujiBoxNumberAndAmountModel
-                         {
-                             ItemIndex = ix++
-              ,
-                             BoxNumber = g.Key
-              ,
-                             Amount = g.ToList().Count
-                         }).ToList();
-                model.BoxAndAmount = items;
-                model.LastestDate = scannedItems.FirstOrDefault() != null ? scannedItems.First().CreateAt : null;
-                return model;
-
+                if (db.ItemScanLastests.Any())
+                {
+                    var scannedItems = db.ItemScanLastests.ToList();
+                    model.TotalRecord = scannedItems.Count;
+                    int ix = 1;
+                    items = (from p in scannedItems
+                             orderby p.BoxNumber
+                             group p by p.BoxNumber
+                            into g
+                             select new FujiBoxNumberAndAmountModel
+                             {
+                                 ItemIndex = ix++
+                  ,
+                                 BoxNumber = g.Key
+                  ,
+                                 Amount = g.ToList().Count
+                             }).ToList();
+                    model.BoxAndAmount = items;
+                    model.LastestDate = scannedItems.FirstOrDefault() != null ? scannedItems.First().CreateAt : null;
+                    return model;
+                }
             }
+            return new FujiCheckRegister();
         }
 
         public IEnumerable<ImportSerialHead> GetHeadDataTopten(ParameterSearch parameterSearch)
