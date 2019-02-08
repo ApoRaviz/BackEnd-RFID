@@ -42,51 +42,67 @@ namespace WIM.Core.Common.Utility.UtilityHelpers
                 return null;
             }
         }
-        
-        public static async Task<HttpClient> GetHttpClientForIdentityServerAsync(string baseUrl)
-        {
-            var identityUrl = baseUrl;
-            var nonce = "N" + new Random().Next() + "" + DateTime.Now.ToString("yyyyMMddTHHmmss");
-            var state = DateTime.Now.ToString("yyyyMMddTHHmmss") + "" + new Random().Next();
-            identityUrl += $"&nonce={nonce}&state={state}";
 
+        public static async Task<HttpClient> GetHttpClientForIdentityServerAsync(string baseUrl
+            , string clientId
+            , string clientSecret
+            , string userName 
+            , string password
+            , string scope 
+            , string grantType 
+            , string customerId
+            , string projectId
+            , string authType = "2")
+        {
+            HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                {"client_id", clientId},
+                {"client_secret", clientSecret},
+                {"username", userName},
+                {"password", password},
+                {"scope", scope},
+                {"grant_type", grantType},
+                {"customer_name","แผนกกล้อง ฟูจิ ประเทศไทย"},
+                {"customer_id",customerId},
+                {"project_id", projectId},
+                {"auth_type", authType}});
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(identityUrl);
+            HttpResponseMessage response = await client.PostAsync(baseUrl, content);
             response.EnsureSuccessStatusCode();
             if (response.RequestMessage.RequestUri.LocalPath.EndsWith("error"))
             {
                 throw new Exception("UnAuthorized!");
             }
-            var fragmentSplits = response.RequestMessage.RequestUri.Fragment.Split('&');
-            var result = new Dictionary<string, string>();
-            foreach (string f in fragmentSplits)
-            {
-                var path = f.Split('=');
-                result.Add(path[0], path[1]);
-            }
-            var accessToken = result["access_token"];
+            var responseString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<JObject>(responseString);
+            var accessToken = result["access_token"].GetValue();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+
+
             return client;
 
         }
 
-        public static async Task<T> GetAsync<T>(string url, string identityUrl = null)
+        public static async Task<T> GetAsync<T>(string url, string identityUrl = null, string clientId = "", string clientSecret = "", string userName = ""
+            , string password = "", string scope = "", string grantType = "", string customerId = "", string projectId = "", string authType = "2")
         {
             HttpClient client = new HttpClient();
             if (!string.IsNullOrEmpty(identityUrl))
             {
-                client = await GetHttpClientForIdentityServerAsync(identityUrl);
+                client = await GetHttpClientForIdentityServerAsync(identityUrl, clientId, userName, password, scope, grantType, customerId, projectId, authType);
             }
             HttpResponseMessage response = await client.GetAsync(url);
             return await MapHttpClientResponseDataAsync<T>(response);
         }
 
-        public static async Task<T> PostAsync<T>(string url, StringContent content, string identityUrl = null)
+        public static async Task<T> PostAsync<T>(string url, StringContent content, string identityUrl = null, string clientId = "", string clientSecret = ""
+            , string userName = "", string password = "", string scope = "", string grantType = "", string customerId = "", string projectId = "", string authType = "2")
         {
             HttpClient client = new HttpClient();
             if (!string.IsNullOrEmpty(identityUrl))
             {
-                client = await GetHttpClientForIdentityServerAsync(identityUrl);
+                client = await GetHttpClientForIdentityServerAsync(identityUrl, clientId, userName, password, scope, grantType, customerId, projectId, authType);
             }
             HttpResponseMessage response = await client.PostAsync(url, content);
             return await MapHttpClientResponseDataAsync<T>(response);

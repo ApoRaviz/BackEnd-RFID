@@ -38,7 +38,7 @@ namespace Fuji.WebApi.Controllers
                 var isConfirmedStock = await _receiveService.Confirm2Stock(confirm2StockRequest.HeadId);
                 if (isConfirmedStock)
                 {
-                    _itemImportService.SetConfirmToStock(confirm2StockRequest.HeadId);              
+                     _itemImportService.SetConfirmToStock(confirm2StockRequest.HeadId);              
                 }
                 responseData.SetStatus(HttpStatusCode.OK);
                 responseData.SetData(true);

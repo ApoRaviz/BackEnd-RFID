@@ -56,7 +56,7 @@ namespace Fuji.Service.Impl.Receive
             var serialNumberList = new List<SerialNumber>();
             foreach (var groupIB in receiveGroupByItemCodeAndBoxNumbers)
             {
-                serialNumberList.Clear();
+                serialNumberList = new List<SerialNumber>();
                 var receiveGroupByItemGroups = groupIB.ReceiveItems.GroupBy(
               i => new { i.ItemGroup },
               i => i,
@@ -74,10 +74,10 @@ namespace Fuji.Service.Impl.Receive
                     itemCode: groupIB.Key.ItemCode, 
                     scanCode: "", 
                     jAN: "",
-                    qty: 1, 
-                    unit: "ชิ้น",
+                    qty: serialNumberList.Count, 
+                    unit: "PIECE",
                     smallestQty: 1, 
-                    smallestUnit: "ชิ้น", 
+                    smallestUnit: "PIECE", 
                     cost: 0, 
                     price: 0, 
                     currency: "THB", 
@@ -108,6 +108,7 @@ namespace Fuji.Service.Impl.Receive
                 poDate: receive.ReceivingDate,
                 receiveDate: receive.ReceivingDate,
                 supplierCode: "FUJI001",
+                projectId: "a1145d0f-05ba-4df8-8271-4d9efb4ec949",
                 receiveItems: receiveItems
             );
 
@@ -121,7 +122,16 @@ namespace Fuji.Service.Impl.Receive
             var stringData = JsonConvert.SerializeObject(receiveCommand);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");            
             var url = $"{ConfigurationManager.AppSettings["receiveServiceUrl"]}/interfaces/confirm2stock";
-            var result = await UtilityHelper.PostAsync<int>(url, contentData, ConfigurationManager.AppSettings["identity"]);
+            var result = await UtilityHelper.PostAsync<int>(url, contentData
+                , ConfigurationManager.AppSettings["identity"]
+                , ConfigurationManager.AppSettings["clientId"]
+                , ConfigurationManager.AppSettings["clientSecret"]
+                , ConfigurationManager.AppSettings["userName"]
+                , ConfigurationManager.AppSettings["password"]
+                , ConfigurationManager.AppSettings["scope"]
+                , ConfigurationManager.AppSettings["grantType"]
+                , ConfigurationManager.AppSettings["customerId"]
+                , ConfigurationManager.AppSettings["projectId"]);
             return result != 0;
         }
     }
