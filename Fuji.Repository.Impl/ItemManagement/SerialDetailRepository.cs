@@ -136,11 +136,11 @@ namespace Fuji.Repository.Impl.ItemManagement
         }
         public IEnumerable<ImportSerialDetail> GetItemsBy(Func<ImportSerialDetail, bool> where)
         {
-            return DbSet.Where(where);
+            return Db.ImportSerialDetail.Where(where);
         }
         public int GetCountItems(Func<ImportSerialDetail, bool> where)
         {
-            return DbSet.Where(where).ToList().Count;
+            return Db.ImportSerialDetail.Where(where).ToList().Count;
         }
 
         public IEnumerable<T> SqlQuery<T>(string sql, params object[] parameters)

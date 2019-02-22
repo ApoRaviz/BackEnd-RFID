@@ -90,7 +90,7 @@ namespace Fuji.WebApi.Controllers
             ResponseData<bool> respones = new ResponseData<bool>();
             try
             {
-                CheckStockHead stockHead = CheckStockService.GetStockHeadByID(checkStockHead.CheckStockID);
+                CheckStockHead stockHead = CheckStockService.GetStockHeadByID(checkStockHead.CheckStockID,true);
                 if (stockHead != null)
                 {
                     stockHead.Status = CheckStockStatus.Completed.GetValueEnum();

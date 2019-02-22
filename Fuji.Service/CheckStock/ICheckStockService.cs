@@ -12,7 +12,7 @@ namespace Fuji.Service.ItemImport
     {
         CheckStockHead CreateCheckStockHead();
         bool UpdateCheckStockHead(CheckStockHead checkStockHead);
-        CheckStockHead GetStockHeadByID(string checkStockID);
+        CheckStockHead GetStockHeadByID(string checkStockID, bool isForceComplete = false);
         CheckStockHead GetStockHeadByProgress();
         IEnumerable<CheckStockHead> GetStock(int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<CheckStockHead> SearchStockBy(ParameterSearch parameterSearch);

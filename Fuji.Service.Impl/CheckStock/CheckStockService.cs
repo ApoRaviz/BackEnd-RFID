@@ -45,7 +45,7 @@ namespace Fuji.Service.Impl.ItemImport
         private string statusExported = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Exported.GetValueEnum());
         private string statusShipped = StatusServiceStatic.GetStatusBySubmoduleIDAndStatusTitle<string>(_SUBMODULE_ID, FujiStatus.Shipped.GetValueEnum());
 
-        private const string STOCK_DIRECTORY = @"/Fuji/CheckStock";
+        private const string STOCK_DIRECTORY = @"/ftproot/Administrator/Fuji/CheckStock";
 
         public CheckStockService()
         {
@@ -101,7 +101,7 @@ namespace Fuji.Service.Impl.ItemImport
             return true;
         }
 
-        public CheckStockHead GetStockHeadByID(string checkStockID)
+        public CheckStockHead GetStockHeadByID(string checkStockID,bool isForceComplete = false)
         {
             string drive = !Directory.Exists("D:") ? "C:" : "D:";
 
@@ -121,7 +121,7 @@ namespace Fuji.Service.Impl.ItemImport
                         if (stockHead.Status == CheckStockStatus.InProgress.GetValueEnum())
                         {
                             stockHead = this.ReadFileFromHandheld(stockHead, false);
-                            stockHead = SetComplete(stockHead);
+                            stockHead = SetComplete(stockHead, isForceComplete);
                         }
 
                     }
@@ -152,7 +152,7 @@ namespace Fuji.Service.Impl.ItemImport
                     if (stockHead != null)
                     {
                         stockHead = this.ReadFileFromHandheld(stockHead, false);
-                        stockHead = SetComplete(stockHead);
+                        stockHead = SetComplete(stockHead,false);
                     }
                 }
                 catch (DbEntityValidationException e)
@@ -263,8 +263,10 @@ namespace Fuji.Service.Impl.ItemImport
                                 List<string> items = new List<string>();
                                 items.AddRange(FileHelper.ReadTextFileBySplit(files[i]));
 
-                                List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => items.Contains(m.ItemGroup)
+                                List<ImportSerialDetail> itemStocks = serialDetailRepo.GetItemsBy(m => items.Contains(m.ItemGroup)
                                 && m.ItemType == "1" && m.Status == statusReceived && !m.IsCheckedStock).ToList();
+                               
+
                                 itemStocks.ForEach(f =>
                                 {
                                     if (f != null)
@@ -314,14 +316,18 @@ namespace Fuji.Service.Impl.ItemImport
             return stockHead;
         }
 
-        private CheckStockHead SetComplete(CheckStockHead stockHead)
+        private CheckStockHead SetComplete(CheckStockHead stockHead, bool isForceComplete)
         {
             if (stockHead == null)
                 return stockHead;
 
             if (stockHead != null)
-                if (DateTime.Now.Date <= stockHead.CreateAt.Value.Date)
-                    return stockHead;
+                if (DateTime.Now.Date <= stockHead.CreateAt.Value.Date )
+                {
+                    if(!isForceComplete)
+                        return stockHead;
+                }
+                    
 
             string drive = !Directory.Exists("D:") ? "C:" : "D:";
             string[] files = Directory.GetFiles(drive + STOCK_DIRECTORY);
@@ -344,7 +350,7 @@ namespace Fuji.Service.Impl.ItemImport
                         ISerialDetailRepository serialDetailRepo = new SerialDetailRepository(Db);
                         ICheckStockRepository checkStockRepo = new CheckStockRepository(Db);
 
-                        List<ImportSerialDetail> itemStocks = serialDetailRepo.GetMany(m => m.ItemType == "1"
+                        List<ImportSerialDetail> itemStocks = serialDetailRepo.GetItemsBy(m => m.ItemType == "1"
                         && m.Status == statusReceived
                         && m.IsCheckedStock).ToList();
                         itemStocks.ForEach(f =>
