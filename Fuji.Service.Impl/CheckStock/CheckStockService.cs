@@ -242,7 +242,7 @@ namespace Fuji.Service.Impl.ItemImport
 
         private CheckStockHead ReadFileFromHandheld(CheckStockHead stockHead, bool isCreate)
         {
-            string newID = new CommonService().GetValueGenerateCode("CheckStock");
+            // string newID = new CommonService().GetValueGenerateCode("CheckStock");
             using (var scope = new TransactionScope())
             {
 
@@ -291,7 +291,7 @@ namespace Fuji.Service.Impl.ItemImport
 
                         if (isCreate)
                         {
-                            stockHead.CheckStockID = newID;//Guid.NewGuid().ToString();
+                            stockHead.CheckStockID = Guid.NewGuid().ToString();
                             stockHead.CheckStockBy = "";
                             stockHead.CheckStockDate = DateTime.Now;
                             stockHead.Status = CheckStockStatus.InProgress.GetValueEnum();
