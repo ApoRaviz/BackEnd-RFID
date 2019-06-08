@@ -128,7 +128,9 @@ namespace Isuzu.Service.Impl.Inbound
                     try
                     {
                         var IsUsedRFID = (from i in db.InboundItems
-                                          where item.RFIDTag.EndsWith(i.RFIDTag)
+                                          where
+                                          // item.RFIDTag.EndsWith(i.RFIDTag)
+                                          (i.RFIDTag.Length == 4 ? item.RFIDTag.EndsWith(i.RFIDTag) : item.RFIDTag == i.RFIDTag)
                                           && !new List<string>
                                           {
                                               statusShipped,
