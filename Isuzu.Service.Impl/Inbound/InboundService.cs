@@ -130,8 +130,9 @@ namespace Isuzu.Service.Impl.Inbound
                         var IsUsedRFID = (from i in db.InboundItems
                                           where
                                           // item.RFIDTag.EndsWith(i.RFIDTag)
-                                          (i.RFIDTag.Length == 4 ? item.RFIDTag.EndsWith(i.RFIDTag) : item.RFIDTag == i.RFIDTag)
-                                          && !new List<string>
+                                          i.InvNo == item.InvNo &&
+                                          (i.RFIDTag.Length == 4 && item.RFIDTag.Length == 6 ? item.RFIDTag.EndsWith(i.RFIDTag) : item.RFIDTag == i.RFIDTag) &&
+                                          !new List<string>
                                           {
                                               statusShipped,
                                               statusDeleted
@@ -480,7 +481,9 @@ namespace Isuzu.Service.Impl.Inbound
             {
                 var inboundItem = (
                        from i in Db.InboundItems
-                       where rfid.EndsWith(i.RFIDTag)
+                       where 
+                       //rfid.EndsWith(i.RFIDTag)
+                       (i.RFIDTag.Length == 4 && rfid.Length == 6 ? rfid.EndsWith(i.RFIDTag) : rfid == i.RFIDTag)
                        && !new List<string> {
                            statusNew,
                            statusShipped,
@@ -754,8 +757,10 @@ namespace Isuzu.Service.Impl.Inbound
                     if(inboundItemCartonPacking.function == "Packing")
                     {
                         var IsUsedRFID = (from i in Db.InboundItems
-                                          where inboundItemCartonPacking.RFIDTag.EndsWith(i.RFIDTag)
-                                          && !new List<string>
+                                          where 
+                                          (i.RFIDTag.Length == 4 && inboundItemCartonPacking.RFIDTag.Length == 6 
+                                          ? inboundItemCartonPacking.RFIDTag.EndsWith(i.RFIDTag) : inboundItemCartonPacking.RFIDTag == i.RFIDTag) &&
+                                          !new List<string>
                                           {
                                               statusShipped,
                                               statusDeleted
@@ -876,7 +881,7 @@ namespace Isuzu.Service.Impl.Inbound
                     {
                         foreach (string scan in inboundItemCasePacking.RFIDTags)
                         {
-                            if (scan.EndsWith(item.RFIDTag))
+                            if ((item.RFIDTag.Length == 4 && scan.Length == 6 ? scan.EndsWith(item.RFIDTag) : scan == item.RFIDTag))
                             {
                                 item.CaseNo = inboundItemCasePacking.CaseNo.Trim();
                                 item.PackCaseDate = DateTime.Now;
@@ -937,7 +942,7 @@ namespace Isuzu.Service.Impl.Inbound
                 {
                     foreach (string scan in rfids.RFIDTags)
                     {
-                        if (scan.EndsWith(item.RFIDTag))
+                        if ((item.RFIDTag.Length == 4 && scan.Length == 6 ? scan.EndsWith(item.RFIDTag) : scan == item.RFIDTag))
                         {
                             inboundItems.Add(item);
                         }
