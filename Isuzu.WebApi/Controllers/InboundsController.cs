@@ -63,6 +63,25 @@ namespace Isuzu.Service.Impl
         [Authorize]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [HttpPost]
+        [Route("handy/items/partNumber")]
+        public HttpResponseMessage GetInboundItemByPathNumber_HANDY([FromBody]InboundItemByPartNumberRequest inboundRequest)
+        {
+            ResponseData<InboundItemHandyDto> responseHandy = new ResponseData<InboundItemHandyDto>();
+            try
+            {
+                InboundItemHandyDto item = InboundService.GetInboundItemByPathNumber_HANDY(inboundRequest);
+                responseHandy.SetData(item);
+            }
+            catch (AppValidationException ex)
+            {
+                responseHandy.SetErrors(ex.Errors);
+            }
+            return Request.ReturnHttpResponseMessage(responseHandy);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
         [Route("handy/items")]
         public HttpResponseMessage RegisterInboundItem_HANDY([FromBody]InboundItemHandyDto inboundItem)
         {

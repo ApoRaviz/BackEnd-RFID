@@ -13,6 +13,7 @@ namespace Isuzu.Service
     {
         //Handy
         InboundItemHandyDto GetInboundItemByISZJOrder_HANDY(string iszjOrder);
+        InboundItemHandyDto GetInboundItemByPathNumber_HANDY(InboundItemByPartNumberRequest inboundRequest);
         int GetAmountRegistered_HANDY();
         int GetAmountInboundItemInInvoiceByRFID_HANDY(string rfid);
         List<RegisterRemaining> GetAmountNewStatusRemaining_HANDY(string invoice);

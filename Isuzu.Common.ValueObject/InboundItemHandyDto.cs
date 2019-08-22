@@ -51,7 +51,14 @@ namespace Isuzu.Common.ValueObject
         public Int16 IsFound { get; set; }
     }
 
-    public class InboundItemShippingHandyRequest
+
+    public class InboundItemByPartNumberRequest
+    {
+        public string InvNo { get; set; }
+        public string PartNumber { get; set; }
+    }
+
+        public class InboundItemShippingHandyRequest
     {
         public string InvNo { get; set; }
         public List<string> RFIDTags { get; set; }

@@ -97,6 +97,72 @@ namespace Isuzu.Service.Impl.Inbound
             return item;
         }
 
+        public InboundItemHandyDto GetInboundItemByPathNumber_HANDY(InboundItemByPartNumberRequest inboundRequest)
+        {
+            InboundItemHandyDto item;
+            
+            bool isUseInv =  !string.IsNullOrEmpty(inboundRequest.InvNo); 
+
+            using (IsuzuDataContext Db = new IsuzuDataContext())
+            {
+                if(isUseInv)
+                {
+                    item = (from i in Db.InboundItems
+                            where i.PartNo == inboundRequest.PartNumber
+                            && i.Weight1 > -1
+                            && i.InvNo == inboundRequest.InvNo
+                            && !new List<string> {
+                                    statusShipped,
+                                    statusDeleted
+                                   }.Contains(i.Status)
+                            select new InboundItemHandyDto
+                            {
+                                ID = i.ID,
+                                InvNo = i.InvNo,
+                                ITAOrder = i.ITAOrder,
+                                RFIDTag = i.RFIDTag,
+                                ISZJOrder = i.ISZJOrder,
+                                Weight1 = i.Weight1,
+                                Weight2 = i.Weight2,
+                                Weight3 = i.Weight3,
+                                Weight4 = i.Weight4,
+                                Weight5 = i.Weight5,
+                                Qty = i.Qty,
+                                PartNo = i.PartNo,
+                                ParrtName = i.ParrtName
+                            }).FirstOrDefault();
+                }
+                else
+                {
+                    item = (from i in Db.InboundItems
+                            where i.PartNo == inboundRequest.PartNumber
+                            && i.Weight1 > -1
+                            && !new List<string> {
+                                    statusShipped,
+                                    statusDeleted
+                                   }.Contains(i.Status)
+                            select new InboundItemHandyDto
+                            {
+                                ID = i.ID,
+                                InvNo = i.InvNo,
+                                ITAOrder = i.ITAOrder,
+                                RFIDTag = i.RFIDTag,
+                                ISZJOrder = i.ISZJOrder,
+                                Weight1 = i.Weight1,
+                                Weight2 = i.Weight2,
+                                Weight3 = i.Weight3,
+                                Weight4 = i.Weight4,
+                                Weight5 = i.Weight5,
+                                Qty = i.Qty,
+                                PartNo = i.PartNo,
+                                ParrtName = i.ParrtName
+                            }).FirstOrDefault();
+                }
+                
+            }
+            return item;
+        }
+
         public bool CheckScanRepeatRegisterInboundItem_HANDY(InboundItemHandyDto inboundItem)
         {
             bool isRFIDNeedRepeat;
@@ -1912,6 +1978,8 @@ namespace Isuzu.Service.Impl.Inbound
                 return items ;
             }
         }
+
+
 
         #region AsyncMethod 
 
