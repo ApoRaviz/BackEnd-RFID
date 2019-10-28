@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InboundManagement\InboundStatusRepository.cs" />
     <Compile Include="InboundManagement\InboundHeadRepository.cs" />
     <Compile Include="InboundManagement\InboundRepository.cs" />
     <Compile Include="LabelManagement\LabelRepository.cs" />

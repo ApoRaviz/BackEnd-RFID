@@ -23,6 +23,10 @@ namespace Isuzu.Entity
         [StringLength(30)]
         public string Status { get; set; }
 
+        [NotMapped]
+        [StringLength(30)]
+        public string StatusDetail { get; set; }
+
         public bool? IsExport { get; set; }
 
         [StringLength(50)]

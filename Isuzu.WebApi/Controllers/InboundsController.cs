@@ -525,7 +525,7 @@ namespace Isuzu.Service.Impl
             {
                  
                 int totalRecord = 0;
-                IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroupPaging(pageIndex,pageSize,out totalRecord);
+                IEnumerable<InboundItemsHeadModel> items = InboundService.GetInboundGroupPaging(null,pageIndex,pageSize,out totalRecord);
                 if(items != null && totalRecord > 0)
                 {
                     IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord,items);
@@ -591,6 +591,7 @@ namespace Isuzu.Service.Impl
 
         //[Authorize]
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+
         [HttpGet]
         [Route("items/{iszjOrder}")]
         public HttpResponseMessage GetInboundItemByISZJOrder([FromUri]string iszjOrder)
@@ -648,7 +649,56 @@ namespace Isuzu.Service.Impl
             {
                 try
                 {
-                    IEnumerable<InboundItemsHead> items = InboundService.GetInboundGroupPaging(pageIndex, pageSize, out totalRecord);
+                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetInboundGroupPaging(null,pageIndex, pageSize, out totalRecord);
+                    if (items != null && totalRecord > 0)
+                    {
+                        IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord, items);
+                        response.SetData(dataItem);
+                        response.SetStatus(HttpStatusCode.OK);
+                    }
+                }
+                catch (AppValidationException ex)
+                {
+                    response.SetErrors(ex.Errors);
+                    response.SetStatus(HttpStatusCode.PreconditionFailed);
+                }
+            }
+            else //Search By KeyWord
+            {
+                string[] keys = keyword.Split(',');
+                string key1 = keys[0], key2 = "";
+                if (keys.Length > 1)
+                    key2 = keys[1];
+                try
+                {
+                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetDataGroupByKeyword(key1, key2,null, pageIndex, pageSize, out totalRecord);
+                    IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord, items);
+                    response.SetData(dataItem);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
+                catch (AppValidationException ex)
+                {
+                    response.SetErrors(ex.Errors);
+                    response.SetStatus(HttpStatusCode.PreconditionFailed);
+                }
+            }
+            
+            return Request.ReturnHttpResponseMessage(response);
+        }
+
+        [Authorize]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [HttpPost]
+        [Route("search/allcolumn")]
+        public HttpResponseMessage GetDataByKeywordObject(IsuzuSearchModel searchModel)
+        {
+            IResponseData<IsuzuDataInboundGroupItems> response = new ResponseData<IsuzuDataInboundGroupItems>();
+            int totalRecord = 0;
+            if (searchModel.Keyword1 == "NOKEYWORD") //Get all
+            {
+                try
+                {
+                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetInboundGroupPaging(searchModel.Status, searchModel.PageIndex, searchModel.PageSize, out totalRecord);
                     if (items != null && totalRecord > 0)
                     {
                         IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord, items);
@@ -666,7 +716,11 @@ namespace Isuzu.Service.Impl
             {
                 try
                 {
-                    IEnumerable<InboundItemsHead> items = InboundService.GetDataGroupByKeyword(keyword, pageIndex, pageSize, out totalRecord);
+                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetDataGroupByKeyword(searchModel.Keyword1
+                        , searchModel.Keyword2
+                        , searchModel.Status
+                        , searchModel.PageIndex
+                        , searchModel.PageSize, out totalRecord);
                     IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord, items);
                     response.SetData(dataItem);
                     response.SetStatus(HttpStatusCode.OK);
@@ -677,7 +731,7 @@ namespace Isuzu.Service.Impl
                     response.SetStatus(HttpStatusCode.PreconditionFailed);
                 }
             }
-            
+
             return Request.ReturnHttpResponseMessage(response);
         }
 
@@ -805,8 +859,8 @@ namespace Isuzu.Service.Impl
         [Route("itemImport/logs/{refID}")]
         public HttpResponseMessage GetOrderLogByID([FromUri]string refID)
         {
-            IResponseData<IEnumerable<GeneralLog>> response = new ResponseData<IEnumerable<GeneralLog>>();
-            IEnumerable<GeneralLog> orderlog = new List<GeneralLog>();
+            IResponseData<IEnumerable<GeneralLogModel>> response = new ResponseData<IEnumerable<GeneralLogModel>>();
+            IEnumerable<GeneralLogModel> orderlog = new List<GeneralLogModel>();
             try
             {
                 orderlog = InboundService.GetOrderLogByID(refID);
@@ -1246,6 +1300,31 @@ namespace Isuzu.Service.Impl
                 responseHandy.SetErrors(ex.Errors);
             }
             return Request.ReturnHttpResponseMessage(responseHandy);
+
+        }
+
+        [HttpPost]
+        [Route("inboundstatus")]
+        public HttpResponseMessage SaveInboundStatus([FromBody]InboundItemsStatusModel inboundStatus)
+        {
+
+            IResponseData<bool> response = new ResponseData<bool>();
+            try
+            {
+                if (inboundStatus != null)
+                {
+                    var result = InboundService.SaveInboundItemsStatus(inboundStatus);
+                    response.SetData(result);
+                    response.SetStatus(HttpStatusCode.OK);
+                }
+
+            }
+            catch (AppValidationException ex)
+            {
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.PreconditionFailed);
+            }
+            return Request.ReturnHttpResponseMessage(response);
 
         }
 

@@ -78,6 +78,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Isuzu.Common.ValueObject\Isuzu.Common.ValueObject.csproj">
+      <Project>{BAE81779-979D-4544-9184-4614986F3362}</Project>
+      <Name>Isuzu.Common.ValueObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Isuzu.Entity\Isuzu.Entity.csproj">
       <Project>{0d9037c9-aa89-4342-80eb-b7e394ad40fd}</Project>
       <Name>Isuzu.Entity</Name>

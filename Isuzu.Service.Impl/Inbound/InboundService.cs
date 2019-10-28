@@ -1353,9 +1353,9 @@ namespace Isuzu.Service.Impl.Inbound
                 return items;
             }
         }
-        public IEnumerable<GeneralLog> GetOrderLogByID(string refID)
+        public IEnumerable<GeneralLogModel> GetOrderLogByID(string refID)
         {
-            IEnumerable<GeneralLog> items = new List<GeneralLog>();
+            IEnumerable<GeneralLogModel> items = new List<GeneralLogModel>();
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
@@ -1363,14 +1363,19 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     try
                     {
-                        items = (from i in Db.GeneralLogs
-                                 where i.RefID == refID
-                                 select i).ToList();
+                        //items = (from i in Db.GeneralLogs
+                        //         join t in Db.InboundStatus
+                        //         on i.Value equals t.StatusName
+                        //         where i.RefID == refID
+                        //         orderby i.CreateAt descending
+                        //         select i).ToList();
+
+                        items = Db.ProcGetLogById(refID);
                         scope.Complete();
                     }
                     catch (Exception)
                     {
-                        return new List<GeneralLog>() { };
+                        return new List<GeneralLogModel>() { };
                     }
 
                 }
@@ -1440,25 +1445,43 @@ namespace Isuzu.Service.Impl.Inbound
             return item;
         }
 
-        public IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord)
+        public IEnumerable<InboundItemsHeadModel> GetInboundGroupPaging(string status, int pageIndex, int pageSize, out int totalRecord)
         {
             DataSet dset = new DataSet();
-            IEnumerable<InboundItemsHead> items = new List<InboundItemsHead>() { };
+            IEnumerable<InboundItemsHeadModel> items = new List<InboundItemsHeadModel>() { };
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
                 using (IsuzuDataContext Db = new IsuzuDataContext())
                 {
+                    
+
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     try
                     {
-                        items = Db.ProcPagingInboundItemHead(pageIndex, pageSize, out totalRecord);
+                        if (status == null || status.Split(',').Any(a => a == "ALL"))
+                        {
+                            status = "'ALL'";
+                        }
+                        else
+                        {
+                            string newStatus = "";
+                            var statusList = status.Split(',');
+                            foreach (var item in statusList)
+                            {
+                                newStatus += "'" + item + "',";
+                            }
+                            newStatus = newStatus.TrimEnd(',');
+                            status = newStatus;
+                        }
+
+                        items = Db.ProcPagingInboundItemHead(status,pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception ex)
                     {
                         var x = ex.Message;
-                        return new List<InboundItemsHead>() { };
+                        return new List<InboundItemsHeadModel>() { };
                     }
                 }
             }
@@ -1470,6 +1493,9 @@ namespace Isuzu.Service.Impl.Inbound
             string sql = "";
             switch (column.Trim().ToUpper())
             {
+                case "CREATEAT":
+                    sql += "SELECT * FROM InboundItemsHead WHERE CONVERT(date,[CreateAt]) BETWEEN @keyword AND @keyword2 ";
+                    break;
                 default:
                 case "INVNO":
                     sql += "SELECT * FROM InboundItemsHead WHERE [InvNo] LIKE '%' + @keyword + '%' ";
@@ -1483,7 +1509,10 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     try
                     {
-                        items = HeadRepo.SqlQuery<InboundItemsHead>(sql, new SqlParameter("@keyword", keyword)).ToList();
+                        string[] keywords = keyword.Split(',');
+                        items = HeadRepo.SqlQuery<InboundItemsHead>(sql
+                            , new SqlParameter("@keyword", keywords[0])
+                            , new SqlParameter("@keyword2", keywords[1])).ToList();
                         scope.Complete();
                     }
                     catch (Exception)
@@ -1496,9 +1525,9 @@ namespace Isuzu.Service.Impl.Inbound
                 return items;
             }
         }
-        public IEnumerable<InboundItemsHead> GetDataGroupByKeyword(string keyword,int pageIndex, int pageSize, out int totalRecord)
+        public IEnumerable<InboundItemsHeadModel> GetDataGroupByKeyword(string keyword,string keyword2,string status,int pageIndex, int pageSize, out int totalRecord)
         {
-            IEnumerable<InboundItemsHead> items = new List<InboundItemsHead>() { };
+            IEnumerable<InboundItemsHeadModel> items = new List<InboundItemsHeadModel>() { };
             totalRecord = 0;
             using (var scope = new TransactionScope())
             {
@@ -1507,12 +1536,27 @@ namespace Isuzu.Service.Impl.Inbound
                     IInboundHeadRepository HeadRepo = new InboundHeadRepository(Db);
                     try
                     {
-                        items = Db.ProcPagingInboundItemHeadSearching(keyword,pageIndex, pageSize, out totalRecord);
+                        if (status == null || status.Split(',').Any(a => a == "ALL"))
+                        {
+                            status = "'ALL'";
+                        }else
+                        {
+                            string newStatus = "";
+                            var statusList = status.Split(',');
+                            foreach (var item in statusList)
+                            {
+                                newStatus += "'" + item + "'";
+                            }
+                            newStatus = newStatus.TrimEnd(',');
+                            status = newStatus;
+                        }
+                        
+                        items = Db.ProcPagingInboundItemHeadSearching(keyword, keyword2, status, pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        return new List<InboundItemsHead>() { };
+                        return new List<InboundItemsHeadModel>() { };
                     }
 
                 }
@@ -1977,6 +2021,45 @@ namespace Isuzu.Service.Impl.Inbound
                 }
                 return items ;
             }
+        }
+
+        public bool SaveInboundItemsStatus(InboundItemsStatusModel model)
+        {
+            model.Status = model.Status.Split('(')[0].Trim();
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    IInboundStatusRepository DetailRepo = new InboundStatusRepository(Db);
+                    var inboundStatus = (
+                        from i in Db.InboundStatus
+                        where i.InvNo == model.InvNo
+                         && i.StatusName == model.Status
+                        select i
+                    ).FirstOrDefault();
+
+                    if(inboundStatus != null)
+                    {
+                        inboundStatus.Update(model.InvNo
+                            , model.Status
+                            , model.StatusDetail);
+
+                        DetailRepo.Update(inboundStatus);
+                    }
+                   else
+                    {
+                        inboundStatus = new InboundItemsStatus(model.InvNo
+                            ,model.Status
+                            ,model.StatusDetail);
+                        DetailRepo.Insert(inboundStatus);
+                    }
+                    
+                    Db.SaveChanges();
+                    scope.Complete();
+                }
+            }
+
+            return true;
         }
 
 

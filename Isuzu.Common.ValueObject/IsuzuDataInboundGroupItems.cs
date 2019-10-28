@@ -9,12 +9,12 @@ namespace Isuzu.Common.ValueObject
 {
     public class IsuzuDataInboundGroupItems
     {
-        public IsuzuDataInboundGroupItems(int totalRecord, IEnumerable<InboundItemsHead> items)
+        public IsuzuDataInboundGroupItems(int totalRecord, IEnumerable<InboundItemsHeadModel> items)
         {
             this.TotalRecord = totalRecord;
             this.Items = items;
         }
         public int TotalRecord { get; set; }
-        public IEnumerable<InboundItemsHead> Items { get; set; }
+        public IEnumerable<InboundItemsHeadModel> Items { get; set; }
     }
 }

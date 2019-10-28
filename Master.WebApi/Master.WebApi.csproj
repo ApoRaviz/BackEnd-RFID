@@ -677,16 +677,16 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>80</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://192.168.108.146/master-backend</IISUrl>
+          <IISUrl>http://localhost/master-backend</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://192.168.108.146/master-backend</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/master-backend</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
           <servers defaultServer="">
-            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://192.168.108.146/master" workingDir="" />
+            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost/master" workingDir="" />
           </servers>
         </WebProjectProperties>
       </FlavorProperties>

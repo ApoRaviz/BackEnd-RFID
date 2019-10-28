@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Data;
 using WIM.Core.Entity.Logs;
 using Isuzu.Entity.InboundManagement;
+using Isuzu.Common.ValueObject;
 
 namespace Isuzu.Context
 {
@@ -16,6 +17,7 @@ namespace Isuzu.Context
 
         public virtual DbSet<InboundItems> InboundItems { get; set; }
         public virtual DbSet<InboundItemsHead> InboundItemsHead { get; set; }
+        public virtual DbSet<InboundItemsStatus> InboundStatus { get; set; }
         public virtual DbSet<LabelRunning> LabelRunning { get; set; }
         public virtual DbSet<GeneralLog> GeneralLogs { get; set; }
         public virtual DbSet<RFIDTagNotFoundLog> RFIDTagNotFoundLogs { get; set; }
@@ -42,13 +44,20 @@ namespace Isuzu.Context
         public void ProcPagingInboundItemGroups()
         {
         }
-        public IEnumerable<InboundItemsHead> ProcPagingInboundItemHead(int page ,int size,out int totalRecord)
+        public IEnumerable<GeneralLogModel> ProcGetLogById(string refId)
+        {
+            var items = this.Database.SqlQuery<GeneralLogModel>("ProcGetLogById @Id"
+                , new SqlParameter("@Id", refId)).ToList();
+            return items;
+        }
+        public IEnumerable<InboundItemsHeadModel> ProcPagingInboundItemHead(string status,int page ,int size,out int totalRecord)
         {
             totalRecord = 0;
             var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
             output.Direction = ParameterDirection.Output;
 
-            var items = this.Database.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHead @page,@size,@totalRecord out"
+            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHead @status,@page,@size,@totalRecord out"
+                , new SqlParameter("@status", status ?? "")
                 , new SqlParameter("@page", page)
                 , new SqlParameter("@size", size)
                 , output).ToList();
@@ -57,14 +66,16 @@ namespace Isuzu.Context
 
             return items;
         }
-        public IEnumerable<InboundItemsHead> ProcPagingInboundItemHeadSearching(string keyword,int page, int size, out int totalRecord)
+        public IEnumerable<InboundItemsHeadModel> ProcPagingInboundItemHeadSearching(string keyword,string keyword2,string status, int page, int size, out int totalRecord)
         {
             totalRecord = 0;
             var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
             output.Direction = ParameterDirection.Output;
 
-            var items = this.Database.SqlQuery<InboundItemsHead>("ProcPagingInboundItemHeadSearching @keyword,@page,@size,@totalRecord out"
-                , new SqlParameter("@keyword", keyword)
+            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHeadSearching @keyword,@keyword2,@status,@page,@size,@totalRecord out"
+                , new SqlParameter("@keyword", keyword ?? "")
+                , new SqlParameter("@keyword2", keyword2??"")
+                , new SqlParameter("@status", status ?? "")
                 , new SqlParameter("@page", page)
                 , new SqlParameter("@size", size)
                 , output).ToList();

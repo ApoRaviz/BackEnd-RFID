@@ -71,7 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneralLogModel.cs" />
     <Compile Include="InboundItemHandyDto.cs" />
+    <Compile Include="InboundItemsHeadModel.cs" />
     <Compile Include="IsuzuDataBarcode.cs" />
     <Compile Include="IsuzuDataImport.cs" />
     <Compile Include="IsuzuDataInboundGroupItems.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="IsuzuDeleteReason.cs" />
     <Compile Include="IsuzuInboundGroup.cs" />
     <Compile Include="IsuzuReportHelper.cs" />
+    <Compile Include="IsuzuSearchModel.cs" />
     <Compile Include="IsuzuStatus.cs" />
     <Compile Include="IsuzuTagReport.cs" />
     <Compile Include="IsuzuUploadItem.cs" />

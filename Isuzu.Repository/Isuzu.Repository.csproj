@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InboundManagement\IInboundStatusRepository.cs" />
     <Compile Include="InboundManagement\IInboundRepository.cs" />
     <Compile Include="InboundManagement\IInboundHeadRepository.cs" />
     <Compile Include="LabelManagement\ILabelRepository.cs" />

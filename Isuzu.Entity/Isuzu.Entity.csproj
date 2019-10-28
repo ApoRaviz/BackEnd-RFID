@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InboundManagement\InboundItemsStatus.cs" />
     <Compile Include="InboundManagement\InboundItems.cs" />
     <Compile Include="InboundManagement\InboundItemsHead.cs" />
     <Compile Include="InboundManagement\RFIDTagNotFoundLog.cs" />

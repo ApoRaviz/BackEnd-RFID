@@ -49,10 +49,10 @@ namespace Isuzu.Service
         IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false);
         IEnumerable<InboundItems> GetDataByColumn(ParameterSearch parameterSearch);
         IEnumerable<InboundItems> GetDataImportByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord);
-        IEnumerable<GeneralLog> GetOrderLogByID(string refID);
+        IEnumerable<GeneralLogModel> GetOrderLogByID(string refID);
         IEnumerable<InboundItemsHead> GetDataGroupByColumn(string column, string keyword);
-        IEnumerable<InboundItemsHead> GetDataGroupByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord);
-        IEnumerable<InboundItemsHead> GetInboundGroupPaging(int pageIndex, int pageSize, out int totalRecord);
+        IEnumerable<InboundItemsHeadModel> GetDataGroupByKeyword(string keyword,string keyword2,string status, int pageIndex, int pageSize, out int totalRecord);
+        IEnumerable<InboundItemsHeadModel> GetInboundGroupPaging(string status,int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<InboundItemsHead> GetInboundGroup(int max = 20);
         InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo,bool isAddItems = false);
         bool UpdateStausExport(InboundItemsHead item);
@@ -67,6 +67,7 @@ namespace Isuzu.Service
         InboundItemHandyDto GetBeforeAdjustWeight(InboundItemHandyDto adjustWeight);
         void AdjustWeight(InboundItemHandyDto adjustWeight);
         IEnumerable<InvoiceReportDetail> GetInvoiceHistory(InvHistoryFilter filter);
+        bool SaveInboundItemsStatus(InboundItemsStatusModel inboundItemsStatusModel);
         //Async
 
     }
