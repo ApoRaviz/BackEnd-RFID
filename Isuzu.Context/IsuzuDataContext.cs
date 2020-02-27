@@ -56,7 +56,7 @@ namespace Isuzu.Context
             var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
             output.Direction = ParameterDirection.Output;
 
-            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHead @status,@page,@size,@totalRecord out"
+            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHeadNew @status,@page,@size,@totalRecord out"
                 , new SqlParameter("@status", status ?? "")
                 , new SqlParameter("@page", page)
                 , new SqlParameter("@size", size)
@@ -72,7 +72,7 @@ namespace Isuzu.Context
             var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
             output.Direction = ParameterDirection.Output;
 
-            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHeadSearching @keyword,@keyword2,@status,@page,@size,@totalRecord out"
+            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHeadSearchingNew @keyword,@keyword2,@status,@page,@size,@totalRecord out"
                 , new SqlParameter("@keyword", keyword ?? "")
                 , new SqlParameter("@keyword2", keyword2??"")
                 , new SqlParameter("@status", status ?? "")

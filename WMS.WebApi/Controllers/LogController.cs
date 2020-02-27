@@ -89,7 +89,7 @@ namespace WMS.WebApi.Controller
             ResponseData<LogMasterPaging> response = new ResponseData<LogMasterPaging>();
             try
             {
-                IEnumerable<UserLogDto> logData = commonService.GetUserLogData3(logMasterParameters);
+                IEnumerable<UserLogDto> logData = null;// commonService.GetUserLogData3(logMasterParameters);
                 LogMasterPaging logMasterPaging = new LogMasterPaging(logMasterParameters.Totalrow, logData);
                 response.SetStatus(HttpStatusCode.OK);
                 response.SetData(logMasterPaging);

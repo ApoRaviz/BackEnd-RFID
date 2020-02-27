@@ -255,26 +255,26 @@ namespace WMS.Service.Impl.Report
         public void WhereTable(List<TableDetail> tables , List<string> where)
         {
             
-            foreach(var table in tables)
-            {
-                var main = (TableDescription)TableHashTableHelper.tableTable[table.TableName];
-                foreach(var name in tables)
-                {
-                    var key = (TableDescription)TableHashTableHelper.tableTable[name.TableName];
-                    if (main.TableName != key.TableName)
-                    {
-                        foreach (var pk in main.PrimaryKey)
-                        {
-                            int index = key.ForeignKey.IndexOf(pk);
-                            if (index != -1)
-                            {
-                                string condition = main.TableName + "." + pk + " = " + key.TableName + "." + key.ForeignKey[index];
-                                where.Add(condition);
-                            }
-                        }
-                    }
-                }
-            }
+            //foreach(var table in tables)
+            //{
+            //    var main = (TableDescription)TableHashTableHelper.tableTable[table.TableName];
+            //    foreach(var name in tables)
+            //    {
+            //        var key = (TableDescription)TableHashTableHelper.tableTable[name.TableName];
+            //        if (main.TableName != key.TableName)
+            //        {
+            //            foreach (var pk in main.PrimaryKey)
+            //            {
+            //                int index = key.ForeignKey.IndexOf(pk);
+            //                if (index != -1)
+            //                {
+            //                    string condition = main.TableName + "." + pk + " = " + key.TableName + "." + key.ForeignKey[index];
+            //                    where.Add(condition);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
             
         }
 
@@ -286,31 +286,31 @@ namespace WMS.Service.Impl.Report
 
             foreach (var table in tables)
             {
-                var main = (TableDescription)TableHashTableHelper.tableTable[table.TableName];
-                string condition = main.TableName + " ";
-                bool isFound = false;
-                foreach (var name in tables)
-                {
-                    var key = (TableDescription)TableHashTableHelper.tableTable[name.TableName];
-                    if (main.TableName != key.TableName)
-                    {
-                        foreach (var fk in main.ForeignKey)
-                        {
-                            int index = key.PrimaryKey.IndexOf(fk);
-                            if (index != -1)
-                            {
-                                condition += " left outer join " + key.TableName +" on " + main.TableName+"."+fk+" = "+key.TableName+"."+key.PrimaryKey[index]+" ";
-                                isFound = true;
-                            }
-                        }
-                    }
-                }
-                condition += ", ";
+                //var main = (TableDescription)TableHashTableHelper.tableTable[table.TableName];
+                //string condition = main.TableName + " ";
+                //bool isFound = false;
+                //foreach (var name in tables)
+                //{
+                //    var key = (TableDescription)TableHashTableHelper.tableTable[name.TableName];
+                //    if (main.TableName != key.TableName)
+                //    {
+                //        foreach (var fk in main.ForeignKey)
+                //        {
+                //            int index = key.PrimaryKey.IndexOf(fk);
+                //            if (index != -1)
+                //            {
+                //                condition += " left outer join " + key.TableName +" on " + main.TableName+"."+fk+" = "+key.TableName+"."+key.PrimaryKey[index]+" ";
+                //                isFound = true;
+                //            }
+                //        }
+                //    }
+                //}
+                //condition += ", ";
  
-                if (isFound)
-                {
-                    from += condition;
-                }
+                //if (isFound)
+                //{
+                //    from += condition;
+                //}
             }
 
             return from.Substring(0,from.Length-2);

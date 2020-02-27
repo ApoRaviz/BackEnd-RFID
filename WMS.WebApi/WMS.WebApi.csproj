@@ -656,6 +656,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth.API\Auth.API.csproj">
+      <Project>{cde78836-0541-47fc-920e-732dd278f489}</Project>
+      <Name>Auth.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Auth.Security.Context\Auth.Security.Context.csproj">
       <Project>{4f1e111d-02eb-4c25-bfe9-b4c20389deac}</Project>
       <Name>Auth.Security.Context</Name>
