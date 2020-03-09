@@ -51,7 +51,11 @@ namespace Isuzu.Service
         IEnumerable<InboundItems> GetDataImportByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<GeneralLogModel> GetOrderLogByID(string refID);
         IEnumerable<InboundItemsHead> GetDataGroupByColumn(string column, string keyword);
-        IEnumerable<InboundItemsHeadModel> GetDataGroupByKeyword(string keyword,string keyword2,string status, int pageIndex, int pageSize, out int totalRecord);
+        IEnumerable<InboundItemsHeadModel> GetDataGroupByKeyword(string invoiceNo
+            , string mno
+            , string mbl
+            , string startDate
+            , string endDate, string status, int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<InboundItemsHeadModel> GetInboundGroupPaging(string status,int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<InboundItemsHead> GetInboundGroup(int max = 20);
         InboundItemsHead GetInboundGroupByInvoiceNumber(string invNo,bool isAddItems = false);

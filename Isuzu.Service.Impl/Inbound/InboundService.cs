@@ -1525,7 +1525,11 @@ namespace Isuzu.Service.Impl.Inbound
                 return items;
             }
         }
-        public IEnumerable<InboundItemsHeadModel> GetDataGroupByKeyword(string keyword,string keyword2,string status,int pageIndex, int pageSize, out int totalRecord)
+        public IEnumerable<InboundItemsHeadModel> GetDataGroupByKeyword(string invoiceNo
+            , string mno
+            , string mbl
+            , string startDate
+            , string endDate, string status,int pageIndex, int pageSize, out int totalRecord)
         {
             IEnumerable<InboundItemsHeadModel> items = new List<InboundItemsHeadModel>() { };
             totalRecord = 0;
@@ -1545,13 +1549,13 @@ namespace Isuzu.Service.Impl.Inbound
                             var statusList = status.Split(',');
                             foreach (var item in statusList)
                             {
-                                newStatus += "'" + item + "'";
+                                newStatus += "'" + item + "',";
                             }
                             newStatus = newStatus.TrimEnd(',');
                             status = newStatus;
                         }
                         
-                        items = Db.ProcPagingInboundItemHeadSearching(keyword, keyword2, status, pageIndex, pageSize, out totalRecord);
+                        items = Db.ProcPagingInboundItemHeadSearching(invoiceNo, mno,mbl, startDate, endDate, status, pageIndex, pageSize, out totalRecord);
                         scope.Complete();
                     }
                     catch (Exception ex)

@@ -10,8 +10,14 @@ namespace Isuzu.Common.ValueObject
     {
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
-        public string Keyword1 { get; set; }
-        public string Keyword2 { get; set; }
+        public string InvoiceNo { get; set; }
+        public string Mno { get; set; }
+        public string Mbl { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public string Status { get; set; }
+
+        public bool? IsNoKeyword { get; set; }
     }
+    
 }

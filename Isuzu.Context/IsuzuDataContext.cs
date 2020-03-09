@@ -66,15 +66,26 @@ namespace Isuzu.Context
 
             return items;
         }
-        public IEnumerable<InboundItemsHeadModel> ProcPagingInboundItemHeadSearching(string keyword,string keyword2,string status, int page, int size, out int totalRecord)
+        public IEnumerable<InboundItemsHeadModel> ProcPagingInboundItemHeadSearching(string invoiceNo
+            , string mno
+            , string mbl
+            , string startDate
+            , string endDate
+            , string status
+            , int page
+            , int size
+            , out int totalRecord)
         {
             totalRecord = 0;
             var output = new SqlParameter("@totalRecord", SqlDbType.Int, 30);
             output.Direction = ParameterDirection.Output;
 
-            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHeadSearchingNew @keyword,@keyword2,@status,@page,@size,@totalRecord out"
-                , new SqlParameter("@keyword", keyword ?? "")
-                , new SqlParameter("@keyword2", keyword2??"")
+            var items = this.Database.SqlQuery<InboundItemsHeadModel>("ProcPagingInboundItemHeadSearchingNew @invoiceno,@mno,@mbl,@startdate,@enddate,@status,@page,@size,@totalRecord out"
+                , new SqlParameter("@invoiceno", invoiceNo ?? "")
+                , new SqlParameter("@mno", mno??"")
+                , new SqlParameter("@mbl", mbl??"")
+                , new SqlParameter("@startdate", startDate??"")
+                , new SqlParameter("@enddate", endDate??"")
                 , new SqlParameter("@status", status ?? "")
                 , new SqlParameter("@page", page)
                 , new SqlParameter("@size", size)

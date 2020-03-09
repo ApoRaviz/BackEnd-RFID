@@ -669,9 +669,17 @@ namespace Isuzu.Service.Impl
                 string key1 = keys[0], key2 = "";
                 if (keys.Length > 1)
                     key2 = keys[1];
+               
+                
                 try
                 {
-                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetDataGroupByKeyword(key1, key2,null, pageIndex, pageSize, out totalRecord);
+                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetDataGroupByKeyword(key1
+                        , null
+                        , null
+                        , key1
+                        , key2
+                        , null
+                        , pageIndex, pageSize, out totalRecord);
                     IsuzuDataInboundGroupItems dataItem = new IsuzuDataInboundGroupItems(totalRecord, items);
                     response.SetData(dataItem);
                     response.SetStatus(HttpStatusCode.OK);
@@ -694,7 +702,7 @@ namespace Isuzu.Service.Impl
         {
             IResponseData<IsuzuDataInboundGroupItems> response = new ResponseData<IsuzuDataInboundGroupItems>();
             int totalRecord = 0;
-            if (searchModel.Keyword1 == "NOKEYWORD") //Get all
+            if (searchModel.IsNoKeyword == true) //Get all
             {
                 try
                 {
@@ -716,8 +724,12 @@ namespace Isuzu.Service.Impl
             {
                 try
                 {
-                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetDataGroupByKeyword(searchModel.Keyword1
-                        , searchModel.Keyword2
+
+                    IEnumerable<InboundItemsHeadModel> items = InboundService.GetDataGroupByKeyword(searchModel.InvoiceNo
+                        , searchModel.Mno
+                        , searchModel.Mbl
+                        , searchModel.StartDate
+                        , searchModel.EndDate
                         , searchModel.Status
                         , searchModel.PageIndex
                         , searchModel.PageSize, out totalRecord);
