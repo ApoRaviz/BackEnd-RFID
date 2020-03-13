@@ -99,6 +99,96 @@ namespace Isuzu.Common.ValueObject
             return dataTable;
         }
 
+        public static DataTable getExportInboundDataTable(List<IsuzuInboundReport> items)
+        {
+            DataTable dataTable = new DataTable();
+            //custom fields
+            if (items != null)
+            {
+                dataTable.Columns.Add(new DataColumn("No."));
+                dataTable.Columns.Add(new DataColumn("ITA Order"));
+                dataTable.Columns.Add(new DataColumn("ISZJ Order"));
+                dataTable.Columns.Add(new DataColumn("Part No."));
+                dataTable.Columns.Add(new DataColumn("Part Name"));
+                dataTable.Columns.Add(new DataColumn("Q'ty"));
+                dataTable.Columns.Add(new DataColumn("Vendor"));
+                dataTable.Columns.Add(new DataColumn("Shelf"));
+                dataTable.Columns.Add(new DataColumn("Destination"));
+                dataTable.Columns.Add(new DataColumn("Carton No."));
+                dataTable.Columns.Add(new DataColumn("Case No."));
+
+                dataTable.Columns.Add(new DataColumn("Status"));
+                dataTable.Columns.Add(new DataColumn("Delivery Type"));
+                
+                dataTable.Columns.Add(new DataColumn("Current Status"));
+                dataTable.Columns.Add(new DataColumn("Remark"));
+                dataTable.Columns.Add(new DataColumn("Destination Status"));
+                dataTable.Columns.Add(new DataColumn("M.AWB.NO"));
+                dataTable.Columns.Add(new DataColumn("H.AWB.NO"));
+                dataTable.Columns.Add(new DataColumn("F.T.NO"));
+                dataTable.Columns.Add(new DataColumn("Loading Date"));
+                dataTable.Columns.Add(new DataColumn("T/T"));
+                dataTable.Columns.Add(new DataColumn("ETD"));
+                dataTable.Columns.Add(new DataColumn("ETA"));
+                dataTable.Columns.Add(new DataColumn("BL"));
+                dataTable.Columns.Add(new DataColumn("MBL"));
+
+                for (int i = 0; i < items.Count(); i++)
+                {
+                    //if(items[i].Status == IsuzuStatus.SHIPPED.ToString())
+                    //{ 
+                    
+                    object[] obj = new object[dataTable.Columns.Count];
+                    obj[0] = items[i].SeqNo;
+                    obj[1] = items[i].ITAOrder;
+                    obj[2] = items[i].ISZJOrder;
+                    obj[3] = items[i].PartNo;
+                    obj[4] = items[i].ParrtName;
+                    obj[5] = items[i].Qty.ToString();
+                    obj[6] = items[i].Vendor;
+                    obj[7] = items[i].Shelf;
+                    obj[8] = items[i].Destination;
+                    obj[9] = items[i].CartonNo;
+                    obj[10] = items[i].CaseNo;
+
+                    obj[11] = items[i].Status;
+                    if(items[i].DeliveryType.HasValue)
+                    {
+                        if (items[i].DeliveryType == 1)
+                        {
+                            obj[12] = "Air";
+                            obj[13] = items[i].StatusFix;
+                            obj[14] = items[i].StatusRemark;
+                            obj[15] = items[i].StatusDestination;
+                            obj[16] = items[i].MNO;
+                            obj[17] = items[i].HNO;
+                            obj[18] = items[i].FNO;
+                        }
+                        else
+                        {
+                            obj[12] = "Sea";
+                            obj[13] = items[i].StatusFix;
+                            obj[14] = items[i].StatusRemark;
+                            obj[15] = items[i].StatusDestination;
+                            obj[19] = items[i].LoadingDate;
+                            obj[20] = items[i].TT;
+                            obj[21] = items[i].ETD;
+                            obj[21] = items[i].ETA;
+                            obj[21] = items[i].BL;
+                            obj[21] = items[i].MBL;
+                        }
+                    }
+                    
+
+
+                    dataTable.Rows.Add(obj);
+                    //}
+                }
+            }
+
+            return dataTable;
+        }
+
         public static DataTable getExportInvHistoryDataTable(List<InvoiceReportDetail> items)
         {
             DataTable dataTable = new DataTable();

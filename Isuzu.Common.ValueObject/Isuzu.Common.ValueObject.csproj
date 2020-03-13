@@ -80,6 +80,7 @@
     <Compile Include="IsuzuDataInboundItems.cs" />
     <Compile Include="IsuzuDeleteReason.cs" />
     <Compile Include="IsuzuInboundGroup.cs" />
+    <Compile Include="IsuzuInboundReport.cs" />
     <Compile Include="IsuzuReportHelper.cs" />
     <Compile Include="IsuzuSearchModel.cs" />
     <Compile Include="IsuzuStatus.cs" />

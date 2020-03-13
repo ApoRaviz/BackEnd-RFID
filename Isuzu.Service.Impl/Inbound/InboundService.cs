@@ -1187,6 +1187,72 @@ namespace Isuzu.Service.Impl.Inbound
             }
             return items;
         }
+
+        public IEnumerable<IsuzuInboundReport> GetInboundItemlByInvoiceNumberAllInfo(string invNo, bool isShipped = false)
+        {
+            List<IsuzuInboundReport> items = new List<IsuzuInboundReport>() { };
+
+            using (var scope = new TransactionScope())
+            {
+                using (IsuzuDataContext Db = new IsuzuDataContext())
+                {
+                    try
+                    {
+                        //items = (from p in Db.InboundItems
+                        //         where p.InvNo == invNo
+                        //         orderby p.SeqNo
+                        //         select p).ToList();
+                        //if (isShipped)
+                        //    items = items.Where(w => w.Status == statusShipped).ToList();
+                        items = Db.Database.SqlQuery<IsuzuInboundReport>(@"
+                            SELECT a.*
+                            , CAST(JSON_VALUE(CONVERT(nvarchar(max),b.StatusDetail),'$.type') AS int) AS DeliveryType 
+                            , Details.destination AS StatusDestination
+                            , Details.loadingDate AS LoadingDate
+                            , Details.tt AS Tt
+                            , Details.etd AS Etd
+                            , Details.eta AS Eta
+                            , Details.bl AS Bl
+                            , Details.statusRemark AS StatusRemark
+                            , Details.statusFix AS StatusFix
+                            , Details.mbl AS Mbl
+                            , Details.mNo AS Mno
+                            , Details.hNo AS Hno
+                            , Details.fNo AS Fno
+                            FROM [InboundItems] a
+                            LEFT JOIN [InboundStatus] b
+                            ON a.InvNo =  b.InvNo
+                             OUTER APPLY OPENJSON(JSON_QUERY(CONVERT(nvarchar(max),b.StatusDetail),'$.data') ) 
+	                            WITH (
+			                            [destination] nvarchar(250) 
+			                            ,[loadingDate] nvarchar(250)
+			                            ,[tt] nvarchar(250)
+			                            ,[etd] nvarchar(250)
+			                            ,[eta] nvarchar(250)
+			                            ,[bl] nvarchar(250)
+			                            ,[statusRemark] nvarchar(250)
+			                            ,[statusFix] nvarchar(250)
+			                            ,[mbl] nvarchar(250)
+			                            ,[mNo] nvarchar(250)
+			                            ,[hNo] nvarchar(250)
+			                            ,[fNo] nvarchar(250)
+	                            ) Details
+                            WHERE a.InvNo = @invNo
+                            ORDER BY SeqNo"
+                        , new SqlParameter("@invNo", invNo)
+                        , new SqlParameter("@status", isShipped)).ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return new List<IsuzuInboundReport>() { };
+                    }
+                }
+
+                scope.Complete();
+            }
+            return items;
+        }
+
         public List<InboundItems> ImportInboundItemList(List<InboundItems> itemList)
         {
             List<InboundItems> duplicateList = new List<InboundItems>();

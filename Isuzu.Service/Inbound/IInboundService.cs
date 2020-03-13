@@ -47,6 +47,7 @@ namespace Isuzu.Service
         List<InboundItems> ImportInboundItemList(List<InboundItems> itemList);
         IEnumerable<InboundItems> GetInboundItemByQty(int Qty, bool isShipped = false);
         IEnumerable<InboundItems> GetInboundItemByInvoiceNumber(string invNo,bool isShipped = false);
+        IEnumerable<IsuzuInboundReport> GetInboundItemlByInvoiceNumberAllInfo(string invNo, bool isShipped = false);
         IEnumerable<InboundItems> GetDataByColumn(ParameterSearch parameterSearch);
         IEnumerable<InboundItems> GetDataImportByKeyword(string keyword, int pageIndex, int pageSize, out int totalRecord);
         IEnumerable<GeneralLogModel> GetOrderLogByID(string refID);

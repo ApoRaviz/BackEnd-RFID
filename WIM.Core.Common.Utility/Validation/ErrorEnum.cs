@@ -34,6 +34,9 @@ namespace WIM.Core.Common.Utility.Validation
         [Description("UNAUTHORIZED2"), HttpCode(HttpStatusCode.Unauthorized), Action("A2")]
         UNAUTHORIZED2 = 1011004,
 
+        [Description("LIMIT_USER")]
+        LimitCurrentUser = 1011005,
+
         #endregion /Auth
 
         #region ================================ CORE[10] -> DATABASE[12]

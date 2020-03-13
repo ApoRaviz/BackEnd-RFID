@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Caching;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -35,6 +36,7 @@ namespace Auth.API.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private int ExToken = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["as:ExToken"]);
+        private static MemoryCache _memory = MemoryCache.Default;
 
         public AccountController()
         {
@@ -59,6 +61,42 @@ namespace Auth.API.Controllers
             }
         }
 
+
+        [Route("ActiveUsers")]
+        [HttpGet]
+        public HttpResponseMessage CheckActiveUsers()
+        {
+            var userName = Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity);
+            var userId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
+            var ip = HttpContext.Current.Request.UserHostAddress;
+            var user = new ActiveUser(userId, userName, ip);
+            IResponseData<string> response = new ResponseData<string>();
+            string cacheKey = "Cache" + userId;
+            
+
+            response.SetData("OK");
+
+            CacheItemPolicy policy = new CacheItemPolicy();
+            policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(ExToken);
+
+
+            var active = _memory.Get(cacheKey) as ActiveUser;
+            if (active != null && ip != active.IpAddress)
+            {
+                AppValidationException ex = new AppValidationException(ErrorEnum.LimitCurrentUser, "Limit Login User");
+                response.SetErrors(ex.Errors);
+                response.SetStatus(HttpStatusCode.InternalServerError);
+            }
+
+            else
+                _memory.Set(cacheKey, user, policy);
+
+
+
+            return Request.ReturnHttpResponseMessage(response); ;
+        }
+
+
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         // GET api/Account/UserInfo
@@ -67,7 +105,6 @@ namespace Auth.API.Controllers
         public UserInfoViewModel GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
             return new UserInfoViewModel
             {
                 Email = Microsoft.AspNet.Identity.IdentityExtensions.GetUserName(User.Identity),
@@ -256,7 +293,7 @@ namespace Auth.API.Controllers
                 if (!string.IsNullOrEmpty(param.Time))
                 {
                     ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
+                    var ip = HttpContext.Current.Request.UserHostAddress;
                     ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager, "JWT");
                     foreach (var claim in oAuthIdentity.Claims)
                     {
@@ -283,6 +320,22 @@ namespace Auth.API.Controllers
                     Json.Add("access_token", token);
                     Json.Add("expires_in", Convert.ToInt32(spEx.TotalSeconds).ToString());
                     Json.Add("status", "200");
+
+                    var userId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
+                    string cacheKey = "Cache" + userId;
+
+                    CacheItemPolicy policy = new CacheItemPolicy();
+                    policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(ExToken);
+
+                    var active = _memory.Get(cacheKey) as ActiveUser;
+                    if (active != null && ip != active.IpAddress)
+                    {
+                        _memory.Remove(cacheKey);
+                        _memory.Set(cacheKey, active, policy);
+                    }
+
+
+
                 }
                 else
                 {
@@ -377,7 +430,38 @@ namespace Auth.API.Controllers
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
+            var userId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
+            string cacheKey = "Cache" + userId;
+
+            var active = _memory.Get(cacheKey) as ActiveUser;
+            if (active != null)
+                _memory.Remove(cacheKey);
+
+
+
             Authentication.SignOut("JWT");
+            return Ok();
+        }
+
+        [Route("LogoutNoCache")]
+        public IHttpActionResult LogoutNoCache()
+        {
+            Authentication.SignOut("JWT");
+            return Ok();
+        }
+
+
+        [Route("ClearLogin")]
+        [HttpGet]
+        public IHttpActionResult ClearLogin()
+        {
+            var userId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
+            string cacheKey = "Cache" + userId;
+
+            var active = _memory.Get(cacheKey) as ActiveUser;
+            if (active != null)
+                _memory.Remove(cacheKey);
+
             return Ok();
         }
 
@@ -877,5 +961,19 @@ namespace Auth.API.Controllers
     {
         public int ProjectIDSys { get; set; }
         public string OTP { get; set; }
+    }
+
+    public class ActiveUser
+    {
+        public string UserId { get; private set; }
+        public string UserName { get; private set; }
+        public string IpAddress { get; private set; }
+
+        public ActiveUser(string userId, string userName, string ipAddress)
+        {
+            UserId = userId;
+            UserName = userName;
+            IpAddress = ipAddress;
+        }
     }
 }

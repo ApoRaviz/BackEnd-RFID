@@ -1069,7 +1069,7 @@ namespace Isuzu.Service.Impl
         {
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NonAuthoritativeInformation);
 
-            IEnumerable<InboundItems> inboundItems = InboundService.GetInboundItemByInvoiceNumber(id,true);
+            IEnumerable<IsuzuInboundReport> inboundItems = InboundService.GetInboundItemlByInvoiceNumberAllInfo(id,true);
             if (inboundItems != null)
             {
                 string filePath = HttpContext.Current.Server.MapPath("~/Temps/tmpexcel_" + Guid.NewGuid() + ".xlsx");
