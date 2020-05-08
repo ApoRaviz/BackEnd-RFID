@@ -42,7 +42,8 @@ namespace Master.WebApi.Controllers
                     throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
                 }
                 DateTime d = DateTime.Now;
-                string drive = "D:";
+                //string drive = "D:"; New server bug
+                string drive = "C:";
                 if (!Directory.Exists(drive))
                     drive = "C:";
                 string root = drive + @"\Uploads\WIM";//HttpContext.Current.Server.MapPath("~/Handy/Upload");
